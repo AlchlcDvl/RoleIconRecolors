@@ -11,8 +11,8 @@ public class MenuItem
 {
     public static SalemMenuButton menuButtonName = new()
     {
-        Label = "Salem's Legacy",
-        Icon = FromResources.LoadSprite("Mod.Resources.thumbnail.png"),
+        Label = "Role Icon Recolors",
+        Icon = FromResources.LoadSprite("Recolors.Resources.thumbnail.png"),
         OnClick = () => {}
     };
 }

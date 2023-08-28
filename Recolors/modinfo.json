@@ -1,8 +1,8 @@
 {
-  "HarmonyId": "legacy.salem",
-  "DisplayName": "Salem's Legacy",
-  "Authors": [ "AlchlcDvl", "Det", "JustAnotherNoob", "Misify" ],
-  "Description": "The mod that adds TOS1 (and more!) to TOS2!",
+  "HarmonyId": "alchlcdvl.recolors",
+  "DisplayName": "Role Icon Recolors",
+  "Authors": [ "AlchlcDvl", "MysticMismagius" ],
+  "Description": "The mod adds a bit of flair to icons!",
   "Version": "1.0.0",
   "RequiredMods": []
 }
