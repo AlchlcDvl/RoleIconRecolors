@@ -1,7 +1,36 @@
 namespace Main;
 
 [SalemMod]
-public class Main
+public class Recolors
 {
-    public void Start() => Console.WriteLine("Time travelling!");
+    public static string ModPath => Path.Combine(Directory.GetCurrentDirectory(), "SalemModLoader", "ModFolders", "Recolors");
+
+    public void Start()
+    {
+        if (!Directory.Exists(ModPath))
+            Directory.CreateDirectory(ModPath);
+
+        Console.WriteLine("Recolored!");
+    }
+}
+
+[SalemMenuItem]
+public class MenuItem
+{
+    public static SalemMenuButton menuButtonName = new()
+    {
+        Label = "Icon Recolors",
+        Icon = FromResources.LoadSprite("Recolors.Resources.thumbnail.png"),
+        OnClick = OpenDirectory
+    };
+
+    private static void OpenDirectory()
+    {
+        var path = Path.Combine(Directory.GetCurrentDirectory(), "SalemModLoader", "ModFolders", "Recolors");
+
+        if (Environment.OSVersion.Platform is PlatformID.MacOSX or PlatformID.Unix)
+            System.Diagnostics.Process.Start("open", "\"" + path + "\""); //code stolen from jan who stole from tuba
+        else
+            Application.OpenURL("file://" + path);
+    }
 }

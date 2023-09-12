@@ -1,8 +1,7 @@
 {
   "HarmonyId": "alchlcdvl.recolors",
-  "DisplayName": "Role Icon Recolors",
+  "DisplayName": "Icon Recolors",
   "Authors": [ "AlchlcDvl", "MysticMismagius" ],
   "Description": "The mod adds a bit of flair to icons!",
-  "Version": "1.0.0",
-  "RequiredMods": []
+  "Version": "1.0.0"
 }
