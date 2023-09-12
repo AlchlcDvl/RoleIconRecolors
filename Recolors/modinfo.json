@@ -3,5 +3,17 @@
   "DisplayName": "Icon Recolors",
   "Authors": [ "AlchlcDvl", "MysticMismagius" ],
   "Description": "The mod adds a bit of flair to icons!",
-  "Version": "1.0.0"
+  "Version": "1.0.0",
+  "Settings":
+  {
+    "CheckboxSettings":
+    [
+      {
+        "Name": "Enable Recolors",
+        "Description": "Toggles whether custom icons appear or not",
+        "DefaultValue": true,
+        "AvailableInGame": false
+      }
+    ]
+  }
 }

@@ -1,4 +1,4 @@
-namespace Main;
+namespace Recolors;
 
 [SalemMod]
 public class Recolors
@@ -10,7 +10,23 @@ public class Recolors
         if (!Directory.Exists(ModPath))
             Directory.CreateDirectory(ModPath);
 
+        LoadAssets();
+
+        try
+        {
+            Harmony.CreateAndPatchAll(typeof(Patches));
+        }
+        catch
+        {
+            Console.WriteLine("Patching failed D:");
+        }
+
         Console.WriteLine("Recolored!");
+    }
+
+    private static void LoadAssets()
+    {
+
     }
 }
 
