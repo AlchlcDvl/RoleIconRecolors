@@ -4,11 +4,15 @@ namespace Recolors;
 public class Recolors
 {
     public static string ModPath => Path.Combine(Directory.GetCurrentDirectory(), "SalemModLoader", "ModFolders", "Recolors");
+    public static string DefaultIconPack => Path.Combine(Directory.GetCurrentDirectory(), "SalemModLoader", "ModFolders", "Recolors", "Default");
 
     public void Start()
     {
         if (!Directory.Exists(ModPath))
             Directory.CreateDirectory(ModPath);
+
+        if (!Directory.Exists(DefaultIconPack))
+            Directory.CreateDirectory(DefaultIconPack);
 
         LoadAssets();
 
@@ -42,11 +46,9 @@ public class MenuItem
 
     private static void OpenDirectory()
     {
-        var path = Path.Combine(Directory.GetCurrentDirectory(), "SalemModLoader", "ModFolders", "Recolors");
-
         if (Environment.OSVersion.Platform is PlatformID.MacOSX or PlatformID.Unix)
-            System.Diagnostics.Process.Start("open", "\"" + path + "\""); //code stolen from jan who stole from tuba
+            System.Diagnostics.Process.Start("open", $"\"{Recolors.ModPath}\""); //code stolen from jan who stole from tuba
         else
-            Application.OpenURL("file://" + path);
+            Application.OpenURL($"file://{Recolors.ModPath}");
     }
 }

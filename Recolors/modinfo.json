@@ -6,6 +6,17 @@
   "Version": "1.0.0",
   "Settings":
   {
+    "TextInputSettings":
+    [
+      {
+        "Name": "Selected Icon Pack",
+        "Description": "The icon pack you are going to be using",
+        "DefaultValue": "Default",
+        "Regex": "[0-9A-Za-z]",
+        "CharacterLimit": 30,
+        "AvailableInGame": false
+      }
+    ],
     "CheckboxSettings":
     [
       {
