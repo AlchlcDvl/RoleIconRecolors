@@ -4,17 +4,29 @@ namespace Recolors;
 public class Recolors
 {
     public static string ModPath => Path.Combine(Directory.GetCurrentDirectory(), "SalemModLoader", "ModFolders", "Recolors");
-    public static string DefaultIconPack => Path.Combine(Directory.GetCurrentDirectory(), "SalemModLoader", "ModFolders", "Recolors", "Default");
+
+    public static Assembly Core => typeof(Recolors).Assembly;
+
+    public const string Resources = "Recolors.Resources.";
+    public const string Base = $"{Resources}Base.";
+    public const string EasterEggs = $"{Resources}EasterEggs.";
+    public const string TT = $"{Resources}TT.";
+
+    public static Dictionary<string, List<Sprite>> Icons = new();
 
     public void Start()
     {
         if (!Directory.Exists(ModPath))
             Directory.CreateDirectory(ModPath);
 
-        if (!Directory.Exists(DefaultIconPack))
-            Directory.CreateDirectory(DefaultIconPack);
-
-        LoadAssets();
+        try
+        {
+            LoadAssets();
+        }
+        catch
+        {
+            Console.WriteLine("Asset loading failed D:");
+        }
 
         try
         {
@@ -30,7 +42,22 @@ public class Recolors
 
     private static void LoadAssets()
     {
+        Core.GetManifestResourceNames().ToList().ForEach(x =>
+        {
+            if (!x.Contains("Thumbnail.png") && x.EndsWith(".png"))
+            {
+                var name = x.Replace(TT, "").Replace(Base, "").Replace(EasterEggs, "").Replace(".png", "");
+                var sprite = FromResources.LoadSprite(x);
 
+                if (Icons.ContainsKey(name))
+                    Icons[name].Add(sprite);
+                else
+                    Icons.Add(name, new() { sprite });
+            }
+        });
+
+        Console.WriteLine("Assets loaded!");
+        Console.WriteLine($"{Icons.Count}!");
     }
 }
 
@@ -40,7 +67,7 @@ public class MenuItem
     public static SalemMenuButton menuButtonName = new()
     {
         Label = "Icon Recolors",
-        Icon = FromResources.LoadSprite("Recolors.Resources.thumbnail.png"),
+        Icon = FromResources.LoadSprite("Recolors.Resources.Thumbnail.png"),
         OnClick = OpenDirectory
     };
 

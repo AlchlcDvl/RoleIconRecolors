@@ -18,7 +18,10 @@
 
     <ItemGroup>
         <None Remove="modinfo.json" />
-        <None Remove="Resources\thumbnail.png" />
+        <None Remove="Resources\*" />
+        <None Remove="Resources\Base\**" />
+        <None Remove="Resources\EasterEggs\**" />
+        <None Remove="Resources\TT\**" />
     </ItemGroup>
 
     <ItemGroup>
