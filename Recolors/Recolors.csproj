@@ -27,16 +27,16 @@
     <ItemGroup>
         <EmbeddedResource Include="modinfo.json" />
         <EmbeddedResource Include="Resources\*" />
-        <EmbeddedResource Include="Resources\Base\**" />
-        <EmbeddedResource Include="Resources\EasterEggs\**" />
-        <EmbeddedResource Include="Resources\TT\**" />
+        <EmbeddedResource Include="Resources\Base\*" />
+        <EmbeddedResource Include="Resources\EasterEggs\*" />
+        <EmbeddedResource Include="Resources\TT\*" />
     </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="HarmonyX" Version="2.10.1" />
         <PackageReference Include="UnityEngine.Modules" Version="2021.3.1" IncludeAssets="compile" />
     </ItemGroup>
-    
+
     <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
         <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
     </ItemGroup>
@@ -49,6 +49,6 @@
     </ItemGroup>
 
     <Target Name="Copy" AfterTargets="Build">
-        <Copy SourceFiles="$(TargetPath)" DestinationFolder="C:/Program Files (x86)/Steam/steamapps/common/Town of Salem 2/SalemModLoader/Mods/" UseSymboliclinksIfPossible="true"></Copy>
+        <Copy SourceFiles="$(TargetPath)" DestinationFolder="C:/Program Files (x86)/Steam/steamapps/common/Town of Salem 2/SalemModLoader/Mods/"></Copy>
     </Target>
 </Project>

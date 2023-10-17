@@ -7,15 +7,20 @@ public class Recolors
 
     public static Assembly Core => typeof(Recolors).Assembly;
 
+    public static Recolors Instance;
+
     public const string Resources = "Recolors.Resources.";
     public const string Base = $"{Resources}Base.";
     public const string EasterEggs = $"{Resources}EasterEggs.";
     public const string TT = $"{Resources}TT.";
 
-    public static Dictionary<string, List<Sprite>> Icons = new();
+    public Dictionary<string, List<Sprite>> RegIcons = new();
+    public Dictionary<string, List<Sprite>> TTIcons = new();
 
     public void Start()
     {
+        Instance = this;
+
         if (!Directory.Exists(ModPath))
             Directory.CreateDirectory(ModPath);
 
@@ -25,39 +30,48 @@ public class Recolors
         }
         catch
         {
-            Console.WriteLine("Asset loading failed D:");
+            Console.WriteLine("[Recolors] Asset loading failed D:");
         }
 
         try
         {
-            Harmony.CreateAndPatchAll(typeof(Patches));
+            Harmony.CreateAndPatchAll(typeof(Patches), "alchlcdvl.recolors");
         }
         catch
         {
-            Console.WriteLine("Patching failed D:");
+            Console.WriteLine("[Recolors] Patching failed D:");
         }
 
-        Console.WriteLine("Recolored!");
+        Console.WriteLine("[Recolors] Recolored!");
     }
 
-    private static void LoadAssets()
+    private void LoadAssets()
     {
-        Core.GetManifestResourceNames().ToList().ForEach(x =>
+        Core.GetManifestResourceNames().ForEach(x =>
         {
-            if (!x.Contains("Thumbnail.png") && x.EndsWith(".png"))
+            if (!x.Contains("Thumbnail") && x.EndsWith(".png"))
             {
-                var name = x.Replace(TT, "").Replace(Base, "").Replace(EasterEggs, "").Replace(".png", "");
+                var name = x.Replace(TT, "").Replace(Base, "").Replace(EasterEggs, "").Replace(Resources, "").Replace(".png", "").Replace("RoleCard_", "");
                 var sprite = FromResources.LoadSprite(x);
 
-                if (Icons.ContainsKey(name))
-                    Icons[name].Add(sprite);
+                if (x.Contains(TT))
+                {
+                    if (TTIcons.ContainsKey(name))
+                        TTIcons[name].Add(sprite);
+                    else
+                        TTIcons.Add(name, new() { sprite });
+                }
                 else
-                    Icons.Add(name, new() { sprite });
+                {
+                    if (RegIcons.ContainsKey(name))
+                        RegIcons[name].Add(sprite);
+                    else
+                        RegIcons.Add(name, new() { sprite });
+                }
             }
         });
 
-        Console.WriteLine("Assets loaded!");
-        Console.WriteLine($"{Icons.Count}!");
+        Console.WriteLine($"[Recolors] {RegIcons.Count} Assets loaded!");
     }
 }
 
