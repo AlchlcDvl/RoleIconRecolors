@@ -12,17 +12,14 @@
         </RestoreAdditionalProjectSources>
         <RootNamespace>Recolors</RootNamespace>
         <ImplicitUsings>enable</ImplicitUsings>
+        <EnableDynamicLoading>true</EnableDynamicLoading>
         <Nullable>enable</Nullable>
-        <Authors>AlchlcDvl, MysticMismagius</Authors>
+        <Authors>AlchlcDvl</Authors>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>https://github.com/AlchlcDvl/RoleIconRecolors.git</RepositoryUrl>
+        <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
+        <TOS>C:\Program Files (x86)\Steam\steamapps\common\Town of Salem 2</TOS>
     </PropertyGroup>
-
-    <ItemGroup>
-        <None Remove="modinfo.json" />
-        <None Remove="Resources\*" />
-        <None Remove="Resources\Base\**" />
-        <None Remove="Resources\EasterEggs\**" />
-        <None Remove="Resources\TT\**" />
-    </ItemGroup>
 
     <ItemGroup>
         <EmbeddedResource Include="modinfo.json" />
@@ -48,7 +45,7 @@
         <Reference Include="Unity.TextMeshPro"><HintPath>Lib\Unity.TextMeshPro.dll</HintPath></Reference>
     </ItemGroup>
 
-    <Target Name="Copy" AfterTargets="Build">
-        <Copy SourceFiles="$(TargetPath)" DestinationFolder="C:/Program Files (x86)/Steam/steamapps/common/Town of Salem 2/SalemModLoader/Mods/"></Copy>
+    <Target Name="Copy" AfterTargets="Build" Condition="'$(TOS)' != ''">
+        <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(TOS)/SalemModLoader/Mods/"></Copy>
     </Target>
 </Project>

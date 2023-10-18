@@ -13,7 +13,7 @@ public static class Patches
             if (!Settings.EnableIcons)
                 return;
 
-            var spriteName = role.ToString().ToTitleCase();
+            var spriteName = role.ToString().Capitalise();
 
             if (Recolors.Instance.RegIcons.ContainsKey(spriteName))
                 __instance.roleIcon.sprite = AssetManager.GetSprite(spriteName);

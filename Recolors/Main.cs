@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace Recolors;
 
 [SalemMod]
@@ -16,6 +18,8 @@ public class Recolors
 
     public Dictionary<string, List<Sprite>> RegIcons = new();
     public Dictionary<string, List<Sprite>> TTIcons = new();
+
+    private static readonly List<string> ToRemove = new() { Base, EasterEggs, TT, ".png", "_A", "_B", "_Flame1", "_Flame2" };
 
     public void Start()
     {
@@ -51,7 +55,8 @@ public class Recolors
         {
             if (!x.Contains("Thumbnail") && x.EndsWith(".png"))
             {
-                var name = x.Replace(TT, "").Replace(Base, "").Replace(EasterEggs, "").Replace(Resources, "").Replace(".png", "").Replace("RoleCard_", "");
+                var name = "";
+                ToRemove.ForEach(y => name = x.Replace(y, ""));
                 var sprite = FromResources.LoadSprite(x);
 
                 if (x.Contains(TT))
@@ -88,7 +93,7 @@ public class MenuItem
     private static void OpenDirectory()
     {
         if (Environment.OSVersion.Platform is PlatformID.MacOSX or PlatformID.Unix)
-            System.Diagnostics.Process.Start("open", $"\"{Recolors.ModPath}\""); //code stolen from jan who stole from tuba
+            Process.Start("open", $"\"{Recolors.ModPath}\""); //code stolen from jan who stole from tuba
         else
             Application.OpenURL($"file://{Recolors.ModPath}");
     }
