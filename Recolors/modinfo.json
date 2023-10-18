@@ -1,26 +1,15 @@
 {
   "HarmonyId": "alchlcdvl.recolors",
   "DisplayName": "Icon Recolors",
-  "Authors": [ "AlchlcDvl", "MysticMismagius" ],
-  "Description": "The mod adds a bit of flair to icons!",
+  "Authors": [ "AlchlcDvl" ],
+  "Description": "The mod adds a bit of flair to icons! Credits to MysticMismagius and Nidoskull for the artwork!",
   "Version": "1.0.0",
   "Settings":
   {
-    "TextInputSettings":
-    [
-      {
-        "Name": "Selected Icon Pack",
-        "Description": "The icon pack you are going to be using",
-        "DefaultValue": "Default",
-        "Regex": "[0-9A-Za-z]",
-        "CharacterLimit": 30,
-        "AvailableInGame": false
-      }
-    ],
     "CheckboxSettings":
     [
       {
-        "Name": "Enable Recolors",
+        "Name": "Enable Custom Icons",
         "Description": "Toggles whether custom icons appear or not",
         "DefaultValue": true,
         "AvailableInGame": false
