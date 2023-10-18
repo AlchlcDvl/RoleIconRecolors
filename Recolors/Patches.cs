@@ -83,7 +83,7 @@ public static class Patches
         }
     }
 
-    /*[HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.DetermineFrameAndSlots_AbilityIcon))]
+    [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.DetermineFrameAndSlots_AbilityIcon))]
     public static class PatchRoleCardAbilityIcons1
     {
         public static void Postfix(RoleCardPanel __instance)
@@ -92,12 +92,30 @@ public static class Patches
                 return;
 
             var spriteName = RoleName + "_Ability";
+            var sprite = AssetManager.GetSprite(spriteName);
 
-            if (!Recolors.Instance.RegIcons.ContainsKey(spriteName))
-                spriteName += "1";
+            if (sprite == Recolors.Instance.Blank)
+                spriteName += "_1";
 
-            if (Recolors.Instance.RegIcons.ContainsKey(spriteName))
-                __instance.roleInfoButtons[1].abilityIcon.sprite = AssetManager.GetSprite(spriteName);
+            sprite = AssetManager.GetSprite(spriteName);
+
+            if (sprite != Recolors.Instance.Blank)
+                __instance.roleInfoButtons[1].abilityIcon.sprite = sprite;
         }
-    }*/
+    }
+
+    [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.DetermineFrameAndSlots_AbilityIcon2))]
+    public static class PatchRoleCardAbilityIcons2
+    {
+        public static void Postfix(RoleCardPanel __instance)
+        {
+            if (!Settings.EnableIcons)
+                return;
+
+            var sprite = AssetManager.GetSprite(RoleName + "_Ability_2");
+
+            if (sprite != Recolors.Instance.Blank)
+                __instance.roleInfoButtons[1].abilityIcon.sprite = sprite;
+        }
+    }
 }

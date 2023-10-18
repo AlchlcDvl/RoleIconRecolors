@@ -32,4 +32,38 @@ public static class AssetManager
 
         return sprites.Random();
     }
+
+    public static void LoadAssets()
+    {
+        Recolors.Core.GetManifestResourceNames().ForEach(x =>
+        {
+            if (!x.Contains("Thumbnail") && x.EndsWith(".png"))
+            {
+                var name = x;
+                var sprite = FromResources.LoadSprite(x);
+                Recolors.ToRemove.ForEach(y => name = name.Replace(y, ""));
+
+                if (x.Contains(Recolors.TT))
+                {
+                    if (Recolors.Instance.TTIcons.ContainsKey(name))
+                        Recolors.Instance.TTIcons[name].Add(sprite);
+                    else
+                        Recolors.Instance.TTIcons.Add(name, new() { sprite });
+                }
+                else if (x.Contains("Blank"))
+                    Recolors.Instance.Blank = sprite;
+                else
+                {
+                    if (Recolors.Instance.RegIcons.ContainsKey(name))
+                        Recolors.Instance.RegIcons[name].Add(sprite);
+                    else
+                        Recolors.Instance.RegIcons.Add(name, new() { sprite });
+                }
+            }
+        });
+
+        Console.WriteLine($"[Recolors] {Recolors.Instance.RegIcons.Count} Regular Assets loaded!");
+        Console.WriteLine($"[Recolors] {Recolors.Instance.TTIcons.Count} TT Assets loaded!");
+        Recolors.Instance.RegIcons.ForEach((x, y) => Console.WriteLine($"{x} has {y.Count} sprite(s)!"));
+    }
 }
