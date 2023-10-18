@@ -10,7 +10,7 @@ public static class AssetManager
             return Recolors.Instance.RegIcons["Blank"][0];
         }
 
-        if (sprites.Count > 1 && URandom.RandomRangeInt(0, 101) <= Settings.EasterEggChance)
+        if ((sprites.Count > 1 && URandom.RandomRangeInt(1, 100) <= Settings.EasterEggChance && Settings.EasterEggChance > 0) || Settings.EasterEggChance == 100)
             return sprites.Skip(1).Random();
 
         return sprites[0];
