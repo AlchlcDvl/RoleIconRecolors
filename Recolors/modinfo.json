@@ -14,6 +14,17 @@
         "DefaultValue": true,
         "AvailableInGame": false
       }
+    ],
+    "IntegerInputSettings":
+    [
+      {
+        "Name": "Easter Egg Icon Chance",
+        "Description": "The chance of a different than normal icon appearing for roles",
+        "DefaultValue": 5,
+        "MinValue": 0,
+        "MaxValue": 100,
+        "AvailableInGame": false
+      }
     ]
   }
 }
