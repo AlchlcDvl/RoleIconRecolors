@@ -4,6 +4,9 @@ public static class AssetManager
 {
     public static Sprite GetSprite(string name)
     {
+        if (name == "Blank")
+            return Recolors.Instance.Blank;
+
         if (!Recolors.Instance.RegIcons.TryGetValue(name, out var sprites))
         {
             Console.WriteLine($"[Recolors] Couldn't find regular {name} in recources");
@@ -18,10 +21,13 @@ public static class AssetManager
 
     public static Sprite GetTTSprite(string name)
     {
+        if (name == "Blank")
+            return Recolors.Instance.Blank;
+
         if (!Recolors.Instance.TTIcons.TryGetValue(name, out var sprites))
         {
             Console.WriteLine($"[Recolors] Couldn't find TT {name} in recources");
-            return Recolors.Instance.RegIcons["Blank"][0];
+            return Recolors.Instance.Blank;
         }
 
         return sprites.Random();

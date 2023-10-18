@@ -18,6 +18,7 @@ public class Recolors
 
     public Dictionary<string, List<Sprite>> RegIcons = new();
     public Dictionary<string, List<Sprite>> TTIcons = new();
+    public Sprite Blank;
 
     private static readonly List<string> ToRemove = new() { Base, EasterEggs, TT, ".png", "_A", "_B", "_Flame1", "_Flame2" };
 
@@ -55,8 +56,8 @@ public class Recolors
         {
             if (!x.Contains("Thumbnail") && x.EndsWith(".png"))
             {
-                var name = "";
-                ToRemove.ForEach(y => name = x.Replace(y, ""));
+                var name = x;
+                ToRemove.ForEach(y => name = name.Replace(y, ""));
                 var sprite = FromResources.LoadSprite(x);
 
                 if (x.Contains(TT))
@@ -66,6 +67,8 @@ public class Recolors
                     else
                         TTIcons.Add(name, new() { sprite });
                 }
+                else if (x.Contains("Blank"))
+                    Blank = sprite;
                 else
                 {
                     if (RegIcons.ContainsKey(name))
@@ -76,7 +79,9 @@ public class Recolors
             }
         });
 
-        Console.WriteLine($"[Recolors] {RegIcons.Count} Assets loaded!");
+        Console.WriteLine($"[Recolors] {RegIcons.Count} Regular Assets loaded!");
+        Console.WriteLine($"[Recolors] {TTIcons.Count} TT Assets loaded!");
+        RegIcons.ForEach((x, y) => Console.WriteLine($"{x} has {y.Count} sprite(s)!"));
     }
 }
 

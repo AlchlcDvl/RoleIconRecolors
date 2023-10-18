@@ -10,5 +10,5 @@ public static class Utils
 
     public static void ForEach<T>(this IEnumerable<T>? source, Action<T>? action) => source?.ToList()?.ForEach(action);
 
-    public static string Capitalise(this string input) => input[0].ToString().ToUpper() + input.ToLower()[1..];
+    public static void ForEach<TKey, TValue>(this IDictionary<TKey, TValue> dict, Action<TKey, TValue> action) => dict.ToList().ForEach(pair => action(pair.Key, pair.Value));
 }
