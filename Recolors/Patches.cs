@@ -1,13 +1,11 @@
 using Game.Interface;
+using Server.Shared.Extensions;
 using Server.Shared.State;
-using Server.Shared.Info;
-using Services;
 
 namespace Recolors;
 
 public static class Patches
 {
-    private static int ButtonIndex;
     private static string RoleName(Role role) => role switch
     {
         Role.ADMIRER => "Admirer",
@@ -65,46 +63,78 @@ public static class Patches
         Role.WAR => "War",
         Role.PESTILENCE => "Pestilence",
         Role.DEATH => "Death",
+        Role.CURSED_SOUL => "CursedSoul",
+        Role.VAMPIRE => "Vampire",
         Role.STONED => "Stoned",
         _ => "Blank"
     };
-    private static string FactionName(Role role) => role switch
+    private static string FactionName(FactionType role) => role switch
     {
-        Role.ADMIRER or Role.AMNESIAC or Role.BODYGUARD or Role.CLERIC or Role.CORONER or Role.CRUSADER or Role.DEPUTY or Role.INVESTIGATOR or Role.JAILOR or Role.LOOKOUT or Role.MAYOR or
-            Role.MONARCH or Role.PROSECUTOR or Role.PSYCHIC or Role.RETRIBUTIONIST or Role.SEER or Role.SHERIFF or Role.SPY or Role.TAVERNKEEPER or Role.TRACKER or Role.TRAPPER or
-            Role.TRICKSTER or Role.VETERAN or Role.VIGILANTE => "Town",
-        Role.CONJURER or Role.COVENLEADER or Role.DREAMWEAVER or Role.ENCHANTER or Role.HEXMASTER or Role.ILLUSIONIST or Role.JINX or Role.MEDUSA or Role.NECROMANCER or Role.POISONER or
-            Role.POTIONMASTER or Role.RITUALIST or Role.VOODOOMASTER or Role.WILDLING or Role.WITCH => "Coven",
-        Role.ARSONIST => "Arsonist",
-        Role.DOOMSAYER => "Doomsayer",
-        Role.EXECUTIONER => "Executioner",
-        Role.JESTER => "Jester",
-        Role.PIRATE => "Pirate",
-        Role.SERIALKILLER => "SerialKiller",
-        Role.SHROUD => "Shroud",
-        Role.WEREWOLF => "Werewolf",
-        Role.BAKER or Role.BERSERKER or Role.PLAGUEBEARER or Role.SOULCOLLECTOR or Role.FAMINE or Role.WAR or Role.PESTILENCE or Role.DEATH => "Horsemen",
+        FactionType.TOWN => "Town",
+        FactionType.COVEN => "Coven",
+        FactionType.SERIALKILLER => "SerialKiller",
+        FactionType.ARSONIST => "Arsonist",
+        FactionType.WEREWOLF => "Werewolf",
+        FactionType.SHROUD => "Shroud",
+        FactionType.APOCALYPSE => "Horsemen",
+        FactionType.EXECUTIONER => "Executioner",
+        FactionType.JESTER => "Jester",
+        FactionType.PIRATE => "Pirate",
+        FactionType.DOOMSAYER => "Doomsayer",
+        FactionType.VAMPIRE => "Vampire",
+        FactionType.CURSED_SOUL => "CursedSoul",
         _ => "Blank"
     };
 
-    [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.SetRole))]
-    public static class PatchRoleCardIcons
+    [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.Update))]
+    public static class PatchRoleCardIcons1
     {
-        public static void Prefix(RoleCardPanel __instance) => ButtonIndex = __instance.infoButtonsShowing;
-
         public static void Postfix(RoleCardPanel __instance)
         {
             if (!Settings.EnableIcons)
                 return;
 
-            var sprite = AssetManager.GetSprite(RoleName(__instance.myData.role));
+            var role = RoleName(Pepper.GetMyCurrentIdentity().role);
+            var faction = FactionName(Pepper.GetMyCurrentIdentity().role.GetFaction());
+            var sprite = AssetManager.GetSprite(role);
 
             if (sprite != Recolors.Instance.Blank)
                 __instance.roleIcon.sprite = sprite;
+
+            var index = 0;
+            var spriteName = $"{role}_Ability";
+            var sprite1 = AssetManager.GetSprite(spriteName);
+
+            if (sprite1 == Recolors.Instance.Blank)
+                spriteName += "_1";
+
+            sprite1 = AssetManager.GetSprite(spriteName);
+
+            if (sprite1 != Recolors.Instance.Blank)
+            {
+                __instance.roleInfoButtons[index].abilityIcon.sprite = sprite1;
+                index++;
+            }
+
+            var sprite2 = AssetManager.GetSprite($"{role}_Ability_2");
+
+            if (sprite2 == Recolors.Instance.Blank)
+                sprite2 = AssetManager.GetSprite($"Attributes_{faction}");
+
+            if (sprite2 != Recolors.Instance.Blank)
+            {
+                __instance.roleInfoButtons[index].abilityIcon.sprite = sprite2;
+                index++;
+            }
+
+            var sprite3 = AssetManager.GetSprite($"{role}_Special");
+
+            if (sprite3 != Recolors.Instance.Blank)
+                __instance.specialAbilityPanel.useButton.abilityIcon.sprite = sprite3;
         }
     }
 
-    [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.DetermineFrameAndSlots_DestroyRoleInfoSlots))]
+    /*[HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.DetermineFrameAndSlots_DestroyRoleInfoSlots))]
     public static class PatchSlots
     {
         public static void Prefix() => ButtonIndex = 0;
@@ -150,9 +180,9 @@ public static class Patches
                 ButtonIndex++;
             }
         }
-    }
+    }*/
 
-    [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.DetermineFrameAndSlots_AttributeIcon))]
+    /*[HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.DetermineFrameAndSlots_AttributeIcon))]
     public static class PatchRoleCardAttributeIcon
     {
         public static void Postfix(RoleCardPanel __instance)
@@ -201,5 +231,5 @@ public static class Patches
             if (sprite != Recolors.Instance.Blank)
                 __instance.specialAbilityPanel.useButton.abilityIcon.sprite = sprite;
         }
-    }
+    }*/
 }

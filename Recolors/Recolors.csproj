@@ -39,7 +39,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Reference Include="Assembly-CSharp"><HintPath>Lib\Assembly-CSharp.dll</HintPath></Reference>
+        <Reference Include="Assembly-CSharp_publicized"><HintPath>Lib\Assembly-CSharp_publicized.dll</HintPath></Reference>
         <Reference Include="UnityEngine.UI"><HintPath>Lib\UnityEngine.UI.dll</HintPath></Reference>
         <Reference Include="SalemModLoader"><HintPath>Lib\SalemModLoader.dll</HintPath></Reference>
         <Reference Include="Unity.TextMeshPro"><HintPath>Lib\Unity.TextMeshPro.dll</HintPath></Reference>
