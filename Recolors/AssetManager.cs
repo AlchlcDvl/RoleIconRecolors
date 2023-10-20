@@ -10,7 +10,7 @@ public static class AssetManager
         if (!Recolors.Instance.RegIcons.TryGetValue(name, out var sprites))
         {
             Console.WriteLine($"[Recolors] Couldn't find regular {name} in recources");
-            return Recolors.Instance.RegIcons["Blank"][0];
+            return Recolors.Instance.Blank;
         }
 
         if ((sprites.Count > 1 && URandom.RandomRangeInt(1, 100) <= Settings.EasterEggChance && Settings.EasterEggChance > 0) || Settings.EasterEggChance == 100)
@@ -30,14 +30,14 @@ public static class AssetManager
             return Recolors.Instance.Blank;
         }
 
-        return sprites.Random();
+        return sprites[0];
     }
 
     public static void LoadAssets()
     {
         Recolors.Core.GetManifestResourceNames().ForEach(x =>
         {
-            if (!x.Contains("Thumbnail") && x.EndsWith(".png"))
+            if (x.EndsWith(".png"))
             {
                 var name = x;
                 var sprite = FromResources.LoadSprite(x);
@@ -52,6 +52,8 @@ public static class AssetManager
                 }
                 else if (x.Contains("Blank"))
                     Recolors.Instance.Blank = sprite;
+                else if (x.Contains("Thumbnail"))
+                    Recolors.Instance.Thumbnail = sprite;
                 else
                 {
                     if (Recolors.Instance.RegIcons.ContainsKey(name))

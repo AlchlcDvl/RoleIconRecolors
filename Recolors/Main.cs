@@ -19,6 +19,7 @@ public class Recolors
     public Dictionary<string, List<Sprite>> RegIcons = new();
     public Dictionary<string, List<Sprite>> TTIcons = new();
     public Sprite Blank;
+    public Sprite Thumbnail;
 
     public static readonly List<string> ToRemove = new() { Base, EasterEggs, TT, ".png", "_A", "_B", "_Flame1", "_Flame2" };
 
@@ -57,7 +58,7 @@ public class MenuItem
     public static SalemMenuButton menuButtonName = new()
     {
         Label = "Icon Recolors",
-        Icon = FromResources.LoadSprite("Recolors.Resources.Thumbnail.png"),
+        Icon = Recolors.Instance.Thumbnail,
         OnClick = OpenDirectory
     };
 
