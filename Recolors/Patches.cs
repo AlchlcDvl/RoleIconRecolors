@@ -1,11 +1,14 @@
 using Game.Interface;
 using Server.Shared.Extensions;
 using Server.Shared.State;
+using Server.Shared.Info;
+using Services;
 
 namespace Recolors;
 
 public static class Patches
 {
+    private static int Index;
     private static string RoleName(Role role) => role switch
     {
         Role.ADMIRER => "Admirer",
@@ -86,16 +89,16 @@ public static class Patches
         _ => "Blank"
     };
 
-    [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.Update))]
+    /*[HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.Update))]
     public static class PatchRoleCardIcons1
     {
         public static void Postfix(RoleCardPanel __instance)
         {
-            if (!Settings.EnableIcons)
+            if (!Settings.EnableIcons || __instance.testMe != 0)
                 return;
 
             var role = RoleName(Pepper.GetMyCurrentIdentity().role);
-            var faction = FactionName(Pepper.GetMyCurrentIdentity().role.GetFaction());
+            var faction = FactionName(Pepper.GetMyCurrentIdentity().faction);
             var sprite = AssetManager.GetSprite(role);
 
             if (sprite != Recolors.Instance.Blank)
@@ -132,12 +135,35 @@ public static class Patches
             if (sprite3 != Recolors.Instance.Blank)
                 __instance.specialAbilityPanel.useButton.abilityIcon.sprite = sprite3;
         }
+    }*/
+
+    [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.SetRole))]
+    public static class PatchRoleCardIcons2
+    {
+        public static void Postfix(RoleCardPanel __instance)
+        {
+            if (!Settings.EnableIcons)
+                return;
+
+            var role = Pepper.GetMyCurrentIdentity().role;
+            var name = RoleName(role);
+            var sprite = role.IsTraitor(Pepper.GetMyCurrentIdentity().faction) ? AssetManager.GetSprite(name) : AssetManager.GetTTSprite(name);
+
+            if (sprite != Recolors.Instance.Blank)
+                __instance.roleIcon.sprite = sprite;
+        }
     }
 
-    /*[HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.DetermineFrameAndSlots_DestroyRoleInfoSlots))]
-    public static class PatchSlots
+    [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.DetermineFrameAndSlots))]
+    public static class ResetIndexPatch1
     {
-        public static void Prefix() => ButtonIndex = 0;
+        public static void Prefix() => Index = 0;
+    }
+
+    [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.DetermineFrameAndSlots_DestroyRoleInfoSlots))]
+    public static class ResetIndexPatch2
+    {
+        public static void Prefix() => Index = 0;
     }
 
     [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.DetermineFrameAndSlots_AbilityIcon))]
@@ -148,7 +174,7 @@ public static class Patches
             if (!Settings.EnableIcons || __instance.myData.abilityIcon == null)
                 return;
 
-            var spriteName = RoleName(__instance.myData.role) + "_Ability";
+            var spriteName = $"{RoleName(Pepper.GetMyCurrentIdentity().role)}_Ability";
             var sprite = AssetManager.GetSprite(spriteName);
 
             if (sprite == Recolors.Instance.Blank)
@@ -158,8 +184,8 @@ public static class Patches
 
             if (sprite != Recolors.Instance.Blank)
             {
-                __instance.roleInfoButtons[ButtonIndex].abilityIcon.sprite = sprite;
-                ButtonIndex++;
+                __instance.roleInfoButtons[Index].abilityIcon.sprite = sprite;
+                Index++;
             }
         }
     }
@@ -172,17 +198,17 @@ public static class Patches
             if (!Settings.EnableIcons || __instance.myData.abilityIcon2 == null)
                 return;
 
-            var sprite = AssetManager.GetSprite(RoleName(__instance.myData.role) + "_Ability_2");
+            var sprite = AssetManager.GetSprite($"{RoleName(Pepper.GetMyCurrentIdentity().role)}_Ability_2");
 
             if (sprite != Recolors.Instance.Blank)
             {
-                __instance.roleInfoButtons[ButtonIndex].abilityIcon.sprite = sprite;
-                ButtonIndex++;
+                __instance.roleInfoButtons[Index].abilityIcon.sprite = sprite;
+                Index++;
             }
         }
-    }*/
+    }
 
-    /*[HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.DetermineFrameAndSlots_AttributeIcon))]
+    [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.DetermineFrameAndSlots_AttributeIcon))]
     public static class PatchRoleCardAttributeIcon
     {
         public static void Postfix(RoleCardPanel __instance)
@@ -190,12 +216,12 @@ public static class Patches
             if (!Settings.EnableIcons || __instance.myData.attributeIcon == null)
                 return;
 
-            var sprite = AssetManager.GetSprite("Attribute_" + FactionName(__instance.myData.role));
+            var sprite = AssetManager.GetSprite($"Attribute_{FactionName(Pepper.GetMyCurrentIdentity().faction)}");
 
             if (sprite != Recolors.Instance.Blank)
             {
-                __instance.roleInfoButtons[ButtonIndex].abilityIcon.sprite = sprite;
-                ButtonIndex++;
+                __instance.roleInfoButtons[Index].abilityIcon.sprite = sprite;
+                Index++;
             }
         }
     }
@@ -212,8 +238,8 @@ public static class Patches
 
             if (sprite != Recolors.Instance.Blank)
             {
-                __instance.roleInfoButtons[ButtonIndex].abilityIcon.sprite = sprite;
-                ButtonIndex++;
+                __instance.roleInfoButtons[Index].abilityIcon.sprite = sprite;
+                Index++;
             }
         }
     }
@@ -226,10 +252,10 @@ public static class Patches
             if (!Settings.EnableIcons || __instance.myData.specialAbilityIcon == null)
                 return;
 
-            var sprite = AssetManager.GetSprite(RoleName(__instance.myData.role) + "_Special");
+            var sprite = AssetManager.GetSprite($"{RoleName(Pepper.GetMyCurrentIdentity().role)}_Special");
 
             if (sprite != Recolors.Instance.Blank)
                 __instance.specialAbilityPanel.useButton.abilityIcon.sprite = sprite;
         }
-    }*/
+    }
 }
