@@ -147,7 +147,7 @@ public static class Patches
 
             var role = Pepper.GetMyCurrentIdentity().role;
             var name = RoleName(role);
-            var sprite = role.IsTraitor(Pepper.GetMyCurrentIdentity().faction) ? AssetManager.GetSprite(name) : AssetManager.GetTTSprite(name);
+            var sprite = role.IsTraitor(Pepper.GetMyCurrentIdentity().faction) ? AssetManager.GetTTSprite(name) : AssetManager.GetSprite(name);
 
             if (sprite != Recolors.Instance.Blank)
                 __instance.roleIcon.sprite = sprite;
@@ -216,7 +216,7 @@ public static class Patches
             if (!Settings.EnableIcons || __instance.myData.attributeIcon == null)
                 return;
 
-            var sprite = AssetManager.GetSprite($"Attribute_{FactionName(Pepper.GetMyCurrentIdentity().faction)}");
+            var sprite = AssetManager.GetSprite($"Attributes_{FactionName(Pepper.GetMyCurrentIdentity().faction)}");
 
             if (sprite != Recolors.Instance.Blank)
             {
