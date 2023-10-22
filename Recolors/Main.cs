@@ -21,8 +21,6 @@ public class Recolors
     public Sprite Blank;
     public Sprite Thumbnail;
 
-    public static readonly List<string> ToRemove = new() { Base, EasterEggs, TT, ".png", "_IconA", "_IconB", "_Flame1", "_Flame2" };
-
     public void Start()
     {
         Instance = this;

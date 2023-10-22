@@ -2,6 +2,8 @@ namespace Recolors;
 
 public static class AssetManager
 {
+    private static readonly List<string> ToRemove = new() { Recolors.Base, Recolors.EasterEggs, Recolors.TT, ".png", "_IconA", "_IconB", "_Flame1", "_Flame2" };
+
     public static Sprite GetSprite(string name)
     {
         if (name == "Blank")
@@ -41,7 +43,7 @@ public static class AssetManager
             {
                 var name = x;
                 var sprite = FromResources.LoadSprite(x);
-                Recolors.ToRemove.ForEach(y => name = name.Replace(y, ""));
+                ToRemove.ForEach(y => name = name.Replace(y, ""));
 
                 if (x.Contains("Blank"))
                     Recolors.Instance.Blank = sprite;
