@@ -43,17 +43,17 @@ public static class AssetManager
                 var sprite = FromResources.LoadSprite(x);
                 Recolors.ToRemove.ForEach(y => name = name.Replace(y, ""));
 
-                if (x.Contains(Recolors.TT))
+                if (x.Contains("Blank"))
+                    Recolors.Instance.Blank = sprite;
+                else if (x.Contains("Thumbnail"))
+                    Recolors.Instance.Thumbnail = sprite;
+                else if (x.Contains(Recolors.TT))
                 {
                     if (Recolors.Instance.TTIcons.ContainsKey(name))
                         Recolors.Instance.TTIcons[name].Add(sprite);
                     else
                         Recolors.Instance.TTIcons.Add(name, new() { sprite });
                 }
-                else if (x.Contains("Blank"))
-                    Recolors.Instance.Blank = sprite;
-                else if (x.Contains("Thumbnail"))
-                    Recolors.Instance.Thumbnail = sprite;
                 else
                 {
                     if (Recolors.Instance.RegIcons.ContainsKey(name))

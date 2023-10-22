@@ -1,2 +1,2 @@
 # RoleIconRecolors
-Remade icons for roles based on whether you are a traitor or not!
+The mod adds a bit of flair to icons!

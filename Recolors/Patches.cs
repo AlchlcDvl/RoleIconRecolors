@@ -89,54 +89,6 @@ public static class Patches
         _ => "Blank"
     };
 
-    /*[HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.Update))]
-    public static class PatchRoleCardIcons1
-    {
-        public static void Postfix(RoleCardPanel __instance)
-        {
-            if (!Settings.EnableIcons || __instance.testMe != 0)
-                return;
-
-            var role = RoleName(Pepper.GetMyCurrentIdentity().role);
-            var faction = FactionName(Pepper.GetMyCurrentIdentity().faction);
-            var sprite = AssetManager.GetSprite(role);
-
-            if (sprite != Recolors.Instance.Blank)
-                __instance.roleIcon.sprite = sprite;
-
-            var index = 0;
-            var spriteName = $"{role}_Ability";
-            var sprite1 = AssetManager.GetSprite(spriteName);
-
-            if (sprite1 == Recolors.Instance.Blank)
-                spriteName += "_1";
-
-            sprite1 = AssetManager.GetSprite(spriteName);
-
-            if (sprite1 != Recolors.Instance.Blank)
-            {
-                __instance.roleInfoButtons[index].abilityIcon.sprite = sprite1;
-                index++;
-            }
-
-            var sprite2 = AssetManager.GetSprite($"{role}_Ability_2");
-
-            if (sprite2 == Recolors.Instance.Blank)
-                sprite2 = AssetManager.GetSprite($"Attributes_{faction}");
-
-            if (sprite2 != Recolors.Instance.Blank)
-            {
-                __instance.roleInfoButtons[index].abilityIcon.sprite = sprite2;
-                index++;
-            }
-
-            var sprite3 = AssetManager.GetSprite($"{role}_Special");
-
-            if (sprite3 != Recolors.Instance.Blank)
-                __instance.specialAbilityPanel.useButton.abilityIcon.sprite = sprite3;
-        }
-    }*/
-
     [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.SetRole))]
     public static class PatchRoleCardIcons2
     {
