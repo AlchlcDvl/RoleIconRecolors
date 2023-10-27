@@ -31,19 +31,11 @@ public class Recolors
         try
         {
             AssetManager.LoadAssets();
+            Harmony.CreateAndPatchAll(Core, "alchlcdvl.recolors.harmony");
         }
         catch
         {
-            Console.WriteLine("[Recolors] Asset loading failed D:");
-        }
-
-        try
-        {
-            Harmony.CreateAndPatchAll(typeof(Patches), "alchlcdvl.recolors");
-        }
-        catch
-        {
-            Console.WriteLine("[Recolors] Patching failed D:");
+            Console.WriteLine("[Recolors] Something failed D:");
         }
 
         Console.WriteLine("[Recolors] Recolored!");

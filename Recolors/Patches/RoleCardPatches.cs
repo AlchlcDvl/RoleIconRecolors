@@ -4,9 +4,10 @@ using Server.Shared.State;
 using Server.Shared.Info;
 using Services;
 
-namespace Recolors;
+namespace Recolors.Patches;
 
-public static class Patches
+[HarmonyPatch(typeof(RoleCardPanel))]
+public static class RoleCardPatches
 {
     private static int Index;
     private static string RoleName(Role role) => role switch
@@ -79,7 +80,7 @@ public static class Patches
         FactionType.ARSONIST => "Arsonist",
         FactionType.WEREWOLF => "Werewolf",
         FactionType.SHROUD => "Shroud",
-        FactionType.APOCALYPSE => "Horsemen",
+        FactionType.APOCALYPSE => Pepper.GetMyRole() is Role.SOULCOLLECTOR or Role.BAKER or Role.PLAGUEBEARER or Role.BERSERKER ? "Apocalypse" : "Horsemen",
         FactionType.EXECUTIONER => "Executioner",
         FactionType.JESTER => "Jester",
         FactionType.PIRATE => "Pirate",
@@ -89,36 +90,36 @@ public static class Patches
         _ => "Blank"
     };
 
-    [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.SetRole))]
-    public static class PatchRoleCardIcons2
+    [HarmonyPatch(nameof(RoleCardPanel.SetRole))]
+    public static class PatchRoleCardIcons
     {
         public static void Postfix(RoleCardPanel __instance)
         {
             if (!Settings.EnableIcons)
                 return;
 
-            var role = Pepper.GetMyCurrentIdentity().role;
+            var role = Pepper.GetMyRole();
             var name = RoleName(role);
-            var sprite = role.IsTraitor(Pepper.GetMyCurrentIdentity().faction) ? AssetManager.GetTTSprite(name) : AssetManager.GetSprite(name);
+            var sprite = role.IsTraitor(Pepper.GetMyFaction()) ? AssetManager.GetTTSprite(name) : AssetManager.GetSprite(name);
 
             if (sprite != Recolors.Instance.Blank)
                 __instance.roleIcon.sprite = sprite;
         }
     }
 
-    [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.DetermineFrameAndSlots))]
+    [HarmonyPatch(nameof(RoleCardPanel.DetermineFrameAndSlots))]
     public static class ResetIndexPatch1
     {
         public static void Prefix() => Index = 0;
     }
 
-    [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.DetermineFrameAndSlots_DestroyRoleInfoSlots))]
+    [HarmonyPatch(nameof(RoleCardPanel.DetermineFrameAndSlots_DestroyRoleInfoSlots))]
     public static class ResetIndexPatch2
     {
         public static void Prefix() => Index = 0;
     }
 
-    [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.DetermineFrameAndSlots_AbilityIcon))]
+    [HarmonyPatch(nameof(RoleCardPanel.DetermineFrameAndSlots_AbilityIcon))]
     public static class PatchRoleCardAbilityIcons1
     {
         public static void Postfix(RoleCardPanel __instance)
@@ -126,7 +127,7 @@ public static class Patches
             if (!Settings.EnableIcons || __instance.myData.abilityIcon == null)
                 return;
 
-            var spriteName = $"{RoleName(Pepper.GetMyCurrentIdentity().role)}_Ability";
+            var spriteName = $"{RoleName(Pepper.GetMyRole())}_Ability";
             var sprite = AssetManager.GetSprite(spriteName);
 
             if (sprite == Recolors.Instance.Blank)
@@ -142,7 +143,7 @@ public static class Patches
         }
     }
 
-    [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.DetermineFrameAndSlots_AbilityIcon2))]
+    [HarmonyPatch(nameof(RoleCardPanel.DetermineFrameAndSlots_AbilityIcon2))]
     public static class PatchRoleCardAbilityIcons2
     {
         public static void Postfix(RoleCardPanel __instance)
@@ -150,7 +151,7 @@ public static class Patches
             if (!Settings.EnableIcons || __instance.myData.abilityIcon2 == null)
                 return;
 
-            var sprite = AssetManager.GetSprite($"{RoleName(Pepper.GetMyCurrentIdentity().role)}_Ability_2");
+            var sprite = AssetManager.GetSprite($"{RoleName(Pepper.GetMyRole())}_Ability_2");
 
             if (sprite != Recolors.Instance.Blank)
             {
@@ -160,7 +161,7 @@ public static class Patches
         }
     }
 
-    [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.DetermineFrameAndSlots_AttributeIcon))]
+    [HarmonyPatch(nameof(RoleCardPanel.DetermineFrameAndSlots_AttributeIcon))]
     public static class PatchRoleCardAttributeIcon
     {
         public static void Postfix(RoleCardPanel __instance)
@@ -178,7 +179,7 @@ public static class Patches
         }
     }
 
-    [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.DetermineFrameAndSlots_Necro))]
+    [HarmonyPatch(nameof(RoleCardPanel.DetermineFrameAndSlots_Necro))]
     public static class PatchRoleCardNecronomicon
     {
         public static void Postfix(RoleCardPanel __instance)
@@ -196,7 +197,7 @@ public static class Patches
         }
     }
 
-    [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.ValidateSpecialAbilityPanel))]
+    [HarmonyPatch(nameof(RoleCardPanel.ValidateSpecialAbilityPanel))]
     public static class PatchRoleCardSpecialAbilityIcon
     {
         public static void Postfix(RoleCardPanel __instance)
@@ -204,7 +205,7 @@ public static class Patches
             if (!Settings.EnableIcons || __instance.myData.specialAbilityIcon == null)
                 return;
 
-            var sprite = AssetManager.GetSprite($"{RoleName(Pepper.GetMyCurrentIdentity().role)}_Special");
+            var sprite = AssetManager.GetSprite($"{RoleName(Pepper.GetMyRole())}_Special");
 
             if (sprite != Recolors.Instance.Blank)
                 __instance.specialAbilityPanel.useButton.abilityIcon.sprite = sprite;
