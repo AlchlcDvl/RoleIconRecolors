@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using Recolors.Patches;
 
 namespace Recolors;
 
@@ -21,6 +22,12 @@ public class Recolors
     public Sprite Blank;
     public Sprite Thumbnail;
 
+    private static readonly Dictionary<string, Type> PatchTypes = new()
+    {
+        { "alchlcdvl.recolors.rolecardpatches", typeof(RoleCardPatches) },
+        { "alchlcdvl.recolors.abilityiconpatches", typeof(AbilityPanelPatches) }
+    };
+
     public void Start()
     {
         Instance = this;
@@ -31,11 +38,11 @@ public class Recolors
         try
         {
             AssetManager.LoadAssets();
-            Harmony.CreateAndPatchAll(Core, "alchlcdvl.recolors.harmony");
+            PatchTypes.ForEach((x, y) => Harmony.CreateAndPatchAll(y, x));
         }
-        catch
+        catch (Exception e)
         {
-            Console.WriteLine("[Recolors] Something failed D:");
+            Console.WriteLine($"[Recolors] Something failed D: because this happened\n{e}");
         }
 
         Console.WriteLine("[Recolors] Recolored!");

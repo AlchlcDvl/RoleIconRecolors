@@ -13,7 +13,6 @@
         <RootNamespace>Recolors</RootNamespace>
         <ImplicitUsings>enable</ImplicitUsings>
         <EnableDynamicLoading>true</EnableDynamicLoading>
-        <Nullable>enable</Nullable>
         <Authors>AlchlcDvl</Authors>
         <RepositoryType>git</RepositoryType>
         <RepositoryUrl>https://github.com/AlchlcDvl/RoleIconRecolors.git</RepositoryUrl>
