@@ -2,7 +2,7 @@ using Server.Shared.Extensions;
 using Server.Shared.State;
 using Home.Shared;
 
-namespace Recolors;
+namespace RecolorsWindows;
 
 public static class Utils
 {
@@ -108,7 +108,7 @@ public static class Utils
         }
 
         var text = role.ToDisplayString();
-        var text2 = role.IsTraitor(factionType) ? "\n<color=#B545FF>(Traitor)</color>" : "";
+        var text2 = role.IsTraitor(factionType) ? "\n<color=#B545FFFF>(Traitor)</color>" : "";
         var text3 = "<color=" + factionType.GetFactionColor() + ">";
 
         switch (role)

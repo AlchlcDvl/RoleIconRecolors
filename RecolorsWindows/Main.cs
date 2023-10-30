@@ -1,7 +1,7 @@
 using System.Diagnostics;
-using Recolors.Patches;
+using RecolorsWindows.Patches;
 
-namespace Recolors;
+namespace RecolorsWindows;
 
 [SalemMod]
 public class Recolors
@@ -12,7 +12,7 @@ public class Recolors
 
     public static Recolors Instance;
 
-    public const string Resources = "RecolorsMac.Resources.";
+    public const string Resources = "RecolorsWindows.Resources.";
     public const string Base = $"{Resources}Base.";
     public const string EasterEggs = $"{Resources}EasterEggs.";
     public const string TT = $"{Resources}TT.";
@@ -24,8 +24,8 @@ public class Recolors
 
     private static readonly Dictionary<string, Type> PatchTypes = new()
     {
-        { "alchlcdvl.recolors.rolecardpatches", typeof(RoleCardPatches) },
-        { "alchlcdvl.recolors.abilityiconpatches", typeof(AbilityPanelPatches) }
+        { "alchlcdvl.recolors.windows.rolecardpatches", typeof(RoleCardPatches) },
+        { "alchlcdvl.recolors.windows.abilityiconpatches", typeof(AbilityPanelPatches) }
     };
 
     public void Start()

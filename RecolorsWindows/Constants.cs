@@ -1,4 +1,4 @@
-namespace Recolors;
+namespace RecolorsWindows;
 
 public static class Constants
 {

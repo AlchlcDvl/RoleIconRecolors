@@ -1,6 +1,6 @@
 //using Game.Interface;
 
-namespace Recolors.Patches;
+namespace RecolorsWindows.Patches;
 
 public static class AbilityPanelPatches
 {

@@ -1,4 +1,4 @@
-namespace Recolors;
+namespace RecolorsMac;
 
 public static class AssetManager
 {
@@ -68,6 +68,6 @@ public static class AssetManager
 
         Console.WriteLine($"[Recolors] {Recolors.Instance.RegIcons.Count} Regular Assets loaded!");
         Console.WriteLine($"[Recolors] {Recolors.Instance.TTIcons.Count} TT Assets loaded!");
-        Recolors.Instance.RegIcons.ForEach((x, y) => Console.WriteLine($"{x} has {y.Count} sprite(s)!"));
+        Recolors.Instance.RegIcons.ForEach((x, y) => Console.WriteLine($"[Recolors] {x} has {y.Count} sprite(s)!"));
     }
 }

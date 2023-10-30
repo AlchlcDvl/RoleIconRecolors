@@ -4,7 +4,7 @@ using Server.Shared.State;
 using Server.Shared.Info;
 using Services;
 
-namespace Recolors.Patches;
+namespace RecolorsMac.Patches;
 
 public static class RoleCardPatches
 {

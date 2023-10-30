@@ -1,6 +1,6 @@
 //using Game.Interface;
 
-namespace Recolors.Patches;
+namespace RecolorsMac.Patches;
 
 public static class AbilityPanelPatches
 {

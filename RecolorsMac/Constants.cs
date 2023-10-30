@@ -1,4 +1,4 @@
-namespace Recolors;
+namespace RecolorsMac;
 
 public static class Constants
 {
