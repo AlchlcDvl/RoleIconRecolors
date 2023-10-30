@@ -34,12 +34,6 @@ public static class RoleCardPatches
         public static void Prefix() => Index = 0;
     }
 
-    [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.DetermineFrameAndSlots_DestroyRoleInfoSlots))]
-    public static class ResetIndexPatch2
-    {
-        public static void Prefix() => Index = 0;
-    }
-
     [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.DetermineFrameAndSlots_AbilityIcon))]
     public static class PatchRoleCardAbilityIcons1
     {
@@ -140,6 +134,11 @@ public static class RoleCardPatches
         {
             var panel = __instance.GetComponentInParent<RoleCardPanel>();
             panel.roleNameText.text = role.ToColorizedDisplayString(__instance.currentFaction);
+            var name = Utils.RoleName(role);
+            var sprite = role.IsTraitor(Pepper.GetMyFaction()) ? AssetManager.GetTTSprite(name) : AssetManager.GetSprite(name);
+
+            if (sprite != Recolors.Instance.Blank)
+                panel.roleIcon.sprite = sprite;
         }
     }
 }
