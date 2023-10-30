@@ -3,7 +3,6 @@ using Server.Shared.Extensions;
 using Server.Shared.State;
 using Server.Shared.Info;
 using Services;
-using Home.Shared;
 
 namespace Recolors.Patches;
 
@@ -128,12 +127,12 @@ public static class RoleCardPatches
     }
 
     [HarmonyPatch(typeof(RoleCardPanelBackground), nameof(RoleCardPanelBackground.SetRole))]
-    public class FixRoleCardTitles
+    public class FixRoleChanges
     {
         public static void Postfix(RoleCardPanelBackground __instance, ref Role role)
         {
             var panel = __instance.GetComponentInParent<RoleCardPanel>();
-            panel.roleNameText.text = role.ToColorizedDisplayString(__instance.currentFaction);
+            panel.roleNameText.text = role.DisplayString(__instance.currentFaction);
             var name = Utils.RoleName(role);
             var sprite = role.IsTraitor(Pepper.GetMyFaction()) ? AssetManager.GetTTSprite(name) : AssetManager.GetSprite(name);
 

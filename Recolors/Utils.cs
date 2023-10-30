@@ -1,5 +1,6 @@
 using Server.Shared.Extensions;
 using Server.Shared.State;
+using Home.Shared;
 
 namespace Recolors;
 
@@ -13,7 +14,7 @@ public static class Utils
 
     public static void ForEach<T>(this IEnumerable<T> source, Action<T> action) => source.ToList().ForEach(action);
 
-    public static void ForEach<TKey, TValue>(this IDictionary<TKey, TValue> dict, Action<TKey, TValue> action) => dict?.ToList()?.ForEach(pair => action(pair.Key, pair.Value));
+    public static void ForEach<TKey, TValue>(this IDictionary<TKey, TValue> dict, Action<TKey, TValue> action) => dict.ToList().ForEach(pair => action(pair.Key, pair.Value));
 
     public static string RoleName(Role role) => role switch
     {
@@ -54,7 +55,7 @@ public static class Utils
         Role.POTIONMASTER => "PotionMaster",
         Role.RITUALIST => "Ritualist",
         Role.VOODOOMASTER => "VoodooMaster",
-        Role.WILDLING => "Wilding",
+        Role.WILDLING => "Wildling",
         Role.WITCH => "Witch",
         Role.ARSONIST => "Arsonist",
         Role.BAKER => "Baker",
@@ -95,4 +96,41 @@ public static class Utils
         FactionType.CURSED_SOUL => "CursedSoul",
         _ => "Blank"
     };
+
+    public static string DisplayString(this Role role, FactionType factionType)
+    {
+        if (role.IsBucket())
+        {
+            var bucketDisplayString = ClientRoleExtensions.GetBucketDisplayString(role);
+
+            if (!string.IsNullOrEmpty(bucketDisplayString))
+                return bucketDisplayString;
+        }
+
+        var text = role.ToDisplayString();
+        var text2 = role.IsTraitor(factionType) ? "\n<color=#B545FF>(Traitor)</color>" : "";
+        var text3 = "<color=" + factionType.GetFactionColor() + ">";
+
+        switch (role)
+        {
+            case Role.STONED:
+                text3 = "<color=#9C9A9A>";
+                break;
+
+            case Role.HIDDEN:
+                text3 = "<color=#9C9A9A>";
+                break;
+
+            default:
+
+                if (role.IsModifierCard())
+                    text3 = "<color=#FFFFFF>";
+                else if (text2.Length > 0)
+                    text3 = "<color=#B545FF>";
+
+                break;
+        }
+
+        return text3 + text + text2 + "</color>";
+    }
 }
