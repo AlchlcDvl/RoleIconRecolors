@@ -15,7 +15,7 @@ public static class AssetManager
             return Recolors.Instance.Blank;
         }
 
-        if ((sprites.Count > 1 && URandom.RandomRangeInt(1, 100) <= Constants.EasterEggChance && Constants.EasterEggChance > 0) || Constants.EasterEggChance == 100)
+        if (sprites.Count > 1 && ((URandom.RandomRangeInt(1, 100) <= Constants.EasterEggChance && Constants.EasterEggChance > 0) || Constants.EasterEggChance == 100))
             return sprites.Skip(1).Random();
 
         return sprites[0];
