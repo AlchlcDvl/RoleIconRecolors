@@ -1,0 +1,33 @@
+{
+  "HarmonyId": "alchlcdvl.recolors.windows",
+  "DisplayName": "Icon Recolors (Windows)",
+  "Authors": [ "AlchlcDvl" ],
+  "Description": "The mod adds a bit of flair to icons! Credits to MysticMismagius and Nidoskull for the artwork! (Windows only)",
+  "Version": "1.0.0",
+  "Platforms": [ "Windows" ],
+  "Settings":
+  {
+    "CheckboxSettings":
+    [
+      {
+        "Name": "Enable Custom Icons",
+        "SettingID": "recolors.windows.icons",
+        "Description": "Toggles whether custom icons appear or not",
+        "DefaultValue": true,
+        "AvailableInGame": false
+      }
+    ],
+    "IntegerInputSettings":
+    [
+      {
+        "Name": "Easter Egg Icon Chance",
+        "SettingID": "recolors.windows.eastereggs",
+        "Description": "The chance of a different than normal icon appearing for roles",
+        "DefaultValue": 5,
+        "MinValue": 0,
+        "MaxValue": 100,
+        "AvailableInGame": false
+      }
+    ]
+  }
+}
