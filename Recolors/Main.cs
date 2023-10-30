@@ -42,7 +42,7 @@ public class Recolors
         }
         catch (Exception e)
         {
-            Console.WriteLine($"[Recolors] Something failed D: because this happened\n{e}");
+            Console.WriteLine($"[Recolors] Something failed because this happened D:\n{e}");
         }
 
         Console.WriteLine("[Recolors] Recolored!");

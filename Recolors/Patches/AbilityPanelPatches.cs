@@ -1,10 +1,10 @@
-using Game.Interface;
+//using Game.Interface;
 
 namespace Recolors.Patches;
 
 public static class AbilityPanelPatches
 {
-    [HarmonyPatch(typeof(TosAbilityPanelListItem), nameof(TosAbilityPanelListItem.OverrideIconAndText))]
+    /*[HarmonyPatch(typeof(TosAbilityPanelListItem), nameof(TosAbilityPanelListItem.OverrideIconAndText))]
     public static class AbilityPanelStartPatch
     {
         public static void Postfix(TosAbilityPanelListItem __instance, ref TosAbilityPanelListItem.OverrideAbilityType overrideType)
@@ -31,5 +31,5 @@ public static class AbilityPanelPatches
                     __instance.choice1Sprite.sprite = sprite;
             }
         }
-    }
+    }*/
 }
