@@ -2,7 +2,7 @@ namespace RecolorsMac;
 
 public static class AssetManager
 {
-    private static readonly List<string> ToRemove = new() { Recolors.Base, Recolors.EasterEggs, Recolors.TT, ".png", "_IconA", "_IconB", "_Flame1", "_Flame2" };
+    private static readonly List<string> ToRemove = new() { Recolors.Base, Recolors.EasterEggs, Recolors.TT, ".png", "_IconA", "_IconB", "_IconC", "_Flame1", "_Flame2" };
 
     public static Sprite GetSprite(string name)
     {
