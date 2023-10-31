@@ -131,13 +131,61 @@ public static class RoleCardPatches
     {
         public static void Postfix(RoleCardPanelBackground __instance, ref Role role)
         {
+            Index = 0;
             var panel = __instance.GetComponentInParent<RoleCardPanel>();
             panel.roleNameText.text = role.DisplayString(__instance.currentFaction);
+
+            if (!Constants.EnableIcons)
+                return;
+
             var name = Utils.RoleName(role);
             var sprite = role.IsTraitor(Pepper.GetMyFaction()) ? AssetManager.GetTTSprite(name) : AssetManager.GetSprite(name);
 
             if (sprite != Recolors.Instance.Blank)
                 panel.roleIcon.sprite = sprite;
+
+            var special = AssetManager.GetSprite($"{name}_Special");
+
+            if (special != Recolors.Instance.Blank)
+                panel.specialAbilityPanel.useButton.abilityIcon.sprite = special;
+
+            var abilityname = $"{name}_Ability";
+            var ability1 = AssetManager.GetSprite(abilityname);
+
+            if (ability1 == Recolors.Instance.Blank)
+                abilityname += "_1";
+
+            ability1 = AssetManager.GetSprite(abilityname);
+
+            if (ability1 != Recolors.Instance.Blank)
+            {
+                panel.roleInfoButtons[Index].abilityIcon.sprite = ability1;
+                Index++;
+            }
+
+            var ability2 = AssetManager.GetSprite($"{name}_Ability_2");
+
+            if (ability2 != Recolors.Instance.Blank)
+            {
+                panel.roleInfoButtons[Index].abilityIcon.sprite = ability2;
+                Index++;
+            }
+
+            var attribute = AssetManager.GetSprite($"Attributes_{Utils.FactionName(Pepper.GetMyFaction())}");
+
+            if (attribute != Recolors.Instance.Blank)
+            {
+                panel.roleInfoButtons[Index].abilityIcon.sprite = attribute;
+                Index++;
+            }
+
+            var nommy = AssetManager.GetSprite("Necronomicon");
+
+            if (nommy != Recolors.Instance.Blank && Service.Game.Sim.info.roleCardObservation.Data.powerUp == POWER_UP_TYPE.NECRONOMICON)
+            {
+                panel.roleInfoButtons[Index].abilityIcon.sprite = nommy;
+                Index++;
+            }
         }
     }
 }

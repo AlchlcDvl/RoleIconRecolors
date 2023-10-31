@@ -1,6 +1,8 @@
 using Server.Shared.Extensions;
 using Server.Shared.State;
 using Home.Shared;
+using Server.Shared.Info;
+using Services;
 
 namespace RecolorsMac;
 
@@ -79,7 +81,7 @@ public static class Utils
         _ => "Blank"
     };
 
-    public static string FactionName(FactionType role) => role switch
+    public static string FactionName(FactionType faction) => faction switch
     {
         FactionType.TOWN => "Town",
         FactionType.COVEN => "Coven",
@@ -108,29 +110,22 @@ public static class Utils
         }
 
         var text = role.ToDisplayString();
-        var text2 = role.IsTraitor(factionType) ? "\n<color=#B545FFFF>(Traitor)</color>" : "";
-        var text3 = "<color=" + factionType.GetFactionColor() + ">";
+        var text2 = "";
 
-        switch (role)
-        {
-            case Role.STONED:
-                text3 = "<color=#9C9A9A>";
-                break;
+        if (role.IsTraitor(factionType))
+            text2 = "\n<color=#B545FFFF>(Traitor)</color>";
+        else if (Service.Game.Sim.info.roleCardObservation.Data.modifier == ROLE_MODIFIER.VIP)
+            text2 = "\n<color=#06E00CFF>(VIP)</color>";
 
-            case Role.HIDDEN:
-                text3 = "<color=#9C9A9A>";
-                break;
+        var text3 = role.GetFaction().GetFactionColor();
 
-            default:
+        if (role.IsModifierCard())
+            text3 = "#FFFFFFFF";
+        else if (text2 != "")
+            text3 = "#B545FFFF";
+        else if (role is Role.STONED or Role.HIDDEN)
+            text3 = "#9C9A9AFF";
 
-                if (role.IsModifierCard())
-                    text3 = "<color=#FFFFFF>";
-                else if (text2.Length > 0)
-                    text3 = "<color=#B545FF>";
-
-                break;
-        }
-
-        return text3 + text + text2 + "</color>";
+        return "<color=" + text3 + ">" + text + text2 + "</color>";
     }
 }
