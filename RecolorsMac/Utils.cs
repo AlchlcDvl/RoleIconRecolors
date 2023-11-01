@@ -117,15 +117,9 @@ public static class Utils
         else if (Service.Game.Sim.info.roleCardObservation.Data.modifier == ROLE_MODIFIER.VIP)
             text2 = "\n<color=#06E00CFF>(VIP)</color>";
 
-        var text3 = role.GetFaction().GetFactionColor();
+        if (text2.Length > 0)
+            text2 = $"<size=85%>{text2}</size>";
 
-        if (role.IsModifierCard())
-            text3 = "#FFFFFFFF";
-        else if (text2 != "")
-            text3 = "#B545FFFF";
-        else if (role is Role.STONED or Role.HIDDEN)
-            text3 = "#9C9A9AFF";
-
-        return "<color=" + text3 + ">" + text + text2 + "</color>";
+        return $"<color={role.GetFaction().GetFactionColor()}>{text}{text2}</color>";
     }
 }
