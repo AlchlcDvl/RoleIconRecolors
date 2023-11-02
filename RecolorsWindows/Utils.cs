@@ -81,23 +81,29 @@ public static class Utils
         _ => "Blank"
     };
 
-    public static string FactionName(FactionType faction) => faction switch
+    public static string FactionName(FactionType faction, Role role = Role.NONE)
     {
-        FactionType.TOWN => "Town",
-        FactionType.COVEN => "Coven",
-        FactionType.SERIALKILLER => "SerialKiller",
-        FactionType.ARSONIST => "Arsonist",
-        FactionType.WEREWOLF => "Werewolf",
-        FactionType.SHROUD => "Shroud",
-        FactionType.APOCALYPSE => Pepper.GetMyRole() is Role.SOULCOLLECTOR or Role.BAKER or Role.PLAGUEBEARER or Role.BERSERKER ? "Apocalypse" : "Horsemen",
-        FactionType.EXECUTIONER => "Executioner",
-        FactionType.JESTER => "Jester",
-        FactionType.PIRATE => "Pirate",
-        FactionType.DOOMSAYER => "Doomsayer",
-        FactionType.VAMPIRE => "Vampire",
-        FactionType.CURSED_SOUL => "CursedSoul",
-        _ => "Blank"
-    };
+        if (role == Role.NONE)
+            role = Pepper.GetMyRole();
+
+        return faction switch
+        {
+            FactionType.TOWN => "Town",
+            FactionType.COVEN => "Coven",
+            FactionType.SERIALKILLER => "SerialKiller",
+            FactionType.ARSONIST => "Arsonist",
+            FactionType.WEREWOLF => "Werewolf",
+            FactionType.SHROUD => "Shroud",
+            FactionType.APOCALYPSE => role is Role.SOULCOLLECTOR or Role.BAKER or Role.PLAGUEBEARER or Role.BERSERKER ? "Apocalypse" : "Horsemen",
+            FactionType.EXECUTIONER => "Executioner",
+            FactionType.JESTER => "Jester",
+            FactionType.PIRATE => "Pirate",
+            FactionType.DOOMSAYER => "Doomsayer",
+            FactionType.VAMPIRE => "Vampire",
+            FactionType.CURSED_SOUL => "CursedSoul",
+            _ => "Blank"
+        };
+    }
 
     public static string DisplayString(this Role role, FactionType factionType)
     {

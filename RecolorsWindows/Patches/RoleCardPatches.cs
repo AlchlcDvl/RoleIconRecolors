@@ -171,7 +171,7 @@ public static class RoleCardPatches
                 Index++;
             }
 
-            var attribute = AssetManager.GetSprite($"Attributes_{Utils.FactionName(Pepper.GetMyFaction())}");
+            var attribute = AssetManager.GetSprite($"Attributes_{Utils.FactionName(Pepper.GetMyFaction(), role)}");
 
             if (attribute != Recolors.Instance.Blank)
             {
