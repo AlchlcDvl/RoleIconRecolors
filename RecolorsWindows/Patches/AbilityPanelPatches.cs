@@ -45,7 +45,7 @@ public static class AbilityPanelPatches
                     break;
 
                 case TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_REVEAL:
-                    var reveal = AssetManager.GetSprite("PotionMaster_Ability2", false);
+                    var reveal = AssetManager.GetSprite("PotionMaster_Ability_2", false);
 
                     if (reveal != Recolors.Blank && __instance.choice1Sprite != null)
                         __instance.choice1Sprite.sprite = reveal;
@@ -69,7 +69,7 @@ public static class AbilityPanelPatches
                     break;
 
                 case TosAbilityPanelListItem.OverrideAbilityType.WEREWOLF_NON_FULL_MOON:
-                    var sniff = AssetManager.GetSprite("Werewolf_Ability2", false);
+                    var sniff = AssetManager.GetSprite("Werewolf_Ability_2", false);
 
                     if (sniff != Recolors.Blank && __instance.choice1Sprite != null)
                         __instance.choice1Sprite.sprite = sniff;
@@ -88,7 +88,7 @@ public static class AbilityPanelPatches
                     if (ability1 != Recolors.Blank && __instance.choice1Sprite != null)
                         __instance.choice1Sprite.sprite = ability1;
 
-                    var ability2 = AssetManager.GetSprite($"{Utils.RoleName(Pepper.GetMyRole())}_Ability2", false);
+                    var ability2 = AssetManager.GetSprite($"{Utils.RoleName(Pepper.GetMyRole())}_Ability_2", false);
 
                     if (ability2 != Recolors.Blank && __instance.choice2Sprite != null)
                         __instance.choice2Sprite.sprite = ability2;
