@@ -2,7 +2,7 @@ namespace RecolorsWindows;
 
 public static class AssetManager
 {
-    private static readonly List<string> ToRemove = new() { Recolors.Base, Recolors.EasterEggs, Recolors.TT, ".png", "_IconA", "_IconB", "_IconC", "_IconD", "_IconE" };
+    private static readonly List<string> ToRemove = new() { Recolors.Base, Recolors.EasterEggs, Recolors.TT, ".png", "_IconA", "_IconB", "_IconC", "_IconD" };
 
     public static Sprite GetSprite(string name, bool allowEE = true)
     {
@@ -15,7 +15,7 @@ public static class AssetManager
             return Recolors.Blank;
         }
 
-        if (sprites.Count > 1 && ((URandom.RandomRangeInt(1, 100) <= Constants.EasterEggChance && Constants.EasterEggChance > 0) || Constants.EasterEggChance == 100) && allowEE)
+        if (sprites.Count > 1 && ((URandom.RandomRangeInt(1, 100) <= Constants.EasterEggChance) || Constants.EasterEggChance == 100) && allowEE)
             return sprites.Skip(1).Random();
 
         return sprites[0];

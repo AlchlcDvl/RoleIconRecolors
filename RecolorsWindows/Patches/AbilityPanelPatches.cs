@@ -21,15 +21,31 @@ public static class AbilityPanelPatches
                     if (nommy != Recolors.Blank)
                     {
                         if (Pepper.GetMyRole() == Role.ILLUSIONIST && __instance.choice2Sprite != null)
+                        {
                             __instance.choice2Sprite.sprite = nommy;
+                            var illu = AssetManager.GetSprite("Illusionist_Ability", Constants.PlayerPanelEasterEggs);
+
+                            if (__instance.choice1Sprite != null)
+                                __instance.choice1Sprite.sprite = illu;
+                        }
                         else if (__instance.choice1Sprite != null)
+                        {
                             __instance.choice1Sprite.sprite = nommy;
+
+                            if (Pepper.GetMyRole() == Role.ILLUSIONIST)
+                            {
+                                var target = AssetManager.GetSprite("Witch_Ability_2", Constants.PlayerPanelEasterEggs);
+
+                                if (__instance.choice2Sprite != null)
+                                    __instance.choice2Sprite.sprite = target;
+                            }
+                        }
                     }
 
                     break;
 
                 case TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_ATTACK:
-                    var attack = AssetManager.GetSprite("PotionMaster_Special", false);
+                    var attack = AssetManager.GetSprite("PotionMaster_Special", Constants.PlayerPanelEasterEggs);
 
                     if (attack != Recolors.Blank && __instance.choice1Sprite != null)
                         __instance.choice1Sprite.sprite = attack;
@@ -37,7 +53,7 @@ public static class AbilityPanelPatches
                     break;
 
                 case TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_HEAL:
-                    var heal = AssetManager.GetSprite("PotionMaster_Ability1", false);
+                    var heal = AssetManager.GetSprite("PotionMaster_Ability1", Constants.PlayerPanelEasterEggs);
 
                     if (heal != Recolors.Blank && __instance.choice1Sprite != null)
                         __instance.choice1Sprite.sprite = heal;
@@ -45,7 +61,7 @@ public static class AbilityPanelPatches
                     break;
 
                 case TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_REVEAL:
-                    var reveal = AssetManager.GetSprite("PotionMaster_Ability_2", false);
+                    var reveal = AssetManager.GetSprite("PotionMaster_Ability_2", Constants.PlayerPanelEasterEggs);
 
                     if (reveal != Recolors.Blank && __instance.choice1Sprite != null)
                         __instance.choice1Sprite.sprite = reveal;
@@ -53,7 +69,7 @@ public static class AbilityPanelPatches
                     break;
 
                 case TosAbilityPanelListItem.OverrideAbilityType.POISONER_POISON:
-                    var poison = AssetManager.GetSprite("Poisoner_Special", false);
+                    var poison = AssetManager.GetSprite("Poisoner_Special", Constants.PlayerPanelEasterEggs);
 
                     if (poison != Recolors.Blank && __instance.choice1Sprite != null)
                         __instance.choice1Sprite.sprite = poison;
@@ -61,7 +77,7 @@ public static class AbilityPanelPatches
                     break;
 
                 case TosAbilityPanelListItem.OverrideAbilityType.SHROUD:
-                    var shroud = AssetManager.GetSprite("Shroud_Special", false);
+                    var shroud = AssetManager.GetSprite("Shroud_Special", Constants.PlayerPanelEasterEggs);
 
                     if (shroud != Recolors.Blank && __instance.choice1Sprite != null)
                         __instance.choice1Sprite.sprite = shroud;
@@ -69,7 +85,7 @@ public static class AbilityPanelPatches
                     break;
 
                 case TosAbilityPanelListItem.OverrideAbilityType.WEREWOLF_NON_FULL_MOON:
-                    var sniff = AssetManager.GetSprite("Werewolf_Ability_2", false);
+                    var sniff = AssetManager.GetSprite("Werewolf_Ability_2", Constants.PlayerPanelEasterEggs);
 
                     if (sniff != Recolors.Blank && __instance.choice1Sprite != null)
                         __instance.choice1Sprite.sprite = sniff;
@@ -78,17 +94,17 @@ public static class AbilityPanelPatches
 
                 default:
                     var abilityName = $"{Utils.RoleName(Pepper.GetMyRole())}_Ability";
-                    var ability1 = AssetManager.GetSprite(abilityName, false);
+                    var ability1 = AssetManager.GetSprite(abilityName, Constants.PlayerPanelEasterEggs);
 
                     if (ability1 == Recolors.Blank)
                         abilityName += "_1";
 
-                    ability1 = AssetManager.GetSprite(abilityName, false);
+                    ability1 = AssetManager.GetSprite(abilityName, Constants.PlayerPanelEasterEggs);
 
                     if (ability1 != Recolors.Blank && __instance.choice1Sprite != null)
                         __instance.choice1Sprite.sprite = ability1;
 
-                    var ability2 = AssetManager.GetSprite($"{Utils.RoleName(Pepper.GetMyRole())}_Ability_2", false);
+                    var ability2 = AssetManager.GetSprite($"{Utils.RoleName(Pepper.GetMyRole())}_Ability_2", Constants.PlayerPanelEasterEggs);
 
                     if (ability2 != Recolors.Blank && __instance.choice2Sprite != null)
                         __instance.choice2Sprite.sprite = ability2;
