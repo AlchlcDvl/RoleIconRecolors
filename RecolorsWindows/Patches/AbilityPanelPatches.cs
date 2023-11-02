@@ -25,18 +25,18 @@ public static class AbilityPanelPatches
                             __instance.choice2Sprite.sprite = nommy;
                             var illu = AssetManager.GetSprite("Illusionist_Ability", Constants.PlayerPanelEasterEggs);
 
-                            if (__instance.choice1Sprite != null)
+                            if (illu != Recolors.Blank && __instance.choice1Sprite != null)
                                 __instance.choice1Sprite.sprite = illu;
                         }
                         else if (__instance.choice1Sprite != null)
                         {
                             __instance.choice1Sprite.sprite = nommy;
 
-                            if (Pepper.GetMyRole() == Role.ILLUSIONIST)
+                            if (Pepper.GetMyRole() == Role.WITCH)
                             {
                                 var target = AssetManager.GetSprite("Witch_Ability_2", Constants.PlayerPanelEasterEggs);
 
-                                if (__instance.choice2Sprite != null)
+                                if (target != Recolors.Blank && __instance.choice2Sprite != null)
                                     __instance.choice2Sprite.sprite = target;
                             }
                         }
