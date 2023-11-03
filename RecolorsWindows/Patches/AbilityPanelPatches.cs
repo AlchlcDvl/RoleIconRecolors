@@ -53,7 +53,7 @@ public static class AbilityPanelPatches
                     break;
 
                 case TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_HEAL:
-                    var heal = AssetManager.GetSprite("PotionMaster_Ability1", Constants.PlayerPanelEasterEggs);
+                    var heal = AssetManager.GetSprite("PotionMaster_Ability_1", Constants.PlayerPanelEasterEggs);
 
                     if (heal != Recolors.Blank && __instance.choice1Sprite != null)
                         __instance.choice1Sprite.sprite = heal;
@@ -111,6 +111,18 @@ public static class AbilityPanelPatches
 
                     break;
             }
+        }
+    }
+
+    [HarmonyPatch(typeof(SpecialAbilityPopupGenericListItem), nameof(SpecialAbilityPopupGenericListItem.SetData))]
+    public static class SpecialAbilityPanelPatch
+    {
+        public static void Postfix(SpecialAbilityPopupGenericListItem __instance)
+        {
+            var special = AssetManager.GetSprite($"{Utils.RoleName(Pepper.GetMyRole())}_Special");
+
+            if (special != Recolors.Blank)
+                __instance.choiceSprite.sprite = special;
         }
     }
 }
