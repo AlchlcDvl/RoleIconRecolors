@@ -22,7 +22,7 @@ public static class RoleCardPatches
             var name = Utils.RoleName(role);
             var sprite = role.IsTraitor(Pepper.GetMyFaction()) ? AssetManager.GetTTSprite(name) : AssetManager.GetSprite(name);
 
-            if (sprite != Recolors.Blank)
+            if (sprite != AssetManager.Blank)
                 __instance.roleIcon.sprite = sprite;
         }
     }
@@ -44,12 +44,12 @@ public static class RoleCardPatches
             var spriteName = $"{Utils.RoleName(Pepper.GetMyRole())}_Ability";
             var sprite = AssetManager.GetSprite(spriteName);
 
-            if (sprite == Recolors.Blank)
+            if (sprite == AssetManager.Blank)
                 spriteName += "_1";
 
             sprite = AssetManager.GetSprite(spriteName);
 
-            if (sprite != Recolors.Blank)
+            if (sprite != AssetManager.Blank)
             {
                 __instance.roleInfoButtons[Index].abilityIcon.sprite = sprite;
                 Index++;
@@ -67,7 +67,7 @@ public static class RoleCardPatches
 
             var sprite = AssetManager.GetSprite($"{Utils.RoleName(Pepper.GetMyRole())}_Ability_2");
 
-            if (sprite != Recolors.Blank)
+            if (sprite != AssetManager.Blank)
             {
                 __instance.roleInfoButtons[Index].abilityIcon.sprite = sprite;
                 Index++;
@@ -85,7 +85,7 @@ public static class RoleCardPatches
 
             var sprite = AssetManager.GetSprite($"Attributes_{Utils.FactionName(Pepper.GetMyCurrentIdentity().faction)}");
 
-            if (sprite != Recolors.Blank)
+            if (sprite != AssetManager.Blank)
             {
                 __instance.roleInfoButtons[Index].abilityIcon.sprite = sprite;
                 Index++;
@@ -103,7 +103,7 @@ public static class RoleCardPatches
 
             var sprite = AssetManager.GetSprite("Necronomicon");
 
-            if (sprite != Recolors.Blank)
+            if (sprite != AssetManager.Blank)
             {
                 __instance.roleInfoButtons[Index].abilityIcon.sprite = sprite;
                 Index++;
@@ -121,7 +121,7 @@ public static class RoleCardPatches
 
             var sprite = AssetManager.GetSprite($"{Utils.RoleName(Pepper.GetMyRole())}_Special");
 
-            if (sprite != Recolors.Blank)
+            if (sprite != AssetManager.Blank)
                 __instance.specialAbilityPanel.useButton.abilityIcon.sprite = sprite;
         }
     }
@@ -141,23 +141,23 @@ public static class RoleCardPatches
             var name = Utils.RoleName(role);
             var sprite = role.IsTraitor(Pepper.GetMyFaction()) ? AssetManager.GetTTSprite(name) : AssetManager.GetSprite(name);
 
-            if (sprite != Recolors.Blank)
+            if (sprite != AssetManager.Blank)
                 panel.roleIcon.sprite = sprite;
 
             var special = AssetManager.GetSprite($"{name}_Special");
 
-            if (special != Recolors.Blank)
+            if (special != AssetManager.Blank)
                 panel.specialAbilityPanel.useButton.abilityIcon.sprite = special;
 
             var abilityname = $"{name}_Ability";
             var ability1 = AssetManager.GetSprite(abilityname);
 
-            if (ability1 == Recolors.Blank)
+            if (ability1 == AssetManager.Blank)
                 abilityname += "_1";
 
             ability1 = AssetManager.GetSprite(abilityname);
 
-            if (ability1 != Recolors.Blank)
+            if (ability1 != AssetManager.Blank)
             {
                 panel.roleInfoButtons[Index].abilityIcon.sprite = ability1;
                 Index++;
@@ -165,7 +165,7 @@ public static class RoleCardPatches
 
             var ability2 = AssetManager.GetSprite($"{name}_Ability_2");
 
-            if (ability2 != Recolors.Blank)
+            if (ability2 != AssetManager.Blank)
             {
                 panel.roleInfoButtons[Index].abilityIcon.sprite = ability2;
                 Index++;
@@ -173,7 +173,7 @@ public static class RoleCardPatches
 
             var attribute = AssetManager.GetSprite($"Attributes_{Utils.FactionName(Pepper.GetMyFaction(), role)}");
 
-            if (attribute != Recolors.Blank)
+            if (attribute != AssetManager.Blank)
             {
                 panel.roleInfoButtons[Index].abilityIcon.sprite = attribute;
                 Index++;
@@ -181,7 +181,7 @@ public static class RoleCardPatches
 
             var nommy = AssetManager.GetSprite("Necronomicon");
 
-            if (nommy != Recolors.Blank && Service.Game.Sim.info.roleCardObservation.Data.powerUp == POWER_UP_TYPE.NECRONOMICON)
+            if (nommy != AssetManager.Blank && Service.Game.Sim.info.roleCardObservation.Data.powerUp == POWER_UP_TYPE.NECRONOMICON)
             {
                 panel.roleInfoButtons[Index].abilityIcon.sprite = nommy;
                 Index++;

@@ -21,10 +21,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <EmbeddedResource Include="Resources\*" />
-        <EmbeddedResource Include="Resources\Base\*" />
-        <EmbeddedResource Include="Resources\EasterEggs\*" />
-        <EmbeddedResource Include="Resources\TT\*" />
+        <EmbeddedResource Include="Resources\**\*" />
     </ItemGroup>
 
     <ItemGroup>

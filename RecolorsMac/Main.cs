@@ -8,13 +8,9 @@ namespace RecolorsMac;
 public class Recolors
 {
     public static string ModPath => Path.Combine(Directory.GetCurrentDirectory(), "SalemModLoader", "ModFolders", "Recolors");
+    public static string DefaultPath => Path.Combine(Directory.GetCurrentDirectory(), "SalemModLoader", "ModFolders", "Recolors", "Default");
 
     public static Assembly Core => typeof(Recolors).Assembly;
-
-    public static Dictionary<string, List<Sprite>> RegIcons = new();
-    public static Dictionary<string, List<Sprite>> TTIcons = new();
-    public static Sprite Blank;
-    public static Sprite Thumbnail;
 
     private static readonly Dictionary<string, Type> PatchTypes = new()
     {
@@ -41,11 +37,18 @@ public class Recolors
         Console.WriteLine("[Recolors] Recolored!");
     }
 
-    public static SalemMenuButton MenuButton = new()
+    public static SalemMenuButton MenuButton1 = new()
     {
         Label = "Icon Recolors",
-        Icon = Thumbnail,
+        Icon = AssetManager.Thumbnail,
         OnClick = OpenDirectory
+    };
+
+    public static SalemMenuButton MenuButton2 = new()
+    {
+        Label = "Dump Mod Assets",
+        Icon = AssetManager.Thumbnail,
+        OnClick = OpenDefaultDirectory
     };
 
     private static void OpenDirectory()
@@ -54,5 +57,15 @@ public class Recolors
             Process.Start("open", $"\"{ModPath}\""); //code stolen from jan who stole from tuba
         else
             Application.OpenURL($"file://{ModPath}");
+    }
+
+    private static void OpenDefaultDirectory()
+    {
+        AssetManager.DumpModAssets();
+
+        if (Environment.OSVersion.Platform is PlatformID.MacOSX or PlatformID.Unix)
+            Process.Start("open", $"\"{DefaultPath}\"");
+        else
+            Application.OpenURL($"file://{DefaultPath}");
     }
 }
