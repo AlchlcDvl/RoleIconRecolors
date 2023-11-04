@@ -40,14 +40,12 @@ public class Recolors
     public static SalemMenuButton MenuButton1 = new()
     {
         Label = "Icon Recolors",
-        Icon = AssetManager.Thumbnail,
         OnClick = OpenDirectory
     };
 
     public static SalemMenuButton MenuButton2 = new()
     {
-        Label = "Dump Mod Assets",
-        Icon = AssetManager.Thumbnail,
+        Label = "Dump Icons",
         OnClick = OpenDefaultDirectory
     };
 

@@ -103,100 +103,57 @@ public static class AssetManager
     //thanks pat
     public static void DumpModAssets()
     {
+        DeleteModAssets();
+
+        if (!Directory.Exists(Recolors.DefaultPath))
+            Directory.CreateDirectory(Recolors.DefaultPath);
+
         foreach (var (name, sprite) in RegIcons)
         {
-            var directory = Path.Combine(Recolors.ModPath, "Default", "Base");
-
-            if (!Directory.Exists(directory))
-                Directory.CreateDirectory(directory);
-
-            var file = $"{directory}/{name}.png";
-
-            if (File.Exists(file))
-                File.Delete(file);
-
-            File.WriteAllBytes(file, sprite.texture.Decompress().EncodeToPNG());
+            var directory = Path.Combine(Recolors.DefaultPath, "Base");
+            Directory.CreateDirectory(directory);
+            File.WriteAllBytes($"{directory}/{name}.png", sprite.texture.Decompress().EncodeToPNG());
         }
 
         foreach (var (name, sprite) in TTIcons)
         {
-            var directory = Path.Combine(Recolors.ModPath, "Default", "TTBase");
-
-            if (!Directory.Exists(directory))
-                Directory.CreateDirectory(directory);
-
-            var file = $"{directory}/{name}.png";
-
-            if (File.Exists(file))
-                File.Delete(file);
-
-            File.WriteAllBytes(file, sprite.texture.Decompress().EncodeToPNG());
+            var directory = Path.Combine(Recolors.DefaultPath, "TTBase");
+            Directory.CreateDirectory(directory);
+            File.WriteAllBytes($"{directory}/{name}.png", sprite.texture.Decompress().EncodeToPNG());
         }
 
         foreach (var (name, sprites) in RegEEIcons)
         {
-            var directory = Path.Combine(Recolors.ModPath, "Default", "EasterEggs");
-
-            if (!Directory.Exists(directory))
-                Directory.CreateDirectory(directory);
+            var directory = Path.Combine(Recolors.DefaultPath, "EasterEggs");
+            Directory.CreateDirectory(directory);
 
             if (sprites.Count == 1)
-            {
-                var file = $"{directory}/{name}.png";
-
-                if (File.Exists(file))
-                    File.Delete(file);
-
-                File.WriteAllBytes(file, sprites[0].texture.Decompress().EncodeToPNG());
-            }
+                File.WriteAllBytes($"{directory}/{name}.png", sprites[0].texture.Decompress().EncodeToPNG());
             else
             {
                 for (var i = 0; i < sprites.Count; i++)
-                {
-                    var file = $"{directory}/{name}_Icon{i}.png";
-
-                    if (File.Exists(file))
-                        File.Delete(file);
-
-                    File.WriteAllBytes(file, sprites[i].texture.Decompress().EncodeToPNG());
-                }
+                    File.WriteAllBytes($"{directory}/{name}_Icon{i + 1}.png", sprites[i].texture.Decompress().EncodeToPNG());
             }
         }
 
         foreach (var (name, sprites) in TTEEIcons)
         {
-            var directory = Path.Combine(Recolors.ModPath, "Default", "TTEasterEggs");
-
-            if (!Directory.Exists(directory))
-                Directory.CreateDirectory(directory);
+            var directory = Path.Combine(Recolors.DefaultPath, "TTEasterEggs");
+            Directory.CreateDirectory(directory);
 
             if (sprites.Count == 1)
-            {
-                var file = $"{directory}/{name}.png";
-
-                if (File.Exists(file))
-                    File.Delete(file);
-
-                File.WriteAllBytes(file, sprites[0].texture.Decompress().EncodeToPNG());
-            }
+                File.WriteAllBytes($"{directory}/{name}.png", sprites[0].texture.Decompress().EncodeToPNG());
             else
             {
                 for (var i = 0; i < sprites.Count; i++)
-                {
-                    var file = $"{directory}/{name}_Icon{i}.png";
-
-                    if (File.Exists(file))
-                        File.Delete(file);
-
-                    File.WriteAllBytes(file, sprites[i].texture.Decompress().EncodeToPNG());
-                }
+                    File.WriteAllBytes($"{directory}/{name}_Icon{i + 1}.png", sprites[i].texture.Decompress().EncodeToPNG());
             }
         }
     }
 
     //thanks stackoverflow and pat
     //https://stackoverflow.com/questions/51315918/how-to-encodetopng-compressed-textures-in-unity
-    public static Texture2D Decompress(this Texture2D source)
+    private static Texture2D Decompress(this Texture2D source)
     {
         var renderTex = RenderTexture.GetTemporary(source.width, source.height, 0, RenderTextureFormat.Default, RenderTextureReadWrite.Linear);
         Graphics.Blit(source, renderTex);
@@ -208,5 +165,16 @@ public static class AssetManager
         RenderTexture.active = previous;
         RenderTexture.ReleaseTemporary(renderTex);
         return readableText;
+    }
+
+    private static void DeleteModAssets()
+    {
+        if (!Directory.Exists(Recolors.DefaultPath))
+            return;
+
+        var defaultPath = new DirectoryInfo(Recolors.DefaultPath);
+        defaultPath.GetFiles("*.png").Select(x => x.FullName).ForEach(File.Delete);
+        defaultPath.GetDirectories().Select(x => x.FullName).ForEach(Directory.Delete);
+        Directory.Delete(Recolors.DefaultPath);
     }
 }
