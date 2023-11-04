@@ -4,16 +4,12 @@ using RecolorsWindows.Patches;
 namespace RecolorsWindows;
 
 [SalemMod]
+[SalemMenuItem]
 public class Recolors
 {
     public static string ModPath => Path.Combine(Directory.GetCurrentDirectory(), "SalemModLoader", "ModFolders", "Recolors");
 
     public static Assembly Core => typeof(Recolors).Assembly;
-
-    public const string Resources = "RecolorsWindows.Resources.";
-    public const string Base = $"{Resources}Base.";
-    public const string EasterEggs = $"{Resources}EasterEggs.";
-    public const string TT = $"{Resources}TT.";
 
     public static Dictionary<string, List<Sprite>> RegIcons = new();
     public static Dictionary<string, List<Sprite>> TTIcons = new();
@@ -23,7 +19,8 @@ public class Recolors
     private static readonly Dictionary<string, Type> PatchTypes = new()
     {
         { "alchlcdvl.recolors.windows.rolecardpatches", typeof(RoleCardPatches) },
-        { "alchlcdvl.recolors.windows.abilityiconpatches", typeof(AbilityPanelPatches) }
+        { "alchlcdvl.recolors.windows.abilityiconpatches", typeof(AbilityPanelPatches) },
+        { "alchlcdvl.recolors.windows.mentionpatches", typeof(MentionPatches) }
     };
 
     public void Start()
@@ -43,23 +40,19 @@ public class Recolors
 
         Console.WriteLine("[Recolors] Recolored!");
     }
-}
 
-[SalemMenuItem]
-public class MenuItem
-{
-    public static SalemMenuButton menuButtonName = new()
+    public static SalemMenuButton MenuButton = new()
     {
         Label = "Icon Recolors",
-        Icon = Recolors.Thumbnail,
+        Icon = Thumbnail,
         OnClick = OpenDirectory
     };
 
     private static void OpenDirectory()
     {
         if (Environment.OSVersion.Platform is PlatformID.MacOSX or PlatformID.Unix)
-            Process.Start("open", $"\"{Recolors.ModPath}\""); //code stolen from jan who stole from tuba
+            Process.Start("open", $"\"{ModPath}\""); //code stolen from jan who stole from tuba
         else
-            Application.OpenURL($"file://{Recolors.ModPath}");
+            Application.OpenURL($"file://{ModPath}");
     }
 }

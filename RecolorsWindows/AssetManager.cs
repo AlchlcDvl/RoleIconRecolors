@@ -2,7 +2,12 @@ namespace RecolorsWindows;
 
 public static class AssetManager
 {
-    private static readonly List<string> ToRemove = new() { Recolors.Base, Recolors.EasterEggs, Recolors.TT, ".png", "_IconA", "_IconB", "_IconC", "_IconD" };
+    private static readonly List<string> ToRemove = new() { Base, EasterEggs, TT, ".png", "_IconA", "_IconB", "_IconC", "_IconD" };
+
+    private const string Resources = "RecolorsMac.Resources.";
+    private const string Base = $"{Resources}Base.";
+    private const string EasterEggs = $"{Resources}EasterEggs.";
+    private const string TT = $"{Resources}TT.";
 
     public static Sprite GetSprite(string name, bool allowEE = true)
     {
@@ -49,7 +54,7 @@ public static class AssetManager
                     Recolors.Blank = sprite;
                 else if (x.Contains("Thumbnail"))
                     Recolors.Thumbnail = sprite;
-                else if (x.Contains(Recolors.TT))
+                else if (x.Contains(TT))
                 {
                     if (Recolors.TTIcons.ContainsKey(name))
                         Recolors.TTIcons[name].Add(sprite);
@@ -69,5 +74,6 @@ public static class AssetManager
         Console.WriteLine($"[Recolors] {Recolors.RegIcons.Count} Regular Assets loaded!");
         Console.WriteLine($"[Recolors] {Recolors.TTIcons.Count} TT Assets loaded!");
         Recolors.RegIcons.ForEach((x, y) => Console.WriteLine($"[Recolors] {x} has {y.Count} sprite(s)!"));
+        Recolors.MenuButton.Icon = Recolors.Thumbnail;
     }
 }

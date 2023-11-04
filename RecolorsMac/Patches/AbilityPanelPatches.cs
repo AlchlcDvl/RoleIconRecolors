@@ -119,10 +119,28 @@ public static class AbilityPanelPatches
     {
         public static void Postfix(SpecialAbilityPopupGenericListItem __instance)
         {
+            if (!Constants.EnableIcons)
+                return;
+
             var special = AssetManager.GetSprite($"{Utils.RoleName(Pepper.GetMyRole())}_Special");
 
             if (special != Recolors.Blank)
                 __instance.choiceSprite.sprite = special;
+        }
+    }
+
+    [HarmonyPatch(typeof(SpecialAbilityPopupRadialIcon), nameof(SpecialAbilityPopupRadialIcon.SetData))]
+    public static class PatchRitualistGuessMenu
+    {
+        public static void Postfix(SpecialAbilityPopupRadialIcon __instance, ref Role a_role)
+        {
+            if (!Constants.EnableIcons)
+                return;
+
+            var icon = AssetManager.GetSprite($"{Utils.RoleName(a_role)}");
+
+            if (__instance.roleIcon != null && icon != Recolors.Blank)
+                __instance.roleIcon.sprite = icon;
         }
     }
 }
