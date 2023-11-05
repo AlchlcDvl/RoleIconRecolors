@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using RecolorsWindows.Patches;
 
 namespace RecolorsWindows;
 
@@ -12,13 +11,6 @@ public class Recolors
 
     public static Assembly Core => typeof(Recolors).Assembly;
 
-    private static readonly Dictionary<string, Type> PatchTypes = new()
-    {
-        { "alchlcdvl.recolors.windows.rolecardpatches", typeof(RoleCardPatches) },
-        { "alchlcdvl.recolors.windows.abilityiconpatches", typeof(AbilityPanelPatches) },
-        { "alchlcdvl.recolors.windows.mentionpatches", typeof(MentionPatches) }
-    };
-
     public void Start()
     {
         if (!Directory.Exists(ModPath))
@@ -27,7 +19,6 @@ public class Recolors
         try
         {
             AssetManager.LoadAssets();
-            PatchTypes.ForEach((x, y) => Harmony.CreateAndPatchAll(y, x));
         }
         catch (Exception e)
         {
