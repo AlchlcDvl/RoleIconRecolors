@@ -119,7 +119,7 @@ public static class PatchRoleCardSpecialAbilityIcon
 
         var sprite = AssetManager.GetSprite($"{Utils.RoleName(Pepper.GetMyRole())}_Special");
 
-        if (sprite != AssetManager.Blank && __instance.specialAbilityPanel.useButton.abilityIcon != null)
+        if (sprite != AssetManager.Blank && __instance.specialAbilityPanel != null)
             __instance.specialAbilityPanel.useButton.abilityIcon.sprite = sprite;
     }
 }
@@ -144,7 +144,7 @@ public class FixRoleChanges
 
         var special = AssetManager.GetSprite($"{name}_Special");
 
-        if (special != AssetManager.Blank && panel.specialAbilityPanel.useButton.abilityIcon != null)
+        if (special != AssetManager.Blank && panel.specialAbilityPanel != null)
             panel.specialAbilityPanel.useButton.abilityIcon.sprite = special;
 
         var abilityname = $"{name}_Ability";

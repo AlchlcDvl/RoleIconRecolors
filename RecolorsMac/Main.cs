@@ -30,7 +30,7 @@ public class Recolors
 
     public static SalemMenuButton MenuButton1 = new()
     {
-        Label = "Icon Recolors",
+        Label = "Icon Packs",
         OnClick = OpenDirectory
     };
 

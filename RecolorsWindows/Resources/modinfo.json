@@ -1,6 +1,6 @@
 {
   "HarmonyId": "alchlcdvl.recolors.windows",
-  "DisplayName": "Icon Recolors (Windows)",
+  "DisplayName": "Icon Packs (Windows)",
   "Authors": [ "AlchlcDvl" ],
   "Description": "The mod adds a bit of flair to icons! Credits to MysticMismagius and Nidoskull for the artwork! (Windows only)",
   "Version": "1.0.0",
@@ -19,9 +19,9 @@
       {
         "Name": "Enable Easter Eggs In Player Panel",
         "SettingID": "recolors.windows.playerpanel",
-        "Description": "Toggles whether custom icons appear or not",
+        "Description": "Toggles whether easter egg icons appear or not in the ability panel",
         "DefaultValue": false,
-        "AvailableInGame": false
+        "AvailableInGame": true
       }
     ],
     "IntegerInputSettings":
@@ -33,6 +33,18 @@
         "DefaultValue": 5,
         "MinValue": 0,
         "MaxValue": 100,
+        "AvailableInGame": true
+      }
+    ],
+    "TextInputSettings":
+    [
+      {
+        "Name": "Selected Icon Pack",
+        "SettingID": "recolors.windows.iconpack",
+        "Description": "The selected icon will start replacing the visible icons with the images you put in. If it can't find the valid image or pack, it will be replaced by the mod's default files",
+        "DefaultValue": "Default",
+        "Regex": "[A-Za-z]",
+        "CharacterLimit": 20,
         "AvailableInGame": true
       }
     ]

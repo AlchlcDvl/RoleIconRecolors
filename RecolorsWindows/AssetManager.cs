@@ -10,22 +10,35 @@ public static class AssetManager
     private const string RegTT = $"{Resources}TTBase.";
     private const string EETT = $"{Resources}TTEasterEggs.";
 
-    private static readonly Dictionary<string, Sprite> RegIcons = new();
-    private static readonly Dictionary<string, Sprite> TTIcons = new();
     private static readonly Dictionary<string, List<Sprite>> RegEEIcons = new();
     private static readonly Dictionary<string, List<Sprite>> TTEEIcons = new();
+    private static readonly Dictionary<string, IconPack> IconPacks = new();
     public static Sprite Blank;
     public static Sprite Thumbnail;
+
+    public static IconPack Default;
 
     public static Sprite GetSprite(string name, bool allowEE = true)
     {
         if (name == "Blank")
             return Blank;
 
-        if (!RegIcons.TryGetValue(name, out var sprite))
+        if (!IconPacks.ContainsKey(Constants.CurrentPack))
+            TryLoadingSprites(Constants.CurrentPack);
+
+        var iconPack = IconPacks.TryGetValue(Constants.CurrentPack, out var pack) ? pack : Default;
+
+        if (!iconPack.RegIcons.TryGetValue(name, out var sprite))
         {
-            Console.WriteLine($"[Recolors] Couldn't find regular {name} in recources");
-            return Blank;
+            Console.WriteLine($"[Recolors] Couldn't find regular {name} in {iconPack.Name}'s recources");
+
+            if (!Default.RegIcons.TryGetValue(name, out sprite))
+            {
+                Console.WriteLine($"[Recolors] Couldn't find regular {name} in mod recources");
+                return Blank;
+            }
+            else
+                return sprite;
         }
 
         if (RegEEIcons.TryGetValue(name, out var sprites) && URandom.RandomRangeInt(1, 101) <= Constants.EasterEggChance && allowEE)
@@ -39,10 +52,22 @@ public static class AssetManager
         if (name == "Blank")
             return Blank;
 
-        if (!TTIcons.TryGetValue(name, out var sprite))
+        if (!IconPacks.ContainsKey(Constants.CurrentPack))
+            TryLoadingSprites(Constants.CurrentPack);
+
+        var iconPack = IconPacks.TryGetValue(Constants.CurrentPack, out var pack) ? pack : Default;
+
+        if (!iconPack.TTIcons.TryGetValue(name, out var sprite))
         {
-            Console.WriteLine($"[Recolors] Couldn't find TT {name} in recources");
-            return GetSprite(name, allowEE);
+            Console.WriteLine($"[Recolors] Couldn't find TT {name} in {iconPack.Name}'s recources");
+
+            if (!Default.TTIcons.TryGetValue(name, out sprite))
+            {
+                Console.WriteLine($"[Recolors] Couldn't find TT {name} in mod recources");
+                return GetSprite(name, allowEE);
+            }
+            else
+                return sprite;
         }
 
         if (TTEEIcons.TryGetValue(name, out var sprites) && URandom.RandomRangeInt(1, 101) <= Constants.EasterEggChance && allowEE)
@@ -55,8 +80,7 @@ public static class AssetManager
     {
         RegEEIcons.Clear();
         TTEEIcons.Clear();
-        TTIcons.Clear();
-        RegIcons.Clear();
+        Default = new("Default");
 
         Recolors.Core.GetManifestResourceNames().ForEach(x =>
         {
@@ -85,16 +109,14 @@ public static class AssetManager
                         TTEEIcons.Add(name, new() { sprite });
                 }
                 else if (x.Contains(RegTT))
-                    TTIcons.Add(name, sprite);
-                else
-                    RegIcons.Add(name, sprite);
+                    Default.TTIcons.Add(name, sprite);
+                else if (x.Contains(Base))
+                    Default.RegIcons.Add(name, sprite);
             }
         });
 
-        RegIcons.ForEach((x, _) => Console.WriteLine($"[Recolors] {x} has a sprite!"));
-        Console.WriteLine($"[Recolors] {RegIcons.Count} Regular Assets loaded!");
-        TTIcons.ForEach((x, _) => Console.WriteLine($"[Recolors] {x} has a sprite!"));
-        Console.WriteLine($"[Recolors] {TTIcons.Count} TT Assets loaded!");
+        Default.Debug();
+        IconPacks.Add("Default", Default);
         RegEEIcons.ForEach((x, y) => Console.WriteLine($"[Recolors] {x} has {y.Count} easter egg sprite(s)!"));
         TTEEIcons.ForEach((x, y) => Console.WriteLine($"[Recolors] {x} has {y.Count} tt easter egg sprite(s)!"));
         Recolors.MenuButton1.Icon = Recolors.MenuButton2.Icon = Thumbnail;
@@ -108,14 +130,14 @@ public static class AssetManager
         if (!Directory.Exists(Recolors.DefaultPath))
             Directory.CreateDirectory(Recolors.DefaultPath);
 
-        foreach (var (name, sprite) in RegIcons)
+        foreach (var (name, sprite) in Default.RegIcons)
         {
             var directory = Path.Combine(Recolors.DefaultPath, "Base");
             Directory.CreateDirectory(directory);
             File.WriteAllBytes($"{directory}/{name}.png", sprite.texture.Decompress().EncodeToPNG());
         }
 
-        foreach (var (name, sprite) in TTIcons)
+        foreach (var (name, sprite) in Default.TTIcons)
         {
             var directory = Path.Combine(Recolors.DefaultPath, "TTBase");
             Directory.CreateDirectory(directory);
@@ -149,6 +171,9 @@ public static class AssetManager
                     File.WriteAllBytes($"{directory}/{name}_Icon{i + 1}.png", sprites[i].texture.Decompress().EncodeToPNG());
             }
         }
+
+        var directory2 = Path.Combine(Recolors.DefaultPath, "TTEasterEggs");
+        Directory.CreateDirectory(directory2);
     }
 
     //thanks stackoverflow and pat
@@ -176,5 +201,105 @@ public static class AssetManager
         defaultPath.GetFiles("*.png").Select(x => x.FullName).ForEach(File.Delete);
         defaultPath.GetDirectories().Select(x => x.FullName).ForEach(Directory.Delete);
         Directory.Delete(Recolors.DefaultPath);
+    }
+
+    private static Texture2D EmptyTexture() => new(2, 2, TextureFormat.ARGB32, true);
+
+    private static Texture2D LoadDiskTexture(string path)
+    {
+        if (!File.Exists(path))
+        {
+            Console.WriteLine($"[Recolors] Path to {path} was missing");
+            return null;
+        }
+
+        try
+        {
+            var texture = EmptyTexture();
+            _ = ImageConversion.LoadImage(texture, File.ReadAllBytes(path), false);
+            texture.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
+            texture.name = path;
+            UObject.DontDestroyOnLoad(texture);
+            return texture;
+        }
+        catch
+        {
+            Console.WriteLine($"[Recolors] Error loading {path} from disk");
+            return null;
+        }
+    }
+
+    private static Sprite LoadSpriteFromDisk(string path)
+    {
+        if (!File.Exists(path))
+        {
+            Console.WriteLine($"[Recolors] Path to {path} was missing");
+            return null;
+        }
+
+        var texture = LoadDiskTexture(path);
+
+        if (texture == null)
+            return null;
+
+        var sprite = Sprite.Create(texture, new(0, 0, texture.width, texture.height), new(0.5f, 0.5f), 100f);
+
+        if (sprite == null)
+            return null;
+
+        sprite.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
+        UObject.DontDestroyOnLoad(sprite);
+        return sprite;
+    }
+
+    private static string SanitisePath(this string path) => path.Split('/')[^1];
+
+    public static void TryLoadingSprites(string packName)
+    {
+        if (IconPacks.ContainsKey(packName))
+            return;
+
+        var folder = Path.Combine(Recolors.ModPath, packName);
+
+        if (!Directory.Exists(folder))
+        {
+            Console.WriteLine($"[Recolors] Path to {folder} was missing");
+            return;
+        }
+
+        var pack = new IconPack(packName);
+        var dir = new DirectoryInfo(folder);
+        IconPacks.Add(packName, pack);
+
+        foreach (var file in dir.GetFiles())
+        {
+            if (!file.FullName.EndsWith(".png"))
+                continue;
+
+            var path = file.FullName;
+            var name = path.SanitisePath();
+            var sprite = LoadSpriteFromDisk(path);
+
+            if (path.Contains("TTEasterEggs"))
+            {
+                if (TTEEIcons.ContainsKey(name))
+                    TTEEIcons[name].Add(sprite);
+                else
+                    TTEEIcons.Add(name, new() { sprite });
+            }
+            else if (path.Contains("EasterEggs"))
+            {
+                if (RegEEIcons.ContainsKey(name))
+                    RegEEIcons[name].Add(sprite);
+                else
+                    RegEEIcons.Add(name, new() { sprite });
+            }
+            else if (path.Contains("TTBase"))
+                pack.TTIcons.Add(name, LoadSpriteFromDisk(path));
+            else if (path.Contains("Base"))
+                pack.RegIcons.Add(name, LoadSpriteFromDisk(path));
+        }
+
+        pack.Debug();
     }
 }
