@@ -6,8 +6,8 @@ namespace RecolorsMac;
 [SalemMenuItem]
 public class Recolors
 {
-    public static string ModPath => Path.Combine(Directory.GetCurrentDirectory(), "SalemModLoader", "ModFolders", "Recolors");
-    public static string DefaultPath => Path.Combine(Directory.GetCurrentDirectory(), "SalemModLoader", "ModFolders", "Recolors", "Default");
+    public static string ModPath => $"{Path.GetDirectoryName(Application.dataPath)}\\SalemModLoader\\ModFolders\\Recolors";
+    public static string DefaultPath => $"{ModPath}\\Default";
 
     public static Assembly Core => typeof(Recolors).Assembly;
 
