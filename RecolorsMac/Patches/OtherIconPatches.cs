@@ -2,7 +2,6 @@ using Game.Interface;
 using Server.Shared.Extensions;
 using Server.Shared.State;
 using Home.GameBrowser;
-using Home.Common.Settings;
 using SalemModLoaderUI;
 
 namespace RecolorsMac.Patches;
@@ -49,74 +48,6 @@ public static class PatchBrowserRoleListPanel
 
         if (__instance.roleImage != null && icon != AssetManager.Blank)
             __instance.roleImage.sprite = icon;
-    }
-}
-
-[HarmonyPatch(typeof(SettingsController), nameof(SettingsController.PopulateListItems))]
-public static class PatchSettingsGuidePanels
-{
-    public static void Postfix(SettingsController __instance)
-    {
-        if (!Constants.EnableIcons)
-            return;
-
-        foreach (var guidePanel in __instance._gameGuideListItems)
-        {
-            if (guidePanel.categoryItemBelongsTo != SettingsController.GameGuideCategory.ROLES)
-                continue;
-
-            var panel = guidePanel.rolecardPopup;
-            var role = guidePanel.role;
-            var index = 0;
-            var name = Utils.RoleName(role);
-            var sprite = AssetManager.GetSprite(name);
-
-            if (sprite != AssetManager.Blank && panel.roleIcon != null)
-                panel.roleIcon.sprite = sprite;
-
-            var special = AssetManager.GetSprite($"{name}_Special");
-
-            if (special != AssetManager.Blank && panel.specialAbilityPanel != null)
-                panel.specialAbilityPanel.useButton.abilityIcon.sprite = special;
-
-            var abilityname = $"{name}_Ability";
-            var ability1 = AssetManager.GetSprite(abilityname);
-
-            if (ability1 == AssetManager.Blank)
-                abilityname += "_1";
-
-            ability1 = AssetManager.GetSprite(abilityname);
-
-            if (ability1 != AssetManager.Blank && panel.roleInfoButtons.Count < index + 1)
-            {
-                panel.roleInfoButtons[index].abilityIcon.sprite = ability1;
-                index++;
-            }
-
-            var ability2 = AssetManager.GetSprite($"{name}_Ability_2");
-
-            if (ability2 != AssetManager.Blank && panel.roleInfoButtons.Count < index + 1)
-            {
-                panel.roleInfoButtons[index].abilityIcon.sprite = ability2;
-                index++;
-            }
-
-            var attribute = AssetManager.GetSprite($"Attributes_{Utils.FactionName(role.GetFaction(), role)}");
-
-            if (attribute != AssetManager.Blank && panel.roleInfoButtons.Count < index + 1)
-            {
-                panel.roleInfoButtons[index].abilityIcon.sprite = attribute;
-                index++;
-            }
-
-            var nommy = AssetManager.GetSprite("Necronomicon");
-
-            if (nommy != AssetManager.Blank && panel.roleInfoButtons.Count < index + 1)
-            {
-                panel.roleInfoButtons[index].abilityIcon.sprite = nommy;
-                index++;
-            }
-        }
     }
 }
 

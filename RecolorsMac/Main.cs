@@ -14,10 +14,10 @@ public class Recolors
         }
         catch (Exception e)
         {
-            Console.WriteLine($"[Recolors] Something failed because this happened D:\n{e}");
+            Utils.Log($"Something failed because this happened D:\n{e}");
         }
 
-        Console.WriteLine("[Recolors] Recolored!");
+        Utils.Log("Recolored!");
     }
 
     public static readonly SalemMenuButton MenuButton = new()

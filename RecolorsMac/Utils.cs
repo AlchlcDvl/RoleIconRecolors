@@ -128,4 +128,6 @@ public static class Utils
 
         return $"<color={role.GetFaction().GetFactionColor()}>{text}{text2}</color>";
     }
+
+    public static void Log(string message) => Console.WriteLine($"[Recolors] {message}");
 }

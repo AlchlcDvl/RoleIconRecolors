@@ -10,16 +10,23 @@
     "CheckboxSettings":
     [
       {
-        "Name": "Enable Custom Icons",
-        "SettingID": "recolors.mac.icons",
-        "Description": "Toggles whether custom icons appear or not",
-        "DefaultValue": true,
-        "AvailableInGame": false
-      },
-      {
         "Name": "Enable Easter Eggs In Player Panel",
         "SettingID": "recolors.mac.playerpanel",
         "Description": "Toggles whether easter egg icons appear or not in the ability panel",
+        "DefaultValue": false,
+        "AvailableInGame": true
+      },
+      {
+        "Name": "Mod Assets Replace Missing Icons",
+        "SettingID": "recolors.mac.replace",
+        "Description": "Toggles whether the mod's recolored icons will replace icons that are missing from the currently selected icon pack",
+        "DefaultValue": true,
+        "AvailableInGame": true
+      },
+      {
+        "Name": "All Easter Eggs Are Active",
+        "SettingID": "recolors.mac.alleeactive",
+        "Description": "Toggles whether all of the previously selected icon pack's easter eggs will be used, or only the selected icon pack's",
         "DefaultValue": false,
         "AvailableInGame": true
       }
@@ -42,7 +49,7 @@
         "Name": "Selected Icon Pack",
         "SettingID": "recolors.mac.iconpack",
         "Description": "The selected icon will start replacing the visible icons with the images you put in. If it can't find the valid image or pack, it will be replaced by the mod's default files",
-        "DefaultValue": "Default",
+        "DefaultValue": "Vanilla",
         "Regex": "[A-Za-z]",
         "CharacterLimit": 20,
         "AvailableInGame": true
