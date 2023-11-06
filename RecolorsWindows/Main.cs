@@ -1,21 +1,11 @@
-using System.Diagnostics;
-
 namespace RecolorsWindows;
 
 [SalemMod]
 [SalemMenuItem]
 public class Recolors
 {
-    public static string ModPath => $"{Path.GetDirectoryName(Application.dataPath)}\\SalemModLoader\\ModFolders\\Recolors";
-    public static string DefaultPath => $"{ModPath}\\Default";
-
-    public static Assembly Core => typeof(Recolors).Assembly;
-
     public void Start()
     {
-        if (!Directory.Exists(ModPath))
-            Directory.CreateDirectory(ModPath);
-
         try
         {
             AssetManager.LoadAssets();
@@ -28,33 +18,16 @@ public class Recolors
         Console.WriteLine("[Recolors] Recolored!");
     }
 
-    public static SalemMenuButton MenuButton1 = new()
-    {
-        Label = "Icon Packs",
-        OnClick = OpenDirectory
-    };
-
-    public static SalemMenuButton MenuButton2 = new()
+    public static readonly SalemMenuButton MenuButton = new()
     {
         Label = "Dump Icons",
-        OnClick = OpenDefaultDirectory
+        OnClick = DumpAndOpen
     };
 
-    private static void OpenDirectory()
-    {
-        if (Environment.OSVersion.Platform is PlatformID.MacOSX or PlatformID.Unix)
-            Process.Start("open", $"\"{ModPath}\""); //code stolen from jan who stole from tuba
-        else
-            Application.OpenURL($"file://{ModPath}");
-    }
-
-    private static void OpenDefaultDirectory()
+    private static void DumpAndOpen()
     {
         AssetManager.DumpModAssets();
-
-        if (Environment.OSVersion.Platform is PlatformID.MacOSX or PlatformID.Unix)
-            Process.Start("open", $"\"{DefaultPath}\"");
-        else
-            Application.OpenURL($"file://{DefaultPath}");
+        //code stolen from jan who stole from tuba
+        Application.OpenURL($"file://{AssetManager.DefaultPath}");
     }
 }

@@ -18,6 +18,11 @@ public static class AssetManager
 
     public static IconPack Default;
 
+    public static string ModPath => $"{Path.GetDirectoryName(Application.dataPath)}\\SalemModLoader\\ModFolders\\Recolors";
+    public static string DefaultPath => $"{ModPath}\\Default";
+
+    private static Assembly Core => typeof(Recolors).Assembly;
+
     public static Sprite GetSprite(string name, bool allowEE = true)
     {
         if (name.Contains("Blank"))
@@ -76,7 +81,7 @@ public static class AssetManager
         TTEEIcons.Clear();
         Default = new("Default");
 
-        Recolors.Core.GetManifestResourceNames().ForEach(x =>
+        Core.GetManifestResourceNames().ForEach(x =>
         {
             if (x.EndsWith(".png"))
             {
@@ -108,38 +113,37 @@ public static class AssetManager
             }
         });
 
-        Default.Debug();
         IconPacks.Add("Default", Default);
-        RegEEIcons.ForEach((x, y) => Console.WriteLine($"[Recolors] {x} has {y.Count} easter egg sprite(s)!"));
-        TTEEIcons.ForEach((x, y) => Console.WriteLine($"[Recolors] {x} has {y.Count} tt easter egg sprite(s)!"));
-        Recolors.MenuButton1.Icon = Recolors.MenuButton2.Icon = Thumbnail;
+        Recolors.MenuButton.Icon = Thumbnail;
     }
 
     //thanks pat
     public static void DumpModAssets()
     {
-        DeleteModAssets();
+        if (!Directory.Exists(ModPath))
+            Directory.CreateDirectory(ModPath);
 
-        if (!Directory.Exists(Recolors.DefaultPath))
-            Directory.CreateDirectory(Recolors.DefaultPath);
+        if (!Directory.Exists(DefaultPath))
+            Directory.CreateDirectory(DefaultPath);
 
         foreach (var (name, sprite) in Default.RegIcons)
         {
-            var directory = Path.Combine(Recolors.DefaultPath, "Base");
+            var directory = $"{DefaultPath}\\Base";
             Directory.CreateDirectory(directory);
+            var file = $"{directory}\\{name}.png";
             File.WriteAllBytes($"{directory}\\{name}.png", sprite.texture.Decompress().EncodeToPNG());
         }
 
         foreach (var (name, sprite) in Default.TTIcons)
         {
-            var directory = Path.Combine(Recolors.DefaultPath, "TTBase");
+            var directory = $"{DefaultPath}\\TTBase";
             Directory.CreateDirectory(directory);
             File.WriteAllBytes($"{directory}\\{name}.png", sprite.texture.Decompress().EncodeToPNG());
         }
 
         foreach (var (name, sprites) in RegEEIcons)
         {
-            var directory = Path.Combine(Recolors.DefaultPath, "EasterEggs");
+            var directory = $"{DefaultPath}\\EasterEggs";
             Directory.CreateDirectory(directory);
 
             if (sprites.Count == 1)
@@ -153,7 +157,7 @@ public static class AssetManager
 
         foreach (var (name, sprites) in TTEEIcons)
         {
-            var directory = Path.Combine(Recolors.DefaultPath, "TTEasterEggs");
+            var directory = $"{DefaultPath}\\TTEasterEggs";
             Directory.CreateDirectory(directory);
 
             if (sprites.Count == 1)
@@ -164,9 +168,6 @@ public static class AssetManager
                     File.WriteAllBytes($"{directory}\\{name}_Icon{i + 1}.png", sprites[i].texture.Decompress().EncodeToPNG());
             }
         }
-
-        var directory2 = Path.Combine(Recolors.DefaultPath, "TTEasterEggs");
-        Directory.CreateDirectory(directory2);
     }
 
     //thanks stackoverflow and pat
@@ -185,23 +186,12 @@ public static class AssetManager
         return readableText;
     }
 
-    private static void DeleteModAssets()
-    {
-        if (!Directory.Exists(Recolors.DefaultPath))
-            return;
-
-        var defaultPath = new DirectoryInfo(Recolors.DefaultPath);
-        defaultPath.GetFiles("*.png").Select(x => x.FullName).ForEach(File.Delete);
-        defaultPath.GetDirectories().Select(x => x.FullName).ForEach(Directory.Delete);
-        Directory.Delete(Recolors.DefaultPath);
-    }
-
     private static Texture2D EmptyTexture() => new(2, 2, TextureFormat.ARGB32, true);
 
     private static Texture2D LoadDiskTexture(string fileName, string subfolder, string folder)
     {
         fileName = fileName.SanitisePath();
-        var path = $"{Recolors.ModPath}\\{folder}\\{subfolder}\\{fileName}.png";
+        var path = $"{ModPath}\\{folder}\\{subfolder}\\{fileName}.png";
 
         try
         {
@@ -222,7 +212,7 @@ public static class AssetManager
     private static Sprite LoadSpriteFromDisk(string fileName, string subfolder, string folder)
     {
         fileName = fileName.SanitisePath();
-        var path = $"{Recolors.ModPath}\\{folder}\\{subfolder}\\{fileName}.png";
+        var path = $"{ModPath}\\{folder}\\{subfolder}\\{fileName}.png";
 
         if (!File.Exists(path))
         {
@@ -263,7 +253,7 @@ public static class AssetManager
         if (IconPacks.ContainsKey(packName))
             return;
 
-        var folder = $"{Recolors.ModPath}\\{packName}";
+        var folder = $"{ModPath}\\{packName}";
 
         if (!Directory.Exists(folder))
         {
@@ -340,7 +330,6 @@ public static class AssetManager
         else
             Console.WriteLine($"[Recolors] {packName} TTEasterEggs folder doesn't exist");
 
-        pack.Debug();
         IconPacks.Add(packName, pack);
     }
 }
