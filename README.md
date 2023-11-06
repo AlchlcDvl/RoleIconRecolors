@@ -54,3 +54,5 @@ Once the filing has been completed, I will go back into the game and navigate to
 Once that's done, I'll just enter into a game where I get Mayor and bam! It works
 
 ![MayorRC](./Images/MayorRC.png)
+
+Note: The image has to be a png (for now) and must be of 256x256 dimensions
