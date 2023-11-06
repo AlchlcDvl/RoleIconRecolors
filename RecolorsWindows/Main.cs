@@ -15,7 +15,7 @@ public class Recolors
             Utils.Log($"Something failed because this happened D:\n{e}");
         }
 
-        Utils.Log("Recolored!");
+        Utils.Log("Recolored!", true);
     }
 
     public static readonly SalemMenuButton MenuButton = new()

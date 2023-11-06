@@ -34,7 +34,7 @@ public static class AssetManager
         {
             Utils.Log($"Couldn't find regular {name} in {iconPack.Name}'s recources");
 
-            if (!Constants.ReplaceMissing)
+            if (!Constants.ReplaceMissing || iconPack == Default)
                 return Blank;
             else if (!Default.RegIcons.TryGetValue(name, out sprite))
             {
@@ -67,7 +67,7 @@ public static class AssetManager
         {
             Utils.Log($"Couldn't find TT {name} in {iconPack.Name}'s recources");
 
-            if (!Constants.ReplaceMissing)
+            if (!Constants.ReplaceMissing || iconPack == Default)
                 return GetSprite(name, allowEE);
             else if (!Default.TTIcons.TryGetValue(name, out sprite))
             {
@@ -233,7 +233,7 @@ public static class AssetManager
         }
     }
 
-    private static Sprite LoadSpriteFromDisk(string fileName, string subfolder, string folder)
+    public static Sprite LoadSpriteFromDisk(string fileName, string subfolder, string folder)
     {
         fileName = fileName.SanitisePath();
         var path = $"{ModPath}\\{folder}\\{subfolder}\\{fileName}.png";
@@ -260,14 +260,10 @@ public static class AssetManager
         return sprite;
     }
 
-    private static string SanitisePath1(this string path) => path.Split('/')[^1];
-
-    private static string SanitisePath2(this string path) => path.Split('\\')[^1];
-
-    private static string SanitisePath(this string path, bool removeIcon = false)
+    public static string SanitisePath(this string path, bool removeIcon = false)
     {
-        path = path.SanitisePath1();
-        path = path.SanitisePath2();
+        path = path.Split('/')[^1];
+        path = path.Split('\\')[^1];
         ToRemove.ForEach(x => path = path.Replace(x, ""));
         var i = 1;
 
@@ -296,84 +292,7 @@ public static class AssetManager
         }
 
         var pack = new IconPack(packName);
-        var baseFolder = $"{folder}\\Base";
-
-        if (Directory.Exists(baseFolder))
-        {
-            foreach (var file in Directory.EnumerateFiles(baseFolder, "*.png"))
-            {
-                var filePath = $"{baseFolder}\\{file}";
-                var sprite = LoadSpriteFromDisk(filePath, "Base", packName);
-                filePath = filePath.SanitisePath(true);
-                pack.RegIcons.TryAdd(filePath, sprite);
-            }
-        }
-        else
-            Utils.Log($"{packName} Base folder doesn't exist");
-
-        var ttFolder = $"{folder}\\TTBase";
-
-        if (Directory.Exists(ttFolder))
-        {
-            foreach (var file in Directory.EnumerateFiles(ttFolder, "*.png"))
-            {
-                var filePath = $"{ttFolder}\\{file}";
-                var sprite = LoadSpriteFromDisk(filePath, "TTBase", packName);
-                filePath = filePath.SanitisePath(true);
-                pack.TTIcons.TryAdd(filePath, sprite);
-            }
-        }
-        else
-            Utils.Log($"{packName} TTBase folder doesn't exist");
-
-        var eeFolder = $"{folder}\\EasterEggs";
-
-        if (Directory.Exists(eeFolder))
-        {
-            foreach (var file in Directory.EnumerateFiles(eeFolder, "*.png"))
-            {
-                var filePath = $"{eeFolder}\\{file}";
-                var sprite = LoadSpriteFromDisk(filePath, "EasterEggs", packName);
-                filePath = filePath.SanitisePath(true);
-
-                if (RegEEIcons.ContainsKey(filePath))
-                    RegEEIcons[filePath].Add(sprite);
-                else
-                    RegEEIcons.TryAdd(filePath, new() { sprite });
-
-                if (pack.TTEEIcons.ContainsKey(filePath))
-                    pack.TTEEIcons[filePath].Add(sprite);
-                else
-                    pack.TTEEIcons.TryAdd(filePath, new() { sprite });
-            }
-        }
-        else
-            Utils.Log($"{packName} EasterEggs folder doesn't exist");
-
-        var tteeFolder = $"{folder}\\TTEasterEggs";
-
-        if (Directory.Exists(tteeFolder))
-        {
-            foreach (var file in Directory.EnumerateFiles(tteeFolder, "*.png"))
-            {
-                var filePath = $"{tteeFolder}\\{file}";
-                var sprite = LoadSpriteFromDisk(filePath, "TTEasterEggs", packName);
-                filePath = filePath.SanitisePath(true);
-
-                if (TTEEIcons.ContainsKey(filePath))
-                    TTEEIcons[filePath].Add(sprite);
-                else
-                    TTEEIcons.TryAdd(filePath, new() { sprite });
-
-                if (pack.TTEEIcons.ContainsKey(filePath))
-                    pack.TTEEIcons[filePath].Add(sprite);
-                else
-                    pack.TTEEIcons.TryAdd(filePath, new() { sprite });
-            }
-        }
-        else
-            Utils.Log($"{packName} TTEasterEggs folder doesn't exist");
-
+        pack.Load();
         IconPacks.Add(packName, pack);
     }
 }

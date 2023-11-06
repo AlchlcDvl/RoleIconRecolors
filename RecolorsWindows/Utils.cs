@@ -78,6 +78,9 @@ public static class Utils
         Role.CURSED_SOUL => "CursedSoul",
         Role.VAMPIRE => "Vampire",
         Role.STONED => "Stoned",
+        Role.RANDOM_TOWN => "Town",
+        Role.RANDOM_COVEN => "Coven",
+        Role.RANDOM_NEUTRAL => "Neutral",
         _ => "Blank"
     };
 
@@ -129,5 +132,11 @@ public static class Utils
         return $"<color={role.GetFaction().GetFactionColor()}>{text}{text2}</color>";
     }
 
-    public static void Log(string message) => Console.WriteLine($"[Recolors] {message}");
+    public static void Log(string message, bool logIt = false)
+    {
+        logIt = logIt || Constants.Debug;
+
+        if (logIt)
+            Console.WriteLine($"[Recolors] {message}");
+    }
 }
