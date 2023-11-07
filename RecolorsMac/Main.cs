@@ -11,7 +11,7 @@ public class Recolors
         try
         {
             AssetManager.LoadAssets();
-            DownloadVanilla.Icon = DownloadRecolors.Icon = AssetManager.Thumbnail;
+            DownloadVanilla.Icon = DownloadRecolors.Icon = AssetManager.Download;
         }
         catch (Exception e)
         {
