@@ -14,6 +14,8 @@ public static class Utils
         return list.Count == 0 ? defaultVal : list[URandom.Range(0, list.Count)];
     }
 
+    public static T Random<T>(this IEnumerable<T> list, Func<T, bool> predicate, T defaultVal = default) => list.Where(predicate).Random(defaultVal);
+
     public static void ForEach<T>(this IEnumerable<T> source, Action<T> action) => source.ToList().ForEach(action);
 
     public static void ForEach<TKey, TValue>(this IDictionary<TKey, TValue> dict, Action<TKey, TValue> action) => dict.ToList().ForEach(pair => action(pair.Key, pair.Value));
@@ -78,9 +80,9 @@ public static class Utils
         Role.CURSED_SOUL => "CursedSoul",
         Role.VAMPIRE => "Vampire",
         Role.STONED => "Stoned",
-        Role.RANDOM_TOWN => "Town",
+        /*Role.RANDOM_TOWN => "Town",
         Role.RANDOM_COVEN => "Coven",
-        Role.RANDOM_NEUTRAL => "Neutral",
+        Role.RANDOM_NEUTRAL => "Neutral",*/
         _ => "Blank"
     };
 
@@ -132,7 +134,7 @@ public static class Utils
         return $"<color={role.GetFaction().GetFactionColor()}>{text}{text2}</color>";
     }
 
-    public static void Log(string message, bool logIt = false)
+    public static void Log(object message, bool logIt = false)
     {
         logIt = logIt || Constants.Debug;
 

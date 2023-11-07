@@ -1,0 +1,1025 @@
+{
+    "recolors":
+    [
+        {
+            "name": "Admirer",
+            "folder": "Base"
+        },
+        {
+            "name": "Admirer_Ability",
+            "folder": "Base"
+        },
+        {
+            "name": "Admirer_Special",
+            "folder": "Base"
+        },
+        {
+            "name": "Amnesiac",
+            "folder": "Base"
+        },
+        {
+            "name": "Amnesiac_Ability",
+            "folder": "Base"
+        },
+        {
+            "name": "Arsonist",
+            "folder": "Base"
+        },
+        {
+            "name": "Arsonist_Ability",
+            "folder": "Base"
+        },
+        {
+            "name": "Arsonist_Special",
+            "folder": "Base"
+        },
+        {
+            "name": "Attributes_Apocalypse",
+            "folder": "Base"
+        },
+        {
+            "name": "Attributes_Coven",
+            "folder": "Base"
+        },
+        {
+            "name": "Attributes_Horsemen",
+            "folder": "Base"
+        },
+        {
+            "name": "Attributes_Arsonist",
+            "folder": "Base"
+        },
+        {
+            "name": "Attributes_CursedSoul",
+            "folder": "Base"
+        },
+        {
+            "name": "Attributes_Doomsayer",
+            "folder": "Base"
+        },
+        {
+            "name": "Attributes_Executioner",
+            "folder": "Base"
+        },
+        {
+            "name": "Attributes_Jester",
+            "folder": "Base"
+        },
+        {
+            "name": "Attributes_Pirate",
+            "folder": "Base"
+        },
+        {
+            "name": "Attributes_SerialKiller",
+            "folder": "Base"
+        },
+        {
+            "name": "Attributes_Shroud",
+            "folder": "Base"
+        },
+        {
+            "name": "Attributes_Town",
+            "folder": "Base"
+        },
+        {
+            "name": "Attributes_Vampire",
+            "folder": "Base"
+        },
+        {
+            "name": "Attributes_Werewolf",
+            "folder": "Base"
+        },
+        {
+            "name": "Baker",
+            "folder": "Base"
+        },
+        {
+            "name": "Baker_Ability",
+            "folder": "Base"
+        },
+        {
+            "name": "Berserker",
+            "folder": "Base"
+        },
+        {
+            "name": "Berserker_Ability",
+            "folder": "Base"
+        },
+        {
+            "name": "Bodyguard",
+            "folder": "Base"
+        },
+        {
+            "name": "Bodyguard_Ability",
+            "folder": "Base"
+        },
+        {
+            "name": "Bodyguard_Special",
+            "folder": "Base"
+        },
+        {
+            "name": "Cleric",
+            "folder": "Base"
+        },
+        {
+            "name": "Cleric_Ability",
+            "folder": "Base"
+        },
+        {
+            "name": "Cleric_Special",
+            "folder": "Base"
+        },
+        {
+            "name": "Conjurer",
+            "folder": "Base"
+        },
+        {
+            "name": "Conjurer_Special",
+            "folder": "Base"
+        },
+        {
+            "name": "Coroner",
+            "folder": "Base"
+        },
+        {
+            "name": "Coroner_Special",
+            "folder": "Base"
+        },
+        {
+            "name": "Coroner_Ability",
+            "folder": "Base"
+        },
+        {
+            "name": "Coven",
+            "folder": "Base"
+        },
+        {
+            "name": "CovenLeader",
+            "folder": "Base"
+        },
+        {
+            "name": "CovenLeader_Ability",
+            "folder": "Base"
+        },
+        {
+            "name": "CovenLeader_Special",
+            "folder": "Base"
+        },
+        {
+            "name": "Crusader",
+            "folder": "Base"
+        },
+        {
+            "name": "Crusader_Ability",
+            "folder": "Base"
+        },
+        {
+            "name": "Death",
+            "folder": "Base"
+        },
+        {
+            "name": "Death_Ability",
+            "folder": "Base"
+        },
+        {
+            "name": "Deputy",
+            "folder": "Base"
+        },
+        {
+            "name": "Deputy_Special",
+            "folder": "Base"
+        },
+        {
+            "name": "Doomsayer",
+            "folder": "Base"
+        },
+        {
+            "name": "Doomsayer_Special",
+            "folder": "Base"
+        },
+        {
+            "name": "Dreamweaver",
+            "folder": "Base"
+        },
+        {
+            "name": "Dreamweaver_Ability",
+            "folder": "Base"
+        },
+        {
+            "name": "Enchanter",
+            "folder": "Base"
+        },
+        {
+            "name": "Enchanter_Ability",
+            "folder": "Base"
+        },
+        {
+            "name": "Enchanter_Special",
+            "folder": "Base"
+        },
+        {
+            "name": "Executioner",
+            "folder": "Base"
+        },
+        {
+            "name": "Executioner_Ability",
+            "folder": "Base"
+        },
+        {
+            "name": "Executioner_Special",
+            "folder": "Base"
+        },
+        {
+            "name": "Famine",
+            "folder": "Base"
+        },
+        {
+            "name": "Famine_Ability",
+            "folder": "Base"
+        },
+        {
+            "name": "HexMaster",
+            "folder": "Base"
+        },
+        {
+            "name": "HexMaster_Ability",
+            "folder": "Base"
+        },
+        {
+            "name": "Illusionist",
+            "folder": "Base"
+        },
+        {
+            "name": "Illusionist_Ability",
+            "folder": "Base"
+        },
+        {
+            "name": "Investigator",
+            "folder": "Base"
+        },
+        {
+            "name": "Investigator_Ability",
+            "folder": "Base"
+        },
+        {
+            "name": "Jailor",
+            "folder": "Base"
+        },
+        {
+            "name": "Jailor_Special",
+            "folder": "Base"
+        },
+        {
+            "name": "Jailor_Ability",
+            "folder": "Base"
+        },
+        {
+            "name": "Jester",
+            "folder": "Base"
+        },
+        {
+            "name": "Jester_Ability",
+            "folder": "Base"
+        },
+        {
+            "name": "Jester_Special",
+            "folder": "Base"
+        },
+        {
+            "name": "Jinx",
+            "folder": "Base"
+        },
+        {
+            "name": "Jinx_Ability",
+            "folder": "Base"
+        },
+        {
+            "name": "Lookout",
+            "folder": "Base"
+        },
+        {
+            "name": "Lookout_Ability",
+            "folder": "Base"
+        },
+        {
+            "name": "Mayor",
+            "folder": "Base"
+        },
+        {
+            "name": "Mayor_Special",
+            "folder": "Base"
+        },
+        {
+            "name": "Medusa",
+            "folder": "Base"
+        },
+        {
+            "name": "Medusa_Ability",
+            "folder": "Base"
+        },
+        {
+            "name": "Monarch",
+            "folder": "Base"
+        },
+        {
+            "name": "Monarch_Ability",
+            "folder": "Base"
+        },
+        {
+            "name": "Necromancer",
+            "folder": "Base"
+        },
+        {
+            "name": "Necromancer_Ability_1",
+            "folder": "Base"
+        },
+        {
+            "name": "Necromancer_Ability_2",
+            "folder": "Base"
+        },
+        {
+            "name": "Necromancer_Special",
+            "folder": "Base"
+        },
+        {
+            "name": "Necronomicon",
+            "folder": "Base"
+        },
+        {
+            "name": "Neutral",
+            "folder": "Base"
+        },
+        {
+            "name": "Pestilence",
+            "folder": "Base"
+        },
+        {
+            "name": "Pestilence_Ability",
+            "folder": "Base"
+        },
+        {
+            "name": "Pirate",
+            "folder": "Base"
+        },
+        {
+            "name": "Pirate_Special",
+            "folder": "Base"
+        },
+        {
+            "name": "Plaguebearer",
+            "folder": "Base"
+        },
+        {
+            "name": "Plaguebearer_Ability",
+            "folder": "Base"
+        },
+        {
+            "name": "Poisoner",
+            "folder": "Base"
+        },
+        {
+            "name": "Poisoner_Ability",
+            "folder": "Base"
+        },
+        {
+            "name": "Poisoner_Special",
+            "folder": "Base"
+        },
+        {
+            "name": "PotionMaster",
+            "folder": "Base"
+        },
+        {
+            "name": "PotionMaster_Ability_1",
+            "folder": "Base"
+        },
+        {
+            "name": "PotionMaster_Ability_2",
+            "folder": "Base"
+        },
+        {
+            "name": "PotionMaster_Special",
+            "folder": "Base"
+        },
+        {
+            "name": "Prosecutor",
+            "folder": "Base"
+        },
+        {
+            "name": "Prosecutor_Special",
+            "folder": "Base"
+        },
+        {
+            "name": "Psychic",
+            "folder": "Base"
+        },
+        {
+            "name": "Psychic_Ability",
+            "folder": "Base"
+        },
+        {
+            "name": "Retributionist",
+            "folder": "Base"
+        },
+        {
+            "name": "Retributionist_Ability_1",
+            "folder": "Base"
+        },
+        {
+            "name": "Retributionist_Ability_2",
+            "folder": "Base"
+        },
+        {
+            "name": "Ritualist",
+            "folder": "Base"
+        },
+        {
+            "name": "Ritualist_Special",
+            "folder": "Base"
+        },
+        {
+            "name": "Seer",
+            "folder": "Base"
+        },
+        {
+            "name": "Seer_Ability_1",
+            "folder": "Base"
+        },
+        {
+            "name": "Seer_Ability_2",
+            "folder": "Base"
+        },
+        {
+            "name": "SerialKiller",
+            "folder": "Base"
+        },
+        {
+            "name": "SerialKiller_Ability",
+            "folder": "Base"
+        },
+        {
+            "name": "SerialKiller_Special",
+            "folder": "Base"
+        },
+        {
+            "name": "Sheriff",
+            "folder": "Base"
+        },
+        {
+            "name": "Sheriff_Ability",
+            "folder": "Base"
+        },
+        {
+            "name": "SoulCollector",
+            "folder": "Base"
+        },
+        {
+            "name": "SoulCollector_Ability",
+            "folder": "Base"
+        },
+        {
+            "name": "Shroud",
+            "folder": "Base"
+        },
+        {
+            "name": "Shroud_Ability",
+            "folder": "Base"
+        },
+        {
+            "name": "Shroud_Special",
+            "folder": "Base"
+        },
+        {
+            "name": "Spy",
+            "folder": "Base"
+        },
+        {
+            "name": "Spy_Ability",
+            "folder": "Base"
+        },
+        {
+            "name": "Stoned",
+            "folder": "Base"
+        },
+        {
+            "name": "TavernKeeper",
+            "folder": "Base"
+        },
+        {
+            "name": "TavernKeeper_Ability",
+            "folder": "Base"
+        },
+        {
+            "name": "Town",
+            "folder": "Base"
+        },
+        {
+            "name": "Tracker",
+            "folder": "Base"
+        },
+        {
+            "name": "Tracker_Ability",
+            "folder": "Base"
+        },
+        {
+            "name": "Trapper",
+            "folder": "Base"
+        },
+        {
+            "name": "Trapper_Ability",
+            "folder": "Base"
+        },
+        {
+            "name": "Trapper_Special",
+            "folder": "Base"
+        },
+        {
+            "name": "Trickster",
+            "folder": "Base"
+        },
+        {
+            "name": "Trickster_Ability",
+            "folder": "Base"
+        },
+        {
+            "name": "Veteran",
+            "folder": "Base"
+        },
+        {
+            "name": "Veteran_Special",
+            "folder": "Base"
+        },
+        {
+            "name": "Vigilante",
+            "folder": "Base"
+        },
+        {
+            "name": "Vigilante_Ability",
+            "folder": "Base"
+        },
+        {
+            "name": "VoodooMaster",
+            "folder": "Base"
+        },
+        {
+            "name": "VoodooMaster_Ability",
+            "folder": "Base"
+        },
+        {
+            "name": "War",
+            "folder": "Base"
+        },
+        {
+            "name": "War_Ability_1",
+            "folder": "Base"
+        },
+        {
+            "name": "War_Ability_2",
+            "folder": "Base"
+        },
+        {
+            "name": "Werewolf",
+            "folder": "Base"
+        },
+        {
+            "name": "Werewolf_Ability_1",
+            "folder": "Base"
+        },
+        {
+            "name": "Werewolf_Ability_2",
+            "folder": "Base"
+        },
+        {
+            "name": "Wildling",
+            "folder": "Base"
+        },
+        {
+            "name": "Wildling_Ability",
+            "folder": "Base"
+        },
+        {
+            "name": "Witch",
+            "folder": "Base"
+        },
+        {
+            "name": "Witch_Ability_1",
+            "folder": "Base"
+        },
+        {
+            "name": "Witch_Ability_2",
+            "folder": "Base"
+        },
+        {
+            "name": "Admirer",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Admirer_Ability_Icon1",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Admirer_Ability_Icon2",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Amnesiac",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Arsonist_Ability",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Arsonist_Special",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Attributes_Coven",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Bodyguard",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Cleric",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Conjurer_Icon1",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Conjurer_Icon2",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Coroner_Ability",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Coven",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "CovenLeader_Ability",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "CovenLeader",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Crusader_Ability",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Crusader",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Deputy_Icon1",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Deputy_Icon2",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Deputy_Icon3",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Dreamweaver_Ability",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Dreamweaver",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Enchanter_Ability",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Executioner_Ability",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Executioner",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Famine_Ability",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "HexMaster",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Investigator",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Jailor_Ability",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Jailor",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Jester",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Jester_Special",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Jinx_Ability",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Berserker",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Lookout",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Mayor_Icon1",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Mayor_Icon2",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Medusa_Icon1",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Medusa_Icon2",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Necromancer",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Pestilence_Icon1",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Pestilence_Icon2",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Pestilence_Icon3",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Pestilence_Icon4",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Pirate",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Plaguebearer",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Poisoner",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "PotionMaster_Ability_1",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "PotionMaster_Ability_2",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "PotionMaster_Special",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Psychic_Icon1",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Psychic_Icon2",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Retributionist",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "SerialKiller",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Sheriff",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Shroud",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "SoulCollector_Ability_Icon1",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "SoulCollector_Ability_Icon2",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Spy_Ability_Icon1",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Spy_Ability_Icon2",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Spy",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Town",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Tracker",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Trapper",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Trickster_Icon1",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Trickster_Icon2",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Vampire",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Veteran_Icon1",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Veteran_Icon2",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Veteran_Icon3",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Veteran_Icon4",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Vigilante",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Vigilante_Ability",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Werewolf",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Wildling_Ability",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Witch_Ability_1",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Witch",
+            "folder": "EasterEggs"
+        },
+        {
+            "name": "Admirer",
+            "folder": "TTBase"
+        },
+        {
+            "name": "Amnesiac",
+            "folder": "TTBase"
+        },
+        {
+            "name": "Bodyguard",
+            "folder": "TTBase"
+        },
+        {
+            "name": "Cleric",
+            "folder": "TTBase"
+        },
+        {
+            "name": "Coroner",
+            "folder": "TTBase"
+        },
+        {
+            "name": "Crusader",
+            "folder": "TTBase"
+        },
+        {
+            "name": "Deputy",
+            "folder": "TTBase"
+        },
+        {
+            "name": "Investigator",
+            "folder": "TTBase"
+        },
+        {
+            "name": "Jailor",
+            "folder": "TTBase"
+        },
+        {
+            "name": "Lookout",
+            "folder": "TTBase"
+        },
+        {
+            "name": "Mayor",
+            "folder": "TTBase"
+        },
+        {
+            "name": "Monarch",
+            "folder": "TTBase"
+        },
+        {
+            "name": "Prosecutor",
+            "folder": "TTBase"
+        },
+        {
+            "name": "Psychic",
+            "folder": "TTBase"
+        },
+        {
+            "name": "Retributionist",
+            "folder": "TTBase"
+        },
+        {
+            "name": "Seer",
+            "folder": "TTBase"
+        },
+        {
+            "name": "Sheriff",
+            "folder": "TTBase"
+        },
+        {
+            "name": "Spy",
+            "folder": "TTBase"
+        },
+        {
+            "name": "TavernKeeper",
+            "folder": "TTBase"
+        },
+        {
+            "name": "Tracker",
+            "folder": "TTBase"
+        },
+        {
+            "name": "Trapper",
+            "folder": "TTBase"
+        },
+        {
+            "name": "Trickster",
+            "folder": "TTBase"
+        },
+        {
+            "name": "Veteran",
+            "folder": "TTBase"
+        },
+        {
+            "name": "Vigilante",
+            "folder": "TTBase"
+        },
+        {
+            "name": "Investigator",
+            "folder": "TTEasterEggs"
+        },
+        {
+            "name": "Trickster",
+            "folder": "TTEasterEggs"
+        }
+    ]
+}

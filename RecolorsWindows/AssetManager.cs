@@ -2,24 +2,25 @@ namespace RecolorsWindows;
 
 public static class AssetManager
 {
-    private static readonly string[] ToRemove = new[] { Base, EasterEggs, EETT, RegTT, ".png" };
+    private static readonly string[] ToRemove = new[] { /*Base, EasterEggs, EETT, RegTT,*/ ".png" };
 
     private const string Resources = "RecolorsWindows.Resources.";
-    private const string Base = $"{Resources}Base.";
+    /*private const string Base = $"{Resources}Base.";
     private const string EasterEggs = $"{Resources}EasterEggs.";
     private const string RegTT = $"{Resources}TTBase.";
-    private const string EETT = $"{Resources}TTEasterEggs.";
+    private const string EETT = $"{Resources}TTEasterEggs.";*/
 
     private static readonly Dictionary<string, List<Sprite>> RegEEIcons = new();
     private static readonly Dictionary<string, List<Sprite>> TTEEIcons = new();
-    private static readonly Dictionary<string, IconPack> IconPacks = new();
+    public static readonly Dictionary<string, IconPack> IconPacks = new();
     public static Sprite Blank;
     public static Sprite Thumbnail;
 
-    public static IconPack Default;
+    public static IconPack Recolors;
 
     public static string ModPath => $"{Path.GetDirectoryName(Application.dataPath)}\\SalemModLoader\\ModFolders\\Recolors";
-    public static string DefaultPath => $"{ModPath}\\Default";
+    public static string DefaultPath => $"{ModPath}\\Recolors";
+    public static string VanillaPath => $"{ModPath}\\Vanilla";
 
     private static Assembly Core => typeof(Recolors).Assembly;
 
@@ -28,15 +29,15 @@ public static class AssetManager
         if (name.Contains("Blank") || !Constants.EnableIcons)
             return Blank;
 
-        var iconPack = IconPacks.TryGetValue(Constants.CurrentPack, out var pack) ? pack : Default;
+        var iconPack = IconPacks.TryGetValue(Constants.CurrentPack, out var pack) ? pack : Recolors;
 
         if (!iconPack.RegIcons.TryGetValue(name, out var sprite))
         {
             Utils.Log($"Couldn't find regular {name} in {iconPack.Name}'s recources");
 
-            if (!Constants.ReplaceMissing || iconPack == Default)
+            if (!Constants.ReplaceMissing || Recolors == null || iconPack == Recolors)
                 return Blank;
-            else if (!Default.RegIcons.TryGetValue(name, out sprite))
+            else if (!Recolors.RegIcons.TryGetValue(name, out sprite))
             {
                 Utils.Log($"Couldn't find regular {name} in mod recources");
                 return Blank;
@@ -61,15 +62,15 @@ public static class AssetManager
         if (name.Contains("Blank") || !Constants.EnableIcons)
             return Blank;
 
-        var iconPack = IconPacks.TryGetValue(Constants.CurrentPack, out var pack) ? pack : Default;
+        var iconPack = IconPacks.TryGetValue(Constants.CurrentPack, out var pack) ? pack : Recolors;
 
         if (!iconPack.TTIcons.TryGetValue(name, out var sprite))
         {
             Utils.Log($"Couldn't find TT {name} in {iconPack.Name}'s recources");
 
-            if (!Constants.ReplaceMissing || iconPack == Default)
+            if (!Constants.ReplaceMissing || Recolors == null || iconPack == Recolors)
                 return GetSprite(name, allowEE);
-            else if (!Default.TTIcons.TryGetValue(name, out sprite))
+            else if (!Recolors.TTIcons.TryGetValue(name, out sprite))
             {
                 Utils.Log($"Couldn't find TT {name} in mod recources");
                 return GetSprite(name, allowEE);
@@ -93,7 +94,7 @@ public static class AssetManager
     {
         RegEEIcons.Clear();
         TTEEIcons.Clear();
-        Default = new("Default");
+        //Recolors = new("Recolors");
 
         Core.GetManifestResourceNames().ForEach(x =>
         {
@@ -106,17 +107,17 @@ public static class AssetManager
                     Blank = sprite;
                 else if (x.Contains("Thumbnail"))
                     Thumbnail = sprite;
-                else if (x.Contains(EasterEggs))
+                /*else if (x.Contains(EasterEggs))
                 {
                     if (RegEEIcons.ContainsKey(name))
                         RegEEIcons[name].Add(sprite);
                     else
                         RegEEIcons.TryAdd(name, new() { sprite });
 
-                    if (Default.RegEEIcons.ContainsKey(name))
-                        Default.RegEEIcons[name].Add(sprite);
+                    if (Recolors.RegEEIcons.ContainsKey(name))
+                        Recolors.RegEEIcons[name].Add(sprite);
                     else
-                        Default.RegEEIcons.TryAdd(name, new() { sprite });
+                        Recolors.RegEEIcons.TryAdd(name, new() { sprite });
                 }
                 else if (x.Contains(EETT))
                 {
@@ -125,23 +126,23 @@ public static class AssetManager
                     else
                         TTEEIcons.TryAdd(name, new() { sprite });
 
-                    if (Default.TTEEIcons.ContainsKey(name))
-                        Default.TTEEIcons[name].Add(sprite);
+                    if (Recolors.TTEEIcons.ContainsKey(name))
+                        Recolors.TTEEIcons[name].Add(sprite);
                     else
-                        Default.TTEEIcons.TryAdd(name, new() { sprite });
+                        Recolors.TTEEIcons.TryAdd(name, new() { sprite });
                 }
                 else if (x.Contains(RegTT))
-                    Default.TTIcons.TryAdd(name, sprite);
+                    Recolors.TTIcons.TryAdd(name, sprite);
                 else if (x.Contains(Base))
-                    Default.RegIcons.TryAdd(name, sprite);
+                    Recolors.RegIcons.TryAdd(name, sprite);*/
             }
         });
 
-        IconPacks.Add("Default", Default);
-        Recolors.MenuButton.Icon = Thumbnail;
+        //IconPacks.Add("Recolors", Recolors);
+        //Recolors.MenuButton.Icon = Thumbnail;
     }
 
-    //thanks pat
+    /*//thanks pat
     public static void DumpModAssets()
     {
         if (!Directory.Exists(ModPath))
@@ -150,7 +151,7 @@ public static class AssetManager
         if (!Directory.Exists(DefaultPath))
             Directory.CreateDirectory(DefaultPath);
 
-        foreach (var (name, sprite) in Default.RegIcons)
+        foreach (var (name, sprite) in Recolors.RegIcons)
         {
             var directory = $"{DefaultPath}\\Base";
             Directory.CreateDirectory(directory);
@@ -158,7 +159,7 @@ public static class AssetManager
             File.WriteAllBytes($"{directory}\\{name}.png", sprite.texture.Decompress().EncodeToPNG());
         }
 
-        foreach (var (name, sprite) in Default.TTIcons)
+        foreach (var (name, sprite) in Recolors.TTIcons)
         {
             var directory = $"{DefaultPath}\\TTBase";
             Directory.CreateDirectory(directory);
@@ -208,7 +209,7 @@ public static class AssetManager
         RenderTexture.active = previous;
         RenderTexture.ReleaseTemporary(renderTex);
         return readableText;
-    }
+    }*/
 
     private static Texture2D EmptyTexture() => new(2, 2, TextureFormat.ARGB32, true);
 
@@ -265,6 +266,7 @@ public static class AssetManager
         path = path.Split('/')[^1];
         path = path.Split('\\')[^1];
         ToRemove.ForEach(x => path = path.Replace(x, ""));
+        path = path.Replace(Resources, "");
         var i = 1;
 
         while (i > 0 && path.Contains("_Icon") && removeIcon)

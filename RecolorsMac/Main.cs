@@ -1,4 +1,4 @@
-using System.Diagnostics;
+//using System.Diagnostics;
 
 namespace RecolorsMac;
 
@@ -11,6 +11,7 @@ public class Recolors
         try
         {
             AssetManager.LoadAssets();
+            DownloadVanilla.Icon = DownloadRecolors.Icon = AssetManager.Thumbnail;
         }
         catch (Exception e)
         {
@@ -20,7 +21,19 @@ public class Recolors
         Utils.Log("Recolored!", true);
     }
 
-    public static readonly SalemMenuButton MenuButton = new()
+    public static readonly SalemMenuButton DownloadVanilla = new()
+    {
+        Label = "Download Vanilla Icons",
+        OnClick = Download.DownloadVanilla
+    };
+
+    public static readonly SalemMenuButton DownloadRecolors = new()
+    {
+        Label = "Download Recolored Icons",
+        OnClick = Download.DownloadRecolors
+    };
+
+    /*public static readonly SalemMenuButton MenuButton = new()
     {
         Label = "Dump Icons",
         OnClick = DumpAndOpen
@@ -31,5 +44,5 @@ public class Recolors
         AssetManager.DumpModAssets();
         //code stolen from jan who stole from tuba
         Process.Start("open", $"\"{AssetManager.DefaultPath}\"");
-    }
+    }*/
 }
