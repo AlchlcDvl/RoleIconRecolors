@@ -10,7 +10,7 @@ end_of_line = lf
 insert_final_newline = false
 
 # Code files
-[*.{cs, csx, vb, vbx}]
+[*.{cs, csx, vb, vbx, json}]
 indent_size = 4
 
 # XML project files

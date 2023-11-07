@@ -15,6 +15,7 @@ public static class AssetManager
     public static readonly Dictionary<string, IconPack> IconPacks = new();
     public static Sprite Blank;
     public static Sprite Thumbnail;
+    public static Sprite Download;
 
     public static IconPack Recolors;
 
@@ -107,6 +108,8 @@ public static class AssetManager
                     Blank = sprite;
                 else if (x.Contains("Thumbnail"))
                     Thumbnail = sprite;
+                else if (x.Contains("Download"))
+                    Download = sprite;
                 /*else if (x.Contains(EasterEggs))
                 {
                     if (RegEEIcons.ContainsKey(name))

@@ -1,7 +1,6 @@
 using System.Net;
 using System.Diagnostics;
-using System.Text;
-using System.Text.Json;
+using Newtonsoft.Json.Linq;
 
 namespace RecolorsMac;
 
@@ -28,29 +27,25 @@ public static class Download
 		Client.Timeout = TimeSpan.FromSeconds(30);
     }
 
-    private static void DownloadIcons(string packName)
+    private static async void DownloadIcons(string packName)
     {
-        SetUpClient();
-
         if (DownloadRunning)
             return;
 
-        Utils.Log($"Starting {packName} download", true);
-        DownloadRunning = true;
-        _ = LaunchFetcher(packName);
-        Utils.Log($"Fetched {packName} icons", true);
+        SetUpClient();
+        await LaunchFetcher(packName);
     }
 
     private static async Task LaunchFetcher(string packName)
     {
+        Utils.Log($"Starting {packName} download", true);
+        DownloadRunning = true;
+
         try
         {
             var status = await Fetch(packName);
-
-            if (status != HttpStatusCode.OK)
-                Utils.Log($"{packName} icons could not be loaded", true);
-            else
-                Process.Start("open", $"\"{AssetManager.DefaultPath}\\{packName}\"");
+            Utils.Log(status != HttpStatusCode.OK ? $"{packName} icons could not be downloaded" : $"Fetched {packName} icons", true);
+            Process.Start("open", $"\"{AssetManager.DefaultPath}\\{packName}\"");
         }
         catch (Exception e)
         {
@@ -91,19 +86,33 @@ public static class Download
             else if (packName == "Recolors")
                 AllRecolorAssets.Clear();
 
-            var json = await response.Content.ReadAsStreamAsync();
-            var datas = JsonSerializer.Deserialize<AssetJson>(Encoding.UTF8.GetString(json.ReadFully()), new JsonSerializerOptions()
+            var json = await response.Content.ReadAsStringAsync();
+            var jobj = JObject.Parse(json)[packName.ToLower()];
+
+            if (jobj == null || !jobj.HasValues)
             {
-                PropertyNameCaseInsensitive = true,
-                ReadCommentHandling = JsonCommentHandling.Skip
-            });
+                Utils.Log($"Server returned no data: {response.StatusCode}", true);
+                return HttpStatusCode.ExpectationFailed;
+            }
+
+            for (var current = jobj.First; current != null && current.HasValues; current = current.Next)
+            {
+                var info = new Asset() { Name = current["name"].ToString() };
+
+                if (info.Name == null) //Required
+                    continue;
+
+                info.Folder = current["folder"].ToString() ?? "";
+                Utils.Log(info.Name + " " + info.Folder);
+
+                if (packName == "Vanilla")
+                    AllVanillaAssets.Add(info);
+                else if (packName == "Recolors")
+                    AllRecolorAssets.Add(info);
+            }
+
             var markedfordownload = new List<Asset>();
             var folder = packName == "Vanilla" ? AssetManager.VanillaPath : AssetManager.DefaultPath;
-
-            if (packName == "Vanilla")
-                AllVanillaAssets.AddRange(datas.Assets);
-            else if (packName == "Recolors")
-                AllRecolorAssets.AddRange(datas.Assets);
 
             if (!Directory.Exists(folder))
                 Directory.CreateDirectory(folder);
@@ -130,11 +139,11 @@ public static class Download
                 var path = "";
 
                 if (packName == "Vanilla")
-                    path = $"{REPO}/Vanilla/{file.Name}.png";
+                    path = file.Name;
                 else if (packName == "Recolors")
-                    path = $"{REPO}/Recolors/{file.Folder}/{file}.png";
+                    path = $"{file.Folder}/{file.Name}";
 
-                var fileresponse = await Client.GetAsync(path, HttpCompletionOption.ResponseContentRead);
+                var fileresponse = await Client.GetAsync(new Uri($"{REPO}/{packName}/{path}.png"), HttpCompletionOption.ResponseContentRead);
 
                 if (fileresponse.StatusCode != HttpStatusCode.OK)
                 {
@@ -142,36 +151,24 @@ public static class Download
                     continue;
                 }
 
-                var imagebytes = await fileresponse.Content.ReadAsByteArrayAsync();
-                var filePath = "";
+                if (!Directory.Exists(folder + "\\" + file.Folder) && packName == "Recolors")
+                    Directory.CreateDirectory(folder + "\\" + file.Folder);
 
-                if (packName == "Vanilla")
-                    filePath = $"{folder}\\{file}.png";
-                else if (packName == "Recolors")
-                    filePath = $"{folder}\\{file.Folder}\\{file}.png";
-
-                if (File.Exists(filePath ))
-                    File.Delete(filePath);
-
-                await File.WriteAllBytesAsync(filePath, imagebytes);
+                var array = await fileresponse.Content.ReadAsByteArrayAsync();
+                File.Create(file.FilePath());
+                await File.WriteAllBytesAsync(file.FilePath(), array);
             }
+
+            if (packName == "Recolors")
+                AssetManager.TryLoadingSprites("Recolors");
+
+            return HttpStatusCode.OK;
         }
         catch (Exception ex)
         {
-            Utils.Log(ex, true);
+            Utils.Log($"ISSUE: {ex}", true);
+            return HttpStatusCode.ExpectationFailed;
         }
-
-        if (packName == "Vanilla")
-            AssetManager.TryLoadingSprites("Recolors");
-
-        return HttpStatusCode.OK;
-    }
-
-    private static byte[] ReadFully(this Stream input)
-    {
-        using var memoryStream = new MemoryStream();
-        input.CopyTo(memoryStream);
-        return memoryStream.ToArray();
     }
 }
 
@@ -179,10 +176,12 @@ public class Asset
 {
     public string Name { get; set; }
     public string Folder { get; set; }
-    public string Sanitised => Name.SanitisePath();
-}
 
-public class AssetJson
-{
-    public Asset[] Assets { get; set; }
+    public string FilePath()
+    {
+        if (Folder == "")
+            return $"{AssetManager.VanillaPath}\\{Name}.png";
+        else
+            return $"{AssetManager.ModPath}\\{Folder}\\{Name}.png";
+    }
 }
