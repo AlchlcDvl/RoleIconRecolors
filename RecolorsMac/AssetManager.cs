@@ -10,8 +10,8 @@ public static class AssetManager
     private const string RegTT = $"{Resources}TTBase.";
     private const string EETT = $"{Resources}TTEasterEggs.";*/
 
-    private static readonly Dictionary<string, List<Sprite>> RegEEIcons = new();
-    private static readonly Dictionary<string, List<Sprite>> TTEEIcons = new();
+    public static readonly Dictionary<string, List<Sprite>> RegEEIcons = new();
+    public static readonly Dictionary<string, List<Sprite>> TTEEIcons = new();
     public static readonly Dictionary<string, IconPack> IconPacks = new();
     public static Sprite Blank;
     public static Sprite Thumbnail;

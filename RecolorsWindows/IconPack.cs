@@ -110,10 +110,10 @@ public class IconPack
                 else
                     RegEEIcons.TryAdd(filePath, new() { sprite });
 
-                if (TTEEIcons.ContainsKey(filePath))
-                    TTEEIcons[filePath].Add(sprite);
+                if (AssetManager.RegEEIcons.ContainsKey(filePath))
+                    AssetManager.RegEEIcons[filePath].Add(sprite);
                 else
-                    TTEEIcons.TryAdd(filePath, new() { sprite });
+                    AssetManager.RegEEIcons.TryAdd(filePath, new() { sprite });
             }
         }
         else
@@ -134,10 +134,10 @@ public class IconPack
                 else
                     TTEEIcons.TryAdd(filePath, new() { sprite });
 
-                if (TTEEIcons.ContainsKey(filePath))
-                    TTEEIcons[filePath].Add(sprite);
+                if (AssetManager.TTEEIcons.ContainsKey(filePath))
+                    AssetManager.TTEEIcons[filePath].Add(sprite);
                 else
-                    TTEEIcons.TryAdd(filePath, new() { sprite });
+                    AssetManager.TTEEIcons.TryAdd(filePath, new() { sprite });
             }
         }
         else
