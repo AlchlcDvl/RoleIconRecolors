@@ -9,29 +9,16 @@ public static class Download
     private static bool DownloadRunning;
     public static readonly List<Asset> AllVanillaAssets = new();
     public static readonly List<Asset> AllRecolorAssets = new();
-    private static HttpClient Client = null;
 
     public static void DownloadVanilla() => DownloadIcons("Vanilla");
 
     public static void DownloadRecolors() => DownloadIcons("Recolors");
-
-    private static void SetUpClient()
-    {
-        if (Client != null)
-            return;
-
-        Client = new();
-        Client.DefaultRequestHeaders.Add("User-Agent", "IconPackDownloader");
-        Client.DefaultRequestHeaders.CacheControl = new() { NoCache = true };
-		Client.Timeout = TimeSpan.FromSeconds(30);
-    }
 
     private static async void DownloadIcons(string packName)
     {
         if (DownloadRunning)
             return;
 
-        SetUpClient();
         await LaunchFetcher(packName);
     }
 
@@ -56,12 +43,7 @@ public static class Download
 
     private static async Task<HttpStatusCode> Fetch(string packName)
     {
-        if (Client == null)
-        {
-            Utils.Log("Client was null", true);
-            return HttpStatusCode.NotFound;
-        }
-        else if (packName is not ("Vanilla" or "Recolors"))
+        if (packName is not ("Vanilla" or "Recolors"))
         {
             Utils.Log($"Wrong pack name {packName}", true);
             return HttpStatusCode.NotFound;
@@ -69,7 +51,11 @@ public static class Download
 
         try
         {
-            var response = await Client.GetAsync(new Uri($"{REPO}/{packName}.json"), HttpCompletionOption.ResponseContentRead);
+            using var client = new HttpClient();
+            client.DefaultRequestHeaders.Add("User-Agent", "IconPackDownloader");
+            client.DefaultRequestHeaders.CacheControl = new() { NoCache = true };
+            client.Timeout = TimeSpan.FromSeconds(30);
+            using var response = await client.GetAsync($"{REPO}/{packName}.json", HttpCompletionOption.ResponseContentRead);
 
             if (response.StatusCode != HttpStatusCode.OK)
                 return response.StatusCode;
@@ -90,18 +76,18 @@ public static class Download
 
             if (jobj == null || !jobj.HasValues)
             {
-                Utils.Log($"Server returned no data: {response.StatusCode}", true);
+                Utils.Log("JSON Parse failed", true);
                 return HttpStatusCode.ExpectationFailed;
             }
 
             for (var current = jobj.First; current != null && current.HasValues; current = current.Next)
             {
-                var info = new Asset() { Name = current["name"].ToString() };
+                var info = new Asset() { Name = current["name"]?.ToString() };
 
                 if (info.Name == null) //Required
                     continue;
 
-                info.Folder = current["folder"].ToString() ?? "";
+                info.Folder = current["folder"]?.ToString() ?? "";
                 Utils.Log(info.Name + " " + info.Folder);
 
                 if (packName == "Vanilla")
@@ -142,7 +128,7 @@ public static class Download
                 else if (packName == "Recolors")
                     path = $"{file.Folder}/{file.Name}";
 
-                var fileresponse = await Client.GetAsync(new Uri($"{REPO}/{packName}/{path}.png"), HttpCompletionOption.ResponseContentRead);
+                using var fileresponse = await client.GetAsync($"{REPO}/{packName}/{path}.png", HttpCompletionOption.ResponseContentRead);
 
                 if (fileresponse.StatusCode != HttpStatusCode.OK)
                 {
