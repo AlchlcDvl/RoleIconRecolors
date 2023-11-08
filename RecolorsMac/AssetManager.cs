@@ -134,6 +134,8 @@ public static class AssetManager
                     DownloadRecolors = sprite;
             }
         });
+
+        TryLoadingSprites(Constants.CurrentPack);
     }
 
     private static Texture2D EmptyTexture() => new(2, 2, TextureFormat.ARGB32, true);
