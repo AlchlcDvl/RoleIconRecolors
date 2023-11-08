@@ -2,7 +2,7 @@
 The mod adds a bit of flair to icons!
 
 **How to set your own icons**
-- Step 1: In the main menu, go to `Mod Actions` and click on the `Download Vanilla Icons` and `Download Recolors Icons`. Wait a while as the mod downloads the required icons. Once the download is complete, it should open a file explorer window to your desired window. If not, you can navigate to it by opening the mods folder, going back one folder and then into `ModFolders` then `Recolors` folders.
+- Step 1: In the main menu, go to `Mod Actions` and click on the `Download Vanilla Icons` and `Download Recolors Icons`. Wait a while as the mod downloads the required icons. Open the icons folder using the other mod action.
 - Step 2: The `Vanilla` folder contains the vanilla images. These can be used as a basis for your icon pack (like what x role but it was blue?) To actually make your own icon pack, explore the `Recolors` folder.
 - Step 3: In the `Recolors` folder, you will see 4 folders: `Base`, `TTBase`, `EasterEggs` and `TTEasterEggs`. `Base` is where your main icons will go. These will be the primary ones to replace your role's icons in all modes and other interfaces. `TTBase` is the folder where your alternate icons for town roles will go. These icons will only appear in the town traitor mode, and only when you are the traitor. These icons (if any) will replace the role icon with an edited version to show that you are the traitor. The icons in `EasterEggs` and `TTEasterEggs` have a small, random and customisable chance of replacing the targeted icon.
 - Step 4: In the `Recolors` folder, look for the image you want to replace, if it's there then it can be replaced in most places in the game. Please note the name of the image and the name of the sub folder it is in.
