@@ -11,22 +11,27 @@ public static class AssetManager
     public static readonly Dictionary<string, IconPack> IconPacks = new();
     public static Sprite Blank;
     public static Sprite Thumbnail;
-    public static Sprite Download;
+    public static Sprite DownloadRecolors;
+    public static Sprite DownloadVanilla;
 
     public static IconPack Recolors;
 
     public static string ModPath => Path.Combine(Path.GetDirectoryName(Application.dataPath), "SalemModLoader", "ModFolders", "Recolors");
     public static string DefaultPath => Path.Combine(ModPath, "Recolors");
     public static string VanillaPath => Path.Combine(ModPath, "Vanilla");
+    public static string[] Folders = new[] { "Base", "TTBase", "EasterEggs", "TTEasterEggs" };
 
     private static Assembly Core => typeof(Recolors).Assembly;
 
     public static Sprite GetSprite(string name, bool allowEE = true)
     {
-        if (name.Contains("Blank") || !Constants.EnableIcons)
+        if (name.Contains("Blank") || !Constants.EnableIcons || IconPacks.Count == 0)
             return Blank;
 
         var iconPack = IconPacks.TryGetValue(Constants.CurrentPack, out var pack) ? pack : Recolors;
+
+        if (iconPack == null)
+            return Blank;
 
         if (!iconPack.RegIcons.TryGetValue(name, out var sprite))
         {
@@ -56,10 +61,13 @@ public static class AssetManager
 
     public static Sprite GetTTSprite(string name, bool allowEE = true)
     {
-        if (name.Contains("Blank") || !Constants.EnableIcons)
+        if (name.Contains("Blank") || !Constants.EnableIcons || IconPacks.Count == 0)
             return Blank;
 
         var iconPack = IconPacks.TryGetValue(Constants.CurrentPack, out var pack) ? pack : Recolors;
+
+        if (iconPack == null)
+            return Blank;
 
         if (!iconPack.TTIcons.TryGetValue(name, out var sprite))
         {
@@ -89,6 +97,23 @@ public static class AssetManager
 
     public static void LoadAssets()
     {
+        if (!Directory.Exists(ModPath))
+            Directory.CreateDirectory(ModPath);
+
+        if (!Directory.Exists(VanillaPath))
+            Directory.CreateDirectory(VanillaPath);
+
+        if (!Directory.Exists(DefaultPath))
+            Directory.CreateDirectory(DefaultPath);
+
+        foreach (var folder in Folders)
+        {
+            var path = Path.Combine(DefaultPath, folder);
+
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+        }
+
         RegEEIcons.Clear();
         TTEEIcons.Clear();
 
@@ -103,8 +128,10 @@ public static class AssetManager
                     Blank = sprite;
                 else if (x.Contains("Thumbnail"))
                     Thumbnail = sprite;
-                else if (x.Contains("Download"))
-                    Download = sprite;
+                else if (x.Contains("DownloadVanilla"))
+                    DownloadVanilla = sprite;
+                else if (x.Contains("DownloadRecolors"))
+                    DownloadRecolors = sprite;
             }
         });
     }
@@ -114,7 +141,7 @@ public static class AssetManager
     private static Texture2D LoadDiskTexture(string fileName, string subfolder, string folder)
     {
         fileName = fileName.SanitisePath();
-        var path = $"{ModPath}\\{folder}\\{subfolder}\\{fileName}.png";
+        var path = Path.Combine(ModPath, folder, subfolder, $"{fileName}.png");
 
         try
         {
@@ -135,7 +162,7 @@ public static class AssetManager
     public static Sprite LoadSpriteFromDisk(string fileName, string subfolder, string folder)
     {
         fileName = fileName.SanitisePath();
-        var path = $"{ModPath}\\{folder}\\{subfolder}\\{fileName}.png";
+        var path = Path.Combine(ModPath, folder, subfolder, $"{fileName}.png");
 
         if (!File.Exists(path))
         {
@@ -181,7 +208,10 @@ public static class AssetManager
     public static void TryLoadingSprites(string packName)
     {
         if (IconPacks.ContainsKey(packName))
+        {
+            Utils.Log($"{packName} is already loaded");
             return;
+        }
 
         var folder = Path.Combine(ModPath, packName);
 
@@ -191,8 +221,15 @@ public static class AssetManager
             return;
         }
 
-        var pack = new IconPack(packName);
-        pack.Load();
-        IconPacks.Add(packName, pack);
+        try
+        {
+            var pack = new IconPack(packName);
+            pack.Load();
+            IconPacks.Add(packName, pack);
+        }
+        catch (Exception e)
+        {
+            Utils.Log($"ISSUE: {e}");
+        }
     }
 }

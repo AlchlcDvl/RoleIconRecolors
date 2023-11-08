@@ -1,5 +1,4 @@
 using System.Net;
-using System.Diagnostics;
 using Newtonsoft.Json.Linq;
 
 namespace RecolorsMac;
@@ -31,7 +30,6 @@ public static class Download
         {
             var status = await Fetch(packName);
             Utils.Log(status != HttpStatusCode.OK ? $"{packName} icons could not be downloaded" : $"Fetched {packName} icons", true);
-            Process.Start("open", $"\"{AssetManager.DefaultPath}\"");
         }
         catch (Exception e)
         {

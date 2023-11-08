@@ -30,7 +30,6 @@ public static class Download
         {
             var status = await Fetch(packName);
             Utils.Log(status != HttpStatusCode.OK ? $"{packName} icons could not be downloaded" : $"Fetched {packName} icons", true);
-            Application.OpenURL($"file://{AssetManager.ModPath}");
         }
         catch (Exception e)
         {
