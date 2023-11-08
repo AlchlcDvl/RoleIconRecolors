@@ -7,8 +7,7 @@ public static class Download
 {
     private const string REPO = "https://raw.githubusercontent.com/AlchlcDvl/RoleIconRecolors/main";
     private static bool DownloadRunning;
-    public static readonly List<Asset> AllVanillaAssets = new();
-    public static readonly List<Asset> AllRecolorAssets = new();
+    public static readonly Dictionary<string, List<Asset>> AllAssets = new();
 
     public static void DownloadVanilla() => DownloadIcons("Vanilla");
 
@@ -31,7 +30,7 @@ public static class Download
         {
             var status = await Fetch(packName);
             Utils.Log(status != HttpStatusCode.OK ? $"{packName} icons could not be downloaded" : $"Fetched {packName} icons", true);
-            Application.OpenURL($"file://{AssetManager.ModPath}\\{packName}");
+            Application.OpenURL($"file://{AssetManager.ModPath}");
         }
         catch (Exception e)
         {
@@ -53,8 +52,6 @@ public static class Download
         {
             using var client = new HttpClient();
             client.DefaultRequestHeaders.Add("User-Agent", "IconPackDownloader");
-            client.DefaultRequestHeaders.CacheControl = new() { NoCache = true };
-            client.Timeout = TimeSpan.FromSeconds(30);
             using var response = await client.GetAsync($"{REPO}/{packName}.json", HttpCompletionOption.ResponseContentRead);
 
             if (response.StatusCode != HttpStatusCode.OK)
@@ -66,11 +63,7 @@ public static class Download
                 return response.StatusCode;
             }
 
-            if (packName == "Vanilla")
-                AllVanillaAssets.Clear();
-            else if (packName == "Recolors")
-                AllRecolorAssets.Clear();
-
+            var assets = new List<Asset>();
             var json = await response.Content.ReadAsStringAsync();
             var jobj = JObject.Parse(json)[packName.ToLower()];
 
@@ -82,41 +75,24 @@ public static class Download
 
             for (var current = jobj.First; current != null && current.HasValues; current = current.Next)
             {
-                var info = new Asset() { Name = current["name"]?.ToString() };
+                var info = new Asset()
+                {
+                    Name = current["name"]?.ToString() ?? "",
+                    Folder = current["folder"]?.ToString() ?? "",
+                    Pack = packName
+                };
 
-                if (info.Name == null) //Required
-                    continue;
-
-                info.Folder = current["folder"]?.ToString() ?? "";
-                Utils.Log(info.Name + " " + info.Folder);
-
-                if (packName == "Vanilla")
-                    AllVanillaAssets.Add(info);
-                else if (packName == "Recolors")
-                    AllRecolorAssets.Add(info);
+                Utils.Log(info.Name + " " + info.Folder + " " + info.Pack);
+                assets.Add(info);
             }
 
+            AllAssets.TryAdd(packName, assets);
             var markedfordownload = new List<Asset>();
-            var folder = packName == "Vanilla" ? AssetManager.VanillaPath : AssetManager.DefaultPath;
 
-            if (!Directory.Exists(folder))
-                Directory.CreateDirectory(folder);
-
-            if (packName == "Vanilla")
+            foreach (var data in assets)
             {
-                foreach (var data in AllVanillaAssets)
-                {
-                    if (!File.Exists(folder + "\\" + data.Name + ".png"))
-                        markedfordownload.Add(data);
-                }
-            }
-            else if (packName == "Recolors")
-            {
-                foreach (var data in AllRecolorAssets)
-                {
-                    if (!File.Exists(folder + "\\" + data.Folder + "\\" + data.Name + ".png"))
-                        markedfordownload.Add(data);
-                }
+                if (!File.Exists(data.FilePath()))
+                    markedfordownload.Add(data);
             }
 
             foreach (var file in markedfordownload)
@@ -136,16 +112,12 @@ public static class Download
                     continue;
                 }
 
-                if (!Directory.Exists(folder + "\\" + file.Folder) && packName == "Recolors")
-                    Directory.CreateDirectory(folder + "\\" + file.Folder);
-
                 var array = await fileresponse.Content.ReadAsByteArrayAsync();
-                File.Create(file.FilePath());
                 await File.WriteAllBytesAsync(file.FilePath(), array);
             }
 
-            if (packName == "Recolors")
-                AssetManager.TryLoadingSprites("Recolors");
+            if (packName != "Vanilla")
+                AssetManager.TryLoadingSprites(packName);
 
             return HttpStatusCode.OK;
         }
@@ -161,12 +133,13 @@ public class Asset
 {
     public string Name { get; set; }
     public string Folder { get; set; }
+    public string Pack { get; set; }
 
     public string FilePath()
     {
-        if (Folder == "")
-            return $"{AssetManager.VanillaPath}\\{Name}.png";
+        if (Folder == "" || Pack == "Vanilla")
+            return Path.Combine(AssetManager.VanillaPath, $"{Name}.png");
         else
-            return $"{AssetManager.ModPath}\\{Folder}\\{Name}.png";
+            return Path.Combine(AssetManager.ModPath, Pack, Folder, $"{Name}.png");
     }
 }

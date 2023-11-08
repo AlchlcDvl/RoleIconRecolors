@@ -64,8 +64,8 @@ public class IconPack
 
     public void Load()
     {
-        var folder = $"{AssetManager.ModPath}\\{Name}";
-        var baseFolder = $"{folder}\\Base";
+        var folder = Path.Combine(AssetManager.ModPath, Name);
+        var baseFolder = Path.Combine(folder, "Base");
 
         if (Directory.Exists(baseFolder))
         {
@@ -80,7 +80,7 @@ public class IconPack
         else
             Utils.Log($"{Name} Base folder doesn't exist");
 
-        var ttFolder = $"{folder}\\TTBase";
+        var ttFolder = Path.Combine(folder, "TTBase");
 
         if (Directory.Exists(ttFolder))
         {
@@ -95,7 +95,7 @@ public class IconPack
         else
             Utils.Log($"{Name} TTBase folder doesn't exist");
 
-        var eeFolder = $"{folder}\\EasterEggs";
+        var eeFolder = Path.Combine(folder, "EasterEggs");
 
         if (Directory.Exists(eeFolder))
         {
@@ -119,7 +119,7 @@ public class IconPack
         else
             Utils.Log($"{Name} EasterEggs folder doesn't exist");
 
-        var tteeFolder = $"{folder}\\TTEasterEggs";
+        var tteeFolder = Path.Combine(folder, "TTEasterEggs");
 
         if (Directory.Exists(tteeFolder))
         {
