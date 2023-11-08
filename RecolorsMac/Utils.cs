@@ -80,9 +80,9 @@ public static class Utils
         Role.CURSED_SOUL => "CursedSoul",
         Role.VAMPIRE => "Vampire",
         Role.STONED => "Stoned",
-        /*Role.RANDOM_TOWN => "Town",
+        Role.RANDOM_TOWN => "Town",
         Role.RANDOM_COVEN => "Coven",
-        Role.RANDOM_NEUTRAL => "Neutral",*/
+        Role.RANDOM_NEUTRAL => "Neutral",
         _ => "Blank"
     };
 

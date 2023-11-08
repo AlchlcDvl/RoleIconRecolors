@@ -13,7 +13,7 @@ public static class PatchRoleDeckBuilder
 {
     public static void Postfix(RoleCardListItem __instance, ref Role role)
     {
-        if (!Constants.EnableIcons || role.IsModifierCard() || role.IsBucket())
+        if (!Constants.EnableIcons || role.IsModifierCard())
             return;
 
         var icon = AssetManager.GetSprite($"{Utils.RoleName(role)}", false);
@@ -28,7 +28,7 @@ public static class PatchRoleListPanel
 {
     public static void Postfix(RoleDeckListItem __instance, ref Role a_role, ref bool a_isBan)
     {
-        if (!Constants.EnableIcons || a_role.IsModifierCard() || a_role.IsBucket() || a_isBan)
+        if (!Constants.EnableIcons || a_role.IsModifierCard() || a_isBan)
             return;
 
         var icon = AssetManager.GetSprite($"{Utils.RoleName(a_role)}", false);
@@ -43,7 +43,7 @@ public static class PatchBrowserRoleListPanel
 {
     public static void Postfix(GameBrowserRoleDeckListItem __instance, ref Role a_role, ref bool a_isBan)
     {
-        if (!Constants.EnableIcons || a_role.IsModifierCard() || a_role.IsBucket() || a_isBan)
+        if (!Constants.EnableIcons || a_role.IsModifierCard() || a_isBan)
             return;
 
         var icon = AssetManager.GetSprite($"{Utils.RoleName(a_role)}", false);

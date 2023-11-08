@@ -55,7 +55,7 @@
       {
         "Name": "Selected Icon Pack",
         "SettingID": "recolors.windows.iconpack",
-        "Description": "The selected icon will start replacing the visible icons with the images you put in. If it can't find the valid image or pack, it will be replaced by the mod's default files\nVanilla - No icon pack selected\nDefault - Use icons from within the mod",
+        "Description": "The selected icon will start replacing the visible icons with the images you put in. If it can't find the valid image or pack, it will be replaced by the mod's default files\nVanilla - No icon pack selected\nRecolors - Use the recolored icons",
         "DefaultValue": "Vanilla",
         "Regex": "[A-Za-z]",
         "CharacterLimit": 20,
