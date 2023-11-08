@@ -52,8 +52,6 @@ And then enter the folder and create the `Base` folder which I had noted earlier
 
 Once the filing has been completed, I will go back into the game and navigate to the mod's settings and change the value for `Selected Icon Pack` to `Test`.
 
-![SelectedDefault](./Images/SelectedDefault.png)
-
 ![SelectedTest](./Images/SelectedTest.png)
 
 Once that's done, I'll just close the SML menu and enter a game where I get Mayor. It works.
