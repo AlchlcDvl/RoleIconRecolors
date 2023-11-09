@@ -71,7 +71,7 @@ public class IconPack
         {
             foreach (var file in Directory.EnumerateFiles(baseFolder, "*.png"))
             {
-                var filePath = Path.Combine(baseFolder, file);
+                var filePath = Path.Combine(baseFolder, $"{file.SanitisePath()}.png");
                 var sprite = AssetManager.LoadSpriteFromDisk(filePath, "Base", Name);
                 filePath = filePath.SanitisePath(true);
                 RegIcons.TryAdd(filePath, sprite);
@@ -86,7 +86,7 @@ public class IconPack
         {
             foreach (var file in Directory.EnumerateFiles(ttFolder, "*.png"))
             {
-                var filePath = Path.Combine(ttFolder, file);
+                var filePath = Path.Combine(ttFolder, $"{file.SanitisePath()}.png");
                 var sprite = AssetManager.LoadSpriteFromDisk(filePath, "TTBase", Name);
                 filePath = filePath.SanitisePath(true);
                 TTIcons.TryAdd(filePath, sprite);
@@ -101,7 +101,7 @@ public class IconPack
         {
             foreach (var file in Directory.EnumerateFiles(eeFolder, "*.png"))
             {
-                var filePath = Path.Combine(eeFolder, file);
+                var filePath = Path.Combine(eeFolder, $"{file.SanitisePath()}.png");
                 var sprite = AssetManager.LoadSpriteFromDisk(filePath, "EasterEggs", Name);
                 filePath = filePath.SanitisePath(true);
 
@@ -125,7 +125,7 @@ public class IconPack
         {
             foreach (var file in Directory.EnumerateFiles(tteeFolder, "*.png"))
             {
-                var filePath = Path.Combine(tteeFolder, file);
+                var filePath = Path.Combine(tteeFolder, $"{file.SanitisePath()}.png");
                 var sprite = AssetManager.LoadSpriteFromDisk(filePath, "TTEasterEggs", Name);
                 filePath = filePath.SanitisePath(true);
 

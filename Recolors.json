@@ -1020,6 +1020,14 @@
         {
             "name": "Trickster",
             "folder": "TTEasterEggs"
+        },
+        {
+            "name": "Jailor",
+            "folder": "TTEasterEggs"
+        },
+        {
+            "name": "Crusader",
+            "folder": "TTEasterEggs"
         }
     ]
 }

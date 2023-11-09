@@ -219,7 +219,7 @@ public static class AssetManager
 
         if (!Directory.Exists(folder))
         {
-            Utils.Log($"Path to {folder} was missing");
+            Utils.Log($"Path to {folder} was missing", true);
             return;
         }
 
@@ -228,6 +228,9 @@ public static class AssetManager
             var pack = new IconPack(packName);
             pack.Load();
             IconPacks.Add(packName, pack);
+
+            if (packName == "Recolors")
+                Recolors = pack;
         }
         catch (Exception e)
         {

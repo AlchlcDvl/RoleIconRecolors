@@ -13,15 +13,15 @@ public static class Download
 
     public static void DownloadRecolors() => DownloadIcons("Recolors");
 
-    private static async void DownloadIcons(string packName)
+    private static void DownloadIcons(string packName)
     {
         if (DownloadRunning)
             return;
 
-        await LaunchFetcher(packName);
+        LaunchFetcher(packName);
     }
 
-    private static async Task LaunchFetcher(string packName)
+    private static async void LaunchFetcher(string packName)
     {
         Utils.Log($"Starting {packName} download", true);
         DownloadRunning = true;
@@ -72,12 +72,15 @@ public static class Download
                 return HttpStatusCode.ExpectationFailed;
             }
 
-            for (var current = jobj.First; current != null && current.HasValues; current = current.Next)
+            for (var current = jobj.First; current != null; current = current.Next)
             {
+                if (!current.HasValues)
+                    continue;
+
                 var info = new Asset()
                 {
                     Name = current["name"]?.ToString() ?? "",
-                    Folder = current["folder"]?.ToString() ?? "",
+                    Folder = current["folder"]?.ToString() ?? "Vanilla",
                     Pack = packName
                 };
 
