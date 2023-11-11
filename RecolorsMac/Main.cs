@@ -4,6 +4,7 @@ namespace RecolorsMac;
 
 [SalemMod]
 [SalemMenuItem]
+[DynamicSettings]
 public class Recolors
 {
     public void Start()
@@ -17,7 +18,7 @@ public class Recolors
         }
         catch (Exception e)
         {
-            Utils.Log($"Something failed because this happened D:\n{e}");
+            Utils.Log($"Something failed because this happened D:\n{e}", true);
         }
 
         Utils.Log("Recolored!", true);
@@ -45,5 +46,26 @@ public class Recolors
     {
         //code stolen from jan who stole from tuba
         Process.Start("open", $"\"{AssetManager.ModPath}\"");
+    }
+
+    public ModSettings.DropdownSetting SelectedIconPack
+    {
+        get
+        {
+            return new()
+            {
+                Name = "Selected Icon Pack",
+                Description = "The selected icon will start replacing the visible icons with the images you put in. If it can't find the valid image or pack, it will be replaced by the mod's default files\nVanilla - No pack selected",
+                Options = GetPackNames(),
+                OnChanged = AssetManager.TryLoadingSprites
+            };
+        }
+    }
+
+    private static List<string> GetPackNames()
+    {
+        var result = new List<string>();
+        Directory.EnumerateDirectories(AssetManager.ModPath).ForEach(x => result.Add(x.SanitisePath()));
+        return result;
     }
 }

@@ -690,6 +690,10 @@
             "folder": "EasterEggs"
         },
         {
+            "name": "Deputy_Icon4",
+            "folder": "EasterEggs"
+        },
+        {
             "name": "Dreamweaver_Ability",
             "folder": "EasterEggs"
         },
@@ -1028,6 +1032,14 @@
         {
             "name": "Crusader",
             "folder": "TTEasterEggs"
+        },
+        {
+            "name": "Jailor",
+            "folder": "VIP"
+        },
+        {
+            "name": "Seer",
+            "folder": "VIP"
         }
     ]
 }

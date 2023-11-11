@@ -92,7 +92,6 @@ public static class Utils
         Role.NEUTRAL_EVIL => "NeutralEvil",
         Role.NEUTRAL_APOCALYPSE => "NeutralApocalypse",
         Role.ANY => "Any",
-        Role.HIDDEN => "Hidden",
         _ => "Blank"
     };
 

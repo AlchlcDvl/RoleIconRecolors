@@ -23,9 +23,6 @@ public class IconPack
 
     public void Debug()
     {
-        if (!Constants.Debug)
-            return;
-
         RegIcons.ForEach((x, _) => Utils.Log($"{Name} Icon Pack {x} has a sprite!"));
         Utils.Log($"{Name} Icon Pack {RegIcons.Count} Assets loaded!");
         TTIcons.ForEach((x, _) => Utils.Log($"{Name} Icon Pack {x} has a TT sprite!"));
@@ -88,7 +85,10 @@ public class IconPack
             }
         }
         else
+        {
             Utils.Log($"{Name} Base folder doesn't exist");
+            Directory.CreateDirectory(baseFolder);
+        }
 
         var ttFolder = Path.Combine(folder, "TTBase");
 
@@ -103,7 +103,10 @@ public class IconPack
             }
         }
         else
+        {
             Utils.Log($"{Name} TTBase folder doesn't exist");
+            Directory.CreateDirectory(ttFolder);
+        }
 
         var vipFolder = Path.Combine(folder, "VIPBase");
 
@@ -118,7 +121,10 @@ public class IconPack
             }
         }
         else
+        {
             Utils.Log($"{Name} VIPBase folder doesn't exist");
+            Directory.CreateDirectory(vipFolder);
+        }
 
         var eeFolder = Path.Combine(folder, "EasterEggs");
 
@@ -142,7 +148,10 @@ public class IconPack
             }
         }
         else
+        {
             Utils.Log($"{Name} EasterEggs folder doesn't exist");
+            Directory.CreateDirectory(eeFolder);
+        }
 
         var tteeFolder = Path.Combine(folder, "TTEasterEggs");
 
@@ -166,7 +175,10 @@ public class IconPack
             }
         }
         else
+        {
             Utils.Log($"{Name} TTEasterEggs folder doesn't exist");
+            Directory.CreateDirectory(tteeFolder);
+        }
 
         var vipeeFolder = Path.Combine(folder, "VIPEasterEggs");
 
@@ -190,6 +202,9 @@ public class IconPack
             }
         }
         else
+        {
             Utils.Log($"{Name} VIPEasterEggs folder doesn't exist");
+            Directory.CreateDirectory(vipeeFolder);
+        }
     }
 }

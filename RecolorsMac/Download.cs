@@ -118,9 +118,7 @@ public static class Download
                 File.WriteAllBytes(file.FilePath(), array);
             }
 
-            if (packName != "Vanilla")
-                AssetManager.TryLoadingSprites(packName);
-
+            AssetManager.TryLoadingSprites(packName);
             return HttpStatusCode.OK;
         }
         catch (Exception ex)

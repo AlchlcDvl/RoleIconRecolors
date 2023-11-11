@@ -267,7 +267,7 @@ public static class AssetManager
 
     public static void TryLoadingSprites(string packName)
     {
-        if (IconPacks.ContainsKey(packName))
+        if (IconPacks.ContainsKey(packName) || packName == "Vanilla")
         {
             Utils.Log($"{packName} is already loaded");
             return;

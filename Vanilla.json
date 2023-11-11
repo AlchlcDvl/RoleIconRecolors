@@ -152,6 +152,19 @@
         { "name": "Wildling_Ability" },
         { "name": "Witch" },
         { "name": "Witch_Ability_1" },
-        { "name": "Witch_Ability_2" }
+        { "name": "Witch_Ability_2" },
+        { "name": "Any" },
+        { "name": "TownInvestigative" },
+        { "name": "TownProtective" },
+        { "name": "TownKilling" },
+        { "name": "TownSupport" },
+        { "name": "TownPower" },
+        { "name": "CovenKilling" },
+        { "name": "CovenPower" },
+        { "name": "CovenUtility" },
+        { "name": "CovenDeception" },
+        { "name": "NeutralKilling" },
+        { "name": "NeutralEvil" },
+        { "name": "NeutralApocalypse" }
     ]
 }
