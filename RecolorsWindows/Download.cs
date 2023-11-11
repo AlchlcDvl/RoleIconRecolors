@@ -115,7 +115,7 @@ public static class Download
                 }
 
                 var array = await fileresponse.Content.ReadAsByteArrayAsync();
-                await File.WriteAllBytesAsync(file.FilePath(), array);
+                File.WriteAllBytes(file.FilePath(), array);
             }
 
             if (packName != "Vanilla")

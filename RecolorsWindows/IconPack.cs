@@ -4,8 +4,10 @@ public class IconPack
 {
     public Dictionary<string, Sprite> RegIcons { get; set; }
     public Dictionary<string, Sprite> TTIcons { get; set; }
+    public Dictionary<string, Sprite> VIPIcons { get; set; }
     public Dictionary<string, List<Sprite>> RegEEIcons { get; set; }
     public Dictionary<string, List<Sprite>> TTEEIcons { get; set; }
+    public Dictionary<string, List<Sprite>> VIPEEIcons { get; set; }
     public string Name { get; }
 
     public IconPack(string name)
@@ -15,29 +17,37 @@ public class IconPack
         RegIcons = new();
         TTEEIcons = new();
         RegEEIcons = new();
+        VIPIcons = new();
+        VIPEEIcons = new();
     }
 
     public void Debug()
     {
+        if (!Constants.Debug)
+            return;
+
         RegIcons.ForEach((x, _) => Utils.Log($"{Name} Icon Pack {x} has a sprite!"));
-        Utils.Log($"{Name} Icon Pack {RegIcons.Count} Regular Assets loaded!");
+        Utils.Log($"{Name} Icon Pack {RegIcons.Count} Assets loaded!");
         TTIcons.ForEach((x, _) => Utils.Log($"{Name} Icon Pack {x} has a TT sprite!"));
         Utils.Log($"{Name} Icon Pack {TTIcons.Count} TT Assets loaded!");
-        RegEEIcons.ForEach((x, y) => Utils.Log($"{x} has {y.Count} easter egg sprite(s)!"));
-        Utils.Log($"{Name} Icon Pack {RegEEIcons.Count} easter egg Assets loaded!");
-        TTEEIcons.ForEach((x, y) => Utils.Log($"{x} has {y.Count} TT easter egg sprite(s)!"));
-        Utils.Log($"{Name} Icon Pack {TTEEIcons.Count} TT easter egg Assets loaded!");
+        VIPIcons.ForEach((x, _) => Utils.Log($"{Name} Icon Pack {x} has a VIP sprite!"));
+        Utils.Log($"{Name} Icon Pack {VIPIcons.Count} VIP Assets loaded!");
+        RegEEIcons.ForEach((x, y) => Utils.Log($"{x} has {y.Count} Easter Egg sprite(s)!"));
+        Utils.Log($"{Name} Icon Pack {RegEEIcons.Count} Easter Egg Assets loaded!");
+        TTEEIcons.ForEach((x, y) => Utils.Log($"{x} has {y.Count} TT Easter Egg sprite(s)!"));
+        Utils.Log($"{Name} Icon Pack {TTEEIcons.Count} TT Easter Egg Assets loaded!");
+        VIPEEIcons.ForEach((x, y) => Utils.Log($"{x} has {y.Count} VIP Easter Egg sprite(s)!"));
+        Utils.Log($"{Name} Icon Pack {VIPEEIcons.Count} VIP Easter Egg Assets loaded!");
     }
 
     public static bool operator ==(IconPack a, IconPack b)
     {
         if (a is null && b is null)
             return true;
-
-        if (a is null || b is null)
+        else if (a is null || b is null)
             return false;
-
-        return a.Name == b.Name;
+        else
+            return a.Name == b.Name;
     }
 
     public static bool operator !=(IconPack a, IconPack b) => !(a == b);
@@ -95,6 +105,21 @@ public class IconPack
         else
             Utils.Log($"{Name} TTBase folder doesn't exist");
 
+        var vipFolder = Path.Combine(folder, "VIPBase");
+
+        if (Directory.Exists(vipFolder))
+        {
+            foreach (var file in Directory.EnumerateFiles(vipFolder, "*.png"))
+            {
+                var filePath = Path.Combine(vipFolder, $"{file.SanitisePath()}.png");
+                var sprite = AssetManager.LoadSpriteFromDisk(filePath, "VIPBase", Name);
+                filePath = filePath.SanitisePath(true);
+                VIPIcons.TryAdd(filePath, sprite);
+            }
+        }
+        else
+            Utils.Log($"{Name} VIPBase folder doesn't exist");
+
         var eeFolder = Path.Combine(folder, "EasterEggs");
 
         if (Directory.Exists(eeFolder))
@@ -142,5 +167,29 @@ public class IconPack
         }
         else
             Utils.Log($"{Name} TTEasterEggs folder doesn't exist");
+
+        var vipeeFolder = Path.Combine(folder, "VIPEasterEggs");
+
+        if (Directory.Exists(vipeeFolder))
+        {
+            foreach (var file in Directory.EnumerateFiles(vipeeFolder, "*.png"))
+            {
+                var filePath = Path.Combine(vipeeFolder, $"{file.SanitisePath()}.png");
+                var sprite = AssetManager.LoadSpriteFromDisk(filePath, "VIPEasterEggs", Name);
+                filePath = filePath.SanitisePath(true);
+
+                if (VIPEEIcons.ContainsKey(filePath))
+                    VIPEEIcons[filePath].Add(sprite);
+                else
+                    VIPEEIcons.TryAdd(filePath, new() { sprite });
+
+                if (AssetManager.VIPEEIcons.ContainsKey(filePath))
+                    AssetManager.VIPEEIcons[filePath].Add(sprite);
+                else
+                    AssetManager.VIPEEIcons.TryAdd(filePath, new() { sprite });
+            }
+        }
+        else
+            Utils.Log($"{Name} VIPEasterEggs folder doesn't exist");
     }
 }

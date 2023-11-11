@@ -1,11 +1,3 @@
-using Game.Interface;
-using Server.Shared.Extensions;
-using Server.Shared.State;
-using Home.GameBrowser;
-using SalemModLoaderUI;
-using Server.Shared.Info;
-using Services;
-
 namespace RecolorsMac;
 
 [HarmonyPatch(typeof(RoleCardListItem), nameof(RoleCardListItem.SetData))]
@@ -72,7 +64,7 @@ public class PatchRoleCards
 
         var index = 0;
         var name = Utils.RoleName(role);
-        var sprite = role.IsTraitor(Pepper.GetMyFaction()) ? AssetManager.GetTTSprite(name) : AssetManager.GetSprite(name);
+        var sprite = AssetManager.GetSprite(name, role);
 
         if (sprite != AssetManager.Blank && panel.roleIcon != null)
             panel.roleIcon.sprite = sprite;
@@ -83,12 +75,12 @@ public class PatchRoleCards
             panel.specialAbilityPanel.useButton.abilityIcon.sprite = special;
 
         var abilityname = $"{name}_Ability";
-        var ability1 = AssetManager.GetSprite(abilityname);
+        var ability1 = AssetManager.GetSprite(abilityname, role);
 
         if (ability1 == AssetManager.Blank)
             abilityname += "_1";
 
-        ability1 = AssetManager.GetSprite(abilityname);
+        ability1 = AssetManager.GetSprite(abilityname, role);
 
         if (ability1 != AssetManager.Blank && panel.roleInfoButtons[index] != null)
         {
@@ -96,7 +88,7 @@ public class PatchRoleCards
             index++;
         }
 
-        var ability2 = AssetManager.GetSprite($"{name}_Ability_2");
+        var ability2 = AssetManager.GetSprite($"{name}_Ability_2", role);
 
         if (ability2 != AssetManager.Blank && panel.roleInfoButtons[index] != null)
         {
@@ -254,7 +246,7 @@ public static class PatchRitualistGuessMenu
         if (!Constants.EnableIcons)
             return;
 
-        var icon = AssetManager.GetSprite($"{Utils.RoleName(a_role)}");
+        var icon = AssetManager.GetSprite($"{Utils.RoleName(a_role)}", false);
 
         if (__instance.roleIcon != null && icon != AssetManager.Blank)
             __instance.roleIcon.sprite = icon;

@@ -2,12 +2,11 @@ namespace RecolorsMac;
 
 public static class AssetManager
 {
-    private static readonly string[] ToRemove = new[] { ".png" };
-
     private const string Resources = "RecolorsMac.Resources.";
 
     public static readonly Dictionary<string, List<Sprite>> RegEEIcons = new();
     public static readonly Dictionary<string, List<Sprite>> TTEEIcons = new();
+    public static readonly Dictionary<string, List<Sprite>> VIPEEIcons = new();
     public static readonly Dictionary<string, IconPack> IconPacks = new();
     public static Sprite Blank;
     public static Sprite Thumbnail;
@@ -19,11 +18,33 @@ public static class AssetManager
     public static string ModPath => Path.Combine(Path.GetDirectoryName(Application.dataPath), "SalemModLoader", "ModFolders", "Recolors");
     public static string DefaultPath => Path.Combine(ModPath, "Recolors");
     public static string VanillaPath => Path.Combine(ModPath, "Vanilla");
-    public static string[] Folders = new[] { "Base", "TTBase", "EasterEggs", "TTEasterEggs" };
+    private static readonly string[] Folders = new[] { "Base", "TTBase", "VIPBase", "EasterEggs", "TTEasterEggs", "VIPEasterEggs" };
+    private static readonly string[] Avoid = new[] { "Attributes", "Necronomicon" };
+    private static readonly string[] ToRemove = new[] { ".png" };
 
     private static Assembly Core => typeof(Recolors).Assembly;
 
-    public static Sprite GetSprite(string name, bool allowEE = true)
+    public static Sprite GetSprite(string name, bool allowEE) => GetSprite(name, null, null, allowEE);
+
+    public static Sprite GetSprite(string name, Role? role = null, FactionType? faction = null, bool allowEE = true)
+    {
+        role ??= Pepper.GetMyRole();
+        faction ??= Pepper.GetMyFaction();
+
+        if (!Avoid.Any(name.Contains) && !role.Value.IsBucket())
+        {
+            if (role.Value.IsTraitor(faction.Value))
+                return GetTTSprite(name, allowEE);
+            else if (Service.Game.Sim.info.roleCardObservation.Data.modifier == ROLE_MODIFIER.VIP)
+                return GetVIPSprite(name, allowEE);
+            else
+                return GetRegSprite(name, allowEE);
+        }
+        else
+            return GetRegSprite(name, allowEE);
+    }
+
+    private static Sprite GetRegSprite(string name, bool allowEE = true)
     {
         if (name.Contains("Blank") || !Constants.EnableIcons || IconPacks.Count == 0)
             return Blank;
@@ -59,7 +80,7 @@ public static class AssetManager
         return sprite;
     }
 
-    public static Sprite GetTTSprite(string name, bool allowEE = true)
+    private static Sprite GetTTSprite(string name, bool allowEE = true)
     {
         if (name.Contains("Blank") || !Constants.EnableIcons || IconPacks.Count == 0)
             return Blank;
@@ -74,11 +95,11 @@ public static class AssetManager
             Utils.Log($"Couldn't find TT {name} in {iconPack.Name}'s recources");
 
             if (!Constants.ReplaceMissing || Recolors == null || iconPack == Recolors)
-                return GetSprite(name, allowEE);
+                return GetRegSprite(name, allowEE);
             else if (!Recolors.TTIcons.TryGetValue(name, out sprite))
             {
                 Utils.Log($"Couldn't find TT {name} in mod recources");
-                return GetSprite(name, allowEE);
+                return GetRegSprite(name, allowEE);
             }
             else
                 return sprite;
@@ -89,6 +110,42 @@ public static class AssetManager
             if (pack.TTEEIcons.TryGetValue(name, out var sprites) && !Constants.AllEasterEggs)
                 return sprites.Random();
             else if (TTEEIcons.TryGetValue(name, out sprites))
+                return sprites.Random();
+        }
+
+        return sprite;
+    }
+
+    private static Sprite GetVIPSprite(string name, bool allowEE = true)
+    {
+        if (name.Contains("Blank") || !Constants.EnableIcons || IconPacks.Count == 0)
+            return Blank;
+
+        var iconPack = IconPacks.TryGetValue(Constants.CurrentPack, out var pack) ? pack : Recolors;
+
+        if (iconPack == null)
+            return Blank;
+
+        if (!iconPack.VIPIcons.TryGetValue(name, out var sprite))
+        {
+            Utils.Log($"Couldn't find VIP {name} in {iconPack.Name}'s recources");
+
+            if (!Constants.ReplaceMissing || Recolors == null || iconPack == Recolors)
+                return GetRegSprite(name, allowEE);
+            else if (!Recolors.VIPIcons.TryGetValue(name, out sprite))
+            {
+                Utils.Log($"Couldn't find VIP {name} in mod recources");
+                return GetRegSprite(name, allowEE);
+            }
+            else
+                return sprite;
+        }
+
+        if (URandom.RandomRangeInt(1, 101) <= Constants.EasterEggChance && allowEE)
+        {
+            if (pack.VIPEEIcons.TryGetValue(name, out var sprites) && !Constants.AllEasterEggs)
+                return sprites.Random();
+            else if (VIPEEIcons.TryGetValue(name, out sprites))
                 return sprites.Random();
         }
 
@@ -116,6 +173,7 @@ public static class AssetManager
 
         RegEEIcons.Clear();
         TTEEIcons.Clear();
+        VIPEEIcons.Clear();
 
         Core.GetManifestResourceNames().ForEach(x =>
         {
@@ -177,7 +235,7 @@ public static class AssetManager
         if (texture == null)
             return null;
 
-        var sprite = Sprite.Create(texture, new(0, 0, texture.width, texture.height), new(0.5f, 0.5f), 100f);
+        var sprite = Sprite.Create(texture, new(0, 0, texture.width, texture.height), new(0.5f, 0.5f), 100);
 
         if (sprite == null)
             return null;
@@ -227,6 +285,7 @@ public static class AssetManager
         {
             var pack = new IconPack(packName);
             pack.Load();
+            pack.Debug();
             IconPacks.Add(packName, pack);
 
             if (packName == "Recolors")

@@ -1,8 +1,4 @@
-using Server.Shared.Extensions;
-using Server.Shared.State;
 using Home.Shared;
-using Server.Shared.Info;
-using Services;
 
 namespace RecolorsMac;
 
@@ -83,6 +79,20 @@ public static class Utils
         Role.RANDOM_TOWN => "Town",
         Role.RANDOM_COVEN => "Coven",
         Role.RANDOM_NEUTRAL => "Neutral",
+        Role.TOWN_INVESTIGATIVE => "TownInvestigative",
+        Role.TOWN_PROTECTIVE => "TownProtective",
+        Role.TOWN_KILLING => "TownKilling",
+        Role.TOWN_SUPPORT => "TownSupport",
+        Role.TOWN_POWER => "TownPower",
+        Role.COVEN_KILLING => "CovenKilling",
+        Role.COVEN_UTILITY => "CovenUtility",
+        Role.COVEN_DECEPTION => "CovenDeception",
+        Role.COVEN_POWER => "CovenPower",
+        Role.NEUTRAL_KILLING => "NeutralKilling",
+        Role.NEUTRAL_EVIL => "NeutralEvil",
+        Role.NEUTRAL_APOCALYPSE => "NeutralApocalypse",
+        Role.ANY => "Any",
+        Role.HIDDEN => "Hidden",
         _ => "Blank"
     };
 
