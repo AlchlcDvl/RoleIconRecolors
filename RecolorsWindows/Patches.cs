@@ -45,12 +45,6 @@ public static class PatchBrowserRoleListPanel
     }
 }
 
-[HarmonyPatch(typeof(SalemModLoaderMainMenuController), nameof(SalemModLoaderMainMenuController.ClickMainButton))]
-public static class PatchSMLSettings
-{
-    public static void Postfix() => AssetManager.TryLoadingSprites(Constants.CurrentPack);
-}
-
 [HarmonyPatch(typeof(RoleCardPanelBackground), nameof(RoleCardPanelBackground.SetRole))]
 public class PatchRoleCards
 {
