@@ -49,9 +49,9 @@ With this mod you can edit (most) renditions of game icons to your own liking! P
 
 For a proper icon pack to function, you have to use at least one of `Base`, `TTBase` or `VIPBase` folder names.
 
-`Base` is the folder that changes the icons all the time.
-`TTBase` is the folder where the icosn in it will only appear when you are the Town Traitor.
-`VIPBase` is the folder where the icons within in will appear only when you are the VIP.
+`Base` is the folder that changes the icons all the time.\
+`TTBase` is the folder where the icosn in it will only appear when you are the Town Traitor.\
+`VIPBase` is the folder where the icons within in will appear only when you are the VIP.\
 The easter egg folders can have as many icons as needed and will only appear with a small chance to replace the actual icons in the corresponding folders.
 
 -----------------------
