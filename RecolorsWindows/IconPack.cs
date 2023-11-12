@@ -37,6 +37,26 @@ public class IconPack
         Utils.Log($"{Name} Icon Pack {VIPEEIcons.Count} VIP Easter Egg Assets loaded!");
     }
 
+    public void Delete()
+    {
+        RegIcons.Values.ForEach(UObject.Destroy);
+        RegIcons.Clear();
+        TTIcons.Values.ForEach(UObject.Destroy);
+        TTIcons.Clear();
+        VIPIcons.Values.ForEach(UObject.Destroy);
+        VIPIcons.Clear();
+        RegEEIcons.Values.ForEach(x => x.ForEach(UObject.Destroy));
+        RegEEIcons.Values.ForEach(x => x.Clear());
+        RegEEIcons.Clear();
+        VIPEEIcons.Values.ForEach(x => x.ForEach(UObject.Destroy));
+        VIPEEIcons.Values.ForEach(x => x.Clear());
+        VIPEEIcons.Clear();
+        TTEEIcons.Values.ForEach(x => x.ForEach(UObject.Destroy));
+        TTEEIcons.Values.ForEach(x => x.Clear());
+        TTEEIcons.Clear();
+        Utils.Log($"Deleting {Name} Icon Pack");
+    }
+
     public static bool operator ==(IconPack a, IconPack b)
     {
         if (a is null && b is null)

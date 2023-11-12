@@ -42,7 +42,7 @@ public class Recolors
         OnClick = Open
     };
 
-    private static void Open()
+    public static void Open()
     {
         //code stolen from jan who stole from tuba
         Process.Start("open", $"\"{AssetManager.ModPath}\"");

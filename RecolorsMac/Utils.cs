@@ -95,10 +95,9 @@ public static class Utils
         _ => "Blank"
     };
 
-    public static string FactionName(FactionType faction, Role role = Role.NONE)
+    public static string FactionName(FactionType faction, Role? role = null)
     {
-        if (role == Role.NONE)
-            role = Pepper.GetMyRole();
+        role ??= Pepper.GetMyRole();
 
         return faction switch
         {
@@ -133,14 +132,14 @@ public static class Utils
         var text2 = "";
 
         if (role.IsTraitor(factionType))
-            text2 = "\n<color=#B545FFFF>(Traitor)</color>";
+            text2 = $"\n<color={Constants.TTColor}>(Traitor)</color>";
         else if (Service.Game?.Sim?.info?.roleCardObservation?.Data?.modifier == ROLE_MODIFIER.VIP)
-            text2 = "\n<color=#06E00CFF>(VIP)</color>";
+            text2 = $"\n<color={Constants.VIPColor}>(VIP)</color>";
 
         if (text2.Length > 0)
             text2 = $"<size=85%>{text2}</size>";
 
-        return $"<color={role.GetFaction().GetFactionColor()}>{text}{text2}</color>";
+        return $"<color={role.GetFaction().GetFactionColor()}>{text}</color>{text2}";
     }
 
     public static void Log(object message, bool logIt = false)

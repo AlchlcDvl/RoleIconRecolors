@@ -1,59 +1,68 @@
-# RoleIconRecolors
-The mod adds a bit of flair to icons!
 
-**How to set your own icons**
-- Step 1: In the main menu, go to `Mod Actions` and click on the `Download Vanilla Icons` and `Download Recolors Icons`. Wait a while as the mod downloads the required icons. Open the icons folder using the other mod action.
-- Step 2: The `Vanilla` folder contains the vanilla images. These can be used as a basis for your icon pack (like what x role but it was blue?) To actually make your own icon pack, explore the `Recolors` folder.
-- Step 3: In the `Recolors` folder, you will see 4 folders: `Base`, `TTBase`, `EasterEggs` and `TTEasterEggs`. `Base` is where your main icons will go. These will be the primary ones to replace your role's icons in all modes and other interfaces. `TTBase` is the folder where your alternate icons for town roles will go. These icons will only appear in the town traitor mode, and only when you are the traitor. These icons (if any) will replace the role icon with an edited version to show that you are the traitor. The icons in `EasterEggs` and `TTEasterEggs` have a small, random and customisable chance of replacing the targeted icon.
-- Step 4: In the `Recolors` folder, look for the image you want to replace, if it's there then it can be replaced in most places in the game. Please note the name of the image and the name of the sub folder it is in.
-- Step 5: Go backwards in your file explorer till you see either the `Vanilla` or `Recolors` folder (or both).
-- Step 6: Create a folder for your icon pack and name it whatever you want. Note this name.
-- Step 7: Enter your newly made folder and create another folder that your desired image will be in. This folder needs to be named one of the 4 subfolders mentioned above.
-- Step 8: Drop your own image into the newly made subfolder and rename the image to that of the image you want to replace.
-- Step 9: Open the game and go into the mod's settings
-- Step 10: Change the value of the `Selected Icon Pack` setting from `Vanilla` or `Recolors` to the name of your icon pack.
-- Step 11: Close the SML menu. There might be a slight lag spike whose length depends on how many images you put in (as it's loading all of those images if the value was input correctly).
-- Step 12: Enjoy (hopefully)!
+<p align="center">
+    <img width="400px" src="./Images/Thumbnail.png" align="center" alt="logo" />
+    <h2 align="center">Icon Packs</h2>
+    <p align="center">The customisation mod that lets you add a bit of flair to icons!
+</p>
 
-**Certain rules for icon packs**
-- Images must be 256x256.
-- Images must be png.
-- The value for the `Selected Icon Pack` is case and character sensitive. Ensure you have the name down correctly, letter for letter to ensure it works.
+-----------------------
 
-If it you didn't understand the instructions, here's an example on how to do it.
+# Icon Packs Mod
 
-First, I will open the game and download the recolors and vanilla assets.
+With this mod you can edit (most) renditions of game icons to your own liking! Paired with the Color Swapper and Text Editor mod, you now have a fully customisable game experience!
 
-![ModActions](./Images/ModActions.png)
+-----------------------
 
-![Download](./Images/Download.png)
+# Contents
 
-After a while (doesn't matter how long, but typically 5-6 mins), a file explorer window should open for me showing me either the `Vanilla` or `Recolors` folder (or both).
+- [**Icon Packs Mod**](#icon-packs-mod)
+- [**Contents**](#contents)
+- [**Pack Creation**](#pack-creation)
+- [**Image Rules**](#image-rules)
+- [**Folders**](#folders)
 
-![AfterDownload](./Images/AfterDownload.png)
+-----------------------
 
-Now I want to replace Mayor's role icon with Admirer's and I will go into the `Recolors` then `Base` folders and look for the Mayor and Admirer icons.
+# Pack Creation
 
-![Mayor](./Images/Mayor.png)
+- Step 1: In the main menu, go to `Mod Actions` and click on the `Download Vanilla Icons`. Wait a while as the mod downloads the required icons. When the download is over, it should open a file explorer window. Close the game.
+- Step 2: Create a folder and name it something you want your icon pack to be.
+- Step 3: Start the game again and select your icon pack in the `Selected Icon Pack` drop down setting. Close the game.
+- Step 4: Go back to your file explorer and enter the folder for your icon pack.
+- Step 5: Read the [folders](#folders) section and create the folder you need for your icons.
+- Step 6: Place your image in the required folder and rename it as per the [image rules](#image-rules).
+- Step 7: Open the game.
+- Step 8: Your icon pack should load on game start up, changing the value of `Selected Icon Pack` will make it load the new pack's icons. Beware, when changing icons, there will be a lag spike as it loads everything.
 
-![Admirer](./Images/Admirer.png)
+-----------------------
 
-So I will note the file's name, which in this case is `Mayor` and the folder it's in, which here is `Base`.
+# Image Rules
 
-![Base](./Images/Base.png)
+- Must be 256x256 pixels.
+- Must be png.
+- Refer to the Vanilla icons on how to give the icons a base name.
+- If the target folder is an easter egg folder and an icon for the image already exists, add `_Icon` after the image name followed by a number (typically the next one in line, starting from 1, like `_Icon1` and `_Icon2`).
 
-Now I will go up the folders, kind of like going in reverse where I'm exiting a folder instead of entering it. I will keep doing it till I see the `Vanilla` or `Recolors` folder in the list. In that directory I will now create a new Icon Pack folder called `Test`.
+-----------------------
 
-![Test](./Images/Test.png)
+# Folders
 
-And then enter the folder and create the `Base` folder which I had noted earlier. I will now drop my Admirer icon into this base folder and rename it to `Mayor`.
+For a proper icon pack to function, you have to use at least one of `Base`, `TTBase` or `VIPBase` folder names.
 
-![Swap](./Images/Swap.png)
+`Base` is the folder that changes the icons all the time.
+`TTBase` is the folder where the icosn in it will only appear when you are the Town Traitor.
+`VIPBase` is the folder where the icons within in will appear only when you are the VIP.
+The easter egg folders can have as many icons as needed and will only appear with a small chance to replace the actual icons in the corresponding folders.
 
-Once the filing has been completed, I will go back into the game and navigate to the mod's settings and change the value for `Selected Icon Pack` to `Test`.
+-----------------------
 
-![SelectedTest](./Images/SelectedTest.png)
+# Is Modding Bannable?
 
-Once that's done, I'll just close the SML menu and enter a game where I get Mayor. It works.
+To quote the "Salem Mod Loader" [Discord](https://discord.gg/AdpRqzstfj).
+> Use the mod at your own risk, while you have very low odds of being banned, you could be at risk if you openly state in games you are running a modded client as trials may guilty you under hacking even though the mod gives no advantages.
 
-![MayorRC](./Images/MayorRC.png)
+[Town of Salem Rules](https://www.blankmediagames.com/rules/)
+> No Cheating – Gaining an unfair advantage over players through means other than normal gameplay. This includes but isn’t limited to using multiple accounts in the same game, sharing information outside the game, using a foreign language to communicate in a way that can’t be understood by the players in the current locale, and posting screenshots to prove something happened in game.
+
+To quote a developer in the official Town of Salem 2 [Discord](https://discord.gg/townofsalem2). [Message Link](https://discord.com/channels/1110363758792036352/1111801081060655154/1112876123852906617)
+> We plan to have official mod support, but having a good base is important. A new player won't have a mod preinstalled.

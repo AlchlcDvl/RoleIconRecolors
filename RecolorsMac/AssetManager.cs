@@ -13,12 +13,10 @@ public static class AssetManager
     public static Sprite DownloadRecolors;
     public static Sprite DownloadVanilla;
 
-    public static IconPack Recolors;
-
     public static string ModPath => Path.Combine(Path.GetDirectoryName(Application.dataPath), "SalemModLoader", "ModFolders", "Recolors");
     public static string DefaultPath => Path.Combine(ModPath, "Recolors");
     public static string VanillaPath => Path.Combine(ModPath, "Vanilla");
-    private static readonly string[] Folders = new[] { "Base", "TTBase", "VIPBase", "EasterEggs", "TTEasterEggs", "VIPEasterEggs" };
+    public static readonly string[] Folders = new[] { "Base", "TTBase", "VIPBase", "EasterEggs", "TTEasterEggs", "VIPEasterEggs" };
     private static readonly string[] Avoid = new[] { "Attributes", "Necronomicon" };
     private static readonly string[] ToRemove = new[] { ".png" };
 
@@ -61,24 +59,21 @@ public static class AssetManager
         if (name.Contains("Blank") || !Constants.EnableIcons || IconPacks.Count == 0)
             return Blank;
 
-        var iconPack = IconPacks.TryGetValue(Constants.CurrentPack, out var pack) ? pack : Recolors;
-
-        if (iconPack == null)
+        if (!IconPacks.TryGetValue(Constants.CurrentPack, out var iconPack))
+        {
+            Utils.Log($"Error finding {Constants.CurrentPack} in loaded packs");
             return Blank;
+        }
 
         if (!iconPack.RegIcons.TryGetValue(name, out var sprite))
         {
             Utils.Log($"Couldn't find regular {name} in {iconPack.Name}'s recources");
-
-            if (Recolors == null || iconPack == Recolors)
-                return Blank;
-            else
-                return sprite;
+            return Blank;
         }
 
         if (URandom.RandomRangeInt(1, 101) <= Constants.EasterEggChance && allowEE)
         {
-            if (pack.RegEEIcons.TryGetValue(name, out var sprites) && !Constants.AllEasterEggs)
+            if (iconPack.RegEEIcons.TryGetValue(name, out var sprites) && !Constants.AllEasterEggs)
                 return sprites.Random();
             else if (RegEEIcons.TryGetValue(name, out sprites))
                 return sprites.Random();
@@ -92,24 +87,21 @@ public static class AssetManager
         if (name.Contains("Blank") || !Constants.EnableIcons || IconPacks.Count == 0)
             return Blank;
 
-        var iconPack = IconPacks.TryGetValue(Constants.CurrentPack, out var pack) ? pack : Recolors;
-
-        if (iconPack == null)
+        if (!IconPacks.TryGetValue(Constants.CurrentPack, out var iconPack))
+        {
+            Utils.Log($"Error finding {Constants.CurrentPack} in loaded packs");
             return Blank;
+        }
 
         if (!iconPack.TTIcons.TryGetValue(name, out var sprite))
         {
             Utils.Log($"Couldn't find TT {name} in {iconPack.Name}'s recources");
-
-            if (Recolors == null || iconPack == Recolors)
-                return GetRegSprite(name, allowEE);
-            else
-                return sprite;
+            return GetRegSprite(name, allowEE);
         }
 
         if (URandom.RandomRangeInt(1, 101) <= Constants.EasterEggChance && allowEE)
         {
-            if (pack.TTEEIcons.TryGetValue(name, out var sprites) && !Constants.AllEasterEggs)
+            if (iconPack.TTEEIcons.TryGetValue(name, out var sprites) && !Constants.AllEasterEggs)
                 return sprites.Random();
             else if (TTEEIcons.TryGetValue(name, out sprites))
                 return sprites.Random();
@@ -123,24 +115,21 @@ public static class AssetManager
         if (name.Contains("Blank") || !Constants.EnableIcons || IconPacks.Count == 0)
             return Blank;
 
-        var iconPack = IconPacks.TryGetValue(Constants.CurrentPack, out var pack) ? pack : Recolors;
-
-        if (iconPack == null)
+        if (!IconPacks.TryGetValue(Constants.CurrentPack, out var iconPack))
+        {
+            Utils.Log($"Error finding {Constants.CurrentPack} in loaded packs");
             return Blank;
+        }
 
         if (!iconPack.VIPIcons.TryGetValue(name, out var sprite))
         {
             Utils.Log($"Couldn't find VIP {name} in {iconPack.Name}'s recources");
-
-            if (Recolors == null || iconPack == Recolors)
-                return GetRegSprite(name, allowEE);
-            else
-                return sprite;
+            return GetRegSprite(name, allowEE);
         }
 
         if (URandom.RandomRangeInt(1, 101) <= Constants.EasterEggChance && allowEE)
         {
-            if (pack.VIPEEIcons.TryGetValue(name, out var sprites) && !Constants.AllEasterEggs)
+            if (iconPack.VIPEEIcons.TryGetValue(name, out var sprites) && !Constants.AllEasterEggs)
                 return sprites.Random();
             else if (VIPEEIcons.TryGetValue(name, out sprites))
                 return sprites.Random();
@@ -178,6 +167,7 @@ public static class AssetManager
             {
                 var name = x.SanitisePath();
                 var sprite = FromResources.LoadSprite(x);
+                UObject.DontDestroyOnLoad(sprite);
 
                 if (x.Contains("Blank"))
                     Blank = sprite;
@@ -264,29 +254,24 @@ public static class AssetManager
 
     public static void TryLoadingSprites(string packName)
     {
-        if (IconPacks.ContainsKey(packName) || packName == "Vanilla")
-        {
-            Utils.Log($"{packName} is already loaded");
+        if (packName == "Vanilla")
             return;
-        }
 
         var folder = Path.Combine(ModPath, packName);
-
-        if (!Directory.Exists(folder))
-        {
-            Utils.Log($"Path to {folder} was missing", true);
-            return;
-        }
 
         try
         {
             var pack = new IconPack(packName);
             pack.Load();
             pack.Debug();
-            IconPacks.Add(packName, pack);
 
-            if (packName == "Recolors")
-                Recolors = pack;
+            if (!IconPacks.ContainsKey(packName))
+                IconPacks.Add(packName, pack);
+            else
+            {
+                IconPacks[packName].Delete();
+                IconPacks[packName] = pack;
+            }
         }
         catch (Exception e)
         {

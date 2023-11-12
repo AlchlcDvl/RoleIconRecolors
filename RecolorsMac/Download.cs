@@ -6,8 +6,7 @@ namespace RecolorsMac;
 public static class Download
 {
     private const string REPO = "https://raw.githubusercontent.com/AlchlcDvl/RoleIconRecolors/main";
-    private static bool DownloadRunning = false;
-    public static readonly Dictionary<string, List<Asset>> AllAssets = new();
+    private static bool DownloadRunning;
 
     public static void DownloadVanilla() => DownloadIcons("Vanilla");
 
@@ -49,6 +48,19 @@ public static class Download
 
         try
         {
+            if (packName == "Vanilla" && Directory.Exists(AssetManager.VanillaPath))
+                new DirectoryInfo(AssetManager.VanillaPath).GetFiles("*.png").Select(x => x.FullName).ForEach(File.Delete);
+            else if (packName == "Recolors" && Directory.Exists(AssetManager.DefaultPath))
+            {
+                foreach (var folder in AssetManager.Folders)
+                {
+                    var dir = Path.Combine(AssetManager.DefaultPath, folder);
+
+                    if (Directory.Exists(dir))
+                        new DirectoryInfo(dir).GetFiles("*.png").Select(x => x.FullName).ForEach(File.Delete);
+                }
+            }
+
             using var client = new HttpClient();
             client.DefaultRequestHeaders.Add("User-Agent", "IconPackDownloader");
             using var response = await client.GetAsync($"{REPO}/{packName}.json", HttpCompletionOption.ResponseContentRead);
@@ -83,27 +95,17 @@ public static class Download
                     Folder = current["folder"]?.ToString() ?? "Vanilla",
                     Pack = packName
                 };
-
                 Utils.Log(info.Name + " " + info.Folder + " " + info.Pack);
                 assets.Add(info);
             }
 
-            AllAssets.TryAdd(packName, assets);
-            var markedfordownload = new List<Asset>();
-
-            foreach (var data in assets)
-            {
-                if (!File.Exists(data.FilePath()))
-                    markedfordownload.Add(data);
-            }
-
-            foreach (var file in markedfordownload)
+            foreach (var file in assets)
             {
                 var path = "";
 
                 if (packName == "Vanilla")
                     path = file.Name;
-                else
+                else if (packName == "Recolors")
                     path = $"{file.Folder}/{file.Name}";
 
                 using var fileresponse = await client.GetAsync($"{REPO}/{packName}/{path}.png", HttpCompletionOption.ResponseContentRead);
@@ -119,6 +121,7 @@ public static class Download
             }
 
             AssetManager.TryLoadingSprites(packName);
+            Recolors.Open();
             return HttpStatusCode.OK;
         }
         catch (Exception ex)
