@@ -1035,11 +1035,11 @@
         },
         {
             "name": "Jailor",
-            "folder": "VIP"
+            "folder": "VIPBase"
         },
         {
             "name": "Seer",
-            "folder": "VIP"
+            "folder": "VIPBase"
         }
     ]
 }

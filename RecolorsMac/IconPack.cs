@@ -29,11 +29,11 @@ public class IconPack
         Utils.Log($"{Name} Icon Pack {TTIcons.Count} TT Assets loaded!");
         VIPIcons.ForEach((x, _) => Utils.Log($"{Name} Icon Pack {x} has a VIP sprite!"));
         Utils.Log($"{Name} Icon Pack {VIPIcons.Count} VIP Assets loaded!");
-        RegEEIcons.ForEach((x, y) => Utils.Log($"{x} has {y.Count} Easter Egg sprite(s)!"));
+        RegEEIcons.ForEach((x, y) => Utils.Log($"{Name} Icon Pack {x} has {y.Count} Easter Egg sprite(s)!"));
         Utils.Log($"{Name} Icon Pack {RegEEIcons.Count} Easter Egg Assets loaded!");
-        TTEEIcons.ForEach((x, y) => Utils.Log($"{x} has {y.Count} TT Easter Egg sprite(s)!"));
+        TTEEIcons.ForEach((x, y) => Utils.Log($"{Name} Icon Pack {x} has {y.Count} TT Easter Egg sprite(s)!"));
         Utils.Log($"{Name} Icon Pack {TTEEIcons.Count} TT Easter Egg Assets loaded!");
-        VIPEEIcons.ForEach((x, y) => Utils.Log($"{x} has {y.Count} VIP Easter Egg sprite(s)!"));
+        VIPEEIcons.ForEach((x, y) => Utils.Log($"{Name} Icon Pack {x} has {y.Count} VIP Easter Egg sprite(s)!"));
         Utils.Log($"{Name} Icon Pack {VIPEEIcons.Count} VIP Easter Egg Assets loaded!");
     }
 

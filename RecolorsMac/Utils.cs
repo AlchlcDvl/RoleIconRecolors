@@ -134,7 +134,7 @@ public static class Utils
 
         if (role.IsTraitor(factionType))
             text2 = "\n<color=#B545FFFF>(Traitor)</color>";
-        else if (Service.Game.Sim.info.roleCardObservation.Data.modifier == ROLE_MODIFIER.VIP)
+        else if (Service.Game?.Sim?.info?.roleCardObservation?.Data?.modifier == ROLE_MODIFIER.VIP)
             text2 = "\n<color=#06E00CFF>(VIP)</color>";
 
         if (text2.Length > 0)

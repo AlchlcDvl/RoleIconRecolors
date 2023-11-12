@@ -28,20 +28,32 @@ public static class AssetManager
 
     public static Sprite GetSprite(string name, Role? role = null, FactionType? faction = null, bool allowEE = true)
     {
-        role ??= Pepper.GetMyRole();
-        faction ??= Pepper.GetMyFaction();
-
-        if (!Avoid.Any(name.Contains) && !role.Value.IsBucket())
+        try
         {
-            if (role.Value.IsTraitor(faction.Value))
-                return GetTTSprite(name, allowEE);
-            else if (Service.Game.Sim.info.roleCardObservation.Data.modifier == ROLE_MODIFIER.VIP)
-                return GetVIPSprite(name, allowEE);
+            role ??= Pepper.GetMyRole();
+            faction ??= Pepper.GetMyFaction();
+
+            if (!role.Value.IsModifierCard() && role is not (null or Role.STONED or Role.HIDDEN))
+            {
+                if (!Avoid.Any(name.Contains) && !role.Value.IsBucket())
+                {
+                    if (role.Value.IsTraitor(faction.Value))
+                        return GetTTSprite(name, allowEE);
+                    else if (Service.Game?.Sim?.info?.roleCardObservation?.Data?.modifier == ROLE_MODIFIER.VIP)
+                        return GetVIPSprite(name, allowEE);
+                    else
+                        return GetRegSprite(name, allowEE);
+                }
+                else
+                    return GetRegSprite(name, allowEE);
+            }
             else
-                return GetRegSprite(name, allowEE);
+                return Blank;
         }
-        else
-            return GetRegSprite(name, allowEE);
+        catch
+        {
+            return Blank;
+        }
     }
 
     private static Sprite GetRegSprite(string name, bool allowEE = true)
@@ -58,13 +70,8 @@ public static class AssetManager
         {
             Utils.Log($"Couldn't find regular {name} in {iconPack.Name}'s recources");
 
-            if (!Constants.ReplaceMissing || Recolors == null || iconPack == Recolors)
+            if (Recolors == null || iconPack == Recolors)
                 return Blank;
-            else if (!Recolors.RegIcons.TryGetValue(name, out sprite))
-            {
-                Utils.Log($"Couldn't find regular {name} in mod recources");
-                return Blank;
-            }
             else
                 return sprite;
         }
@@ -94,13 +101,8 @@ public static class AssetManager
         {
             Utils.Log($"Couldn't find TT {name} in {iconPack.Name}'s recources");
 
-            if (!Constants.ReplaceMissing || Recolors == null || iconPack == Recolors)
+            if (Recolors == null || iconPack == Recolors)
                 return GetRegSprite(name, allowEE);
-            else if (!Recolors.TTIcons.TryGetValue(name, out sprite))
-            {
-                Utils.Log($"Couldn't find TT {name} in mod recources");
-                return GetRegSprite(name, allowEE);
-            }
             else
                 return sprite;
         }
@@ -130,13 +132,8 @@ public static class AssetManager
         {
             Utils.Log($"Couldn't find VIP {name} in {iconPack.Name}'s recources");
 
-            if (!Constants.ReplaceMissing || Recolors == null || iconPack == Recolors)
+            if (Recolors == null || iconPack == Recolors)
                 return GetRegSprite(name, allowEE);
-            else if (!Recolors.VIPIcons.TryGetValue(name, out sprite))
-            {
-                Utils.Log($"Couldn't find VIP {name} in mod recources");
-                return GetRegSprite(name, allowEE);
-            }
             else
                 return sprite;
         }

@@ -62,8 +62,21 @@ public class Recolors
 
     private static List<string> GetPackNames()
     {
-        var result = new List<string>();
-        Directory.EnumerateDirectories(AssetManager.ModPath).ForEach(x => result.Add(x.SanitisePath()));
-        return result;
+        try
+        {
+            var result = new List<string>() { "Vanilla" };
+
+            foreach (var dir in Directory.EnumerateDirectories(AssetManager.ModPath))
+            {
+                if (!dir.Contains("Vanilla"))
+                    result.Add(dir.SanitisePath());
+            }
+
+            return result;
+        }
+        catch
+        {
+            return new() { "Vanilla" };
+        }
     }
 }
