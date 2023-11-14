@@ -1,3 +1,5 @@
+using Game.Services;
+
 namespace RecolorsMac;
 
 [HarmonyPatch(typeof(RoleCardListItem), nameof(RoleCardListItem.SetData))]
@@ -46,7 +48,7 @@ public static class PatchBrowserRoleListPanel
 }
 
 [HarmonyPatch(typeof(RoleCardPanelBackground), nameof(RoleCardPanelBackground.SetRole))]
-public class PatchRoleCards
+public static class PatchRoleCards
 {
     public static void Postfix(RoleCardPanelBackground __instance, ref Role role)
     {
@@ -65,7 +67,7 @@ public class PatchRoleCards
 
         var special = AssetManager.GetSprite($"{name}_Special");
 
-        if (special != AssetManager.Blank && panel.specialAbilityPanel != null)
+        if (special != AssetManager.Blank && panel.specialAbilityPanel != null && !(role == Role.NECROMANCER && !Constants.IsNecroActive))
             panel.specialAbilityPanel.useButton.abilityIcon.sprite = special;
 
         var abilityname = $"{name}_Ability";
@@ -84,7 +86,7 @@ public class PatchRoleCards
 
         var ability2 = AssetManager.GetSprite($"{name}_Ability_2", role);
 
-        if (ability2 != AssetManager.Blank && panel.roleInfoButtons[index] != null)
+        if (ability2 != AssetManager.Blank && panel.roleInfoButtons[index] != null && role != Role.WAR)
         {
             panel.roleInfoButtons[index].abilityIcon.sprite = ability2;
             index++;
@@ -100,7 +102,7 @@ public class PatchRoleCards
 
         var nommy = AssetManager.GetSprite("Necronomicon");
 
-        if (nommy != AssetManager.Blank && Service.Game.Sim.info.roleCardObservation.Data.powerUp == POWER_UP_TYPE.NECRONOMICON && panel.roleInfoButtons[index] != null)
+        if (nommy != AssetManager.Blank && Constants.IsNecroActive && panel.roleInfoButtons[index] != null)
         {
             panel.roleInfoButtons[index].abilityIcon.sprite = nommy;
             index++;
@@ -245,4 +247,23 @@ public static class PatchRitualistGuessMenu
         if (__instance.roleIcon != null && icon != AssetManager.Blank)
             __instance.roleIcon.sprite = icon;
     }
+}
+
+[HarmonyPatch]
+public static class ResourcesLoadPatch
+{
+    public static MethodInfo TargetMethod() => typeof(Resources).GetMethods()[4]; // im not sure if this will work 100% of the time
+
+    public static void Postfix(ref UObject __result, ref string path)
+    {
+        // handle spriteassets: RoleIcons are not loaded in homescene and reloaded every time visiting gamescene
+        if (Constants.EnableIcons && path.Contains("Sprites/") && path.Replace("Sprites/", "") == "RoleIcons" && __result.ToString().Contains("TMP_SpriteAsset"))
+            __result = AssetManager.IconPacks[Constants.CurrentPack].Asset;
+    }
+}
+
+[HarmonyPatch(typeof(RoleService), nameof(RoleService.Init))]
+public static class PathRoleService
+{
+    public static void Postfix() => AssetManager.IconPacks[Constants.CurrentPack].LoadSpriteSheet();
 }

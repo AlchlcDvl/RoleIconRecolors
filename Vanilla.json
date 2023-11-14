@@ -165,6 +165,10 @@
         { "name": "CovenDeception" },
         { "name": "NeutralKilling" },
         { "name": "NeutralEvil" },
-        { "name": "NeutralApocalypse" }
+        { "name": "NeutralApocalypse" },
+        { "name": "Vampire" },
+        { "name": "Vampire_Ability" },
+        { "name": "CursedSoul" },
+        { "name": "CursedSoul_Ability" }
     ]
 }

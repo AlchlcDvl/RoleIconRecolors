@@ -1,3 +1,5 @@
+using TMPro;
+
 namespace RecolorsMac;
 
 public class IconPack
@@ -9,6 +11,10 @@ public class IconPack
     public Dictionary<string, List<Sprite>> TTEEIcons { get; set; }
     public Dictionary<string, List<Sprite>> VIPEEIcons { get; set; }
     public string Name { get; }
+    public TMP_SpriteAsset Asset;
+    public bool SpriteSheetLoaded;
+
+    private static readonly Role[] ExceptRoles = { Role.NONE, Role.ROLE_COUNT, Role.UNKNOWN, Role.HANGMAN };
 
     public IconPack(string name)
     {
@@ -23,22 +29,26 @@ public class IconPack
 
     public void Debug()
     {
-        RegIcons.ForEach((x, _) => Utils.Log($"{Name} Icon Pack {x} has a sprite!"));
-        Utils.Log($"{Name} Icon Pack {RegIcons.Count} Assets loaded!");
-        TTIcons.ForEach((x, _) => Utils.Log($"{Name} Icon Pack {x} has a TT sprite!"));
-        Utils.Log($"{Name} Icon Pack {TTIcons.Count} TT Assets loaded!");
-        VIPIcons.ForEach((x, _) => Utils.Log($"{Name} Icon Pack {x} has a VIP sprite!"));
-        Utils.Log($"{Name} Icon Pack {VIPIcons.Count} VIP Assets loaded!");
-        RegEEIcons.ForEach((x, y) => Utils.Log($"{Name} Icon Pack {x} has {y.Count} Easter Egg sprite(s)!"));
-        Utils.Log($"{Name} Icon Pack {RegEEIcons.Count} Easter Egg Assets loaded!");
-        TTEEIcons.ForEach((x, y) => Utils.Log($"{Name} Icon Pack {x} has {y.Count} TT Easter Egg sprite(s)!"));
-        Utils.Log($"{Name} Icon Pack {TTEEIcons.Count} TT Easter Egg Assets loaded!");
-        VIPEEIcons.ForEach((x, y) => Utils.Log($"{Name} Icon Pack {x} has {y.Count} VIP Easter Egg sprite(s)!"));
-        Utils.Log($"{Name} Icon Pack {VIPEEIcons.Count} VIP Easter Egg Assets loaded!");
+        RegIcons.ForEach((x, _) => Utils.Log($"{Name} {x} has a sprite!"));
+        Utils.Log($"{Name} {RegIcons.Count} Assets loaded!");
+        TTIcons.ForEach((x, _) => Utils.Log($"{Name} {x} has a TT sprite!"));
+        Utils.Log($"{Name} {TTIcons.Count} TT Assets loaded!");
+        VIPIcons.ForEach((x, _) => Utils.Log($"{Name} {x} has a VIP sprite!"));
+        Utils.Log($"{Name} {VIPIcons.Count} VIP Assets loaded!");
+        RegEEIcons.ForEach((x, y) => Utils.Log($"{Name} {x} has {y.Count} Easter Egg sprite(s)!"));
+        Utils.Log($"{Name} {RegEEIcons.Count} Easter Egg Assets loaded!");
+        TTEEIcons.ForEach((x, y) => Utils.Log($"{Name} {x} has {y.Count} TT Easter Egg sprite(s)!"));
+        Utils.Log($"{Name} {TTEEIcons.Count} TT Easter Egg Assets loaded!");
+        VIPEEIcons.ForEach((x, y) => Utils.Log($"{Name} {x} has {y.Count} VIP Easter Egg sprite(s)!"));
+        Utils.Log($"{Name} {VIPEEIcons.Count} VIP Easter Egg Assets loaded!");
+
+        if (Asset != null)
+            Utils.Log($"{Name} Sprite Asset exists!");
     }
 
-    public void Delete()
+    public void Reload()
     {
+        Utils.Log($"Reloading {Name}");
         RegIcons.Values.ForEach(UObject.Destroy);
         RegIcons.Clear();
         TTIcons.Values.ForEach(UObject.Destroy);
@@ -54,7 +64,9 @@ public class IconPack
         TTEEIcons.Values.ForEach(x => x.ForEach(UObject.Destroy));
         TTEEIcons.Values.ForEach(x => x.Clear());
         TTEEIcons.Clear();
-        Utils.Log($"Deleting {Name} Icon Pack");
+        UObject.Destroy(Asset);
+        SpriteSheetLoaded = false;
+        Load(true);
     }
 
     public static bool operator ==(IconPack a, IconPack b)
@@ -89,8 +101,9 @@ public class IconPack
 
     public override string ToString() => Name;
 
-    public void Load()
+    public void Load(bool loadSheet)
     {
+        Utils.Log($"Loading {Name}");
         var folder = Path.Combine(AssetManager.ModPath, Name);
         var baseFolder = Path.Combine(folder, "Base");
 
@@ -226,5 +239,53 @@ public class IconPack
             Utils.Log($"{Name} VIPEasterEggs folder doesn't exist");
             Directory.CreateDirectory(vipeeFolder);
         }
+
+        if (loadSheet)
+            LoadSpriteSheet();
+
+        Debug();
+    }
+
+    // love ya pat
+    public void LoadSpriteSheet()
+    {
+        if (SpriteSheetLoaded || Asset != null)
+            return;
+
+        SpriteSheetLoaded = true;
+
+        // these roles dont have sprites so just ignore them
+        var roles = ((Role[])Enum.GetValues(typeof(Role))).Except(ExceptRoles);
+
+        // map all roles to (role name, role number) so we can make a dict
+        var rolesWithIndex = roles.Select(role => (role.ToString().ToLower(), (int)role));
+
+        // dict allows us to find dict[rolename.tolower] and get Role{number} for later use in spritecharacters
+        var rolesWithIndexDict = rolesWithIndex.ToDictionary(rolesSelect => rolesSelect.Item1.ToLower(), rolesSelect => $"Role{rolesSelect.Item2}");
+        var textures = new List<Texture2D>();
+
+        // now get all the sprites that we want to load
+        foreach (var (role, roleInt) in rolesWithIndex)
+        {
+            var actualRole = (Role)roleInt;
+
+            if (RegIcons.TryGetValue(Utils.RoleName(actualRole), out var sprite))
+            {
+                sprite.texture.name = role;
+                textures.Add(sprite.texture);
+            }
+            else
+            {
+                // getting the original sprite from base game as a backup
+                var tex = Service.Game.Roles.roleInfoLookup[actualRole].sprite.texture;
+                tex.name = role;
+                textures.Add(tex);
+            }
+        }
+
+        var assetBuilder = new SpriteAssetBuilder(256, 256, 10);
+        assetBuilder.BuildGlyphs(textures.ToArray(), $"RoleIcons ({Name})", x => x.name = rolesWithIndexDict[(x.glyph as TMP_SpriteGlyph).sprite.name.ToLower()]);
+        // set spritecharacter name to "Role{number}" so that the game can find correct roles
+        Asset = assetBuilder.Asset;
     }
 }

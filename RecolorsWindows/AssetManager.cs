@@ -37,7 +37,7 @@ public static class AssetManager
                 {
                     if (role.Value.IsTraitor(faction.Value))
                         return GetTTSprite(name, allowEE);
-                    else if (Service.Game?.Sim?.info?.roleCardObservation?.Data?.modifier == ROLE_MODIFIER.VIP)
+                    else if (Constants.IsLocalVIP)
                         return GetVIPSprite(name, allowEE);
                     else
                         return GetRegSprite(name, allowEE);
@@ -180,7 +180,7 @@ public static class AssetManager
             }
         });
 
-        TryLoadingSprites(Constants.CurrentPack);
+        TryLoadingSprites(Constants.CurrentPack, false);
     }
 
     private static Texture2D EmptyTexture() => new(2, 2, TextureFormat.ARGB32, true);
@@ -252,7 +252,9 @@ public static class AssetManager
         return path;
     }
 
-    public static void TryLoadingSprites(string packName)
+    public static void TryLoadingSprites(string packName) => TryLoadingSprites(packName, true);
+
+    public static void TryLoadingSprites(string packName, bool loadSheet)
     {
         if (packName == "Vanilla")
             return;
@@ -261,21 +263,18 @@ public static class AssetManager
 
         try
         {
-            var pack = new IconPack(packName);
-            pack.Load();
-            pack.Debug();
-
-            if (!IconPacks.ContainsKey(packName))
-                IconPacks.Add(packName, pack);
+            if (IconPacks.TryGetValue(packName, out var exists))
+                exists.Reload();
             else
             {
-                IconPacks[packName].Delete();
-                IconPacks[packName] = pack;
+                var pack = new IconPack(packName);
+                pack.Load(loadSheet);
+                IconPacks.Add(packName, pack);
             }
         }
         catch (Exception e)
         {
-            Utils.Log($"ISSUE: {e}");
+            Utils.Log($"ISSUE: {e}", true);
         }
     }
 }

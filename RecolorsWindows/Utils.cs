@@ -133,7 +133,7 @@ public static class Utils
 
         if (role.IsTraitor(factionType))
             text2 = $"\n<color={Constants.TTColor}>(Traitor)</color>";
-        else if (Service.Game?.Sim?.info?.roleCardObservation?.Data?.modifier == ROLE_MODIFIER.VIP)
+        else if (Constants.IsLocalVIP)
             text2 = $"\n<color={Constants.VIPColor}>(VIP)</color>";
 
         if (text2.Length > 0)
