@@ -257,13 +257,17 @@ public static class ResourcesLoadPatch
     public static void Postfix(ref UObject __result, ref string path)
     {
         // handle spriteassets: RoleIcons are not loaded in homescene and reloaded every time visiting gamescene
-        if (Constants.EnableIcons && path.Contains("Sprites/") && path.Replace("Sprites/", "") == "RoleIcons" && __result.ToString().Contains("TMP_SpriteAsset"))
-            __result = AssetManager.IconPacks[Constants.CurrentPack].Asset;
+        if (AssetManager.IconPacks.TryGetValue(Constants.CurrentPack, out var pack) && path.Replace("Sprites/", "") == "RoleIcons" && __result.ToString().Contains("TMP_SpriteAsset"))
+            __result = pack.Asset ?? __result;
     }
 }
 
 [HarmonyPatch(typeof(RoleService), nameof(RoleService.Init))]
 public static class PathRoleService
 {
-    public static void Postfix() => AssetManager.IconPacks[Constants.CurrentPack].LoadSpriteSheet();
+    public static void Postfix()
+    {
+        if (AssetManager.IconPacks.TryGetValue(Constants.CurrentPack, out var pack))
+            pack.LoadSpriteSheet();
+    }
 }

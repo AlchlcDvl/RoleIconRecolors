@@ -103,189 +103,205 @@ public class IconPack
 
     public void Load(bool loadSheet)
     {
-        Utils.Log($"Loading {Name}");
-        var folder = Path.Combine(AssetManager.ModPath, Name);
-        var baseFolder = Path.Combine(folder, "Base");
-
-        if (Directory.Exists(baseFolder))
+        try
         {
-            foreach (var file in Directory.EnumerateFiles(baseFolder, "*.png"))
+            Utils.Log($"Loading {Name}");
+            var folder = Path.Combine(AssetManager.ModPath, Name);
+            var baseFolder = Path.Combine(folder, "Base");
+
+            if (Directory.Exists(baseFolder))
             {
-                var filePath = Path.Combine(baseFolder, $"{file.SanitisePath()}.png");
-                var sprite = AssetManager.LoadSpriteFromDisk(filePath, "Base", Name);
-                filePath = filePath.SanitisePath(true);
-                RegIcons.TryAdd(filePath, sprite);
+                foreach (var file in Directory.EnumerateFiles(baseFolder, "*.png"))
+                {
+                    var filePath = Path.Combine(baseFolder, $"{file.SanitisePath()}.png");
+                    var sprite = AssetManager.LoadSpriteFromDisk(filePath, "Base", Name);
+                    filePath = filePath.SanitisePath(true);
+                    RegIcons.TryAdd(filePath, sprite);
+                }
             }
-        }
-        else
-        {
-            Utils.Log($"{Name} Base folder doesn't exist");
-            Directory.CreateDirectory(baseFolder);
-        }
-
-        var ttFolder = Path.Combine(folder, "TTBase");
-
-        if (Directory.Exists(ttFolder))
-        {
-            foreach (var file in Directory.EnumerateFiles(ttFolder, "*.png"))
+            else
             {
-                var filePath = Path.Combine(ttFolder, $"{file.SanitisePath()}.png");
-                var sprite = AssetManager.LoadSpriteFromDisk(filePath, "TTBase", Name);
-                filePath = filePath.SanitisePath(true);
-                TTIcons.TryAdd(filePath, sprite);
+                Utils.Log($"{Name} Base folder doesn't exist");
+                Directory.CreateDirectory(baseFolder);
             }
-        }
-        else
-        {
-            Utils.Log($"{Name} TTBase folder doesn't exist");
-            Directory.CreateDirectory(ttFolder);
-        }
 
-        var vipFolder = Path.Combine(folder, "VIPBase");
+            var ttFolder = Path.Combine(folder, "TTBase");
 
-        if (Directory.Exists(vipFolder))
-        {
-            foreach (var file in Directory.EnumerateFiles(vipFolder, "*.png"))
+            if (Directory.Exists(ttFolder))
             {
-                var filePath = Path.Combine(vipFolder, $"{file.SanitisePath()}.png");
-                var sprite = AssetManager.LoadSpriteFromDisk(filePath, "VIPBase", Name);
-                filePath = filePath.SanitisePath(true);
-                VIPIcons.TryAdd(filePath, sprite);
+                foreach (var file in Directory.EnumerateFiles(ttFolder, "*.png"))
+                {
+                    var filePath = Path.Combine(ttFolder, $"{file.SanitisePath()}.png");
+                    var sprite = AssetManager.LoadSpriteFromDisk(filePath, "TTBase", Name);
+                    filePath = filePath.SanitisePath(true);
+                    TTIcons.TryAdd(filePath, sprite);
+                }
             }
-        }
-        else
-        {
-            Utils.Log($"{Name} VIPBase folder doesn't exist");
-            Directory.CreateDirectory(vipFolder);
-        }
-
-        var eeFolder = Path.Combine(folder, "EasterEggs");
-
-        if (Directory.Exists(eeFolder))
-        {
-            foreach (var file in Directory.EnumerateFiles(eeFolder, "*.png"))
+            else
             {
-                var filePath = Path.Combine(eeFolder, $"{file.SanitisePath()}.png");
-                var sprite = AssetManager.LoadSpriteFromDisk(filePath, "EasterEggs", Name);
-                filePath = filePath.SanitisePath(true);
-
-                if (RegEEIcons.ContainsKey(filePath))
-                    RegEEIcons[filePath].Add(sprite);
-                else
-                    RegEEIcons.TryAdd(filePath, new() { sprite });
-
-                if (AssetManager.RegEEIcons.ContainsKey(filePath))
-                    AssetManager.RegEEIcons[filePath].Add(sprite);
-                else
-                    AssetManager.RegEEIcons.TryAdd(filePath, new() { sprite });
+                Utils.Log($"{Name} TTBase folder doesn't exist");
+                Directory.CreateDirectory(ttFolder);
             }
-        }
-        else
-        {
-            Utils.Log($"{Name} EasterEggs folder doesn't exist");
-            Directory.CreateDirectory(eeFolder);
-        }
 
-        var tteeFolder = Path.Combine(folder, "TTEasterEggs");
+            var vipFolder = Path.Combine(folder, "VIPBase");
 
-        if (Directory.Exists(tteeFolder))
-        {
-            foreach (var file in Directory.EnumerateFiles(tteeFolder, "*.png"))
+            if (Directory.Exists(vipFolder))
             {
-                var filePath = Path.Combine(tteeFolder, $"{file.SanitisePath()}.png");
-                var sprite = AssetManager.LoadSpriteFromDisk(filePath, "TTEasterEggs", Name);
-                filePath = filePath.SanitisePath(true);
-
-                if (TTEEIcons.ContainsKey(filePath))
-                    TTEEIcons[filePath].Add(sprite);
-                else
-                    TTEEIcons.TryAdd(filePath, new() { sprite });
-
-                if (AssetManager.TTEEIcons.ContainsKey(filePath))
-                    AssetManager.TTEEIcons[filePath].Add(sprite);
-                else
-                    AssetManager.TTEEIcons.TryAdd(filePath, new() { sprite });
+                foreach (var file in Directory.EnumerateFiles(vipFolder, "*.png"))
+                {
+                    var filePath = Path.Combine(vipFolder, $"{file.SanitisePath()}.png");
+                    var sprite = AssetManager.LoadSpriteFromDisk(filePath, "VIPBase", Name);
+                    filePath = filePath.SanitisePath(true);
+                    VIPIcons.TryAdd(filePath, sprite);
+                }
             }
-        }
-        else
-        {
-            Utils.Log($"{Name} TTEasterEggs folder doesn't exist");
-            Directory.CreateDirectory(tteeFolder);
-        }
-
-        var vipeeFolder = Path.Combine(folder, "VIPEasterEggs");
-
-        if (Directory.Exists(vipeeFolder))
-        {
-            foreach (var file in Directory.EnumerateFiles(vipeeFolder, "*.png"))
+            else
             {
-                var filePath = Path.Combine(vipeeFolder, $"{file.SanitisePath()}.png");
-                var sprite = AssetManager.LoadSpriteFromDisk(filePath, "VIPEasterEggs", Name);
-                filePath = filePath.SanitisePath(true);
-
-                if (VIPEEIcons.ContainsKey(filePath))
-                    VIPEEIcons[filePath].Add(sprite);
-                else
-                    VIPEEIcons.TryAdd(filePath, new() { sprite });
-
-                if (AssetManager.VIPEEIcons.ContainsKey(filePath))
-                    AssetManager.VIPEEIcons[filePath].Add(sprite);
-                else
-                    AssetManager.VIPEEIcons.TryAdd(filePath, new() { sprite });
+                Utils.Log($"{Name} VIPBase folder doesn't exist");
+                Directory.CreateDirectory(vipFolder);
             }
+
+            var eeFolder = Path.Combine(folder, "EasterEggs");
+
+            if (Directory.Exists(eeFolder))
+            {
+                foreach (var file in Directory.EnumerateFiles(eeFolder, "*.png"))
+                {
+                    var filePath = Path.Combine(eeFolder, $"{file.SanitisePath()}.png");
+                    var sprite = AssetManager.LoadSpriteFromDisk(filePath, "EasterEggs", Name);
+                    filePath = filePath.SanitisePath(true);
+
+                    if (RegEEIcons.ContainsKey(filePath))
+                        RegEEIcons[filePath].Add(sprite);
+                    else
+                        RegEEIcons.TryAdd(filePath, new() { sprite });
+
+                    if (AssetManager.RegEEIcons.ContainsKey(filePath))
+                        AssetManager.RegEEIcons[filePath].Add(sprite);
+                    else
+                        AssetManager.RegEEIcons.TryAdd(filePath, new() { sprite });
+                }
+            }
+            else
+            {
+                Utils.Log($"{Name} EasterEggs folder doesn't exist");
+                Directory.CreateDirectory(eeFolder);
+            }
+
+            var tteeFolder = Path.Combine(folder, "TTEasterEggs");
+
+            if (Directory.Exists(tteeFolder))
+            {
+                foreach (var file in Directory.EnumerateFiles(tteeFolder, "*.png"))
+                {
+                    var filePath = Path.Combine(tteeFolder, $"{file.SanitisePath()}.png");
+                    var sprite = AssetManager.LoadSpriteFromDisk(filePath, "TTEasterEggs", Name);
+                    filePath = filePath.SanitisePath(true);
+
+                    if (TTEEIcons.ContainsKey(filePath))
+                        TTEEIcons[filePath].Add(sprite);
+                    else
+                        TTEEIcons.TryAdd(filePath, new() { sprite });
+
+                    if (AssetManager.TTEEIcons.ContainsKey(filePath))
+                        AssetManager.TTEEIcons[filePath].Add(sprite);
+                    else
+                        AssetManager.TTEEIcons.TryAdd(filePath, new() { sprite });
+                }
+            }
+            else
+            {
+                Utils.Log($"{Name} TTEasterEggs folder doesn't exist");
+                Directory.CreateDirectory(tteeFolder);
+            }
+
+            var vipeeFolder = Path.Combine(folder, "VIPEasterEggs");
+
+            if (Directory.Exists(vipeeFolder))
+            {
+                foreach (var file in Directory.EnumerateFiles(vipeeFolder, "*.png"))
+                {
+                    var filePath = Path.Combine(vipeeFolder, $"{file.SanitisePath()}.png");
+                    var sprite = AssetManager.LoadSpriteFromDisk(filePath, "VIPEasterEggs", Name);
+                    filePath = filePath.SanitisePath(true);
+
+                    if (VIPEEIcons.ContainsKey(filePath))
+                        VIPEEIcons[filePath].Add(sprite);
+                    else
+                        VIPEEIcons.TryAdd(filePath, new() { sprite });
+
+                    if (AssetManager.VIPEEIcons.ContainsKey(filePath))
+                        AssetManager.VIPEEIcons[filePath].Add(sprite);
+                    else
+                        AssetManager.VIPEEIcons.TryAdd(filePath, new() { sprite });
+                }
+            }
+            else
+            {
+                Utils.Log($"{Name} VIPEasterEggs folder doesn't exist");
+                Directory.CreateDirectory(vipeeFolder);
+            }
+
+            if (loadSheet)
+                LoadSpriteSheet();
+
+            Debug();
         }
-        else
+        catch (Exception e)
         {
-            Utils.Log($"{Name} VIPEasterEggs folder doesn't exist");
-            Directory.CreateDirectory(vipeeFolder);
+            Utils.Log($"ISSUE: {e}", true);
         }
-
-        if (loadSheet)
-            LoadSpriteSheet();
-
-        Debug();
     }
 
     // love ya pat
     public void LoadSpriteSheet()
     {
-        if (SpriteSheetLoaded || Asset != null)
-            return;
-
-        SpriteSheetLoaded = true;
-
-        // these roles dont have sprites so just ignore them
-        var roles = ((Role[])Enum.GetValues(typeof(Role))).Except(ExceptRoles);
-
-        // map all roles to (role name, role number) so we can make a dict
-        var rolesWithIndex = roles.Select(role => (role.ToString().ToLower(), (int)role));
-
-        // dict allows us to find dict[rolename.tolower] and get Role{number} for later use in spritecharacters
-        var rolesWithIndexDict = rolesWithIndex.ToDictionary(rolesSelect => rolesSelect.Item1.ToLower(), rolesSelect => $"Role{rolesSelect.Item2}");
-        var textures = new List<Texture2D>();
-
-        // now get all the sprites that we want to load
-        foreach (var (role, roleInt) in rolesWithIndex)
+        try
         {
-            var actualRole = (Role)roleInt;
+            if (SpriteSheetLoaded || Asset != null)
+                return;
 
-            if (RegIcons.TryGetValue(Utils.RoleName(actualRole), out var sprite))
+            SpriteSheetLoaded = true;
+
+            // these roles dont have sprites so just ignore them
+            var roles = ((Role[])Enum.GetValues(typeof(Role))).Except(ExceptRoles);
+
+            // map all roles to (role name, role number) so we can make a dict
+            var rolesWithIndex = roles.Select(role => (role.ToString().ToLower(), (int)role));
+
+            // dict allows us to find dict[rolename.tolower] and get Role{number} for later use in spritecharacters
+            var rolesWithIndexDict = rolesWithIndex.ToDictionary(rolesSelect => rolesSelect.Item1.ToLower(), rolesSelect => $"Role{rolesSelect.Item2}");
+            var textures = new List<Texture2D>();
+
+            // now get all the sprites that we want to load
+            foreach (var (role, roleInt) in rolesWithIndex)
             {
-                sprite.texture.name = role;
-                textures.Add(sprite.texture);
+                var actualRole = (Role)roleInt;
+
+                if (RegIcons.TryGetValue(Utils.RoleName(actualRole), out var sprite))
+                {
+                    sprite.texture.name = role;
+                    textures.Add(sprite.texture);
+                }
+                else
+                {
+                    // getting the original sprite from base game as a backup
+                    var tex = Service.Game.Roles.roleInfoLookup[actualRole].sprite.texture;
+                    tex.name = role;
+                    textures.Add(tex);
+                }
             }
-            else
-            {
-                // getting the original sprite from base game as a backup
-                var tex = Service.Game.Roles.roleInfoLookup[actualRole].sprite.texture;
-                tex.name = role;
-                textures.Add(tex);
-            }
+
+            var assetBuilder = new SpriteAssetBuilder(256, 256, 10);
+            assetBuilder.BuildGlyphs(textures.ToArray(), $"RoleIcons ({Name})", x => x.name = rolesWithIndexDict[(x.glyph as TMP_SpriteGlyph).sprite.name.ToLower()]);
+            // set spritecharacter name to "Role{number}" so that the game can find correct roles
+            Asset = assetBuilder.Asset;
         }
-
-        var assetBuilder = new SpriteAssetBuilder(256, 256, 10);
-        assetBuilder.BuildGlyphs(textures.ToArray(), $"RoleIcons ({Name})", x => x.name = rolesWithIndexDict[(x.glyph as TMP_SpriteGlyph).sprite.name.ToLower()]);
-        // set spritecharacter name to "Role{number}" so that the game can find correct roles
-        Asset = assetBuilder.Asset;
+        catch (Exception e)
+        {
+            Utils.Log($"ISSUE: {e}", true);
+            Asset = null;
+            SpriteSheetLoaded = false;
+        }
     }
 }

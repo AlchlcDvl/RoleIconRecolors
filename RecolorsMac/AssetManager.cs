@@ -28,6 +28,15 @@ public static class AssetManager
     {
         try
         {
+            if (name.Contains("Blank") || !Constants.EnableIcons || IconPacks.Count == 0)
+                return Blank;
+
+            if (!IconPacks.TryGetValue(Constants.CurrentPack, out var pack))
+            {
+                Utils.Log($"Error finding {Constants.CurrentPack} in loaded packs");
+                return Blank;
+            }
+
             role ??= Pepper.GetMyRole();
             faction ??= Pepper.GetMyFaction();
 
@@ -36,44 +45,36 @@ public static class AssetManager
                 if (!Avoid.Any(name.Contains) && !role.Value.IsBucket())
                 {
                     if (role.Value.IsTraitor(faction.Value))
-                        return GetTTSprite(name, allowEE);
+                        return GetTTSprite(pack, name, allowEE);
                     else if (Constants.IsLocalVIP)
-                        return GetVIPSprite(name, allowEE);
+                        return GetVIPSprite(pack, name, allowEE);
                     else
-                        return GetRegSprite(name, allowEE);
+                        return GetRegSprite(pack, name, allowEE);
                 }
                 else
-                    return GetRegSprite(name, allowEE);
+                    return GetRegSprite(pack, name, allowEE);
             }
             else
                 return Blank;
         }
-        catch
+        catch (Exception e)
         {
+            Utils.Log($"ISSUE: {e}", true);
             return Blank;
         }
     }
 
-    private static Sprite GetRegSprite(string name, bool allowEE = true)
+    private static Sprite GetRegSprite(IconPack pack, string name, bool allowEE = true)
     {
-        if (name.Contains("Blank") || !Constants.EnableIcons || IconPacks.Count == 0)
-            return Blank;
-
-        if (!IconPacks.TryGetValue(Constants.CurrentPack, out var iconPack))
+        if (!pack.RegIcons.TryGetValue(name, out var sprite))
         {
-            Utils.Log($"Error finding {Constants.CurrentPack} in loaded packs");
-            return Blank;
-        }
-
-        if (!iconPack.RegIcons.TryGetValue(name, out var sprite))
-        {
-            Utils.Log($"Couldn't find regular {name} in {iconPack.Name}'s recources");
+            Utils.Log($"Couldn't find regular {name} in {pack.Name}'s recources");
             return Blank;
         }
 
         if (URandom.RandomRangeInt(1, 101) <= Constants.EasterEggChance && allowEE)
         {
-            if (iconPack.RegEEIcons.TryGetValue(name, out var sprites) && !Constants.AllEasterEggs)
+            if (pack.RegEEIcons.TryGetValue(name, out var sprites) && !Constants.AllEasterEggs)
                 return sprites.Random();
             else if (RegEEIcons.TryGetValue(name, out sprites))
                 return sprites.Random();
@@ -82,26 +83,17 @@ public static class AssetManager
         return sprite;
     }
 
-    private static Sprite GetTTSprite(string name, bool allowEE = true)
+    private static Sprite GetTTSprite(IconPack pack, string name, bool allowEE = true)
     {
-        if (name.Contains("Blank") || !Constants.EnableIcons || IconPacks.Count == 0)
-            return Blank;
-
-        if (!IconPacks.TryGetValue(Constants.CurrentPack, out var iconPack))
+        if (!pack.TTIcons.TryGetValue(name, out var sprite))
         {
-            Utils.Log($"Error finding {Constants.CurrentPack} in loaded packs");
-            return Blank;
-        }
-
-        if (!iconPack.TTIcons.TryGetValue(name, out var sprite))
-        {
-            Utils.Log($"Couldn't find TT {name} in {iconPack.Name}'s recources");
-            return GetRegSprite(name, allowEE);
+            Utils.Log($"Couldn't find TT {name} in {pack.Name}'s recources");
+            return GetRegSprite(pack, name, allowEE);
         }
 
         if (URandom.RandomRangeInt(1, 101) <= Constants.EasterEggChance && allowEE)
         {
-            if (iconPack.TTEEIcons.TryGetValue(name, out var sprites) && !Constants.AllEasterEggs)
+            if (pack.TTEEIcons.TryGetValue(name, out var sprites) && !Constants.AllEasterEggs)
                 return sprites.Random();
             else if (TTEEIcons.TryGetValue(name, out sprites))
                 return sprites.Random();
@@ -110,26 +102,17 @@ public static class AssetManager
         return sprite;
     }
 
-    private static Sprite GetVIPSprite(string name, bool allowEE = true)
+    private static Sprite GetVIPSprite(IconPack pack, string name, bool allowEE = true)
     {
-        if (name.Contains("Blank") || !Constants.EnableIcons || IconPacks.Count == 0)
-            return Blank;
-
-        if (!IconPacks.TryGetValue(Constants.CurrentPack, out var iconPack))
+        if (!pack.VIPIcons.TryGetValue(name, out var sprite))
         {
-            Utils.Log($"Error finding {Constants.CurrentPack} in loaded packs");
-            return Blank;
-        }
-
-        if (!iconPack.VIPIcons.TryGetValue(name, out var sprite))
-        {
-            Utils.Log($"Couldn't find VIP {name} in {iconPack.Name}'s recources");
-            return GetRegSprite(name, allowEE);
+            Utils.Log($"Couldn't find VIP {name} in {pack.Name}'s recources");
+            return GetRegSprite(pack, name, allowEE);
         }
 
         if (URandom.RandomRangeInt(1, 101) <= Constants.EasterEggChance && allowEE)
         {
-            if (iconPack.VIPEEIcons.TryGetValue(name, out var sprites) && !Constants.AllEasterEggs)
+            if (pack.VIPEEIcons.TryGetValue(name, out var sprites) && !Constants.AllEasterEggs)
                 return sprites.Random();
             else if (VIPEEIcons.TryGetValue(name, out sprites))
                 return sprites.Random();
@@ -187,11 +170,10 @@ public static class AssetManager
 
     private static Texture2D LoadDiskTexture(string fileName, string subfolder, string folder)
     {
-        fileName = fileName.SanitisePath();
-        var path = Path.Combine(ModPath, folder, subfolder, $"{fileName}.png");
-
         try
         {
+            fileName = fileName.SanitisePath();
+            var path = Path.Combine(ModPath, folder, subfolder, $"{fileName}.png");
             var texture = EmptyTexture();
             ImageConversion.LoadImage(texture, File.ReadAllBytes(path), false);
             texture.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
@@ -201,36 +183,44 @@ public static class AssetManager
         }
         catch
         {
-            Utils.Log($"Error loading {path} from disk");
+            Utils.Log($"Error loading {folder} > {subfolder} > {fileName}");
             return null;
         }
     }
 
     public static Sprite LoadSpriteFromDisk(string fileName, string subfolder, string folder)
     {
-        fileName = fileName.SanitisePath();
-        var path = Path.Combine(ModPath, folder, subfolder, $"{fileName}.png");
-
-        if (!File.Exists(path))
+        try
         {
-            Utils.Log($"Path {folder} > {subfolder} > {fileName} was missing");
-            return null;
+            fileName = fileName.SanitisePath();
+            var path = Path.Combine(ModPath, folder, subfolder, $"{fileName}.png");
+
+            if (!File.Exists(path))
+            {
+                Utils.Log($"Path {folder} > {subfolder} > {fileName} was missing");
+                return null;
+            }
+
+            var texture = LoadDiskTexture(path, subfolder, folder);
+
+            if (texture == null)
+                return null;
+
+            var sprite = Sprite.Create(texture, new(0, 0, texture.width, texture.height), new(0.5f, 0.5f), 100);
+
+            if (sprite == null)
+                return null;
+
+            sprite.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
+            sprite.name = fileName;
+            UObject.DontDestroyOnLoad(sprite);
+            return sprite;
         }
-
-        var texture = LoadDiskTexture(path, subfolder, folder);
-
-        if (texture == null)
-            return null;
-
-        var sprite = Sprite.Create(texture, new(0, 0, texture.width, texture.height), new(0.5f, 0.5f), 100);
-
-        if (sprite == null)
-            return null;
-
-        sprite.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
-        sprite.name = fileName;
-        UObject.DontDestroyOnLoad(sprite);
-        return sprite;
+        catch (Exception e)
+        {
+            Utils.Log($"ISSUE: {e}", true);
+            return Blank;
+        }
     }
 
     public static string SanitisePath(this string path, bool removeIcon = false)
@@ -260,6 +250,13 @@ public static class AssetManager
             return;
 
         var folder = Path.Combine(ModPath, packName);
+
+        if (!Directory.Exists(folder))
+        {
+            Utils.Log($"{packName} was missing", true);
+            ModSettings.SetString("Selected Icon Pack", "Vanilla", "alchlcsystm.recolors.windows");
+            return;
+        }
 
         try
         {
