@@ -42,7 +42,7 @@ With this mod you can edit (most) renditions of game icons to your own liking! P
 - Must be png.
 - Refer to the Vanilla icons on how to give the icons a base name.
 - If the target folder is an easter egg folder and an icon for the image already exists, add `_Icon` after the image name followed by a number (typically the next one in line, starting from 1, like `_Icon1` and `_Icon2`).
-- It is recommended you compress your images because a) it'll significantly lower load times and not break the game in the rare few cases. I recommend using [compressor.io](https://compressor.io)
+- It is recommended you compress your images because a) it'll significantly lower load times b) not break the game in the rare few cases and c) makes your pack eaily shareable. I recommend using [compressor.io](https://compressor.io)
 
 -----------------------
 
