@@ -229,9 +229,9 @@ public static class AssetManager
         path = path.Split('\\')[^1];
         ToRemove.ForEach(x => path = path.Replace(x, ""));
         path = path.Replace(Resources, "");
-        var i = 1;
+        var i = 0;
 
-        while (i > 0 && path.Contains("_Icon") && removeIcon)
+        while (i >= 0 && path.Contains("_Icon") && removeIcon)
         {
             if (path.Contains($"_Icon{i}"))
                 path = path.Replace($"_Icon{i}", "");

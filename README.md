@@ -38,7 +38,7 @@ With this mod you can edit (most) renditions of game icons to your own liking! P
 
 # Image Rules
 
-- Must be 256x256 pixels.
+- Must be 256x256 pixels. **Ensure your images are of this size, because weird things happen if they aren't.**
 - Must be png.
 - Refer to the Vanilla icons on how to give the icons a base name.
 - If the target folder is an easter egg folder and an icon for the image already exists, add `_Icon` after the image name followed by a number (typically the next one in line, starting from 1, like `_Icon1` and `_Icon2`).
