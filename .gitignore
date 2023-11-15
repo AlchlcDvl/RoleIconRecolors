@@ -365,5 +365,4 @@ FodyWeavers.xsd
 # VSC stuff
 .vscode/
 
-AssemblyPublicizer.exe
 TODO.txt

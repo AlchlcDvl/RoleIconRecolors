@@ -29,26 +29,26 @@ public class IconPack
 
     public void Debug()
     {
-        RegIcons.ForEach((x, _) => Utils.Log($"{Name} {x} has a sprite!"));
-        Utils.Log($"{Name} {RegIcons.Count} Assets loaded!");
-        TTIcons.ForEach((x, _) => Utils.Log($"{Name} {x} has a TT sprite!"));
-        Utils.Log($"{Name} {TTIcons.Count} TT Assets loaded!");
-        VIPIcons.ForEach((x, _) => Utils.Log($"{Name} {x} has a VIP sprite!"));
-        Utils.Log($"{Name} {VIPIcons.Count} VIP Assets loaded!");
-        RegEEIcons.ForEach((x, y) => Utils.Log($"{Name} {x} has {y.Count} Easter Egg sprite(s)!"));
-        Utils.Log($"{Name} {RegEEIcons.Count} Easter Egg Assets loaded!");
-        TTEEIcons.ForEach((x, y) => Utils.Log($"{Name} {x} has {y.Count} TT Easter Egg sprite(s)!"));
-        Utils.Log($"{Name} {TTEEIcons.Count} TT Easter Egg Assets loaded!");
-        VIPEEIcons.ForEach((x, y) => Utils.Log($"{Name} {x} has {y.Count} VIP Easter Egg sprite(s)!"));
-        Utils.Log($"{Name} {VIPEEIcons.Count} VIP Easter Egg Assets loaded!");
+        RegIcons.ForEach((x, _) => Recolors.LogMessage($"{Name} {x} has a sprite!"));
+        Recolors.LogMessage($"{Name} {RegIcons.Count} Assets loaded!");
+        TTIcons.ForEach((x, _) => Recolors.LogMessage($"{Name} {x} has a TT sprite!"));
+        Recolors.LogMessage($"{Name} {TTIcons.Count} TT Assets loaded!");
+        VIPIcons.ForEach((x, _) => Recolors.LogMessage($"{Name} {x} has a VIP sprite!"));
+        Recolors.LogMessage($"{Name} {VIPIcons.Count} VIP Assets loaded!");
+        RegEEIcons.ForEach((x, y) => Recolors.LogMessage($"{Name} {x} has {y.Count} Easter Egg sprite(s)!"));
+        Recolors.LogMessage($"{Name} {RegEEIcons.Count} Easter Egg Assets loaded!");
+        TTEEIcons.ForEach((x, y) => Recolors.LogMessage($"{Name} {x} has {y.Count} TT Easter Egg sprite(s)!"));
+        Recolors.LogMessage($"{Name} {TTEEIcons.Count} TT Easter Egg Assets loaded!");
+        VIPEEIcons.ForEach((x, y) => Recolors.LogMessage($"{Name} {x} has {y.Count} VIP Easter Egg sprite(s)!"));
+        Recolors.LogMessage($"{Name} {VIPEEIcons.Count} VIP Easter Egg Assets loaded!");
 
         if (Asset != null)
-            Utils.Log($"{Name} Sprite Asset exists!");
+            Recolors.LogMessage($"{Name} Sprite Asset exists!");
     }
 
     public void Reload()
     {
-        Utils.Log($"Reloading {Name}");
+        Recolors.LogMessage($"Reloading {Name}");
         RegIcons.Values.ForEach(UObject.Destroy);
         RegIcons.Clear();
         TTIcons.Values.ForEach(UObject.Destroy);
@@ -105,7 +105,7 @@ public class IconPack
     {
         try
         {
-            Utils.Log($"Loading {Name}");
+            Recolors.LogMessage($"Loading {Name}");
             var folder = Path.Combine(AssetManager.ModPath, Name);
             var baseFolder = Path.Combine(folder, "Base");
 
@@ -121,7 +121,7 @@ public class IconPack
             }
             else
             {
-                Utils.Log($"{Name} Base folder doesn't exist");
+                Recolors.LogWarning($"{Name} Base folder doesn't exist");
                 Directory.CreateDirectory(baseFolder);
             }
 
@@ -139,7 +139,7 @@ public class IconPack
             }
             else
             {
-                Utils.Log($"{Name} TTBase folder doesn't exist");
+                Recolors.LogWarning($"{Name} TTBase folder doesn't exist");
                 Directory.CreateDirectory(ttFolder);
             }
 
@@ -157,7 +157,7 @@ public class IconPack
             }
             else
             {
-                Utils.Log($"{Name} VIPBase folder doesn't exist");
+                Recolors.LogWarning($"{Name} VIPBase folder doesn't exist");
                 Directory.CreateDirectory(vipFolder);
             }
 
@@ -184,7 +184,7 @@ public class IconPack
             }
             else
             {
-                Utils.Log($"{Name} EasterEggs folder doesn't exist");
+                Recolors.LogWarning($"{Name} EasterEggs folder doesn't exist");
                 Directory.CreateDirectory(eeFolder);
             }
 
@@ -211,7 +211,7 @@ public class IconPack
             }
             else
             {
-                Utils.Log($"{Name} TTEasterEggs folder doesn't exist");
+                Recolors.LogWarning($"{Name} TTEasterEggs folder doesn't exist");
                 Directory.CreateDirectory(tteeFolder);
             }
 
@@ -238,7 +238,7 @@ public class IconPack
             }
             else
             {
-                Utils.Log($"{Name} VIPEasterEggs folder doesn't exist");
+                Recolors.LogWarning($"{Name} VIPEasterEggs folder doesn't exist");
                 Directory.CreateDirectory(vipeeFolder);
             }
 
@@ -249,7 +249,7 @@ public class IconPack
         }
         catch (Exception e)
         {
-            Utils.Log($"ISSUE: {e}", true);
+            Recolors.LogError(e, true);
         }
     }
 
@@ -299,7 +299,7 @@ public class IconPack
         }
         catch (Exception e)
         {
-            Utils.Log($"ISSUE: {e}", true);
+            Recolors.LogError(e, true);
             Asset = null;
             SpriteSheetLoaded = false;
         }

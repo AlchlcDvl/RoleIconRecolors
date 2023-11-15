@@ -33,7 +33,7 @@ public static class AssetManager
 
             if (!IconPacks.TryGetValue(Constants.CurrentPack, out var pack))
             {
-                Utils.Log($"Error finding {Constants.CurrentPack} in loaded packs");
+                Recolors.LogError($"Error finding {Constants.CurrentPack} in loaded packs");
                 return Blank;
             }
 
@@ -59,7 +59,7 @@ public static class AssetManager
         }
         catch (Exception e)
         {
-            Utils.Log($"ISSUE: {e}", true);
+            Recolors.LogError(e, true);
             return Blank;
         }
     }
@@ -68,7 +68,7 @@ public static class AssetManager
     {
         if (!pack.RegIcons.TryGetValue(name, out var sprite))
         {
-            Utils.Log($"Couldn't find regular {name} in {pack.Name}'s recources");
+            Recolors.LogWarning($"Couldn't find regular {name} in {pack.Name}'s recources");
             return Blank;
         }
 
@@ -87,7 +87,7 @@ public static class AssetManager
     {
         if (!pack.TTIcons.TryGetValue(name, out var sprite))
         {
-            Utils.Log($"Couldn't find TT {name} in {pack.Name}'s recources");
+            Recolors.LogWarning($"Couldn't find TT {name} in {pack.Name}'s recources");
             return GetRegSprite(pack, name, allowEE);
         }
 
@@ -106,7 +106,7 @@ public static class AssetManager
     {
         if (!pack.VIPIcons.TryGetValue(name, out var sprite))
         {
-            Utils.Log($"Couldn't find VIP {name} in {pack.Name}'s recources");
+            Recolors.LogWarning($"Couldn't find VIP {name} in {pack.Name}'s recources");
             return GetRegSprite(pack, name, allowEE);
         }
 
@@ -183,7 +183,7 @@ public static class AssetManager
         }
         catch
         {
-            Utils.Log($"Error loading {folder} > {subfolder} > {fileName}");
+            Recolors.LogError($"Error loading {folder} > {subfolder} > {fileName}");
             return null;
         }
     }
@@ -197,7 +197,7 @@ public static class AssetManager
 
             if (!File.Exists(path))
             {
-                Utils.Log($"Path {folder} > {subfolder} > {fileName} was missing");
+                Recolors.LogError($"Path {folder} > {subfolder} > {fileName} was missing");
                 return null;
             }
 
@@ -218,7 +218,7 @@ public static class AssetManager
         }
         catch (Exception e)
         {
-            Utils.Log($"ISSUE: {e}", true);
+            Recolors.LogError(e, true);
             return Blank;
         }
     }
@@ -253,7 +253,7 @@ public static class AssetManager
 
         if (!Directory.Exists(folder))
         {
-            Utils.Log($"{packName} was missing", true);
+            Recolors.LogError($"{packName} was missing", true);
             ModSettings.SetString("Selected Icon Pack", "Vanilla", "alchlcsystm.recolors.windows");
             return;
         }
@@ -271,7 +271,7 @@ public static class AssetManager
         }
         catch (Exception e)
         {
-            Utils.Log($"ISSUE: {e}", true);
+            Recolors.LogError(e, true);
         }
     }
 }

@@ -141,12 +141,4 @@ public static class Utils
 
         return $"<color={role.GetFaction().GetFactionColor()}>{text}</color>{text2}";
     }
-
-    public static void Log(object message, bool logIt = false)
-    {
-        logIt = logIt || Constants.Debug;
-
-        if (logIt)
-            Console.WriteLine($"[Recolors] {message}");
-    }
 }

@@ -22,17 +22,17 @@ public static class Download
 
     private static async void LaunchFetcher(string packName)
     {
-        Utils.Log($"Starting {packName} download", true);
+        Recolors.LogMessage($"Starting {packName} download", true);
         DownloadRunning = true;
 
         try
         {
             var status = await Fetch(packName);
-            Utils.Log(status != HttpStatusCode.OK ? $"{packName} icons could not be downloaded" : $"Fetched {packName} icons", true);
+            Recolors.LogMessage(status != HttpStatusCode.OK ? $"{packName} icons could not be downloaded" : $"Fetched {packName} icons", true);
         }
         catch (Exception e)
         {
-            Utils.Log($"Unable to fetch {packName} icons\n{e}", true);
+            Recolors.LogError($"Unable to fetch {packName} icons\n{e}", true);
         }
 
         DownloadRunning = false;
@@ -42,7 +42,7 @@ public static class Download
     {
         if (packName is not ("Vanilla" or "Recolors"))
         {
-            Utils.Log($"Wrong pack name {packName}", true);
+            Recolors.LogError($"Wrong pack name {packName}", true);
             return HttpStatusCode.NotFound;
         }
 
@@ -70,7 +70,7 @@ public static class Download
 
             if (response.Content == null)
             {
-                Utils.Log($"Server returned no data: {response.StatusCode}", true);
+                Recolors.LogError($"Server returned no data: {response.StatusCode}", true);
                 return response.StatusCode;
             }
 
@@ -80,7 +80,7 @@ public static class Download
 
             if (jobj == null || !jobj.HasValues)
             {
-                Utils.Log("JSON Parse failed", true);
+                Recolors.LogError("JSON Parse failed", true);
                 return HttpStatusCode.ExpectationFailed;
             }
 
@@ -95,7 +95,7 @@ public static class Download
                     Folder = current["folder"]?.ToString() ?? "Vanilla",
                     Pack = packName
                 };
-                Utils.Log(info.Name + " " + info.Folder + " " + info.Pack);
+                Recolors.LogMessage(info.Name + " " + info.Folder + " " + info.Pack);
                 assets.Add(info);
             }
 
@@ -112,7 +112,7 @@ public static class Download
 
                 if (fileresponse.StatusCode != HttpStatusCode.OK)
                 {
-                    Utils.Log($"Error downloading {file.Name}: {fileresponse.StatusCode}", true);
+                    Recolors.LogError($"Error downloading {file.Name}: {fileresponse.StatusCode}", true);
                     continue;
                 }
 
@@ -124,9 +124,9 @@ public static class Download
             Recolors.Open();
             return HttpStatusCode.OK;
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            Utils.Log($"ISSUE: {ex}", true);
+            Recolors.LogError(e, true);
             return HttpStatusCode.ExpectationFailed;
         }
     }

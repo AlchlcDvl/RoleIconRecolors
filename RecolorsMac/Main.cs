@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using BepInEx.Logging;
 
 namespace RecolorsMac;
 
@@ -7,6 +8,9 @@ namespace RecolorsMac;
 [DynamicSettings]
 public class Recolors
 {
+    private static readonly ManualLogSource Log = BepInEx.Logging.Logger.CreateLogSource("IconPacks");
+    public static string SavedLogs = "";
+
     public void Start()
     {
         try
@@ -18,10 +22,10 @@ public class Recolors
         }
         catch (Exception e)
         {
-            Utils.Log($"Something failed because this happened D:\n{e}", true);
+            LogError($"Something failed because this happened D:\n{e}", true);
         }
 
-        Utils.Log("Recolored!", true);
+        LogMessage("Recolored!", true);
     }
 
     public static readonly SalemMenuButton DownloadVanilla = new()
@@ -81,4 +85,31 @@ public class Recolors
             return new() { "Vanilla" };
         }
     }
+
+    private static void LogSomething(object message, LogLevel type, bool logIt)
+    {
+        logIt = logIt || Constants.Debug;
+
+        if (logIt)
+        {
+            Log?.Log(type, message);
+            SavedLogs += $"[{type, -7}] {message}\n";
+        }
+    }
+
+    public static void LogError(object message, bool logIt = false) => LogSomething(message, LogLevel.Error, logIt);
+
+    public static void LogMessage(object message, bool logIt = false) => LogSomething(message, LogLevel.Message, logIt);
+
+    public static void LogFatal(object message, bool logIt = false) => LogSomething(message, LogLevel.Fatal, logIt);
+
+    public static void LogInfo(object message, bool logIt = false) => LogSomething(message, LogLevel.Info, logIt);
+
+    public static void LogWarning(object message, bool logIt = false) => LogSomething(message, LogLevel.Warning, logIt);
+
+    public static void LogDebug(object message, bool logIt = false) => LogSomething(message, LogLevel.Debug, logIt);
+
+    public static void LogNone(object message, bool logIt = false) => LogSomething(message, LogLevel.None, logIt);
+
+    public static void LogAll(object message, bool logIt = false) => LogSomething(message, LogLevel.All, logIt);
 }

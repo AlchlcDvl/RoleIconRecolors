@@ -1,4 +1,5 @@
 using Game.Services;
+using Home.Shared;
 
 namespace RecolorsWindows;
 
@@ -252,22 +253,50 @@ public static class PatchRitualistGuessMenu
 [HarmonyPatch]
 public static class ResourcesLoadPatch
 {
+    private static UObject Original;
+
     public static MethodInfo TargetMethod() => typeof(Resources).GetMethods()[4]; // im not sure if this will work 100% of the time
 
     public static void Postfix(ref UObject __result, ref string path)
     {
-        // handle spriteassets: RoleIcons are not loaded in homescene and reloaded every time visiting gamescene
-        if (AssetManager.IconPacks.TryGetValue(Constants.CurrentPack, out var pack) && path.Replace("Sprites/", "") == "RoleIcons" && __result.ToString().Contains("TMP_SpriteAsset"))
-            __result = pack.Asset ?? __result;
+        if (Original == null)
+            Original = __result;
+
+        try
+        {
+            // handle spriteassets: RoleIcons are not loaded in homescene and reloaded every time visiting gamescene
+            if (AssetManager.IconPacks.TryGetValue(Constants.CurrentPack, out var pack) && path.Replace("Sprites/", "") == "RoleIcons" && __result.ToString().Contains("TMP_SpriteAsset"))
+                __result = pack.Asset ?? Original;
+        }
+        catch
+        {
+            __result = Original;
+        }
     }
 }
 
 [HarmonyPatch(typeof(RoleService), nameof(RoleService.Init))]
-public static class PathRoleService
+public static class PatchRoleService
 {
     public static void Postfix()
     {
         if (AssetManager.IconPacks.TryGetValue(Constants.CurrentPack, out var pack))
             pack.LoadSpriteSheet();
+    }
+}
+
+[HarmonyPatch(typeof(ApplicationController), nameof(ApplicationController.QuitGame))]
+public static class ExitGamePatch
+{
+    public static void Postfix()
+    {
+        try
+        {
+            File.WriteAllText(Path.Combine(AssetManager.ModPath, "IconPackLogs.txt"), Recolors.SavedLogs);
+        }
+        catch
+        {
+            Recolors.LogError("Unable to save logs");
+        }
     }
 }
