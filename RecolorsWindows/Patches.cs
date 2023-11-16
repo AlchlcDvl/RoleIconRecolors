@@ -53,6 +53,18 @@ public static class PatchRoleCards
 {
     public static void Postfix(RoleCardPanelBackground __instance, ref Role role)
     {
+        if (Constants.IsTransformed)
+        {
+            role = role switch
+            {
+                Role.BAKER => Role.FAMINE,
+                Role.BERSERKER => Role.WAR,
+                Role.SOULCOLLECTOR => Role.DEATH,
+                Role.PLAGUEBEARER => Role.PESTILENCE,
+                _ => role
+            };
+        }
+
         var panel = __instance.GetComponentInParent<RoleCardPanel>();
         panel.roleNameText.text = role.DisplayString(__instance.currentFaction);
 
@@ -93,7 +105,7 @@ public static class PatchRoleCards
             index++;
         }
 
-        var attribute = AssetManager.GetSprite($"Attributes_{Utils.FactionName(Pepper.GetMyFaction(), role)}");
+        var attribute = AssetManager.GetSprite($"Attributes_{Utils.FactionName(Pepper.GetMyFaction(), role)}", role);
 
         if (attribute != AssetManager.Blank && panel.roleInfoButtons[index] != null)
         {
@@ -122,7 +134,7 @@ public static class AbilityPanelStartPatch
         switch (overrideType)
         {
             case TosAbilityPanelListItem.OverrideAbilityType.NECRO_ATTACK:
-                var nommy = AssetManager.GetSprite("Necronomicon", false);
+                var nommy = AssetManager.GetSprite("Necronomicon", Constants.PlayerPanelEasterEggs);
 
                 if (nommy != AssetManager.Blank)
                 {
@@ -259,8 +271,7 @@ public static class ResourcesLoadPatch
 
     public static void Postfix(ref UObject __result, ref string path)
     {
-        if (Original == null)
-            Original = __result;
+        Original ??= __result;
 
         try
         {
@@ -268,8 +279,9 @@ public static class ResourcesLoadPatch
             if (AssetManager.IconPacks.TryGetValue(Constants.CurrentPack, out var pack) && path.Replace("Sprites/", "") == "RoleIcons" && __result.ToString().Contains("TMP_SpriteAsset"))
                 __result = pack.Asset ?? Original;
         }
-        catch
+        catch (Exception e)
         {
+            Recolors.LogError(e, true);
             __result = Original;
         }
     }
@@ -288,15 +300,65 @@ public static class PatchRoleService
 [HarmonyPatch(typeof(ApplicationController), nameof(ApplicationController.QuitGame))]
 public static class ExitGamePatch
 {
-    public static void Postfix()
+    public static void Postfix() => Utils.SaveLogs();
+}
+
+[HarmonyPatch(typeof(RoleCardPopupPanel), nameof(RoleCardPopupPanel.SetRole))]
+public static class PatchGuideRoleCards
+{
+    public static void Postfix(RoleCardPopupPanel __instance, ref Role role)
     {
-        try
+        if (!Constants.EnableIcons)
+            return;
+
+        var index = 0;
+        var name = Utils.RoleName(role);
+        var sprite = AssetManager.GetSprite(name, false);
+
+        if (sprite != AssetManager.Blank && __instance.roleIcon != null)
+            __instance.roleIcon.sprite = sprite;
+
+        var special = AssetManager.GetSprite($"{name}_Special");
+
+        if (special != AssetManager.Blank && __instance.specialAbilityPanel != null && role != Role.NECROMANCER)
+            __instance.specialAbilityPanel.useButton.abilityIcon.sprite = special;
+
+        var abilityname = $"{name}_Ability";
+        var ability1 = AssetManager.GetSprite(abilityname, false);
+
+        if (ability1 == AssetManager.Blank)
+            abilityname += "_1";
+
+        ability1 = AssetManager.GetSprite(abilityname, false);
+
+        if (ability1 != AssetManager.Blank && __instance.roleInfoButtons[index] != null)
         {
-            File.WriteAllText(Path.Combine(AssetManager.ModPath, "IconPackLogs.txt"), Recolors.SavedLogs);
+            __instance.roleInfoButtons[index].abilityIcon.sprite = ability1;
+            index++;
         }
-        catch
+
+        var ability2 = AssetManager.GetSprite($"{name}_Ability_2", false);
+
+        if (ability2 != AssetManager.Blank && __instance.roleInfoButtons[index] != null && role != Role.WAR)
         {
-            Recolors.LogError("Unable to save logs");
+            __instance.roleInfoButtons[index].abilityIcon.sprite = ability2;
+            index++;
+        }
+
+        var attribute = AssetManager.GetSprite($"Attributes_{Utils.FactionName(role.GetFaction(), role)}", false);
+
+        if (attribute != AssetManager.Blank && __instance.roleInfoButtons[index] != null)
+        {
+            __instance.roleInfoButtons[index].abilityIcon.sprite = attribute;
+            index++;
+        }
+
+        var nommy = AssetManager.GetSprite("Necronomicon", false);
+
+        if (nommy != AssetManager.Blank && Constants.IsNecroActive && __instance.roleInfoButtons[index] != null)
+        {
+            __instance.roleInfoButtons[index].abilityIcon.sprite = nommy;
+            index++;
         }
     }
 }

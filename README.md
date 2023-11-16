@@ -32,7 +32,7 @@ With this mod you can edit (most) renditions of game icons to your own liking! P
 - Step 5: Read the [folders](#folders) section and create the folder you need for your icons.
 - Step 6: Place your image in the required folder and rename it as per the [image rules](#image-rules).
 - Step 7: Open the game.
-- Step 8: Your icon pack should load on game start up, changing the value of `Selected Icon Pack` will make it load the new pack's icons. Beware, when changing icons, there will be a lag spike as it loads everything.
+- Step 8: Your icon pack should load on game start up, changing the value of `Selected Icon Pack` will make it load the new pack's icons. Beware, when changing icons, there will be a lag spike as it loads everything. Note: Mentions will not load unless you restart the game.
 
 -----------------------
 

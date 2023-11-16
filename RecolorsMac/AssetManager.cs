@@ -1,3 +1,5 @@
+using Home.Common.Settings;
+
 namespace RecolorsMac;
 
 public static class AssetManager
@@ -37,16 +39,28 @@ public static class AssetManager
                 return Blank;
             }
 
-            role ??= Pepper.GetMyRole();
-            faction ??= Pepper.GetMyFaction();
+            try
+            {
+                if (UObject.FindObjectOfType<GameGuideItemTemplate>() == null)
+                {
+                    role ??= Pepper.GetMyRole();
+                    faction ??= Pepper.GetMyFaction();
+                }
+            }
+            catch (Exception e)
+            {
+                Recolors.LogError(e, true);
+                role = null;
+                faction = null;
+            }
 
-            if (!role.Value.IsModifierCard() && role is not (null or Role.STONED or Role.HIDDEN))
+            if (role.HasValue && !role.Value.IsModifierCard() && role is not (null or Role.STONED or Role.HIDDEN or Role.NONE))
             {
                 if (!Avoid.Any(name.Contains) && !role.Value.IsBucket())
                 {
-                    if (role.Value.IsTraitor(faction.Value))
+                    if (faction.HasValue && role.Value.IsTraitor(faction.Value))
                         return GetTTSprite(pack, name, allowEE);
-                    else if (Constants.IsLocalVIP)
+                    else if (UObject.FindObjectOfType<GameGuideItemTemplate>() == null && Constants.IsLocalVIP)
                         return GetVIPSprite(pack, name, allowEE);
                     else
                         return GetRegSprite(pack, name, allowEE);
@@ -260,10 +274,11 @@ public static class AssetManager
 
         try
         {
-            if (IconPacks.TryGetValue(packName, out var exists))
+            if (IconPacks.TryGetValue(packName, out var exists) && exists != null)
                 exists.Reload();
             else
             {
+                IconPacks.Remove(packName);
                 var pack = new IconPack(packName);
                 pack.Load(loadSheet);
                 IconPacks.Add(packName, pack);

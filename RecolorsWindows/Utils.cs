@@ -141,4 +141,16 @@ public static class Utils
 
         return $"<color={role.GetFaction().GetFactionColor()}>{text}</color>{text2}";
     }
+
+    public static void SaveLogs()
+    {
+        try
+        {
+            File.WriteAllText(Path.Combine(AssetManager.ModPath, "IconPackLogs.txt"), Recolors.SavedLogs);
+        }
+        catch
+        {
+            Recolors.LogError("Unable to save logs");
+        }
+    }
 }

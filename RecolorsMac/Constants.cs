@@ -9,6 +9,7 @@ public static class Constants
     public static string CurrentPack => ModSettings.GetString("Selected Icon Pack", "alchlcsystm.recolors.mac");
     public static bool EnableIcons => CurrentPack != "Vanilla";
     public static bool IsNecroActive => Service.Game?.Sim?.info?.roleCardObservation?.Data?.powerUp == POWER_UP_TYPE.NECRONOMICON;
+    public static bool IsTransformed => Service.Game?.Sim?.info?.roleCardObservation?.Data?.powerUp == POWER_UP_TYPE.HORSEMAN;
     public static bool IsLocalVIP => Service.Game?.Sim?.info?.roleCardObservation?.Data?.modifier == ROLE_MODIFIER.VIP;
     public static string TTColor
     {

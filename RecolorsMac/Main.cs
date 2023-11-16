@@ -91,10 +91,9 @@ public class Recolors
         logIt = logIt || Constants.Debug;
 
         if (logIt)
-        {
             Log?.Log(type, message);
-            SavedLogs += $"[{type, -7}] {message}\n";
-        }
+
+        SavedLogs += $"[{type, -7}] {message}\n";
     }
 
     public static void LogError(object message, bool logIt = false) => LogSomething(message, LogLevel.Error, logIt);
