@@ -278,18 +278,18 @@ public class IconPack
             {
                 var actualRole = (Role)roleInt;
 
-                if (RegIcons.TryGetValue(Utils.RoleName(actualRole), out var sprite))
+                if (!RegIcons.TryGetValue(Utils.RoleName(actualRole), out var sprite))
                 {
-                    sprite.texture.name = role;
-                    textures.Add(sprite.texture);
+                    sprite = actualRole switch
+                    {
+                        Role.VAMPIRE => AssetManager.Vampire,
+                        Role.CURSED_SOUL => AssetManager.CursedSoul,
+                        _ => Service.Game.Roles.roleInfoLookup[actualRole].sprite
+                    };
                 }
-                else
-                {
-                    // getting the original sprite from base game as a backup
-                    var tex = Service.Game.Roles.roleInfoLookup[actualRole].sprite.texture;
-                    tex.name = role;
-                    textures.Add(tex);
-                }
+
+                sprite.texture.name = role;
+                textures.Add(sprite.texture);
             }
 
             var assetBuilder = new SpriteAssetBuilder(256, 256, 10);

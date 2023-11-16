@@ -30,9 +30,10 @@ With this mod you can edit (most) renditions of game icons to your own liking! P
 - Step 3: Start the game again and select your icon pack in the `Selected Icon Pack` drop down setting. Close the game.
 - Step 4: Go back to your file explorer and enter the folder for your icon pack.
 - Step 5: Read the [folders](#folders) section and create the folder you need for your icons.
-- Step 6: Place your image in the required folder and rename it as per the [image rules](#image-rules).
-- Step 7: Open the game.
-- Step 8: Your icon pack should load on game start up, changing the value of `Selected Icon Pack` will make it load the new pack's icons. Beware, when changing icons, there will be a lag spike as it loads everything. Note: Mentions will not load unless you restart the game.
+- Step 6: Create your icon using a 256x256 image canvas (you can also do so by making it edit a vanilla icon and just delete the vanilla icon later if needed).
+- Step 7: Place your image in the required folder and rename it as per the [image rules](#image-rules).
+- Step 8: Open the game.
+- Step 9: Your icon pack should load on game start up, changing the value of `Selected Icon Pack` will make it load the new pack's icons. Beware, when changing icons, there will be a lag spike as it loads everything. Note: Mentions will not load unless you restart the game.
 
 -----------------------
 
@@ -53,7 +54,7 @@ For a proper icon pack to function, you have to use at least one of `Base`, `TTB
 `Base` is the folder that changes the icons all the time.\
 `TTBase` is the folder where the icosn in it will only appear when you are the Town Traitor.\
 `VIPBase` is the folder where the icons within in will appear only when you are the VIP.\
-The easter egg folders can have as many icons as needed and will only appear with a small chance to replace the actual icons in the corresponding folders.
+The easter egg folders (`EasterEggs`, `TTEasterEggs` and `VIPEasterEggs`) can have as many icons as needed and will only appear with a small chance to replace the actual icons in the corresponding folders.
 
 -----------------------
 

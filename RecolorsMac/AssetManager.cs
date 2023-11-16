@@ -10,10 +10,21 @@ public static class AssetManager
     public static readonly Dictionary<string, List<Sprite>> TTEEIcons = new();
     public static readonly Dictionary<string, List<Sprite>> VIPEEIcons = new();
     public static readonly Dictionary<string, IconPack> IconPacks = new();
+
+    private static readonly List<string> SkippableNames = new() { "Admirer_Ability", "Amnesiac_Ability", "Arsonist_Ability", "Attributes_Coven", "Baker_Ability", "Berserker_Ability",
+        "Bodyguard_Ability", "Cleric_Ability", "Coroner_Examine", "CovenLeader_Ability", "Crusader_Ability", "CursedSoul_Ability", "Death_Ability", "Dreamweaver_Ability", "Enchanter_Ability",
+        "Executioner_Ability", "Famine_Ability", "HexMaster_Ability", "Illusionist_Ability", "Investigator_Ability", "Jailor_Ability", "Jester_Ability", "Jinx_Ability", "Lookout_Ability",
+        "Medusa_Ability", "Monarch_Ability", "Necromancer_Ability_1", "Necromancer_Ability_2", "Pestilence_Ability", "Plaguebearer_Ability", "Poisoner_Ability", "PotionMaster_Ability_1",
+        "PotionMaster_Ability_2", "Psychic_Ability", "Retributionist_Ability_1", "Retributionist_Ability_2", "Seer_Ability_1", "Seer_Ability_2", "SerialKiller_Ability", "Sheriff_Ability",
+        "Shroud_Ability", "SoulCollector_Ability", "Spy_Ability", "TavernKeeper_Ability", "Tracker_Ability", "Trapper_Ability", "Trickster_Ability", "Vampire_Ability", "Veteran_Ability",
+        "Vigilante_Ability", "VoodooMaster_Ability", "War_Ability_1", "War_Ability_2", "Werewolf_Ability_1", "Werewolf_Ability_2", "Wildling_Ability", "Witch_Ability_1", "Witch_Ability_2" };
+
     public static Sprite Blank;
     public static Sprite Thumbnail;
     public static Sprite DownloadRecolors;
     public static Sprite DownloadVanilla;
+    public static Sprite CursedSoul;
+    public static Sprite Vampire;
 
     public static string ModPath => Path.Combine(Path.GetDirectoryName(Application.dataPath), "SalemModLoader", "ModFolders", "Recolors");
     public static string DefaultPath => Path.Combine(ModPath, "Recolors");
@@ -23,6 +34,8 @@ public static class AssetManager
     private static readonly string[] ToRemove = new[] { ".png" };
 
     private static Assembly Core => typeof(Recolors).Assembly;
+
+    public static bool Skippable(string name) => SkippableNames.Contains(name);
 
     public static Sprite GetSprite(string name, bool allowEE) => GetSprite(name, null, null, allowEE);
 
@@ -174,6 +187,10 @@ public static class AssetManager
                     DownloadVanilla = sprite;
                 else if (x.Contains("DownloadRecolors"))
                     DownloadRecolors = sprite;
+                else if (x.Contains("CursedSoul"))
+                    CursedSoul = sprite;
+                else if (x.Contains("Vampire"))
+                    Vampire = sprite;
             }
         });
 
