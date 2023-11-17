@@ -5,6 +5,10 @@
     <p align="center">The customisation mod that lets you add a bit of flair to icons!
 </p>
 
+<p align="center">
+    <a href="https://discord.gg/cd27aDQDY9">Join the Discord!</a>
+</p>
+
 -----------------------
 
 # Icon Packs Mod

@@ -21,9 +21,9 @@ public static class PatchRoleDeckBuilder
 [HarmonyPatch(typeof(RoleDeckListItem), nameof(RoleDeckListItem.SetData))]
 public static class PatchRoleListPanel
 {
-    public static void Postfix(RoleDeckListItem __instance, ref Role a_role, ref bool a_isBan)
+    public static void Postfix(RoleDeckListItem __instance, ref Role a_role)
     {
-        if (!Constants.EnableIcons || a_role.IsModifierCard() || a_isBan)
+        if (!Constants.EnableIcons || a_role.IsModifierCard())
             return;
 
         var icon = AssetManager.GetSprite($"{Utils.RoleName(a_role)}", false);
@@ -73,7 +73,7 @@ public static class PatchRoleCards
 
         var index = 0;
         var name = Utils.RoleName(role);
-        var sprite = AssetManager.GetSprite(name, role);
+        var sprite = AssetManager.GetSprite(name);
 
         if (sprite != AssetManager.Blank && panel.roleIcon != null)
             panel.roleIcon.sprite = sprite;
@@ -84,12 +84,12 @@ public static class PatchRoleCards
             panel.specialAbilityPanel.useButton.abilityIcon.sprite = special;
 
         var abilityname = $"{name}_Ability";
-        var ability1 = AssetManager.GetSprite(abilityname, role);
+        var ability1 = AssetManager.GetSprite(abilityname);
 
         if (ability1 == AssetManager.Blank)
             abilityname += "_1";
 
-        ability1 = AssetManager.GetSprite(abilityname, role);
+        ability1 = AssetManager.GetSprite(abilityname);
 
         if (ability1 != AssetManager.Blank && panel.roleInfoButtons[index] != null)
         {
@@ -100,7 +100,7 @@ public static class PatchRoleCards
             index++;
 
         var abilityname2 = $"{name}_Ability_2";
-        var ability2 = AssetManager.GetSprite(abilityname2, role);
+        var ability2 = AssetManager.GetSprite(abilityname2);
 
         if (ability2 != AssetManager.Blank && panel.roleInfoButtons[index] != null && role != Role.WAR)
         {
@@ -111,7 +111,7 @@ public static class PatchRoleCards
             index++;
 
         var attributename = $"Attributes_{Utils.FactionName(Pepper.GetMyFaction(), role)}";
-        var attribute = AssetManager.GetSprite(attributename, role);
+        var attribute = AssetManager.GetSprite(attributename);
 
         if (attribute != AssetManager.Blank && panel.roleInfoButtons[index] != null)
         {
@@ -345,7 +345,7 @@ public static class PatchGuideRoleCards
             index++;
 
         var abilityname2 = $"{name}_Ability_2";
-        var ability2 = AssetManager.GetSprite(abilityname2, role);
+        var ability2 = AssetManager.GetSprite(abilityname2);
 
         if (ability2 != AssetManager.Blank && __instance.roleInfoButtons[index] != null && role != Role.WAR)
         {
@@ -355,8 +355,8 @@ public static class PatchGuideRoleCards
         else if (AssetManager.Skippable(abilityname2))
             index++;
 
-        var attributename = $"Attributes_{Utils.FactionName(Pepper.GetMyFaction(), role)}";
-        var attribute = AssetManager.GetSprite(attributename, role);
+        var attributename = $"Attributes_{Utils.FactionName(role.GetFaction(), role)}";
+        var attribute = AssetManager.GetSprite(attributename);
 
         if (attribute != AssetManager.Blank && __instance.roleInfoButtons[index] != null)
         {
@@ -368,7 +368,7 @@ public static class PatchGuideRoleCards
 
         var nommy = AssetManager.GetSprite("Necronomicon", false);
 
-        if (nommy != AssetManager.Blank && Constants.IsNecroActive && __instance.roleInfoButtons[index] != null)
+        if (nommy != AssetManager.Blank && __instance.roleInfoButtons[index] != null)
             __instance.roleInfoButtons[index].abilityIcon.sprite = nommy;
     }
 }

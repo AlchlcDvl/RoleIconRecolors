@@ -30,16 +30,15 @@ public static class AssetManager
     public static string DefaultPath => Path.Combine(ModPath, "Recolors");
     public static string VanillaPath => Path.Combine(ModPath, "Vanilla");
     public static readonly string[] Folders = new[] { "Base", "TTBase", "VIPBase", "EasterEggs", "TTEasterEggs", "VIPEasterEggs" };
-    private static readonly string[] Avoid = new[] { "Attributes", "Necronomicon" };
+    private static readonly string[] Avoid = new[] { "Attributes", "Necronomicon", "Neutral", "NeutralApocalypse", "NeutralEvil", "NeutralKilling", "Town", "TownInvestigative",
+        "TownKilling", "TownSupport", "TownProtective", "TownPower", "CovenKilling", "CovenDeception", "CovenUtility", "CovenPower", "Coven" };
     private static readonly string[] ToRemove = new[] { ".png" };
 
     private static Assembly Core => typeof(Recolors).Assembly;
 
     public static bool Skippable(string name) => SkippableNames.Contains(name);
 
-    public static Sprite GetSprite(string name, bool allowEE) => GetSprite(name, null, null, allowEE);
-
-    public static Sprite GetSprite(string name, Role? role = null, FactionType? faction = null, bool allowEE = true)
+    public static Sprite GetSprite(string name, bool allowEE = true)
     {
         try
         {
@@ -49,40 +48,23 @@ public static class AssetManager
             if (!IconPacks.TryGetValue(Constants.CurrentPack, out var pack))
             {
                 Recolors.LogError($"Error finding {Constants.CurrentPack} in loaded packs");
+                ModSettings.SetString("Selected Icon Pack", "Vanilla", "alchlcsystm.recolors.windows");
                 return Blank;
             }
 
-            try
-            {
-                if (UObject.FindObjectOfType<GameGuideItemTemplate>() == null)
-                {
-                    role ??= Pepper.GetMyRole();
-                    faction ??= Pepper.GetMyFaction();
-                }
-            }
-            catch (Exception e)
-            {
-                Recolors.LogError(e, true);
-                role = null;
-                faction = null;
-            }
+            var nosettings = UObject.FindObjectOfType<GameGuideItemTemplate>() == null;
 
-            if (role.HasValue && !role.Value.IsModifierCard() && role is not (null or Role.STONED or Role.HIDDEN or Role.NONE))
+            if (!Avoid.Any(name.Contains))
             {
-                if (!Avoid.Any(name.Contains) && !role.Value.IsBucket())
-                {
-                    if (faction.HasValue && role.Value.IsTraitor(faction.Value))
-                        return GetTTSprite(pack, name, allowEE);
-                    else if (UObject.FindObjectOfType<GameGuideItemTemplate>() == null && Constants.IsLocalVIP)
-                        return GetVIPSprite(pack, name, allowEE);
-                    else
-                        return GetRegSprite(pack, name, allowEE);
-                }
+                if (nosettings && Constants.IsLocalTT)
+                    return GetTTSprite(pack, name, allowEE);
+                else if (nosettings && Constants.IsLocalVIP)
+                    return GetVIPSprite(pack, name, allowEE);
                 else
                     return GetRegSprite(pack, name, allowEE);
             }
             else
-                return Blank;
+                return GetRegSprite(pack, name, allowEE);
         }
         catch (Exception e)
         {
