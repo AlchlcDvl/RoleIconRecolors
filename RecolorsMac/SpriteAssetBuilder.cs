@@ -19,7 +19,7 @@ public class SpriteAssetBuilder
         Asset = ScriptableObject.CreateInstance<TMP_SpriteAsset>();
     }
 
-    public void BuildGlyphs(Texture2D[] textures, string spriteAssetName, Action<TMP_SpriteCharacter> action)
+    public TMP_SpriteAsset BuildGlyphs(Texture2D[] textures, string spriteAssetName, Action<TMP_SpriteCharacter> action)
     {
         var rowNumber = (textures.Length - 1) / GlyphsInRow + 1;
         var completeWidth = GlyphsInRow * GlyphWidth;
@@ -58,6 +58,7 @@ public class SpriteAssetBuilder
         Asset.material.mainTexture = image;
         Asset.spriteSheet = image;
         Asset.UpdateLookupTables();
+        return Asset;
     }
 
     internal Sprite BuildGlyph(Texture2D texture, int xIndex, int yIndex, uint index, Action<TMP_SpriteCharacter> action)

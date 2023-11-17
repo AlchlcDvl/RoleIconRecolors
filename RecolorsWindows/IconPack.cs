@@ -293,10 +293,9 @@ public class IconPack
             }
 
             var assetBuilder = new SpriteAssetBuilder(256, 256, 10);
-            assetBuilder.BuildGlyphs(textures.ToArray(), $"RoleIcons ({Name})", x => x.name = rolesWithIndexDict[(x.glyph as TMP_SpriteGlyph).sprite.name.ToLower()]);
+            Asset = assetBuilder.BuildGlyphs(textures.ToArray(), $"RoleIcons ({Name})", x => x.name = rolesWithIndexDict[(x.glyph as TMP_SpriteGlyph).sprite.name.ToLower()]);
             // set spritecharacter name to "Role{number}" so that the game can find correct roles
-            Asset = assetBuilder.Asset;
-            Recolors.LogMessage("Sprite Asset loaded!");
+            Recolors.LogMessage($"{Name} Sprite Asset loaded!");
         }
         catch (Exception e)
         {

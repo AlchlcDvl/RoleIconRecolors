@@ -87,16 +87,17 @@ public static class PatchRoleCards
         var ability1 = AssetManager.GetSprite(abilityname);
 
         if (ability1 == AssetManager.Blank)
+        {
             abilityname += "_1";
-
-        ability1 = AssetManager.GetSprite(abilityname);
+            ability1 = AssetManager.GetSprite(abilityname);
+        }
 
         if (ability1 != AssetManager.Blank && panel.roleInfoButtons.Exists(index))
         {
             panel.roleInfoButtons[index].abilityIcon.sprite = ability1;
             index++;
         }
-        else if (AssetManager.Skippable(abilityname))
+        else if (AssetManager.Skippable(abilityname) || AssetManager.Skippable(abilityname.Replace("_1", "")))
             index++;
 
         var abilityname2 = $"{name}_Ability_2";
@@ -332,20 +333,21 @@ public static class PatchGuideRoleCards
         var ability1 = AssetManager.GetSprite(abilityname, false);
 
         if (ability1 == AssetManager.Blank)
+        {
             abilityname += "_1";
-
-        ability1 = AssetManager.GetSprite(abilityname, false);
+            ability1 = AssetManager.GetSprite(abilityname, false);
+        }
 
         if (ability1 != AssetManager.Blank && __instance.roleInfoButtons.Exists(index))
         {
             __instance.roleInfoButtons[index].abilityIcon.sprite = ability1;
             index++;
         }
-        else if (AssetManager.Skippable(abilityname))
+        else if (AssetManager.Skippable(abilityname) || AssetManager.Skippable(abilityname + "_1") || AssetManager.Skippable(abilityname.Replace("_1", "")))
             index++;
 
         var abilityname2 = $"{name}_Ability_2";
-        var ability2 = AssetManager.GetSprite(abilityname2);
+        var ability2 = AssetManager.GetSprite(abilityname2, false);
 
         if (ability2 != AssetManager.Blank && __instance.roleInfoButtons.Exists(index) && role != Role.WAR)
         {
@@ -356,7 +358,7 @@ public static class PatchGuideRoleCards
             index++;
 
         var attributename = $"Attributes_{Utils.FactionName(role.GetFaction(), role)}";
-        var attribute = AssetManager.GetSprite(attributename);
+        var attribute = AssetManager.GetSprite(attributename, false);
 
         if (attribute != AssetManager.Blank && __instance.roleInfoButtons.Exists(index))
         {
