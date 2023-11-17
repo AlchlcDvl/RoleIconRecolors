@@ -30,7 +30,8 @@ public static class AssetManager
     public static string DefaultPath => Path.Combine(ModPath, "Recolors");
     public static string VanillaPath => Path.Combine(ModPath, "Vanilla");
     public static readonly string[] Folders = new[] { "Base", "TTBase", "VIPBase", "EasterEggs", "TTEasterEggs", "VIPEasterEggs" };
-    private static readonly string[] Avoid = new[] { "Attributes", "Necronomicon" };
+    private static readonly string[] Avoid = new[] { "Attributes", "Necronomicon", "Neutral", "NeutralApocalypse", "NeutralEvil", "NeutralKilling", "Town", "TownInvestigative",
+        "TownKilling", "TownSupport", "TownProtective", "TownPower", "CovenKilling", "CovenDeception", "CovenUtility", "CovenPower", "Coven" };
     private static readonly string[] ToRemove = new[] { ".png" };
 
     private static Assembly Core => typeof(Recolors).Assembly;
