@@ -91,7 +91,7 @@ public static class PatchRoleCards
 
         ability1 = AssetManager.GetSprite(abilityname);
 
-        if (ability1 != AssetManager.Blank && panel.roleInfoButtons[index] != null)
+        if (ability1 != AssetManager.Blank && panel.roleInfoButtons.Exists(index))
         {
             panel.roleInfoButtons[index].abilityIcon.sprite = ability1;
             index++;
@@ -102,7 +102,7 @@ public static class PatchRoleCards
         var abilityname2 = $"{name}_Ability_2";
         var ability2 = AssetManager.GetSprite(abilityname2);
 
-        if (ability2 != AssetManager.Blank && panel.roleInfoButtons[index] != null && role != Role.WAR)
+        if (ability2 != AssetManager.Blank && panel.roleInfoButtons.Exists(index) && role != Role.WAR)
         {
             panel.roleInfoButtons[index].abilityIcon.sprite = ability2;
             index++;
@@ -113,7 +113,7 @@ public static class PatchRoleCards
         var attributename = $"Attributes_{Utils.FactionName(Pepper.GetMyFaction(), role)}";
         var attribute = AssetManager.GetSprite(attributename);
 
-        if (attribute != AssetManager.Blank && panel.roleInfoButtons[index] != null)
+        if (attribute != AssetManager.Blank && panel.roleInfoButtons.Exists(index))
         {
             panel.roleInfoButtons[index].abilityIcon.sprite = attribute;
             index++;
@@ -123,7 +123,7 @@ public static class PatchRoleCards
 
         var nommy = AssetManager.GetSprite("Necronomicon");
 
-        if (nommy != AssetManager.Blank && Constants.IsNecroActive && panel.roleInfoButtons[index] != null)
+        if (nommy != AssetManager.Blank && Constants.IsNecroActive && panel.roleInfoButtons.Exists(index))
             panel.roleInfoButtons[index].abilityIcon.sprite = nommy;
     }
 }
@@ -336,7 +336,7 @@ public static class PatchGuideRoleCards
 
         ability1 = AssetManager.GetSprite(abilityname, false);
 
-        if (ability1 != AssetManager.Blank && __instance.roleInfoButtons[index] != null)
+        if (ability1 != AssetManager.Blank && __instance.roleInfoButtons.Exists(index))
         {
             __instance.roleInfoButtons[index].abilityIcon.sprite = ability1;
             index++;
@@ -347,7 +347,7 @@ public static class PatchGuideRoleCards
         var abilityname2 = $"{name}_Ability_2";
         var ability2 = AssetManager.GetSprite(abilityname2);
 
-        if (ability2 != AssetManager.Blank && __instance.roleInfoButtons[index] != null && role != Role.WAR)
+        if (ability2 != AssetManager.Blank && __instance.roleInfoButtons.Exists(index) && role != Role.WAR)
         {
             __instance.roleInfoButtons[index].abilityIcon.sprite = ability2;
             index++;
@@ -358,7 +358,7 @@ public static class PatchGuideRoleCards
         var attributename = $"Attributes_{Utils.FactionName(role.GetFaction(), role)}";
         var attribute = AssetManager.GetSprite(attributename);
 
-        if (attribute != AssetManager.Blank && __instance.roleInfoButtons[index] != null)
+        if (attribute != AssetManager.Blank && __instance.roleInfoButtons.Exists(index))
         {
             __instance.roleInfoButtons[index].abilityIcon.sprite = attribute;
             index++;
@@ -368,7 +368,7 @@ public static class PatchGuideRoleCards
 
         var nommy = AssetManager.GetSprite("Necronomicon", false);
 
-        if (nommy != AssetManager.Blank && __instance.roleInfoButtons[index] != null)
+        if (nommy != AssetManager.Blank && __instance.roleInfoButtons.Exists(index))
             __instance.roleInfoButtons[index].abilityIcon.sprite = nommy;
     }
 }

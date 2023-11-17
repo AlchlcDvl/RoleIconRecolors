@@ -153,4 +153,16 @@ public static class Utils
             Recolors.LogError("Unable to save logs");
         }
     }
+
+    public static bool Exists(this List<BaseAbilityButton> list, int index)
+    {
+        try
+        {
+            return list[index] != null;
+        }
+        catch
+        {
+            return false;
+        }
+    }
 }
