@@ -1,5 +1,3 @@
-using Home.Common.Settings;
-
 namespace RecolorsMac;
 
 public static class AssetManager
@@ -40,25 +38,23 @@ public static class AssetManager
 
     public static Sprite GetSprite(string name, bool allowEE = true)
     {
+        if (name.Contains("Blank") || !Constants.EnableIcons || IconPacks.Count == 0)
+            return Blank;
+
+        if (!IconPacks.TryGetValue(Constants.CurrentPack, out var pack))
+        {
+            Recolors.LogError($"Error finding {Constants.CurrentPack} in loaded packs");
+            ModSettings.SetString("Selected Icon Pack", "Vanilla", "alchlcsystm.recolors.windows");
+            return Blank;
+        }
+
         try
         {
-            if (name.Contains("Blank") || !Constants.EnableIcons || IconPacks.Count == 0)
-                return Blank;
-
-            if (!IconPacks.TryGetValue(Constants.CurrentPack, out var pack))
-            {
-                Recolors.LogError($"Error finding {Constants.CurrentPack} in loaded packs");
-                ModSettings.SetString("Selected Icon Pack", "Vanilla", "alchlcsystm.recolors.windows");
-                return Blank;
-            }
-
-            var nosettings = UObject.FindObjectOfType<GameGuideItemTemplate>() == null;
-
             if (!Avoid.Any(name.Contains))
             {
-                if (nosettings && Constants.IsLocalTT)
+                if (Constants.IsLocalTT)
                     return GetTTSprite(pack, name, allowEE);
-                else if (nosettings && Constants.IsLocalVIP)
+                else if (Constants.IsLocalVIP)
                     return GetVIPSprite(pack, name, allowEE);
                 else
                     return GetRegSprite(pack, name, allowEE);
