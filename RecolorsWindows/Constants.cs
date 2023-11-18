@@ -8,10 +8,62 @@ public static class Constants
     public static int EasterEggChance => ModSettings.GetInt("Easter Egg Icon Chance", "alchlcsystm.recolors.windows");
     public static string CurrentPack => ModSettings.GetString("Selected Icon Pack", "alchlcsystm.recolors.windows");
     public static bool EnableIcons => CurrentPack != "Vanilla";
-    public static bool IsNecroActive => Service.Game?.Sim?.info?.roleCardObservation?.Data?.powerUp == POWER_UP_TYPE.NECRONOMICON;
-    public static bool IsTransformed => Service.Game?.Sim?.info?.roleCardObservation?.Data?.powerUp == POWER_UP_TYPE.HORSEMAN;
-    public static bool IsLocalVIP => Service.Game?.Sim?.info?.roleCardObservation?.Data?.modifier == ROLE_MODIFIER.VIP;
-    public static bool IsLocalTT => Service.Game?.Sim?.info?.roleCardObservation?.Data?.modifier == ROLE_MODIFIER.TRAITOR;
+    public static bool IsNecroActive
+    {
+        get
+        {
+            try
+            {
+                return Service.Game?.Sim?.info?.roleCardObservation?.Data?.powerUp == POWER_UP_TYPE.NECRONOMICON;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+    }
+    public static bool IsTransformed
+    {
+        get
+        {
+            try
+            {
+                return Service.Game?.Sim?.info?.roleCardObservation?.Data?.powerUp == POWER_UP_TYPE.HORSEMAN;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+    }
+    public static bool IsLocalVIP
+    {
+        get
+        {
+            try
+            {
+                return Service.Game?.Sim?.info?.roleCardObservation?.Data?.modifier == ROLE_MODIFIER.VIP;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+    }
+    public static bool IsLocalTT
+    {
+        get
+        {
+            try
+            {
+                return Service.Game?.Sim?.info?.roleCardObservation?.Data?.modifier == ROLE_MODIFIER.TRAITOR;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+    }
     public static string TTColor
     {
         get
