@@ -49,22 +49,20 @@ public class Recolors
     public static void Open()
     {
         //code stolen from jan who stole from tuba
-        Process.Start("open", $"\"{AssetManager.ModPath}\"");
+        //if (Environment.OSVersion.Platform is PlatformID.MacOSX or PlatformID.Unix)
+            Process.Start("open", $"\"{AssetManager.ModPath}\"");
+        //else
+            //Application.OpenURL($"file://{AssetManager.ModPath}");
+        //Process.Start("open", $"\"{AssetManager.ModPath}\"");
     }
 
-    public ModSettings.DropdownSetting SelectedIconPack
+    public ModSettings.DropdownSetting SelectedIconPack => new()
     {
-        get
-        {
-            return new()
-            {
-                Name = "Selected Icon Pack",
-                Description = "The selected icon will start replacing the visible icons with the images you put in. If it can't find the valid image or pack, it will be replaced by the mod's default files\nVanilla - No pack selected",
-                Options = GetPackNames(),
-                OnChanged = AssetManager.TryLoadingSprites
-            };
-        }
-    }
+        Name = "Selected Icon Pack",
+        Description = "The selected icon will start replacing the visible icons with the images you put in. If it can't find the valid image or pack, it will be replaced by the mod's default files\nVanilla - No pack selected",
+        Options = GetPackNames(),
+        OnChanged = AssetManager.TryLoadingSprites
+    };
 
     private static List<string> GetPackNames()
     {
