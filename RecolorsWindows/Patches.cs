@@ -21,9 +21,9 @@ public static class PatchRoleDeckBuilder
 [HarmonyPatch(typeof(RoleDeckListItem), nameof(RoleDeckListItem.SetData))]
 public static class PatchRoleListPanel
 {
-    public static void Postfix(RoleDeckListItem __instance, ref Role a_role)
+    public static void Postfix(RoleDeckListItem __instance, ref Role a_role, ref bool a_isBan)
     {
-        if (!Constants.EnableIcons || a_role.IsModifierCard())
+        if (!Constants.EnableIcons || a_role.IsModifierCard() || a_isBan)
             return;
 
         var icon = AssetManager.GetSprite($"{Utils.RoleName(a_role)}", false);
@@ -349,7 +349,7 @@ public static class PatchGuideRoleCards
         var abilityname2 = $"{name}_Ability_2";
         var ability2 = AssetManager.GetSprite(abilityname2, false);
 
-        if (ability2 != AssetManager.Blank && __instance.roleInfoButtons.Exists(index) && role != Role.WAR)
+        if (ability2 != AssetManager.Blank && __instance.roleInfoButtons.Exists(index))
         {
             __instance.roleInfoButtons[index].abilityIcon.sprite = ability2;
             index++;

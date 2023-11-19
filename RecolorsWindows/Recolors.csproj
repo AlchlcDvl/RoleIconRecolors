@@ -28,7 +28,7 @@
         <EmbeddedResource Include="Resources\*" />
         <PackageReference Include="HarmonyX" Version="2.10.1" />
         <PackageReference Include="UnityEngine.Modules" Version="2021.3.1" IncludeAssets="compile" />
-        <Reference Include="Assembly-CSharp_publicized"><HintPath>Lib\Assembly-CSharp_publicized.dll</HintPath></Reference>
+        <Reference Include="Assembly-CSharp"><HintPath>Lib\Assembly-CSharp.dll</HintPath></Reference>
         <Reference Include="UnityEngine.UI"><HintPath>Lib\UnityEngine.UI.dll</HintPath></Reference>
         <Reference Include="SalemModLoader"><HintPath>Lib\SalemModLoader.dll</HintPath></Reference>
         <Reference Include="Unity.TextMeshPro"><HintPath>Lib\Unity.TextMeshPro.dll</HintPath></Reference>
