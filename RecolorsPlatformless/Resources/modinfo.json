@@ -1,0 +1,46 @@
+{
+  "HarmonyId": "alchlcsystm.recolors",
+  "DisplayName": "Icon Packs",
+  "Authors": [ "AlchlcSystm", "Pat" ],
+  "Description": "The mod adds a bit of flair to icons! Credits to MysticMismagius and Nidoskull for the artwork!",
+  "Version": "1.0.0",
+  "Settings":
+  {
+    "CheckboxSettings":
+    [
+      {
+        "Name": "Enable Easter Eggs In Player Panel",
+        "SettingID": "recolors.playerpanel",
+        "Description": "Toggles whether easter egg icons appear or not in the ability panel",
+        "DefaultValue": false,
+        "AvailableInGame": true
+      },
+      {
+        "Name": "All Easter Eggs Are Active",
+        "SettingID": "recolors.alleeactive",
+        "Description": "Toggles whether all of the previously selected icon pack's easter eggs will be used, or only the selected icon pack's",
+        "DefaultValue": false,
+        "AvailableInGame": true
+      },
+      {
+        "Name": "Enable Debugging",
+        "SettingID": "recolors.debug",
+        "Description": "Toggles whether the mod's logs will be displayed (keep it off, only turn on if the dev tells you to)",
+        "DefaultValue": false,
+        "AvailableInGame": true
+      }
+    ],
+    "IntegerInputSettings":
+    [
+      {
+        "Name": "Easter Egg Icon Chance",
+        "SettingID": "recolors.eastereggs",
+        "Description": "The chance of a different than normal icon appearing for roles",
+        "DefaultValue": 5,
+        "MinValue": 0,
+        "MaxValue": 100,
+        "AvailableInGame": true
+      }
+    ]
+  }
+}

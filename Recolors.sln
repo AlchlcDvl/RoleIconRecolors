@@ -1,11 +1,9 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.5.002.0
-MinimumVisualStudioVersion = 10.0.40219.1
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RecolorsWindows", "RecolorsWindows/Recolors.csproj", "{81930CD3-2E5A-435C-99ED-2A050920CC31}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecolorsMac", "RecolorsMac/Recolors.csproj", "{51FFDEFD-A5FF-475E-9A7C-0BBE91D2DC24}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BCSG3B73C61A}") = "RecolorsPlatformless", "RecolorsPlatformless/Recolors.csproj", "{F8F4E96F-40BF-4374-B8BA-968D0SGG4A9E}"
 EndProject
 Global
     GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +19,10 @@ Global
         {51FFDEFD-A5FF-475E-9A7C-0BBE91D2DC24}.Debug|Any CPU.Build.0 = Debug|Any CPU
         {51FFDEFD-A5FF-475E-9A7C-0BBE91D2DC24}.Release|Any CPU.ActiveCfg = Release|Any CPU
         {51FFDEFD-A5FF-475E-9A7C-0BBE91D2DC24}.Release|Any CPU.Build.0 = Release|Any CPU
+        {F8F4E96F-40BF-4374-B8BA-968D0SGG4A9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {F8F4E96F-40BF-4374-B8BA-968D0SGG4A9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {F8F4E96F-40BF-4374-B8BA-968D0SGG4A9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {F8F4E96F-40BF-4374-B8BA-968D0SGG4A9E}.Release|Any CPU.Build.0 = Release|Any CPU
     EndGlobalSection
     GlobalSection(SolutionProperties) = preSolution
         HideSolutionNode = FALSE
