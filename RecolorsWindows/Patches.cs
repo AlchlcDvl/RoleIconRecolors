@@ -1,5 +1,6 @@
 using Game.Services;
 using Home.Shared;
+using Cinematics.Players;
 
 namespace RecolorsWindows;
 
@@ -372,5 +373,29 @@ public static class PatchGuideRoleCards
 
         if (nommy != AssetManager.Blank && __instance.roleInfoButtons.Exists(index))
             __instance.roleInfoButtons[index].abilityIcon.sprite = nommy;
+    }
+}
+
+[HarmonyPatch(typeof(DoomsayerLeavesCinematicPlayer), nameof(DoomsayerLeavesCinematicPlayer.Init))]
+public static class PatchDoomsayerLeaving
+{
+    public static void Postfix(DoomsayerLeavesCinematicPlayer __instance)
+    {
+        var role1 = __instance.doomsayerLeavesCinematicData.roles[0];
+        var role2 = __instance.doomsayerLeavesCinematicData.roles[1];
+        var role3 = __instance.doomsayerLeavesCinematicData.roles[2];
+
+        var sprite1 = AssetManager.GetSprite(Utils.RoleName(role1));
+        var sprite2 = AssetManager.GetSprite(Utils.RoleName(role2));
+        var sprite3 = AssetManager.GetSprite(Utils.RoleName(role3));
+
+        if (sprite1 != AssetManager.Blank)
+            __instance.otherCharacterRole1.sprite = sprite1;
+
+        if (sprite2 != AssetManager.Blank)
+            __instance.otherCharacterRole2.sprite = sprite2;
+
+        if (sprite3 != AssetManager.Blank)
+            __instance.otherCharacterRole3.sprite = sprite3;
     }
 }
