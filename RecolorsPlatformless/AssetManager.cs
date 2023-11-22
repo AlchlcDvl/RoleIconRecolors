@@ -50,15 +50,12 @@ public static class AssetManager
 
         try
         {
-            if (!Avoid.Any(name.Contains))
-            {
-                if (Constants.IsLocalTT)
-                    return GetTTSprite(pack, name, allowEE);
-                else if (Constants.IsLocalVIP)
-                    return GetVIPSprite(pack, name, allowEE);
-                else
-                    return GetRegSprite(pack, name, allowEE);
-            }
+            if (Avoid.Any(name.Contains))
+                return GetRegSprite(pack, name, allowEE);
+            else if (Constants.IsLocalTT)
+                return GetTTSprite(pack, name, allowEE);
+            else if (Constants.IsLocalVIP)
+                return GetVIPSprite(pack, name, allowEE);
             else
                 return GetRegSprite(pack, name, allowEE);
         }

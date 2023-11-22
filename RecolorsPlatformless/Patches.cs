@@ -9,6 +9,8 @@ public static class PatchRoleDeckBuilder
 {
     public static void Postfix(RoleCardListItem __instance, ref Role role)
     {
+        Recolors.LogMessage("Patching RoleCardListItem.SetData");
+
         if (!Constants.EnableIcons || role.IsModifierCard())
             return;
 
@@ -24,6 +26,8 @@ public static class PatchRoleListPanel
 {
     public static void Postfix(RoleDeckListItem __instance, ref Role a_role, ref bool a_isBan)
     {
+        Recolors.LogMessage("Patching RoleDeckListItem.SetData");
+
         if (!Constants.EnableIcons || a_role.IsModifierCard() || a_isBan)
             return;
 
@@ -39,6 +43,8 @@ public static class PatchBrowserRoleListPanel
 {
     public static void Postfix(GameBrowserRoleDeckListItem __instance, ref Role a_role, ref bool a_isBan)
     {
+        Recolors.LogMessage("Patching GameBrowserRoleDeckListItem.SetData");
+
         if (!Constants.EnableIcons || a_role.IsModifierCard() || a_isBan)
             return;
 
@@ -54,6 +60,8 @@ public static class PatchRoleCards
 {
     public static void Postfix(RoleCardPanelBackground __instance, ref Role role)
     {
+        Recolors.LogMessage("Patching RoleCardPanelBackground.SetRole");
+
         if (Constants.IsTransformed)
         {
             role = role switch
@@ -135,6 +143,8 @@ public static class AbilityPanelStartPatch
 {
     public static void Postfix(TosAbilityPanelListItem __instance, ref TosAbilityPanelListItem.OverrideAbilityType overrideType)
     {
+        Recolors.LogMessage("Patching TosAbilityPanelListItem.OverrideIconAndText");
+
         if (!Constants.EnableIcons || overrideType == TosAbilityPanelListItem.OverrideAbilityType.VOTING)
             return;
 
@@ -244,6 +254,8 @@ public static class SpecialAbilityPanelPatch
 {
     public static void Postfix(SpecialAbilityPopupGenericListItem __instance)
     {
+        Recolors.LogMessage("Patching SpecialAbilityPopupGenericListItem.SetData");
+
         if (!Constants.EnableIcons)
             return;
 
@@ -259,6 +271,8 @@ public static class PatchRitualistGuessMenu
 {
     public static void Postfix(SpecialAbilityPopupRadialIcon __instance, ref Role a_role)
     {
+        Recolors.LogMessage("Patching SpecialAbilityPopupRadialIcon.SetData");
+
         if (!Constants.EnableIcons)
             return;
 
@@ -278,6 +292,8 @@ public static class ResourcesLoadPatch
 
     public static void Postfix(ref UObject __result, ref string path)
     {
+        Recolors.LogMessage("Patching Resources.Load");
+
         Original ??= __result;
 
         try
@@ -299,6 +315,8 @@ public static class PatchRoleService
 {
     public static void Postfix()
     {
+        Recolors.LogMessage("Patching RoleService.Init");
+
         if (AssetManager.IconPacks.TryGetValue(Constants.CurrentPack, out var pack))
             pack.LoadSpriteSheet();
     }
@@ -307,7 +325,11 @@ public static class PatchRoleService
 [HarmonyPatch(typeof(ApplicationController), nameof(ApplicationController.QuitGame))]
 public static class ExitGamePatch
 {
-    public static void Postfix() => Utils.SaveLogs();
+    public static void Postfix()
+    {
+        Recolors.LogMessage("Patching ApplicationController.QuitGame");
+        Utils.SaveLogs();
+    }
 }
 
 [HarmonyPatch(typeof(RoleCardPopupPanel), nameof(RoleCardPopupPanel.SetRole))]
@@ -315,6 +337,8 @@ public static class PatchGuideRoleCards
 {
     public static void Postfix(RoleCardPopupPanel __instance, ref Role role)
     {
+        Recolors.LogMessage("Patching RoleCardPopupPanel.SetRole");
+
         if (!Constants.EnableIcons)
             return;
 
@@ -381,6 +405,8 @@ public static class PatchDoomsayerLeaving
 {
     public static void Postfix(DoomsayerLeavesCinematicPlayer __instance)
     {
+        Recolors.LogMessage("Patching DoomsayerLeavesCinematicPlayer.Init");
+
         var role1 = __instance.doomsayerLeavesCinematicData.roles[0];
         var role2 = __instance.doomsayerLeavesCinematicData.roles[1];
         var role3 = __instance.doomsayerLeavesCinematicData.roles[2];
