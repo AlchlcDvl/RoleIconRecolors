@@ -610,6 +610,26 @@
             "folder": "Base"
         },
         {
+            "name": "CovenDeception",
+            "folder": "Base"
+        },
+        {
+            "name": "CovenKilling",
+            "folder": "Base"
+        },
+        {
+            "name": "CovenPower",
+            "folder": "Base"
+        },
+        {
+            "name": "CovenUtility",
+            "folder": "Base"
+        },
+        {
+            "name": "NeutralEvil",
+            "folder": "Base"
+        },
+        {
             "name": "Admirer",
             "folder": "EasterEggs"
         },

@@ -1,8 +1,8 @@
 {
   "HarmonyId": "alchlcsystm.recolors",
   "DisplayName": "Icon Packs",
-  "Authors": [ "AlchlcSystm", "Pat" ],
-  "Description": "The mod adds a bit of flair to icons! Credits to MysticMismagius and Nidoskull for the artwork!",
+  "Authors": [ "AlchlcSystm" ],
+  "Description": "The mod adds a bit of flair to icons! Credits to MysticMismagius and Nidoskull for the artwork and Pat for coding help!",
   "Version": "1.0.0",
   "Settings":
   {
