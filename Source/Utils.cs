@@ -132,9 +132,9 @@ public static class Utils
         var text2 = "";
 
         if (role.IsTraitor(factionType))
-            text2 = $"\n<color={Constants.TTColor}>(Traitor)</color>";
+            text2 = $"\n<color={Constants.TTColor}>({Service.Home.LocalizationService.GetLocalizedString("GUI_ROLENAME_202")})</color>";
         else if (Constants.IsLocalVIP)
-            text2 = $"\n<color={Constants.VIPColor}>(VIP)</color>";
+            text2 = $"\n<color={Constants.VIPColor}>({Service.Home.LocalizationService.GetLocalizedString("GUI_ROLENAME_201")})</color>";
 
         if (text2.Length > 0)
             text2 = $"<size=85%>{text2}</size>";

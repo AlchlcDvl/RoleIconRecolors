@@ -53,8 +53,8 @@ public class SpriteAssetBuilder
         image.Apply();
 
         Asset.name = spriteAssetName;
-        Asset.material = UObject.Instantiate(TMP_Settings.defaultSpriteAsset.material);
-        Asset.version = "1.1.0";
+        Asset.material = new(Shader.Find("TextMeshPro/Sprite"));
+        Asset.GetType().GetProperty("version").SetValue(Asset, "1.1.0");
         Asset.material.mainTexture = image;
         Asset.spriteSheet = image;
         Asset.UpdateLookupTables();

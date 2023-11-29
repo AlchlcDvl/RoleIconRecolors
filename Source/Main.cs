@@ -22,7 +22,7 @@ public class Recolors
         }
         catch (Exception e)
         {
-            LogError($"Something failed because this happened D:\n{e}", true);
+            LogError($"Something failed because this happened D:\n{e}");
         }
 
         LogMessage("Recolored!", true);
@@ -86,6 +86,7 @@ public class Recolors
     private static void LogSomething(object message, LogLevel type, bool logIt)
     {
         logIt = logIt || Constants.Debug;
+        message = $"[{DateTime.UtcNow}] {message}";
 
         if (logIt)
             Log?.Log(type, message);
@@ -93,11 +94,11 @@ public class Recolors
         SavedLogs += $"[{type, -7}] {message}\n";
     }
 
-    public static void LogError(object message, bool logIt = false) => LogSomething(message, LogLevel.Error, logIt);
+    public static void LogError(object message) => LogSomething(message, LogLevel.Error, true);
 
     public static void LogMessage(object message, bool logIt = false) => LogSomething(message, LogLevel.Message, logIt);
 
-    public static void LogFatal(object message, bool logIt = false) => LogSomething(message, LogLevel.Fatal, logIt);
+    public static void LogFatal(object message) => LogSomething(message, LogLevel.Fatal, true);
 
     public static void LogInfo(object message, bool logIt = false) => LogSomething(message, LogLevel.Info, logIt);
 

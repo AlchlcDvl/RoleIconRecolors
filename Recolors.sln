@@ -1,5 +1,5 @@
 ﻿Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{E24C65DC-7377-472B-9ABA-BCSG3B73C61A}") = "RecolorsPlatformless", "RecolorsPlatformless/Recolors.csproj", "{F8F4E96F-40BF-4374-B8BA-968D0SGG4A9E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Source", "Source\Recolors.csproj", "{7B91EF68-B9BB-4138-9DEF-79C91FA554D6}"
 EndProject
 Global
     GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -7,15 +7,15 @@ Global
         Release|Any CPU = Release|Any CPU
     EndGlobalSection
     GlobalSection(ProjectConfigurationPlatforms) = postSolution
-        {F8F4E96F-40BF-4374-B8BA-968D0SGG4A9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-        {F8F4E96F-40BF-4374-B8BA-968D0SGG4A9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-        {F8F4E96F-40BF-4374-B8BA-968D0SGG4A9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-        {F8F4E96F-40BF-4374-B8BA-968D0SGG4A9E}.Release|Any CPU.Build.0 = Release|Any CPU
+        {7B91EF68-B9BB-4138-9DEF-79C91FA554D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {7B91EF68-B9BB-4138-9DEF-79C91FA554D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {7B91EF68-B9BB-4138-9DEF-79C91FA554D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {7B91EF68-B9BB-4138-9DEF-79C91FA554D6}.Release|Any CPU.Build.0 = Release|Any CPU
     EndGlobalSection
     GlobalSection(SolutionProperties) = preSolution
         HideSolutionNode = FALSE
     EndGlobalSection
     GlobalSection(ExtensibilityGlobals) = postSolution
-        SolutionGuid = {C70938D8-4A8D-4859-A1EF-7973B2CB1657}
+        SolutionGuid = {F2C2A857-F42E-4331-B220-4439B2FCA645}
     EndGlobalSection
 EndGlobal
