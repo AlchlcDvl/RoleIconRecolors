@@ -61,7 +61,7 @@ public static class AssetManager
         }
         catch (Exception e)
         {
-            Recolors.LogError(e, true);
+            Recolors.LogError(e);
             return Blank;
         }
     }
@@ -169,7 +169,7 @@ public static class AssetManager
             }
         });
 
-        TryLoadingSprites(Constants.CurrentPack, false);
+        TryLoadingSprites(Constants.CurrentPack);
     }
 
     private static Texture2D EmptyTexture() => new(2, 2, TextureFormat.ARGB32, true);
@@ -224,7 +224,7 @@ public static class AssetManager
         }
         catch (Exception e)
         {
-            Recolors.LogError(e, true);
+            Recolors.LogError(e);
             return Blank;
         }
     }
@@ -248,18 +248,19 @@ public static class AssetManager
         return path;
     }
 
-    public static void TryLoadingSprites(string packName) => TryLoadingSprites(packName, true);
-
-    public static void TryLoadingSprites(string packName, bool loadSheet)
+    public static void TryLoadingSprites(string packName)
     {
         if (packName == "Vanilla")
+        {
+            ChangeSpriteSheets(packName);
             return;
+        }
 
         var folder = Path.Combine(ModPath, packName);
 
         if (!Directory.Exists(folder))
         {
-            Recolors.LogError($"{packName} was missing", true);
+            Recolors.LogError($"{packName} was missing");
             ModSettings.SetString("Selected Icon Pack", "Vanilla", "alchlcsystm.recolors.windows");
             return;
         }
@@ -272,13 +273,37 @@ public static class AssetManager
             {
                 IconPacks.Remove(packName);
                 var pack = new IconPack(packName);
-                pack.Load(loadSheet);
+                pack.Load();
                 IconPacks.Add(packName, pack);
+
+                if (PatchRoleService.ServiceExists)
+                    pack.LoadSpriteSheet(true);
             }
         }
         catch (Exception e)
         {
-            Recolors.LogError(e, true);
+            Recolors.LogError(e);
+        }
+    }
+
+    public static void ChangeSpriteSheets(string packName)
+    {
+        try
+        {
+            if (packName == "Vanilla")
+            {
+                MaterialReferenceManager.instance.m_SpriteAssetReferenceLookup[CacheDefaultSpriteSheet.Cache] = CacheDefaultSpriteSheet.VanillaSheet;
+                MaterialReferenceManager.instance.m_FontMaterialReferenceLookup[CacheDefaultSpriteSheet.Cache] = CacheDefaultSpriteSheet.VanillaSheet.material;
+            }
+            else
+            {
+                MaterialReferenceManager.instance.m_SpriteAssetReferenceLookup[CacheDefaultSpriteSheet.Cache] = IconPacks[packName].Asset;
+                MaterialReferenceManager.instance.m_FontMaterialReferenceLookup[CacheDefaultSpriteSheet.Cache] = IconPacks[packName].Asset.material;
+            }
+        }
+        catch (Exception e)
+        {
+            Recolors.LogError(e);
         }
     }
 }

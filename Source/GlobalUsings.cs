@@ -15,3 +15,5 @@ global using Server.Shared.State;
 global using Home.GameBrowser;
 global using Server.Shared.Info;
 global using Services;
+
+global using TMPro;

@@ -1,7 +1,7 @@
 using Game.Services;
 using Home.Shared;
 using Cinematics.Players;
-//using Game.Simulation;
+using Home.Services;
 
 namespace RecolorsPlatformless;
 
@@ -284,41 +284,19 @@ public static class PatchRitualistGuessMenu
     }
 }
 
-[HarmonyPatch]
-public static class ResourcesLoadPatch
-{
-    private static UObject Original;
-
-    public static MethodInfo TargetMethod() => typeof(Resources).GetMethods()[4]; // im not sure if this will work 100% of the time
-
-    public static void Postfix(ref UObject __result, ref string path)
-    {
-        Recolors.LogMessage("Patching Resources.Load");
-        Original ??= __result;
-
-        try
-        {
-            // handle spriteassets: RoleIcons are not loaded in homescene and reloaded every time visiting gamescene
-            if (AssetManager.IconPacks.TryGetValue(Constants.CurrentPack, out var pack) && path.Replace("Sprites/", "") == "RoleIcons" && __result.ToString().Contains("TMP_SpriteAsset"))
-                __result = pack.Asset ?? Original;
-        }
-        catch (Exception e)
-        {
-            Recolors.LogError(e);
-            __result = Original;
-        }
-    }
-}
-
 [HarmonyPatch(typeof(RoleService), nameof(RoleService.Init))]
 public static class PatchRoleService
 {
+    public static bool ServiceExists = false;
+
     public static void Postfix()
     {
         Recolors.LogMessage("Patching RoleService.Init");
 
         if (AssetManager.IconPacks.TryGetValue(Constants.CurrentPack, out var pack))
-            pack.LoadSpriteSheet();
+            pack.LoadSpriteSheet(true);
+
+        ServiceExists = true;
     }
 }
 
@@ -405,7 +383,7 @@ public static class PatchDoomsayerLeaving
 {
     public static void Postfix(DoomsayerLeavesCinematicPlayer __instance)
     {
-        Recolors.LogMessage("Patching DoomsayerLeavesCinematicPlayer.Init");;
+        Recolors.LogMessage("Patching DoomsayerLeavesCinematicPlayer.Init");
 
         if (!Constants.EnableIcons)
             return;
@@ -429,62 +407,29 @@ public static class PatchDoomsayerLeaving
     }
 }
 
-/*[HarmonyPatch(typeof(GameSimulation), nameof(GameSimulation.GetRoleInlineHeadshotString))]
-public static class GetRoleInlineHeadshotStringPatch
+[HarmonyPatch(typeof(HomeInterfaceService), nameof(HomeInterfaceService.Init))]
+public static class CacheDefaultSpriteSheet
 {
-    public static void Postfix(ref Role role, ref double indentEm, ref string __result)
-    {
-        if (!Constants.EnableIcons || role == Role.NONE)
-            return;
+    public static int Cache = 0;
+    public static TMP_SpriteAsset VanillaSheet = null;
+    private static readonly string[] Assets = new[] { "TmpSpriteAssets/Cast.asset", "TmpSpriteAssets/LobbyIcons.asset", "TmpSpriteAssets/MiscIcons.asset",
+        "TmpSpriteAssets/PlayerNumbers.asset", "TmpSpriteAssets/RoleIcons.asset", "TmpSpriteAssets/SalemTmpIcons.asset", "TmpSpriteAssets/TrialReportIcons.asset" };
 
-        __result = $"<link=\"r{(int)role}\"><color=white><sprite=\"RoleIcons ({Constants.CurrentPack})\" name=\"Role{(int)role}\"><indent={indentEm}em></color></link>";
+    public static bool Prefix(HomeInterfaceService __instance)
+    {
+        Assets.ForEach(key =>
+        {
+            Debug.Log("HomeInterfaceService:: Add Sprite Asset " + key);
+            var asset = __instance.LoadResource<TMP_SpriteAsset>(key);
+            MaterialReferenceManager.AddSpriteAsset(asset);
+
+            if (key.Contains("RoleIcons"))
+            {
+                Cache = asset.hashCode;
+                VanillaSheet = asset;
+            }
+        });
+        __instance.isReady_ = true;
+        return false;
     }
 }
-
-[HarmonyPatch(typeof(GameSimulation), nameof(GameSimulation.GetRoleIconAndNameInlineString))]
-public static class GetRoleIconAndNameInlineStringPatch
-{
-    public static void Postfix(GameSimulation __instance, ref Role role, ref FactionType factionType, ref string __result)
-    {
-        if (!Constants.EnableIcons || role == Role.NONE)
-            return;
-
-        __result = $"<link=\"r{(int)role}\"><color=white><sprite=\"RoleIcons ({Constants.CurrentPack})\" name=\"Role{(int)role}\"></color></link>{__instance.GetRoleNameLinkString(role, factionType)}";
-    }
-}
-
-[HarmonyPatch(typeof(GameSimulation), nameof(GameSimulation.GetTownTraitorRoleIconAndNameInlineString))]
-public static class GetTownTraitorRoleIconAndNameInlineStringPatch
-{
-    public static void Postfix(GameSimulation __instance, ref Role role, ref string __result)
-    {
-        if (!Constants.EnableIcons || role == Role.NONE)
-            return;
-
-        __result = $"<link=\"r{(int)role}\"><color=white><sprite=\"RoleIcons ({Constants.CurrentPack})\" name=\"Role{(int)role}\"></color></link>{__instance.GetRoleNameLinkString(role, role.GetFaction())}";
-    }
-}
-
-[HarmonyPatch(typeof(GameSimulation), nameof(GameSimulation.GetVIPRoleIconAndNameInlineString))]
-public static class GetVIPRoleIconAndNameInlineStringPatch
-{
-    public static void Postfix(GameSimulation __instance, ref Role role, ref string __result)
-    {
-        if (!Constants.EnableIcons || role == Role.NONE)
-            return;
-
-        __result = $"<link=\"r{(int)role}\"><color=white><sprite=\"RoleIcons ({Constants.CurrentPack})\" name=\"Role{(int)role}\"></color></link>{__instance.GetRoleNameLinkString(role, role.GetFaction()) + __instance.GetVIPText()}";
-    }
-}
-
-[HarmonyPatch(typeof(GameSimulation), nameof(GameSimulation.GetModIcon))]
-public static class GetModIconPatch
-{
-    public static void Postfix(ref Role role, ref string __result)
-    {
-        if (!Constants.EnableIcons || role == Role.NONE)
-            return;
-
-        __result = $"<link=\"r{(int)role}\"><color=white><sprite=\"RoleIcons ({Constants.CurrentPack})\" name=\"Role{(int)role}\"></color></link>";
-    }
-}*/

@@ -1,5 +1,3 @@
-using TMPro;
-
 namespace RecolorsPlatformless;
 
 public class IconPack
@@ -66,7 +64,8 @@ public class IconPack
         TTEEIcons.Clear();
         UObject.Destroy(Asset);
         SpriteSheetLoaded = false;
-        Load(true);
+        Load();
+        LoadSpriteSheet(true);
     }
 
     public static bool operator ==(IconPack a, IconPack b)
@@ -101,7 +100,7 @@ public class IconPack
 
     public override string ToString() => Name;
 
-    public void Load(bool loadSheet)
+    public void Load()
     {
         try
         {
@@ -242,9 +241,6 @@ public class IconPack
                 Directory.CreateDirectory(vipeeFolder);
             }
 
-            if (loadSheet)
-                LoadSpriteSheet();
-
             Debug();
         }
         catch (Exception e)
@@ -254,7 +250,7 @@ public class IconPack
     }
 
     // love ya pat
-    public void LoadSpriteSheet()
+    public void LoadSpriteSheet(bool change)
     {
         try
         {
@@ -295,14 +291,13 @@ public class IconPack
             var assetBuilder = new SpriteAssetBuilder(256, 256, 10);
             Asset = assetBuilder.BuildGlyphs(textures.ToArray(), $"RoleIcons ({Name})", x => x.name = rolesWithIndexDict[(x.glyph as TMP_SpriteGlyph).sprite.name.ToLower()]);
             // set spritecharacter name to "Role{number}" so that the game can find correct roles
-            /*TMP_Text.OnSpriteAssetRequest += (_, str) =>
-            {
-                if (str == $"RoleIcons ({Name})")
-                    return Asset;
-                else
-                    return null;
-            };*/
             Recolors.LogMessage($"{Name} Sprite Asset loaded!");
+
+            if (change)
+            {
+                AssetManager.ChangeSpriteSheets(Name);
+                Recolors.LogMessage($"{Name} Sprite Asset added!");
+            }
         }
         catch (Exception e)
         {

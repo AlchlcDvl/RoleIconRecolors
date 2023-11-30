@@ -32,7 +32,7 @@ public static class Download
         }
         catch (Exception e)
         {
-            Recolors.LogError($"Unable to fetch {packName} icons\n{e}", true);
+            Recolors.LogError($"Unable to fetch {packName} icons\n{e}");
         }
 
         DownloadRunning = false;
@@ -42,7 +42,7 @@ public static class Download
     {
         if (packName is not ("Vanilla" or "Recolors"))
         {
-            Recolors.LogError($"Wrong pack name {packName}", true);
+            Recolors.LogError($"Wrong pack name {packName}");
             return HttpStatusCode.NotFound;
         }
 
@@ -70,7 +70,7 @@ public static class Download
 
             if (response.Content == null)
             {
-                Recolors.LogError($"Server returned no data: {response.StatusCode}", true);
+                Recolors.LogError($"Server returned no data: {response.StatusCode}");
                 return response.StatusCode;
             }
 
@@ -80,7 +80,7 @@ public static class Download
 
             if (jobj == null || !jobj.HasValues)
             {
-                Recolors.LogError("JSON Parse failed", true);
+                Recolors.LogError("JSON Parse failed");
                 return HttpStatusCode.ExpectationFailed;
             }
 
@@ -112,7 +112,7 @@ public static class Download
 
                 if (fileresponse.StatusCode != HttpStatusCode.OK)
                 {
-                    Recolors.LogError($"Error downloading {file.Name}: {fileresponse.StatusCode}", true);
+                    Recolors.LogError($"Error downloading {file.Name}: {fileresponse.StatusCode}");
                     continue;
                 }
 
@@ -126,7 +126,7 @@ public static class Download
         }
         catch (Exception e)
         {
-            Recolors.LogError(e, true);
+            Recolors.LogError(e);
             return HttpStatusCode.ExpectationFailed;
         }
     }
