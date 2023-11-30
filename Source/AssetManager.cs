@@ -272,12 +272,12 @@ public static class AssetManager
             else
             {
                 IconPacks.Remove(packName);
-                var pack = new IconPack(packName);
-                pack.Load();
-                IconPacks.Add(packName, pack);
+                exists = new(packName);
+                exists.Load();
+                IconPacks.Add(packName, exists);
 
                 if (PatchRoleService.ServiceExists)
-                    pack.LoadSpriteSheet(true);
+                    exists.LoadSpriteSheet(true);
             }
         }
         catch (Exception e)
