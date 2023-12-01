@@ -410,17 +410,18 @@ public static class PatchDoomsayerLeaving
 [HarmonyPatch(typeof(HomeInterfaceService), nameof(HomeInterfaceService.Init))]
 public static class CacheDefaultSpriteSheet
 {
-    public static int Cache = 0;
-    public static TMP_SpriteAsset VanillaSheet = null;
-    private static readonly string[] Assets = new[] { "TmpSpriteAssets/Cast.asset", "TmpSpriteAssets/LobbyIcons.asset", "TmpSpriteAssets/MiscIcons.asset",
-        "TmpSpriteAssets/PlayerNumbers.asset", "TmpSpriteAssets/RoleIcons.asset", "TmpSpriteAssets/SalemTmpIcons.asset", "TmpSpriteAssets/TrialReportIcons.asset" };
+    public static int Cache;
+    public static TMP_SpriteAsset VanillaSheet;
+    private static readonly string[] Assets = new[] { "Cast", "LobbyIcons", "MiscIcons", "PlayerNumbers", "RoleIcons", "SalemTmpIcons", "TrialReportIcons" };
 
     public static bool Prefix(HomeInterfaceService __instance)
     {
+        Recolors.LogMessage("Patching HomeInterfaceService.Init");
+
         Assets.ForEach(key =>
         {
             Debug.Log("HomeInterfaceService:: Add Sprite Asset " + key);
-            var asset = __instance.LoadResource<TMP_SpriteAsset>(key);
+            var asset = __instance.LoadResource<TMP_SpriteAsset>($"TmpSpriteAssets/{key}.asset");
             MaterialReferenceManager.AddSpriteAsset(asset);
 
             if (key.Contains("RoleIcons"))

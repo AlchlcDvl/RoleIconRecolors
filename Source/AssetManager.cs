@@ -290,12 +290,12 @@ public static class AssetManager
     {
         try
         {
-            if (packName == "Vanilla")
+            if (packName == "Vanilla" && CacheDefaultSpriteSheet.VanillaSheet)
             {
                 MaterialReferenceManager.instance.m_SpriteAssetReferenceLookup[CacheDefaultSpriteSheet.Cache] = CacheDefaultSpriteSheet.VanillaSheet;
                 MaterialReferenceManager.instance.m_FontMaterialReferenceLookup[CacheDefaultSpriteSheet.Cache] = CacheDefaultSpriteSheet.VanillaSheet.material;
             }
-            else
+            else if (packName != "Vanilla")
             {
                 MaterialReferenceManager.instance.m_SpriteAssetReferenceLookup[CacheDefaultSpriteSheet.Cache] = IconPacks[packName].Asset;
                 MaterialReferenceManager.instance.m_FontMaterialReferenceLookup[CacheDefaultSpriteSheet.Cache] = IconPacks[packName].Asset.material;
