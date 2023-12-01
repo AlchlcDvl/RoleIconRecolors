@@ -68,7 +68,7 @@ public static class Constants
     {
         get
         {
-            if (ModStates.IsEnabled("curtis.colour.swapper"))
+            if (ModStates.IsLoaded("curtis.colour.swapper"))
                 return ModSettings.GetString("Coven", "curtis.colour.swapper");
             else
                 return "#B545FF";
@@ -78,7 +78,7 @@ public static class Constants
     {
         get
         {
-            if (ModStates.IsEnabled("curtis.colour.swapper"))
+            if (ModStates.IsLoaded("curtis.colour.swapper"))
                 return ModSettings.GetString("Town", "curtis.colour.swapper");
             else
                 return "#06E00C";
