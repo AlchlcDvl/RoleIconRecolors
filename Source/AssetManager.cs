@@ -300,6 +300,8 @@ public static class AssetManager
                 MaterialReferenceManager.instance.m_SpriteAssetReferenceLookup[CacheDefaultSpriteSheet.Cache] = IconPacks[packName].Asset;
                 MaterialReferenceManager.instance.m_FontMaterialReferenceLookup[CacheDefaultSpriteSheet.Cache] = IconPacks[packName].Asset.material;
             }
+            else
+                Recolors.LogFatal("Uh oh, something happened here in AssetManager.ChangeSpriteSheets");
         }
         catch (Exception e)
         {
