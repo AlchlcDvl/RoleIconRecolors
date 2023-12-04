@@ -281,6 +281,9 @@ public static class AssetManager
 
                 if (PatchRoleService.ServiceExists)
                     exists.LoadSpriteSheet(true);
+
+                if (PatchScrolls.ServiceExists)
+                    SetScrollSprites(Service.Home.Scrolls);
             }
         }
         catch (Exception e)

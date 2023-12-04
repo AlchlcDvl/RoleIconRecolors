@@ -437,9 +437,12 @@ public static class CacheDefaultSpriteSheet
 [HarmonyPatch(typeof(HomeScrollService), nameof(HomeScrollService.Init))]
 public static class PatchScrolls
 {
+    public static bool ServiceExists = false;
+
     public static void Postfix(HomeScrollService __instance)
     {
         Recolors.LogMessage("Patching HomeScrollService.Init");
         AssetManager.SetScrollSprites(__instance);
+        ServiceExists = true;
     }
 }
