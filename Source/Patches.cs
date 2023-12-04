@@ -417,7 +417,6 @@ public static class CacheDefaultSpriteSheet
     public static bool Prefix(HomeInterfaceService __instance)
     {
         Recolors.LogMessage("Patching HomeInterfaceService.Init");
-
         Assets.ForEach(key =>
         {
             Debug.Log("HomeInterfaceService:: Add Sprite Asset " + key);
@@ -432,5 +431,15 @@ public static class CacheDefaultSpriteSheet
         });
         __instance.isReady_ = true;
         return false;
+    }
+}
+
+[HarmonyPatch(typeof(HomeScrollService), nameof(HomeScrollService.Init))]
+public static class PatchScrolls
+{
+    public static void Postfix(HomeScrollService __instance)
+    {
+        Recolors.LogMessage("Patching HomeScrollService.Init");
+        AssetManager.SetScrollSprites(__instance);
     }
 }

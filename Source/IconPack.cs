@@ -66,39 +66,8 @@ public class IconPack
         SpriteSheetLoaded = false;
         Load();
         LoadSpriteSheet(true);
+        AssetManager.SetScrollSprites(Service.Home.Scrolls);
     }
-
-    public static bool operator ==(IconPack a, IconPack b)
-    {
-        if (a is null && b is null)
-            return true;
-        else if (a is null || b is null)
-            return false;
-        else
-            return a.Name == b.Name;
-    }
-
-    public static bool operator !=(IconPack a, IconPack b) => !(a == b);
-
-    private bool Equals(IconPack other) => Name == other.Name && GetHashCode() == other.GetHashCode();
-
-    public override bool Equals(object obj)
-    {
-        if (obj is null)
-            return false;
-
-        if (ReferenceEquals(this, obj))
-            return true;
-
-        if (obj.GetType() != typeof(IconPack))
-            return false;
-
-        return Equals((IconPack)obj);
-    }
-
-    public override int GetHashCode() => HashCode.Combine(Name);
-
-    public override string ToString() => Name;
 
     public void Load()
     {

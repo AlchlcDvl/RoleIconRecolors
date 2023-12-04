@@ -1,3 +1,5 @@
+using Home.Services;
+
 namespace RecolorsPlatformless;
 
 public static class AssetManager
@@ -302,6 +304,32 @@ public static class AssetManager
             }
             else
                 Recolors.LogFatal("Uh oh, something happened here in AssetManager.ChangeSpriteSheets");
+        }
+        catch (Exception e)
+        {
+            Recolors.LogError(e);
+        }
+    }
+
+    public static void SetScrollSprites(HomeScrollService __instance)
+    {
+        try
+        {
+            __instance.scrollInfoLookup_.ForEach((_, y) =>
+            {
+                var sprite = GetSprite(Utils.RoleName(y.role), false);
+
+                if (sprite != Blank)
+                    y.decoration.sprite = sprite;
+            });
+
+            __instance.cursedScrollInfoLookup_.ForEach((_, y) =>
+            {
+                var sprite = GetSprite(Utils.RoleName(y.role), false);
+
+                if (sprite != Blank)
+                    y.decoration.sprite = sprite;
+            });
         }
         catch (Exception e)
         {
