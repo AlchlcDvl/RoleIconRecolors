@@ -630,6 +630,10 @@
             "folder": "Base"
         },
         {
+            "name": "TownPower",
+            "folder": "Base"
+        },
+        {
             "name": "Admirer",
             "folder": "EasterEggs"
         },
