@@ -10,6 +10,7 @@ public static class AssetManager
     public static readonly Dictionary<string, List<Sprite>> TTEEIcons = new();
     public static readonly Dictionary<string, List<Sprite>> VIPEEIcons = new();
     public static readonly Dictionary<string, IconPack> IconPacks = new();
+    public static readonly Dictionary<int, Sprite> CacheScrollSprites = new();
 
     private static readonly List<string> SkippableNames = new() { "Admirer_Ability", "Amnesiac_Ability", "Arsonist_Ability", "Attributes_Coven", "Baker_Ability", "Berserker_Ability",
         "Bodyguard_Ability", "Cleric_Ability", "Coroner_Ability", "CovenLeader_Ability", "Crusader_Ability", "CursedSoul_Ability", "Death_Ability", "Dreamweaver_Ability", "Enchanter_Ability",
@@ -321,6 +322,10 @@ public static class AssetManager
 
                 if (sprite != Blank)
                     y.decoration.sprite = sprite;
+                else if (CacheScrollSprites.TryGetValue(y.id, out sprite))
+                    y.decoration.sprite = sprite;
+                else
+                    CacheScrollSprites[y.id] = y.decoration.sprite;
             });
 
             __instance.cursedScrollInfoLookup_.ForEach((_, y) =>
@@ -329,6 +334,10 @@ public static class AssetManager
 
                 if (sprite != Blank)
                     y.decoration.sprite = sprite;
+                else if (CacheScrollSprites.TryGetValue(y.id, out sprite))
+                    y.decoration.sprite = sprite;
+                else
+                    CacheScrollSprites[y.id] = y.decoration.sprite;
             });
         }
         catch (Exception e)
