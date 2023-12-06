@@ -634,6 +634,10 @@
             "folder": "Base"
         },
         {
+            "name": "TownInvestigative",
+            "folder": "Base"
+        },
+        {
             "name": "Admirer",
             "folder": "EasterEggs"
         },
