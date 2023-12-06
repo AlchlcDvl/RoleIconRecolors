@@ -2,6 +2,7 @@ using Game.Services;
 using Home.Shared;
 using Cinematics.Players;
 using Home.Services;
+using UnityEngine.UI;
 
 namespace RecolorsPlatformless;
 
@@ -442,7 +443,55 @@ public static class PatchScrolls
     public static void Postfix(HomeScrollService __instance)
     {
         Recolors.LogMessage("Patching HomeScrollService.Init");
+
+        if (!Constants.EnableIcons)
+            return;
+
         AssetManager.SetScrollSprites(__instance);
         ServiceExists = true;
+    }
+}
+
+[HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.ShowAttackAndDefense))]
+public static class PatchAttackDefense
+{
+    public static void Postfix(RoleCardPanel __instance, ref RoleCardData data)
+    {
+        Recolors.LogMessage("Patching RoleCardPanel.ShowAttackAndDefense");
+
+        if (!Constants.EnableIcons)
+            return;
+
+        var attack = AssetManager.GetSprite($"Attack{Utils.GetLevel(data.attack, true)}");
+
+        if (attack != AssetManager.Blank)
+            __instance.transform.Find("AttackIcon").Find("Icon").GetComponent<Image>().sprite = attack;
+
+        var defense = AssetManager.GetSprite($"Defense{Utils.GetLevel(data.defense, false)}");
+
+        if (defense != AssetManager.Blank)
+            __instance.transform.Find("DefenseIcon").Find("Icon").GetComponent<Image>().sprite = defense;
+    }
+}
+
+[HarmonyPatch(typeof(RoleCardPopupPanel), nameof(RoleCardPopupPanel.ShowAttackAndDefense))]
+public static class PatchAttackDefensePopup
+{
+    public static void Postfix(RoleCardPopupPanel __instance, ref RoleCardData data)
+    {
+        Recolors.LogMessage("Patching RoleCardPopupPanel.ShowAttackAndDefense");
+
+        if (!Constants.EnableIcons)
+            return;
+
+        var attack = AssetManager.GetSprite($"Attack{Utils.GetLevel(data.attack, true)}", false);
+
+        if (attack != AssetManager.Blank)
+            __instance.transform.Find("AttackIcon").Find("Icon").GetComponent<Image>().sprite = attack;
+
+        var defense = AssetManager.GetSprite($"Defense{Utils.GetLevel(data.defense, false)}", false);
+
+        if (defense != AssetManager.Blank)
+            __instance.transform.Find("DefenseIcon").Find("Icon").GetComponent<Image>().sprite = defense;
     }
 }

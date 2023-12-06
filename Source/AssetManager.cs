@@ -301,13 +301,13 @@ public static class AssetManager
                 MaterialReferenceManager.instance.m_SpriteAssetReferenceLookup[CacheDefaultSpriteSheet.Cache] = CacheDefaultSpriteSheet.VanillaSheet;
                 MaterialReferenceManager.instance.m_FontMaterialReferenceLookup[CacheDefaultSpriteSheet.Cache] = CacheDefaultSpriteSheet.VanillaSheet.material;
             }
-            else if (packName != "Vanilla")
+            else if (packName != "Vanilla" && IconPacks.TryGetValue(packName, out var pack) && pack != null && pack.Asset)
             {
-                MaterialReferenceManager.instance.m_SpriteAssetReferenceLookup[CacheDefaultSpriteSheet.Cache] = IconPacks[packName].Asset;
-                MaterialReferenceManager.instance.m_FontMaterialReferenceLookup[CacheDefaultSpriteSheet.Cache] = IconPacks[packName].Asset.material;
+                MaterialReferenceManager.instance.m_SpriteAssetReferenceLookup[CacheDefaultSpriteSheet.Cache] = pack.Asset;
+                MaterialReferenceManager.instance.m_FontMaterialReferenceLookup[CacheDefaultSpriteSheet.Cache] = pack.Asset.material;
             }
             else
-                Recolors.LogFatal("Uh oh, something happened here in AssetManager.ChangeSpriteSheets");
+                Recolors.LogError("Uh oh, something happened here in AssetManager.ChangeSpriteSheets");
         }
         catch (Exception e)
         {
@@ -324,7 +324,12 @@ public static class AssetManager
                 var sprite = GetSprite(Utils.RoleName(y.role), false);
 
                 if (sprite != Blank)
+                {
+                    if (!CacheScrollSprites.ContainsKey(y.id))
+                        CacheScrollSprites[y.id] = y.decoration.sprite;
+
                     y.decoration.sprite = sprite;
+                }
                 else if (CacheScrollSprites.TryGetValue(y.id, out sprite))
                     y.decoration.sprite = sprite;
                 else
@@ -336,7 +341,12 @@ public static class AssetManager
                 var sprite = GetSprite(Utils.RoleName(y.role), false);
 
                 if (sprite != Blank)
+                {
+                    if (!CacheScrollSprites.ContainsKey(y.id))
+                        CacheScrollSprites[y.id] = y.decoration.sprite;
+
                     y.decoration.sprite = sprite;
+                }
                 else if (CacheScrollSprites.TryGetValue(y.id, out sprite))
                     y.decoration.sprite = sprite;
                 else

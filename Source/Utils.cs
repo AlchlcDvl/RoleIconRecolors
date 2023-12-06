@@ -165,4 +165,12 @@ public static class Utils
             return false;
         }
     }
+
+    public static string GetLevel(int value, bool attack) => value switch
+    {
+        1 => "Basic",
+        2 => "Powerful",
+        3 => attack ? "Unstoppable" : "Invincible",
+        _ => "None"
+    };
 }

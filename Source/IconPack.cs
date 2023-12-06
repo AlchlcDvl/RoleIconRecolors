@@ -40,7 +40,7 @@ public class IconPack
         VIPEEIcons.ForEach((x, y) => Recolors.LogMessage($"{Name} {x} has {y.Count} VIP Easter Egg sprite(s)!"));
         Recolors.LogMessage($"{Name} {VIPEEIcons.Count} VIP Easter Egg Assets loaded!");
 
-        if (Asset != null)
+        if (Asset)
             Recolors.LogMessage($"{Name} Sprite Asset exists!");
     }
 

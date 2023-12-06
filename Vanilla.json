@@ -169,6 +169,14 @@
         { "name": "Vampire" },
         { "name": "Vampire_Ability" },
         { "name": "CursedSoul" },
-        { "name": "CursedSoul_Ability" }
+        { "name": "CursedSoul_Ability" },
+        { "name": "AttackNone" },
+        { "name": "AttackBasic" },
+        { "name": "AttackPowerful" },
+        { "name": "AttackUnstoppable" },
+        { "name": "DefenseNone" },
+        { "name": "DefenseBasic" },
+        { "name": "DefensePowerful" },
+        { "name": "DefenseInvincible" }
     ]
 }
