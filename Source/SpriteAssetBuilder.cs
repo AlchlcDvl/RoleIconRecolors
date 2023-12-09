@@ -1,4 +1,3 @@
-using TMPro;
 using UnityEngine.TextCore;
 
 namespace RecolorsPlatformless;
@@ -54,7 +53,7 @@ public class SpriteAssetBuilder
 
         Asset.name = spriteAssetName;
         Asset.material = new(Shader.Find("TextMeshPro/Sprite"));
-        Asset.GetType().GetProperty("version").SetValue(Asset, "1.1.0");
+        Asset.version = "1.1.0";
         Asset.material.mainTexture = image;
         Asset.spriteSheet = image;
         Asset.UpdateLookupTables();
