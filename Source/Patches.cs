@@ -499,14 +499,16 @@ public static class PatchAttackDefensePopup
             return;
 
         var attack = AssetManager.GetSprite($"Attack{Utils.GetLevel(data.attack, true)}", false);
+        var icon1 = __instance.transform.Find("AttackIcon").Find("Icon").GetComponent<Image>();
 
-        if (attack != AssetManager.Blank)
-            __instance.transform.Find("AttackIcon").Find("Icon").GetComponent<Image>().sprite = attack;
+        if (attack != AssetManager.Blank && icon1)
+            icon1.sprite = attack;
 
         var defense = AssetManager.GetSprite($"Defense{Utils.GetLevel(data.defense, false)}", false);
+        var icon2 = __instance.transform.Find("DefenseIcon").Find("Icon").GetComponent<Image>();
 
-        if (defense != AssetManager.Blank)
-            __instance.transform.Find("DefenseIcon").Find("Icon").GetComponent<Image>().sprite = defense;
+        if (defense != AssetManager.Blank && icon2)
+            icon2.sprite = defense;
     }
 }
 
