@@ -13,12 +13,12 @@ public static class PatchRoleDeckBuilder
     {
         Recolors.LogMessage("Patching RoleCardListItem.SetData");
 
-        if (!Constants.EnableIcons || role.IsModifierCard())
+        if (!Constants.EnableIcons)
             return;
 
         var icon = AssetManager.GetSprite($"{Utils.RoleName(role)}", false);
 
-        if (__instance.roleImage != null && icon != AssetManager.Blank)
+        if (__instance.roleImage && icon != AssetManager.Blank)
             __instance.roleImage.sprite = icon;
     }
 }
@@ -30,12 +30,12 @@ public static class PatchRoleListPanel
     {
         Recolors.LogMessage("Patching RoleDeckListItem.SetData");
 
-        if (!Constants.EnableIcons || a_role.IsModifierCard() || a_isBan)
+        if (!Constants.EnableIcons || a_isBan)
             return;
 
         var icon = AssetManager.GetSprite($"{Utils.RoleName(a_role)}", false);
 
-        if (__instance.roleImage != null && icon != AssetManager.Blank)
+        if (__instance.roleImage && icon != AssetManager.Blank)
             __instance.roleImage.sprite = icon;
     }
 }
@@ -47,12 +47,12 @@ public static class PatchBrowserRoleListPanel
     {
         Recolors.LogMessage("Patching GameBrowserRoleDeckListItem.SetData");
 
-        if (!Constants.EnableIcons || a_role.IsModifierCard() || a_isBan)
+        if (!Constants.EnableIcons || a_isBan)
             return;
 
         var icon = AssetManager.GetSprite($"{Utils.RoleName(a_role)}", false);
 
-        if (__instance.roleImage != null && icon != AssetManager.Blank)
+        if (__instance.roleImage && icon != AssetManager.Blank)
             __instance.roleImage.sprite = icon;
     }
 }
@@ -86,12 +86,12 @@ public static class PatchRoleCards
         var name = Utils.RoleName(role);
         var sprite = AssetManager.GetSprite(name);
 
-        if (sprite != AssetManager.Blank && panel.roleIcon != null)
+        if (sprite != AssetManager.Blank && panel.roleIcon)
             panel.roleIcon.sprite = sprite;
 
         var special = AssetManager.GetSprite($"{name}_Special");
 
-        if (special != AssetManager.Blank && panel.specialAbilityPanel != null && !(role == Role.NECROMANCER && !Constants.IsNecroActive))
+        if (special != AssetManager.Blank && panel.specialAbilityPanel && !(role == Role.NECROMANCER && !Constants.IsNecroActive))
             panel.specialAbilityPanel.useButton.abilityIcon.sprite = special;
 
         var abilityname = $"{name}_Ability";
@@ -157,15 +157,15 @@ public static class AbilityPanelStartPatch
 
                 if (nommy != AssetManager.Blank)
                 {
-                    if (Pepper.GetMyRole() == Role.ILLUSIONIST && __instance.choice2Sprite != null)
+                    if (Pepper.GetMyRole() == Role.ILLUSIONIST && __instance.choice2Sprite)
                     {
                         __instance.choice2Sprite.sprite = nommy;
                         var illu = AssetManager.GetSprite("Illusionist_Ability", Constants.PlayerPanelEasterEggs);
 
-                        if (illu != AssetManager.Blank && __instance.choice1Sprite != null)
+                        if (illu != AssetManager.Blank && __instance.choice1Sprite)
                             __instance.choice1Sprite.sprite = illu;
                     }
-                    else if (__instance.choice1Sprite != null)
+                    else if (__instance.choice1Sprite)
                     {
                         __instance.choice1Sprite.sprite = nommy;
 
@@ -173,7 +173,7 @@ public static class AbilityPanelStartPatch
                         {
                             var target = AssetManager.GetSprite("Witch_Ability_2", Constants.PlayerPanelEasterEggs);
 
-                            if (target != AssetManager.Blank && __instance.choice2Sprite != null)
+                            if (target != AssetManager.Blank && __instance.choice2Sprite)
                                 __instance.choice2Sprite.sprite = target;
                         }
                     }
@@ -184,7 +184,7 @@ public static class AbilityPanelStartPatch
             case TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_ATTACK:
                 var attack = AssetManager.GetSprite("PotionMaster_Special", Constants.PlayerPanelEasterEggs);
 
-                if (attack != AssetManager.Blank && __instance.choice1Sprite != null)
+                if (attack != AssetManager.Blank && __instance.choice1Sprite)
                     __instance.choice1Sprite.sprite = attack;
 
                 break;
@@ -192,7 +192,7 @@ public static class AbilityPanelStartPatch
             case TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_HEAL:
                 var heal = AssetManager.GetSprite("PotionMaster_Ability_1", Constants.PlayerPanelEasterEggs);
 
-                if (heal != AssetManager.Blank && __instance.choice1Sprite != null)
+                if (heal != AssetManager.Blank && __instance.choice1Sprite)
                     __instance.choice1Sprite.sprite = heal;
 
                 break;
@@ -200,7 +200,7 @@ public static class AbilityPanelStartPatch
             case TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_REVEAL:
                 var reveal = AssetManager.GetSprite("PotionMaster_Ability_2", Constants.PlayerPanelEasterEggs);
 
-                if (reveal != AssetManager.Blank && __instance.choice1Sprite != null)
+                if (reveal != AssetManager.Blank && __instance.choice1Sprite)
                     __instance.choice1Sprite.sprite = reveal;
 
                 break;
@@ -208,7 +208,7 @@ public static class AbilityPanelStartPatch
             case TosAbilityPanelListItem.OverrideAbilityType.POISONER_POISON:
                 var poison = AssetManager.GetSprite("Poisoner_Special", Constants.PlayerPanelEasterEggs);
 
-                if (poison != AssetManager.Blank && __instance.choice1Sprite != null)
+                if (poison != AssetManager.Blank && __instance.choice1Sprite)
                     __instance.choice1Sprite.sprite = poison;
 
                 break;
@@ -216,7 +216,7 @@ public static class AbilityPanelStartPatch
             case TosAbilityPanelListItem.OverrideAbilityType.SHROUD:
                 var shroud = AssetManager.GetSprite("Shroud_Special", Constants.PlayerPanelEasterEggs);
 
-                if (shroud != AssetManager.Blank && __instance.choice1Sprite != null)
+                if (shroud != AssetManager.Blank && __instance.choice1Sprite)
                     __instance.choice1Sprite.sprite = shroud;
 
                 break;
@@ -224,7 +224,7 @@ public static class AbilityPanelStartPatch
             case TosAbilityPanelListItem.OverrideAbilityType.WEREWOLF_NON_FULL_MOON:
                 var sniff = AssetManager.GetSprite("Werewolf_Ability_2", Constants.PlayerPanelEasterEggs);
 
-                if (sniff != AssetManager.Blank && __instance.choice1Sprite != null)
+                if (sniff != AssetManager.Blank && __instance.choice1Sprite)
                     __instance.choice1Sprite.sprite = sniff;
 
                 break;
@@ -252,12 +252,12 @@ public static class AbilityPanelStartPatch
 
                 ability1 = AssetManager.GetSprite(abilityName, Constants.PlayerPanelEasterEggs);
 
-                if (ability1 != AssetManager.Blank && __instance.choice1Sprite != null)
+                if (ability1 != AssetManager.Blank && __instance.choice1Sprite)
                     __instance.choice1Sprite.sprite = ability1;
 
                 var ability2 = AssetManager.GetSprite($"{Utils.RoleName(role)}_Ability_2", Constants.PlayerPanelEasterEggs);
 
-                if (ability2 != AssetManager.Blank && __instance.choice2Sprite != null)
+                if (ability2 != AssetManager.Blank && __instance.choice2Sprite)
                     __instance.choice2Sprite.sprite = ability2;
 
                 break;
@@ -339,12 +339,12 @@ public static class PatchGuideRoleCards
         var name = Utils.RoleName(role);
         var sprite = AssetManager.GetSprite(name, false);
 
-        if (sprite != AssetManager.Blank && __instance.roleIcon != null)
+        if (sprite != AssetManager.Blank && __instance.roleIcon)
             __instance.roleIcon.sprite = sprite;
 
         var special = AssetManager.GetSprite($"{name}_Special");
 
-        if (special != AssetManager.Blank && __instance.specialAbilityPanel != null && role != Role.NECROMANCER)
+        if (special != AssetManager.Blank && __instance.specialAbilityPanel && role != Role.NECROMANCER)
             __instance.specialAbilityPanel.useButton.abilityIcon.sprite = special;
 
         var abilityname = $"{name}_Ability";
@@ -507,5 +507,31 @@ public static class PatchAttackDefensePopup
 
         if (defense != AssetManager.Blank)
             __instance.transform.Find("DefenseIcon").Find("Icon").GetComponent<Image>().sprite = defense;
+    }
+}
+
+[HarmonyPatch(typeof(TosAbilityPanelListItem), nameof(TosAbilityPanelListItem.SetKnownRole))]
+public static class FixApocNaming
+{
+    public static void Postfix(TosAbilityPanelListItem __instance, ref Role role)
+    {
+        if (role != Pepper.GetMyRole() || !role.IsApoc())
+            return;
+
+        if (Constants.IsTransformed)
+        {
+            role = role switch
+            {
+                Role.BAKER => Role.FAMINE,
+                Role.BERSERKER => Role.WAR,
+                Role.SOULCOLLECTOR => Role.DEATH,
+                Role.PLAGUEBEARER => Role.PESTILENCE,
+                _ => role
+            };
+        }
+
+        ColorUtility.TryParseHtmlString(role.GetFaction().GetFactionColor(), out var color);
+        __instance.playerRoleText.color = color;
+        __instance.playerRoleText.text = $"({role.ToDisplayString()})";
     }
 }

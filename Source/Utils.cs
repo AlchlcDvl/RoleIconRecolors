@@ -92,6 +92,16 @@ public static class Utils
         Role.NEUTRAL_EVIL => "NeutralEvil",
         Role.NEUTRAL_APOCALYPSE => "NeutralApocalypse",
         Role.ANY => "Any",
+        Role.TOWN_TRAITOR => "TownTraitor",
+        Role.NO_TOWN_HANGED => "NoTownHanged",
+        Role.GHOST_TOWN => "GhostTown",
+        Role.VIP => "VIP",
+        Role.SLOW_MODE => "SlowMode",
+        Role.FAST_MODE => "FastMode",
+        Role.ANONYMOUS_VOTES => "AnonVotes",
+        Role.KILLER_ROLES_HIDDEN => "HiddenKillers",
+        Role.ROLES_ON_DEATH_HIDDEN => "HiddenRoles",
+        Role.ONE_TRIAL_PER_DAY => "OneTrial",
         _ => "Blank"
     };
 
@@ -158,7 +168,7 @@ public static class Utils
     {
         try
         {
-            return list[index] != null;
+            return list[index];
         }
         catch
         {
@@ -173,4 +183,6 @@ public static class Utils
         3 => attack ? "Unstoppable" : "Invincible",
         _ => "None"
     };
+
+    public static bool IsApoc(this Role role) => role is Role.BERSERKER or Role.WAR or Role.BAKER or Role.FAMINE or Role.SOULCOLLECTOR or Role.DEATH or Role.PLAGUEBEARER or Role.PESTILENCE;
 }
