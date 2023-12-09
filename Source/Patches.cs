@@ -230,7 +230,21 @@ public static class AbilityPanelStartPatch
                 break;
 
             default:
-                var abilityName = $"{Utils.RoleName(Pepper.GetMyRole())}_Ability";
+                var role = Pepper.GetMyRole();
+
+                if (Constants.IsTransformed)
+                {
+                    role = role switch
+                    {
+                        Role.BAKER => Role.FAMINE,
+                        Role.BERSERKER => Role.WAR,
+                        Role.SOULCOLLECTOR => Role.DEATH,
+                        Role.PLAGUEBEARER => Role.PESTILENCE,
+                        _ => role
+                    };
+                }
+
+                var abilityName = $"{Utils.RoleName(role)}_Ability";
                 var ability1 = AssetManager.GetSprite(abilityName, Constants.PlayerPanelEasterEggs);
 
                 if (ability1 == AssetManager.Blank)
@@ -241,7 +255,7 @@ public static class AbilityPanelStartPatch
                 if (ability1 != AssetManager.Blank && __instance.choice1Sprite != null)
                     __instance.choice1Sprite.sprite = ability1;
 
-                var ability2 = AssetManager.GetSprite($"{Utils.RoleName(Pepper.GetMyRole())}_Ability_2", Constants.PlayerPanelEasterEggs);
+                var ability2 = AssetManager.GetSprite($"{Utils.RoleName(role)}_Ability_2", Constants.PlayerPanelEasterEggs);
 
                 if (ability2 != AssetManager.Blank && __instance.choice2Sprite != null)
                     __instance.choice2Sprite.sprite = ability2;
