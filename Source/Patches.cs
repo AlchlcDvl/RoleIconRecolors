@@ -108,7 +108,7 @@ public static class PatchRoleCards
             panel.roleInfoButtons[index].abilityIcon.sprite = ability1;
             index++;
         }
-        else if (AssetManager.Skippable(abilityname) || AssetManager.Skippable(abilityname.Replace("_1", "")))
+        else if (Utils.Skippable(abilityname) || Utils.Skippable(abilityname + "_1") || Utils.Skippable(abilityname.Replace("_1", "")))
             index++;
 
         var abilityname2 = $"{name}_Ability_2";
@@ -119,7 +119,7 @@ public static class PatchRoleCards
             panel.roleInfoButtons[index].abilityIcon.sprite = ability2;
             index++;
         }
-        else if (AssetManager.Skippable(abilityname2))
+        else if (Utils.Skippable(abilityname2))
             index++;
 
         var attributename = $"Attributes_{Utils.FactionName(Pepper.GetMyFaction(), role)}";
@@ -130,7 +130,7 @@ public static class PatchRoleCards
             panel.roleInfoButtons[index].abilityIcon.sprite = attribute;
             index++;
         }
-        else if (AssetManager.Skippable(attributename))
+        else if (Utils.Skippable(attributename))
             index++;
 
         var nommy = AssetManager.GetSprite("Necronomicon");
@@ -361,7 +361,7 @@ public static class PatchGuideRoleCards
             __instance.roleInfoButtons[index].abilityIcon.sprite = ability1;
             index++;
         }
-        else if (AssetManager.Skippable(abilityname) || AssetManager.Skippable(abilityname + "_1") || AssetManager.Skippable(abilityname.Replace("_1", "")))
+        else if (Utils.Skippable(abilityname) || Utils.Skippable(abilityname + "_1") || Utils.Skippable(abilityname.Replace("_1", "")))
             index++;
 
         var abilityname2 = $"{name}_Ability_2";
@@ -372,7 +372,7 @@ public static class PatchGuideRoleCards
             __instance.roleInfoButtons[index].abilityIcon.sprite = ability2;
             index++;
         }
-        else if (AssetManager.Skippable(abilityname2))
+        else if (Utils.Skippable(abilityname2))
             index++;
 
         var attributename = $"Attributes_{Utils.FactionName(role.GetFaction(), role)}";
@@ -383,7 +383,7 @@ public static class PatchGuideRoleCards
             __instance.roleInfoButtons[index].abilityIcon.sprite = attribute;
             index++;
         }
-        else if (AssetManager.Skippable(attributename))
+        else if (Utils.Skippable(attributename))
             index++;
 
         var nommy = AssetManager.GetSprite("Necronomicon", false);
