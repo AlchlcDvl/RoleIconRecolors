@@ -177,6 +177,17 @@
         { "name": "DefenseNone" },
         { "name": "DefenseBasic" },
         { "name": "DefensePowerful" },
-        { "name": "DefenseInvincible" }
+        { "name": "DefenseInvincible" },
+        { "name": "TownTraitor" },
+        { "name": "VIP" },
+        { "name": "NoTownHanged" },
+        { "name": "HiddenRoles" },
+        { "name": "HiddenKillers" },
+        { "name": "OneTrial" },
+        { "name": "GhostTown" },
+        { "name": "SlowMode" },
+        { "name": "FastMode" },
+        { "name": "AnonVotes" },
+        { "name": "Hidden" }
     ]
 }

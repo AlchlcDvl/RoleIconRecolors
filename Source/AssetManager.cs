@@ -14,19 +14,26 @@ public static class AssetManager
 
     public static Sprite Blank;
     public static Sprite Thumbnail;
-    public static Sprite DownloadRecolors;
-    public static Sprite DownloadVanilla;
     public static Sprite CursedSoul;
+    public static Sprite GhostTown;
     public static Sprite Vampire;
+
+    public static TMP_SpriteAsset Asset;
+    public static bool SpriteSheetLoaded;
 
     public static string ModPath => Path.Combine(Path.GetDirectoryName(Application.dataPath), "SalemModLoader", "ModFolders", "Recolors");
     public static string DefaultPath => Path.Combine(ModPath, "Recolors");
     public static string VanillaPath => Path.Combine(ModPath, "Vanilla");
+
     public static readonly string[] Folders = new[] { "Base", "TTBase", "VIPBase", "EasterEggs", "TTEasterEggs", "VIPEasterEggs" };
+
     private static readonly string[] Avoid = new[] { "Attributes", "Necronomicon", "Neutral", "NeutralApocalypse", "NeutralEvil", "NeutralKilling", "Town", "TownInvestigative",
         "TownKilling", "TownSupport", "TownProtective", "TownPower", "CovenKilling", "CovenDeception", "CovenUtility", "CovenPower", "Coven", "SlowMode", "FastMode", "AnonVotes",
         "HiddenKillers", "HiddenRoles", "OneTrial" };
+
     private static readonly string[] ToRemove = new[] { ".png" };
+
+    public static readonly Role[] ExceptRoles = { Role.NONE, Role.ROLE_COUNT, Role.UNKNOWN, Role.HANGMAN };
 
     private static Assembly Core => typeof(Recolors).Assembly;
 
@@ -38,7 +45,7 @@ public static class AssetManager
         if (!IconPacks.TryGetValue(Constants.CurrentPack, out var pack))
         {
             Recolors.LogError($"Error finding {Constants.CurrentPack} in loaded packs");
-            ModSettings.SetString("Selected Icon Pack", "Vanilla", "alchlcsystm.recolors.windows");
+            ModSettings.SetString("Selected Icon Pack", "Vanilla", "alchlcsystm.recolors");
             return Blank;
         }
 
@@ -152,14 +159,12 @@ public static class AssetManager
                     Blank = sprite;
                 else if (x.Contains("Thumbnail"))
                     Thumbnail = sprite;
-                else if (x.Contains("DownloadVanilla"))
-                    DownloadVanilla = sprite;
-                else if (x.Contains("DownloadRecolors"))
-                    DownloadRecolors = sprite;
                 else if (x.Contains("CursedSoul"))
                     CursedSoul = sprite;
                 else if (x.Contains("Vampire"))
                     Vampire = sprite;
+                else if (x.Contains("GhostTown"))
+                    GhostTown = sprite;
             }
         });
 
@@ -255,7 +260,7 @@ public static class AssetManager
         if (!Directory.Exists(folder))
         {
             Recolors.LogError($"{packName} was missing");
-            ModSettings.SetString("Selected Icon Pack", "Vanilla", "alchlcsystm.recolors.windows");
+            ModSettings.SetString("Selected Icon Pack", "Vanilla", "alchlcsystm.recolors");
             return;
         }
 
@@ -287,10 +292,10 @@ public static class AssetManager
     {
         try
         {
-            if (packName == "Vanilla" && CacheDefaultSpriteSheet.VanillaSheet)
+            if (packName == "Vanilla" && Asset)
             {
-                MaterialReferenceManager.instance.m_SpriteAssetReferenceLookup[CacheDefaultSpriteSheet.Cache] = CacheDefaultSpriteSheet.VanillaSheet;
-                MaterialReferenceManager.instance.m_FontMaterialReferenceLookup[CacheDefaultSpriteSheet.Cache] = CacheDefaultSpriteSheet.VanillaSheet.material;
+                MaterialReferenceManager.instance.m_SpriteAssetReferenceLookup[CacheDefaultSpriteSheet.Cache] = Asset;
+                MaterialReferenceManager.instance.m_FontMaterialReferenceLookup[CacheDefaultSpriteSheet.Cache] = Asset.material;
             }
             else if (packName != "Vanilla" && IconPacks.TryGetValue(packName, out var pack) && pack != null && pack.Asset)
             {
@@ -347,6 +352,83 @@ public static class AssetManager
         catch (Exception e)
         {
             Recolors.LogError(e);
+        }
+    }
+
+    //thanks stackoverflow and pat
+    //https://stackoverflow.com/questions/51315918/how-to-encodetopng-compressed-textures-in-unity
+    public static Texture2D Decompress(this Texture2D source)
+    {
+        var renderTex = RenderTexture.GetTemporary(source.width, source.height, 0, RenderTextureFormat.Default, RenderTextureReadWrite.Linear);
+        Graphics.Blit(source, renderTex);
+        var previous = RenderTexture.active;
+        RenderTexture.active = renderTex;
+        var readableText = new Texture2D(source.width, source.height);
+        readableText.ReadPixels(new(0, 0, renderTex.width, renderTex.height), 0, 0);
+        readableText.Apply();
+        RenderTexture.active = previous;
+        RenderTexture.ReleaseTemporary(renderTex);
+        return readableText;
+    }
+
+    // love ya pat
+    public static void LoadVanillaSpriteSheet(bool change)
+    {
+        try
+        {
+            if (SpriteSheetLoaded || Asset != null)
+                return;
+
+            SpriteSheetLoaded = true;
+
+            // these roles dont have sprites so just ignore them
+            var roles = ((Role[])Enum.GetValues(typeof(Role))).Except(ExceptRoles);
+
+            // map all roles to (role name, role number) so we can make a dict
+            var rolesWithIndex = roles.Select(role => (role.ToString().ToLower(), (int)role));
+
+            // dict allows us to find dict[rolename.tolower] and get Role{number} for later use in spritecharacters
+            var rolesWithIndexDict = rolesWithIndex.ToDictionary(rolesSelect => rolesSelect.Item1.ToLower(), rolesSelect => $"Role{rolesSelect.Item2}");
+            var textures = new List<Texture2D>();
+
+            // now get all the sprites that we want to load
+            foreach (var (role, roleInt) in rolesWithIndex)
+            {
+                var actualRole = (Role)roleInt;
+                var sprite = actualRole switch
+                {
+                    Role.VAMPIRE => Vampire,
+                    Role.CURSED_SOUL => CursedSoul,
+                    Role.GHOST_TOWN => GhostTown,
+                    _ => Service.Game.Roles.roleInfoLookup[actualRole].sprite
+                };
+                sprite.texture.name = role;
+                textures.Add(sprite.texture);
+            }
+
+            var assetBuilder = new SpriteAssetBuilder(256, 256, 10);
+            Asset = assetBuilder.BuildGlyphs(textures.ToArray(), "RoleIcons", x => x.name = rolesWithIndexDict[(x.glyph as TMP_SpriteGlyph).sprite.name.ToLower()]);
+            // set spritecharacter name to "Role{number}" so that the game can find correct roles
+            Recolors.LogMessage("Vanilla Sprite Asset loaded!");
+
+            if (change)
+            {
+                ChangeSpriteSheets("Vanilla");
+                Recolors.LogMessage("Vanilla Sprite Asset added!");
+            }
+
+            var assetPath = Path.Combine(VanillaPath, "RoleIcons_Modified.png");
+
+            if (File.Exists(assetPath))
+                File.Delete(assetPath);
+
+            File.WriteAllBytes(assetPath, (Asset.spriteSheet as Texture2D).Decompress().EncodeToPNG());
+        }
+        catch (Exception e)
+        {
+            Recolors.LogError(e);
+            Asset = null;
+            SpriteSheetLoaded = false;
         }
     }
 }

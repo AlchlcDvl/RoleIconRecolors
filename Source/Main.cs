@@ -16,9 +16,8 @@ public class Recolors
         try
         {
             AssetManager.LoadAssets();
-            DownloadRecolors.Icon = AssetManager.DownloadRecolors;
-            DownloadVanilla.Icon = AssetManager.DownloadVanilla;
             MenuButton.Icon = AssetManager.Thumbnail;
+            ModSettings.SetString("Download Recommended Icon Packs", "None", "alchlcsystm.recolors");
         }
         catch (Exception e)
         {
@@ -27,18 +26,6 @@ public class Recolors
 
         LogMessage("Recolored!", true);
     }
-
-    public static readonly SalemMenuButton DownloadVanilla = new()
-    {
-        Label = "Download Vanilla Icons",
-        OnClick = Download.DownloadVanilla
-    };
-
-    public static readonly SalemMenuButton DownloadRecolors = new()
-    {
-        Label = "Download Recolored Icons",
-        OnClick = Download.DownloadRecolors
-    };
 
     public static readonly SalemMenuButton MenuButton = new()
     {
@@ -61,6 +48,14 @@ public class Recolors
         Description = "The selected icon will start replacing the visible icons with the images you put in. If it can't find the valid image or pack, it will be replaced by the mod's default files\nVanilla - No pack selected",
         Options = GetPackNames(),
         OnChanged = AssetManager.TryLoadingSprites
+    };
+
+    public ModSettings.DropdownSetting DownloadIcons => new()
+    {
+        Name = "Download Recommended Icon Packs",
+        Description = "Downloads icon packs recommended by the mod creator\nVanilla - Icons used in the vanilla game to be used as a reference for icon packs",
+        Options = new() { "None", "Vanilla", "Recolors" },
+        OnChanged = Download.DownloadIcons
     };
 
     private static List<string> GetPackNames()

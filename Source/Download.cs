@@ -7,12 +7,9 @@ public static class Download
 {
     private const string REPO = "https://raw.githubusercontent.com/AlchlcDvl/RoleIconRecolors/main";
     private static bool DownloadRunning;
+    private static string[] SupportedPacks = new[] { "Vanilla", "Recolors" };
 
-    public static void DownloadVanilla() => DownloadIcons("Vanilla");
-
-    public static void DownloadRecolors() => DownloadIcons("Recolors");
-
-    private static void DownloadIcons(string packName)
+    public static void DownloadIcons(string packName)
     {
         if (DownloadRunning)
             return;
@@ -27,8 +24,7 @@ public static class Download
 
         try
         {
-            var status = await Fetch(packName);
-            Recolors.LogMessage(status != HttpStatusCode.OK ? $"{packName} icons could not be downloaded" : $"Fetched {packName} icons", true);
+            Recolors.LogMessage(await Fetch(packName) != HttpStatusCode.OK ? $"{packName} icons could not be downloaded" : $"Fetched {packName} icons", true);
         }
         catch (Exception e)
         {
@@ -40,7 +36,7 @@ public static class Download
 
     private static async Task<HttpStatusCode> Fetch(string packName)
     {
-        if (packName is not ("Vanilla" or "Recolors"))
+        if (!SupportedPacks.Contains(packName))
         {
             Recolors.LogError($"Wrong pack name {packName}");
             return HttpStatusCode.NotFound;
@@ -50,11 +46,11 @@ public static class Download
         {
             if (packName == "Vanilla" && Directory.Exists(AssetManager.VanillaPath))
                 new DirectoryInfo(AssetManager.VanillaPath).GetFiles("*.png").Select(x => x.FullName).ForEach(File.Delete);
-            else if (packName == "Recolors" && Directory.Exists(AssetManager.DefaultPath))
+            else if (Directory.Exists(Path.Combine(AssetManager.ModPath, packName)))
             {
                 foreach (var folder in AssetManager.Folders)
                 {
-                    var dir = Path.Combine(AssetManager.DefaultPath, folder);
+                    var dir = Path.Combine(Path.Combine(AssetManager.ModPath, packName), folder);
 
                     if (Directory.Exists(dir))
                         new DirectoryInfo(dir).GetFiles("*.png").Select(x => x.FullName).ForEach(File.Delete);
@@ -74,7 +70,6 @@ public static class Download
                 return response.StatusCode;
             }
 
-            var assets = new List<Asset>();
             var json = await response.Content.ReadAsStringAsync();
             var jobj = JObject.Parse(json)[packName.ToLower()];
 
@@ -83,6 +78,8 @@ public static class Download
                 Recolors.LogError("JSON Parse failed");
                 return HttpStatusCode.ExpectationFailed;
             }
+
+            var assets = new List<Asset>();
 
             for (var current = jobj.First; current != null; current = current.Next)
             {
@@ -95,20 +92,13 @@ public static class Download
                     Folder = current["folder"]?.ToString() ?? "Vanilla",
                     Pack = packName
                 };
-                Recolors.LogMessage(info.Name + " " + info.Folder + " " + info.Pack);
+                Recolors.LogMessage(info.DownloadLink());
                 assets.Add(info);
             }
 
             foreach (var file in assets)
             {
-                var path = "";
-
-                if (packName == "Vanilla")
-                    path = file.Name;
-                else if (packName == "Recolors")
-                    path = $"{file.Folder}/{file.Name}";
-
-                using var fileresponse = await client.GetAsync($"{REPO}/{packName}/{path}.png", HttpCompletionOption.ResponseContentRead);
+                using var fileresponse = await client.GetAsync($"{REPO}/{file.DownloadLink()}", HttpCompletionOption.ResponseContentRead);
 
                 if (fileresponse.StatusCode != HttpStatusCode.OK)
                 {
@@ -120,7 +110,9 @@ public static class Download
                 File.WriteAllBytes(file.FilePath(), array);
             }
 
-            AssetManager.TryLoadingSprites(packName);
+            if (packName != "Vanilla")
+                AssetManager.TryLoadingSprites(packName);
+
             Recolors.Open();
             return HttpStatusCode.OK;
         }
@@ -140,9 +132,17 @@ public class Asset
 
     public string FilePath()
     {
-        if (Folder == "" || Pack == "Vanilla")
+        if (Folder is "" or "Vanilla" || Pack == "Vanilla")
             return Path.Combine(AssetManager.VanillaPath, $"{Name}.png");
         else
             return Path.Combine(AssetManager.ModPath, Pack, Folder, $"{Name}.png");
+    }
+
+    public string DownloadLink()
+    {
+        if (Folder is "" or "Vanilla" || Pack == "Vanilla")
+            return $"Vanilla/{Name}.png";
+        else
+            return $"{Pack}/{Folder}/{Name}.png";
     }
 }

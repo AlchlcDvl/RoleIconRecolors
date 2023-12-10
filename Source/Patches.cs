@@ -311,6 +311,7 @@ public static class PatchRoleService
         if (AssetManager.IconPacks.TryGetValue(Constants.CurrentPack, out var pack))
             pack.LoadSpriteSheet(true);
 
+        AssetManager.LoadVanillaSpriteSheet(!Constants.EnableIcons);
         ServiceExists = true;
     }
 }
@@ -438,7 +439,7 @@ public static class CacheDefaultSpriteSheet
             var asset = __instance.LoadResource<TMP_SpriteAsset>($"TmpSpriteAssets/{key}.asset");
             MaterialReferenceManager.AddSpriteAsset(asset);
 
-            if (key.Contains("RoleIcons"))
+            if (key == "RoleIcons")
             {
                 Cache = asset.hashCode;
                 VanillaSheet = asset;

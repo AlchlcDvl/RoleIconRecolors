@@ -110,6 +110,7 @@ public static class Utils
         Role.KILLER_ROLES_HIDDEN => "HiddenKillers",
         Role.ROLES_ON_DEATH_HIDDEN => "HiddenRoles",
         Role.ONE_TRIAL_PER_DAY => "OneTrial",
+        Role.HIDDEN => "Hidden",
         _ => "Blank"
     };
 

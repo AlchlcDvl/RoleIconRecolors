@@ -11,8 +11,7 @@ public class IconPack
     public string Name { get; }
     public TMP_SpriteAsset Asset;
     public bool SpriteSheetLoaded;
-
-    private static readonly Role[] ExceptRoles = { Role.NONE, Role.ROLE_COUNT, Role.UNKNOWN, Role.HANGMAN };
+    public string PackPath => Path.Combine(AssetManager.ModPath, Name);
 
     public IconPack(string name)
     {
@@ -229,7 +228,7 @@ public class IconPack
             SpriteSheetLoaded = true;
 
             // these roles dont have sprites so just ignore them
-            var roles = ((Role[])Enum.GetValues(typeof(Role))).Except(ExceptRoles);
+            var roles = ((Role[])Enum.GetValues(typeof(Role))).Except(AssetManager.ExceptRoles);
 
             // map all roles to (role name, role number) so we can make a dict
             var rolesWithIndex = roles.Select(role => (role.ToString().ToLower(), (int)role));
@@ -249,6 +248,7 @@ public class IconPack
                     {
                         Role.VAMPIRE => AssetManager.Vampire,
                         Role.CURSED_SOUL => AssetManager.CursedSoul,
+                        Role.GHOST_TOWN => AssetManager.GhostTown,
                         _ => Service.Game.Roles.roleInfoLookup[actualRole].sprite
                     };
                 }
@@ -267,6 +267,13 @@ public class IconPack
                 AssetManager.ChangeSpriteSheets(Name);
                 Recolors.LogMessage($"{Name} Sprite Asset added!");
             }
+
+            var assetPath = Path.Combine(PackPath, $"{Name.Replace(" ", "")}_RoleIcons.png");
+
+            if (File.Exists(assetPath))
+                File.Delete(assetPath);
+
+            File.WriteAllBytes(assetPath, (Asset.spriteSheet as Texture2D).Decompress().EncodeToPNG());
         }
         catch (Exception e)
         {
