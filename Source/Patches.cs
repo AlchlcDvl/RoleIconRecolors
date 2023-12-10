@@ -257,6 +257,14 @@ public static class AbilityPanelStartPatch
 
                 var ability2 = AssetManager.GetSprite($"{Utils.RoleName(role)}_Ability_2", Constants.PlayerPanelEasterEggs);
 
+                if (ability2 == AssetManager.Blank && role == Role.JAILOR && ModStates.IsLoaded("dum.oldjailor"))
+                {
+                    ability2 = AssetManager.GetSprite("Jailor_Special", Constants.PlayerPanelEasterEggs);
+
+                    if (ability2 == AssetManager.Blank)
+                        ability2 = AssetManager.JailorSpecial;
+                }
+
                 if (ability2 != AssetManager.Blank && __instance.choice2Sprite)
                     __instance.choice2Sprite.sprite = ability2;
 

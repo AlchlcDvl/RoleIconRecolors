@@ -5,6 +5,7 @@
   "Description": "The customisation mod for most in-game icons! Credits to MysticMismagius, Haap, Fucker and Nidoskull for the Recolors artwork and Pat for coding help!",
   "Version": "1.1.0",
   "Discord": "https://discord.gg/cd27aDQDY9",
+  "Platforms": [ "Windows", "Mac" ],
   "Settings":
   {
     "CheckboxSettings":
