@@ -517,6 +517,8 @@ public static class FixApocNaming
 {
     public static void Postfix(TosAbilityPanelListItem __instance, ref Role role)
     {
+        Recolors.LogMessage("Patching TosAbilityPanelListItem.SetKnownRole");
+
         if (role != Pepper.GetMyRole() || !role.IsApoc())
             return;
 
