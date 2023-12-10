@@ -443,6 +443,13 @@ public static class CacheDefaultSpriteSheet
             {
                 Cache = asset.hashCode;
                 VanillaSheet = asset;
+
+                var assetPath = Path.Combine(AssetManager.VanillaPath, $"{key}.png");
+
+                if (File.Exists(assetPath))
+                    File.Delete(assetPath);
+
+                File.WriteAllBytes(assetPath, (asset.spriteSheet as Texture2D).Decompress().EncodeToPNG());
             }
         });
         __instance.isReady_ = true;
