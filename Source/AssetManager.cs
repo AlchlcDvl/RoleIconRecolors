@@ -379,7 +379,7 @@ public static class AssetManager
     {
         try
         {
-            if (SpriteSheetLoaded || Asset != null)
+            if (SpriteSheetLoaded || Asset)
                 return;
 
             SpriteSheetLoaded = true;
