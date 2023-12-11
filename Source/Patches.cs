@@ -327,7 +327,7 @@ public static class PatchRoleService
 [HarmonyPatch(typeof(ApplicationController), nameof(ApplicationController.QuitGame))]
 public static class ExitGamePatch
 {
-    public static void Postfix()
+    public static void Prefix()
     {
         Recolors.LogMessage("Patching ApplicationController.QuitGame");
         Utils.SaveLogs();
