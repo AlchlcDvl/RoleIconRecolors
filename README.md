@@ -29,15 +29,14 @@ With this mod you can edit (most) renditions of game icons to your own liking! P
 
 # Pack Creation
 
-- Step 1: In the main menu, go to `Mod Actions` and click on the `Download Vanilla Icons`. Wait a while as the mod downloads the required icons. When the download is over, it should open a file explorer window. Close the game.
+- Step 1: Navigate to the mod menu for Icon Packs. Find the `Download Recommended Icon Packs` and change its value to `Vanilla`. Wait a while as the mod downloads the required icons. When the download is over, it should open a file explorer window. Exit the menu.
 - Step 2: Create a folder and name it something you want your icon pack to be.
-- Step 3: Start the game again and select your icon pack in the `Selected Icon Pack` drop down setting. Close the game.
-- Step 4: Go back to your file explorer and enter the folder for your icon pack.
-- Step 5: Read the [folders](#folders) section and create the folder you need for your icons.
+- Step 3: Navigate to the mod menu again and select your icon pack in the `Selected Icon Pack` drop down setting.
+- Step 4: Go back to your file explorer and enter the folder for your icon pack. There should be some folders made for you.
+- Step 5: Read the [folders](#folders) section.
 - Step 6: Create your icon using a 256x256 image canvas (you can also do so by making it edit a vanilla icon and just delete the vanilla icon later if needed).
-- Step 7: Place your image in the required folder and rename it as per the [image rules](#image-rules).
-- Step 8: Open the game.
-- Step 9: Your icon pack should load on game start up, changing the value of `Selected Icon Pack` will make it load the new pack's icons. Beware, when changing icons, there will be a lag spike as it loads everything. Note: Mentions will not load unless you restart the game.
+- Step 7: Place your image in the required folder and name the image as per the [image rules](#image-rules) section.
+- Step 8: Change the value of `Selected Icon Pack` to `Vanilla` and then reselect your icon pack. Beware, there will be a lag spike as it loads everything. Note: Mentions may not load unless you restart the game.
 
 -----------------------
 
@@ -56,7 +55,7 @@ With this mod you can edit (most) renditions of game icons to your own liking! P
 For a proper icon pack to function, you have to use at least one of `Base`, `TTBase` or `VIPBase` folder names.
 
 `Base` is the folder that changes the icons all the time.\
-`TTBase` is the folder where the icosn in it will only appear when you are the Town Traitor.\
+`TTBase` is the folder where the icons in it will only appear when you are the Town Traitor.\
 `VIPBase` is the folder where the icons within in will appear only when you are the VIP.\
 The easter egg folders (`EasterEggs`, `TTEasterEggs` and `VIPEasterEggs`) can have as many icons as needed and will only appear with a small chance to replace the actual icons in the corresponding folders.
 
