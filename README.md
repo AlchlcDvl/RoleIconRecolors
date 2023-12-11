@@ -29,7 +29,7 @@ With this mod you can edit (most) renditions of game icons to your own liking! P
 
 # Pack Creation
 
-- Step 1: Navigate to the mod menu for Icon Packs. Find the `Download Recommended Icon Packs` and change its value to `Vanilla`. Wait a while as the mod downloads the required icons. When the download is over, it should open a file explorer window. Exit the menu.
+- Step 1: Navigate to the mod menu for Icon Packs. Find the `Download Recommended Icon Packs` setting and change its value to `Vanilla`. Wait a while as the mod downloads the required icons. When the download is over, it should open a file explorer window. Exit the menu.
 - Step 2: Create a folder and name it something you want your icon pack to be.
 - Step 3: Navigate to the mod menu again and select your icon pack in the `Selected Icon Pack` drop down setting.
 - Step 4: Go back to your file explorer and enter the folder for your icon pack. There should be some folders made for you.
