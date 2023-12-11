@@ -13,7 +13,7 @@
 
 # Icon Packs Mod
 
-With this mod you can edit (most) renditions of game icons to your own liking! Paired with the Color Swapper and Text Editor mod, you now have a fully customisable game experience!
+With this mod you can edit (most) renditions of game icons to your own liking! Paired with the Color Swapper and Text Editor mod, you now have a (mostly) fully customisable game experience!
 
 -----------------------
 
