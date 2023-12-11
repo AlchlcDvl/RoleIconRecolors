@@ -53,7 +53,7 @@ public class Recolors
     public ModSettings.DropdownSetting DownloadIcons => new()
     {
         Name = "Download Recommended Icon Packs",
-        Description = "Downloads icon packs recommended by the mod creator\nVanilla - Icons used in the vanilla game to be used as a reference for icon packs",
+        Description = "Downloads icon packs recommended by the mod creator\nVanilla - Icons used in the vanilla game to be used as a reference for icon packs\nRecolors - Art by MysticMismagius, Haap, Fucker and Nidoskull",
         Options = new() { "None", "Vanilla", "Recolors" },
         OnChanged = Download.DownloadIcons
     };
