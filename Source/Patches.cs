@@ -555,3 +555,20 @@ public static class FixApocNaming
         __instance.playerRoleText.text = $"({role.ToDisplayString()})";
     }
 }
+
+[HarmonyPatch(typeof(PlayerPopupController), nameof(PlayerPopupController.SetRoleIcon))]
+public static class PlayerPopupControllerPatch
+{
+    public static void Postfix(PlayerPopupController __instance)
+    {
+        Recolors.LogMessage("Patching PlayerPopupController.SetRoleIcon");
+
+        if (!Constants.EnableIcons)
+            return;
+
+        var sprite = AssetManager.GetSprite(Utils.RoleName(__instance.m_role));
+
+        if (sprite != AssetManager.Blank)
+            __instance.RoleIcon.sprite = sprite;
+    }
+}
