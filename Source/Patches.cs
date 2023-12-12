@@ -514,17 +514,17 @@ public static class PatchAttackDefensePopup
         if (!Constants.EnableIcons)
             return;
 
-        var attack = AssetManager.GetSprite($"Attack{Utils.GetLevel(data.attack, true)}", false);
+        var attack = AssetManager.GetSprite($"Attack{Utils.GetLevel(data.attack, true)}");
         var icon1 = __instance.transform.Find("AttackIcon").Find("Icon").GetComponent<Image>();
 
-        if (attack != AssetManager.Blank && icon1)
-            icon1.sprite = attack;
+        if (icon1)
+            icon1.sprite = attack != AssetManager.Blank ? attack : AssetManager.Attack;
 
-        var defense = AssetManager.GetSprite($"Defense{Utils.GetLevel(data.defense, false)}", false);
+        var defense = AssetManager.GetSprite($"Defense{Utils.GetLevel(data.defense, false)}");
         var icon2 = __instance.transform.Find("DefenseIcon").Find("Icon").GetComponent<Image>();
 
-        if (defense != AssetManager.Blank && icon2)
-            icon2.sprite = defense;
+        if (icon2)
+            icon2.sprite = defense != AssetManager.Blank ? defense : AssetManager.Defense;
     }
 }
 
@@ -568,7 +568,7 @@ public static class PlayerPopupControllerPatch
 
         var sprite = AssetManager.GetSprite(Utils.RoleName(__instance.m_role));
 
-        if (sprite != AssetManager.Blank)
+        if (sprite != AssetManager.Blank && __instance.RoleIcon)
             __instance.RoleIcon.sprite = sprite;
     }
 }

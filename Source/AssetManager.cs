@@ -18,6 +18,8 @@ public static class AssetManager
     public static Sprite GhostTown;
     public static Sprite Vampire;
     public static Sprite JailorSpecial;
+    public static Sprite Attack;
+    public static Sprite Defense;
 
     public static TMP_SpriteAsset Asset;
     public static bool SpriteSheetLoaded;
@@ -168,6 +170,10 @@ public static class AssetManager
                     GhostTown = sprite;
                 else if (x.Contains("JailorSpecial"))
                     JailorSpecial = sprite;
+                else if (x.Contains("Attack"))
+                    Attack = sprite;
+                else if (x.Contains("Defense"))
+                    Defense = sprite;
             }
         });
 
