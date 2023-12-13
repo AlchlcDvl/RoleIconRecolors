@@ -35,7 +35,7 @@ public class Recolors
 
     public static void Open()
     {
-        //code stolen from jan who stole from tuba
+        // code stolen from jan who stole from tuba
         if (Environment.OSVersion.Platform is PlatformID.MacOSX or PlatformID.Unix)
             Process.Start("open", $"\"{AssetManager.ModPath}\"");
         else

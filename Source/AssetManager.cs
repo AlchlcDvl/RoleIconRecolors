@@ -364,8 +364,8 @@ public static class AssetManager
         }
     }
 
-    //thanks stackoverflow and pat
-    //https://stackoverflow.com/questions/51315918/how-to-encodetopng-compressed-textures-in-unity
+    // thanks stackoverflow and pat
+    // https://stackoverflow.com/questions/51315918/how-to-encodetopng-compressed-textures-in-unity
     public static Texture2D Decompress(this Texture2D source)
     {
         var renderTex = RenderTexture.GetTemporary(source.width, source.height, 0, RenderTextureFormat.Default, RenderTextureReadWrite.Linear);

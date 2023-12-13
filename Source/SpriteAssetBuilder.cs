@@ -1,6 +1,6 @@
 namespace RecolorsPlatformless;
 
-//Courtesy of pat, love ya mate
+// courtesy of pat, love ya mate
 public static class SpriteAssetBuilder
 {
     public static TMP_SpriteAsset BuildGlyphs(Texture2D[] textures, string spriteAssetName, Action<TMP_SpriteCharacter> action)
