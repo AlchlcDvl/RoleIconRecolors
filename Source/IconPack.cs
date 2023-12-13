@@ -257,8 +257,7 @@ public class IconPack
                 textures.Add(sprite.texture);
             }
 
-            var assetBuilder = new SpriteAssetBuilder(256, 256, 10);
-            Asset = assetBuilder.BuildGlyphs(textures.ToArray(), $"RoleIcons ({Name})", x => x.name = rolesWithIndexDict[(x.glyph as TMP_SpriteGlyph).sprite.name.ToLower()]);
+            Asset = SpriteAssetBuilder.BuildGlyphs(textures.ToArray(), $"RoleIcons ({Name})", x => x.name = rolesWithIndexDict[(x.glyph as TMP_SpriteGlyph).sprite.name.ToLower()]);
             // set spritecharacter name to "Role{number}" so that the game can find correct roles
             Recolors.LogMessage($"{Name} Sprite Asset loaded!");
 
