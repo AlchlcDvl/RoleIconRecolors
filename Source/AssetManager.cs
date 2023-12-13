@@ -415,8 +415,7 @@ public static class AssetManager
                 textures.Add(sprite.texture);
             }
 
-            var assetBuilder = new SpriteAssetBuilder(256, 256, 10);
-            Asset = assetBuilder.BuildGlyphs(textures.ToArray(), "RoleIcons", x => x.name = rolesWithIndexDict[(x.glyph as TMP_SpriteGlyph).sprite.name.ToLower()]);
+            Asset = SpriteAssetBuilder.BuildGlyphs(textures.ToArray(), "RoleIcons", x => x.name = rolesWithIndexDict[(x.glyph as TMP_SpriteGlyph).sprite.name.ToLower()]);
             // set spritecharacter name to "Role{number}" so that the game can find correct roles
             Recolors.LogMessage("Vanilla Sprite Asset loaded!");
 
