@@ -1,5 +1,3 @@
-using Home.Services;
-
 namespace RecolorsPlatformless;
 
 public static class AssetManager
@@ -17,9 +15,14 @@ public static class AssetManager
     public static Sprite CursedSoul;
     public static Sprite GhostTown;
     public static Sprite Vampire;
-    public static Sprite JailorSpecial;
     public static Sprite Attack;
     public static Sprite Defense;
+
+    public static Sprite JailorSpecial;
+    public static Sprite PirateSpecial;
+    public static Sprite NecroSpecial;
+    public static Sprite AdmirerSpecial;
+    public static Sprite MayorSpecial;
 
     public static TMP_SpriteAsset Asset;
     public static bool SpriteSheetLoaded;
@@ -35,8 +38,6 @@ public static class AssetManager
         "HiddenKillers", "HiddenRoles", "OneTrial" };
 
     private static readonly string[] ToRemove = new[] { ".png" };
-
-    public static readonly Role[] ExceptRoles = { Role.NONE, Role.ROLE_COUNT, Role.UNKNOWN, Role.HANGMAN };
 
     private static Assembly Core => typeof(Recolors).Assembly;
 
@@ -170,10 +171,14 @@ public static class AssetManager
                     GhostTown = sprite;
                 else if (x.Contains("JailorSpecial"))
                     JailorSpecial = sprite;
-                else if (x.Contains("Attack"))
-                    Attack = sprite;
-                else if (x.Contains("Defense"))
-                    Defense = sprite;
+                else if (x.Contains("PirateSpecial"))
+                    PirateSpecial = sprite;
+                else if (x.Contains("NecroSpecial"))
+                    NecroSpecial = sprite;
+                else if (x.Contains("AdmirerSpecial"))
+                    AdmirerSpecial = sprite;
+                else if (x.Contains("MayorSpecial"))
+                    MayorSpecial = sprite;
             }
         });
 
@@ -288,7 +293,7 @@ public static class AssetManager
                     exists.LoadSpriteSheet(true);
 
                 if (PatchScrolls.ServiceExists)
-                    SetScrollSprites(Service.Home.Scrolls);
+                    SetScrollSprites();
             }
         }
         catch (Exception e)
@@ -299,6 +304,9 @@ public static class AssetManager
 
     public static void ChangeSpriteSheets(string packName)
     {
+        IconPack pack = null;
+        TMP_SpriteAsset asset = null;
+
         try
         {
             if (packName == "Vanilla" && Asset)
@@ -306,25 +314,77 @@ public static class AssetManager
                 MaterialReferenceManager.instance.m_SpriteAssetReferenceLookup[CacheDefaultSpriteSheet.Cache] = Asset;
                 MaterialReferenceManager.instance.m_FontMaterialReferenceLookup[CacheDefaultSpriteSheet.Cache] = Asset.material;
             }
-            else if (packName != "Vanilla" && IconPacks.TryGetValue(packName, out var pack) && pack != null && pack.Asset)
+            else if (packName != "Vanilla" && IconPacks.TryGetValue(packName, out pack) && pack != null && pack.MentionStyles.TryGetValue(Constants.CurrentStyle, out asset) && asset)
             {
-                MaterialReferenceManager.instance.m_SpriteAssetReferenceLookup[CacheDefaultSpriteSheet.Cache] = pack.Asset;
-                MaterialReferenceManager.instance.m_FontMaterialReferenceLookup[CacheDefaultSpriteSheet.Cache] = pack.Asset.material;
+                MaterialReferenceManager.instance.m_SpriteAssetReferenceLookup[CacheDefaultSpriteSheet.Cache] = asset;
+                MaterialReferenceManager.instance.m_FontMaterialReferenceLookup[CacheDefaultSpriteSheet.Cache] = asset.material;
             }
-            else
-                Recolors.LogError("Uh oh, something happened here in AssetManager.ChangeSpriteSheets");
         }
         catch (Exception e)
         {
-            Recolors.LogError(e);
+            var diagnostic = $"Uh oh, something happened here in AssetManager.ChangeSpriteSheets\nPack Name: {packName}\nStyle Name: {Constants.CurrentStyle}";
+
+            if (!Asset)
+                diagnostic += "\nVanilla Sheet Does Not Exist";
+
+            if (packName != "Vanilla" && !IconPacks.TryGetValue(packName, out pack))
+                diagnostic += "\nNo Loaded Icon Pack";
+            else if (pack == null)
+                diagnostic += "\nLoaded Icon Pack Was Null";
+            else if (!pack.MentionStyles.TryGetValue(Constants.CurrentStyle, out asset))
+                diagnostic += "\nLoaded Icon Pack Does Not Have A Valid Mention Style";
+            else if (!asset)
+                diagnostic += "\nLoaded Mention Style Was Null";
+
+            diagnostic += $"\nError: {e}";
+            Recolors.LogError(diagnostic);
         }
     }
 
-    public static void SetScrollSprites(HomeScrollService __instance)
+    public static void ChangeSpriteSheetStyles(string styleName)
+    {
+        IconPack pack = null;
+        TMP_SpriteAsset asset = null;
+
+        try
+        {
+            if (styleName == "Vanilla" && Asset)
+            {
+                MaterialReferenceManager.instance.m_SpriteAssetReferenceLookup[CacheDefaultSpriteSheet.Cache] = Asset;
+                MaterialReferenceManager.instance.m_FontMaterialReferenceLookup[CacheDefaultSpriteSheet.Cache] = Asset.material;
+            }
+            else if (styleName != "Vanilla" && IconPacks.TryGetValue(Constants.CurrentPack, out pack) && pack != null && pack.MentionStyles.TryGetValue(styleName, out asset) && asset)
+            {
+                MaterialReferenceManager.instance.m_SpriteAssetReferenceLookup[CacheDefaultSpriteSheet.Cache] = asset;
+                MaterialReferenceManager.instance.m_FontMaterialReferenceLookup[CacheDefaultSpriteSheet.Cache] = asset.material;
+            }
+        }
+        catch (Exception e)
+        {
+            var diagnostic = $"Uh oh, something happened here in AssetManager.ChangeSpriteSheets\nPack Name: {Constants.CurrentPack}\nStyle Name: {styleName}";
+
+            if (!Asset)
+                diagnostic += "\nVanilla Sheet Does Not Exist";
+
+            if (Constants.CurrentPack != "Vanilla" && !IconPacks.TryGetValue(Constants.CurrentPack, out pack))
+                diagnostic += "\nNo Loaded Icon Pack";
+            else if (pack == null)
+                diagnostic += "\nLoaded Icon Pack Was Null";
+            else if (!pack.MentionStyles.TryGetValue(styleName, out asset))
+                diagnostic += "\nLoaded Icon Pack Does Not Have A Valid Mention Style";
+            else if (!asset)
+                diagnostic += "\nLoaded Mention Style Was Null";
+
+            diagnostic += $"\nError: {e}";
+            Recolors.LogError(diagnostic);
+        }
+    }
+
+    public static void SetScrollSprites()
     {
         try
         {
-            __instance.scrollInfoLookup_.ForEach((_, y) =>
+            Service.Home.Scrolls.scrollInfoLookup_.ForEach((_, y) =>
             {
                 var sprite = GetSprite(Utils.RoleName(y.role), false);
 
@@ -341,7 +401,7 @@ public static class AssetManager
                     CacheScrollSprites[y.id] = y.decoration.sprite;
             });
 
-            __instance.cursedScrollInfoLookup_.ForEach((_, y) =>
+            Service.Home.Scrolls.cursedScrollInfoLookup_.ForEach((_, y) =>
             {
                 var sprite = GetSprite(Utils.RoleName(y.role), false);
 
@@ -389,34 +449,20 @@ public static class AssetManager
                 return;
 
             SpriteSheetLoaded = true;
-
-            // these roles dont have sprites so just ignore them
-            var roles = ((Role[])Enum.GetValues(typeof(Role))).Except(ExceptRoles);
-
-            // map all roles to (role name, role number) so we can make a dict
-            var rolesWithIndex = roles.Select(role => (role.ToString().ToLower(), (int)role));
-
-            // dict allows us to find dict[rolename.tolower] and get Role{number} for later use in spritecharacters
-            var rolesWithIndexDict = rolesWithIndex.ToDictionary(rolesSelect => rolesSelect.Item1.ToLower(), rolesSelect => $"Role{rolesSelect.Item2}");
+            var (rolesWithIndexDict, rolesWithIndex) = Utils.Filtered();
             var textures = new List<Texture2D>();
 
             // now get all the sprites that we want to load
             foreach (var (role, roleInt) in rolesWithIndex)
             {
                 var actualRole = (Role)roleInt;
-                var sprite = actualRole switch
-                {
-                    Role.VAMPIRE => Vampire,
-                    Role.CURSED_SOUL => CursedSoul,
-                    Role.GHOST_TOWN => GhostTown,
-                    _ => Service.Game.Roles.roleInfoLookup[actualRole].sprite
-                };
+                var sprite = Service.Game.Roles.roleInfoLookup[actualRole].sprite;
                 sprite.texture.name = role;
                 textures.Add(sprite.texture);
             }
 
-            Asset = SpriteAssetBuilder.BuildGlyphs(textures.ToArray(), "RoleIcons", x => x.name = rolesWithIndexDict[(x.glyph as TMP_SpriteGlyph).sprite.name.ToLower()]);
             // set spritecharacter name to "Role{number}" so that the game can find correct roles
+            Asset = BuildGlyphs(textures.ToArray(), "RoleIcons", x => x.name = rolesWithIndexDict[(x.glyph as TMP_SpriteGlyph).sprite.name.ToLower()]);
             Recolors.LogMessage("Vanilla Sprite Asset loaded!");
 
             if (change)
@@ -438,5 +484,60 @@ public static class AssetManager
             Asset = null;
             SpriteSheetLoaded = false;
         }
+    }
+
+    // courtesy of pat, love ya mate
+    public static TMP_SpriteAsset BuildGlyphs(Texture2D[] textures, string spriteAssetName, Action<TMP_SpriteCharacter> action)
+    {
+        var asset = ScriptableObject.CreateInstance<TMP_SpriteAsset>();
+        var image = new Texture2D(2048, 2048) { name = spriteAssetName };
+        var rects = image.PackTextures(textures, 2);
+
+        for (uint i = 0; i < rects.Length; i++)
+        {
+            var sprite = Sprite.Create(textures[i], new(0, 0, textures[i].width, textures[i].height), new(0, 0), 100);
+            sprite.name = textures[i].name;
+
+            var glyph = new TMP_SpriteGlyph()
+            {
+                glyphRect = new()
+                {
+                    x = (int)(rects[i].x * image.width),
+                    y = (int)(rects[i].y * image.height),
+                    width = (int)(rects[i].width * image.width),
+                    height = (int)(rects[i].height * image.height),
+                },
+                metrics = new()
+                {
+                    width = textures[i].width,
+                    height = textures[i].height,
+                    horizontalBearingY = textures[i].width * 0.75f,
+                    horizontalBearingX = 0,
+                    horizontalAdvance = textures[i].width
+                },
+                index = i,
+                sprite = sprite,
+            };
+
+            var character = new TMP_SpriteCharacter(0, glyph)
+            {
+                name = textures[i].name,
+                glyphIndex = i,
+            };
+
+            // renaming to $"Role{(int)Role}" should occur here
+            action?.Invoke(character);
+
+            asset.spriteGlyphTable.Add(glyph);
+            asset.spriteCharacterTable.Add(character);
+        }
+
+        asset.name = spriteAssetName;
+        asset.material = new(Shader.Find("TextMeshPro/Sprite"));
+        asset.version = "1.1.0";
+        asset.material.mainTexture = image;
+        asset.spriteSheet = image;
+        asset.UpdateLookupTables();
+        return asset;
     }
 }

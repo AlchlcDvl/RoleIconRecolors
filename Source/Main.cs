@@ -45,15 +45,23 @@ public class Recolors
     public ModSettings.DropdownSetting SelectedIconPack => new()
     {
         Name = "Selected Icon Pack",
-        Description = "The selected icon will start replacing the visible icons with the images you put in. If it can't find the valid image or pack, it will be replaced by the mod's default files\nVanilla - No pack selected",
+        Description = "The selected icon will start replacing the visible icons with the images you put in. If it can't find the valid image or pack, it will be replaced by the mod's default files.\nVanilla - No pack selected.",
         Options = GetPackNames(),
         OnChanged = AssetManager.TryLoadingSprites
+    };
+
+    public ModSettings.DropdownSetting ChoiceMentions => new()
+    {
+        Name = "Selected Mention Style",
+        Description = "The selected mention style will dictate which icons are used for the mentions. If the selection is TT or VIP and certain icons don't exist, the mod will instead use the main icons of the pack and if even those don't exist, then the vanilla icons.\nMain - Main icons used in the mod.\nTraitor - Uses the TT icons for town roles.\nVIP - Uses the VIP icons for town roles.\nCustom - Icons in the custom folder will have the higher priority in appearing for mentions so you can mix and match between other options.\nVanilla - Uses the vanilla mentions.",
+        Options = GetMentionStyles(),
+        OnChanged = AssetManager.ChangeSpriteSheetStyles
     };
 
     public ModSettings.DropdownSetting DownloadIcons => new()
     {
         Name = "Download Recommended Icon Packs",
-        Description = "Downloads icon packs recommended by the mod creator\nVanilla - Icons used in the vanilla game to be used as a reference for icon packs\nRecolors - Art by MysticMismagius, Haap, Fucker and Nidoskull",
+        Description = "Downloads icon packs recommended by the mod creator\nVanilla - Icons used in the vanilla game to be used as a reference for icon packs\nRecolors - Art by MysticMismagius, Haapsalu, faketier and Nidoskull.",
         Options = new() { "None", "Vanilla", "Recolors" },
         OnChanged = Download.DownloadIcons
     };
@@ -70,6 +78,33 @@ public class Recolors
                     result.Add(dir.SanitisePath());
             }
 
+            return result;
+        }
+        catch
+        {
+            return new() { "Vanilla" };
+        }
+    }
+
+    private static List<string> GetMentionStyles()
+    {
+        try
+        {
+            var result = new List<string>() { "Main" };
+
+            if (AssetManager.IconPacks.TryGetValue(Constants.CurrentPack, out var pack))
+            {
+                if (pack.TTIcons.Count > 0)
+                    result.Add("Traitor");
+
+                if (pack.VIPIcons.Count > 0)
+                    result.Add("VIP");
+
+                if (pack.CustomIcons.Count > 0)
+                    result.Add("Custom");
+            }
+
+            result.Add("Vanilla");
             return result;
         }
         catch

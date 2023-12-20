@@ -638,6 +638,34 @@
             "folder": "Base"
         },
         {
+            "name": "AttackNone",
+            "folder": "Base"
+        },
+        {
+            "name": "AttackBasic",
+            "folder": "Base"
+        },
+        {
+            "name": "AttackPowerful",
+            "folder": "Base"
+        },
+        {
+            "name": "AttackUnstoppable",
+            "folder": "Base"
+        },
+        {
+            "name": "DefenseNone",
+            "folder": "Base"
+        },
+        {
+            "name": "DefenseBasic",
+            "folder": "Base"
+        },
+        {
+            "name": "DefensePowerful",
+            "folder": "Base"
+        },
+        {
             "name": "Admirer",
             "folder": "EasterEggs"
         },
@@ -695,10 +723,6 @@
         },
         {
             "name": "CovenLeader",
-            "folder": "EasterEggs"
-        },
-        {
-            "name": "Crusader_Ability",
             "folder": "EasterEggs"
         },
         {

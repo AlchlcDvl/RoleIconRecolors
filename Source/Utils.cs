@@ -12,13 +12,13 @@ public static class Utils
         "Shroud_Ability", "SoulCollector_Ability", "Spy_Ability", "TavernKeeper_Ability", "Tracker_Ability", "Trapper_Ability", "Trickster_Ability", "Vampire_Ability", "Veteran_Ability",
         "Vigilante_Ability", "VoodooMaster_Ability", "War_Ability_1", "War_Ability_2", "Werewolf_Ability_1", "Werewolf_Ability_2", "Wildling_Ability", "Witch_Ability_1", "Witch_Ability_2" };
 
+    public static readonly Role[] ExceptRoles = { Role.NONE, Role.ROLE_COUNT, Role.UNKNOWN, Role.HANGMAN };
+
     public static T Random<T>(this IEnumerable<T> input, T defaultVal = default)
     {
         var list = input.ToList();
         return list.Count == 0 ? defaultVal : list[URandom.Range(0, list.Count)];
     }
-
-    public static T Random<T>(this IEnumerable<T> list, Func<T, bool> predicate, T defaultVal = default) => list.Where(predicate).Random(defaultVal);
 
     public static void ForEach<T>(this IEnumerable<T> source, Action<T> action) => source.ToList().ForEach(action);
 
@@ -196,4 +196,16 @@ public static class Utils
     public static bool IsApoc(this Role role) => role is Role.BERSERKER or Role.WAR or Role.BAKER or Role.FAMINE or Role.SOULCOLLECTOR or Role.DEATH or Role.PLAGUEBEARER or Role.PESTILENCE;
 
     public static bool Skippable(string name) => SkippableNames.Contains(name);
+
+    public static (Dictionary<string, string>, IEnumerable<(string, int)>) Filtered()
+    {
+        // these roles dont have sprites so just ignore them
+        var roles = ((Role[])Enum.GetValues(typeof(Role))).Except(ExceptRoles);
+
+        // map all roles to (role name, role number) so we can make a dict
+        var rolesWithIndex = roles.Select(role => (role.ToString().ToLower(), (int)role));
+
+        // dict allows us to find dict[rolename.tolower] and get Role{number} for later use in spritecharacters
+        return (rolesWithIndex.ToDictionary(rolesSelect => rolesSelect.Item1.ToLower(), rolesSelect => $"Role{rolesSelect.Item2}"), rolesWithIndex);
+    }
 }

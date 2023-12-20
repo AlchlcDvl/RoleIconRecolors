@@ -132,7 +132,7 @@ public class Asset
 
     public string FilePath()
     {
-        if (Folder is "" or "Vanilla" || Pack == "Vanilla")
+        if (Folder is null or "" or "Vanilla" || Pack == "Vanilla")
             return Path.Combine(AssetManager.VanillaPath, $"{Name}.png");
         else
             return Path.Combine(AssetManager.ModPath, Pack, Folder, $"{Name}.png");

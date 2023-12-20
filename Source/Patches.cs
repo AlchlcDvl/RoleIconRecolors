@@ -252,17 +252,49 @@ public static class AbilityPanelStartPatch
 
                 ability1 = AssetManager.GetSprite(abilityName, Constants.PlayerPanelEasterEggs);
 
+                if (ModStates.IsLoaded("dum.oldui") && role == Role.NECROMANCER && Constants.IsNecroActive && __instance.characterPosition == Pepper.GetMyPosition())
+                {
+                    ability1 = AssetManager.GetSprite("Necromancer_Special", Constants.PlayerPanelEasterEggs);
+
+                    if (ability1 == AssetManager.Blank)
+                        ability1 = AssetManager.NecroSpecial;
+                }
+
                 if (ability1 != AssetManager.Blank && __instance.choice1Sprite)
                     __instance.choice1Sprite.sprite = ability1;
 
                 var ability2 = AssetManager.GetSprite($"{Utils.RoleName(role)}_Ability_2", Constants.PlayerPanelEasterEggs);
 
-                if (ability2 == AssetManager.Blank && role == Role.JAILOR && ModStates.IsLoaded("dum.oldjailor"))
+                if (ability2 == AssetManager.Blank && ModStates.IsLoaded("dum.oldui"))
                 {
-                    ability2 = AssetManager.GetSprite("Jailor_Special", Constants.PlayerPanelEasterEggs);
+                    if (role == Role.JAILOR)
+                    {
+                        ability2 = AssetManager.GetSprite("Jailor_Special", Constants.PlayerPanelEasterEggs);
 
-                    if (ability2 == AssetManager.Blank)
-                        ability2 = AssetManager.JailorSpecial;
+                        if (ability2 == AssetManager.Blank)
+                            ability2 = AssetManager.JailorSpecial;
+                    }
+                    else if (role == Role.PIRATE)
+                    {
+                        ability2 = AssetManager.GetSprite("Pirate_Special", Constants.PlayerPanelEasterEggs);
+
+                        if (ability2 == AssetManager.Blank)
+                            ability2 = AssetManager.PirateSpecial;
+                    }
+                    else if (role == Role.ADMIRER)
+                    {
+                        ability2 = AssetManager.GetSprite("Admirer_Special", Constants.PlayerPanelEasterEggs);
+
+                        if (ability2 == AssetManager.Blank)
+                            ability2 = AssetManager.AdmirerSpecial;
+                    }
+                    else if (role == Role.MAYOR)
+                    {
+                        ability2 = AssetManager.GetSprite("Mayor_Special", Constants.PlayerPanelEasterEggs);
+
+                        if (ability2 == AssetManager.Blank)
+                            ability2 = AssetManager.MayorSpecial;
+                    }
                 }
 
                 if (ability2 != AssetManager.Blank && __instance.choice2Sprite)
@@ -312,9 +344,12 @@ public static class PatchRoleService
 {
     public static bool ServiceExists = false;
 
-    public static void Postfix()
+    public static void Postfix(RoleService __instance)
     {
         Recolors.LogMessage("Patching RoleService.Init");
+        __instance.roleInfoLookup[Role.VAMPIRE].sprite = AssetManager.Vampire;
+        __instance.roleInfoLookup[Role.CURSED_SOUL].sprite = AssetManager.CursedSoul;
+        __instance.roleInfoLookup[Role.GHOST_TOWN].sprite = AssetManager.GhostTown;
 
         if (AssetManager.IconPacks.TryGetValue(Constants.CurrentPack, out var pack))
             pack.LoadSpriteSheet(true);
@@ -470,14 +505,14 @@ public static class PatchScrolls
 {
     public static bool ServiceExists = false;
 
-    public static void Postfix(HomeScrollService __instance)
+    public static void Postfix()
     {
         Recolors.LogMessage("Patching HomeScrollService.Init");
 
         if (!Constants.EnableIcons)
             return;
 
-        AssetManager.SetScrollSprites(__instance);
+        AssetManager.SetScrollSprites();
         ServiceExists = true;
     }
 }
@@ -493,14 +528,26 @@ public static class PatchAttackDefense
             return;
 
         var attack = AssetManager.GetSprite($"Attack{Utils.GetLevel(data.attack, true)}");
+        var icon1 = __instance.transform.Find("AttackIcon").Find("Icon").GetComponent<Image>();
 
-        if (attack != AssetManager.Blank)
-            __instance.transform.Find("AttackIcon").Find("Icon").GetComponent<Image>().sprite = attack;
+        if (icon1)
+        {
+            if (AssetManager.Attack == null)
+                AssetManager.Attack = icon1.sprite;
+
+            icon1.sprite = attack != AssetManager.Blank ? attack : AssetManager.Attack;
+        }
 
         var defense = AssetManager.GetSprite($"Defense{Utils.GetLevel(data.defense, false)}");
+        var icon2 = __instance.transform.Find("DefenseIcon").Find("Icon").GetComponent<Image>();
 
-        if (defense != AssetManager.Blank)
-            __instance.transform.Find("DefenseIcon").Find("Icon").GetComponent<Image>().sprite = defense;
+        if (icon2)
+        {
+            if (AssetManager.Defense == null)
+                AssetManager.Defense = icon2.sprite;
+
+            icon2.sprite = defense != AssetManager.Blank ? defense : AssetManager.Defense;
+        }
     }
 }
 
@@ -518,13 +565,23 @@ public static class PatchAttackDefensePopup
         var icon1 = __instance.transform.Find("AttackIcon").Find("Icon").GetComponent<Image>();
 
         if (icon1)
+        {
+            if (AssetManager.Attack == null)
+                AssetManager.Attack = icon1.sprite;
+
             icon1.sprite = attack != AssetManager.Blank ? attack : AssetManager.Attack;
+        }
 
         var defense = AssetManager.GetSprite($"Defense{Utils.GetLevel(data.defense, false)}");
         var icon2 = __instance.transform.Find("DefenseIcon").Find("Icon").GetComponent<Image>();
 
         if (icon2)
+        {
+            if (AssetManager.Defense == null)
+                AssetManager.Defense = icon2.sprite;
+
             icon2.sprite = defense != AssetManager.Blank ? defense : AssetManager.Defense;
+        }
     }
 }
 
