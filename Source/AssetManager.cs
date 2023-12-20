@@ -309,7 +309,7 @@ public static class AssetManager
 
         try
         {
-            if (packName == "Vanilla" && Asset)
+            if ((packName == "Vanilla" || Constants.CurrentStyle == "Vanilla" ) && Asset)
             {
                 MaterialReferenceManager.instance.m_SpriteAssetReferenceLookup[CacheDefaultSpriteSheet.Cache] = Asset;
                 MaterialReferenceManager.instance.m_FontMaterialReferenceLookup[CacheDefaultSpriteSheet.Cache] = Asset.material;
@@ -322,22 +322,7 @@ public static class AssetManager
         }
         catch (Exception e)
         {
-            var diagnostic = $"Uh oh, something happened here in AssetManager.ChangeSpriteSheets\nPack Name: {packName}\nStyle Name: {Constants.CurrentStyle}";
-
-            if (!Asset)
-                diagnostic += "\nVanilla Sheet Does Not Exist";
-
-            if (packName != "Vanilla" && !IconPacks.TryGetValue(packName, out pack))
-                diagnostic += "\nNo Loaded Icon Pack";
-            else if (pack == null)
-                diagnostic += "\nLoaded Icon Pack Was Null";
-            else if (!pack.MentionStyles.TryGetValue(Constants.CurrentStyle, out asset))
-                diagnostic += "\nLoaded Icon Pack Does Not Have A Valid Mention Style";
-            else if (!asset)
-                diagnostic += "\nLoaded Mention Style Was Null";
-
-            diagnostic += $"\nError: {e}";
-            Recolors.LogError(diagnostic);
+            RunDiagnostics(packName, Constants.CurrentStyle, e);
         }
     }
 
@@ -348,7 +333,7 @@ public static class AssetManager
 
         try
         {
-            if (styleName == "Vanilla" && Asset)
+            if ((styleName == "Vanilla" || Constants.CurrentPack == "Vanilla") && Asset)
             {
                 MaterialReferenceManager.instance.m_SpriteAssetReferenceLookup[CacheDefaultSpriteSheet.Cache] = Asset;
                 MaterialReferenceManager.instance.m_FontMaterialReferenceLookup[CacheDefaultSpriteSheet.Cache] = Asset.material;
@@ -361,23 +346,30 @@ public static class AssetManager
         }
         catch (Exception e)
         {
-            var diagnostic = $"Uh oh, something happened here in AssetManager.ChangeSpriteSheets\nPack Name: {Constants.CurrentPack}\nStyle Name: {styleName}";
-
-            if (!Asset)
-                diagnostic += "\nVanilla Sheet Does Not Exist";
-
-            if (Constants.CurrentPack != "Vanilla" && !IconPacks.TryGetValue(Constants.CurrentPack, out pack))
-                diagnostic += "\nNo Loaded Icon Pack";
-            else if (pack == null)
-                diagnostic += "\nLoaded Icon Pack Was Null";
-            else if (!pack.MentionStyles.TryGetValue(styleName, out asset))
-                diagnostic += "\nLoaded Icon Pack Does Not Have A Valid Mention Style";
-            else if (!asset)
-                diagnostic += "\nLoaded Mention Style Was Null";
-
-            diagnostic += $"\nError: {e}";
-            Recolors.LogError(diagnostic);
+            RunDiagnostics(Constants.CurrentPack, styleName, e);
         }
+    }
+
+    private static void RunDiagnostics(string packName, string styleName, Exception e)
+    {
+        IconPack pack = null;
+        TMP_SpriteAsset asset = null;
+        var diagnostic = $"Uh oh, something happened here in AssetManager.ChangeSpriteSheets\nPack Name: {packName}\nStyle Name: {styleName}";
+
+        if (!Asset)
+            diagnostic += "\nVanilla Sheet Does Not Exist";
+
+        if (packName != "Vanilla" && !IconPacks.TryGetValue(packName, out pack))
+            diagnostic += "\nNo Loaded Icon Pack";
+        else if (pack == null)
+            diagnostic += "\nLoaded Icon Pack Was Null";
+        else if (!pack.MentionStyles.TryGetValue(styleName, out asset))
+            diagnostic += "\nLoaded Icon Pack Does Not Have A Valid Mention Style";
+        else if (!asset)
+            diagnostic += "\nLoaded Mention Style Was Null";
+
+        diagnostic += $"\nError: {e}";
+        Recolors.LogError(diagnostic);
     }
 
     public static void SetScrollSprites()
