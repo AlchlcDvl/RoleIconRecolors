@@ -207,12 +207,13 @@ public class IconPack
     {
         try
         {
+            var (rolesWithIndexDict, rolesWithIndex) = Utils.Filtered();
+
             foreach (var style in Styles)
             {
                 if (MentionStyles.ContainsKey(style))
                     continue;
 
-                var (rolesWithIndexDict, rolesWithIndex) = Utils.Filtered();
                 var textures = new List<Texture2D>();
                 var spritesDict = style switch
                 {
