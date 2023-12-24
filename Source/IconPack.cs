@@ -19,10 +19,10 @@ public class IconPack
     public IconPack(string name)
     {
         Name = name;
-        TTIcons = new();
         RegIcons = new();
-        TTEEIcons = new();
         RegEEIcons = new();
+        TTIcons = new();
+        TTEEIcons = new();
         VIPIcons = new();
         VIPEEIcons = new();
         CustomIcons = new();

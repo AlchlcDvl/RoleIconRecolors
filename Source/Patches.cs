@@ -252,50 +252,10 @@ public static class AbilityPanelStartPatch
 
                 ability1 = AssetManager.GetSprite(abilityName, Constants.PlayerPanelEasterEggs);
 
-                if (ModStates.IsLoaded("dum.oldui") && role == Role.NECROMANCER && Constants.IsNecroActive && __instance.characterPosition == Pepper.GetMyPosition())
-                {
-                    ability1 = AssetManager.GetSprite("Necromancer_Special", Constants.PlayerPanelEasterEggs);
-
-                    if (ability1 == AssetManager.Blank)
-                        ability1 = AssetManager.NecroSpecial;
-                }
-
                 if (ability1 != AssetManager.Blank && __instance.choice1Sprite)
                     __instance.choice1Sprite.sprite = ability1;
 
                 var ability2 = AssetManager.GetSprite($"{Utils.RoleName(role)}_Ability_2", Constants.PlayerPanelEasterEggs);
-
-                if (ability2 == AssetManager.Blank && ModStates.IsLoaded("dum.oldui"))
-                {
-                    if (role == Role.JAILOR)
-                    {
-                        ability2 = AssetManager.GetSprite("Jailor_Special", Constants.PlayerPanelEasterEggs);
-
-                        if (ability2 == AssetManager.Blank)
-                            ability2 = AssetManager.JailorSpecial;
-                    }
-                    else if (role == Role.PIRATE)
-                    {
-                        ability2 = AssetManager.GetSprite("Pirate_Special", Constants.PlayerPanelEasterEggs);
-
-                        if (ability2 == AssetManager.Blank)
-                            ability2 = AssetManager.PirateSpecial;
-                    }
-                    else if (role == Role.ADMIRER)
-                    {
-                        ability2 = AssetManager.GetSprite("Admirer_Special", Constants.PlayerPanelEasterEggs);
-
-                        if (ability2 == AssetManager.Blank)
-                            ability2 = AssetManager.AdmirerSpecial;
-                    }
-                    else if (role == Role.MAYOR)
-                    {
-                        ability2 = AssetManager.GetSprite("Mayor_Special", Constants.PlayerPanelEasterEggs);
-
-                        if (ability2 == AssetManager.Blank)
-                            ability2 = AssetManager.MayorSpecial;
-                    }
-                }
 
                 if (ability2 != AssetManager.Blank && __instance.choice2Sprite)
                     __instance.choice2Sprite.sprite = ability2;
