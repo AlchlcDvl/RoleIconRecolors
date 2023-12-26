@@ -110,7 +110,6 @@ public static class PatchRoleCards
         }
         else if (Utils.Skippable(abilityname) || Utils.Skippable(abilityname + "_1") || Utils.Skippable(abilityname.Replace("_1", "")))
             index++;
-
         var abilityname2 = $"{name}_Ability_2";
         var ability2 = AssetManager.GetSprite(abilityname2);
 
@@ -121,7 +120,10 @@ public static class PatchRoleCards
         }
         else if (Utils.Skippable(abilityname2))
             index++;
-
+        //this line needs to be here, because otherwise it wont skip
+        //my custom rolecard icons
+        else if (ModStates.IsLoaded("dum.oldui")) index++;
+        
         var attributename = $"Attributes_{Utils.FactionName(Pepper.GetMyFaction(), role)}";
         var attribute = AssetManager.GetSprite(attributename);
 
@@ -132,7 +134,7 @@ public static class PatchRoleCards
         }
         else if (Utils.Skippable(attributename))
             index++;
-
+        
         var nommy = AssetManager.GetSprite("Necronomicon");
 
         if (nommy != AssetManager.Blank && Constants.IsNecroActive && panel.roleInfoButtons.Exists(index))
@@ -378,7 +380,9 @@ public static class PatchGuideRoleCards
         }
         else if (Utils.Skippable(abilityname2))
             index++;
-
+        //this line needs to be here, because otherwise it wont skip
+        //my custom rolecard icons
+        else if (ModStates.IsLoaded("dum.oldui")) index++;
         var attributename = $"Attributes_{Utils.FactionName(role.GetFaction(), role)}";
         var attribute = AssetManager.GetSprite(attributename, false);
 
