@@ -380,6 +380,7 @@ public static class PatchGuideRoleCards
             index++;
         else if (isModifiedByTos1UI)
         {
+            __instance.roleInfoButtons[index].abilityIcon.sprite = special;
             index++;
             isModifiedByTos1UI = false;
         }
@@ -395,6 +396,7 @@ public static class PatchGuideRoleCards
             index++;
         else if (isModifiedByTos1UI)
         {
+            __instance.roleInfoButtons[index].abilityIcon.sprite = special;
             index++;
             isModifiedByTos1UI = false;
         }
