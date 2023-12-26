@@ -23,7 +23,8 @@ public static class Utils
     //I need an list of roles modified by my mod
     private static readonly List<Role> ChangedByToS1UI = new()
     {
-        Role.JAILOR, Role.CLERIC, Role.MAYOR, Role.JESTER, Role.EXECUTIONER,Role.BODYGUARD,Role.VETERAN,Role.TRAPPER,Role.PIRATE,Role.ADMIRER
+        Role.JAILOR, Role.CLERIC, Role.MAYOR, Role.JESTER, Role.EXECUTIONER,Role.BODYGUARD,Role.VETERAN,Role.TRAPPER,Role.PIRATE,Role.ADMIRER,
+        Role.ARSONIST
     };
 
     public static void ForEach<T>(this IEnumerable<T> source, Action<T> action) => source.ToList().ForEach(action);

@@ -113,6 +113,7 @@ public static class PatchRoleCards
             index++;
         else if (isModifiedByTos1UI)
         {
+            panel.roleInfoButtons[index].abilityIcon.sprite = special;
             index++;
             isModifiedByTos1UI = false;
         }
@@ -128,6 +129,7 @@ public static class PatchRoleCards
             index++;
         else if (isModifiedByTos1UI)
         {
+            panel.roleInfoButtons[index].abilityIcon.sprite = special;
             index++;
             isModifiedByTos1UI = false;
         }
