@@ -78,10 +78,11 @@ public static class PatchRoleCards
 
         var panel = __instance.GetComponentInParent<RoleCardPanel>();
         panel.roleNameText.text = role.DisplayString(__instance.currentFaction);
-
+        //this determines if the role in question is changed by my mod
+        bool isModifiedByTos1UI = Utils.ModifiedByToS1UI(role)
+                                  && ModStates.IsLoaded("dum.oldui");
         if (!Constants.EnableIcons)
             return;
-
         var index = 0;
         var name = Utils.RoleName(role);
         var sprite = AssetManager.GetSprite(name);
@@ -110,6 +111,11 @@ public static class PatchRoleCards
         }
         else if (Utils.Skippable(abilityname) || Utils.Skippable(abilityname + "_1") || Utils.Skippable(abilityname.Replace("_1", "")))
             index++;
+        else if (isModifiedByTos1UI)
+        {
+            index++;
+            isModifiedByTos1UI = false;
+        }
         var abilityname2 = $"{name}_Ability_2";
         var ability2 = AssetManager.GetSprite(abilityname2);
 
@@ -120,10 +126,11 @@ public static class PatchRoleCards
         }
         else if (Utils.Skippable(abilityname2))
             index++;
-        //this line needs to be here, because otherwise it wont skip
-        //my custom rolecard icons
-        else if (ModStates.IsLoaded("dum.oldui")) index++;
-        
+        else if (isModifiedByTos1UI)
+        {
+            index++;
+            isModifiedByTos1UI = false;
+        }
         var attributename = $"Attributes_{Utils.FactionName(Pepper.GetMyFaction(), role)}";
         var attribute = AssetManager.GetSprite(attributename);
 
@@ -134,7 +141,7 @@ public static class PatchRoleCards
         }
         else if (Utils.Skippable(attributename))
             index++;
-        
+
         var nommy = AssetManager.GetSprite("Necronomicon");
 
         if (nommy != AssetManager.Blank && Constants.IsNecroActive && panel.roleInfoButtons.Exists(index))
@@ -344,7 +351,9 @@ public static class PatchGuideRoleCards
         var index = 0;
         var name = Utils.RoleName(role);
         var sprite = AssetManager.GetSprite(name, false);
-
+        //this determines if the role in question is changed by my mod
+        bool isModifiedByTos1UI = Utils.ModifiedByToS1UI(role)
+                                  && ModStates.IsLoaded("dum.oldui");
         if (sprite != AssetManager.Blank && __instance.roleIcon)
             __instance.roleIcon.sprite = sprite;
 
@@ -369,7 +378,11 @@ public static class PatchGuideRoleCards
         }
         else if (Utils.Skippable(abilityname) || Utils.Skippable(abilityname + "_1") || Utils.Skippable(abilityname.Replace("_1", "")))
             index++;
-
+        else if (isModifiedByTos1UI)
+        {
+            index++;
+            isModifiedByTos1UI = false;
+        }
         var abilityname2 = $"{name}_Ability_2";
         var ability2 = AssetManager.GetSprite(abilityname2, false);
 
@@ -380,9 +393,11 @@ public static class PatchGuideRoleCards
         }
         else if (Utils.Skippable(abilityname2))
             index++;
-        //this line needs to be here, because otherwise it wont skip
-        //my custom rolecard icons
-        else if (ModStates.IsLoaded("dum.oldui")) index++;
+        else if (isModifiedByTos1UI)
+        {
+            index++;
+            isModifiedByTos1UI = false;
+        }
         var attributename = $"Attributes_{Utils.FactionName(role.GetFaction(), role)}";
         var attribute = AssetManager.GetSprite(attributename, false);
 

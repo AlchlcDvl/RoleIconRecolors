@@ -6,7 +6,7 @@ public static class Utils
 {
     private static readonly List<string> SkippableNames = new() { "Admirer_Ability", "Amnesiac_Ability", "Arsonist_Ability", "Attributes_Coven", "Baker_Ability", "Berserker_Ability",
         "Bodyguard_Ability", "Cleric_Ability", "Coroner_Ability", "CovenLeader_Ability", "Crusader_Ability", "CursedSoul_Ability", "Death_Ability", "Dreamweaver_Ability", "Enchanter_Ability",
-        "Executioner_Ability", "Famine_Ability", "HexMaster_Ability", "Illusionist_Ability", "Investigator_Ability", "Jailor_Ability", "Jester_Ability", "Jinx_Ability", "Lookout_Ability",
+        "Executioner_Ability", "Famine_Ability", "HexMaster_Ability", "Illusionist_Ability", "Investigator_Ability", "Jailor_Ability","Jailor_Ability_2", "Jester_Ability", "Jinx_Ability", "Lookout_Ability",
         "Medusa_Ability", "Monarch_Ability", "Necromancer_Ability_1", "Necromancer_Ability_2", "Pestilence_Ability", "Plaguebearer_Ability", "Poisoner_Ability", "PotionMaster_Ability_1",
         "PotionMaster_Ability_2", "Psychic_Ability", "Retributionist_Ability_1", "Retributionist_Ability_2", "Seer_Ability_1", "Seer_Ability_2", "SerialKiller_Ability", "Sheriff_Ability",
         "Shroud_Ability", "SoulCollector_Ability", "Spy_Ability", "TavernKeeper_Ability", "Tracker_Ability", "Trapper_Ability", "Trickster_Ability", "Vampire_Ability", "Veteran_Ability",
@@ -19,6 +19,12 @@ public static class Utils
         var list = input.ToList();
         return list.Count == 0 ? defaultVal : list[URandom.Range(0, list.Count)];
     }
+    
+    //I need an list of roles modified by my mod
+    private static readonly List<Role> ChangedByToS1UI = new()
+    {
+        Role.JAILOR, Role.CLERIC, Role.MAYOR, Role.JESTER, Role.EXECUTIONER,Role.BODYGUARD,Role.VETERAN,Role.TRAPPER,Role.PIRATE,Role.ADMIRER
+    };
 
     public static void ForEach<T>(this IEnumerable<T> source, Action<T> action) => source.ToList().ForEach(action);
 
@@ -135,6 +141,11 @@ public static class Utils
             FactionType.CURSED_SOUL => "CursedSoul",
             _ => "Blank"
         };
+    }
+
+    public static bool ModifiedByToS1UI(Role role)
+    {
+        return ChangedByToS1UI.Contains(role);
     }
 
     public static string DisplayString(this Role role, FactionType factionType)
