@@ -592,14 +592,32 @@ public static class PlayerPopupControllerPatch
 {
     public static void Postfix(PlayerPopupController __instance)
     {
-        Recolors.LogMessage("Patching PlayerPopupController.SetRoleIcon");
-
         if (!Constants.EnableIcons)
             return;
 
+        Recolors.LogMessage("Patching PlayerPopupController.SetRoleIcon");
         var sprite = AssetManager.GetSprite(Utils.RoleName(__instance.m_role));
 
         if (sprite != AssetManager.Blank && __instance.RoleIcon)
             __instance.RoleIcon.sprite = sprite;
+    }
+}
+
+[HarmonyPatch(typeof(RoleMenuPopupController), nameof(RoleMenuPopupController.SetRoleIconAndLabels))]
+public static class RoleMenuPopupControllerPatch
+{
+    public static void Postfix(RoleMenuPopupController __instance)
+    {
+        if (!Constants.EnableIcons)
+            return;
+
+        Recolors.LogMessage("Patching PlayerPopupController.SetRoleIcon");
+        var sprite = AssetManager.GetSprite(Utils.RoleName(__instance.m_role));
+
+        if (sprite != AssetManager.Blank && __instance.RoleIconImage && __instance.HeaderRoleIconImage)
+        {
+            __instance.RoleIconImage.sprite = sprite;
+            __instance.HeaderRoleIconImage.sprite = sprite;
+        }
     }
 }
