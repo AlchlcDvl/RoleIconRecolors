@@ -10,7 +10,7 @@
             https://api.nuget.org/v3/index.json;
             https://nuget.bepinex.dev/v3/index.json
         </RestoreAdditionalProjectSources>
-        <RootNamespace>RecolorsPlatformless</RootNamespace>
+        <RootNamespace>IconPacks</RootNamespace>
         <ImplicitUsings>enable</ImplicitUsings>
         <EnableDynamicLoading>true</EnableDynamicLoading>
         <Authors>AlchlcDvl</Authors>

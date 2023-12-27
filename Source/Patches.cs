@@ -4,7 +4,7 @@ using Cinematics.Players;
 using Home.Services;
 using UnityEngine.UI;
 
-namespace RecolorsPlatformless;
+namespace IconPacks;
 
 [HarmonyPatch(typeof(RoleCardListItem), nameof(RoleCardListItem.SetData))]
 public static class PatchRoleDeckBuilder

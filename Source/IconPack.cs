@@ -1,4 +1,4 @@
-namespace RecolorsPlatformless;
+namespace IconPacks;
 
 public class IconPack
 {

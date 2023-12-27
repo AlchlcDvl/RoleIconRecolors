@@ -1,4 +1,4 @@
-namespace RecolorsPlatformless;
+namespace IconPacks;
 
 public static class Constants
 {

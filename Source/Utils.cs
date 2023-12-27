@@ -1,6 +1,6 @@
 using Home.Shared;
 
-namespace RecolorsPlatformless;
+namespace IconPacks;
 
 public static class Utils
 {

@@ -1,8 +1,8 @@
-namespace RecolorsPlatformless;
+namespace IconPacks;
 
 public static class AssetManager
 {
-    private const string Resources = "RecolorsPlatformless.Resources.";
+    private const string Resources = "IconPacks.Resources.";
 
     public static readonly Dictionary<string, List<Sprite>> RegEEIcons = new();
     public static readonly Dictionary<string, List<Sprite>> TTEEIcons = new();

@@ -1,7 +1,7 @@
 using BepInEx.Logging;
 using System.Diagnostics;
 
-namespace RecolorsPlatformless;
+namespace IconPacks;
 
 [SalemMod]
 [SalemMenuItem]
@@ -115,10 +115,9 @@ public class Recolors
 
     private static void LogSomething(object message, LogLevel type, bool logIt)
     {
-        logIt = logIt || Constants.Debug;
         message = $"[{DateTime.UtcNow}] {message}";
 
-        if (logIt)
+        if (logIt || Constants.Debug)
             Log?.Log(type, message);
 
         SavedLogs += $"[{type, -7}] {message}\n";
