@@ -12,9 +12,6 @@ public static class AssetManager
 
     public static Sprite Blank;
     public static Sprite Thumbnail;
-    public static Sprite CursedSoul;
-    public static Sprite GhostTown;
-    public static Sprite Vampire;
     public static Sprite Attack;
     public static Sprite Defense;
 
@@ -149,7 +146,6 @@ public static class AssetManager
         {
             if (x.EndsWith(".png"))
             {
-                var name = x.SanitisePath();
                 var sprite = FromResources.LoadSprite(x);
                 UObject.DontDestroyOnLoad(sprite);
 
@@ -157,12 +153,6 @@ public static class AssetManager
                     Blank = sprite;
                 else if (x.Contains("Thumbnail"))
                     Thumbnail = sprite;
-                else if (x.Contains("CursedSoul"))
-                    CursedSoul = sprite;
-                else if (x.Contains("Vampire"))
-                    Vampire = sprite;
-                else if (x.Contains("GhostTown"))
-                    GhostTown = sprite;
             }
         });
 

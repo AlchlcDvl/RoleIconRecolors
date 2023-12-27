@@ -11,11 +11,10 @@ public static class PatchRoleDeckBuilder
 {
     public static void Postfix(RoleCardListItem __instance, ref Role role)
     {
-        Recolors.LogMessage("Patching RoleCardListItem.SetData");
-
         if (!Constants.EnableIcons)
             return;
 
+        Recolors.LogMessage("Patching RoleCardListItem.SetData");
         var icon = AssetManager.GetSprite($"{Utils.RoleName(role)}", false);
 
         if (__instance.roleImage && icon != AssetManager.Blank)
@@ -28,11 +27,10 @@ public static class PatchRoleListPanel
 {
     public static void Postfix(RoleDeckListItem __instance, ref Role a_role, ref bool a_isBan)
     {
-        Recolors.LogMessage("Patching RoleDeckListItem.SetData");
-
         if (!Constants.EnableIcons || a_isBan)
             return;
 
+        Recolors.LogMessage("Patching RoleDeckListItem.SetData");
         var icon = AssetManager.GetSprite($"{Utils.RoleName(a_role)}", false);
 
         if (__instance.roleImage && icon != AssetManager.Blank)
@@ -45,11 +43,10 @@ public static class PatchBrowserRoleListPanel
 {
     public static void Postfix(GameBrowserRoleDeckListItem __instance, ref Role a_role, ref bool a_isBan)
     {
-        Recolors.LogMessage("Patching GameBrowserRoleDeckListItem.SetData");
-
         if (!Constants.EnableIcons || a_isBan)
             return;
 
+        Recolors.LogMessage("Patching GameBrowserRoleDeckListItem.SetData");
         var icon = AssetManager.GetSprite($"{Utils.RoleName(a_role)}", false);
 
         if (__instance.roleImage && icon != AssetManager.Blank)
@@ -62,8 +59,6 @@ public static class PatchRoleCards
 {
     public static void Postfix(RoleCardPanelBackground __instance, ref Role role)
     {
-        Recolors.LogMessage("Patching RoleCardPanelBackground.SetRole");
-
         if (Constants.IsTransformed)
         {
             role = role switch
@@ -77,12 +72,14 @@ public static class PatchRoleCards
         }
 
         var panel = __instance.GetComponentInParent<RoleCardPanel>();
-        panel.roleNameText.text = role.DisplayString(__instance.currentFaction);
-        //this determines if the role in question is changed by my mod
-        bool isModifiedByTos1UI = Utils.ModifiedByToS1UI(role)
-                                  && ModStates.IsLoaded("dum.oldui");
+
         if (!Constants.EnableIcons)
             return;
+
+        Recolors.LogMessage("Patching RoleCardPanelBackground.SetRole");
+
+        //this determines if the role in question is changed by my mod
+        var isModifiedByTos1UI = Utils.ModifiedByToS1UI(role) && ModStates.IsLoaded("dum.oldui");
         var index = 0;
         var name = Utils.RoleName(role);
         var sprite = AssetManager.GetSprite(name);
@@ -90,7 +87,8 @@ public static class PatchRoleCards
         if (sprite != AssetManager.Blank && panel.roleIcon)
             panel.roleIcon.sprite = sprite;
 
-        var special = AssetManager.GetSprite($"{name}_Special");
+        var specialName = $"{name}_Special";
+        var special = AssetManager.GetSprite(specialName);
 
         if (special != AssetManager.Blank && panel.specialAbilityPanel && !(role == Role.NECROMANCER && !Constants.IsNecroActive))
             panel.specialAbilityPanel.useButton.abilityIcon.sprite = special;
@@ -113,10 +111,17 @@ public static class PatchRoleCards
             index++;
         else if (isModifiedByTos1UI)
         {
-            panel.roleInfoButtons[index].abilityIcon.sprite = special;
-            index++;
+            if (special != AssetManager.Blank)
+            {
+                panel.roleInfoButtons[index].abilityIcon.sprite = special;
+                index++;
+            }
+            else if (Utils.Skippable(specialName))
+                index++;
+
             isModifiedByTos1UI = false;
         }
+
         var abilityname2 = $"{name}_Ability_2";
         var ability2 = AssetManager.GetSprite(abilityname2);
 
@@ -129,10 +134,17 @@ public static class PatchRoleCards
             index++;
         else if (isModifiedByTos1UI)
         {
-            panel.roleInfoButtons[index].abilityIcon.sprite = special;
-            index++;
+            if (special != AssetManager.Blank)
+            {
+                panel.roleInfoButtons[index].abilityIcon.sprite = special;
+                index++;
+            }
+            else if (Utils.Skippable(specialName))
+                index++;
+
             isModifiedByTos1UI = false;
         }
+
         var attributename = $"Attributes_{Utils.FactionName(Pepper.GetMyFaction(), role)}";
         var attribute = AssetManager.GetSprite(attributename);
 
@@ -156,10 +168,10 @@ public static class AbilityPanelStartPatch
 {
     public static void Postfix(TosAbilityPanelListItem __instance, ref TosAbilityPanelListItem.OverrideAbilityType overrideType)
     {
-        Recolors.LogMessage("Patching TosAbilityPanelListItem.OverrideIconAndText");
-
         if (!Constants.EnableIcons || overrideType == TosAbilityPanelListItem.OverrideAbilityType.VOTING)
             return;
+
+        Recolors.LogMessage("Patching TosAbilityPanelListItem.OverrideIconAndText");
 
         switch (overrideType)
         {
@@ -281,11 +293,10 @@ public static class SpecialAbilityPanelPatch
 {
     public static void Postfix(SpecialAbilityPopupGenericListItem __instance)
     {
-        Recolors.LogMessage("Patching SpecialAbilityPopupGenericListItem.SetData");
-
         if (!Constants.EnableIcons)
             return;
 
+        Recolors.LogMessage("Patching SpecialAbilityPopupGenericListItem.SetData");
         var special = AssetManager.GetSprite($"{Utils.RoleName(Pepper.GetMyRole())}_Special");
 
         if (special != AssetManager.Blank)
@@ -298,11 +309,10 @@ public static class PatchRitualistGuessMenu
 {
     public static void Postfix(SpecialAbilityPopupRadialIcon __instance, ref Role a_role)
     {
-        Recolors.LogMessage("Patching SpecialAbilityPopupRadialIcon.SetData");
-
         if (!Constants.EnableIcons)
             return;
 
+        Recolors.LogMessage("Patching SpecialAbilityPopupRadialIcon.SetData");
         var icon = AssetManager.GetSprite($"{Utils.RoleName(a_role)}", false);
 
         if (__instance.roleIcon != null && icon != AssetManager.Blank)
@@ -311,16 +321,14 @@ public static class PatchRitualistGuessMenu
 }
 
 [HarmonyPatch(typeof(RoleService), nameof(RoleService.Init))]
+[HarmonyPriority(Priority.Low)]
 public static class PatchRoleService
 {
     public static bool ServiceExists = false;
 
-    public static void Postfix(RoleService __instance)
+    public static void Postfix()
     {
         Recolors.LogMessage("Patching RoleService.Init");
-        __instance.roleInfoLookup[Role.VAMPIRE].sprite = AssetManager.Vampire;
-        __instance.roleInfoLookup[Role.CURSED_SOUL].sprite = AssetManager.CursedSoul;
-        __instance.roleInfoLookup[Role.GHOST_TOWN].sprite = AssetManager.GhostTown;
 
         if (AssetManager.IconPacks.TryGetValue(Constants.CurrentPack, out var pack))
             pack.LoadSpriteSheet(true);
@@ -345,21 +353,21 @@ public static class PatchGuideRoleCards
 {
     public static void Postfix(RoleCardPopupPanel __instance, ref Role role)
     {
-        Recolors.LogMessage("Patching RoleCardPopupPanel.SetRole");
-
         if (!Constants.EnableIcons)
             return;
 
+        Recolors.LogMessage("Patching RoleCardPopupPanel.SetRole");
         var index = 0;
         var name = Utils.RoleName(role);
         var sprite = AssetManager.GetSprite(name, false);
         //this determines if the role in question is changed by my mod
-        bool isModifiedByTos1UI = Utils.ModifiedByToS1UI(role)
-                                  && ModStates.IsLoaded("dum.oldui");
+        var isModifiedByTos1UI = Utils.ModifiedByToS1UI(role) && ModStates.IsLoaded("dum.oldui");
+
         if (sprite != AssetManager.Blank && __instance.roleIcon)
             __instance.roleIcon.sprite = sprite;
 
-        var special = AssetManager.GetSprite($"{name}_Special");
+        var specialName = $"{name}_Special";
+        var special = AssetManager.GetSprite(specialName);
 
         if (special != AssetManager.Blank && __instance.specialAbilityPanel && role != Role.NECROMANCER)
             __instance.specialAbilityPanel.useButton.abilityIcon.sprite = special;
@@ -382,10 +390,17 @@ public static class PatchGuideRoleCards
             index++;
         else if (isModifiedByTos1UI)
         {
-            __instance.roleInfoButtons[index].abilityIcon.sprite = special;
-            index++;
+            if (special != AssetManager.Blank)
+            {
+                __instance.roleInfoButtons[index].abilityIcon.sprite = special;
+                index++;
+            }
+            else if (Utils.Skippable(specialName))
+                index++;
+
             isModifiedByTos1UI = false;
         }
+
         var abilityname2 = $"{name}_Ability_2";
         var ability2 = AssetManager.GetSprite(abilityname2, false);
 
@@ -398,10 +413,17 @@ public static class PatchGuideRoleCards
             index++;
         else if (isModifiedByTos1UI)
         {
-            __instance.roleInfoButtons[index].abilityIcon.sprite = special;
-            index++;
+            if (special != AssetManager.Blank)
+            {
+                __instance.roleInfoButtons[index].abilityIcon.sprite = special;
+                index++;
+            }
+            else if (Utils.Skippable(specialName))
+                index++;
+
             isModifiedByTos1UI = false;
         }
+
         var attributename = $"Attributes_{Utils.FactionName(role.GetFaction(), role)}";
         var attribute = AssetManager.GetSprite(attributename, false);
 
@@ -425,10 +447,10 @@ public static class PatchDoomsayerLeaving
 {
     public static void Postfix(DoomsayerLeavesCinematicPlayer __instance)
     {
-        Recolors.LogMessage("Patching DoomsayerLeavesCinematicPlayer.Init");
-
         if (!Constants.EnableIcons)
             return;
+
+        Recolors.LogMessage("Patching DoomsayerLeavesCinematicPlayer.Init");
 
         var role1 = __instance.doomsayerLeavesCinematicData.roles[0];
         var role2 = __instance.doomsayerLeavesCinematicData.roles[1];
@@ -490,11 +512,10 @@ public static class PatchScrolls
 
     public static void Postfix()
     {
-        Recolors.LogMessage("Patching HomeScrollService.Init");
-
         if (!Constants.EnableIcons)
             return;
 
+        Recolors.LogMessage("Patching HomeScrollService.Init");
         AssetManager.SetScrollSprites();
         ServiceExists = true;
     }
@@ -505,11 +526,10 @@ public static class PatchAttackDefense
 {
     public static void Postfix(RoleCardPanel __instance, ref RoleCardData data)
     {
-        Recolors.LogMessage("Patching RoleCardPanel.ShowAttackAndDefense");
-
         if (!Constants.EnableIcons)
             return;
 
+        Recolors.LogMessage("Patching RoleCardPanel.ShowAttackAndDefense");
         var attack = AssetManager.GetSprite($"Attack{Utils.GetLevel(data.attack, true)}");
         var icon1 = __instance.transform.Find("AttackIcon").Find("Icon").GetComponent<Image>();
 
@@ -539,11 +559,10 @@ public static class PatchAttackDefensePopup
 {
     public static void Postfix(RoleCardPopupPanel __instance, ref RoleCardData data)
     {
-        Recolors.LogMessage("Patching RoleCardPopupPanel.ShowAttackAndDefense");
-
         if (!Constants.EnableIcons)
             return;
 
+        Recolors.LogMessage("Patching RoleCardPopupPanel.ShowAttackAndDefense");
         var attack = AssetManager.GetSprite($"Attack{Utils.GetLevel(data.attack, true)}");
         var icon1 = __instance.transform.Find("AttackIcon").Find("Icon").GetComponent<Image>();
 
@@ -565,34 +584,6 @@ public static class PatchAttackDefensePopup
 
             icon2.sprite = defense != AssetManager.Blank ? defense : AssetManager.Defense;
         }
-    }
-}
-
-[HarmonyPatch(typeof(TosAbilityPanelListItem), nameof(TosAbilityPanelListItem.SetKnownRole))]
-public static class FixApocNaming
-{
-    public static void Postfix(TosAbilityPanelListItem __instance, ref Role role)
-    {
-        Recolors.LogMessage("Patching TosAbilityPanelListItem.SetKnownRole");
-
-        if (role != Pepper.GetMyRole() || !role.IsApoc())
-            return;
-
-        if (Constants.IsTransformed)
-        {
-            role = role switch
-            {
-                Role.BAKER => Role.FAMINE,
-                Role.BERSERKER => Role.WAR,
-                Role.SOULCOLLECTOR => Role.DEATH,
-                Role.PLAGUEBEARER => Role.PESTILENCE,
-                _ => role
-            };
-        }
-
-        ColorUtility.TryParseHtmlString(role.GetFaction().GetFactionColor(), out var color);
-        __instance.playerRoleText.color = color;
-        __instance.playerRoleText.text = $"({role.ToDisplayString()})";
     }
 }
 
