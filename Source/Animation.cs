@@ -1,4 +1,4 @@
-using UnityEngine.UI;
+/*using UnityEngine.UI;
 
 namespace IconPacks;
 
@@ -43,4 +43,4 @@ public class Animation : MonoBehaviour
         if (Index >= Frames.Count)
             Index = 0;
     }
-}
+}*/
