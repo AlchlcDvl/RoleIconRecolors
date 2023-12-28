@@ -28,7 +28,7 @@ public class IconPack
 
     private static readonly string[] Folders = new[] { "", "TT", "VIP", "Custom" };
     private static readonly string[] Styles = new[] { "Main", "Traitor", "VIP", "Custom" };
-    private static readonly string[] FileTypes = new[] { "png", "jpg" };
+    public static readonly string[] FileTypes = new[] { "png", "jpg" };
 
     public IconPack(string name)
     {

@@ -258,9 +258,9 @@ public static class AssetManager
             UObject.DontDestroyOnLoad(texture);
             return texture.Decompress();
         }
-        catch
+        catch (Exception e)
         {
-            Recolors.LogError($"Error loading {folder} > {subfolder} > {fileName}");
+            Recolors.LogError($"Error loading {folder} > {subfolder} > {fileName} ({filetype})\n{e}");
             return null;
         }
     }
@@ -273,35 +273,26 @@ public static class AssetManager
             var path = Path.Combine(ModPath, folder, subfolder, animationName);
             var textures = new List<Texture2D>();
 
-            foreach (var file in Directory.GetFiles(path, "*.png"))
+            foreach (var type in IconPack.FileTypes)
             {
-                var fileName = file.SanitisePath(true);
-                var filePath = Path.Combine(path, $"{fileName}.png");
-                var texture = EmptyTexture();
-                texture.LoadImage(File.ReadAllBytes(filePath), false);
-                texture.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
-                texture.name = fileName;
-                UObject.DontDestroyOnLoad(texture);
-                textures.Add(texture.Decompress());
-            }
-
-            foreach (var file in Directory.GetFiles(path, "*.jpg"))
-            {
-                var fileName = file.SanitisePath(true);
-                var filePath = Path.Combine(path, $"{fileName}.jpg");
-                var texture = EmptyTexture();
-                texture.LoadImage(File.ReadAllBytes(filePath), false);
-                texture.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
-                texture.name = fileName;
-                UObject.DontDestroyOnLoad(texture);
-                textures.Add(texture.Decompress());
+                foreach (var file in Directory.GetFiles(path, $"*.{type}"))
+                {
+                    var fileName = file.SanitisePath(true);
+                    var filePath = Path.Combine(path, $"{fileName}.{type}");
+                    var texture = EmptyTexture();
+                    texture.LoadImage(File.ReadAllBytes(filePath), false);
+                    texture.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
+                    texture.name = fileName;
+                    UObject.DontDestroyOnLoad(texture);
+                    textures.Add(texture.Decompress());
+                }
             }
 
             return textures;
         }
-        catch
+        catch (Exception e)
         {
-            Recolors.LogError($"Error loading {folder} > {subfolder} > {animationName}");
+            Recolors.LogError($"Error loading {folder} > {subfolder} > {animationName}\n{e}");
             return null;
         }
     }

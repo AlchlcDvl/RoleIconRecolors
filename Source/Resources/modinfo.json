@@ -50,7 +50,7 @@
         "Name": "Animation Duration",
         "SettingID": "recolors.duration",
         "Description": "The duration of icon animations.",
-        "DefaultValue": 5,
+        "DefaultValue": 2,
         "MinValue": 0.5,
         "MaxValue": 10,
         "AvailableInGame": true
