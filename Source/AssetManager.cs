@@ -277,7 +277,7 @@ public static class AssetManager
             {
                 foreach (var file in Directory.GetFiles(path, $"*.{type}"))
                 {
-                    var fileName = file.SanitisePath(true);
+                    var fileName = file.SanitisePath();
                     var filePath = Path.Combine(path, $"{fileName}.{type}");
                     var texture = EmptyTexture();
                     texture.LoadImage(File.ReadAllBytes(filePath), false);
