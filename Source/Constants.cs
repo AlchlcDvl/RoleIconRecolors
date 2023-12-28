@@ -8,6 +8,7 @@ public static class Constants
     public static int EasterEggChance => ModSettings.GetInt("Easter Egg Icon Chance", "alchlcsystm.recolors");
     public static string CurrentPack => ModSettings.GetString("Selected Icon Pack", "alchlcsystm.recolors");
     public static string CurrentStyle => ModSettings.GetString("Selected Mention Style", "alchlcsystm.recolors");
+    public static float AnimationDuration => ModSettings.GetFloat("Animation Duration", "alchlcsystm.recolors");
     public static bool EnableIcons => CurrentPack != "Vanilla";
     public static bool IsNecroActive
     {

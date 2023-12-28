@@ -190,4 +190,8 @@ public static class Utils
         // dict allows us to find dict[rolename.tolower] and get Role{number} for later use in spritecharacters
         return (rolesWithIndex.ToDictionary(rolesSelect => rolesSelect.Item1.ToLower(), rolesSelect => $"Role{rolesSelect.Item2}"), rolesWithIndex);
     }
+
+    public static T EnsureComponent<T>(this Component component) where T : Component => component.gameObject?.EnsureComponent<T>();
+
+    public static T EnsureComponent<T>(this GameObject gameObject) where T : Component => gameObject?.GetComponent<T>() ?? gameObject?.AddComponent<T>();
 }

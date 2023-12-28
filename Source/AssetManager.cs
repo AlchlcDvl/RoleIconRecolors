@@ -7,6 +7,11 @@ public static class AssetManager
     public static readonly Dictionary<string, List<Sprite>> RegEEIcons = new();
     public static readonly Dictionary<string, List<Sprite>> TTEEIcons = new();
     public static readonly Dictionary<string, List<Sprite>> VIPEEIcons = new();
+
+    public static readonly Dictionary<string, List<List<Sprite>>> RegEEAnimations = new();
+    public static readonly Dictionary<string, List<List<Sprite>>> TTEEAnimations = new();
+    public static readonly Dictionary<string, List<List<Sprite>>> VIPEEAnimations = new();
+
     public static readonly Dictionary<string, IconPack> IconPacks = new();
     public static readonly Dictionary<int, Sprite> CacheScrollSprites = new();
 
@@ -15,11 +20,12 @@ public static class AssetManager
     public static Sprite Attack;
     public static Sprite Defense;
 
+    public static List<Sprite> Blanks;
+
     public static TMP_SpriteAsset Asset;
     public static bool SpriteSheetLoaded;
 
     public static string ModPath => Path.Combine(Path.GetDirectoryName(Application.dataPath), "SalemModLoader", "ModFolders", "Recolors");
-    public static string DefaultPath => Path.Combine(ModPath, "Recolors");
     public static string VanillaPath => Path.Combine(ModPath, "Vanilla");
 
     public static readonly string[] Folders = new[] { "Base", "TTBase", "VIPBase", "EasterEggs", "TTEasterEggs", "VIPEasterEggs" };
@@ -62,6 +68,36 @@ public static class AssetManager
         }
     }
 
+    public static List<Sprite> GetSprites(string name, bool allowEE = true)
+    {
+        if (name.Contains("Blank") || !Constants.EnableIcons || IconPacks.Count == 0)
+            return Blanks;
+
+        if (!IconPacks.TryGetValue(Constants.CurrentPack, out var pack))
+        {
+            Recolors.LogError($"Error finding {Constants.CurrentPack} in loaded packs");
+            ModSettings.SetString("Selected Icon Pack", "Vanilla", "alchlcsystm.recolors");
+            return Blanks;
+        }
+
+        try
+        {
+            if (Avoid.Any(name.Contains))
+                return GetRegSprites(pack, name, allowEE);
+            else if (Constants.IsLocalTT)
+                return GetTTSprites(pack, name, allowEE);
+            else if (Constants.IsLocalVIP)
+                return GetVIPSprites(pack, name, allowEE);
+            else
+                return GetRegSprites(pack, name, allowEE);
+        }
+        catch (Exception e)
+        {
+            Recolors.LogError(e);
+            return Blanks;
+        }
+    }
+
     private static Sprite GetRegSprite(IconPack pack, string name, bool allowEE = true)
     {
         if (!pack.RegIcons.TryGetValue(name, out var sprite))
@@ -78,7 +114,26 @@ public static class AssetManager
                 return sprites.Random();
         }
 
-        return sprite;
+        return sprite ?? Blank;
+    }
+
+    private static List<Sprite> GetRegSprites(IconPack pack, string name, bool allowEE = true)
+    {
+        if (!pack.RegAnimations.TryGetValue(name, out var sprites))
+        {
+            Recolors.LogWarning($"Couldn't find regular {name} animation in {pack.Name}'s recources");
+            return Blanks;
+        }
+
+        if (URandom.RandomRangeInt(1, 101) <= Constants.EasterEggChance && allowEE)
+        {
+            if (pack.RegEEAnimations.TryGetValue(name, out var spritess) && !Constants.AllEasterEggs)
+                return spritess.Random();
+            else if (RegEEAnimations.TryGetValue(name, out spritess))
+                return spritess.Random();
+        }
+
+        return sprites ?? Blanks;
     }
 
     private static Sprite GetTTSprite(IconPack pack, string name, bool allowEE = true)
@@ -97,7 +152,26 @@ public static class AssetManager
                 return sprites.Random();
         }
 
-        return sprite;
+        return sprite ?? Blank;
+    }
+
+    private static List<Sprite> GetTTSprites(IconPack pack, string name, bool allowEE = true)
+    {
+        if (!pack.TTAnimations.TryGetValue(name, out var sprites))
+        {
+            Recolors.LogWarning($"Couldn't find regular {name} animation in {pack.Name}'s recources");
+            return GetRegSprites(pack, name, allowEE);
+        }
+
+        if (URandom.RandomRangeInt(1, 101) <= Constants.EasterEggChance && allowEE)
+        {
+            if (pack.TTEEAnimations.TryGetValue(name, out var spritess) && !Constants.AllEasterEggs)
+                return spritess.Random();
+            else if (TTEEAnimations.TryGetValue(name, out spritess))
+                return spritess.Random();
+        }
+
+        return sprites ?? Blanks;
     }
 
     private static Sprite GetVIPSprite(IconPack pack, string name, bool allowEE = true)
@@ -116,27 +190,32 @@ public static class AssetManager
                 return sprites.Random();
         }
 
-        return sprite;
+        return sprite ?? Blank;
+    }
+
+    private static List<Sprite> GetVIPSprites(IconPack pack, string name, bool allowEE = true)
+    {
+        if (!pack.VIPAnimations.TryGetValue(name, out var sprites))
+        {
+            Recolors.LogWarning($"Couldn't find VIP {name} animation in {pack.Name}'s recources");
+            return GetRegSprites(pack, name, allowEE);
+        }
+
+        if (URandom.RandomRangeInt(1, 101) <= Constants.EasterEggChance && allowEE)
+        {
+            if (pack.VIPEEAnimations.TryGetValue(name, out var spritess) && !Constants.AllEasterEggs)
+                return spritess.Random();
+            else if (VIPEEAnimations.TryGetValue(name, out spritess))
+                return spritess.Random();
+        }
+
+        return sprites ?? Blanks;
     }
 
     public static void LoadAssets()
     {
         if (!Directory.Exists(ModPath))
             Directory.CreateDirectory(ModPath);
-
-        if (!Directory.Exists(VanillaPath))
-            Directory.CreateDirectory(VanillaPath);
-
-        if (!Directory.Exists(DefaultPath))
-            Directory.CreateDirectory(DefaultPath);
-
-        foreach (var folder in Folders)
-        {
-            var path = Path.Combine(DefaultPath, folder);
-
-            if (!Directory.Exists(path))
-                Directory.CreateDirectory(path);
-        }
 
         RegEEIcons.Clear();
         TTEEIcons.Clear();
@@ -156,6 +235,7 @@ public static class AssetManager
             }
         });
 
+        Blanks = new() { Blank };
         TryLoadingSprites(Constants.CurrentPack);
     }
 
@@ -172,7 +252,7 @@ public static class AssetManager
             texture.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
             texture.name = fileName;
             UObject.DontDestroyOnLoad(texture);
-            return texture;
+            return texture.Decompress();
         }
         catch
         {
@@ -181,7 +261,36 @@ public static class AssetManager
         }
     }
 
-    public static Sprite LoadSpriteFromDisk(string fileName, string subfolder, string folder)
+    private static List<Texture2D> LoadDiskTextures(string animationName, string subfolder, string folder)
+    {
+        try
+        {
+            animationName = animationName.SanitisePath();
+            var path = Path.Combine(ModPath, folder, subfolder, animationName);
+            var textures = new List<Texture2D>();
+
+            foreach (var file in Directory.EnumerateFiles(path, "*.png"))
+            {
+                var fileName = file.SanitisePath();
+                var filePath = Path.Combine(path, $"{fileName}.png");
+                var texture = EmptyTexture();
+                ImageConversion.LoadImage(texture, File.ReadAllBytes(filePath), false);
+                texture.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
+                texture.name = fileName;
+                UObject.DontDestroyOnLoad(texture);
+                textures.Add(texture.Decompress());
+            }
+
+            return textures;
+        }
+        catch
+        {
+            Recolors.LogError($"Error loading {folder} > {subfolder} > {animationName}");
+            return null;
+        }
+    }
+
+    public static Sprite LoadDiskSprite(string fileName, string subfolder, string folder)
     {
         try
         {
@@ -197,22 +306,75 @@ public static class AssetManager
             var texture = LoadDiskTexture(path, subfolder, folder);
 
             if (texture == null)
+            {
+                Recolors.LogError($"Uh oh texture loading error at {path}");
                 return null;
+            }
 
             var sprite = Sprite.Create(texture, new(0, 0, texture.width, texture.height), new(0.5f, 0.5f), 100);
 
             if (sprite == null)
+            {
+                Recolors.LogError($"Uh oh sprite loading error at {path}");
                 return null;
+            }
 
             sprite.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
-            sprite.name = fileName;
+            sprite.name = texture.name;
             UObject.DontDestroyOnLoad(sprite);
             return sprite;
         }
         catch (Exception e)
         {
             Recolors.LogError(e);
-            return Blank;
+            return null;
+        }
+    }
+
+    public static List<Sprite> LoadDiskSprites(string animationName, string subfolder, string folder)
+    {
+        try
+        {
+            animationName = animationName.SanitisePath();
+            var path = Path.Combine(ModPath, folder, subfolder, animationName);
+
+            if (!Directory.Exists(path))
+            {
+                Recolors.LogError($"Path {folder} > {subfolder} > {animationName} was missing");
+                return null;
+            }
+
+            var textures = LoadDiskTextures(path, subfolder, folder);
+
+            if (textures == null)
+            {
+                Recolors.LogError($"Uh oh textures loading error at {path}");
+                return null;
+            }
+
+            var sprites = new List<Sprite>();
+
+            foreach (var texture in textures)
+            {
+                var sprite = Sprite.Create(texture, new(0, 0, texture.width, texture.height), new(0.5f, 0.5f), 100);
+
+                if (sprite == null)
+                {
+                    Recolors.LogError($"Uh oh sprites loading error at {path}");
+                    return null;
+                }
+
+                sprite.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
+                sprite.name = texture.name;
+                UObject.DontDestroyOnLoad(sprite);
+            }
+
+            return sprites;
+        }
+        catch (Exception e)
+        {
+            Recolors.LogError(e);
+            return null;
         }
     }
 
@@ -259,6 +421,7 @@ public static class AssetManager
             else
             {
                 IconPacks.Remove(packName);
+                exists?.Delete();
                 exists = new(packName);
                 exists.Load();
                 IconPacks.Add(packName, exists);

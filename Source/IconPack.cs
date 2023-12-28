@@ -5,13 +5,26 @@ public class IconPack
     public Dictionary<string, Sprite> RegIcons { get; set; }
     public Dictionary<string, Sprite> TTIcons { get; set; }
     public Dictionary<string, Sprite> VIPIcons { get; set; }
-    public Dictionary<string, Sprite> CustomIcons { get; set; }
+
     public Dictionary<string, List<Sprite>> RegEEIcons { get; set; }
     public Dictionary<string, List<Sprite>> TTEEIcons { get; set; }
     public Dictionary<string, List<Sprite>> VIPEEIcons { get; set; }
+
+    public Dictionary<string, Sprite> CustomIcons { get; set; }
+
     public Dictionary<string, TMP_SpriteAsset> MentionStyles { get; set; }
+
+    public Dictionary<string, List<Sprite>> RegAnimations { get; set; }
+    public Dictionary<string, List<Sprite>> TTAnimations { get; set; }
+    public Dictionary<string, List<Sprite>> VIPAnimations { get; set; }
+
+    public Dictionary<string, List<List<Sprite>>> RegEEAnimations { get; set; }
+    public Dictionary<string, List<List<Sprite>>> TTEEAnimations { get; set; }
+    public Dictionary<string, List<List<Sprite>>> VIPEEAnimations { get; set; }
+
     public string Name { get; }
-    public string PackPath => Path.Combine(AssetManager.ModPath, Name);
+
+    private string PackPath => Path.Combine(AssetManager.ModPath, Name);
 
     private static readonly string[] Folders = new[] { "", "TT", "VIP", "Custom" };
     private static readonly string[] Styles = new[] { "Main", "Traitor", "VIP", "Custom" };
@@ -25,6 +38,12 @@ public class IconPack
         TTEEIcons = new();
         VIPIcons = new();
         VIPEEIcons = new();
+        RegAnimations = new();
+        RegEEAnimations = new();
+        TTAnimations = new();
+        TTEEAnimations = new();
+        VIPAnimations = new();
+        VIPEEAnimations = new();
         CustomIcons = new();
         MentionStyles = new();
     }
@@ -37,29 +56,48 @@ public class IconPack
         Recolors.LogMessage($"{Name} {TTIcons.Count} TT Assets loaded!");
         VIPIcons.ForEach((x, _) => Recolors.LogMessage($"{Name} {x} has a VIP sprite!"));
         Recolors.LogMessage($"{Name} {VIPIcons.Count} VIP Assets loaded!");
-        CustomIcons.ForEach((x, _) => Recolors.LogMessage($"{Name} {x} has a Custom Mention sprite!"));
-        Recolors.LogMessage($"{Name} {CustomIcons.Count} Custom Assets loaded!");
+
         RegEEIcons.ForEach((x, y) => Recolors.LogMessage($"{Name} {x} has {y.Count} Easter Egg sprite(s)!"));
         Recolors.LogMessage($"{Name} {RegEEIcons.Count} Easter Egg Assets loaded!");
         TTEEIcons.ForEach((x, y) => Recolors.LogMessage($"{Name} {x} has {y.Count} TT Easter Egg sprite(s)!"));
         Recolors.LogMessage($"{Name} {TTEEIcons.Count} TT Easter Egg Assets loaded!");
         VIPEEIcons.ForEach((x, y) => Recolors.LogMessage($"{Name} {x} has {y.Count} VIP Easter Egg sprite(s)!"));
         Recolors.LogMessage($"{Name} {VIPEEIcons.Count} VIP Easter Egg Assets loaded!");
+
+        CustomIcons.ForEach((x, _) => Recolors.LogMessage($"{Name} {x} has a Custom Mention sprite!"));
+        Recolors.LogMessage($"{Name} {CustomIcons.Count} Custom Assets loaded!");
+
         MentionStyles.ForEach((x, _) => Recolors.LogMessage($"{Name} {x} mention style exists!"));
         Recolors.LogMessage($"{Name} {MentionStyles.Count} mention styles exist!");
+
+        RegAnimations.ForEach((x, _) => Recolors.LogMessage($"{Name} {x} has an animation!"));
+        Recolors.LogMessage($"{Name} {RegAnimations.Count} Animations loaded!");
+        TTAnimations.ForEach((x, _) => Recolors.LogMessage($"{Name} {x} has a TT animation!"));
+        Recolors.LogMessage($"{Name} {TTAnimations.Count} TT Animations loaded!");
+        VIPAnimations.ForEach((x, _) => Recolors.LogMessage($"{Name} {x} has a VIP animation!"));
+        Recolors.LogMessage($"{Name} {VIPAnimations.Count} VIP Animations loaded!");
+
+        RegEEAnimations.ForEach((x, y) => Recolors.LogMessage($"{Name} {x} has {y.Count} Easter Egg animation(s)!"));
+        Recolors.LogMessage($"{Name} {RegEEAnimations.Count} Easter Egg Animations loaded!");
+        TTEEAnimations.ForEach((x, y) => Recolors.LogMessage($"{Name} {x} has {y.Count} TT Easter Egg animation(s)!"));
+        Recolors.LogMessage($"{Name} {TTEEAnimations.Count} TT Easter Egg Animations loaded!");
+        VIPEEAnimations.ForEach((x, y) => Recolors.LogMessage($"{Name} {x} has {y.Count} VIP Easter Egg animation(s)!"));
+        Recolors.LogMessage($"{Name} {VIPEEAnimations.Count} VIP Easter Egg Animations loaded!");
     }
 
-    public void Reload()
+    public void Delete()
     {
-        Recolors.LogMessage($"Reloading {Name}");
+        Recolors.LogMessage($"Deleteing {Name}");
         RegIcons.Values.ForEach(UObject.Destroy);
         RegIcons.Clear();
         TTIcons.Values.ForEach(UObject.Destroy);
         TTIcons.Clear();
         VIPIcons.Values.ForEach(UObject.Destroy);
         VIPIcons.Clear();
+
         CustomIcons.Values.ForEach(UObject.Destroy);
         CustomIcons.Clear();
+
         RegEEIcons.Values.ForEach(x => x.ForEach(UObject.Destroy));
         RegEEIcons.Values.ForEach(x => x.Clear());
         RegEEIcons.Clear();
@@ -69,8 +107,38 @@ public class IconPack
         TTEEIcons.Values.ForEach(x => x.ForEach(UObject.Destroy));
         TTEEIcons.Values.ForEach(x => x.Clear());
         TTEEIcons.Clear();
+
+        RegAnimations.Values.ForEach(x => x.ForEach(UObject.Destroy));
+        RegAnimations.Values.ForEach(x => x.Clear());
+        RegAnimations.Clear();
+        VIPAnimations.Values.ForEach(x => x.ForEach(UObject.Destroy));
+        VIPAnimations.Values.ForEach(x => x.Clear());
+        VIPAnimations.Clear();
+        TTAnimations.Values.ForEach(x => x.ForEach(UObject.Destroy));
+        TTAnimations.Values.ForEach(x => x.Clear());
+        TTAnimations.Clear();
+
+        RegEEAnimations.Values.ForEach(x => x.ForEach(y => y.ForEach(UObject.Destroy)));
+        RegEEAnimations.Values.ForEach(x => x.ForEach(y => y.Clear()));
+        RegEEAnimations.Values.ForEach(x => x.Clear());
+        RegEEAnimations.Clear();
+        VIPEEAnimations.Values.ForEach(x => x.ForEach(y => y.ForEach(UObject.Destroy)));
+        VIPEEAnimations.Values.ForEach(x => x.ForEach(y => y.Clear()));
+        VIPEEAnimations.Values.ForEach(x => x.Clear());
+        VIPEEAnimations.Clear();
+        TTEEAnimations.Values.ForEach(x => x.ForEach(y => y.ForEach(UObject.Destroy)));
+        TTEEAnimations.Values.ForEach(x => x.ForEach(y => y.Clear()));
+        TTEEAnimations.Values.ForEach(x => x.Clear());
+        TTEEAnimations.Clear();
+
         MentionStyles.Values.ForEach(UObject.Destroy);
         MentionStyles.Clear();
+    }
+
+    public void Reload()
+    {
+        Recolors.LogMessage($"Reloading {Name}");
+        Delete();
         Load();
         LoadSpriteSheet(true);
         AssetManager.SetScrollSprites();
@@ -94,8 +162,11 @@ public class IconPack
                         foreach (var file in Directory.EnumerateFiles(baseFolder, "*.png"))
                         {
                             var filePath = Path.Combine(baseFolder, $"{file.SanitisePath()}.png");
-                            var sprite = AssetManager.LoadSpriteFromDisk(filePath, baseName, Name);
+                            var sprite = AssetManager.LoadDiskSprite(filePath, baseName, Name);
                             filePath = filePath.SanitisePath(true);
+
+                            if (sprite == null)
+                                continue;
 
                             if (name == "")
                                 RegIcons.TryAdd(filePath, sprite);
@@ -103,6 +174,23 @@ public class IconPack
                                 TTIcons.TryAdd(filePath, sprite);
                             else if (name == "VIP")
                                 VIPIcons.TryAdd(filePath, sprite);
+                        }
+
+                        foreach (var folder in Directory.EnumerateDirectories(baseFolder))
+                        {
+                            var filePath = Path.Combine(baseFolder, folder.SanitisePath());
+                            var sprites = AssetManager.LoadDiskSprites(filePath, baseName, Name);
+                            filePath = filePath.SanitisePath(true);
+
+                            if (sprites == null)
+                                continue;
+
+                            if (name == "")
+                                RegAnimations.TryAdd(filePath, sprites);
+                            else if (name == "TT")
+                                TTAnimations.TryAdd(filePath, sprites);
+                            else if (name == "VIP")
+                                VIPAnimations.TryAdd(filePath, sprites);
                         }
                     }
                     else
@@ -119,8 +207,11 @@ public class IconPack
                         foreach (var file in Directory.EnumerateFiles(eeFolder, "*.png"))
                         {
                             var filePath = Path.Combine(eeFolder, $"{file.SanitisePath()}.png");
-                            var sprite = AssetManager.LoadSpriteFromDisk(filePath, eeName, Name);
+                            var sprite = AssetManager.LoadDiskSprite(filePath, eeName, Name);
                             filePath = filePath.SanitisePath(true);
+
+                            if (sprite == null)
+                                continue;
 
                             if (name == "")
                             {
@@ -159,6 +250,53 @@ public class IconPack
                                     AssetManager.VIPEEIcons.TryAdd(filePath, new() { sprite });
                             }
                         }
+
+                        foreach (var folder in Directory.EnumerateDirectories(eeFolder))
+                        {
+                            var filePath = Path.Combine(baseFolder, folder.SanitisePath());
+                            var sprites = AssetManager.LoadDiskSprites(filePath, baseName, Name);
+                            filePath = filePath.SanitisePath(true);
+
+                            if (sprites == null)
+                                continue;
+
+                            if (name == "")
+                            {
+                                if (RegEEAnimations.ContainsKey(filePath))
+                                    RegEEAnimations[filePath].Add(sprites);
+                                else
+                                    RegEEAnimations.TryAdd(filePath, new() { sprites });
+
+                                if (AssetManager.RegEEAnimations.ContainsKey(filePath))
+                                    AssetManager.RegEEAnimations[filePath].Add(sprites);
+                                else
+                                    AssetManager.RegEEAnimations.TryAdd(filePath, new() { sprites });
+                            }
+                            else if (name == "TT")
+                            {
+                                if (TTEEAnimations.ContainsKey(filePath))
+                                    TTEEAnimations[filePath].Add(sprites);
+                                else
+                                    TTEEAnimations.TryAdd(filePath, new() { sprites });
+
+                                if (AssetManager.TTEEAnimations.ContainsKey(filePath))
+                                    AssetManager.TTEEAnimations[filePath].Add(sprites);
+                                else
+                                    AssetManager.TTEEAnimations.TryAdd(filePath, new() { sprites });
+                            }
+                            else if (name == "VIP")
+                            {
+                                if (VIPEEAnimations.ContainsKey(filePath))
+                                    VIPEEAnimations[filePath].Add(sprites);
+                                else
+                                    VIPEEAnimations.TryAdd(filePath, new() { sprites });
+
+                                if (AssetManager.VIPEEAnimations.ContainsKey(filePath))
+                                    AssetManager.VIPEEAnimations[filePath].Add(sprites);
+                                else
+                                    AssetManager.VIPEEAnimations.TryAdd(filePath, new() { sprites });
+                            }
+                        }
                     }
                     else
                     {
@@ -175,7 +313,7 @@ public class IconPack
                         foreach (var file in Directory.EnumerateFiles(folder, "*.png"))
                         {
                             var filePath = Path.Combine(folder, $"{file.SanitisePath()}.png");
-                            var sprite = AssetManager.LoadSpriteFromDisk(filePath, "Custom", Name);
+                            var sprite = AssetManager.LoadDiskSprite(filePath, "Custom", Name);
                             filePath = filePath.SanitisePath(true);
 
                             if (name == "")
@@ -222,6 +360,16 @@ public class IconPack
                     "Custom" => CustomIcons,
                     _ => RegIcons,
                 };
+                var animationsDict = style switch
+                {
+                    "Traitor" => TTAnimations,
+                    "VIP" => VIPAnimations,
+                    "Custom" => new(),
+                    _ => RegAnimations,
+                };
+
+                if (style == "Custom")
+                    CustomIcons.ForEach((x, y) => animationsDict.Add(x, new() { y }));
 
                 // now get all the sprites that we want to load
                 foreach (var (role, roleInt) in rolesWithIndex)
@@ -230,8 +378,13 @@ public class IconPack
 
                     if (!spritesDict.TryGetValue(Utils.RoleName(actualRole), out var sprite))
                     {
-                        if (!RegIcons.TryGetValue(Utils.RoleName(actualRole), out sprite))
-                            sprite = Service.Game.Roles.roleInfoLookup[actualRole].sprite;
+                        if (animationsDict.TryGetValue(Utils.RoleName(actualRole), out var sprites))
+                            sprite = sprites[0];
+                        else
+                        {
+                            if (!RegIcons.TryGetValue(Utils.RoleName(actualRole), out sprite))
+                                sprite = Service.Game.Roles.roleInfoLookup[actualRole].sprite;
+                        }
                     }
 
                     sprite.texture.name = role;

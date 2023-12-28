@@ -7,6 +7,7 @@ public class Animation : MonoBehaviour
     public List<Sprite> Frames { get; set; }
     public Image Render { get; set; }
     private int Index { get; set; }
+    private float TimePassed { get; set; }
 
     public void Start()
     {
@@ -19,6 +20,7 @@ public class Animation : MonoBehaviour
         Render = render;
         Frames = frames;
         Index = 0;
+        TimePassed = 0;
 
         if (Frames.Count > 0)
             Render.sprite = Frames[0];
@@ -27,16 +29,17 @@ public class Animation : MonoBehaviour
     public void Update()
     {
         if (!Render)
-        {
             Render = gameObject.GetComponent<Image>();
 
-            if (!Render)
-                return;
-        }
-
-        if (Frames.Count == 0)
+        if (!Render || Frames.Count == 0)
             return;
 
+        TimePassed += Time.deltaTime;
+
+        if (TimePassed < Constants.AnimationDuration)
+            return;
+
+        TimePassed -= Constants.AnimationDuration;
         Render.sprite = Frames[Index];
         Index++;
 
