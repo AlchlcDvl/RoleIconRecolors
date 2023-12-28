@@ -4,22 +4,12 @@ using Cinematics.Players;
 using Home.Services;
 using UnityEngine.UI;
 
-namespace IconPacks;
+namespace IconPacks.Patches;
 
 [HarmonyPatch(typeof(RoleCardListItem), nameof(RoleCardListItem.SetData))]
 public static class PatchRoleDeckBuilder
 {
-    public static void Postfix(RoleCardListItem __instance, ref Role role)
-    {
-        if (!Constants.EnableIcons)
-            return;
-
-        Recolors.LogMessage("Patching RoleCardListItem.SetData");
-        var icon = AssetManager.GetSprite($"{Utils.RoleName(role)}", false);
-
-        if (__instance.roleImage && icon != AssetManager.Blank)
-            __instance.roleImage.sprite = icon;
-    }
+    public static void Postfix(RoleCardListItem __instance, ref Role role) => PatchHandler.PatchRoleDeckBuilder(__instance, role, GameType.Vanilla);
 }
 
 [HarmonyPatch(typeof(RoleDeckListItem), nameof(RoleDeckListItem.SetData))]
@@ -110,7 +100,7 @@ public static class PatchRoleCards
             index++;
         else if (isModifiedByTos1UI)
         {
-            if (special != AssetManager.Blank)
+            if (special != AssetManager.Blank && panel.roleInfoButtons.Exists(index))
             {
                 panel.roleInfoButtons[index].abilityIcon.sprite = special;
                 index++;
@@ -133,7 +123,7 @@ public static class PatchRoleCards
             index++;
         else if (isModifiedByTos1UI)
         {
-            if (special != AssetManager.Blank)
+            if (special != AssetManager.Blank && panel.roleInfoButtons.Exists(index))
             {
                 panel.roleInfoButtons[index].abilityIcon.sprite = special;
                 index++;
@@ -393,7 +383,7 @@ public static class PatchGuideRoleCards
             index++;
         else if (isModifiedByTos1UI)
         {
-            if (special != AssetManager.Blank)
+            if (special != AssetManager.Blank && __instance.roleInfoButtons.Exists(index))
             {
                 __instance.roleInfoButtons[index].abilityIcon.sprite = special;
                 index++;
@@ -416,7 +406,7 @@ public static class PatchGuideRoleCards
             index++;
         else if (isModifiedByTos1UI)
         {
-            if (special != AssetManager.Blank)
+            if (special != AssetManager.Blank && __instance.roleInfoButtons.Exists(index))
             {
                 __instance.roleInfoButtons[index].abilityIcon.sprite = special;
                 index++;

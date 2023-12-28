@@ -28,6 +28,7 @@ public class IconPack
 
     private static readonly string[] Folders = new[] { "", "TT", "VIP", "Custom" };
     private static readonly string[] Styles = new[] { "Main", "Traitor", "VIP", "Custom" };
+    private static readonly string[] FileTypes = new[] { "png", "jpg" };
 
     public IconPack(string name)
     {
@@ -159,24 +160,27 @@ public class IconPack
 
                     if (Directory.Exists(baseFolder))
                     {
-                        foreach (var file in Directory.EnumerateFiles(baseFolder, "*.png"))
+                        foreach (var type in FileTypes)
                         {
-                            var filePath = Path.Combine(baseFolder, $"{file.SanitisePath()}.png");
-                            var sprite = AssetManager.LoadDiskSprite(filePath.SanitisePath(), baseName, Name);
-                            filePath = filePath.SanitisePath(true);
+                            foreach (var file in Directory.GetFiles(baseFolder, $"*.{type}"))
+                            {
+                                var filePath = Path.Combine(baseFolder, $"{file.SanitisePath()}.{type}");
+                                var sprite = AssetManager.LoadDiskSprite(filePath.SanitisePath(), baseName, Name, type);
+                                filePath = filePath.SanitisePath(true);
 
-                            if (sprite == null)
-                                continue;
+                                if (sprite == null)
+                                    continue;
 
-                            if (name == "")
-                                RegIcons.TryAdd(filePath, sprite);
-                            else if (name == "TT")
-                                TTIcons.TryAdd(filePath, sprite);
-                            else if (name == "VIP")
-                                VIPIcons.TryAdd(filePath, sprite);
+                                if (name == "")
+                                    RegIcons.TryAdd(filePath, sprite);
+                                else if (name == "TT")
+                                    TTIcons.TryAdd(filePath, sprite);
+                                else if (name == "VIP")
+                                    VIPIcons.TryAdd(filePath, sprite);
+                            }
                         }
 
-                        foreach (var folder in Directory.EnumerateDirectories(baseFolder))
+                        foreach (var folder in Directory.GetDirectories(baseFolder))
                         {
                             var filePath = Path.Combine(baseFolder, folder.SanitisePath());
                             var sprites = AssetManager.LoadDiskSprites(filePath.SanitisePath(), baseName, Name);
@@ -204,50 +208,53 @@ public class IconPack
 
                     if (Directory.Exists(eeFolder))
                     {
-                        foreach (var file in Directory.EnumerateFiles(eeFolder, "*.png"))
+                        foreach (var type in FileTypes)
                         {
-                            var filePath = Path.Combine(eeFolder, $"{file.SanitisePath()}.png");
-                            var sprite = AssetManager.LoadDiskSprite(filePath, eeName, Name);
-                            filePath = filePath.SanitisePath(true);
-
-                            if (sprite == null)
-                                continue;
-
-                            if (name == "")
+                            foreach (var file in Directory.GetFiles(baseFolder, $"*.{type}"))
                             {
-                                if (RegEEIcons.ContainsKey(filePath))
-                                    RegEEIcons[filePath].Add(sprite);
-                                else
-                                    RegEEIcons.TryAdd(filePath, new() { sprite });
+                                var filePath = Path.Combine(baseFolder, $"{file.SanitisePath()}.{type}");
+                                var sprite = AssetManager.LoadDiskSprite(filePath.SanitisePath(), baseName, Name, type);
+                                filePath = filePath.SanitisePath(true);
 
-                                if (AssetManager.RegEEIcons.ContainsKey(filePath))
-                                    AssetManager.RegEEIcons[filePath].Add(sprite);
-                                else
-                                    AssetManager.RegEEIcons.TryAdd(filePath, new() { sprite });
-                            }
-                            else if (name == "TT")
-                            {
-                                if (TTEEIcons.ContainsKey(filePath))
-                                    TTEEIcons[filePath].Add(sprite);
-                                else
-                                    TTEEIcons.TryAdd(filePath, new() { sprite });
+                                if (sprite == null)
+                                    continue;
 
-                                if (AssetManager.TTEEIcons.ContainsKey(filePath))
-                                    AssetManager.TTEEIcons[filePath].Add(sprite);
-                                else
-                                    AssetManager.TTEEIcons.TryAdd(filePath, new() { sprite });
-                            }
-                            else if (name == "VIP")
-                            {
-                                if (VIPEEIcons.ContainsKey(filePath))
-                                    VIPEEIcons[filePath].Add(sprite);
-                                else
-                                    VIPEEIcons.TryAdd(filePath, new() { sprite });
+                                if (name == "")
+                                {
+                                    if (RegEEIcons.ContainsKey(filePath))
+                                        RegEEIcons[filePath].Add(sprite);
+                                    else
+                                        RegEEIcons.TryAdd(filePath, new() { sprite });
 
-                                if (AssetManager.VIPEEIcons.ContainsKey(filePath))
-                                    AssetManager.VIPEEIcons[filePath].Add(sprite);
-                                else
-                                    AssetManager.VIPEEIcons.TryAdd(filePath, new() { sprite });
+                                    if (AssetManager.RegEEIcons.ContainsKey(filePath))
+                                        AssetManager.RegEEIcons[filePath].Add(sprite);
+                                    else
+                                        AssetManager.RegEEIcons.TryAdd(filePath, new() { sprite });
+                                }
+                                else if (name == "TT")
+                                {
+                                    if (TTEEIcons.ContainsKey(filePath))
+                                        TTEEIcons[filePath].Add(sprite);
+                                    else
+                                        TTEEIcons.TryAdd(filePath, new() { sprite });
+
+                                    if (AssetManager.TTEEIcons.ContainsKey(filePath))
+                                        AssetManager.TTEEIcons[filePath].Add(sprite);
+                                    else
+                                        AssetManager.TTEEIcons.TryAdd(filePath, new() { sprite });
+                                }
+                                else if (name == "VIP")
+                                {
+                                    if (VIPEEIcons.ContainsKey(filePath))
+                                        VIPEEIcons[filePath].Add(sprite);
+                                    else
+                                        VIPEEIcons.TryAdd(filePath, new() { sprite });
+
+                                    if (AssetManager.VIPEEIcons.ContainsKey(filePath))
+                                        AssetManager.VIPEEIcons[filePath].Add(sprite);
+                                    else
+                                        AssetManager.VIPEEIcons.TryAdd(filePath, new() { sprite });
+                                }
                             }
                         }
 
@@ -310,18 +317,24 @@ public class IconPack
 
                     if (Directory.Exists(folder))
                     {
-                        foreach (var file in Directory.EnumerateFiles(folder, "*.png"))
+                        foreach (var type in FileTypes)
                         {
-                            var filePath = Path.Combine(folder, $"{file.SanitisePath()}.png");
-                            var sprite = AssetManager.LoadDiskSprite(filePath, "Custom", Name);
-                            filePath = filePath.SanitisePath(true);
+                            foreach (var file in Directory.GetFiles(folder, $"*.{type}"))
+                            {
+                                var filePath = Path.Combine(folder, $"{file.SanitisePath()}.{type}");
+                                var sprite = AssetManager.LoadDiskSprite(filePath.SanitisePath(), "Custom", Name, type);
+                                filePath = filePath.SanitisePath(true);
 
-                            if (name == "")
-                                RegIcons.TryAdd(filePath, sprite);
-                            else if (name == "TT")
-                                TTIcons.TryAdd(filePath, sprite);
-                            else if (name == "VIP")
-                                VIPIcons.TryAdd(filePath, sprite);
+                                if (sprite == null)
+                                    continue;
+
+                                if (name == "")
+                                    RegIcons.TryAdd(filePath, sprite);
+                                else if (name == "TT")
+                                    TTIcons.TryAdd(filePath, sprite);
+                                else if (name == "VIP")
+                                    VIPIcons.TryAdd(filePath, sprite);
+                            }
                         }
                     }
                     else

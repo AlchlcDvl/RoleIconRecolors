@@ -34,7 +34,7 @@ public static class AssetManager
         "TownKilling", "TownSupport", "TownProtective", "TownPower", "CovenKilling", "CovenDeception", "CovenUtility", "CovenPower", "Coven", "SlowMode", "FastMode", "AnonVotes",
         "HiddenKillers", "HiddenRoles", "OneTrial" };
 
-    private static readonly string[] ToRemove = new[] { ".png" };
+    private static readonly string[] ToRemove = new[] { ".png", ".jpg" };
 
     private static Assembly Core => typeof(Recolors).Assembly;
 
@@ -245,12 +245,12 @@ public static class AssetManager
 
     private static Texture2D EmptyTexture() => new(2, 2, TextureFormat.ARGB32, true);
 
-    private static Texture2D LoadDiskTexture(string fileName, string subfolder, string folder)
+    private static Texture2D LoadDiskTexture(string fileName, string subfolder, string folder, string filetype)
     {
         try
         {
             fileName = fileName.SanitisePath();
-            var path = Path.Combine(ModPath, folder, subfolder, $"{fileName}.png");
+            var path = Path.Combine(ModPath, folder, subfolder, $"{fileName}.{filetype}");
             var texture = EmptyTexture();
             texture.LoadImage(File.ReadAllBytes(path), false);
             texture.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
@@ -273,10 +273,22 @@ public static class AssetManager
             var path = Path.Combine(ModPath, folder, subfolder, animationName);
             var textures = new List<Texture2D>();
 
-            foreach (var file in Directory.EnumerateFiles(path, "*.png"))
+            foreach (var file in Directory.GetFiles(path, "*.png"))
             {
                 var fileName = file.SanitisePath(true);
                 var filePath = Path.Combine(path, $"{fileName}.png");
+                var texture = EmptyTexture();
+                texture.LoadImage(File.ReadAllBytes(filePath), false);
+                texture.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
+                texture.name = fileName;
+                UObject.DontDestroyOnLoad(texture);
+                textures.Add(texture.Decompress());
+            }
+
+            foreach (var file in Directory.GetFiles(path, "*.jpg"))
+            {
+                var fileName = file.SanitisePath(true);
+                var filePath = Path.Combine(path, $"{fileName}.jpg");
                 var texture = EmptyTexture();
                 texture.LoadImage(File.ReadAllBytes(filePath), false);
                 texture.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
@@ -294,12 +306,12 @@ public static class AssetManager
         }
     }
 
-    public static Sprite LoadDiskSprite(string fileName, string subfolder, string folder)
+    public static Sprite LoadDiskSprite(string fileName, string subfolder, string folder, string filetype)
     {
         try
         {
             fileName = fileName.SanitisePath();
-            var path = Path.Combine(ModPath, folder, subfolder, $"{fileName}.png");
+            var path = Path.Combine(ModPath, folder, subfolder, $"{fileName}.{filetype}");
 
             if (!File.Exists(path))
             {
@@ -307,7 +319,7 @@ public static class AssetManager
                 return null;
             }
 
-            var texture = LoadDiskTexture(path.SanitisePath(), subfolder, folder);
+            var texture = LoadDiskTexture(path.SanitisePath(), subfolder, folder, filetype);
 
             if (texture == null)
             {

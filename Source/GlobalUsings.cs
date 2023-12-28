@@ -17,3 +17,5 @@ global using Server.Shared.Info;
 global using Services;
 
 global using TMPro;
+
+global using IconPacks.Patches;
