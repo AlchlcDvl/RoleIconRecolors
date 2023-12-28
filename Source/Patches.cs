@@ -59,6 +59,12 @@ public static class PatchRoleCards
 {
     public static void Postfix(RoleCardPanelBackground __instance, ref Role role)
     {
+        if (!Constants.EnableIcons)
+            return;
+
+        Recolors.LogMessage("Patching RoleCardPanelBackground.SetRole");
+        var panel = __instance.GetComponentInParent<RoleCardPanel>();
+
         if (Constants.IsTransformed)
         {
             role = role switch
@@ -70,13 +76,6 @@ public static class PatchRoleCards
                 _ => role
             };
         }
-
-        var panel = __instance.GetComponentInParent<RoleCardPanel>();
-
-        if (!Constants.EnableIcons)
-            return;
-
-        Recolors.LogMessage("Patching RoleCardPanelBackground.SetRole");
 
         //this determines if the role in question is changed by my mod
         var isModifiedByTos1UI = Utils.ModifiedByToS1UI(role) && ModStates.IsLoaded("dum.oldui");
@@ -360,10 +359,14 @@ public static class PatchGuideRoleCards
         var index = 0;
         var name = Utils.RoleName(role);
         var sprite = AssetManager.GetSprite(name, false);
-        //this determines if the role in question is changed by my mod
+        var sprites = AssetManager.GetSprites(name, false);
+
+        //this determines if the role in question is changed by the old ui mod
         var isModifiedByTos1UI = Utils.ModifiedByToS1UI(role) && ModStates.IsLoaded("dum.oldui");
 
-        if (sprite != AssetManager.Blank && __instance.roleIcon)
+        if (sprites.Contains(AssetManager.Blank) && __instance.roleIcon)
+            __instance.roleIcon.EnsureComponent<Animation>().SetFrames(__instance.roleIcon, sprites);
+        else if (sprite != AssetManager.Blank && __instance.roleIcon)
             __instance.roleIcon.sprite = sprite;
 
         var specialName = $"{name}_Special";

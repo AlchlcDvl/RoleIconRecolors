@@ -194,4 +194,14 @@ public static class Utils
     public static T EnsureComponent<T>(this Component component) where T : Component => component.gameObject?.EnsureComponent<T>();
 
     public static T EnsureComponent<T>(this GameObject gameObject) where T : Component => gameObject?.GetComponent<T>() ?? gameObject?.AddComponent<T>();
+
+    public static void Cycle(ref float value, float min, float max, bool increment, float change)
+    {
+        value += change * (increment ? 1 : -1);
+
+        if (value > max)
+            value = min;
+        else if (value < min)
+            value = max;
+    }
 }

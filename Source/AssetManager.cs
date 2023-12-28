@@ -52,7 +52,7 @@ public static class AssetManager
 
         try
         {
-            if (Avoid.Any(name.Contains))
+            if (Avoid.Any(name.Contains) || name.Contains("Attributes_"))
                 return GetRegSprite(pack, name, allowEE);
             else if (Constants.IsLocalTT)
                 return GetTTSprite(pack, name, allowEE);
@@ -221,6 +221,10 @@ public static class AssetManager
         TTEEIcons.Clear();
         VIPEEIcons.Clear();
 
+        RegEEAnimations.Clear();
+        TTEEAnimations.Clear();
+        VIPEEAnimations.Clear();
+
         Core.GetManifestResourceNames().ForEach(x =>
         {
             if (x.EndsWith(".png"))
@@ -248,7 +252,7 @@ public static class AssetManager
             fileName = fileName.SanitisePath();
             var path = Path.Combine(ModPath, folder, subfolder, $"{fileName}.png");
             var texture = EmptyTexture();
-            ImageConversion.LoadImage(texture, File.ReadAllBytes(path), false);
+            texture.LoadImage(File.ReadAllBytes(path), false);
             texture.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
             texture.name = fileName;
             UObject.DontDestroyOnLoad(texture);
@@ -271,10 +275,10 @@ public static class AssetManager
 
             foreach (var file in Directory.EnumerateFiles(path, "*.png"))
             {
-                var fileName = file.SanitisePath();
+                var fileName = file.SanitisePath(true);
                 var filePath = Path.Combine(path, $"{fileName}.png");
                 var texture = EmptyTexture();
-                ImageConversion.LoadImage(texture, File.ReadAllBytes(filePath), false);
+                texture.LoadImage(File.ReadAllBytes(filePath), false);
                 texture.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
                 texture.name = fileName;
                 UObject.DontDestroyOnLoad(texture);
@@ -303,7 +307,7 @@ public static class AssetManager
                 return null;
             }
 
-            var texture = LoadDiskTexture(path, subfolder, folder);
+            var texture = LoadDiskTexture(path.SanitisePath(), subfolder, folder);
 
             if (texture == null)
             {
@@ -344,7 +348,7 @@ public static class AssetManager
                 return null;
             }
 
-            var textures = LoadDiskTextures(path, subfolder, folder);
+            var textures = LoadDiskTextures(path.SanitisePath(), subfolder, folder);
 
             if (textures == null)
             {

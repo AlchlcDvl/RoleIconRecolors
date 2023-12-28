@@ -70,11 +70,11 @@ public class IconPack
         MentionStyles.ForEach((x, _) => Recolors.LogMessage($"{Name} {x} mention style exists!"));
         Recolors.LogMessage($"{Name} {MentionStyles.Count} mention styles exist!");
 
-        RegAnimations.ForEach((x, _) => Recolors.LogMessage($"{Name} {x} has an animation!"));
+        RegAnimations.ForEach((x, y) => Recolors.LogMessage($"{Name} {x} has an animation with {y.Count} frames!"));
         Recolors.LogMessage($"{Name} {RegAnimations.Count} Animations loaded!");
-        TTAnimations.ForEach((x, _) => Recolors.LogMessage($"{Name} {x} has a TT animation!"));
+        TTAnimations.ForEach((x, y) => Recolors.LogMessage($"{Name} {x} has a TT animation with {y.Count} frames!"));
         Recolors.LogMessage($"{Name} {TTAnimations.Count} TT Animations loaded!");
-        VIPAnimations.ForEach((x, _) => Recolors.LogMessage($"{Name} {x} has a VIP animation!"));
+        VIPAnimations.ForEach((x, y) => Recolors.LogMessage($"{Name} {x} has a VIP animation with {y.Count} frames!"));
         Recolors.LogMessage($"{Name} {VIPAnimations.Count} VIP Animations loaded!");
 
         RegEEAnimations.ForEach((x, y) => Recolors.LogMessage($"{Name} {x} has {y.Count} Easter Egg animation(s)!"));
@@ -162,7 +162,7 @@ public class IconPack
                         foreach (var file in Directory.EnumerateFiles(baseFolder, "*.png"))
                         {
                             var filePath = Path.Combine(baseFolder, $"{file.SanitisePath()}.png");
-                            var sprite = AssetManager.LoadDiskSprite(filePath, baseName, Name);
+                            var sprite = AssetManager.LoadDiskSprite(filePath.SanitisePath(), baseName, Name);
                             filePath = filePath.SanitisePath(true);
 
                             if (sprite == null)
@@ -179,7 +179,7 @@ public class IconPack
                         foreach (var folder in Directory.EnumerateDirectories(baseFolder))
                         {
                             var filePath = Path.Combine(baseFolder, folder.SanitisePath());
-                            var sprites = AssetManager.LoadDiskSprites(filePath, baseName, Name);
+                            var sprites = AssetManager.LoadDiskSprites(filePath.SanitisePath(), baseName, Name);
                             filePath = filePath.SanitisePath(true);
 
                             if (sprites == null)
