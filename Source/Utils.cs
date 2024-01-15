@@ -24,7 +24,7 @@ public static class Utils
 
     //I need an list of roles modified by my mod
     private static readonly Role[] ChangedByToS1UI = new[] { Role.JAILOR, Role.CLERIC, Role.MAYOR, Role.JESTER, Role.EXECUTIONER, Role.BODYGUARD, Role.VETERAN, Role.TRAPPER, Role.PIRATE,
-        Role.ADMIRER, Role.ARSONIST, Role.Marshal, Role.Socialite };
+        Role.ADMIRER, Role.ARSONIST, Role.MARSHAL, Role.SOCIALITE, Role.POISONER, Role.COVENLEADER, Role.CORONER,Role.SERIALKILLER,Role.SHROUD };
 
     public static void ForEach<T>(this IEnumerable<T> source, Action<T> action) => source.ToList().ForEach(action);
 
