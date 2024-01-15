@@ -12,7 +12,7 @@ public static class Utils
         "SerialKiller_Ability", "Sheriff_Ability", "Shroud_Ability", "SoulCollector_Ability", "Spy_Ability", "TavernKeeper_Ability", "Tracker_Ability", "Trapper_Ability",
         "Trickster_Ability", "Vampire_Ability", "Vigilante_Ability", "VoodooMaster_Ability", "War_Ability_1", "War_Ability_2", "Werewolf_Ability_1", "Werewolf_Ability_2", "Wildling_Ability",
         "Witch_Ability_1", "Witch_Ability_2", "Jailor_Special", "Cleric_Special", "Mayor_Special", "Jester_Special", "Executioner_Special", "Bodyguard_Special", "Veteran_Special",
-        "Trapper_Special", "Pirate_Special", "Admirer_Special", "Arsonist_Special" };
+        "Trapper_Special", "Pirate_Special", "Admirer_Special", "Arsonist_Special", "Marshal_Ability","Marshal_Ability2","Socialite_Ability","Socialite_Ability2"};
 
     public static readonly Role[] ExceptRoles = { Role.NONE, Role.ROLE_COUNT, Role.UNKNOWN, Role.HANGMAN };
 
