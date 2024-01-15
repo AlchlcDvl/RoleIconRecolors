@@ -1,3 +1,5 @@
+using Home.Shared;
+
 namespace IconPacks;
 
 public static class Utils
@@ -22,7 +24,7 @@ public static class Utils
 
     //I need an list of roles modified by my mod
     private static readonly Role[] ChangedByToS1UI = new[] { Role.JAILOR, Role.CLERIC, Role.MAYOR, Role.JESTER, Role.EXECUTIONER, Role.BODYGUARD, Role.VETERAN, Role.TRAPPER, Role.PIRATE,
-        Role.ADMIRER, Role.ARSONIST };
+        Role.ADMIRER, Role.ARSONIST, Role.Marshal, Role.Socialite };
 
     public static void ForEach<T>(this IEnumerable<T> source, Action<T> action) => source.ToList().ForEach(action);
 
@@ -141,7 +143,34 @@ public static class Utils
         };
     }
 
-    public static bool ModifiedByToS1UI(Role role) => ChangedByToS1UI.Contains(role);
+    public static bool ModifiedByToS1UI(Role role)
+    {
+        return ChangedByToS1UI.Contains(role);
+    }
+
+    public static string DisplayString(this Role role, FactionType factionType)
+    {
+        if (role.IsBucket())
+        {
+            var bucketDisplayString = ClientRoleExtensions.GetBucketDisplayString(role);
+
+            if (!string.IsNullOrEmpty(bucketDisplayString))
+                return bucketDisplayString;
+        }
+
+        var text = role.ToDisplayString();
+        var text2 = "";
+
+        if (role.IsTraitor(factionType))
+            text2 = $"\n<color={Constants.TTColor}>({Service.Home.LocalizationService.GetLocalizedString("GUI_ROLENAME_202")})</color>";
+        else if (Constants.IsLocalVIP)
+            text2 = $"\n<color={Constants.VIPColor}>({Service.Home.LocalizationService.GetLocalizedString("GUI_ROLENAME_201")})</color>";
+
+        if (text2.Length > 0)
+            text2 = $"<size=85%>{text2}</size>";
+
+        return $"<color={role.GetFaction().GetFactionColor()}>{text}</color>{text2}";
+    }
 
     public static void SaveLogs()
     {
