@@ -2,7 +2,7 @@ namespace IconPacks;
 
 public static class Utils
 {
-    private static readonly List<string> SkippableNames = new() { "Admirer_Ability", "Amnesiac_Ability", "Arsonist_Ability", "Attributes_Coven", "Baker_Ability", "Berserker_Ability",
+    private static readonly string[] SkippableNames = { "Admirer_Ability", "Amnesiac_Ability", "Arsonist_Ability", "Attributes_Coven", "Baker_Ability", "Berserker_Ability",
         "Bodyguard_Ability", "Cleric_Ability", "Coroner_Ability", "CovenLeader_Ability", "Crusader_Ability", "CursedSoul_Ability", "Death_Ability", "Dreamweaver_Ability", "Enchanter_Ability",
         "Executioner_Ability", "Famine_Ability", "HexMaster_Ability", "Illusionist_Ability", "Investigator_Ability", "Jailor_Ability","Jailor_Ability_2", "Jester_Ability", "Jinx_Ability",
         "Lookout_Ability", "Medusa_Ability", "Monarch_Ability", "Necromancer_Ability_1", "Necromancer_Ability_2", "Pestilence_Ability", "Plaguebearer_Ability", "Poisoner_Ability",
@@ -10,19 +10,19 @@ public static class Utils
         "SerialKiller_Ability", "Sheriff_Ability", "Shroud_Ability", "SoulCollector_Ability", "Spy_Ability", "TavernKeeper_Ability", "Tracker_Ability", "Trapper_Ability",
         "Trickster_Ability", "Vampire_Ability", "Vigilante_Ability", "VoodooMaster_Ability", "War_Ability_1", "War_Ability_2", "Werewolf_Ability_1", "Werewolf_Ability_2", "Wildling_Ability",
         "Witch_Ability_1", "Witch_Ability_2", "Jailor_Special", "Cleric_Special", "Mayor_Special", "Jester_Special", "Executioner_Special", "Bodyguard_Special", "Veteran_Special",
-        "Trapper_Special", "Pirate_Special", "Admirer_Special", "Arsonist_Special","Marshal_Special","Socialite_Special"};
+        "Trapper_Special", "Pirate_Special", "Admirer_Special", "Arsonist_Special", "Marshal_Special", "Socialite_Special", "Poisoner_Special", "CovenLeader_Special", "Coroner_Special", "SerialKiller_Special", "Shroud_Special" };
 
     public static readonly Role[] ExceptRoles = { Role.NONE, Role.ROLE_COUNT, Role.UNKNOWN, Role.HANGMAN };
 
-    public static T Random<T>(this IEnumerable<T> input, T defaultVal = default)
+    //List of roles modified by Dum's mod
+    private static readonly Role[] ChangedByToS1UI = { Role.JAILOR, Role.CLERIC, Role.MAYOR, Role.JESTER, Role.EXECUTIONER, Role.BODYGUARD, Role.VETERAN, Role.TRAPPER, Role.PIRATE,
+        Role.ADMIRER, Role.ARSONIST, Role.MARSHAL, Role.SOCIALITE, Role.POISONER, Role.COVENLEADER, Role.CORONER, Role.SERIALKILLER, Role.SHROUD };
+
+    public static T Random<T>(this IEnumerable<T> input)
     {
         var list = input.ToList();
-        return list.Count == 0 ? defaultVal : list[URandom.Range(0, list.Count)];
+        return list.Count == 0 ? default : list[URandom.Range(0, list.Count)];
     }
-
-    //I need an list of roles modified by my mod
-    private static readonly Role[] ChangedByToS1UI = new[] { Role.JAILOR, Role.CLERIC, Role.MAYOR, Role.JESTER, Role.EXECUTIONER, Role.BODYGUARD, Role.VETERAN, Role.TRAPPER, Role.PIRATE,
-        Role.ADMIRER, Role.ARSONIST, Role.MARSHAL, Role.SOCIALITE, Role.POISONER, Role.COVENLEADER, Role.CORONER,Role.SERIALKILLER,Role.SHROUD };
 
     public static void ForEach<T>(this IEnumerable<T> source, Action<T> action) => source.ToList().ForEach(action);
 
@@ -176,16 +176,16 @@ public static class Utils
 
     public static bool Skippable(string name) => SkippableNames.Contains(name);
 
-    public static (Dictionary<string, string>, IEnumerable<(string, int)>) Filtered()
+    public static (Dictionary<string, string>, Dictionary<string, int>) Filtered()
     {
         // these roles dont have sprites so just ignore them
         var roles = ((Role[])Enum.GetValues(typeof(Role))).Except(ExceptRoles);
 
         // map all roles to (role name, role number) so we can make a dict
-        var rolesWithIndex = roles.Select(role => (role.ToString().ToLower(), (int)role));
+        var rolesWithIndex = roles.Select(role => (role.ToString().ToLower(), (int)role)).ToDictionary(rolesSelect => rolesSelect.Item1.ToLower(), rolesSelect => rolesSelect.Item2);
 
         // dict allows us to find dict[rolename.tolower] and get Role{number} for later use in spritecharacters
-        return (rolesWithIndex.ToDictionary(rolesSelect => rolesSelect.Item1.ToLower(), rolesSelect => $"Role{rolesSelect.Item2}"), rolesWithIndex);
+        return (rolesWithIndex.ToDictionary(rolesSelect => rolesSelect.Key.ToLower(), rolesSelect => $"Role{rolesSelect.Value}"), rolesWithIndex);
     }
 
     public static void DumpSprite(Texture2D texture, string fileName, string path = null)
