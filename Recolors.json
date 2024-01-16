@@ -1070,6 +1070,230 @@
             "folder": "CovenBase"
         },
         {
+            "name": "Admirer_Ability",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Admirer_Special",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Arsonist",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Arsonist_Ability",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Arsonist_Special",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Baker",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Baker_Ability",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Berserker",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Berserker_Ability",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Bodyguard_Ability",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Bodyguard_Special",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Cleric_Ability",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Cleric_Special",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Coroner_Ability",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Coroner_Special",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Crusader_Ability",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Death",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Death_Ability",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Deputy_Special",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Famine",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Famine_Ability",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Investigator_Ability",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Jailor_Ability",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Lookout_Ability",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Mayor_Special",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Monarch_Ability",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Pestilence",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Pestilence_Ability",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Plaguebearer",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Plaguebearer_Ability",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Prosecutor_Special",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Psychic_Ability",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Retributionist_Ability_1",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Retributionist_Ability_2",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Seer_Ability_1",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Seer_Ability_2",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "SerialKiller",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "SerialKiller_Ability",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Shroud",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Shroud_Ability",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Shroud_Special",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "SoulCollector",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "SoulCollector_Ability",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Spy_Ability",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "TavernKeeper_Ability",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Tracker_Ability",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Trapper_Special",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Trickster_Ability",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Veteran_Special",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Vigilante_Ability",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "War",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "War_Ability_1",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "War_Ability_2",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Werewolf",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Werewolf_Ability_1",
+            "folder": "CovenBase"
+        },
+        {
+            "name": "Werewolf_Ability_2",
+            "folder": "CovenBase"
+        },
+        {
             "name": "Investigator",
             "folder": "CovenEasterEggs"
         },
@@ -1083,6 +1307,14 @@
         },
         {
             "name": "Crusader",
+            "folder": "CovenEasterEggs"
+        },
+        {
+            "name": "Mayor",
+            "folder": "CovenEasterEggs"
+        },
+        {
+            "name": "Amnesiac",
             "folder": "CovenEasterEggs"
         },
         {
