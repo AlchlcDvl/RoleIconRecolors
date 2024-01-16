@@ -61,7 +61,7 @@ public class Recolors
     public ModSettings.DropdownSetting DownloadIcons => new()
     {
         Name = "Download Recommended Icon Packs",
-        Description = "Downloads icon packs recommended by the mod creator\nVanilla - Icons used in the vanilla game to be used as a reference for icon packs\nRecolors - Art by MysticMismagius, Haapsalu, faketier and Nidoskull.",
+        Description = "Downloads icon packs recommended by the mod creator\nVanilla - Icons used in the vanilla game to be used as a reference for icon packs\nRecolors - Art by MysticMismagius, Haapsalu, faketier, splarg and Nidoskull.",
         Options = new() { "None", "Vanilla", "Recolors" },
         OnChanged = Download.DownloadIcons
     };
@@ -112,7 +112,7 @@ public class Recolors
 
     private static void LogSomething(object message, LogLevel type, bool logIt)
     {
-        message ??= "";
+        message ??= "message was null";
         message = $"[{DateTime.UtcNow}] {message}";
 
         if (logIt || Constants.Debug)

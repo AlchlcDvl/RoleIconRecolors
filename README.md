@@ -24,6 +24,7 @@ With this mod you can edit (most) renditions of game icons to your own liking! P
 - [**Pack Creation**](#pack-creation)
 - [**Image Rules**](#image-rules)
 - [**Folders**](#folders)
+- [**Faction**](#factions)
 
 -----------------------
 
@@ -43,22 +44,27 @@ With this mod you can edit (most) renditions of game icons to your own liking! P
 # Image Rules
 
 - Must be 256x256 pixels. **Ensure your images are of this size, because weird things happen if they aren't.**
-- Must be png.
+- Must be png or jpg.
 - Refer to the Vanilla icons on how to give the icons a base name.
 - If the target folder is an easter egg folder and an icon for the image already exists, add `_Icon` after the image name followed by a number (typically the next one in line, starting from 0, like `_Icon0` and `_Icon1`).
-- It is recommended you compress your images because a) it'll significantly lower load times b) not break the game in the rare few cases and c) makes your pack easily shareable. I recommend using [compressor.io](https://compressor.io).
+- It is recommended you compress your images because\
+a) it'll significantly lower load times\
+b) not break the game in the rare few cases\
+c) makes your pack easily shareable. I recommend using [compressor.io](https://compressor.io).
 
 -----------------------
 
 # Folders
 
-For a proper icon pack to function, you have to use at least one of `Base`, `TTBase` or `VIPBase` folder names.
+For a proper icon pack to function, it needs to have either a `Regular`, `Custom` or faction type folders.\
+Folders are classified between two types:- `Base` and `EasterEggs` (does not apply to the `Custom` folder).\
+Role and ability icons go into the faction folders. The mod will try to find the role and ability icons relevant to your current faction (in case of TT or when BTOS2 comes out). If it is unable to, it will try to fetch the same from the `Regular` folder.
 
-`Base` is the folder that changes the icons all the time.\
-`TTBase` is the folder where the icons in it will only appear when you are the Town Traitor.\
-`VIPBase` is the folder where the icons within in will appear only when you are the VIP.\
-The easter egg folders (`EasterEggs`, `TTEasterEggs` and `VIPEasterEggs`) can have as many icons as needed and will only appear with a small chance to replace the actual icons in the corresponding folders.\
-`Custom` is the folder for customising your mention icons. You can pick and choose which icons from other folders show up for mentions.
+-----------------------
+
+# Factions
+
+There are multiple factions in play in the game. They are mainly the `Town`, `Coven` and `Apocalypse` faction. All neutral roles aside from the apocalypse ones are their own factions, for example `SerialKiller` or `Doomsayer`. The same applies for `Vampire` and `CursedSoul`. The folder names should not contain spaces.
 
 -----------------------
 
