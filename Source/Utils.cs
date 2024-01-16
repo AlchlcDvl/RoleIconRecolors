@@ -1,3 +1,5 @@
+using Home.Shared;
+
 namespace IconPacks;
 
 public static class Utils
@@ -10,7 +12,7 @@ public static class Utils
         "SerialKiller_Ability", "Sheriff_Ability", "Shroud_Ability", "SoulCollector_Ability", "Spy_Ability", "TavernKeeper_Ability", "Tracker_Ability", "Trapper_Ability",
         "Trickster_Ability", "Vampire_Ability", "Vigilante_Ability", "VoodooMaster_Ability", "War_Ability_1", "War_Ability_2", "Werewolf_Ability_1", "Werewolf_Ability_2", "Wildling_Ability",
         "Witch_Ability_1", "Witch_Ability_2", "Jailor_Special", "Cleric_Special", "Mayor_Special", "Jester_Special", "Executioner_Special", "Bodyguard_Special", "Veteran_Special",
-        "Trapper_Special", "Pirate_Special", "Admirer_Special", "Arsonist_Special" };
+        "Trapper_Special", "Pirate_Special", "Admirer_Special", "Arsonist_Special","Marshal_Special","Socialite_Special"};
 
     public static readonly Role[] ExceptRoles = { Role.NONE, Role.ROLE_COUNT, Role.UNKNOWN, Role.HANGMAN };
 
@@ -22,7 +24,7 @@ public static class Utils
 
     //I need an list of roles modified by my mod
     private static readonly Role[] ChangedByToS1UI = new[] { Role.JAILOR, Role.CLERIC, Role.MAYOR, Role.JESTER, Role.EXECUTIONER, Role.BODYGUARD, Role.VETERAN, Role.TRAPPER, Role.PIRATE,
-        Role.ADMIRER, Role.ARSONIST };
+        Role.ADMIRER, Role.ARSONIST, Role.MARSHAL, Role.SOCIALITE, Role.POISONER, Role.COVENLEADER, Role.CORONER,Role.SERIALKILLER,Role.SHROUD };
 
     public static void ForEach<T>(this IEnumerable<T> source, Action<T> action) => source.ToList().ForEach(action);
 
@@ -42,11 +44,13 @@ public static class Utils
         Role.LOOKOUT => "Lookout",
         Role.MAYOR => "Mayor",
         Role.MONARCH => "Monarch",
+        Role.MARSHAL=>"Marshal",
         Role.PROSECUTOR => "Prosecutor",
         Role.PSYCHIC => "Psychic",
         Role.RETRIBUTIONIST => "Retributionist",
         Role.SEER => "Seer",
         Role.SHERIFF => "Sheriff",
+        Role.SOCIALITE=>"Socialite",
         Role.SPY => "Spy",
         Role.TAVERNKEEPER => "TavernKeeper",
         Role.TRACKER => "Tracker",
@@ -141,7 +145,34 @@ public static class Utils
         };
     }
 
-    public static bool ModifiedByToS1UI(Role role) => ChangedByToS1UI.Contains(role);
+    public static bool ModifiedByToS1UI(Role role)
+    {
+        return ChangedByToS1UI.Contains(role);
+    }
+
+    public static string DisplayString(this Role role, FactionType factionType)
+    {
+        if (role.IsBucket())
+        {
+            var bucketDisplayString = ClientRoleExtensions.GetBucketDisplayString(role);
+
+            if (!string.IsNullOrEmpty(bucketDisplayString))
+                return bucketDisplayString;
+        }
+
+        var text = role.ToDisplayString();
+        var text2 = "";
+
+        if (role.IsTraitor(factionType))
+            text2 = $"\n<color={Constants.TTColor}>({Service.Home.LocalizationService.GetLocalizedString("GUI_ROLENAME_202")})</color>";
+        else if (Constants.IsLocalVIP)
+            text2 = $"\n<color={Constants.VIPColor}>({Service.Home.LocalizationService.GetLocalizedString("GUI_ROLENAME_201")})</color>";
+
+        if (text2.Length > 0)
+            text2 = $"<size=85%>{text2}</size>";
+
+        return $"<color={role.GetFaction().GetFactionColor()}>{text}</color>{text2}";
+    }
 
     public static void SaveLogs()
     {
