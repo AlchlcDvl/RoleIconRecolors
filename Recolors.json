@@ -3,1087 +3,1087 @@
     [
         {
             "name": "Admirer",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Admirer_Ability",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Admirer_Special",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Amnesiac",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Amnesiac_Ability",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Arsonist",
-            "folder": "Base"
+            "folder": "ArsonistBase"
         },
         {
             "name": "Arsonist_Ability",
-            "folder": "Base"
+            "folder": "ArsonistBase"
         },
         {
             "name": "Arsonist_Special",
-            "folder": "Base"
+            "folder": "ArsonistBase"
         },
         {
             "name": "Attributes_Apocalypse",
-            "folder": "Base"
+            "folder": "RegularBase"
         },
         {
             "name": "Attributes_Coven",
-            "folder": "Base"
+            "folder": "RegularBase"
         },
         {
             "name": "Attributes_Horsemen",
-            "folder": "Base"
+            "folder": "RegularBase"
         },
         {
             "name": "Attributes_Arsonist",
-            "folder": "Base"
+            "folder": "RegularBase"
         },
         {
             "name": "Attributes_CursedSoul",
-            "folder": "Base"
+            "folder": "RegularBase"
         },
         {
             "name": "Attributes_Doomsayer",
-            "folder": "Base"
+            "folder": "RegularBase"
         },
         {
             "name": "Attributes_Executioner",
-            "folder": "Base"
+            "folder": "RegularBase"
         },
         {
             "name": "Attributes_Jester",
-            "folder": "Base"
+            "folder": "RegularBase"
         },
         {
             "name": "Attributes_Pirate",
-            "folder": "Base"
+            "folder": "RegularBase"
         },
         {
             "name": "Attributes_SerialKiller",
-            "folder": "Base"
+            "folder": "RegularBase"
         },
         {
             "name": "Attributes_Shroud",
-            "folder": "Base"
+            "folder": "RegularBase"
         },
         {
             "name": "Attributes_Town",
-            "folder": "Base"
+            "folder": "RegularBase"
         },
         {
             "name": "Attributes_Vampire",
-            "folder": "Base"
+            "folder": "RegularBase"
         },
         {
             "name": "Attributes_Werewolf",
-            "folder": "Base"
+            "folder": "RegularBase"
         },
         {
             "name": "Baker",
-            "folder": "Base"
+            "folder": "ApocalypseBase"
         },
         {
             "name": "Baker_Ability",
-            "folder": "Base"
+            "folder": "ApocalypseBase"
         },
         {
             "name": "Berserker",
-            "folder": "Base"
+            "folder": "ApocalypseBase"
         },
         {
             "name": "Berserker_Ability",
-            "folder": "Base"
+            "folder": "ApocalypseBase"
         },
         {
             "name": "Bodyguard",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Bodyguard_Ability",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Bodyguard_Special",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Cleric",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Cleric_Ability",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Cleric_Special",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Conjurer",
-            "folder": "Base"
+            "folder": "CovenBase"
         },
         {
             "name": "Conjurer_Special",
-            "folder": "Base"
+            "folder": "CovenBase"
         },
         {
             "name": "Coroner",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Coroner_Special",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Coroner_Ability",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Coven",
-            "folder": "Base"
+            "folder": "RegularBase"
         },
         {
             "name": "CovenLeader",
-            "folder": "Base"
+            "folder": "CovenBase"
         },
         {
             "name": "CovenLeader_Ability",
-            "folder": "Base"
+            "folder": "CovenBase"
         },
         {
             "name": "CovenLeader_Special",
-            "folder": "Base"
+            "folder": "CovenBase"
         },
         {
             "name": "Crusader",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Crusader_Ability",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Death",
-            "folder": "Base"
+            "folder": "ApocalypseBase"
         },
         {
             "name": "Death_Ability",
-            "folder": "Base"
+            "folder": "ApocalypseBase"
         },
         {
             "name": "Deputy",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Deputy_Special",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Doomsayer",
-            "folder": "Base"
+            "folder": "DoomsayerBase"
         },
         {
             "name": "Doomsayer_Special",
-            "folder": "Base"
+            "folder": "DoomsayerBase"
         },
         {
             "name": "Dreamweaver",
-            "folder": "Base"
+            "folder": "CovenBase"
         },
         {
             "name": "Dreamweaver_Ability",
-            "folder": "Base"
+            "folder": "CovenBase"
         },
         {
             "name": "Enchanter",
-            "folder": "Base"
+            "folder": "CovenBase"
         },
         {
             "name": "Enchanter_Ability",
-            "folder": "Base"
+            "folder": "CovenBase"
         },
         {
             "name": "Enchanter_Special",
-            "folder": "Base"
+            "folder": "CovenBase"
         },
         {
             "name": "Executioner",
-            "folder": "Base"
+            "folder": "ExecutionerBase"
         },
         {
             "name": "Executioner_Ability",
-            "folder": "Base"
+            "folder": "ExecutionerBase"
         },
         {
             "name": "Executioner_Special",
-            "folder": "Base"
+            "folder": "ExecutionerBase"
         },
         {
             "name": "Famine",
-            "folder": "Base"
+            "folder": "ApocalypseBase"
         },
         {
             "name": "Famine_Ability",
-            "folder": "Base"
+            "folder": "ApocalypseBase"
         },
         {
             "name": "HexMaster",
-            "folder": "Base"
+            "folder": "CovenBase"
         },
         {
             "name": "HexMaster_Ability",
-            "folder": "Base"
+            "folder": "CovenBase"
         },
         {
             "name": "Illusionist",
-            "folder": "Base"
+            "folder": "CovenBase"
         },
         {
             "name": "Illusionist_Ability",
-            "folder": "Base"
+            "folder": "CovenBase"
         },
         {
             "name": "Investigator",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Investigator_Ability",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Jailor",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Jailor_Special",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Jailor_Ability",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Jester",
-            "folder": "Base"
+            "folder": "JesterBase"
         },
         {
             "name": "Jester_Ability",
-            "folder": "Base"
+            "folder": "JesterBase"
         },
         {
             "name": "Jester_Special",
-            "folder": "Base"
+            "folder": "JesterBase"
         },
         {
             "name": "Jinx",
-            "folder": "Base"
+            "folder": "CovenBase"
         },
         {
             "name": "Jinx_Ability",
-            "folder": "Base"
+            "folder": "CovenBase"
         },
         {
             "name": "Lookout",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Lookout_Ability",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Mayor",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Mayor_Special",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Medusa",
-            "folder": "Base"
+            "folder": "CovenBase"
         },
         {
             "name": "Medusa_Ability",
-            "folder": "Base"
+            "folder": "CovenBase"
         },
         {
             "name": "Monarch",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Monarch_Ability",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Necromancer",
-            "folder": "Base"
+            "folder": "CovenBase"
         },
         {
             "name": "Necromancer_Ability_1",
-            "folder": "Base"
+            "folder": "CovenBase"
         },
         {
             "name": "Necromancer_Ability_2",
-            "folder": "Base"
+            "folder": "CovenBase"
         },
         {
             "name": "Necromancer_Special",
-            "folder": "Base"
+            "folder": "CovenBase"
         },
         {
             "name": "Necronomicon",
-            "folder": "Base"
+            "folder": "RegularBase"
         },
         {
             "name": "Neutral",
-            "folder": "Base"
+            "folder": "RegularBase"
         },
         {
             "name": "Pestilence",
-            "folder": "Base"
+            "folder": "ApocalypseBase"
         },
         {
             "name": "Pestilence_Ability",
-            "folder": "Base"
+            "folder": "ApocalypseBase"
         },
         {
             "name": "Pirate",
-            "folder": "Base"
+            "folder": "PirateBase"
         },
         {
             "name": "Pirate_Special",
-            "folder": "Base"
+            "folder": "PirateBase"
         },
         {
             "name": "Plaguebearer",
-            "folder": "Base"
+            "folder": "ApocalypseBase"
         },
         {
             "name": "Plaguebearer_Ability",
-            "folder": "Base"
+            "folder": "ApocalypseBase"
         },
         {
             "name": "Poisoner",
-            "folder": "Base"
+            "folder": "CovenBase"
         },
         {
             "name": "Poisoner_Ability",
-            "folder": "Base"
+            "folder": "CovenBase"
         },
         {
             "name": "Poisoner_Special",
-            "folder": "Base"
+            "folder": "CovenBase"
         },
         {
             "name": "PotionMaster",
-            "folder": "Base"
+            "folder": "CovenBase"
         },
         {
             "name": "PotionMaster_Ability_1",
-            "folder": "Base"
+            "folder": "CovenBase"
         },
         {
             "name": "PotionMaster_Ability_2",
-            "folder": "Base"
+            "folder": "CovenBase"
         },
         {
             "name": "PotionMaster_Special",
-            "folder": "Base"
+            "folder": "CovenBase"
         },
         {
             "name": "Prosecutor",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Prosecutor_Special",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Psychic",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Psychic_Ability",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Retributionist",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Retributionist_Ability_1",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Retributionist_Ability_2",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Ritualist",
-            "folder": "Base"
+            "folder": "CovenBase"
         },
         {
             "name": "Ritualist_Special",
-            "folder": "Base"
+            "folder": "CovenBase"
         },
         {
             "name": "Seer",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Seer_Ability_1",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Seer_Ability_2",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "SerialKiller",
-            "folder": "Base"
+            "folder": "SerialKillerBase"
         },
         {
             "name": "SerialKiller_Ability",
-            "folder": "Base"
+            "folder": "SerialKillerBase"
         },
         {
             "name": "SerialKiller_Special",
-            "folder": "Base"
+            "folder": "SerialKillerBase"
         },
         {
             "name": "Sheriff",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Sheriff_Ability",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "SoulCollector",
-            "folder": "Base"
+            "folder": "ApocalypseBase"
         },
         {
             "name": "SoulCollector_Ability",
-            "folder": "Base"
+            "folder": "ApocalypseBase"
         },
         {
             "name": "Shroud",
-            "folder": "Base"
+            "folder": "ShroudBase"
         },
         {
             "name": "Shroud_Ability",
-            "folder": "Base"
+            "folder": "ShroudBase"
         },
         {
             "name": "Shroud_Special",
-            "folder": "Base"
+            "folder": "ShroudBase"
         },
         {
             "name": "Spy",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Spy_Ability",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Stoned",
-            "folder": "Base"
+            "folder": "RegularBase"
         },
         {
             "name": "TavernKeeper",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "TavernKeeper_Ability",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Town",
-            "folder": "Base"
+            "folder": "RegularBase"
         },
         {
             "name": "Tracker",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Tracker_Ability",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Trapper",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Trapper_Ability",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Trapper_Special",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Trickster",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Trickster_Ability",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Veteran",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Veteran_Special",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Vigilante",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "Vigilante_Ability",
-            "folder": "Base"
+            "folder": "TownBase"
         },
         {
             "name": "VoodooMaster",
-            "folder": "Base"
+            "folder": "CovenBase"
         },
         {
             "name": "VoodooMaster_Ability",
-            "folder": "Base"
+            "folder": "CovenBase"
         },
         {
             "name": "War",
-            "folder": "Base"
+            "folder": "ApocalypseBase"
         },
         {
             "name": "War_Ability_1",
-            "folder": "Base"
+            "folder": "ApocalypseBase"
         },
         {
             "name": "War_Ability_2",
-            "folder": "Base"
+            "folder": "ApocalypseBase"
         },
         {
             "name": "Werewolf",
-            "folder": "Base"
+            "folder": "WerewolfBase"
         },
         {
             "name": "Werewolf_Ability_1",
-            "folder": "Base"
+            "folder": "WerewolfBase"
         },
         {
             "name": "Werewolf_Ability_2",
-            "folder": "Base"
+            "folder": "WerewolfBase"
         },
         {
             "name": "Wildling",
-            "folder": "Base"
+            "folder": "CovenBase"
         },
         {
             "name": "Wildling_Ability",
-            "folder": "Base"
+            "folder": "CovenBase"
         },
         {
             "name": "Witch",
-            "folder": "Base"
+            "folder": "CovenBase"
         },
         {
             "name": "Witch_Ability_1",
-            "folder": "Base"
+            "folder": "CovenBase"
         },
         {
             "name": "Witch_Ability_2",
-            "folder": "Base"
+            "folder": "CovenBase"
         },
         {
             "name": "CovenDeception",
-            "folder": "Base"
+            "folder": "RegularBase"
         },
         {
             "name": "CovenKilling",
-            "folder": "Base"
+            "folder": "RegularBase"
         },
         {
             "name": "CovenPower",
-            "folder": "Base"
+            "folder": "RegularBase"
         },
         {
             "name": "CovenUtility",
-            "folder": "Base"
+            "folder": "RegularBase"
         },
         {
             "name": "NeutralEvil",
-            "folder": "Base"
+            "folder": "RegularBase"
         },
         {
             "name": "TownPower",
-            "folder": "Base"
+            "folder": "RegularBase"
         },
         {
             "name": "TownInvestigative",
-            "folder": "Base"
+            "folder": "RegularBase"
         },
         {
             "name": "AttackNone",
-            "folder": "Base"
+            "folder": "RegularBase"
         },
         {
             "name": "AttackBasic",
-            "folder": "Base"
+            "folder": "RegularBase"
         },
         {
             "name": "AttackPowerful",
-            "folder": "Base"
+            "folder": "RegularBase"
         },
         {
             "name": "AttackUnstoppable",
-            "folder": "Base"
+            "folder": "RegularBase"
         },
         {
             "name": "DefenseNone",
-            "folder": "Base"
+            "folder": "RegularBase"
         },
         {
             "name": "DefenseBasic",
-            "folder": "Base"
+            "folder": "RegularBase"
         },
         {
             "name": "DefensePowerful",
-            "folder": "Base"
+            "folder": "RegularBase"
         },
         {
             "name": "Admirer",
-            "folder": "EasterEggs"
+            "folder": "TownEasterEggs"
         },
         {
             "name": "Admirer_Ability_Icon1",
-            "folder": "EasterEggs"
+            "folder": "TownEasterEggs"
         },
         {
             "name": "Admirer_Ability_Icon2",
-            "folder": "EasterEggs"
+            "folder": "TownEasterEggs"
         },
         {
             "name": "Amnesiac",
-            "folder": "EasterEggs"
+            "folder": "TownEasterEggs"
         },
         {
             "name": "Arsonist_Ability",
-            "folder": "EasterEggs"
+            "folder": "ArsonistEasterEggs"
         },
         {
             "name": "Arsonist_Special",
-            "folder": "EasterEggs"
+            "folder": "ArsonistEasterEggs"
         },
         {
             "name": "Attributes_Coven",
-            "folder": "EasterEggs"
+            "folder": "RegularEasterEggs"
         },
         {
             "name": "Bodyguard",
-            "folder": "EasterEggs"
+            "folder": "TownEasterEggs"
         },
         {
             "name": "Cleric",
-            "folder": "EasterEggs"
+            "folder": "TownEasterEggs"
         },
         {
             "name": "Conjurer_Icon1",
-            "folder": "EasterEggs"
+            "folder": "CovenEasterEggs"
         },
         {
             "name": "Conjurer_Icon2",
-            "folder": "EasterEggs"
+            "folder": "CovenEasterEggs"
         },
         {
             "name": "Coroner_Ability",
-            "folder": "EasterEggs"
+            "folder": "TownEasterEggs"
         },
         {
             "name": "Coven",
-            "folder": "EasterEggs"
+            "folder": "RegularEasterEggs"
         },
         {
             "name": "CovenLeader_Ability",
-            "folder": "EasterEggs"
+            "folder": "CovenEasterEggs"
         },
         {
             "name": "CovenLeader",
-            "folder": "EasterEggs"
+            "folder": "CovenEasterEggs"
         },
         {
             "name": "Crusader",
-            "folder": "EasterEggs"
+            "folder": "TownEasterEggs"
         },
         {
             "name": "Deputy_Icon1",
-            "folder": "EasterEggs"
+            "folder": "TownEasterEggs"
         },
         {
             "name": "Deputy_Icon2",
-            "folder": "EasterEggs"
+            "folder": "TownEasterEggs"
         },
         {
             "name": "Deputy_Icon3",
-            "folder": "EasterEggs"
+            "folder": "TownEasterEggs"
         },
         {
             "name": "Deputy_Icon4",
-            "folder": "EasterEggs"
+            "folder": "TownEasterEggs"
         },
         {
             "name": "Dreamweaver_Ability",
-            "folder": "EasterEggs"
+            "folder": "CovenEasterEggs"
         },
         {
             "name": "Dreamweaver",
-            "folder": "EasterEggs"
+            "folder": "CovenEasterEggs"
         },
         {
             "name": "Enchanter_Ability",
-            "folder": "EasterEggs"
+            "folder": "CovenEasterEggs"
         },
         {
             "name": "Executioner_Ability",
-            "folder": "EasterEggs"
+            "folder": "ExecutionerEasterEggs"
         },
         {
             "name": "Executioner",
-            "folder": "EasterEggs"
+            "folder": "ExecutionerEasterEggs"
         },
         {
             "name": "Famine_Ability",
-            "folder": "EasterEggs"
+            "folder": "ApocalypseEasterEggs"
         },
         {
             "name": "HexMaster",
-            "folder": "EasterEggs"
+            "folder": "CovenEasterEggs"
         },
         {
             "name": "Investigator",
-            "folder": "EasterEggs"
+            "folder": "TownEasterEggs"
         },
         {
             "name": "Jailor_Ability",
-            "folder": "EasterEggs"
+            "folder": "TownEasterEggs"
         },
         {
             "name": "Jailor",
-            "folder": "EasterEggs"
+            "folder": "TownEasterEggs"
         },
         {
             "name": "Jester",
-            "folder": "EasterEggs"
+            "folder": "JesterEasterEggs"
         },
         {
             "name": "Jester_Special",
-            "folder": "EasterEggs"
+            "folder": "JesterEasterEggs"
         },
         {
             "name": "Jinx_Ability",
-            "folder": "EasterEggs"
+            "folder": "CovenEasterEggs"
         },
         {
             "name": "Berserker",
-            "folder": "EasterEggs"
+            "folder": "ApocalypseEasterEggs"
         },
         {
             "name": "Lookout",
-            "folder": "EasterEggs"
+            "folder": "TownEasterEggs"
         },
         {
             "name": "Mayor_Icon1",
-            "folder": "EasterEggs"
+            "folder": "TownEasterEggs"
         },
         {
             "name": "Mayor_Icon2",
-            "folder": "EasterEggs"
+            "folder": "TownEasterEggs"
         },
         {
             "name": "Medusa_Icon1",
-            "folder": "EasterEggs"
+            "folder": "CovenEasterEggs"
         },
         {
             "name": "Medusa_Icon2",
-            "folder": "EasterEggs"
+            "folder": "CovenEasterEggs"
         },
         {
             "name": "Necromancer",
-            "folder": "EasterEggs"
+            "folder": "CovenEasterEggs"
         },
         {
             "name": "Pestilence_Icon1",
-            "folder": "EasterEggs"
+            "folder": "ApocalypseEasterEggs"
         },
         {
             "name": "Pestilence_Icon2",
-            "folder": "EasterEggs"
+            "folder": "ApocalypseEasterEggs"
         },
         {
             "name": "Pestilence_Icon3",
-            "folder": "EasterEggs"
+            "folder": "ApocalypseEasterEggs"
         },
         {
             "name": "Pestilence_Icon4",
-            "folder": "EasterEggs"
+            "folder": "ApocalypseEasterEggs"
         },
         {
             "name": "Pirate",
-            "folder": "EasterEggs"
+            "folder": "PirateEasterEggs"
         },
         {
             "name": "Plaguebearer",
-            "folder": "EasterEggs"
+            "folder": "ApocalypseEasterEggs"
         },
         {
             "name": "Poisoner",
-            "folder": "EasterEggs"
+            "folder": "CovenEasterEggs"
         },
         {
             "name": "PotionMaster_Ability_1",
-            "folder": "EasterEggs"
+            "folder": "CovenEasterEggs"
         },
         {
             "name": "PotionMaster_Ability_2",
-            "folder": "EasterEggs"
+            "folder": "CovenEasterEggs"
         },
         {
             "name": "PotionMaster_Special",
-            "folder": "EasterEggs"
+            "folder": "CovenEasterEggs"
         },
         {
             "name": "Psychic_Icon1",
-            "folder": "EasterEggs"
+            "folder": "TownEasterEggs"
         },
         {
             "name": "Psychic_Icon2",
-            "folder": "EasterEggs"
+            "folder": "TownEasterEggs"
         },
         {
             "name": "Retributionist",
-            "folder": "EasterEggs"
+            "folder": "TownEasterEggs"
         },
         {
             "name": "SerialKiller",
-            "folder": "EasterEggs"
+            "folder": "SerialKillerEasterEggs"
         },
         {
             "name": "Sheriff",
-            "folder": "EasterEggs"
+            "folder": "TownEasterEggs"
         },
         {
             "name": "Shroud",
-            "folder": "EasterEggs"
+            "folder": "ShroudEasterEggs"
         },
         {
             "name": "SoulCollector_Ability_Icon1",
-            "folder": "EasterEggs"
+            "folder": "ApocalypseEasterEggs"
         },
         {
             "name": "SoulCollector_Ability_Icon2",
-            "folder": "EasterEggs"
+            "folder": "ApocalypseEasterEggs"
         },
         {
             "name": "Spy_Ability_Icon1",
-            "folder": "EasterEggs"
+            "folder": "TownEasterEggs"
         },
         {
             "name": "Spy_Ability_Icon2",
-            "folder": "EasterEggs"
+            "folder": "TownEasterEggs"
         },
         {
             "name": "Spy",
-            "folder": "EasterEggs"
+            "folder": "TownEasterEggs"
         },
         {
             "name": "Town",
-            "folder": "EasterEggs"
+            "folder": "RegularEasterEggs"
         },
         {
             "name": "Tracker",
-            "folder": "EasterEggs"
+            "folder": "TownEasterEggs"
         },
         {
             "name": "Trapper",
-            "folder": "EasterEggs"
+            "folder": "TownEasterEggs"
         },
         {
             "name": "Trickster_Icon1",
-            "folder": "EasterEggs"
+            "folder": "TownEasterEggs"
         },
         {
             "name": "Trickster_Icon2",
-            "folder": "EasterEggs"
+            "folder": "TownEasterEggs"
         },
         {
             "name": "Vampire",
-            "folder": "EasterEggs"
+            "folder": "VampireEasterEggs"
         },
         {
             "name": "Veteran_Icon1",
-            "folder": "EasterEggs"
+            "folder": "TownEasterEggs"
         },
         {
             "name": "Veteran_Icon2",
-            "folder": "EasterEggs"
+            "folder": "TownEasterEggs"
         },
         {
             "name": "Veteran_Icon3",
-            "folder": "EasterEggs"
+            "folder": "TownEasterEggs"
         },
         {
             "name": "Veteran_Icon4",
-            "folder": "EasterEggs"
+            "folder": "TownEasterEggs"
         },
         {
             "name": "Vigilante",
-            "folder": "EasterEggs"
+            "folder": "TownEasterEggs"
         },
         {
             "name": "Vigilante_Ability",
-            "folder": "EasterEggs"
+            "folder": "TownEasterEggs"
         },
         {
             "name": "Werewolf",
-            "folder": "EasterEggs"
+            "folder": "WerewolfEasterEggs"
         },
         {
             "name": "Wildling_Ability",
-            "folder": "EasterEggs"
+            "folder": "CovenEasterEggs"
         },
         {
             "name": "Witch_Ability_1",
-            "folder": "EasterEggs"
+            "folder": "CovenEasterEggs"
         },
         {
             "name": "Witch",
-            "folder": "EasterEggs"
+            "folder": "CovenEasterEggs"
         },
         {
             "name": "Admirer",
-            "folder": "TTBase"
+            "folder": "CovenBase"
         },
         {
             "name": "Amnesiac",
-            "folder": "TTBase"
+            "folder": "CovenBase"
         },
         {
             "name": "Bodyguard",
-            "folder": "TTBase"
+            "folder": "CovenBase"
         },
         {
             "name": "Cleric",
-            "folder": "TTBase"
+            "folder": "CovenBase"
         },
         {
             "name": "Coroner",
-            "folder": "TTBase"
+            "folder": "CovenBase"
         },
         {
             "name": "Crusader",
-            "folder": "TTBase"
+            "folder": "CovenBase"
         },
         {
             "name": "Deputy",
-            "folder": "TTBase"
+            "folder": "CovenBase"
         },
         {
             "name": "Investigator",
-            "folder": "TTBase"
+            "folder": "CovenBase"
         },
         {
             "name": "Jailor",
-            "folder": "TTBase"
+            "folder": "CovenBase"
         },
         {
             "name": "Lookout",
-            "folder": "TTBase"
+            "folder": "CovenBase"
         },
         {
             "name": "Mayor",
-            "folder": "TTBase"
+            "folder": "CovenBase"
         },
         {
             "name": "Monarch",
-            "folder": "TTBase"
+            "folder": "CovenBase"
         },
         {
             "name": "Prosecutor",
-            "folder": "TTBase"
+            "folder": "CovenBase"
         },
         {
             "name": "Psychic",
-            "folder": "TTBase"
+            "folder": "CovenBase"
         },
         {
             "name": "Retributionist",
-            "folder": "TTBase"
+            "folder": "CovenBase"
         },
         {
             "name": "Seer",
-            "folder": "TTBase"
+            "folder": "CovenBase"
         },
         {
             "name": "Sheriff",
-            "folder": "TTBase"
+            "folder": "CovenBase"
         },
         {
             "name": "Spy",
-            "folder": "TTBase"
+            "folder": "CovenBase"
         },
         {
             "name": "TavernKeeper",
-            "folder": "TTBase"
+            "folder": "CovenBase"
         },
         {
             "name": "Tracker",
-            "folder": "TTBase"
+            "folder": "CovenBase"
         },
         {
             "name": "Trapper",
-            "folder": "TTBase"
+            "folder": "CovenBase"
         },
         {
             "name": "Trickster",
-            "folder": "TTBase"
+            "folder": "CovenBase"
         },
         {
             "name": "Veteran",
-            "folder": "TTBase"
+            "folder": "CovenBase"
         },
         {
             "name": "Vigilante",
-            "folder": "TTBase"
+            "folder": "CovenBase"
         },
         {
             "name": "Investigator",
-            "folder": "TTEasterEggs"
+            "folder": "CovenEasterEggs"
         },
         {
             "name": "Trickster",
-            "folder": "TTEasterEggs"
+            "folder": "CovenEasterEggs"
         },
         {
             "name": "Jailor",
-            "folder": "TTEasterEggs"
+            "folder": "CovenEasterEggs"
         },
         {
             "name": "Crusader",
-            "folder": "TTEasterEggs"
+            "folder": "CovenEasterEggs"
         },
         {
             "name": "Jailor",
