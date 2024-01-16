@@ -71,7 +71,7 @@ public static class Download
             }
 
             var json = await response.Content.ReadAsStringAsync();
-            var jobj = JObject.Parse(json)[packName.ToLower()];
+            var jobj = JObject.Parse(json)[packName.Replace(" ", "").ToLower()];
 
             if (jobj == null || !jobj.HasValues)
             {
@@ -89,6 +89,7 @@ public static class Download
                 var info = new Asset()
                 {
                     Name = current["name"]?.ToString() ?? "",
+                    FileType = current["type"]?.ToString() ?? "png",
                     Folder = current["folder"]?.ToString() ?? "Vanilla",
                     Pack = packName
                 };
@@ -129,20 +130,21 @@ public class Asset
     public string Name { get; set; }
     public string Folder { get; set; }
     public string Pack { get; set; }
+    public string FileType { get; set; }
 
     public string FilePath()
     {
         if (Folder is null or "" or "Vanilla" || Pack == "Vanilla")
-            return Path.Combine(AssetManager.VanillaPath, $"{Name}.png");
+            return Path.Combine(AssetManager.VanillaPath, $"{Name}.{FileType}");
         else
-            return Path.Combine(AssetManager.ModPath, Pack, Folder, $"{Name}.png");
+            return Path.Combine(AssetManager.ModPath, Pack, Folder, $"{Name}.{FileType}");
     }
 
     public string DownloadLink()
     {
         if (Folder is "" or "Vanilla" || Pack == "Vanilla")
-            return $"Vanilla/{Name}.png";
+            return $"Vanilla/{Name}.{FileType}";
         else
-            return $"{Pack}/{Folder}/{Name}.png";
+            return $"{Pack}/{Folder}/{Name}.{FileType}";
     }
 }
