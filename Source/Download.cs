@@ -48,10 +48,10 @@ public static class Download
                 new DirectoryInfo(AssetManager.VanillaPath).GetFiles("*.png").Select(x => x.FullName).ForEach(File.Delete);
             else if (Directory.Exists(Path.Combine(AssetManager.ModPath, packName)))
             {
-                foreach (var folder in AssetManager.Folders)
-                {
-                    var dir = Path.Combine(Path.Combine(AssetManager.ModPath, packName), folder);
+                var pack = new DirectoryInfo(Path.Combine(AssetManager.ModPath, packName)).GetDirectories().Select(x => x.FullName);
 
+                foreach (var dir in pack)
+                {
                     if (Directory.Exists(dir))
                         new DirectoryInfo(dir).GetFiles("*.png").Select(x => x.FullName).ForEach(File.Delete);
                 }

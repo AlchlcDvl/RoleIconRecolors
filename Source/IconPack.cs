@@ -2,77 +2,62 @@ namespace IconPacks;
 
 public class IconPack
 {
-    public Dictionary<string, Sprite> RegIcons { get; set; }
-    public Dictionary<string, Sprite> TTIcons { get; set; }
-    public Dictionary<string, Sprite> VIPIcons { get; set; }
-    public Dictionary<string, Sprite> CustomIcons { get; set; }
-    public Dictionary<string, List<Sprite>> RegEEIcons { get; set; }
-    public Dictionary<string, List<Sprite>> TTEEIcons { get; set; }
-    public Dictionary<string, List<Sprite>> VIPEEIcons { get; set; }
-    public Dictionary<string, TMP_SpriteAsset> MentionStyles { get; set; }
-    public string Name { get; }
-    public string PackPath => Path.Combine(AssetManager.ModPath, Name);
+    public Dictionary<string, Dictionary<string, Sprite>> BaseIcons { get; set; }
+    public Dictionary<string, Dictionary<string, List<Sprite>>> EasterEggs { get; set; }
 
-    private static readonly string[] Folders = new[] { "", "TT", "VIP", "Custom" };
-    private static readonly string[] Styles = new[] { "Main", "Traitor", "VIP", "Custom" };
+    public Dictionary<string, TMP_SpriteAsset> MentionStyles { get; set; }
+
+    public string Name { get; }
+
+    private string PackPath => Path.Combine(AssetManager.ModPath, Name);
+
+    private static readonly string[] Folders = new[] { "Regular", "Town", "Coven", "SerialKiller", "Arsonist", "Werewolf", "Shroud", "Apocalypse", "Executioner", "Jester", "Pirate",
+        "Doomsayer", "Vampire", "CursedSoul", /*"PlayerNumbers",*/ "Custom" };
+    public static readonly string[] FileTypes = new[] { "png", "jpg" };
 
     public IconPack(string name)
     {
         Name = name;
-        RegIcons = new();
-        RegEEIcons = new();
-        TTIcons = new();
-        TTEEIcons = new();
-        VIPIcons = new();
-        VIPEEIcons = new();
-        CustomIcons = new();
+        BaseIcons = new();
+        EasterEggs = new();
         MentionStyles = new();
     }
 
     public void Debug()
     {
-        RegIcons.ForEach((x, _) => Recolors.LogMessage($"{Name} {x} has a sprite!"));
-        Recolors.LogMessage($"{Name} {RegIcons.Count} Assets loaded!");
-        TTIcons.ForEach((x, _) => Recolors.LogMessage($"{Name} {x} has a TT sprite!"));
-        Recolors.LogMessage($"{Name} {TTIcons.Count} TT Assets loaded!");
-        VIPIcons.ForEach((x, _) => Recolors.LogMessage($"{Name} {x} has a VIP sprite!"));
-        Recolors.LogMessage($"{Name} {VIPIcons.Count} VIP Assets loaded!");
-        CustomIcons.ForEach((x, _) => Recolors.LogMessage($"{Name} {x} has a Custom Mention sprite!"));
-        Recolors.LogMessage($"{Name} {CustomIcons.Count} Custom Assets loaded!");
-        RegEEIcons.ForEach((x, y) => Recolors.LogMessage($"{Name} {x} has {y.Count} Easter Egg sprite(s)!"));
-        Recolors.LogMessage($"{Name} {RegEEIcons.Count} Easter Egg Assets loaded!");
-        TTEEIcons.ForEach((x, y) => Recolors.LogMessage($"{Name} {x} has {y.Count} TT Easter Egg sprite(s)!"));
-        Recolors.LogMessage($"{Name} {TTEEIcons.Count} TT Easter Egg Assets loaded!");
-        VIPEEIcons.ForEach((x, y) => Recolors.LogMessage($"{Name} {x} has {y.Count} VIP Easter Egg sprite(s)!"));
-        Recolors.LogMessage($"{Name} {VIPEEIcons.Count} VIP Easter Egg Assets loaded!");
+        BaseIcons.ForEach((x, y) => y.ForEach((a, _) => Recolors.LogMessage($"{Name} {a} has a(n) {x} sprite!")));
+        Recolors.LogMessage($"{Name} {BaseIcons.Count} Base Assets loaded!");
+
+        EasterEggs.ForEach((x, y) => y.ForEach((a, b) => Recolors.LogMessage($"{Name} {a} has {b.Count} {x} easter egg sprite(s)!")));
+        Recolors.LogMessage($"{Name} {EasterEggs.Count} Easter Egg Assets loaded!");
+
         MentionStyles.ForEach((x, _) => Recolors.LogMessage($"{Name} {x} mention style exists!"));
         Recolors.LogMessage($"{Name} {MentionStyles.Count} mention styles exist!");
+    }
+
+    public void Delete()
+    {
+        Recolors.LogMessage($"Deleteing {Name}");
+
+        BaseIcons.ForEach((_, x) => x.Values.ForEach(UObject.Destroy));
+        BaseIcons.ForEach((_, x) => x.Clear());
+        BaseIcons.Clear();
+
+        EasterEggs.Values.ForEach(x => x.Values.ForEach(y => y.ForEach(UObject.Destroy)));
+        EasterEggs.Values.ForEach(x => x.Values.ForEach(y => y.Clear()));
+        EasterEggs.Values.ForEach(x => x.Clear());
+        EasterEggs.Clear();
+
+        MentionStyles.Values.ForEach(UObject.Destroy);
+        MentionStyles.Clear();
     }
 
     public void Reload()
     {
         Recolors.LogMessage($"Reloading {Name}");
-        RegIcons.Values.ForEach(UObject.Destroy);
-        RegIcons.Clear();
-        TTIcons.Values.ForEach(UObject.Destroy);
-        TTIcons.Clear();
-        VIPIcons.Values.ForEach(UObject.Destroy);
-        VIPIcons.Clear();
-        CustomIcons.Values.ForEach(UObject.Destroy);
-        CustomIcons.Clear();
-        RegEEIcons.Values.ForEach(x => x.ForEach(UObject.Destroy));
-        RegEEIcons.Values.ForEach(x => x.Clear());
-        RegEEIcons.Clear();
-        VIPEEIcons.Values.ForEach(x => x.ForEach(UObject.Destroy));
-        VIPEEIcons.Values.ForEach(x => x.Clear());
-        VIPEEIcons.Clear();
-        TTEEIcons.Values.ForEach(x => x.ForEach(UObject.Destroy));
-        TTEEIcons.Values.ForEach(x => x.Clear());
-        TTEEIcons.Clear();
-        MentionStyles.Values.ForEach(UObject.Destroy);
-        MentionStyles.Clear();
+        Delete();
         Load();
-        LoadSpriteSheet(true);
+        LoadSpriteSheets(true);
         AssetManager.SetScrollSprites();
     }
 
@@ -84,79 +69,62 @@ public class IconPack
 
             foreach (var name in Folders)
             {
-                if (name != "Custom")
+                if (!AssetManager.GlobalEasterEggs.ContainsKey(name))
+                    AssetManager.GlobalEasterEggs[name] = new();
+
+                BaseIcons[name] = new();
+                EasterEggs[name] = new();
+                var baseName = name + (name is "Custom" or "PlayerNumbers" ? "" : "Base");
+                var baseFolder = Path.Combine(PackPath, baseName);
+
+                if (Directory.Exists(baseFolder))
                 {
-                    var baseName = name + "Base";
-                    var baseFolder = Path.Combine(PackPath, baseName);
-
-                    if (Directory.Exists(baseFolder))
+                    foreach (var type in FileTypes)
                     {
-                        foreach (var file in Directory.EnumerateFiles(baseFolder, "*.png"))
+                        foreach (var file in Directory.GetFiles(baseFolder, $"*.{type}"))
                         {
-                            var filePath = Path.Combine(baseFolder, $"{file.SanitisePath()}.png");
-                            var sprite = AssetManager.LoadSpriteFromDisk(filePath, baseName, Name);
-                            filePath = filePath.SanitisePath(true);
+                            var filePath = Path.Combine(baseFolder, $"{file.SanitisePath()}.{type}");
+                            var sprite = AssetManager.LoadDiskSprite(filePath.SanitisePath(), baseName, Name, type);
 
-                            if (name == "")
-                                RegIcons.TryAdd(filePath, sprite);
-                            else if (name == "TT")
-                                TTIcons.TryAdd(filePath, sprite);
-                            else if (name == "VIP")
-                                VIPIcons.TryAdd(filePath, sprite);
+                            if (sprite == null)
+                                continue;
+
+                            BaseIcons[name][filePath.SanitisePath(true)] = sprite;
                         }
                     }
-                    else
-                    {
-                        Recolors.LogWarning($"{Name} {baseName} folder doesn't exist");
-                        Directory.CreateDirectory(baseFolder);
-                    }
+                }
+                else
+                {
+                    Recolors.LogWarning($"{Name} {baseName} folder doesn't exist");
+                    Directory.CreateDirectory(baseFolder);
+                }
 
+                if (name is not ("Custom" or "PlayerNumbers"))
+                {
                     var eeName = name + "EasterEggs";
                     var eeFolder = Path.Combine(PackPath, eeName);
 
                     if (Directory.Exists(eeFolder))
                     {
-                        foreach (var file in Directory.EnumerateFiles(eeFolder, "*.png"))
+                        foreach (var type in FileTypes)
                         {
-                            var filePath = Path.Combine(eeFolder, $"{file.SanitisePath()}.png");
-                            var sprite = AssetManager.LoadSpriteFromDisk(filePath, eeName, Name);
-                            filePath = filePath.SanitisePath(true);
-
-                            if (name == "")
+                            foreach (var file in Directory.GetFiles(eeFolder, $"*.{type}"))
                             {
-                                if (RegEEIcons.ContainsKey(filePath))
-                                    RegEEIcons[filePath].Add(sprite);
-                                else
-                                    RegEEIcons.TryAdd(filePath, new() { sprite });
+                                var filePath = Path.Combine(eeFolder, $"{file.SanitisePath()}.{type}");
+                                var sprite = AssetManager.LoadDiskSprite(filePath.SanitisePath(), eeName, Name, type);
+                                filePath = filePath.SanitisePath(true);
 
-                                if (AssetManager.RegEEIcons.ContainsKey(filePath))
-                                    AssetManager.RegEEIcons[filePath].Add(sprite);
-                                else
-                                    AssetManager.RegEEIcons.TryAdd(filePath, new() { sprite });
-                            }
-                            else if (name == "TT")
-                            {
-                                if (TTEEIcons.ContainsKey(filePath))
-                                    TTEEIcons[filePath].Add(sprite);
-                                else
-                                    TTEEIcons.TryAdd(filePath, new() { sprite });
+                                if (sprite == null)
+                                    continue;
 
-                                if (AssetManager.TTEEIcons.ContainsKey(filePath))
-                                    AssetManager.TTEEIcons[filePath].Add(sprite);
-                                else
-                                    AssetManager.TTEEIcons.TryAdd(filePath, new() { sprite });
-                            }
-                            else if (name == "VIP")
-                            {
-                                if (VIPEEIcons.ContainsKey(filePath))
-                                    VIPEEIcons[filePath].Add(sprite);
-                                else
-                                    VIPEEIcons.TryAdd(filePath, new() { sprite });
+                                if (!EasterEggs[name].ContainsKey(filePath))
+                                    EasterEggs[name][filePath] = new();
 
-                                if (AssetManager.VIPEEIcons.ContainsKey(filePath))
-                                    AssetManager.VIPEEIcons[filePath].Add(sprite);
-                                else
-                                    AssetManager.VIPEEIcons.TryAdd(filePath, new() { sprite });
+                                if (!AssetManager.GlobalEasterEggs[name].ContainsKey(filePath))
+                                    AssetManager.GlobalEasterEggs[name][filePath] = new();
+
+                                EasterEggs[name][filePath].Add(sprite);
+                                AssetManager.GlobalEasterEggs[name][filePath].Add(sprite);
                             }
                         }
                     }
@@ -164,32 +132,6 @@ public class IconPack
                     {
                         Recolors.LogWarning($"{Name} {eeName} folder doesn't exist");
                         Directory.CreateDirectory(eeFolder);
-                    }
-                }
-                else
-                {
-                    var folder = Path.Combine(PackPath, "Custom");
-
-                    if (Directory.Exists(folder))
-                    {
-                        foreach (var file in Directory.EnumerateFiles(folder, "*.png"))
-                        {
-                            var filePath = Path.Combine(folder, $"{file.SanitisePath()}.png");
-                            var sprite = AssetManager.LoadSpriteFromDisk(filePath, "Custom", Name);
-                            filePath = filePath.SanitisePath(true);
-
-                            if (name == "")
-                                RegIcons.TryAdd(filePath, sprite);
-                            else if (name == "TT")
-                                TTIcons.TryAdd(filePath, sprite);
-                            else if (name == "VIP")
-                                VIPIcons.TryAdd(filePath, sprite);
-                        }
-                    }
-                    else
-                    {
-                        Recolors.LogWarning($"{Name} Custom folder doesn't exist");
-                        Directory.CreateDirectory(folder);
                     }
                 }
             }
@@ -203,52 +145,43 @@ public class IconPack
     }
 
     // love ya pat
-    public void LoadSpriteSheet(bool change)
+    public void LoadSpriteSheets(bool change)
     {
         try
         {
             var (rolesWithIndexDict, rolesWithIndex) = Utils.Filtered();
 
-            foreach (var style in Styles)
+            foreach (var style in Folders)
             {
                 if (MentionStyles.ContainsKey(style))
                     continue;
 
                 var textures = new List<Texture2D>();
-                var spritesDict = style switch
-                {
-                    "Traitor" => TTIcons,
-                    "VIP" => VIPIcons,
-                    "Custom" => CustomIcons,
-                    _ => RegIcons,
-                };
+                var sprites = new List<Sprite>();
 
                 // now get all the sprites that we want to load
                 foreach (var (role, roleInt) in rolesWithIndex)
                 {
                     var actualRole = (Role)roleInt;
+                    var name = Utils.RoleName(actualRole);
+                    var sprite = AssetManager.GetSprite(name, style, false, Name, false);
 
-                    if (!spritesDict.TryGetValue(Utils.RoleName(actualRole), out var sprite))
-                    {
-                        if (!RegIcons.TryGetValue(Utils.RoleName(actualRole), out sprite))
-                            sprite = Service.Game.Roles.roleInfoLookup[actualRole].sprite;
-                    }
+                    if (sprite == AssetManager.Blank)
+                        sprite = AssetManager.GetSprite(name, "Regular", false, Name, false);
 
-                    sprite.texture.name = role;
+                    if (sprite == AssetManager.Blank)
+                        sprite = Service.Game.Roles.roleInfoLookup[actualRole].sprite;
+
+                    sprite.name = sprite.texture.name = role;
                     textures.Add(sprite.texture);
+                    sprites.Add(sprite);
                 }
 
                 // set spritecharacter name to "Role{number}" so that the game can find correct roles
-                var asset = AssetManager.BuildGlyphs(textures.ToArray(), $"RoleIcons ({Name}, {style})", x => x.name = rolesWithIndexDict[(x.glyph as TMP_SpriteGlyph).sprite.name.ToLower()]);
+                var asset = AssetManager.BuildGlyphs(sprites.ToArray(), textures.ToArray(), $"RoleIcons ({Name}, {style})", rolesWithIndexDict);
                 MentionStyles[style] = asset;
+                Utils.DumpSprite(asset.spriteSheet as Texture2D, $"{style}RoleIcons.png", PackPath);
                 Recolors.LogMessage($"{Name} {style} Sprite Asset loaded!");
-
-                var assetPath = Path.Combine(PackPath, $"{Name.Replace(" ", "")}_{style}RoleIcons.png");
-
-                if (File.Exists(assetPath))
-                    File.Delete(assetPath);
-
-                File.WriteAllBytes(assetPath, (asset.spriteSheet as Texture2D).Decompress().EncodeToPNG());
             }
 
             if (change)
@@ -262,4 +195,53 @@ public class IconPack
             Recolors.LogError(e);
         }
     }
+
+    public Sprite GetSprite(string name, bool allowEE, string type, bool log)
+    {
+        if (!BaseIcons[type].TryGetValue(name, out var sprite))
+        {
+            if (log)
+                Recolors.LogWarning($"Couldn't find {name} in {Name}'s {type} resources");
+
+            if (type != "Regular" && !BaseIcons["Regular"].TryGetValue(name, out sprite))
+            {
+                if (log)
+                    Recolors.LogWarning($"Couldn't find {name} in {Name}'s Regular resources");
+
+                sprite = null;
+            }
+        }
+
+        if (URandom.RandomRangeInt(1, 101) <= Constants.EasterEggChance && allowEE)
+        {
+            var sprites = new List<Sprite>();
+
+            if (Constants.AllEasterEggs)
+            {
+                if (!AssetManager.GlobalEasterEggs[type].TryGetValue(name, out sprites))
+                {
+                    if (type != "Regular")
+                        AssetManager.GlobalEasterEggs["Regular"].TryGetValue(name, out sprites);
+                }
+            }
+
+            if (sprites.Count == 0)
+            {
+                if (!EasterEggs[type].TryGetValue(name, out sprites))
+                {
+                    if (type != "Regular")
+                        EasterEggs["Regular"].TryGetValue(name, out sprites);
+                }
+            }
+
+            if (sprites.Count > 0)
+                return sprites.Random();
+        }
+
+        return sprite ?? AssetManager.Blank;
+    }
+
+    //private static bool IsBTOS2ModdedFolder(string folderName) => folderName is "Jackal" or "Judge" or "Auditor" or "Starspawn" or "Inquisitor" or "Lions" or "Frogs" or "Hawks";
+
+    //private static bool IsLegacyModdedFolder(string folderName) => folderName is "Mafia" or "Amnesiac" or "Juggernaut" or "Sorcerer" or "GuardianAngel" or "Survivor";
 }

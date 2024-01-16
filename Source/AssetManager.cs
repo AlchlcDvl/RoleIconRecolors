@@ -4,9 +4,8 @@ public static class AssetManager
 {
     private const string Resources = "IconPacks.Resources.";
 
-    public static readonly Dictionary<string, List<Sprite>> RegEEIcons = new();
-    public static readonly Dictionary<string, List<Sprite>> TTEEIcons = new();
-    public static readonly Dictionary<string, List<Sprite>> VIPEEIcons = new();
+    public static readonly Dictionary<string, Dictionary<string, List<Sprite>>> GlobalEasterEggs = new();
+
     public static readonly Dictionary<string, IconPack> IconPacks = new();
     public static readonly Dictionary<int, Sprite> CacheScrollSprites = new();
 
@@ -15,132 +14,62 @@ public static class AssetManager
     public static Sprite Attack;
     public static Sprite Defense;
 
-    public static TMP_SpriteAsset Asset;
+    public static TMP_SpriteAsset VanillaAsset;
     public static bool SpriteSheetLoaded;
 
     public static string ModPath => Path.Combine(Path.GetDirectoryName(Application.dataPath), "SalemModLoader", "ModFolders", "Recolors");
-    public static string DefaultPath => Path.Combine(ModPath, "Recolors");
     public static string VanillaPath => Path.Combine(ModPath, "Vanilla");
 
-    public static readonly string[] Folders = new[] { "Base", "TTBase", "VIPBase", "EasterEggs", "TTEasterEggs", "VIPEasterEggs" };
+    private static readonly string[] Avoid = { "Attributes", "Necronomicon", "Neutral", "NeutralApocalypse", "NeutralEvil", "NeutralKilling", "Town", "TownInvestigative",
+        "TownKilling", "TownSupport", "TownProtective", "TownPower", "CovenKilling", "CovenDeception", "CovenUtility", "CovenPower", "Coven", "SlowMode", "FastMode", "AnonVoting",
+        "SecretKillers", "HiddenRoles", "OneTrial", "Any", "PerfectTown", "Hidden", "Stoned" };
 
-    private static readonly string[] Avoid = new[] { "Attributes", "Necronomicon", "Neutral", "NeutralApocalypse", "NeutralEvil", "NeutralKilling", "Town", "TownInvestigative",
-        "TownKilling", "TownSupport", "TownProtective", "TownPower", "CovenKilling", "CovenDeception", "CovenUtility", "CovenPower", "Coven", "SlowMode", "FastMode", "AnonVotes",
-        "HiddenKillers", "HiddenRoles", "OneTrial" };
-
-    private static readonly string[] ToRemove = new[] { ".png" };
+    private static readonly string[] ToRemove = { ".png", ".jpg" };
 
     private static Assembly Core => typeof(Recolors).Assembly;
 
-    public static Sprite GetSprite(string name, bool allowEE = true)
+    public static Sprite GetSprite(string name, string faction, bool allowEE = true, string packName = null, bool log = true) => GetSprite(name, allowEE, faction, packName, log);
+
+    public static Sprite GetSprite(string name, bool allowEE = true, string faction = null, string packName = null, bool log = true)
     {
         if (name.Contains("Blank") || !Constants.EnableIcons || IconPacks.Count == 0)
             return Blank;
 
-        if (!IconPacks.TryGetValue(Constants.CurrentPack, out var pack))
+        packName ??= Constants.CurrentPack;
+        faction ??= "Regular";
+
+        if (faction == "Blank")
+            faction = "Regular";
+
+        if (!IconPacks.TryGetValue(packName, out var pack))
         {
-            Recolors.LogError($"Error finding {Constants.CurrentPack} in loaded packs");
+            Recolors.LogError($"Error finding {packName} in loaded packs");
             ModSettings.SetString("Selected Icon Pack", "Vanilla", "alchlcsystm.recolors");
             return Blank;
         }
 
+        var type = faction;
+
+        if (Avoid.Any(name.Contains))
+            type = "Regular";
+        else if (Constants.IsLocalVIP)
+            type = "VIP";
+
         try
         {
-            if (Avoid.Any(name.Contains))
-                return GetRegSprite(pack, name, allowEE);
-            else if (Constants.IsLocalTT)
-                return GetTTSprite(pack, name, allowEE);
-            else if (Constants.IsLocalVIP)
-                return GetVIPSprite(pack, name, allowEE);
-            else
-                return GetRegSprite(pack, name, allowEE);
+            return pack.GetSprite(name, allowEE, type, log);
         }
         catch (Exception e)
         {
-            Recolors.LogError(e);
+            Recolors.LogError($"Error finding {name}'s sprite\n{e}");
             return Blank;
         }
-    }
-
-    private static Sprite GetRegSprite(IconPack pack, string name, bool allowEE = true)
-    {
-        if (!pack.RegIcons.TryGetValue(name, out var sprite))
-        {
-            Recolors.LogWarning($"Couldn't find regular {name} in {pack.Name}'s recources");
-            return Blank;
-        }
-
-        if (URandom.RandomRangeInt(1, 101) <= Constants.EasterEggChance && allowEE)
-        {
-            if (pack.RegEEIcons.TryGetValue(name, out var sprites) && !Constants.AllEasterEggs)
-                return sprites.Random();
-            else if (RegEEIcons.TryGetValue(name, out sprites))
-                return sprites.Random();
-        }
-
-        return sprite;
-    }
-
-    private static Sprite GetTTSprite(IconPack pack, string name, bool allowEE = true)
-    {
-        if (!pack.TTIcons.TryGetValue(name, out var sprite))
-        {
-            Recolors.LogWarning($"Couldn't find TT {name} in {pack.Name}'s recources");
-            return GetRegSprite(pack, name, allowEE);
-        }
-
-        if (URandom.RandomRangeInt(1, 101) <= Constants.EasterEggChance && allowEE)
-        {
-            if (pack.TTEEIcons.TryGetValue(name, out var sprites) && !Constants.AllEasterEggs)
-                return sprites.Random();
-            else if (TTEEIcons.TryGetValue(name, out sprites))
-                return sprites.Random();
-        }
-
-        return sprite;
-    }
-
-    private static Sprite GetVIPSprite(IconPack pack, string name, bool allowEE = true)
-    {
-        if (!pack.VIPIcons.TryGetValue(name, out var sprite))
-        {
-            Recolors.LogWarning($"Couldn't find VIP {name} in {pack.Name}'s recources");
-            return GetRegSprite(pack, name, allowEE);
-        }
-
-        if (URandom.RandomRangeInt(1, 101) <= Constants.EasterEggChance && allowEE)
-        {
-            if (pack.VIPEEIcons.TryGetValue(name, out var sprites) && !Constants.AllEasterEggs)
-                return sprites.Random();
-            else if (VIPEEIcons.TryGetValue(name, out sprites))
-                return sprites.Random();
-        }
-
-        return sprite;
     }
 
     public static void LoadAssets()
     {
         if (!Directory.Exists(ModPath))
             Directory.CreateDirectory(ModPath);
-
-        if (!Directory.Exists(VanillaPath))
-            Directory.CreateDirectory(VanillaPath);
-
-        if (!Directory.Exists(DefaultPath))
-            Directory.CreateDirectory(DefaultPath);
-
-        foreach (var folder in Folders)
-        {
-            var path = Path.Combine(DefaultPath, folder);
-
-            if (!Directory.Exists(path))
-                Directory.CreateDirectory(path);
-        }
-
-        RegEEIcons.Clear();
-        TTEEIcons.Clear();
-        VIPEEIcons.Clear();
 
         Core.GetManifestResourceNames().ForEach(x =>
         {
@@ -161,32 +90,32 @@ public static class AssetManager
 
     private static Texture2D EmptyTexture() => new(2, 2, TextureFormat.ARGB32, true);
 
-    private static Texture2D LoadDiskTexture(string fileName, string subfolder, string folder)
+    private static Texture2D LoadDiskTexture(string fileName, string subfolder, string folder, string filetype)
     {
         try
         {
             fileName = fileName.SanitisePath();
-            var path = Path.Combine(ModPath, folder, subfolder, $"{fileName}.png");
+            var path = Path.Combine(ModPath, folder, subfolder, $"{fileName}.{filetype}");
             var texture = EmptyTexture();
-            ImageConversion.LoadImage(texture, File.ReadAllBytes(path), false);
+            texture.LoadImage(File.ReadAllBytes(path), false);
             texture.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
             texture.name = fileName;
             UObject.DontDestroyOnLoad(texture);
-            return texture;
+            return texture.Decompress();
         }
-        catch
+        catch (Exception e)
         {
-            Recolors.LogError($"Error loading {folder} > {subfolder} > {fileName}");
+            Recolors.LogError($"Error loading {folder} > {subfolder} > {fileName} ({filetype})\n{e}");
             return null;
         }
     }
 
-    public static Sprite LoadSpriteFromDisk(string fileName, string subfolder, string folder)
+    public static Sprite LoadDiskSprite(string fileName, string subfolder, string folder, string filetype)
     {
         try
         {
             fileName = fileName.SanitisePath();
-            var path = Path.Combine(ModPath, folder, subfolder, $"{fileName}.png");
+            var path = Path.Combine(ModPath, folder, subfolder, $"{fileName}.{filetype}");
 
             if (!File.Exists(path))
             {
@@ -194,25 +123,31 @@ public static class AssetManager
                 return null;
             }
 
-            var texture = LoadDiskTexture(path, subfolder, folder);
+            var texture = LoadDiskTexture(path.SanitisePath(), subfolder, folder, filetype);
 
             if (texture == null)
+            {
+                Recolors.LogError($"Uh oh texture loading error at {path}");
                 return null;
+            }
 
             var sprite = Sprite.Create(texture, new(0, 0, texture.width, texture.height), new(0.5f, 0.5f), 100);
 
             if (sprite == null)
+            {
+                Recolors.LogError($"Uh oh sprite loading error at {path}");
                 return null;
+            }
 
             sprite.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
-            sprite.name = fileName;
+            sprite.name = texture.name;
             UObject.DontDestroyOnLoad(sprite);
             return sprite;
         }
         catch (Exception e)
         {
             Recolors.LogError(e);
-            return Blank;
+            return null;
         }
     }
 
@@ -259,12 +194,13 @@ public static class AssetManager
             else
             {
                 IconPacks.Remove(packName);
+                exists?.Delete();
                 exists = new(packName);
                 exists.Load();
                 IconPacks.Add(packName, exists);
 
                 if (PatchRoleService.ServiceExists)
-                    exists.LoadSpriteSheet(true);
+                    exists.LoadSpriteSheets(true);
 
                 if (PatchScrolls.ServiceExists)
                     SetScrollSprites();
@@ -283,20 +219,20 @@ public static class AssetManager
 
         try
         {
-            if ((packName == "Vanilla" || Constants.CurrentStyle == "Vanilla" ) && Asset)
+            if ((packName == "Vanilla" || Constants.CurrentStyle == "Vanilla" ) && VanillaAsset)
             {
-                MaterialReferenceManager.instance.m_SpriteAssetReferenceLookup[CacheDefaultSpriteSheet.Cache] = Asset;
-                MaterialReferenceManager.instance.m_FontMaterialReferenceLookup[CacheDefaultSpriteSheet.Cache] = Asset.material;
+                MaterialReferenceManager.instance.m_SpriteAssetReferenceLookup[CacheDefaultSpriteSheet.Hash1] = VanillaAsset ?? CacheDefaultSpriteSheet.Cache1;
+                MaterialReferenceManager.instance.m_FontMaterialReferenceLookup[CacheDefaultSpriteSheet.Hash1] = VanillaAsset?.material ?? CacheDefaultSpriteSheet.Cache1?.material;
             }
             else if (packName != "Vanilla" && IconPacks.TryGetValue(packName, out pack) && pack != null && pack.MentionStyles.TryGetValue(Constants.CurrentStyle, out asset) && asset)
             {
-                MaterialReferenceManager.instance.m_SpriteAssetReferenceLookup[CacheDefaultSpriteSheet.Cache] = asset;
-                MaterialReferenceManager.instance.m_FontMaterialReferenceLookup[CacheDefaultSpriteSheet.Cache] = asset.material;
+                MaterialReferenceManager.instance.m_SpriteAssetReferenceLookup[CacheDefaultSpriteSheet.Hash1] = asset ?? CacheDefaultSpriteSheet.Cache1;
+                MaterialReferenceManager.instance.m_FontMaterialReferenceLookup[CacheDefaultSpriteSheet.Hash1] = asset?.material ?? CacheDefaultSpriteSheet.Cache1?.material;
             }
         }
         catch (Exception e)
         {
-            RunDiagnostics(packName, Constants.CurrentStyle, e);
+            RunDiagnostics(e);
         }
     }
 
@@ -307,37 +243,40 @@ public static class AssetManager
 
         try
         {
-            if ((styleName == "Vanilla" || Constants.CurrentPack == "Vanilla") && Asset)
+            if ((styleName == "Vanilla" || Constants.CurrentPack == "Vanilla") && VanillaAsset)
             {
-                MaterialReferenceManager.instance.m_SpriteAssetReferenceLookup[CacheDefaultSpriteSheet.Cache] = Asset;
-                MaterialReferenceManager.instance.m_FontMaterialReferenceLookup[CacheDefaultSpriteSheet.Cache] = Asset.material;
+                MaterialReferenceManager.instance.m_SpriteAssetReferenceLookup[CacheDefaultSpriteSheet.Hash1] = VanillaAsset ?? CacheDefaultSpriteSheet.Cache1;
+                MaterialReferenceManager.instance.m_FontMaterialReferenceLookup[CacheDefaultSpriteSheet.Hash1] = VanillaAsset?.material ?? CacheDefaultSpriteSheet.Cache1?.material;
             }
             else if (styleName != "Vanilla" && IconPacks.TryGetValue(Constants.CurrentPack, out pack) && pack != null && pack.MentionStyles.TryGetValue(styleName, out asset) && asset)
             {
-                MaterialReferenceManager.instance.m_SpriteAssetReferenceLookup[CacheDefaultSpriteSheet.Cache] = asset;
-                MaterialReferenceManager.instance.m_FontMaterialReferenceLookup[CacheDefaultSpriteSheet.Cache] = asset.material;
+                MaterialReferenceManager.instance.m_SpriteAssetReferenceLookup[CacheDefaultSpriteSheet.Hash1] = asset ?? CacheDefaultSpriteSheet.Cache1;
+                MaterialReferenceManager.instance.m_FontMaterialReferenceLookup[CacheDefaultSpriteSheet.Hash1] = asset?.material ?? CacheDefaultSpriteSheet.Cache1?.material;
             }
         }
         catch (Exception e)
         {
-            RunDiagnostics(Constants.CurrentPack, styleName, e);
+            RunDiagnostics(e);
         }
     }
 
-    private static void RunDiagnostics(string packName, string styleName, Exception e)
+    private static void RunDiagnostics(Exception e)
     {
         IconPack pack = null;
         TMP_SpriteAsset asset = null;
-        var diagnostic = $"Uh oh, something happened here in AssetManager.ChangeSpriteSheets\nPack Name: {packName}\nStyle Name: {styleName}";
+        var diagnostic = $"Uh oh, something happened here in AssetManager.ChangeSpriteSheets\nPack Name: {Constants.CurrentPack}\nStyle Name: {Constants.CurrentStyle}";
 
-        if (!Asset)
+        if (!CacheDefaultSpriteSheet.Cache1)
             diagnostic += "\nVanilla Sheet Does Not Exist";
 
-        if (packName != "Vanilla" && !IconPacks.TryGetValue(packName, out pack))
+        if (!VanillaAsset)
+            diagnostic += "\nModified Vanilla Sheet Does Not Exist";
+
+        if (Constants.EnableIcons && !IconPacks.TryGetValue(Constants.CurrentPack, out pack))
             diagnostic += "\nNo Loaded Icon Pack";
         else if (pack == null)
             diagnostic += "\nLoaded Icon Pack Was Null";
-        else if (!pack.MentionStyles.TryGetValue(styleName, out asset))
+        else if (!pack.MentionStyles.TryGetValue(Constants.CurrentStyle, out asset))
             diagnostic += "\nLoaded Icon Pack Does Not Have A Valid Mention Style";
         else if (!asset)
             diagnostic += "\nLoaded Mention Style Was Null";
@@ -354,13 +293,11 @@ public static class AssetManager
             {
                 var sprite = GetSprite(Utils.RoleName(y.role), false);
 
-                if (sprite != Blank)
-                {
-                    if (!CacheScrollSprites.ContainsKey(y.id))
-                        CacheScrollSprites[y.id] = y.decoration.sprite;
+                if (!CacheScrollSprites.ContainsKey(y.id))
+                    CacheScrollSprites[y.id] = y.decoration.sprite;
 
+                if (sprite != Blank)
                     y.decoration.sprite = sprite;
-                }
                 else if (CacheScrollSprites.TryGetValue(y.id, out sprite))
                     y.decoration.sprite = sprite;
                 else
@@ -371,13 +308,11 @@ public static class AssetManager
             {
                 var sprite = GetSprite(Utils.RoleName(y.role), false);
 
-                if (sprite != Blank)
-                {
-                    if (!CacheScrollSprites.ContainsKey(y.id))
-                        CacheScrollSprites[y.id] = y.decoration.sprite;
+                if (!CacheScrollSprites.ContainsKey(y.id))
+                    CacheScrollSprites[y.id] = y.decoration.sprite;
 
+                if (sprite != Blank)
                     y.decoration.sprite = sprite;
-                }
                 else if (CacheScrollSprites.TryGetValue(y.id, out sprite))
                     y.decoration.sprite = sprite;
                 else
@@ -411,59 +346,52 @@ public static class AssetManager
     {
         try
         {
-            if (SpriteSheetLoaded || Asset)
+            if (SpriteSheetLoaded)
                 return;
 
             SpriteSheetLoaded = true;
             var (rolesWithIndexDict, rolesWithIndex) = Utils.Filtered();
             var textures = new List<Texture2D>();
+            var sprites = new List<Sprite>();
 
             // now get all the sprites that we want to load
             foreach (var (role, roleInt) in rolesWithIndex)
             {
                 var actualRole = (Role)roleInt;
                 var sprite = Service.Game.Roles.roleInfoLookup[actualRole].sprite;
-                sprite.texture.name = role;
+                sprite.name = sprite.texture.name = role;
                 textures.Add(sprite.texture);
+                sprites.Add(sprite);
             }
 
             // set spritecharacter name to "Role{number}" so that the game can find correct roles
-            Asset = BuildGlyphs(textures.ToArray(), "RoleIcons", x => x.name = rolesWithIndexDict[(x.glyph as TMP_SpriteGlyph).sprite.name.ToLower()]);
+            VanillaAsset = BuildGlyphs(sprites.ToArray(), textures.ToArray(), "RoleIcons", rolesWithIndexDict);
+            Utils.DumpSprite(VanillaAsset.spriteSheet as Texture2D, "RoleIcons_Modified.png", VanillaPath);
             Recolors.LogMessage("Vanilla Sprite Asset loaded!");
 
             if (change)
             {
                 ChangeSpriteSheets("Vanilla");
-                Recolors.LogMessage("Vanilla Sprite Asset added!");
+                Recolors.LogMessage("Set to Vanilla Sprite Asset!");
             }
-
-            var assetPath = Path.Combine(VanillaPath, "RoleIcons_Modified.png");
-
-            if (File.Exists(assetPath))
-                File.Delete(assetPath);
-
-            File.WriteAllBytes(assetPath, (Asset.spriteSheet as Texture2D).Decompress().EncodeToPNG());
         }
         catch (Exception e)
         {
             Recolors.LogError(e);
-            Asset = null;
+            VanillaAsset = null;
             SpriteSheetLoaded = false;
         }
     }
 
     // courtesy of pat, love ya mate
-    public static TMP_SpriteAsset BuildGlyphs(Texture2D[] textures, string spriteAssetName, Action<TMP_SpriteCharacter> action)
+    public static TMP_SpriteAsset BuildGlyphs(Sprite[] sprites, Texture2D[] textures, string spriteAssetName, Dictionary<string, string> rolesWithIndexDict)
     {
         var asset = ScriptableObject.CreateInstance<TMP_SpriteAsset>();
-        var image = new Texture2D(2048, 2048) { name = spriteAssetName };
+        var image = new Texture2D(4096, 2048) { name = spriteAssetName };
         var rects = image.PackTextures(textures, 2);
 
         for (uint i = 0; i < rects.Length; i++)
         {
-            var sprite = Sprite.Create(textures[i], new(0, 0, textures[i].width, textures[i].height), new(0, 0), 100);
-            sprite.name = textures[i].name;
-
             var glyph = new TMP_SpriteGlyph()
             {
                 glyphRect = new()
@@ -482,17 +410,16 @@ public static class AssetManager
                     horizontalAdvance = textures[i].width
                 },
                 index = i,
-                sprite = sprite,
+                sprite = sprites[i],
             };
 
             var character = new TMP_SpriteCharacter(0, glyph)
             {
-                name = textures[i].name,
+                // renaming to $"Role{(int)role}" should occur here
+                name = rolesWithIndexDict[glyph.sprite.name.ToLower()],
                 glyphIndex = i,
             };
 
-            // renaming to $"Role{(int)Role}" should occur here
-            action?.Invoke(character);
 
             asset.spriteGlyphTable.Add(glyph);
             asset.spriteCharacterTable.Add(character);
@@ -504,6 +431,7 @@ public static class AssetManager
         asset.material.mainTexture = image;
         asset.spriteSheet = image;
         asset.UpdateLookupTables();
+        asset.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
         return asset;
     }
 }

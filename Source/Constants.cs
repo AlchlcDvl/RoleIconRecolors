@@ -51,20 +51,6 @@ public static class Constants
             }
         }
     }
-    public static bool IsLocalTT
-    {
-        get
-        {
-            try
-            {
-                return Service.Game?.Sim?.info?.roleCardObservation?.Data?.modifier == ROLE_MODIFIER.TRAITOR;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-    }
     public static string TTColor
     {
         get

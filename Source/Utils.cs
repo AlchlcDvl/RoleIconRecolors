@@ -1,5 +1,3 @@
-using Home.Shared;
-
 namespace IconPacks;
 
 public static class Utils
@@ -108,71 +106,39 @@ public static class Utils
         Role.NEUTRAL_EVIL => "NeutralEvil",
         Role.NEUTRAL_APOCALYPSE => "NeutralApocalypse",
         Role.ANY => "Any",
-        Role.TOWN_TRAITOR => "TownTraitor",
-        Role.NO_TOWN_HANGED => "NoTownHanged",
+        Role.TOWN_TRAITOR => "CovenTownTraitor",
+        Role.NO_TOWN_HANGED => "PerfectTown",
         Role.GHOST_TOWN => "GhostTown",
         Role.VIP => "VIP",
         Role.SLOW_MODE => "SlowMode",
         Role.FAST_MODE => "FastMode",
-        Role.ANONYMOUS_VOTES => "AnonVotes",
-        Role.KILLER_ROLES_HIDDEN => "HiddenKillers",
+        Role.ANONYMOUS_VOTES => "AnonVoting",
+        Role.KILLER_ROLES_HIDDEN => "SecretKillers",
         Role.ROLES_ON_DEATH_HIDDEN => "HiddenRoles",
         Role.ONE_TRIAL_PER_DAY => "OneTrial",
         Role.HIDDEN => "Hidden",
         _ => "Blank"
     };
 
-    public static string FactionName(FactionType faction, Role? role = null)
+    public static string FactionName(FactionType faction) => faction switch
     {
-        role ??= Pepper.GetMyRole();
+        FactionType.TOWN => "Town",
+        FactionType.COVEN => "Coven",
+        FactionType.SERIALKILLER => "SerialKiller",
+        FactionType.ARSONIST => "Arsonist",
+        FactionType.WEREWOLF => "Werewolf",
+        FactionType.SHROUD => "Shroud",
+        FactionType.APOCALYPSE => "Apocalypse",
+        FactionType.EXECUTIONER => "Executioner",
+        FactionType.JESTER => "Jester",
+        FactionType.PIRATE => "Pirate",
+        FactionType.DOOMSAYER => "Doomsayer",
+        FactionType.VAMPIRE => "Vampire",
+        FactionType.CURSED_SOUL => "CursedSoul",
+        _ => "Blank"
+    };
 
-        return faction switch
-        {
-            FactionType.TOWN => "Town",
-            FactionType.COVEN => "Coven",
-            FactionType.SERIALKILLER => "SerialKiller",
-            FactionType.ARSONIST => "Arsonist",
-            FactionType.WEREWOLF => "Werewolf",
-            FactionType.SHROUD => "Shroud",
-            FactionType.APOCALYPSE => role is Role.SOULCOLLECTOR or Role.BAKER or Role.PLAGUEBEARER or Role.BERSERKER ? "Apocalypse" : "Horsemen",
-            FactionType.EXECUTIONER => "Executioner",
-            FactionType.JESTER => "Jester",
-            FactionType.PIRATE => "Pirate",
-            FactionType.DOOMSAYER => "Doomsayer",
-            FactionType.VAMPIRE => "Vampire",
-            FactionType.CURSED_SOUL => "CursedSoul",
-            _ => "Blank"
-        };
-    }
-
-    public static bool ModifiedByToS1UI(Role role)
-    {
-        return ChangedByToS1UI.Contains(role);
-    }
-
-    public static string DisplayString(this Role role, FactionType factionType)
-    {
-        if (role.IsBucket())
-        {
-            var bucketDisplayString = ClientRoleExtensions.GetBucketDisplayString(role);
-
-            if (!string.IsNullOrEmpty(bucketDisplayString))
-                return bucketDisplayString;
-        }
-
-        var text = role.ToDisplayString();
-        var text2 = "";
-
-        if (role.IsTraitor(factionType))
-            text2 = $"\n<color={Constants.TTColor}>({Service.Home.LocalizationService.GetLocalizedString("GUI_ROLENAME_202")})</color>";
-        else if (Constants.IsLocalVIP)
-            text2 = $"\n<color={Constants.VIPColor}>({Service.Home.LocalizationService.GetLocalizedString("GUI_ROLENAME_201")})</color>";
-
-        if (text2.Length > 0)
-            text2 = $"<size=85%>{text2}</size>";
-
-        return $"<color={role.GetFaction().GetFactionColor()}>{text}</color>{text2}";
-    }
+    public static bool ModifiedByToS1UI(Role role) => ChangedByToS1UI.Contains(role);
 
     public static void SaveLogs()
     {
@@ -221,4 +187,17 @@ public static class Utils
         // dict allows us to find dict[rolename.tolower] and get Role{number} for later use in spritecharacters
         return (rolesWithIndex.ToDictionary(rolesSelect => rolesSelect.Item1.ToLower(), rolesSelect => $"Role{rolesSelect.Item2}"), rolesWithIndex);
     }
+
+    public static void DumpSprite(Texture2D texture, string fileName, string path = null)
+    {
+        path ??= AssetManager.ModPath;
+        var assetPath = Path.Combine(path, fileName);
+
+        if (File.Exists(assetPath))
+            File.Delete(assetPath);
+
+        File.WriteAllBytes(assetPath, texture.Decompress().EncodeToPNG());
+    }
+
+    public static bool IsTransformedApoc(this Role role) => role is Role.DEATH or Role.FAMINE or Role.WAR or Role.PESTILENCE;
 }
