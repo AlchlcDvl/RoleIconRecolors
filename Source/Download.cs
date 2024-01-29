@@ -7,7 +7,7 @@ public static class Download
 {
     private const string REPO = "https://raw.githubusercontent.com/AlchlcDvl/RoleIconRecolors/main";
     private static bool DownloadRunning;
-    private static string[] SupportedPacks = new[] { "Vanilla", "Recolors" };
+    private static string[] SupportedPacks = { "Vanilla", "Recolors" };
 
     public static void DownloadIcons(string packName)
     {
@@ -19,16 +19,16 @@ public static class Download
 
     private static async void LaunchFetcher(string packName)
     {
-        Recolors.LogMessage($"Starting {packName} download", true);
+        Logging.LogMessage($"Starting {packName} download", true);
         DownloadRunning = true;
 
         try
         {
-            Recolors.LogMessage(await Fetch(packName) != HttpStatusCode.OK ? $"{packName} icons could not be downloaded" : $"Fetched {packName} icons", true);
+            Logging.LogMessage(await Fetch(packName) != HttpStatusCode.OK ? $"{packName} icons could not be downloaded" : $"Fetched {packName} icons", true);
         }
         catch (Exception e)
         {
-            Recolors.LogError($"Unable to fetch {packName} icons\n{e}");
+            Logging.LogError($"Unable to fetch {packName} icons\n{e}");
         }
 
         DownloadRunning = false;
@@ -38,7 +38,7 @@ public static class Download
     {
         if (!SupportedPacks.Contains(packName))
         {
-            Recolors.LogError($"Wrong pack name {packName}");
+            Logging.LogError($"Wrong pack name {packName}");
             return HttpStatusCode.NotFound;
         }
 
@@ -66,7 +66,7 @@ public static class Download
 
             if (response.Content == null)
             {
-                Recolors.LogError($"Server returned no data: {response.StatusCode}");
+                Logging.LogError($"Server returned no data: {response.StatusCode}");
                 return response.StatusCode;
             }
 
@@ -75,7 +75,7 @@ public static class Download
 
             if (jobj == null || !jobj.HasValues)
             {
-                Recolors.LogError("JSON Parse failed");
+                Logging.LogError("JSON Parse failed");
                 return HttpStatusCode.ExpectationFailed;
             }
 
@@ -93,7 +93,7 @@ public static class Download
                     Folder = current["folder"]?.ToString() ?? "Vanilla",
                     Pack = packName
                 };
-                Recolors.LogMessage(info.DownloadLink());
+                Logging.LogMessage(info.DownloadLink());
                 assets.Add(info);
             }
 
@@ -103,7 +103,7 @@ public static class Download
 
                 if (fileresponse.StatusCode != HttpStatusCode.OK)
                 {
-                    Recolors.LogError($"Error downloading {file.Name}: {fileresponse.StatusCode}");
+                    Logging.LogError($"Error downloading {file.Name}: {fileresponse.StatusCode}");
                     continue;
                 }
 
@@ -119,7 +119,7 @@ public static class Download
         }
         catch (Exception e)
         {
-            Recolors.LogError(e);
+            Logging.LogError(e);
             return HttpStatusCode.ExpectationFailed;
         }
     }

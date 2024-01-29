@@ -15,6 +15,9 @@ public static class AssetManager
     public static Sprite Defense;
 
     public static TMP_SpriteAsset VanillaAsset;
+    public static TMP_SpriteAsset BTOS2Asset;
+    public static readonly Dictionary<string, Sprite> BTOSMentionSprites = new();
+    private static int Hash3;
     public static bool SpriteSheetLoaded;
 
     public static string ModPath => Path.Combine(Path.GetDirectoryName(Application.dataPath), "SalemModLoader", "ModFolders", "Recolors");
@@ -22,7 +25,8 @@ public static class AssetManager
 
     private static readonly string[] Avoid = { "Attributes", "Necronomicon", "Neutral", "NeutralApocalypse", "NeutralEvil", "NeutralKilling", "Town", "TownInvestigative",
         "TownKilling", "TownSupport", "TownProtective", "TownPower", "CovenKilling", "CovenDeception", "CovenUtility", "CovenPower", "Coven", "SlowMode", "FastMode", "AnonVoting",
-        "SecretKillers", "HiddenRoles", "OneTrial", "Any", "PerfectTown", "Hidden", "Stoned" };
+        "SecretKillers", "HiddenRoles", "OneTrial", "RandomApocalypse", "Any", "RegularCoven", "RegularTown", "NeutralPariah", "NeutralSpecial", "CovenTownTraitor", "ApocTownTraitor",
+        "PerfectTown", "NecroPass", "Teams", "AnonNames", "WalkingDead", "Hidden", "Stoned" };
 
     private static readonly string[] ToRemove = { ".png", ".jpg" };
 
@@ -43,7 +47,7 @@ public static class AssetManager
 
         if (!IconPacks.TryGetValue(packName, out var pack))
         {
-            Recolors.LogError($"Error finding {packName} in loaded packs");
+            Logging.LogError($"Error finding {packName} in loaded packs");
             ModSettings.SetString("Selected Icon Pack", "Vanilla", "alchlcsystm.recolors");
             return Blank;
         }
@@ -61,7 +65,7 @@ public static class AssetManager
         }
         catch (Exception e)
         {
-            Recolors.LogError($"Error finding {name}'s sprite\n{e}");
+            Logging.LogError($"Error finding {name}'s sprite from {packName} {type}\n{e}");
             return Blank;
         }
     }
@@ -85,6 +89,24 @@ public static class AssetManager
             }
         });
 
+        if (Constants.BTOS2Exists)
+        {
+            BTOS2Asset = BTOSInfo.assetBundle.LoadAsset<TMP_SpriteAsset>("Roles");
+
+            for (var i = 0; i < BTOS2Asset.spriteCharacterTable.Count; i++)
+            {
+                BTOS2Asset.spriteGlyphTable[i].metrics = new()
+                {
+                    horizontalBearingX = 0f,
+                    horizontalBearingY = 224f
+                };
+            }
+
+            MaterialReferenceManager.AddSpriteAsset(BTOS2Asset);
+            Utils.DumpSprite(BTOS2Asset.spriteSheet as Texture2D, "BTOSRoleIcons", VanillaPath);
+            Hash3 = BTOS2Asset.hashCode;
+        }
+
         TryLoadingSprites(Constants.CurrentPack);
     }
 
@@ -105,7 +127,7 @@ public static class AssetManager
         }
         catch (Exception e)
         {
-            Recolors.LogError($"Error loading {folder} > {subfolder} > {fileName} ({filetype})\n{e}");
+            Logging.LogError($"Error loading {folder} > {subfolder} > {fileName} ({filetype})\n{e}");
             return null;
         }
     }
@@ -119,7 +141,7 @@ public static class AssetManager
 
             if (!File.Exists(path))
             {
-                Recolors.LogError($"Path {folder} > {subfolder} > {fileName} was missing");
+                Logging.LogError($"Path {folder} > {subfolder} > {fileName} was missing");
                 return null;
             }
 
@@ -127,7 +149,7 @@ public static class AssetManager
 
             if (texture == null)
             {
-                Recolors.LogError($"Uh oh texture loading error at {path}");
+                Logging.LogError($"Uh oh texture loading error at {path}");
                 return null;
             }
 
@@ -135,7 +157,7 @@ public static class AssetManager
 
             if (sprite == null)
             {
-                Recolors.LogError($"Uh oh sprite loading error at {path}");
+                Logging.LogError($"Uh oh sprite loading error at {path}");
                 return null;
             }
 
@@ -146,7 +168,7 @@ public static class AssetManager
         }
         catch (Exception e)
         {
-            Recolors.LogError(e);
+            Logging.LogError(e);
             return null;
         }
     }
@@ -182,7 +204,7 @@ public static class AssetManager
 
         if (!Directory.Exists(folder))
         {
-            Recolors.LogError($"{packName} was missing");
+            Logging.LogError($"{packName} was missing");
             ModSettings.SetString("Selected Icon Pack", "Vanilla", "alchlcsystm.recolors");
             return;
         }
@@ -199,16 +221,16 @@ public static class AssetManager
                 exists.Load();
                 IconPacks.Add(packName, exists);
 
-                if (PatchRoleService.ServiceExists)
-                    exists.LoadSpriteSheets(true);
-
-                if (PatchScrolls.ServiceExists)
+                if (CacheDefaultSpriteSheet.ServiceExists)
+                {
                     SetScrollSprites();
+                    exists.LoadSpriteSheets(true);
+                }
             }
         }
         catch (Exception e)
         {
-            Recolors.LogError(e);
+            Logging.LogError(e);
         }
     }
 
@@ -272,6 +294,9 @@ public static class AssetManager
         if (!VanillaAsset)
             diagnostic += "\nModified Vanilla Sheet Does Not Exist";
 
+        if (!BTOS2Asset && Constants.BTOS2Exists)
+            diagnostic += "\nBTOS2 Sheet Does Not Exist";
+
         if (Constants.EnableIcons && !IconPacks.TryGetValue(Constants.CurrentPack, out pack))
             diagnostic += "\nNo Loaded Icon Pack";
         else if (pack == null)
@@ -282,7 +307,7 @@ public static class AssetManager
             diagnostic += "\nLoaded Mention Style Was Null";
 
         diagnostic += $"\nError: {e}";
-        Recolors.LogError(diagnostic);
+        Logging.LogError(diagnostic);
     }
 
     public static void SetScrollSprites()
@@ -321,7 +346,7 @@ public static class AssetManager
         }
         catch (Exception e)
         {
-            Recolors.LogError(e);
+            Logging.LogError(e);
         }
     }
 
@@ -358,26 +383,35 @@ public static class AssetManager
             foreach (var (role, roleInt) in rolesWithIndex)
             {
                 var actualRole = (Role)roleInt;
-                var sprite = Service.Game.Roles.roleInfoLookup[actualRole].sprite;
-                sprite.name = sprite.texture.name = role;
-                textures.Add(sprite.texture);
-                sprites.Add(sprite);
+                var sprite = CacheScrollSprites.TryGetValue(roleInt, out var sprite1) ? sprite1 : Blank;
+
+                if (sprite == Blank)
+                    sprite = Service.Game.Roles.roleInfoLookup.TryGetValue(actualRole, out var sprite2) ? sprite2.sprite : Blank;
+
+                if (sprite != Blank)
+                {
+                    sprite.name = sprite.texture.name = role;
+                    textures.Add(sprite.texture);
+                    sprites.Add(sprite);
+                }
+                else
+                    Logging.LogWarning($"NO ICON FOR {Utils.RoleName(actualRole)}?!");
             }
 
             // set spritecharacter name to "Role{number}" so that the game can find correct roles
             VanillaAsset = BuildGlyphs(sprites.ToArray(), textures.ToArray(), "RoleIcons", rolesWithIndexDict);
-            Utils.DumpSprite(VanillaAsset.spriteSheet as Texture2D, "RoleIcons_Modified.png", VanillaPath);
-            Recolors.LogMessage("Vanilla Sprite Asset loaded!");
+            Utils.DumpSprite(VanillaAsset.spriteSheet as Texture2D, "RoleIcons_Modified", VanillaPath);
+            Logging.LogMessage("Vanilla Sprite Asset loaded!");
 
             if (change)
             {
                 ChangeSpriteSheets("Vanilla");
-                Recolors.LogMessage("Set to Vanilla Sprite Asset!");
+                Logging.LogMessage("Set to Vanilla Sprite Asset!");
             }
         }
         catch (Exception e)
         {
-            Recolors.LogError(e);
+            Logging.LogError(e);
             VanillaAsset = null;
             SpriteSheetLoaded = false;
         }
@@ -390,7 +424,7 @@ public static class AssetManager
         var image = new Texture2D(4096, 2048) { name = spriteAssetName };
         var rects = image.PackTextures(textures, 2);
 
-        for (uint i = 0; i < rects.Length; i++)
+        for (var i = 0; i < rects.Length; i++)
         {
             var glyph = new TMP_SpriteGlyph()
             {
@@ -409,17 +443,16 @@ public static class AssetManager
                     horizontalBearingX = 0,
                     horizontalAdvance = textures[i].width
                 },
-                index = i,
+                index = (uint)i,
                 sprite = sprites[i],
             };
 
-            var character = new TMP_SpriteCharacter(0, glyph)
+            var character = new TMP_SpriteCharacter(0, asset, glyph)
             {
                 // renaming to $"Role{(int)role}" should occur here
                 name = rolesWithIndexDict[glyph.sprite.name.ToLower()],
-                glyphIndex = i,
+                glyphIndex = (uint)i,
             };
-
 
             asset.spriteGlyphTable.Add(glyph);
             asset.spriteCharacterTable.Add(character);

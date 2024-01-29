@@ -6,14 +6,16 @@ public class IconPack
     public Dictionary<string, Dictionary<string, List<Sprite>>> EasterEggs { get; set; }
 
     public Dictionary<string, TMP_SpriteAsset> MentionStyles { get; set; }
+    public Dictionary<string, TMP_SpriteAsset> BTOS2MentionStyles { get; set; }
 
     public string Name { get; }
 
     private string PackPath => Path.Combine(AssetManager.ModPath, Name);
 
-    private static readonly string[] Folders = new[] { "Regular", "Town", "Coven", "SerialKiller", "Arsonist", "Werewolf", "Shroud", "Apocalypse", "Executioner", "Jester", "Pirate",
-        "Doomsayer", "Vampire", "CursedSoul", /*"PlayerNumbers",*/ "Custom" };
-    public static readonly string[] FileTypes = new[] { "png", "jpg" };
+    private static readonly string[] Folders = { "Regular", "Town", "Coven", "SerialKiller", "Arsonist", "Werewolf", "Shroud", "Apocalypse", "Executioner", "Jester", "Pirate",
+        "Doomsayer", "Judge", "Auditor", "Starspawn", "Inquisitor", "Vampire", "CursedSoul", "Jackal", "Lions", "Frogs", "Hawks", "VIP", /*"Mafia", "Amnesiac", "Juggernaut", "Sorcerer",
+        "GuardianAngel", "Survivor", "PlayerNumbers",*/ "Custom" };
+    public static readonly string[] FileTypes = { "png", "jpg" };
 
     public IconPack(string name)
     {
@@ -21,23 +23,27 @@ public class IconPack
         BaseIcons = new();
         EasterEggs = new();
         MentionStyles = new();
+        BTOS2MentionStyles = new();
     }
 
     public void Debug()
     {
-        BaseIcons.ForEach((x, y) => y.ForEach((a, _) => Recolors.LogMessage($"{Name} {a} has a(n) {x} sprite!")));
-        Recolors.LogMessage($"{Name} {BaseIcons.Count} Base Assets loaded!");
+        BaseIcons.ForEach((x, y) => y.ForEach((a, _) => Logging.LogMessage($"{Name} {a} has a(n) {x} sprite!")));
+        Logging.LogMessage($"{Name} {BaseIcons.Count} Base Assets loaded!");
 
-        EasterEggs.ForEach((x, y) => y.ForEach((a, b) => Recolors.LogMessage($"{Name} {a} has {b.Count} {x} easter egg sprite(s)!")));
-        Recolors.LogMessage($"{Name} {EasterEggs.Count} Easter Egg Assets loaded!");
+        EasterEggs.ForEach((x, y) => y.ForEach((a, b) => Logging.LogMessage($"{Name} {a} has {b.Count} {x} easter egg sprite(s)!")));
+        Logging.LogMessage($"{Name} {EasterEggs.Count} Easter Egg Assets loaded!");
 
-        MentionStyles.ForEach((x, _) => Recolors.LogMessage($"{Name} {x} mention style exists!"));
-        Recolors.LogMessage($"{Name} {MentionStyles.Count} mention styles exist!");
+        MentionStyles.ForEach((x, _) => Logging.LogMessage($"{Name} {x} mention style exists!"));
+        Logging.LogMessage($"{Name} {MentionStyles.Count} mention styles exist!");
+
+        BTOS2MentionStyles.ForEach((x, _) => Logging.LogMessage($"{Name} {x} BTOS2 mention style exists!"));
+        Logging.LogMessage($"{Name} {BTOS2MentionStyles.Count} BTOS2 mention styles exist!");
     }
 
     public void Delete()
     {
-        Recolors.LogMessage($"Deleteing {Name}");
+        Logging.LogMessage($"Deleteing {Name}");
 
         BaseIcons.ForEach((_, x) => x.Values.ForEach(UObject.Destroy));
         BaseIcons.ForEach((_, x) => x.Clear());
@@ -50,11 +56,14 @@ public class IconPack
 
         MentionStyles.Values.ForEach(UObject.Destroy);
         MentionStyles.Clear();
+
+        BTOS2MentionStyles.Values.ForEach(UObject.Destroy);
+        BTOS2MentionStyles.Clear();
     }
 
     public void Reload()
     {
-        Recolors.LogMessage($"Reloading {Name}");
+        Logging.LogMessage($"Reloading {Name}");
         Delete();
         Load();
         LoadSpriteSheets(true);
@@ -65,10 +74,13 @@ public class IconPack
     {
         try
         {
-            Recolors.LogMessage($"Loading {Name}");
+            Logging.LogMessage($"Loading {Name}");
 
             foreach (var name in Folders)
             {
+                if (IsBTOS2ModdedFolder(name) && !Constants.BTOS2Exists)
+                    continue;
+
                 if (!AssetManager.GlobalEasterEggs.ContainsKey(name))
                     AssetManager.GlobalEasterEggs[name] = new();
 
@@ -95,7 +107,7 @@ public class IconPack
                 }
                 else
                 {
-                    Recolors.LogWarning($"{Name} {baseName} folder doesn't exist");
+                    Logging.LogWarning($"{Name} {baseName} folder doesn't exist");
                     Directory.CreateDirectory(baseFolder);
                 }
 
@@ -130,7 +142,7 @@ public class IconPack
                     }
                     else
                     {
-                        Recolors.LogWarning($"{Name} {eeName} folder doesn't exist");
+                        Logging.LogWarning($"{Name} {eeName} folder doesn't exist");
                         Directory.CreateDirectory(eeFolder);
                     }
                 }
@@ -140,7 +152,7 @@ public class IconPack
         }
         catch (Exception e)
         {
-            Recolors.LogError(e);
+            Logging.LogError(e);
         }
     }
 
@@ -164,35 +176,80 @@ public class IconPack
                 {
                     var actualRole = (Role)roleInt;
                     var name = Utils.RoleName(actualRole);
-                    var sprite = AssetManager.GetSprite(name, style, false, Name, false);
+                    var sprite = GetSprite(name, false, style, false);
+
+                    if (sprite == AssetManager.Blank && style != "Regular")
+                        sprite = GetSprite(name, false, "Regular", false);
 
                     if (sprite == AssetManager.Blank)
-                        sprite = AssetManager.GetSprite(name, "Regular", false, Name, false);
+                        sprite = AssetManager.CacheScrollSprites.TryGetValue(roleInt, out var sprite1) ? sprite1 : AssetManager.Blank;
 
                     if (sprite == AssetManager.Blank)
-                        sprite = Service.Game.Roles.roleInfoLookup[actualRole].sprite;
+                        sprite = Service.Game.Roles.roleInfoLookup.TryGetValue(actualRole, out var sprite1) ? sprite1.sprite : AssetManager.Blank;
 
-                    sprite.name = sprite.texture.name = role;
-                    textures.Add(sprite.texture);
-                    sprites.Add(sprite);
+                    if (sprite != AssetManager.Blank)
+                    {
+                        sprite.name = sprite.texture.name = role;
+                        textures.Add(sprite.texture);
+                        sprites.Add(sprite);
+                    }
+                    else
+                        Logging.LogWarning($"NO ICON FOR {name}?!");
                 }
 
                 // set spritecharacter name to "Role{number}" so that the game can find correct roles
                 var asset = AssetManager.BuildGlyphs(sprites.ToArray(), textures.ToArray(), $"RoleIcons ({Name}, {style})", rolesWithIndexDict);
                 MentionStyles[style] = asset;
-                Utils.DumpSprite(asset.spriteSheet as Texture2D, $"{style}RoleIcons.png", PackPath);
-                Recolors.LogMessage($"{Name} {style} Sprite Asset loaded!");
+                Utils.DumpSprite(asset.spriteSheet as Texture2D, $"{style}RoleIcons", PackPath);
+                Logging.LogMessage($"{Name} {style} Sprite Asset loaded!");
             }
+
+            /*if (Constants.BTOS2Exists)
+            {
+                (rolesWithIndexDict, rolesWithIndex) = Utils.Filtered(false);
+
+                foreach (var style in Folders)
+                {
+                    if (BTOS2MentionStyles.ContainsKey(style))
+                        continue;
+
+                    var textures = new List<Texture2D>();
+                    var sprites = new List<Sprite>();
+
+                    // now get all the sprites that we want to load
+                    foreach (var (role, roleInt) in rolesWithIndex)
+                    {
+                        var name = Utils.RoleName((Role)roleInt);
+                        var sprite = AssetManager.GetSprite(name, style, false, Name, false);
+
+                        if (sprite == AssetManager.Blank)
+                            sprite = AssetManager.GetSprite(name, "Regular", false, Name, false);
+
+                        if (sprite == AssetManager.Blank)
+                            sprite = AssetManager.CacheScrollSprites[roleInt];
+
+                        sprite.name = sprite.texture.name = role;
+                        textures.Add(sprite.texture);
+                        sprites.Add(sprite);
+                    }
+
+                    // set spritecharacter name to "Role{number}" so that the game can find correct roles
+                    var asset = AssetManager.BuildGlyphs(sprites.ToArray(), textures.ToArray(), $"BTOSRoleIcons ({Name}, {style})", rolesWithIndexDict);
+                    BTOS2MentionStyles[style] = asset;
+                    Utils.DumpSprite(asset.spriteSheet as Texture2D, $"{style}BTOS2RoleIcons", PackPath);
+                    Logging.LogMessage($"{Name} {style} BTOS2 Sprite Asset loaded!");
+                }
+            }*/
 
             if (change)
             {
                 AssetManager.ChangeSpriteSheets(Name);
-                Recolors.LogMessage($"Changed to {Name} {Constants.CurrentStyle} Sprite Asset!");
+                Logging.LogMessage($"Changed to {Name} {Constants.CurrentStyle} Sprite Asset!");
             }
         }
         catch (Exception e)
         {
-            Recolors.LogError(e);
+            Logging.LogError(e);
         }
     }
 
@@ -201,18 +258,18 @@ public class IconPack
         if (!BaseIcons[type].TryGetValue(name, out var sprite))
         {
             if (log)
-                Recolors.LogWarning($"Couldn't find {name} in {Name}'s {type} resources");
+                Logging.LogWarning($"Couldn't find {name} in {Name}'s {type} resources");
 
             if (type != "Regular" && !BaseIcons["Regular"].TryGetValue(name, out sprite))
             {
                 if (log)
-                    Recolors.LogWarning($"Couldn't find {name} in {Name}'s Regular resources");
+                    Logging.LogWarning($"Couldn't find {name} in {Name}'s Regular resources");
 
                 sprite = null;
             }
         }
 
-        if (URandom.RandomRangeInt(1, 101) <= Constants.EasterEggChance && allowEE)
+        if ((URandom.RandomRangeInt(1, 101) <= Constants.EasterEggChance || !sprite) && allowEE)
         {
             var sprites = new List<Sprite>();
 
@@ -223,6 +280,8 @@ public class IconPack
                     if (type != "Regular")
                         AssetManager.GlobalEasterEggs["Regular"].TryGetValue(name, out sprites);
                 }
+
+                sprites ??= new();
             }
 
             if (sprites.Count == 0)
@@ -232,6 +291,8 @@ public class IconPack
                     if (type != "Regular")
                         EasterEggs["Regular"].TryGetValue(name, out sprites);
                 }
+
+                sprites ??= new();
             }
 
             if (sprites.Count > 0)
@@ -241,7 +302,7 @@ public class IconPack
         return sprite ?? AssetManager.Blank;
     }
 
-    //private static bool IsBTOS2ModdedFolder(string folderName) => folderName is "Jackal" or "Judge" or "Auditor" or "Starspawn" or "Inquisitor" or "Lions" or "Frogs" or "Hawks";
+    private static bool IsBTOS2ModdedFolder(string folderName) => folderName is "Jackal" or "Judge" or "Auditor" or "Starspawn" or "Inquisitor" or "Lions" or "Frogs" or "Hawks";
 
     //private static bool IsLegacyModdedFolder(string folderName) => folderName is "Mafia" or "Amnesiac" or "Juggernaut" or "Sorcerer" or "GuardianAngel" or "Survivor";
 }
