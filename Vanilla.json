@@ -66,6 +66,7 @@
         { "name": "Illusionist_Ability" },
         { "name": "Investigator" },
         { "name": "Investigator_Ability" },
+        { "name": "Investigator_Special" },
         { "name": "Jailor" },
         { "name": "Jailor_Special" },
         { "name": "Jailor_Ability" },
