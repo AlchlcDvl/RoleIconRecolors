@@ -244,7 +244,10 @@ public static class PatchAbilityPanel
 
                 break;
 
-            case TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_ATTACK or TosAbilityPanelListItem.OverrideAbilityType.POISONER_POISON or TosAbilityPanelListItem.OverrideAbilityType.SHROUD:
+            case TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_ATTACK:
+            case TosAbilityPanelListItem.OverrideAbilityType.POISONER_POISON:
+            case TosAbilityPanelListItem.OverrideAbilityType.SHROUD:
+            case TosAbilityPanelListItem.OverrideAbilityType.INVESTIGATOR:
                 var special = AssetManager.GetSprite($"{Utils.RoleName(role)}_Special", Utils.FactionName(faction), Constants.PlayerPanelEasterEggs);
 
                 if (special != AssetManager.Blank && __instance.choice1Sprite)
@@ -253,26 +256,19 @@ public static class PatchAbilityPanel
                 break;
 
             case TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_HEAL:
-                var heal = AssetManager.GetSprite($"{Utils.RoleName(role)}_Ability_1", Utils.FactionName(faction), Constants.PlayerPanelEasterEggs);
+                var ab1 = AssetManager.GetSprite($"{Utils.RoleName(role)}_Ability_1", Utils.FactionName(faction), Constants.PlayerPanelEasterEggs);
 
-                if (heal != AssetManager.Blank && __instance.choice1Sprite)
-                    __instance.choice1Sprite.sprite = heal;
+                if (ab1 != AssetManager.Blank && __instance.choice1Sprite)
+                    __instance.choice1Sprite.sprite = ab1;
 
                 break;
 
             case TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_REVEAL:
-                var reveal = AssetManager.GetSprite($"{Utils.RoleName(role)}_Ability_2", Utils.FactionName(faction), Constants.PlayerPanelEasterEggs);
-
-                if (reveal != AssetManager.Blank && __instance.choice1Sprite)
-                    __instance.choice1Sprite.sprite = reveal;
-
-                break;
-
             case TosAbilityPanelListItem.OverrideAbilityType.WEREWOLF_NON_FULL_MOON:
-                var sniff = AssetManager.GetSprite($"{Utils.RoleName(role)}_Ability_2", Utils.FactionName(faction), Constants.PlayerPanelEasterEggs);
+                var ab2 = AssetManager.GetSprite($"{Utils.RoleName(role)}_Ability_2", Utils.FactionName(faction), Constants.PlayerPanelEasterEggs);
 
-                if (sniff != AssetManager.Blank && __instance.choice1Sprite)
-                    __instance.choice1Sprite.sprite = sniff;
+                if (ab2 != AssetManager.Blank && __instance.choice1Sprite)
+                    __instance.choice1Sprite.sprite = ab2;
 
                 break;
 
