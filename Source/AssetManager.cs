@@ -102,7 +102,6 @@ public static class AssetManager
                 };
             }
 
-            MaterialReferenceManager.AddSpriteAsset(BTOS2Asset);
             Utils.DumpSprite(BTOS2Asset.spriteSheet as Texture2D, "BTOSRoleIcons", VanillaPath);
             Hash3 = BTOS2Asset.hashCode;
         }

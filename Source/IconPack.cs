@@ -182,10 +182,10 @@ public class IconPack
                         sprite = GetSprite(name, false, "Regular", false);
 
                     if (sprite == AssetManager.Blank)
-                        sprite = AssetManager.CacheScrollSprites.TryGetValue(roleInt, out var sprite1) ? sprite1 : AssetManager.Blank;
+                        sprite = Service.Game.Roles.roleInfoLookup.TryGetValue(actualRole, out var sprite1) ? sprite1.sprite : AssetManager.Blank;
 
                     if (sprite == AssetManager.Blank)
-                        sprite = Service.Game.Roles.roleInfoLookup.TryGetValue(actualRole, out var sprite1) ? sprite1.sprite : AssetManager.Blank;
+                        sprite = AssetManager.CacheScrollSprites.TryGetValue(roleInt, out var sprite1) ? sprite1 : AssetManager.Blank;
 
                     if (sprite != AssetManager.Blank)
                     {
