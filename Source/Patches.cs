@@ -512,12 +512,17 @@ public static class PatchAttackDefense
             icon1.sprite = attack != AssetManager.Blank ? attack : AssetManager.Attack;
         }
 
-        var defense = AssetManager.GetSprite($"Defense{Utils.GetLevel(data.defense, false)}");
+        var defLevel = Constants.IsBTOS2 ? (__instance.myData.IsEthereal() ? 4 : data.defense) : data.defense;
+        var defense = AssetManager.GetSprite($"Defense{Utils.GetLevel(defLevel, false)}");
         var icon2 = __instance.transform.Find("DefenseIcon").Find("Icon").GetComponent<Image>();
 
         if (icon2)
         {
-            AssetManager.Defense ??= icon2.sprite;
+            if (Constants.IsBTOS2 && __instance.myData.IsEthereal())
+                AssetManager.Ethereal ??= icon2.sprite;
+            else
+                AssetManager.Defense ??= icon2.sprite;
+
             icon2.sprite = defense != AssetManager.Blank ? defense : AssetManager.Defense;
         }
     }
@@ -541,12 +546,17 @@ public static class PatchAttackDefensePopup
             icon1.sprite = attack != AssetManager.Blank ? attack : AssetManager.Attack;
         }
 
-        var defense = AssetManager.GetSprite($"Defense{Utils.GetLevel(data.defense, false)}");
+        var defLevel = Constants.IsBTOS2 ? (__instance.myData.IsEthereal() ? 4 : data.defense) : data.defense;
+        var defense = AssetManager.GetSprite($"Defense{Utils.GetLevel(defLevel, false)}");
         var icon2 = __instance.transform.Find("DefenseIcon").Find("Icon").GetComponent<Image>();
 
         if (icon2)
         {
-            AssetManager.Defense ??= icon2.sprite;
+            if (Constants.IsBTOS2 && __instance.myData.IsEthereal())
+                AssetManager.Ethereal ??= icon2.sprite;
+            else
+                AssetManager.Defense ??= icon2.sprite;
+
             icon2.sprite = defense != AssetManager.Blank ? defense : AssetManager.Defense;
         }
     }

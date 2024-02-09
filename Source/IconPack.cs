@@ -13,7 +13,7 @@ public class IconPack
     private string PackPath => Path.Combine(AssetManager.ModPath, Name);
 
     private static readonly string[] Folders = { "Regular", "Town", "Coven", "SerialKiller", "Arsonist", "Werewolf", "Shroud", "Apocalypse", "Executioner", "Jester", "Pirate",
-        "Doomsayer", "Judge", "Auditor", "Starspawn", "Inquisitor", "Vampire", "CursedSoul", "Jackal", "Lions", "Frogs", "Hawks", "VIP", /*"Mafia", "Amnesiac", "Juggernaut", "Sorcerer",
+        "Doomsayer", "Judge", "Auditor", "Starspawn", "Inquisitor", "Vampire", "CursedSoul", "Jackal", "Lions", "Frogs", "Hawks", "VIP", /*"Mafia", "Amnesiac", "Juggernaut",
         "GuardianAngel", "Survivor", "PlayerNumbers",*/ "Custom" };
     public static readonly string[] FileTypes = { "png", "jpg" };
 
@@ -181,13 +181,33 @@ public class IconPack
                     if (sprite == AssetManager.Blank && style != "Regular")
                         sprite = GetSprite(name, false, "Regular", false);
 
-                    if (sprite == AssetManager.Blank)
-                        sprite = Service.Game.Roles.roleInfoLookup.TryGetValue(actualRole, out var sprite1) ? sprite1.sprite : AssetManager.Blank;
+                    if (sprite == AssetManager.Blank || sprite == null)
+                    {
+                        sprite = name switch
+                        {
+                            "Stoned" => Witchcraft.Witchcraft.Stoned,
+                            "AnonVoting" => Witchcraft.Witchcraft.AnonVotes,
+                            "FastMode" => Witchcraft.Witchcraft.FastMode,
+                            "Hidden" => Witchcraft.Witchcraft.Hidden,
+                            "HiddenRoles" => Witchcraft.Witchcraft.HiddenRoles,
+                            "Marshal" => Witchcraft.Witchcraft.Marshal,
+                            "OneTrial" => Witchcraft.Witchcraft.OneTrial,
+                            "PerfectTown" => Witchcraft.Witchcraft.PerfectTown,
+                            "SecretKillers" => Witchcraft.Witchcraft.SecretKillers,
+                            "SlowMode" => Witchcraft.Witchcraft.SlowMode,
+                            "Socialite" => Witchcraft.Witchcraft.Socialite,
+                            "VIP" => Witchcraft.Witchcraft.VIP,
+                            "CovenTownTraitor" => Witchcraft.Witchcraft.TownTraitor,
+                            "Death" => Witchcraft.Witchcraft.Death,
+                            "Famine" => Witchcraft.Witchcraft.Famine,
+                            "Pestilence" => Witchcraft.Witchcraft.Pestilence,
+                            "War" => Witchcraft.Witchcraft.War,
+                            "GhostTown" => Witchcraft.Witchcraft.GhostTown,
+                            _ => AssetManager.Blank
+                        };
+                    }
 
-                    if (sprite == AssetManager.Blank)
-                        sprite = AssetManager.CacheScrollSprites.TryGetValue(roleInt, out var sprite1) ? sprite1 : AssetManager.Blank;
-
-                    if (sprite != AssetManager.Blank)
+                    if (sprite != AssetManager.Blank && sprite != null)
                     {
                         sprite.name = sprite.texture.name = role;
                         textures.Add(sprite.texture);
@@ -220,13 +240,13 @@ public class IconPack
                     foreach (var (role, roleInt) in rolesWithIndex)
                     {
                         var name = Utils.RoleName((Role)roleInt);
-                        var sprite = AssetManager.GetSprite(name, style, false, Name, false);
+                        var sprite = GetSprite(name, false, style, false);
+
+                        if (sprite == AssetManager.Blank && style != "Regular")
+                            sprite = GetSprite(name, false, "Regular", false);
 
                         if (sprite == AssetManager.Blank)
-                            sprite = AssetManager.GetSprite(name, "Regular", false, Name, false);
-
-                        if (sprite == AssetManager.Blank)
-                            sprite = AssetManager.CacheScrollSprites[roleInt];
+                            sprite = BTOSInfo.sprites.TryGetValue($"RoleCard_{name}", out var sprite1) ? sprite1 : AssetManager.Blank;
 
                         sprite.name = sprite.texture.name = role;
                         textures.Add(sprite.texture);

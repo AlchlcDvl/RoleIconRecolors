@@ -13,6 +13,7 @@ public static class AssetManager
     public static Sprite Thumbnail;
     public static Sprite Attack;
     public static Sprite Defense;
+    public static Sprite Ethereal;
 
     public static TMP_SpriteAsset VanillaAsset;
     public static TMP_SpriteAsset BTOS2Asset;
@@ -382,19 +383,38 @@ public static class AssetManager
             foreach (var (role, roleInt) in rolesWithIndex)
             {
                 var actualRole = (Role)roleInt;
-                var sprite = CacheScrollSprites.TryGetValue(roleInt, out var sprite1) ? sprite1 : Blank;
+                var name = Utils.RoleName(actualRole);
+                var sprite = name switch
+                {
+                    "Stoned" => Witchcraft.Witchcraft.Stoned,
+                    "AnonVoting" => Witchcraft.Witchcraft.AnonVotes,
+                    "FastMode" => Witchcraft.Witchcraft.FastMode,
+                    "Hidden" => Witchcraft.Witchcraft.Hidden,
+                    "HiddenRoles" => Witchcraft.Witchcraft.HiddenRoles,
+                    "Marshal" => Witchcraft.Witchcraft.Marshal,
+                    "OneTrial" => Witchcraft.Witchcraft.OneTrial,
+                    "PerfectTown" => Witchcraft.Witchcraft.PerfectTown,
+                    "SecretKillers" => Witchcraft.Witchcraft.SecretKillers,
+                    "SlowMode" => Witchcraft.Witchcraft.SlowMode,
+                    "Socialite" => Witchcraft.Witchcraft.Socialite,
+                    "VIP" => Witchcraft.Witchcraft.VIP,
+                    "CovenTownTraitor" => Witchcraft.Witchcraft.TownTraitor,
+                    "Death" => Witchcraft.Witchcraft.Death,
+                    "Famine" => Witchcraft.Witchcraft.Famine,
+                    "Pestilence" => Witchcraft.Witchcraft.Pestilence,
+                    "War" => Witchcraft.Witchcraft.War,
+                    "GhostTown" => Witchcraft.Witchcraft.GhostTown,
+                    _ => Blank
+                };
 
-                if (sprite == Blank)
-                    sprite = Service.Game.Roles.roleInfoLookup.TryGetValue(actualRole, out var sprite2) ? sprite2.sprite : Blank;
-
-                if (sprite != Blank)
+                if (sprite != Blank && sprite != null)
                 {
                     sprite.name = sprite.texture.name = role;
                     textures.Add(sprite.texture);
                     sprites.Add(sprite);
                 }
                 else
-                    Logging.LogWarning($"NO ICON FOR {Utils.RoleName(actualRole)}?!");
+                    Logging.LogWarning($"NO ICON FOR {name}?!");
             }
 
             // set spritecharacter name to "Role{number}" so that the game can find correct roles

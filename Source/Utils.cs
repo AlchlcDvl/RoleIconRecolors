@@ -317,6 +317,7 @@ public static class Utils
         1 => "Basic",
         2 => "Powerful",
         3 => attack ? "Unstoppable" : "Invincible",
+        4 => "Ethereal",
         _ => "None"
     };
 
