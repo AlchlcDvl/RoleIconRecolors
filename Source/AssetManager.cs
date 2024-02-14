@@ -26,8 +26,8 @@ public static class AssetManager
 
     private static readonly string[] Avoid = { "Attributes", "Necronomicon", "Neutral", "NeutralApocalypse", "NeutralEvil", "NeutralKilling", "Town", "TownInvestigative",
         "TownKilling", "TownSupport", "TownProtective", "TownPower", "CovenKilling", "CovenDeception", "CovenUtility", "CovenPower", "Coven", "SlowMode", "FastMode", "AnonVoting",
-        "SecretKillers", "HiddenRoles", "OneTrial", "RandomApocalypse", "Any", "RegularCoven", "RegularTown", "NeutralPariah", "NeutralSpecial", "CovenTownTraitor", "ApocTownTraitor",
-        "PerfectTown", "NecroPass", "Teams", "AnonNames", "WalkingDead", "Hidden", "Stoned" };
+        "SecretKillers", "HiddenRoles", "OneTrial", "RandomApocalypse", "Any", "RegularCoven", "RegularTown", "NeutralPariah", "NeutralSpecial", "TownTraitor", "PerfectTown", "NecroPass",
+        "Teams", "AnonNames", "WalkingDead", "Hidden", "Stoned" };
 
     private static readonly string[] ToRemove = { ".png", ".jpg" };
 
@@ -384,28 +384,7 @@ public static class AssetManager
             {
                 var actualRole = (Role)roleInt;
                 var name = Utils.RoleName(actualRole);
-                var sprite = name switch
-                {
-                    "Stoned" => Witchcraft.Witchcraft.Stoned,
-                    "AnonVoting" => Witchcraft.Witchcraft.AnonVotes,
-                    "FastMode" => Witchcraft.Witchcraft.FastMode,
-                    "Hidden" => Witchcraft.Witchcraft.Hidden,
-                    "HiddenRoles" => Witchcraft.Witchcraft.HiddenRoles,
-                    "Marshal" => Witchcraft.Witchcraft.Marshal,
-                    "OneTrial" => Witchcraft.Witchcraft.OneTrial,
-                    "PerfectTown" => Witchcraft.Witchcraft.PerfectTown,
-                    "SecretKillers" => Witchcraft.Witchcraft.SecretKillers,
-                    "SlowMode" => Witchcraft.Witchcraft.SlowMode,
-                    "Socialite" => Witchcraft.Witchcraft.Socialite,
-                    "VIP" => Witchcraft.Witchcraft.VIP,
-                    "CovenTownTraitor" => Witchcraft.Witchcraft.TownTraitor,
-                    "Death" => Witchcraft.Witchcraft.Death,
-                    "Famine" => Witchcraft.Witchcraft.Famine,
-                    "Pestilence" => Witchcraft.Witchcraft.Pestilence,
-                    "War" => Witchcraft.Witchcraft.War,
-                    "GhostTown" => Witchcraft.Witchcraft.GhostTown,
-                    _ => Blank
-                };
+                var sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name == "CovenTownTraitor" ? "TownTraitor" : name, out var sprite1) ? sprite1 : Blank;
 
                 if (sprite != Blank && sprite != null)
                 {

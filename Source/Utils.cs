@@ -12,13 +12,14 @@ public static class Utils
         "Witch_Ability_1", "Witch_Ability_2", "Jailor_Special", "Cleric_Special", "Mayor_Special", "Jester_Special", "Executioner_Special", "Bodyguard_Special", "Veteran_Special",
         "Trapper_Special", "Pirate_Special", "Admirer_Special", "Arsonist_Special", "Marshal_Special", "Socialite_Special", "Poisoner_Special", "CovenLeader_Special", "Coroner_Special",
         "SerialKiller_Special", "Shroud_Special", "Starspawn_Ability", "Banshee_Ability", "Judge_Ability", "Jackal_Ability", "Auditor_Ability", "Inquisitor_Ability",
-        /*"Judge_Special", "Auditor_Special", "Inquisitor_Special", "Starspawn_Special", "Oracle_Special"*/ };
+        "Judge_Special", "Auditor_Special", "Inquisitor_Special", "Starspawn_Special", "Oracle_Special" };
 
     private static readonly Role[] ExceptRoles = { Role.NONE, Role.ROLE_COUNT, Role.UNKNOWN, Role.HANGMAN };
 
     //List of roles modified by Dum's mod
     private static readonly Role[] ChangedByToS1UI = { Role.JAILOR, Role.CLERIC, Role.MAYOR, Role.JESTER, Role.EXECUTIONER, Role.BODYGUARD, Role.VETERAN, Role.TRAPPER, Role.PIRATE,
-        Role.ADMIRER, Role.ARSONIST, Role.MARSHAL, Role.SOCIALITE, Role.POISONER, Role.COVENLEADER, Role.CORONER, Role.SERIALKILLER, Role.SHROUD };
+        Role.ADMIRER, Role.ARSONIST, Role.MARSHAL, Role.SOCIALITE, Role.POISONER, Role.COVENLEADER, Role.CORONER, Role.SERIALKILLER, Role.SHROUD, Role.ROLE_COUNT, (Role)57, (Role)58,
+        (Role)59, (Role)60, (Role)61 };
 
     public static T Random<T>(this IEnumerable<T> input)
     {

@@ -159,15 +159,15 @@ public class IconPack
     // love ya pat
     public void LoadSpriteSheets(bool change)
     {
-        try
+        var (rolesWithIndexDict, rolesWithIndex) = Utils.Filtered();
+
+        foreach (var style in Folders)
         {
-            var (rolesWithIndexDict, rolesWithIndex) = Utils.Filtered();
+            if (MentionStyles.ContainsKey(style))
+                continue;
 
-            foreach (var style in Folders)
+            try
             {
-                if (MentionStyles.ContainsKey(style))
-                    continue;
-
                 var textures = new List<Texture2D>();
                 var sprites = new List<Sprite>();
 
@@ -181,33 +181,10 @@ public class IconPack
                     if (sprite == AssetManager.Blank && style != "Regular")
                         sprite = GetSprite(name, false, "Regular", false);
 
-                    if (sprite == AssetManager.Blank || sprite == null)
-                    {
-                        sprite = name switch
-                        {
-                            "Stoned" => Witchcraft.Witchcraft.Stoned,
-                            "AnonVoting" => Witchcraft.Witchcraft.AnonVotes,
-                            "FastMode" => Witchcraft.Witchcraft.FastMode,
-                            "Hidden" => Witchcraft.Witchcraft.Hidden,
-                            "HiddenRoles" => Witchcraft.Witchcraft.HiddenRoles,
-                            "Marshal" => Witchcraft.Witchcraft.Marshal,
-                            "OneTrial" => Witchcraft.Witchcraft.OneTrial,
-                            "PerfectTown" => Witchcraft.Witchcraft.PerfectTown,
-                            "SecretKillers" => Witchcraft.Witchcraft.SecretKillers,
-                            "SlowMode" => Witchcraft.Witchcraft.SlowMode,
-                            "Socialite" => Witchcraft.Witchcraft.Socialite,
-                            "VIP" => Witchcraft.Witchcraft.VIP,
-                            "CovenTownTraitor" => Witchcraft.Witchcraft.TownTraitor,
-                            "Death" => Witchcraft.Witchcraft.Death,
-                            "Famine" => Witchcraft.Witchcraft.Famine,
-                            "Pestilence" => Witchcraft.Witchcraft.Pestilence,
-                            "War" => Witchcraft.Witchcraft.War,
-                            "GhostTown" => Witchcraft.Witchcraft.GhostTown,
-                            _ => AssetManager.Blank
-                        };
-                    }
+                    if (sprite == AssetManager.Blank)
+                        sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name == "CovenTownTraitor" ? "TownTraitor" : name, out var sprite1) ? sprite1 : AssetManager.Blank;
 
-                    if (sprite != AssetManager.Blank && sprite != null)
+                    if (sprite != AssetManager.Blank)
                     {
                         sprite.name = sprite.texture.name = role;
                         textures.Add(sprite.texture);
@@ -223,23 +200,30 @@ public class IconPack
                 Utils.DumpSprite(asset.spriteSheet as Texture2D, $"{style}RoleIcons", PackPath);
                 Logging.LogMessage($"{Name} {style} Sprite Asset loaded!");
             }
-
-            /*if (Constants.BTOS2Exists)
+            catch (Exception e)
             {
-                (rolesWithIndexDict, rolesWithIndex) = Utils.Filtered(false);
+                Logging.LogError(e);
+            }
+        }
 
-                foreach (var style in Folders)
+        if (Constants.BTOS2Exists)
+        {
+            (rolesWithIndexDict, rolesWithIndex) = Utils.Filtered(false);
+
+            foreach (var style in Folders)
+            {
+                if (BTOS2MentionStyles.ContainsKey(style))
+                    continue;
+
+                try
                 {
-                    if (BTOS2MentionStyles.ContainsKey(style))
-                        continue;
-
                     var textures = new List<Texture2D>();
                     var sprites = new List<Sprite>();
 
                     // now get all the sprites that we want to load
                     foreach (var (role, roleInt) in rolesWithIndex)
                     {
-                        var name = Utils.RoleName((Role)roleInt);
+                        var name = Utils.RoleName((Role)roleInt, true);
                         var sprite = GetSprite(name, false, style, false);
 
                         if (sprite == AssetManager.Blank && style != "Regular")
@@ -248,9 +232,17 @@ public class IconPack
                         if (sprite == AssetManager.Blank)
                             sprite = BTOSInfo.sprites.TryGetValue($"RoleCard_{name}", out var sprite1) ? sprite1 : AssetManager.Blank;
 
-                        sprite.name = sprite.texture.name = role;
-                        textures.Add(sprite.texture);
-                        sprites.Add(sprite);
+                        if (sprite == AssetManager.Blank)
+                            sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name == "CovenTownTraitor" ? "TownTraitor" : name, out var sprite1) ? sprite1 : AssetManager.Blank;
+
+                        if (sprite != AssetManager.Blank)
+                        {
+                            sprite.name = sprite.texture.name = role;
+                            textures.Add(sprite.texture);
+                            sprites.Add(sprite);
+                        }
+                        else
+                            Logging.LogWarning($"NO BTOS2 ICON FOR {name}?!");
                     }
 
                     // set spritecharacter name to "Role{number}" so that the game can find correct roles
@@ -259,17 +251,17 @@ public class IconPack
                     Utils.DumpSprite(asset.spriteSheet as Texture2D, $"{style}BTOS2RoleIcons", PackPath);
                     Logging.LogMessage($"{Name} {style} BTOS2 Sprite Asset loaded!");
                 }
-            }*/
-
-            if (change)
-            {
-                AssetManager.ChangeSpriteSheets(Name);
-                Logging.LogMessage($"Changed to {Name} {Constants.CurrentStyle} Sprite Asset!");
+                catch (Exception e)
+                {
+                    Logging.LogError(e);
+                }
             }
         }
-        catch (Exception e)
+
+        if (change)
         {
-            Logging.LogError(e);
+            AssetManager.ChangeSpriteSheets(Name);
+            Logging.LogMessage($"Changed to {Name} {Constants.CurrentStyle} Sprite Asset!");
         }
     }
 
