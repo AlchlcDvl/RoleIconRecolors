@@ -7,7 +7,7 @@ public static class Download
 {
     private const string REPO = "https://raw.githubusercontent.com/AlchlcDvl/RoleIconRecolors/main";
     private static bool DownloadRunning;
-    private static string[] SupportedPacks = { "Vanilla", "Recolors" };
+    private static string[] SupportedPacks = { "Vanilla", "BTOS2", "Recolors" };
 
     public static void DownloadIcons(string packName)
     {
@@ -46,6 +46,8 @@ public static class Download
         {
             if (packName == "Vanilla" && Directory.Exists(AssetManager.VanillaPath))
                 new DirectoryInfo(AssetManager.VanillaPath).GetFiles("*.png").Select(x => x.FullName).ForEach(File.Delete);
+            else if (packName == "BTOS2" && Directory.Exists(AssetManager.BTOS2Path))
+                new DirectoryInfo(AssetManager.BTOS2Path).GetFiles("*.png").Select(x => x.FullName).ForEach(File.Delete);
             else if (Directory.Exists(Path.Combine(AssetManager.ModPath, packName)))
             {
                 var pack = new DirectoryInfo(Path.Combine(AssetManager.ModPath, packName)).GetDirectories().Select(x => x.FullName);
@@ -88,7 +90,7 @@ public static class Download
 
                 var info = new Asset()
                 {
-                    Name = current["name"]?.ToString() ?? "",
+                    Name = current["name"]?.ToString(),
                     FileType = current["type"]?.ToString() ?? "png",
                     Folder = current["folder"]?.ToString() ?? "Vanilla",
                     Pack = packName
@@ -111,7 +113,7 @@ public static class Download
                 File.WriteAllBytes(file.FilePath(), array);
             }
 
-            if (packName != "Vanilla")
+            if (packName is not ("Vanilla" or "BTOS2"))
                 AssetManager.TryLoadingSprites(packName);
 
             Recolors.Open();
@@ -136,6 +138,8 @@ public class Asset
     {
         if (Folder is null or "" or "Vanilla" || Pack == "Vanilla")
             return Path.Combine(AssetManager.VanillaPath, $"{Name}.{FileType}");
+        else if (Pack == "BTOS2")
+            return Path.Combine(AssetManager.BTOS2Path, $"{Name}.{FileType}");
         else
             return Path.Combine(AssetManager.ModPath, Pack, Folder, $"{Name}.{FileType}");
     }
@@ -144,6 +148,8 @@ public class Asset
     {
         if (Folder is "" or "Vanilla" || Pack == "Vanilla")
             return $"Vanilla/{Name}.{FileType}";
+        else if (Pack == "BTOS2")
+            return $"BTOS2/{Name}.{FileType}";
         else
             return $"{Pack}/{Folder}/{Name}.{FileType}";
     }

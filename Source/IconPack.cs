@@ -66,7 +66,7 @@ public class IconPack
         Logging.LogMessage($"Reloading {Name}");
         Delete();
         Load();
-        LoadSpriteSheets(true);
+        LoadSpriteSheets();
         AssetManager.SetScrollSprites();
     }
 
@@ -157,7 +157,7 @@ public class IconPack
     }
 
     // love ya pat
-    public void LoadSpriteSheets(bool change)
+    public void LoadSpriteSheets()
     {
         var (rolesWithIndexDict, rolesWithIndex) = Utils.Filtered();
 
@@ -182,7 +182,10 @@ public class IconPack
                         sprite = GetSprite(name, false, "Regular", false);
 
                     if (sprite == AssetManager.Blank)
-                        sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name == "CovenTownTraitor" ? "TownTraitor" : name, out var sprite1) ? sprite1 : AssetManager.Blank;
+                        sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name + "_BTOS2", out var sprite1) ? sprite1 : AssetManager.Blank;
+
+                    if (sprite == AssetManager.Blank)
+                        sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name, out var sprite1) ? sprite1 : AssetManager.Blank;
 
                     if (sprite != AssetManager.Blank)
                     {
@@ -230,10 +233,7 @@ public class IconPack
                             sprite = GetSprite(name, false, "Regular", false);
 
                         if (sprite == AssetManager.Blank)
-                            sprite = BTOSInfo.sprites.TryGetValue($"RoleCard_{name}", out var sprite1) ? sprite1 : AssetManager.Blank;
-
-                        if (sprite == AssetManager.Blank)
-                            sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name == "CovenTownTraitor" ? "TownTraitor" : name, out var sprite1) ? sprite1 : AssetManager.Blank;
+                            sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name, out var sprite1) ? sprite1 : AssetManager.Blank;
 
                         if (sprite != AssetManager.Blank)
                         {
@@ -258,11 +258,11 @@ public class IconPack
             }
         }
 
-        if (change)
+        /*if (change)
         {
             AssetManager.ChangeSpriteSheets(Name);
             Logging.LogMessage($"Changed to {Name} {Constants.CurrentStyle} Sprite Asset!");
-        }
+        }*/
     }
 
     public Sprite GetSprite(string name, bool allowEE, string type, bool log)
@@ -316,5 +316,5 @@ public class IconPack
 
     private static bool IsBTOS2ModdedFolder(string folderName) => folderName is "Jackal" or "Judge" or "Auditor" or "Starspawn" or "Inquisitor" or "Lions" or "Frogs" or "Hawks";
 
-    //private static bool IsLegacyModdedFolder(string folderName) => folderName is "Mafia" or "Amnesiac" or "Juggernaut" or "Sorcerer" or "GuardianAngel" or "Survivor";
+    //private static bool IsLegacyModdedFolder(string folderName) => folderName is "Mafia" or "Amnesiac" or "Juggernaut" or "GuardianAngel" or "Survivor";
 }

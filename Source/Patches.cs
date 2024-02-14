@@ -1,6 +1,7 @@
 using Cinematics.Players;
 using Home.Services;
 using UnityEngine.UI;
+using SalemModLoader;
 
 namespace IconPacks;
 
@@ -482,11 +483,11 @@ public static class CacheDefaultSpriteSheet
             if (key is "RoleIcons" or "PlayerNumbers")
                 Utils.DumpSprite(asset.spriteSheet as Texture2D, key, AssetManager.VanillaPath);
         });
-        AssetManager.SetScrollSprites();
 
         if (AssetManager.IconPacks.TryGetValue(Constants.CurrentPack, out var pack))
-            pack.LoadSpriteSheets(true);
+            pack.LoadSpriteSheets();
 
+        AssetManager.SetScrollSprites();
         AssetManager.LoadVanillaSpriteSheet(!Constants.EnableIcons);
         ServiceExists = true;
         __instance.isReady_ = true;
@@ -594,5 +595,48 @@ public static class RoleMenuPopupControllerPatch
             __instance.RoleIconImage.sprite = sprite;
             __instance.HeaderRoleIconImage.sprite = sprite;
         }
+    }
+}
+
+[HarmonyPatch(typeof(DownloadContributorTags), nameof(DownloadContributorTags.AddTMPSprites))]
+[HarmonyPriority(Priority.Low)]
+public class ApplicationControllerPatch
+{
+    public static void Postfix()
+    {
+        var oldSpriteAssetRequest = Traverse.Create<TMP_Text>().Field<Func<int, string, TMP_SpriteAsset>>("OnSpriteAssetRequest").Value;
+
+        TMP_Text.OnSpriteAssetRequest += (_, str) =>
+        {
+            try
+            {
+                if (AssetManager.IconPacks.TryGetValue(Constants.CurrentPack, out var pack))
+                {
+                    if (str == "BTOSRoleIcons")
+                        return (pack.BTOS2MentionStyles.TryGetValue(Constants.CurrentStyle, out var style) ? style : AssetManager.BTOS2Asset) ?? AssetManager.BTOS2Asset;
+                    else if (str == "RoleIcons")
+                        return (pack.MentionStyles.TryGetValue(Constants.CurrentStyle, out var style) ? style : AssetManager.VanillaAsset) ?? AssetManager.VanillaAsset;
+                    else
+                        return oldSpriteAssetRequest(_, str);
+                }
+                else if (str == "BTOSRoleIcons")
+                    return AssetManager.BTOS2Asset;
+                else if (str == "RoleIcons")
+                    return AssetManager.VanillaAsset;
+                else
+                    return oldSpriteAssetRequest(_, str);
+            }
+            catch (Exception e)
+            {
+                AssetManager.RunDiagnostics(e);
+
+                if (str == "BTOSRoleIcons")
+                    return AssetManager.BTOS2Asset;
+                else if (str == "RoleIcons")
+                    return AssetManager.VanillaAsset;
+                else
+                    return oldSpriteAssetRequest(_, str);
+            }
+        };
     }
 }

@@ -126,8 +126,8 @@ public static class Utils
         RolePlus.NEUTRAL_KILLING => "NeutralKilling",
         RolePlus.NEUTRAL_EVIL => "NeutralEvil",
         RolePlus.TRUE_ANY => "TrueAny",
-        RolePlus.REGULAR_COVEN => "RegularCoven",
-        RolePlus.REGULAR_TOWN => "RegularTown",
+        RolePlus.REGULAR_COVEN => "CommonCoven",
+        RolePlus.REGULAR_TOWN => "CommonTown",
         RolePlus.RANDOM_APOCALYPSE => "RandomApocalypse",
         RolePlus.NEUTRAL_PARIAH => "NeutralPariah",
         RolePlus.NEUTRAL_SPECIAL => "NeutralSpecial",
@@ -229,7 +229,7 @@ public static class Utils
         Role.NEUTRAL_EVIL => "NeutralEvil",
         Role.NEUTRAL_APOCALYPSE => "NeutralApocalypse",
         Role.ANY => "Any",
-        Role.TOWN_TRAITOR => "CovenTownTraitor",
+        Role.TOWN_TRAITOR => "TownTraitor",
         Role.NO_TOWN_HANGED => "PerfectTown",
         Role.GHOST_TOWN => "GhostTown",
         Role.VIP => "VIP",
@@ -347,7 +347,7 @@ public static class Utils
             .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)
             .Where(fi => fi.IsLiteral && !fi.IsInitOnly && fi.FieldType == typeof(Role))
             .Select(x => (Role)x.GetRawConstantValue())
-            .Where(x => x is not (RolePlus.NONE or Role.HANGMAN or RolePlus.UNKNOWN)) :
+            .Where(x => x is not (RolePlus.NONE or Role.HANGMAN or RolePlus.UNKNOWN or RolePlus.ROLE_COUNT)) :
             ((Role[])Enum.GetValues(typeof(Role))).Except(ExceptRoles);
 
         // map all roles to (role name, role number) so we can make a dict

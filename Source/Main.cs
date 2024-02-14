@@ -52,15 +52,14 @@ public class Recolors
     {
         Name = "Selected Mention Style",
         Description = "The selected mention style will dictate which icons are used for the mentions. If the selection is TT or VIP and certain icons don't exist, the mod will instead use the main icons of the pack and if even those don't exist, then the vanilla icons. May require a game restart.",
-        Options = GetMentionStyles(),
-        OnChanged = AssetManager.ChangeSpriteSheetStyles
+        Options = GetMentionStyles()
     };
 
     public ModSettings.DropdownSetting DownloadIcons => new()
     {
         Name = "Download Recommended Icon Packs",
-        Description = "Downloads icon packs recommended by the mod creator\nVanilla - Icons used in the vanilla game to be used as a reference for icon packs\nRecolors - Art by MysticMismagius, Haapsalu, faketier and Nidoskull.",
-        Options = new() { "None", "Vanilla", "Recolors" },
+        Description = "Downloads icon packs recommended by the mod creator\nVanilla - Icons used in the vanilla game to be used as a reference for icon packs\nBTOS2 - Icons used in BTOS2 games to be used as a reference for icons specifically set for BTOS2\nRecolors - Art by MysticMismagius, Haapsalu, faketier and Nidoskull.",
+        Options = new() { "None", "Vanilla", "BTOS2", "Recolors" },
         OnChanged = Download.DownloadIcons
     };
 

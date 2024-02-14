@@ -17,12 +17,12 @@ public static class AssetManager
 
     public static TMP_SpriteAsset VanillaAsset;
     public static TMP_SpriteAsset BTOS2Asset;
-    public static readonly Dictionary<string, Sprite> BTOSMentionSprites = new();
     private static int Hash3;
     public static bool SpriteSheetLoaded;
 
     public static string ModPath => Path.Combine(Path.GetDirectoryName(Application.dataPath), "SalemModLoader", "ModFolders", "Recolors");
     public static string VanillaPath => Path.Combine(ModPath, "Vanilla");
+    public static string BTOS2Path => Path.Combine(ModPath, "BTOS2");
 
     private static readonly string[] Avoid = { "Attributes", "Necronomicon", "Neutral", "NeutralApocalypse", "NeutralEvil", "NeutralKilling", "Town", "TownInvestigative",
         "TownKilling", "TownSupport", "TownProtective", "TownPower", "CovenKilling", "CovenDeception", "CovenUtility", "CovenPower", "Coven", "SlowMode", "FastMode", "AnonVoting",
@@ -76,6 +76,12 @@ public static class AssetManager
         if (!Directory.Exists(ModPath))
             Directory.CreateDirectory(ModPath);
 
+        if (!Directory.Exists(VanillaPath))
+            Directory.CreateDirectory(VanillaPath);
+
+        if (!Directory.Exists(BTOS2Path))
+            Directory.CreateDirectory(BTOS2Path);
+
         Core.GetManifestResourceNames().ForEach(x =>
         {
             if (x.EndsWith(".png"))
@@ -103,7 +109,7 @@ public static class AssetManager
                 };
             }
 
-            Utils.DumpSprite(BTOS2Asset.spriteSheet as Texture2D, "BTOSRoleIcons", VanillaPath);
+            Utils.DumpSprite(BTOS2Asset.spriteSheet as Texture2D, "BTOSRoleIcons", BTOS2Path);
             Hash3 = BTOS2Asset.hashCode;
         }
 
@@ -120,10 +126,9 @@ public static class AssetManager
             var path = Path.Combine(ModPath, folder, subfolder, $"{fileName}.{filetype}");
             var texture = EmptyTexture();
             texture.LoadImage(File.ReadAllBytes(path), false);
-            texture.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
+            texture.hideFlags |= HideFlags.DontUnloadUnusedAsset;
             texture.name = fileName;
-            UObject.DontDestroyOnLoad(texture);
-            return texture.Decompress();
+            return texture.DontDestroy().Decompress();
         }
         catch (Exception e)
         {
@@ -161,10 +166,9 @@ public static class AssetManager
                 return null;
             }
 
-            sprite.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
+            sprite.hideFlags |= HideFlags.DontUnloadUnusedAsset;
             sprite.name = texture.name;
-            UObject.DontDestroyOnLoad(sprite);
-            return sprite;
+            return sprite.DontDestroy();
         }
         catch (Exception e)
         {
@@ -194,12 +198,6 @@ public static class AssetManager
 
     public static void TryLoadingSprites(string packName)
     {
-        if (packName == "Vanilla")
-        {
-            ChangeSpriteSheets(packName);
-            return;
-        }
-
         var folder = Path.Combine(ModPath, packName);
 
         if (!Directory.Exists(folder))
@@ -219,13 +217,12 @@ public static class AssetManager
                 exists?.Delete();
                 exists = new(packName);
                 exists.Load();
-                IconPacks.Add(packName, exists);
+                exists.LoadSpriteSheets();
 
                 if (CacheDefaultSpriteSheet.ServiceExists)
-                {
                     SetScrollSprites();
-                    exists.LoadSpriteSheets(true);
-                }
+
+                IconPacks.Add(packName, exists);
             }
         }
         catch (Exception e)
@@ -234,55 +231,7 @@ public static class AssetManager
         }
     }
 
-    public static void ChangeSpriteSheets(string packName)
-    {
-        IconPack pack = null;
-        TMP_SpriteAsset asset = null;
-
-        try
-        {
-            if ((packName == "Vanilla" || Constants.CurrentStyle == "Vanilla" ) && VanillaAsset)
-            {
-                MaterialReferenceManager.instance.m_SpriteAssetReferenceLookup[CacheDefaultSpriteSheet.Hash1] = VanillaAsset ?? CacheDefaultSpriteSheet.Cache1;
-                MaterialReferenceManager.instance.m_FontMaterialReferenceLookup[CacheDefaultSpriteSheet.Hash1] = VanillaAsset?.material ?? CacheDefaultSpriteSheet.Cache1?.material;
-            }
-            else if (packName != "Vanilla" && IconPacks.TryGetValue(packName, out pack) && pack != null && pack.MentionStyles.TryGetValue(Constants.CurrentStyle, out asset) && asset)
-            {
-                MaterialReferenceManager.instance.m_SpriteAssetReferenceLookup[CacheDefaultSpriteSheet.Hash1] = asset ?? CacheDefaultSpriteSheet.Cache1;
-                MaterialReferenceManager.instance.m_FontMaterialReferenceLookup[CacheDefaultSpriteSheet.Hash1] = asset?.material ?? CacheDefaultSpriteSheet.Cache1?.material;
-            }
-        }
-        catch (Exception e)
-        {
-            RunDiagnostics(e);
-        }
-    }
-
-    public static void ChangeSpriteSheetStyles(string styleName)
-    {
-        IconPack pack = null;
-        TMP_SpriteAsset asset = null;
-
-        try
-        {
-            if ((styleName == "Vanilla" || Constants.CurrentPack == "Vanilla") && VanillaAsset)
-            {
-                MaterialReferenceManager.instance.m_SpriteAssetReferenceLookup[CacheDefaultSpriteSheet.Hash1] = VanillaAsset ?? CacheDefaultSpriteSheet.Cache1;
-                MaterialReferenceManager.instance.m_FontMaterialReferenceLookup[CacheDefaultSpriteSheet.Hash1] = VanillaAsset?.material ?? CacheDefaultSpriteSheet.Cache1?.material;
-            }
-            else if (styleName != "Vanilla" && IconPacks.TryGetValue(Constants.CurrentPack, out pack) && pack != null && pack.MentionStyles.TryGetValue(styleName, out asset) && asset)
-            {
-                MaterialReferenceManager.instance.m_SpriteAssetReferenceLookup[CacheDefaultSpriteSheet.Hash1] = asset ?? CacheDefaultSpriteSheet.Cache1;
-                MaterialReferenceManager.instance.m_FontMaterialReferenceLookup[CacheDefaultSpriteSheet.Hash1] = asset?.material ?? CacheDefaultSpriteSheet.Cache1?.material;
-            }
-        }
-        catch (Exception e)
-        {
-            RunDiagnostics(e);
-        }
-    }
-
-    private static void RunDiagnostics(Exception e)
+    public static void RunDiagnostics(Exception e)
     {
         IconPack pack = null;
         TMP_SpriteAsset asset = null;
@@ -296,6 +245,9 @@ public static class AssetManager
 
         if (!BTOS2Asset && Constants.BTOS2Exists)
             diagnostic += "\nBTOS2 Sheet Does Not Exist";
+
+        if (Constants.IsBTOS2)
+            diagnostic += "\nCurrently In A BTOS2 Game";
 
         if (Constants.EnableIcons && !IconPacks.TryGetValue(Constants.CurrentPack, out pack))
             diagnostic += "\nNo Loaded Icon Pack";
@@ -384,9 +336,9 @@ public static class AssetManager
             {
                 var actualRole = (Role)roleInt;
                 var name = Utils.RoleName(actualRole);
-                var sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name == "CovenTownTraitor" ? "TownTraitor" : name, out var sprite1) ? sprite1 : Blank;
+                var sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name, out var sprite1) ? sprite1 : Blank;
 
-                if (sprite != Blank && sprite != null)
+                if (sprite != Blank)
                 {
                     sprite.name = sprite.texture.name = role;
                     textures.Add(sprite.texture);
@@ -400,12 +352,6 @@ public static class AssetManager
             VanillaAsset = BuildGlyphs(sprites.ToArray(), textures.ToArray(), "RoleIcons", rolesWithIndexDict);
             Utils.DumpSprite(VanillaAsset.spriteSheet as Texture2D, "RoleIcons_Modified", VanillaPath);
             Logging.LogMessage("Vanilla Sprite Asset loaded!");
-
-            if (change)
-            {
-                ChangeSpriteSheets("Vanilla");
-                Logging.LogMessage("Set to Vanilla Sprite Asset!");
-            }
         }
         catch (Exception e)
         {
@@ -458,11 +404,11 @@ public static class AssetManager
 
         asset.name = spriteAssetName;
         asset.material = new(Shader.Find("TextMeshPro/Sprite"));
-        asset.version = "1.1.0";
+        AccessTools.Property(asset.GetType(), "version").SetValue(asset, "1.1.0");
         asset.material.mainTexture = image;
         asset.spriteSheet = image;
         asset.UpdateLookupTables();
-        asset.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
-        return asset;
+        asset.hideFlags |= HideFlags.DontUnloadUnusedAsset;
+        return asset.DontDestroy();
     }
 }
