@@ -454,10 +454,9 @@ public static class CacheDefaultSpriteSheet
 {
     public static bool ServiceExists;
 
-    public static int Hash1;
-    public static int Hash2;
     public static TMP_SpriteAsset Cache1;
     public static TMP_SpriteAsset Cache2;
+
     private static readonly string[] Assets = { "Cast", "LobbyIcons", "MiscIcons", "PlayerNumbers", "RoleIcons", "SalemTmpIcons", "TrialReportIcons" };
 
     public static bool Prefix(HomeInterfaceService __instance)
@@ -470,15 +469,9 @@ public static class CacheDefaultSpriteSheet
             MaterialReferenceManager.AddSpriteAsset(asset);
 
             if (key == "RoleIcons")
-            {
-                Hash1 = asset.hashCode;
                 Cache1 = asset;
-            }
             else if (key == "PlayerNumbers")
-            {
-                Hash2 = asset.hashCode;
                 Cache2 = asset;
-            }
 
             if (key is "RoleIcons" or "PlayerNumbers")
                 Utils.DumpSprite(asset.spriteSheet as Texture2D, key, AssetManager.VanillaPath);
@@ -487,8 +480,8 @@ public static class CacheDefaultSpriteSheet
         if (AssetManager.IconPacks.TryGetValue(Constants.CurrentPack, out var pack))
             pack.LoadSpriteSheets();
 
+        AssetManager.LoadVanillaSpriteSheet();
         AssetManager.SetScrollSprites();
-        AssetManager.LoadVanillaSpriteSheet(!Constants.EnableIcons);
         ServiceExists = true;
         __instance.isReady_ = true;
         return false;

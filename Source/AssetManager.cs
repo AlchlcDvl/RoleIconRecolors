@@ -17,7 +17,6 @@ public static class AssetManager
 
     public static TMP_SpriteAsset VanillaAsset;
     public static TMP_SpriteAsset BTOS2Asset;
-    private static int Hash3;
     public static bool SpriteSheetLoaded;
 
     public static string ModPath => Path.Combine(Path.GetDirectoryName(Application.dataPath), "SalemModLoader", "ModFolders", "Recolors");
@@ -110,7 +109,6 @@ public static class AssetManager
             }
 
             Utils.DumpSprite(BTOS2Asset.spriteSheet as Texture2D, "BTOSRoleIcons", BTOS2Path);
-            Hash3 = BTOS2Asset.hashCode;
         }
 
         TryLoadingSprites(Constants.CurrentPack);
@@ -319,7 +317,7 @@ public static class AssetManager
     }
 
     // love ya pat
-    public static void LoadVanillaSpriteSheet(bool change)
+    public static void LoadVanillaSpriteSheet()
     {
         try
         {

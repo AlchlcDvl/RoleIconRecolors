@@ -163,7 +163,7 @@ public class IconPack
 
         foreach (var style in Folders)
         {
-            if (MentionStyles.ContainsKey(style))
+            if (MentionStyles.ContainsKey(style) || BaseIcons[style].Count == 0)
                 continue;
 
             try
@@ -180,9 +180,6 @@ public class IconPack
 
                     if (sprite == AssetManager.Blank && style != "Regular")
                         sprite = GetSprite(name, false, "Regular", false);
-
-                    if (sprite == AssetManager.Blank)
-                        sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name + "_BTOS2", out var sprite1) ? sprite1 : AssetManager.Blank;
 
                     if (sprite == AssetManager.Blank)
                         sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name, out var sprite1) ? sprite1 : AssetManager.Blank;
@@ -215,7 +212,7 @@ public class IconPack
 
             foreach (var style in Folders)
             {
-                if (BTOS2MentionStyles.ContainsKey(style))
+                if (BTOS2MentionStyles.ContainsKey(style) || BaseIcons[style].Count == 0)
                     continue;
 
                 try
@@ -231,6 +228,9 @@ public class IconPack
 
                         if (sprite == AssetManager.Blank && style != "Regular")
                             sprite = GetSprite(name, false, "Regular", false);
+
+                        if (sprite == AssetManager.Blank)
+                            sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name + "_BTOS2", out var sprite1) ? sprite1 : AssetManager.Blank;
 
                         if (sprite == AssetManager.Blank)
                             sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name, out var sprite1) ? sprite1 : AssetManager.Blank;
