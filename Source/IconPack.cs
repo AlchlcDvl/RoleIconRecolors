@@ -66,8 +66,8 @@ public class IconPack
         Logging.LogMessage($"Reloading {Name}");
         Delete();
         Load();
-        LoadSpriteSheets();
         AssetManager.SetScrollSprites();
+        Debug();
     }
 
     public void Load()
@@ -147,18 +147,14 @@ public class IconPack
                     }
                 }
             }
-
-            Debug();
         }
         catch (Exception e)
         {
             Logging.LogError(e);
         }
-    }
 
-    // love ya pat
-    public void LoadSpriteSheets()
-    {
+        // love ya pat
+
         var (rolesWithIndexDict, rolesWithIndex) = Utils.Filtered();
 
         foreach (var style in Folders)
@@ -198,11 +194,11 @@ public class IconPack
                 var asset = AssetManager.BuildGlyphs(sprites.ToArray(), textures.ToArray(), $"RoleIcons ({Name}, {style})", rolesWithIndexDict);
                 MentionStyles[style] = asset;
                 Utils.DumpSprite(asset.spriteSheet as Texture2D, $"{style}RoleIcons", PackPath);
-                Logging.LogMessage($"{Name} {style} Sprite Asset loaded!");
             }
             catch (Exception e)
             {
                 Logging.LogError(e);
+                MentionStyles[style] = null;
             }
         }
 
@@ -249,20 +245,14 @@ public class IconPack
                     var asset = AssetManager.BuildGlyphs(sprites.ToArray(), textures.ToArray(), $"BTOSRoleIcons ({Name}, {style})", rolesWithIndexDict);
                     BTOS2MentionStyles[style] = asset;
                     Utils.DumpSprite(asset.spriteSheet as Texture2D, $"{style}BTOS2RoleIcons", PackPath);
-                    Logging.LogMessage($"{Name} {style} BTOS2 Sprite Asset loaded!");
                 }
                 catch (Exception e)
                 {
                     Logging.LogError(e);
+                    BTOS2MentionStyles[style] = null;
                 }
             }
         }
-
-        /*if (change)
-        {
-            AssetManager.ChangeSpriteSheets(Name);
-            Logging.LogMessage($"Changed to {Name} {Constants.CurrentStyle} Sprite Asset!");
-        }*/
     }
 
     public Sprite GetSprite(string name, bool allowEE, string type, bool log)
@@ -281,7 +271,7 @@ public class IconPack
             }
         }
 
-        if ((URandom.RandomRangeInt(1, 101) <= Constants.EasterEggChance || !sprite) && allowEE)
+        if ((URandom.RandomRangeInt(1, 101) <= Constants.EasterEggChance && allowEE) || !sprite)
         {
             var sprites = new List<Sprite>();
 

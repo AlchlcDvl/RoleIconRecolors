@@ -92,7 +92,7 @@ public static class Download
                 {
                     Name = current["name"]?.ToString(),
                     FileType = current["type"]?.ToString() ?? "png",
-                    Folder = current["folder"]?.ToString() ?? "Vanilla",
+                    Folder = current["folder"]?.ToString() ?? packName.Replace(" ", ""),
                     Pack = packName
                 };
                 Logging.LogMessage(info.DownloadLink());

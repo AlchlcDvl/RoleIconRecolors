@@ -71,7 +71,7 @@ public class Recolors
 
             foreach (var dir in Directory.EnumerateDirectories(AssetManager.ModPath))
             {
-                if (!dir.Contains("Vanilla"))
+                if (!dir.Contains("Vanilla") && !dir.Contains("BTOS2"))
                     result.Add(dir.SanitisePath());
             }
 
@@ -93,7 +93,7 @@ public class Recolors
             {
                 foreach (var (folder, icons) in pack.BaseIcons)
                 {
-                    if (icons.Count > 0)
+                    if (icons.Count > 0 && (pack.MentionStyles[folder] || pack.BTOS2MentionStyles[folder]))
                         result.Add(folder);
                 }
             }

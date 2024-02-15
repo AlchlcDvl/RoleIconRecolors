@@ -85,8 +85,9 @@ public static class AssetManager
         {
             if (x.EndsWith(".png"))
             {
-                var sprite = FromResources.LoadSprite(x);
-                UObject.DontDestroyOnLoad(sprite);
+                var sprite = FromResources.LoadSprite(x).DontDestroy();
+                sprite.hideFlags |= HideFlags.DontUnloadUnusedAsset;
+                sprite.name = sprite.texture.name = x.SanitisePath();
 
                 if (x.Contains("Blank"))
                     Blank = sprite;
@@ -112,6 +113,7 @@ public static class AssetManager
         }
 
         TryLoadingSprites(Constants.CurrentPack);
+        LoadVanillaSpriteSheet();
     }
 
     private static Texture2D EmptyTexture() => new(2, 2, TextureFormat.ARGB32, true);
@@ -215,11 +217,11 @@ public static class AssetManager
                 exists?.Delete();
                 exists = new(packName);
                 exists.Load();
-                exists.LoadSpriteSheets();
 
                 if (CacheDefaultSpriteSheet.ServiceExists)
                     SetScrollSprites();
 
+                exists.Debug();
                 IconPacks.Add(packName, exists);
             }
         }
@@ -349,7 +351,6 @@ public static class AssetManager
             // set spritecharacter name to "Role{number}" so that the game can find correct roles
             VanillaAsset = BuildGlyphs(sprites.ToArray(), textures.ToArray(), "RoleIcons", rolesWithIndexDict);
             Utils.DumpSprite(VanillaAsset.spriteSheet as Texture2D, "RoleIcons_Modified", VanillaPath);
-            Logging.LogMessage("Vanilla Sprite Asset loaded!");
         }
         catch (Exception e)
         {

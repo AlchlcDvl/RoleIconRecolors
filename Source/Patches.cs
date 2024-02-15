@@ -466,7 +466,6 @@ public static class CacheDefaultSpriteSheet
         {
             Debug.Log($"HomeInterfaceService:: Add Sprite Asset {key}");
             var asset = __instance.LoadResource<TMP_SpriteAsset>($"TmpSpriteAssets/{key}.asset");
-            MaterialReferenceManager.AddSpriteAsset(asset);
 
             if (key == "RoleIcons")
                 Cache1 = asset;
@@ -474,13 +473,16 @@ public static class CacheDefaultSpriteSheet
                 Cache2 = asset;
 
             if (key is "RoleIcons" or "PlayerNumbers")
+            {
                 Utils.DumpSprite(asset.spriteSheet as Texture2D, key, AssetManager.VanillaPath);
+
+                if (key == "PlayerNumbers")
+                    MaterialReferenceManager.AddSpriteAsset(asset);
+            }
+            else
+                MaterialReferenceManager.AddSpriteAsset(asset);
         });
 
-        if (AssetManager.IconPacks.TryGetValue(Constants.CurrentPack, out var pack))
-            pack.LoadSpriteSheets();
-
-        AssetManager.LoadVanillaSpriteSheet();
         AssetManager.SetScrollSprites();
         ServiceExists = true;
         __instance.isReady_ = true;
@@ -593,12 +595,11 @@ public static class RoleMenuPopupControllerPatch
 
 [HarmonyPatch(typeof(DownloadContributorTags), nameof(DownloadContributorTags.AddTMPSprites))]
 [HarmonyPriority(Priority.Low)]
-public class ApplicationControllerPatch
+public static class ApplicationControllerPatch
 {
     public static void Postfix()
     {
         var oldSpriteAssetRequest = Traverse.Create<TMP_Text>().Field<Func<int, string, TMP_SpriteAsset>>("OnSpriteAssetRequest").Value;
-
         TMP_Text.OnSpriteAssetRequest += (_, str) =>
         {
             try
@@ -608,14 +609,19 @@ public class ApplicationControllerPatch
                     if (str == "BTOSRoleIcons")
                         return (pack.BTOS2MentionStyles.TryGetValue(Constants.CurrentStyle, out var style) ? style : AssetManager.BTOS2Asset) ?? AssetManager.BTOS2Asset;
                     else if (str == "RoleIcons")
-                        return (pack.MentionStyles.TryGetValue(Constants.CurrentStyle, out var style) ? style : AssetManager.VanillaAsset) ?? AssetManager.VanillaAsset;
+                    {
+                        return ((pack.MentionStyles.TryGetValue(Constants.CurrentStyle, out var style) ? style : AssetManager.VanillaAsset) ?? AssetManager.VanillaAsset) ??
+                            CacheDefaultSpriteSheet.Cache1;
+                    }
                     else
                         return oldSpriteAssetRequest(_, str);
                 }
                 else if (str == "BTOSRoleIcons")
                     return AssetManager.BTOS2Asset;
                 else if (str == "RoleIcons")
-                    return AssetManager.VanillaAsset;
+                    return AssetManager.VanillaAsset ?? CacheDefaultSpriteSheet.Cache1;
+                /*else if (str == "PlayerNumbers")
+                    return CacheDefaultSpriteSheet.Cache2;*/
                 else
                     return oldSpriteAssetRequest(_, str);
             }
@@ -626,7 +632,9 @@ public class ApplicationControllerPatch
                 if (str == "BTOSRoleIcons")
                     return AssetManager.BTOS2Asset;
                 else if (str == "RoleIcons")
-                    return AssetManager.VanillaAsset;
+                    return AssetManager.VanillaAsset ?? CacheDefaultSpriteSheet.Cache1;
+                /*else if (str == "PlayerNumbers")
+                    return CacheDefaultSpriteSheet.Cache2;*/
                 else
                     return oldSpriteAssetRequest(_, str);
             }
