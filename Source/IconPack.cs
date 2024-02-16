@@ -159,7 +159,7 @@ public class IconPack
 
         foreach (var style in Folders)
         {
-            if (MentionStyles.ContainsKey(style) || BaseIcons[style].Count == 0)
+            if (MentionStyles.ContainsKey(style) || (BaseIcons.TryGetValue(style, out var list) && list.Count == 0) || !BaseIcons.ContainsKey(style))
                 continue;
 
             try
@@ -208,7 +208,7 @@ public class IconPack
 
             foreach (var style in Folders)
             {
-                if (BTOS2MentionStyles.ContainsKey(style) || BaseIcons[style].Count == 0)
+                if (BTOS2MentionStyles.ContainsKey(style) || (BaseIcons.TryGetValue(style, out var list) && list.Count == 0) || !BaseIcons.ContainsKey(style))
                     continue;
 
                 try
