@@ -21,16 +21,6 @@ public static class Utils
         Role.ADMIRER, Role.ARSONIST, Role.MARSHAL, Role.SOCIALITE, Role.POISONER, Role.COVENLEADER, Role.CORONER, Role.SERIALKILLER, Role.SHROUD, Role.ROLE_COUNT, (Role)57, (Role)58,
         (Role)59, (Role)60, (Role)61 };
 
-    public static T Random<T>(this IEnumerable<T> input)
-    {
-        var list = input.ToList();
-        return list.Count == 0 ? default : list[URandom.Range(0, list.Count)];
-    }
-
-    public static void ForEach<T>(this IEnumerable<T> source, Action<T> action) => source.ToList().ForEach(action);
-
-    public static void ForEach<TKey, TValue>(this IDictionary<TKey, TValue> dict, Action<TKey, TValue> action) => dict.ToList().ForEach(pair => action(pair.Key, pair.Value));
-
     public static string RoleName(Role role, bool btos = false)
     {
         try

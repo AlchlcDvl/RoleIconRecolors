@@ -2,6 +2,7 @@ using Cinematics.Players;
 using Home.Services;
 using UnityEngine.UI;
 using SalemModLoader;
+using Server.Shared.Extensions;
 
 namespace IconPacks;
 
@@ -462,7 +463,7 @@ public static class CacheDefaultSpriteSheet
     public static bool Prefix(HomeInterfaceService __instance)
     {
         Logging.LogMessage("Patching HomeInterfaceService.Init");
-        Assets.ForEach(key =>
+        Assets.ToList().ForEach(key =>
         {
             Debug.Log($"HomeInterfaceService:: Add Sprite Asset {key}");
             var asset = __instance.LoadResource<TMP_SpriteAsset>($"TmpSpriteAssets/{key}.asset");
