@@ -26,7 +26,7 @@ public static class AssetManager
     private static readonly string[] Avoid = { "Attributes", "Necronomicon", "Neutral", "NeutralApocalypse", "NeutralEvil", "NeutralKilling", "Town", "TownInvestigative",
         "TownKilling", "TownSupport", "TownProtective", "TownPower", "CovenKilling", "CovenDeception", "CovenUtility", "CovenPower", "Coven", "SlowMode", "FastMode", "AnonVoting",
         "SecretKillers", "HiddenRoles", "OneTrial", "RandomApocalypse", "Any", "RegularCoven", "RegularTown", "NeutralPariah", "NeutralSpecial", "TownTraitor", "PerfectTown", "NecroPass",
-        "Teams", "AnonNames", "WalkingDead", "Hidden", "Stoned" };
+        "Teams", "AnonNames", "WalkingDead", "Hidden", "Stoned"/*, "Mafia", "MafiaDeception", "MafiaKilling", "MafiaUtility", "MafiaPower", "Cleaned", "NeutralChaos"*/ };
 
     private static readonly string[] ToRemove = { ".png", ".jpg" };
 
@@ -183,14 +183,18 @@ public static class AssetManager
         path = path.Split('\\')[^1];
         ToRemove.ForEach(x => path = path.Replace(x, ""));
         path = path.Replace(Resources, "");
-        var i = 0;
 
-        while (i >= 0 && path.Contains("_Icon") && removeIcon)
+        if (removeIcon)
         {
-            if (path.Contains($"_Icon{i}"))
-                path = path.Replace($"_Icon{i}", "");
+            var i = 0;
 
-            i++;
+            while (i >= 0 && path.Contains("_Icon"))
+            {
+                if (path.Contains($"_Icon{i}"))
+                    path = path.Replace($"_Icon{i}", "");
+
+                i++;
+            }
         }
 
         return path;
@@ -306,16 +310,24 @@ public static class AssetManager
     // https://stackoverflow.com/questions/51315918/how-to-encodetopng-compressed-textures-in-unity
     public static Texture2D Decompress(this Texture2D source)
     {
-        var renderTex = RenderTexture.GetTemporary(source.width, source.height, 0, RenderTextureFormat.Default, RenderTextureReadWrite.Linear);
-        Graphics.Blit(source, renderTex);
-        var previous = RenderTexture.active;
-        RenderTexture.active = renderTex;
-        var readableText = new Texture2D(source.width, source.height);
-        readableText.ReadPixels(new(0, 0, renderTex.width, renderTex.height), 0, 0);
-        readableText.Apply();
-        RenderTexture.active = previous;
-        RenderTexture.ReleaseTemporary(renderTex);
-        return readableText;
+        try
+        {
+            var renderTex = RenderTexture.GetTemporary(source.width, source.height, 0, RenderTextureFormat.Default, RenderTextureReadWrite.Linear);
+            Graphics.Blit(source, renderTex);
+            var previous = RenderTexture.active;
+            RenderTexture.active = renderTex;
+            var readableText = new Texture2D(source.width, source.height);
+            readableText.ReadPixels(new(0, 0, renderTex.width, renderTex.height), 0, 0);
+            readableText.Apply();
+            RenderTexture.active = previous;
+            RenderTexture.ReleaseTemporary(renderTex);
+            return readableText;
+        }
+        catch (Exception e)
+        {
+            Logging.LogError(e);
+            return source;
+        }
     }
 
     // love ya pat
@@ -404,8 +416,9 @@ public static class AssetManager
         asset.name = spriteAssetName;
         asset.material = new(Shader.Find("TextMeshPro/Sprite"));
         AccessTools.Property(asset.GetType(), "version").SetValue(asset, "1.1.0");
-        asset.material.mainTexture = image;
-        asset.spriteSheet = image;
+        var decompressed = image.Decompress();
+        asset.material.mainTexture = decompressed;
+        asset.spriteSheet = decompressed;
         asset.UpdateLookupTables();
         asset.hideFlags |= HideFlags.DontUnloadUnusedAsset;
         return asset.DontDestroy();
