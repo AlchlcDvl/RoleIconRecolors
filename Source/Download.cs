@@ -1,129 +1,94 @@
-using System.Net;
-using Newtonsoft.Json.Linq;
+using System.Collections;
+using UnityEngine.Networking;
+using Newtonsoft.Json;
+using Home.Shared;
 
 namespace IconPacks;
 
 public static class Download
 {
     private const string REPO = "https://raw.githubusercontent.com/AlchlcDvl/RoleIconRecolors/main";
-    private static bool DownloadRunning;
-    private static string[] SupportedPacks = { "Vanilla", "BTOS2", "Recolors" };
+    private static readonly string[] SupportedPacks = { "Vanilla", "BTOS2", "Recolors" };
+    private static readonly Dictionary<string, bool> Running = new();
 
-    public static void DownloadIcons(string packName)
-    {
-        if (DownloadRunning)
-            return;
+    public static void DownloadIcons(string packName) => ApplicationController.ApplicationContext.StartCoroutine(CoDownload(packName));
 
-        LaunchFetcher(packName);
-    }
-
-    private static async void LaunchFetcher(string packName)
-    {
-        Logging.LogMessage($"Starting {packName} download", true);
-        DownloadRunning = true;
-
-        try
-        {
-            Logging.LogMessage(await Fetch(packName) != HttpStatusCode.OK ? $"{packName} icons could not be downloaded" : $"Fetched {packName} icons", true);
-        }
-        catch (Exception e)
-        {
-            Logging.LogError($"Unable to fetch {packName} icons\n{e}");
-        }
-
-        DownloadRunning = false;
-    }
-
-    private static async Task<HttpStatusCode> Fetch(string packName)
+    private static IEnumerator CoDownload(string packName)
     {
         if (!SupportedPacks.Contains(packName))
         {
             Logging.LogError($"Wrong pack name {packName}");
-            return HttpStatusCode.NotFound;
+            yield break;
         }
 
-        try
+        if (Running.TryGetValue(packName, out var running) && running)
         {
-            if (packName == "Vanilla" && Directory.Exists(AssetManager.VanillaPath))
-                new DirectoryInfo(AssetManager.VanillaPath).GetFiles("*.png").Select(x => x.FullName).ForEach(File.Delete);
-            else if (packName == "BTOS2" && Directory.Exists(AssetManager.BTOS2Path))
-                new DirectoryInfo(AssetManager.BTOS2Path).GetFiles("*.png").Select(x => x.FullName).ForEach(File.Delete);
-            else if (Directory.Exists(Path.Combine(AssetManager.ModPath, packName)))
-            {
-                var pack = new DirectoryInfo(Path.Combine(AssetManager.ModPath, packName)).GetDirectories().Select(x => x.FullName);
+            Logging.LogError($"{packName} download is still running");
+            yield break;
+        }
 
-                foreach (var dir in pack)
+        if (packName == "Vanilla" && Directory.Exists(AssetManager.VanillaPath))
+            new DirectoryInfo(AssetManager.VanillaPath).GetFiles("*.png").Select(x => x.FullName).ForEach(File.Delete);
+        else if (packName == "BTOS2" && Directory.Exists(AssetManager.BTOS2Path))
+            new DirectoryInfo(AssetManager.BTOS2Path).GetFiles("*.png").Select(x => x.FullName).ForEach(File.Delete);
+        else if (Directory.Exists(Path.Combine(AssetManager.ModPath, packName)))
+        {
+            var pack = new DirectoryInfo(Path.Combine(AssetManager.ModPath, packName)).GetDirectories().Select(x => x.FullName);
+
+            foreach (var dir in pack)
+            {
+                if (Directory.Exists(dir))
+                    new DirectoryInfo(dir).GetFiles("*.png").Select(x => x.FullName).ForEach(File.Delete);
+            }
+        }
+
+        var www = UnityWebRequest.Get($"{REPO}/{packName}.json");
+        yield return www.SendWebRequest();
+
+        while (!www.isDone)
+            yield return new WaitForEndOfFrame();
+
+        if (www.result != UnityWebRequest.Result.Success)
+        {
+            Logging.LogError(www.error);
+            yield break;
+        }
+
+        var json = JsonConvert.DeserializeObject<List<Asset>>(www.downloadHandler.text);
+
+        foreach (var asset in json)
+        {
+            asset.FileType ??= "png";
+            asset.Folder ??= packName.Replace(" ", "");
+            asset.Pack = packName;
+
+            var www2 = UnityWebRequest.Get($"{REPO}/{asset.DownloadLink()}");
+            yield return www2.SendWebRequest();
+
+            while (!www2.isDone)
+                yield return new WaitForEndOfFrame();
+
+            if (www2.result != UnityWebRequest.Result.Success)
+            {
+                Logging.LogError(www2.error);
+                continue;
+            }
+
+            var persistTask = File.WriteAllBytesAsync(asset.FilePath(), www2.downloadHandler.data);
+
+            while (!persistTask.IsCompleted)
+            {
+                if (persistTask.Exception != null)
                 {
-                    if (Directory.Exists(dir))
-                        new DirectoryInfo(dir).GetFiles("*.png").Select(x => x.FullName).ForEach(File.Delete);
-                }
-            }
-
-            using var client = new HttpClient();
-            client.DefaultRequestHeaders.Add("User-Agent", "IconPackDownloader");
-            using var response = await client.GetAsync($"{REPO}/{packName}.json", HttpCompletionOption.ResponseContentRead);
-
-            if (response.StatusCode != HttpStatusCode.OK)
-                return response.StatusCode;
-
-            if (response.Content == null)
-            {
-                Logging.LogError($"Server returned no data: {response.StatusCode}");
-                return response.StatusCode;
-            }
-
-            var json = await response.Content.ReadAsStringAsync();
-            var jobj = JObject.Parse(json)[packName.Replace(" ", "").ToLower()];
-
-            if (jobj == null || !jobj.HasValues)
-            {
-                Logging.LogError("JSON Parse failed");
-                return HttpStatusCode.ExpectationFailed;
-            }
-
-            var assets = new List<Asset>();
-
-            for (var current = jobj.First; current != null; current = current.Next)
-            {
-                if (!current.HasValues)
-                    continue;
-
-                var info = new Asset()
-                {
-                    Name = current["name"]?.ToString(),
-                    FileType = current["type"]?.ToString() ?? "png",
-                    Folder = current["folder"]?.ToString() ?? packName.Replace(" ", ""),
-                    Pack = packName
-                };
-                Logging.LogMessage(info.DownloadLink());
-                assets.Add(info);
-            }
-
-            foreach (var file in assets)
-            {
-                using var fileresponse = await client.GetAsync($"{REPO}/{file.DownloadLink()}", HttpCompletionOption.ResponseContentRead);
-
-                if (fileresponse.StatusCode != HttpStatusCode.OK)
-                {
-                    Logging.LogError($"Error downloading {file.Name}: {fileresponse.StatusCode}");
-                    continue;
+                    Logging.LogError(persistTask.Exception);
+                    break;
                 }
 
-                var array = await fileresponse.Content.ReadAsByteArrayAsync();
-                File.WriteAllBytes(file.FilePath(), array);
+                yield return new WaitForEndOfFrame();
             }
-
-            if (packName is not ("Vanilla" or "BTOS2"))
-                AssetManager.TryLoadingSprites(packName);
-
-            Recolors.Open();
-            return HttpStatusCode.OK;
         }
-        catch (Exception e)
-        {
-            Logging.LogError(e);
-            return HttpStatusCode.ExpectationFailed;
-        }
+
+        yield break;
     }
 }
 
@@ -136,7 +101,7 @@ public class Asset
 
     public string FilePath()
     {
-        if (Folder is null or "" or "Vanilla" || Pack == "Vanilla")
+        if (Pack == "Vanilla")
             return Path.Combine(AssetManager.VanillaPath, $"{Name}.{FileType}");
         else if (Pack == "BTOS2")
             return Path.Combine(AssetManager.BTOS2Path, $"{Name}.{FileType}");
@@ -146,7 +111,7 @@ public class Asset
 
     public string DownloadLink()
     {
-        if (Folder is "" or "Vanilla" || Pack == "Vanilla")
+        if (Pack == "Vanilla")
             return $"Vanilla/{Name}.{FileType}";
         else if (Pack == "BTOS2")
             return $"BTOS2/{Name}.{FileType}";
