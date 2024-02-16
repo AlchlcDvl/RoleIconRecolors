@@ -58,9 +58,16 @@ public class Recolors
     public ModSettings.DropdownSetting DownloadIcons => new()
     {
         Name = "Download Recommended Icon Packs",
-        Description = "Downloads icon packs recommended by the mod creator\nVanilla - Icons used in the vanilla game to be used as a reference for icon packs\nBTOS2 - Icons used in BTOS2 games to be used as a reference for icons specifically set for BTOS2\nRecolors - Art by MysticMismagius, Haapsalu, faketier and Nidoskull.",
+        Description = "Downloads icon packs recommended by the mod creator.\nVanilla - Icons used in the vanilla game to be used as a reference for icon packs.\nBTOS2 - Icons used in BTOS2 games to be used as a reference for icons specifically set for BTOS2.\nRecolors - Art by MysticMismagius, Haapsalu, faketier, splarg, Det, Wevit and Nidoskull.",
         Options = new() { "None", "Vanilla", "BTOS2", "Recolors" },
         OnChanged = Download.DownloadIcons
+    };
+
+    public ModSettings.DropdownSetting FactionOverride => new()
+    {
+        Name = "Override Faction",
+        Description = "Only icons from the selected faction will appear.",
+        Options = GetFactionOverrides()
     };
 
     private static List<string> GetPackNames()
@@ -104,6 +111,29 @@ public class Recolors
         catch
         {
             return new() { "Vanilla" };
+        }
+    }
+
+    private static List<string> GetFactionOverrides()
+    {
+        try
+        {
+            var result = new List<string>() { "None" };
+
+            if (AssetManager.IconPacks.TryGetValue(Constants.CurrentPack, out var pack))
+            {
+                foreach (var (folder, icons) in pack.BaseIcons)
+                {
+                    if (icons.Count > 0)
+                        result.Add(folder);
+                }
+            }
+
+            return result;
+        }
+        catch
+        {
+            return new() { "None" };
         }
     }
 }
