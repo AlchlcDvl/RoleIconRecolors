@@ -27,6 +27,8 @@ public static class Download
             yield break;
         }
 
+        Running[packName] = true;
+
         if (packName == "Vanilla" && Directory.Exists(AssetManager.VanillaPath))
             new DirectoryInfo(AssetManager.VanillaPath).GetFiles("*.png").Select(x => x.FullName).ForEach(File.Delete);
         else if (packName == "BTOS2" && Directory.Exists(AssetManager.BTOS2Path))
@@ -88,6 +90,11 @@ public static class Download
             }
         }
 
+        if (packName is not ("Vanilla" or "BTOS2"))
+            AssetManager.TryLoadingSprites(packName);
+
+        Recolors.Open();
+        Running[packName] = false;
         yield break;
     }
 }
