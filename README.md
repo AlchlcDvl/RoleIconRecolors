@@ -34,7 +34,7 @@ With this mod you can edit (most) renditions of game icons to your own liking! P
 - Step 2: Create a folder and name it something you want your icon pack to be.
 - Step 3: Navigate to the mod menu again and select your icon pack in the `Selected Icon Pack` drop down setting.
 - Step 4: Go back to your file explorer and enter the folder for your icon pack. There should be some folders made for you.
-- Step 5: Read the [folders](#folders) section.
+- Step 5: Read the [folders](#folders) and [factions](#factions) sections.
 - Step 6: Create your icon using a 256x256 image canvas (you can also do so by making it edit a vanilla icon and just delete the vanilla icon later if needed).
 - Step 7: Place your image in the required folder and name the image as per the [image rules](#image-rules) section.
 - Step 8: Change the value of `Selected Icon Pack` to `Vanilla` and then reselect your icon pack. Beware, there will be a lag spike as it loads everything. Note: Mentions may not load unless you restart the game.
