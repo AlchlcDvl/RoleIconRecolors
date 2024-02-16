@@ -30,9 +30,9 @@ public static class Download
         Running[packName] = true;
 
         if (packName == "Vanilla" && Directory.Exists(AssetManager.VanillaPath))
-            new DirectoryInfo(AssetManager.VanillaPath).GetFiles("*.png").Select(x => x.FullName).ForEach(File.Delete);
+            new DirectoryInfo(AssetManager.VanillaPath).GetFiles("*.png").Select(x => x.FullName).Where(x => !x.Contains("RoleIcons") && !x.Contains("PlayerNumbers")).ForEach(File.Delete);
         else if (packName == "BTOS2" && Directory.Exists(AssetManager.BTOS2Path))
-            new DirectoryInfo(AssetManager.BTOS2Path).GetFiles("*.png").Select(x => x.FullName).ForEach(File.Delete);
+            new DirectoryInfo(AssetManager.BTOS2Path).GetFiles("*.png").Select(x => x.FullName).Where(x => !x.Contains("RoleIcons")).ForEach(File.Delete);
         else if (Directory.Exists(Path.Combine(AssetManager.ModPath, packName)))
         {
             var pack = new DirectoryInfo(Path.Combine(AssetManager.ModPath, packName)).GetDirectories().Select(x => x.FullName);
