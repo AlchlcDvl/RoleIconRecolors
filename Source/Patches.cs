@@ -321,7 +321,7 @@ public static class PatchRitualistGuessMenu
         Logging.LogMessage("Patching SpecialAbilityPopupRadialIcon.SetData");
         var icon = AssetManager.GetSprite(Utils.RoleName(a_role), Utils.FactionName(a_role.GetFaction()), false);
 
-        if (__instance.roleIcon != null && icon != AssetManager.Blank)
+        if (__instance.roleIcon && icon != AssetManager.Blank)
             __instance.roleIcon.sprite = icon;
     }
 }

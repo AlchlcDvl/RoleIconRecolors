@@ -304,6 +304,8 @@ public class IconPack
         return sprite ?? AssetManager.Blank;
     }
 
+    public static implicit operator bool(IconPack exists) => exists != null;
+
     private static bool IsBTOS2ModdedFolder(string folderName) => folderName is "Jackal" or "Judge" or "Auditor" or "Starspawn" or "Inquisitor" or "Lions" or "Frogs" or "Hawks";
 
     //private static bool IsLegacyModdedFolder(string folderName) => folderName is "Mafia" or "Amnesiac" or "Juggernaut" or "GuardianAngel" or "Survivor";

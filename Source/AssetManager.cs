@@ -213,7 +213,7 @@ public static class AssetManager
 
         try
         {
-            if (IconPacks.TryGetValue(packName, out var exists) && exists != null)
+            if (IconPacks.TryGetValue(packName, out var exists) && exists)
                 exists.Reload();
             else
             {
