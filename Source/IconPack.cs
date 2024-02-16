@@ -159,7 +159,7 @@ public class IconPack
 
         foreach (var style in Folders)
         {
-            if (MentionStyles.ContainsKey(style) || (BaseIcons.TryGetValue(style, out var list) && list.Count == 0) || !BaseIcons.ContainsKey(style))
+            if (MentionStyles.ContainsKey(style) || (BaseIcons.TryGetValue(style, out var list) && list.Count == 0) || !BaseIcons.ContainsKey(style) || IsBTOS2ModdedFolder(style))
                 continue;
 
             try
