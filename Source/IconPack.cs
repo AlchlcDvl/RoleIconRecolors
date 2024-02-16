@@ -208,7 +208,7 @@ public class IconPack
 
             foreach (var style in Folders)
             {
-                if (BTOS2MentionStyles.ContainsKey(style) || (BaseIcons.TryGetValue(style, out var list) && list.Count == 0) || !BaseIcons.ContainsKey(style))
+                if (BTOS2MentionStyles.ContainsKey(style) || (BaseIcons.TryGetValue(style, out var list) && list.Count == 0) || !BaseIcons.ContainsKey(style) || style == "Executioner")
                     continue;
 
                 try
