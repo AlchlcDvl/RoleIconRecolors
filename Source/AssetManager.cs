@@ -239,7 +239,7 @@ public static class AssetManager
     {
         IconPack pack = null;
         TMP_SpriteAsset asset = null;
-        var diagnostic = $"Uh oh, something happened here in AssetManager.ChangeSpriteSheets\nPack Name: {Constants.CurrentPack}\nStyle Name: {Constants.CurrentStyle}";
+        var diagnostic = $"Uh oh, something happened here\nPack Name: {Constants.CurrentPack}\nStyle Name: {Constants.CurrentStyle}\nFaction Override: {Constants.FactionOverride}";
 
         if (!CacheDefaultSpriteSheet.Cache1)
             diagnostic += "\nVanilla Sheet Does Not Exist";
