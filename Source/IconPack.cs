@@ -14,7 +14,7 @@ public class IconPack
 
     private static readonly string[] Folders = { "Regular", "Town", "Coven", "SerialKiller", "Arsonist", "Werewolf", "Shroud", "Apocalypse", "Executioner", "Jester", "Pirate",
         "Doomsayer", "Judge", "Auditor", "Starspawn", "Inquisitor", "Vampire", "CursedSoul", "Jackal", "Lions", "Frogs", "Hawks", "VIP", /*"Mafia", "Amnesiac", "Juggernaut",
-        "GuardianAngel", "Survivor", "PlayerNumbers",*/ "Custom" };
+        "GuardianAngel", "Evils", "PlayerNumbers",*/ "Custom" };
     public static readonly string[] FileTypes = { "png", "jpg" };
 
     public IconPack(string name)
@@ -308,5 +308,5 @@ public class IconPack
 
     private static bool IsBTOS2ModdedFolder(string folderName) => folderName is "Jackal" or "Judge" or "Auditor" or "Starspawn" or "Inquisitor" or "Lions" or "Frogs" or "Hawks";
 
-    //private static bool IsLegacyModdedFolder(string folderName) => folderName is "Mafia" or "Amnesiac" or "Juggernaut" or "GuardianAngel" or "Survivor";
+    //private static bool IsLegacyModdedFolder(string folderName) => folderName is "Mafia" or "Amnesiac" or "Juggernaut" or "GuardianAngel" or "Evils";
 }
