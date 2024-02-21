@@ -28,20 +28,17 @@ public static class Download
         }
 
         Running[packName] = true;
+        var pack = Path.Combine(AssetManager.ModPath, packName);
 
-        if (packName == "Vanilla" && Directory.Exists(AssetManager.VanillaPath))
-            new DirectoryInfo(AssetManager.VanillaPath).GetFiles("*.png").Select(x => x.FullName).Where(x => !x.Contains("RoleIcons") && !x.Contains("PlayerNumbers")).ForEach(File.Delete);
-        else if (packName == "BTOS2" && Directory.Exists(AssetManager.BTOS2Path))
-            new DirectoryInfo(AssetManager.BTOS2Path).GetFiles("*.png").Select(x => x.FullName).Where(x => !x.Contains("RoleIcons")).ForEach(File.Delete);
-        else if (Directory.Exists(Path.Combine(AssetManager.ModPath, packName)))
+        if (Directory.Exists(pack))
         {
-            var pack = new DirectoryInfo(Path.Combine(AssetManager.ModPath, packName)).GetDirectories().Select(x => x.FullName);
+            var packinfo = new DirectoryInfo(Path.Combine(AssetManager.ModPath, packName));
+            var dirs = packinfo.GetDirectories().Select(x => x.FullName);
 
-            foreach (var dir in pack)
-            {
-                if (Directory.Exists(dir))
-                    new DirectoryInfo(dir).GetFiles("*.png").Select(x => x.FullName).ForEach(File.Delete);
-            }
+            foreach (var dir in dirs)
+                new DirectoryInfo(dir).GetFiles("*.png").Select(x => x.FullName).ForEach(File.Delete);
+
+            packinfo.GetFiles("*.png").Select(x => x.FullName).ForEach(File.Delete);
         }
 
         var www = UnityWebRequest.Get($"{REPO}/{packName}.json");
@@ -108,20 +105,16 @@ public class Asset
 
     public string FilePath()
     {
-        if (Pack == "Vanilla")
-            return Path.Combine(AssetManager.VanillaPath, $"{Name}.{FileType}");
-        else if (Pack == "BTOS2")
-            return Path.Combine(AssetManager.BTOS2Path, $"{Name}.{FileType}");
+        if (Pack is "Vanilla" or "BTOS2")
+            return Path.Combine(AssetManager.ModPath, Pack, $"{Name}.{FileType}");
         else
             return Path.Combine(AssetManager.ModPath, Pack, Folder, $"{Name}.{FileType}");
     }
 
     public string DownloadLink()
     {
-        if (Pack == "Vanilla")
-            return $"Vanilla/{Name}.{FileType}";
-        else if (Pack == "BTOS2")
-            return $"BTOS2/{Name}.{FileType}";
+        if (Pack is "Vanilla" or  "BTOS2")
+            return $"{Pack}/{Name}.{FileType}";
         else
             return $"{Pack}/{Folder}/{Name}.{FileType}";
     }

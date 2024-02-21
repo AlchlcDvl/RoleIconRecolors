@@ -475,7 +475,7 @@ public static class CacheDefaultSpriteSheet
 
             if (key is "RoleIcons" or "PlayerNumbers")
             {
-                Utils.DumpSprite(asset.spriteSheet as Texture2D, key, AssetManager.VanillaPath);
+                Utils.DumpSprite(asset.spriteSheet as Texture2D, key);
 
                 if (key == "PlayerNumbers")
                     MaterialReferenceManager.AddSpriteAsset(asset);

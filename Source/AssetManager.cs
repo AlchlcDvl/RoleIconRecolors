@@ -20,8 +20,6 @@ public static class AssetManager
     public static bool SpriteSheetLoaded;
 
     public static string ModPath => Path.Combine(Path.GetDirectoryName(Application.dataPath), "SalemModLoader", "ModFolders", "Recolors");
-    public static string VanillaPath => Path.Combine(ModPath, "Vanilla");
-    public static string BTOS2Path => Path.Combine(ModPath, "BTOS2");
 
     private static readonly string[] Avoid = { "Attributes", "Necronomicon", "Neutral", "NeutralApocalypse", "NeutralEvil", "NeutralKilling", "Town", "TownInvestigative",
         "TownKilling", "TownSupport", "TownProtective", "TownPower", "CovenKilling", "CovenDeception", "CovenUtility", "CovenPower", "Coven", "SlowMode", "FastMode", "AnonVoting",
@@ -75,12 +73,6 @@ public static class AssetManager
         if (!Directory.Exists(ModPath))
             Directory.CreateDirectory(ModPath);
 
-        if (!Directory.Exists(VanillaPath))
-            Directory.CreateDirectory(VanillaPath);
-
-        if (!Directory.Exists(BTOS2Path))
-            Directory.CreateDirectory(BTOS2Path);
-
         Core.GetManifestResourceNames().ForEach(x =>
         {
             if (x.EndsWith(".png"))
@@ -109,7 +101,7 @@ public static class AssetManager
                 };
             }
 
-            Utils.DumpSprite(BTOS2Asset.spriteSheet as Texture2D, "BTOSRoleIcons", BTOS2Path);
+            Utils.DumpSprite(BTOS2Asset.spriteSheet as Texture2D, "BTOSRoleIcons");
         }
 
         TryLoadingSprites(Constants.CurrentPack);
@@ -321,7 +313,8 @@ public static class AssetManager
             readableText.Apply();
             RenderTexture.active = previous;
             RenderTexture.ReleaseTemporary(renderTex);
-            return readableText;
+            readableText.hideFlags |= HideFlags.DontUnloadUnusedAsset;
+            return readableText.DontDestroy();
         }
         catch (Exception e)
         {
@@ -362,7 +355,7 @@ public static class AssetManager
 
             // set spritecharacter name to "Role{number}" so that the game can find correct roles
             VanillaAsset = BuildGlyphs(sprites.ToArray(), textures.ToArray(), "RoleIcons", rolesWithIndexDict);
-            Utils.DumpSprite(VanillaAsset.spriteSheet as Texture2D, "RoleIcons_Modified", VanillaPath);
+            Utils.DumpSprite(VanillaAsset.spriteSheet as Texture2D, "RoleIcons_Modified");
         }
         catch (Exception e)
         {
