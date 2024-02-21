@@ -28,6 +28,8 @@ public class IconPack
 
     public void Debug()
     {
+        Logging.LogMessage($"Debugging {Name}");
+
         BaseIcons.ForEach((x, y) => y.ForEach((a, _) => Logging.LogMessage($"{Name} {a} has a(n) {x} sprite!")));
         Logging.LogMessage($"{Name} {BaseIcons.Count} Base Assets loaded!");
 
