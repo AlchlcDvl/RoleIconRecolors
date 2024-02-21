@@ -36,9 +36,13 @@ public static class Download
             var dirs = packinfo.GetDirectories().Select(x => x.FullName);
 
             foreach (var dir in dirs)
+            {
                 new DirectoryInfo(dir).GetFiles("*.png").Select(x => x.FullName).ForEach(File.Delete);
+                new DirectoryInfo(dir).GetFiles("*.jpg").Select(x => x.FullName).ForEach(File.Delete);
+            }
 
             packinfo.GetFiles("*.png").Select(x => x.FullName).ForEach(File.Delete);
+            packinfo.GetFiles("*.jpg").Select(x => x.FullName).ForEach(File.Delete);
         }
 
         var www = UnityWebRequest.Get($"{REPO}/{packName}.json");
