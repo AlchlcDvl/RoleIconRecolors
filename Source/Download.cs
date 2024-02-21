@@ -109,7 +109,7 @@ public class Asset
 
     public string FilePath()
     {
-        if (Pack is "Vanilla" or "BTOS2")
+        if (Pack is "Vanilla" or "BTOS2" || string.IsNullOrWhiteSpace(Folder) || string.IsNullOrWhiteSpace(Pack))
             return Path.Combine(AssetManager.ModPath, Pack, $"{Name}.{FileType}");
         else
             return Path.Combine(AssetManager.ModPath, Pack, Folder, $"{Name}.{FileType}");
@@ -117,7 +117,7 @@ public class Asset
 
     public string DownloadLink()
     {
-        if (Pack is "Vanilla" or  "BTOS2")
+        if (Pack is "Vanilla" or  "BTOS2" || string.IsNullOrWhiteSpace(Folder) || string.IsNullOrWhiteSpace(Pack))
             return $"{Pack}/{Name}.{FileType}";
         else
             return $"{Pack}/{Folder}/{Name}.{FileType}";
