@@ -32,7 +32,7 @@ public static class Download
 
         if (Directory.Exists(pack))
         {
-            var packinfo = new DirectoryInfo(Path.Combine(AssetManager.ModPath, packName));
+            var packinfo = new DirectoryInfo(pack);
             var dirs = packinfo.GetDirectories().Select(x => x.FullName);
 
             foreach (var dir in dirs)
