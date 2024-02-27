@@ -37,8 +37,9 @@ public static class Download
 
             foreach (var dir in dirs)
             {
-                new DirectoryInfo(dir).GetFiles("*.png").Select(x => x.FullName).ForEach(File.Delete);
-                new DirectoryInfo(dir).GetFiles("*.jpg").Select(x => x.FullName).ForEach(File.Delete);
+                var info = new DirectoryInfo(dir);
+                info.GetFiles("*.png").Select(x => x.FullName).ForEach(File.Delete);
+                info.GetFiles("*.jpg").Select(x => x.FullName).ForEach(File.Delete);
             }
 
             packinfo.GetFiles("*.png").Select(x => x.FullName).ForEach(File.Delete);
