@@ -44,6 +44,8 @@ public static class Download
             packinfo.GetFiles("*.png").Select(x => x.FullName).ForEach(File.Delete);
             packinfo.GetFiles("*.jpg").Select(x => x.FullName).ForEach(File.Delete);
         }
+        else
+            Directory.CreateDirectory(pack);
 
         var www = UnityWebRequest.Get($"{REPO}/{packName}.json");
         yield return www.SendWebRequest();
