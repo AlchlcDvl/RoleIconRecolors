@@ -70,24 +70,4 @@ public static class Constants
             }
         }
     }
-    public static string TTColor
-    {
-        get
-        {
-            if (ModStates.IsLoaded("curtis.colour.swapper"))
-                return ModSettings.GetString("Coven", "curtis.colour.swapper");
-            else
-                return "#B545FF";
-        }
-    }
-    public static string VIPColor
-    {
-        get
-        {
-            if (ModStates.IsLoaded("curtis.colour.swapper"))
-                return ModSettings.GetString("Town", "curtis.colour.swapper");
-            else
-                return "#06E00C";
-        }
-    }
 }

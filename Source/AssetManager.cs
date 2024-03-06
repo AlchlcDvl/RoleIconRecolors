@@ -4,10 +4,9 @@ public static class AssetManager
 {
     private const string Resources = "IconPacks.Resources.";
 
-    public static readonly Dictionary<string, Dictionary<string, List<Sprite>>> GlobalEasterEggs = new();
-
-    public static readonly Dictionary<string, IconPack> IconPacks = new();
-    public static readonly Dictionary<int, Sprite> CacheScrollSprites = new();
+    public static readonly Dictionary<string, Dictionary<string, List<Sprite>>> GlobalEasterEggs = [];
+    public static readonly Dictionary<string, IconPack> IconPacks = [];
+    public static readonly Dictionary<int, Sprite> CacheScrollSprites = [];
 
     public static Sprite Blank;
     public static Sprite Thumbnail;
@@ -21,12 +20,12 @@ public static class AssetManager
 
     public static string ModPath => Path.Combine(Path.GetDirectoryName(Application.dataPath), "SalemModLoader", "ModFolders", "Recolors");
 
-    private static readonly string[] Avoid = { "Attributes", "Necronomicon", "Neutral", "NeutralApocalypse", "NeutralEvil", "NeutralKilling", "Town", "TownInvestigative",
+    private static readonly string[] Avoid = [ "Attributes", "Necronomicon", "Neutral", "NeutralApocalypse", "NeutralEvil", "NeutralKilling", "Town", "TownInvestigative",
         "TownKilling", "TownSupport", "TownProtective", "TownPower", "CovenKilling", "CovenDeception", "CovenUtility", "CovenPower", "Coven", "SlowMode", "FastMode", "AnonVoting",
         "SecretKillers", "HiddenRoles", "OneTrial", "RandomApocalypse", "Any", "RegularCoven", "RegularTown", "NeutralPariah", "NeutralSpecial", "TownTraitor", "PerfectTown", "NecroPass",
-        "Teams", "AnonNames", "WalkingDead", "Hidden", "Stoned"/*, "Mafia", "MafiaDeception", "MafiaKilling", "MafiaUtility", "MafiaPower", "Cleaned", "NeutralChaos"*/ };
+        "Teams", "AnonNames", "WalkingDead", "Hidden", "Stoned"/*, "Mafia", "MafiaDeception", "MafiaKilling", "MafiaUtility", "MafiaPower", "Cleaned", "NeutralChaos"*/ ];
 
-    private static readonly string[] ToRemove = { ".png", ".jpg" };
+    private static readonly string[] ToRemove = [ ".png", ".jpg" ];
 
     private static Assembly Core => typeof(Recolors).Assembly;
 
@@ -269,9 +268,7 @@ public static class AssetManager
                 if (!CacheScrollSprites.ContainsKey(y.id))
                     CacheScrollSprites[y.id] = y.decoration.sprite;
 
-                if (sprite != Blank)
-                    y.decoration.sprite = sprite;
-                else if (CacheScrollSprites.TryGetValue(y.id, out sprite))
+                if (sprite != Blank || CacheScrollSprites.TryGetValue(y.id, out sprite))
                     y.decoration.sprite = sprite;
                 else
                     CacheScrollSprites[y.id] = y.decoration.sprite;
@@ -284,9 +281,7 @@ public static class AssetManager
                 if (!CacheScrollSprites.ContainsKey(y.id))
                     CacheScrollSprites[y.id] = y.decoration.sprite;
 
-                if (sprite != Blank)
-                    y.decoration.sprite = sprite;
-                else if (CacheScrollSprites.TryGetValue(y.id, out sprite))
+                if (sprite != Blank || CacheScrollSprites.TryGetValue(y.id, out sprite))
                     y.decoration.sprite = sprite;
                 else
                     CacheScrollSprites[y.id] = y.decoration.sprite;

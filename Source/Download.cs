@@ -8,8 +8,8 @@ namespace IconPacks;
 public static class Download
 {
     private const string REPO = "https://raw.githubusercontent.com/AlchlcDvl/RoleIconRecolors/main";
-    private static readonly string[] SupportedPacks = { "Vanilla", "BTOS2", "Recolors" };
-    private static readonly Dictionary<string, bool> Running = new();
+    private static readonly string[] SupportedPacks = [ "Vanilla", "BTOS2", "Recolors" ];
+    private static readonly Dictionary<string, bool> Running = [];
 
     public static void DownloadIcons(string packName) => ApplicationController.ApplicationContext.StartCoroutine(CoDownload(packName));
 

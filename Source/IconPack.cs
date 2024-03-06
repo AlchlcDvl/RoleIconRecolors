@@ -1,30 +1,21 @@
 namespace IconPacks;
 
-public class IconPack
+public class IconPack(string name)
 {
-    public Dictionary<string, Dictionary<string, Sprite>> BaseIcons { get; set; }
-    public Dictionary<string, Dictionary<string, List<Sprite>>> EasterEggs { get; set; }
+    public Dictionary<string, Dictionary<string, Sprite>> BaseIcons { get; set; } = [];
+    public Dictionary<string, Dictionary<string, List<Sprite>>> EasterEggs { get; set; } = [];
 
-    public Dictionary<string, TMP_SpriteAsset> MentionStyles { get; set; }
-    public Dictionary<string, TMP_SpriteAsset> BTOS2MentionStyles { get; set; }
+    public Dictionary<string, TMP_SpriteAsset> MentionStyles { get; set; } = [];
+    public Dictionary<string, TMP_SpriteAsset> BTOS2MentionStyles { get; set; } = [];
 
-    public string Name { get; }
+    public string Name { get; } = name;
 
     private string PackPath => Path.Combine(AssetManager.ModPath, Name);
 
-    private static readonly string[] Folders = { "Regular", "Town", "Coven", "SerialKiller", "Arsonist", "Werewolf", "Shroud", "Apocalypse", "Executioner", "Jester", "Pirate",
+    private static readonly string[] Folders = [ "Regular", "Town", "Coven", "SerialKiller", "Arsonist", "Werewolf", "Shroud", "Apocalypse", "Executioner", "Jester", "Pirate",
         "Doomsayer", "Judge", "Auditor", "Starspawn", "Inquisitor", "Vampire", "CursedSoul", "Jackal", "Lions", "Frogs", "Hawks", "VIP", /*"Mafia", "Amnesiac", "Juggernaut",
-        "GuardianAngel", "Evils", "PlayerNumbers",*/ "Custom" };
+        "GuardianAngel", "Evils", "PlayerNumbers",*/ "Custom" ];
     public static readonly string[] FileTypes = { "png", "jpg" };
-
-    public IconPack(string name)
-    {
-        Name = name;
-        BaseIcons = new();
-        EasterEggs = new();
-        MentionStyles = new();
-        BTOS2MentionStyles = new();
-    }
 
     public void Debug()
     {

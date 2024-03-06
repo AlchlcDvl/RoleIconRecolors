@@ -86,7 +86,7 @@ public class Recolors
         }
         catch
         {
-            return new() { "Vanilla" };
+            return [ "Vanilla" ];
         }
     }
 
@@ -110,7 +110,7 @@ public class Recolors
         }
         catch
         {
-            return new() { "Vanilla" };
+            return [ "Vanilla" ];
         }
     }
 
@@ -133,7 +133,7 @@ public class Recolors
         }
         catch
         {
-            return new() { "None" };
+            return [ "None" ];
         }
     }
 }
