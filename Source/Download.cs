@@ -80,6 +80,9 @@ public static class Download
                 continue;
             }
 
+            if (!Directory.Exists(asset.FolderPath()))
+                Directory.CreateDirectory(asset.FolderPath());
+
             var persistTask = File.WriteAllBytesAsync(asset.FilePath(), www2.downloadHandler.data);
 
             while (!persistTask.IsCompleted)
@@ -116,6 +119,14 @@ public class Asset
             return Path.Combine(AssetManager.ModPath, Pack, $"{Name}.{FileType}");
         else
             return Path.Combine(AssetManager.ModPath, Pack, Folder, $"{Name}.{FileType}");
+    }
+
+    public string FolderPath()
+    {
+        if (Pack is "Vanilla" or "BTOS2" || string.IsNullOrWhiteSpace(Folder) || string.IsNullOrWhiteSpace(Pack))
+            return Path.Combine(AssetManager.ModPath, Pack);
+        else
+            return Path.Combine(AssetManager.ModPath, Pack, Folder);
     }
 
     public string DownloadLink()

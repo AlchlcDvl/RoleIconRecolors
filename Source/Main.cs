@@ -59,7 +59,7 @@ public class Recolors
     {
         Name = "Download Recommended Icon Packs",
         Description = "Downloads icon packs recommended by the mod creator.\nVanilla - Icons used in the vanilla game to be used as a reference for icon packs.\nBTOS2 - Icons used in BTOS2 games to be used as a reference for icons specifically set for BTOS2.\nRecolors - Art by MysticMismagius, Haapsalu, faketier, splarg, Det, Wevit and Nidoskull.",
-        Options = new() { "None", "Vanilla", "BTOS2", "Recolors" },
+        Options = [ "None", "Vanilla", "BTOS2", "Recolors" ],
         OnChanged = Download.DownloadIcons
     };
 

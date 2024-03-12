@@ -15,7 +15,8 @@ public class IconPack(string name)
     private static readonly string[] Folders = [ "Regular", "Town", "Coven", "SerialKiller", "Arsonist", "Werewolf", "Shroud", "Apocalypse", "Executioner", "Jester", "Pirate",
         "Doomsayer", "Judge", "Auditor", "Starspawn", "Inquisitor", "Vampire", "CursedSoul", "Jackal", "Lions", "Frogs", "Hawks", "VIP", /*"Mafia", "Amnesiac", "Juggernaut",
         "GuardianAngel", "Evils", "PlayerNumbers",*/ "Custom" ];
-    public static readonly string[] FileTypes = { "png", "jpg" };
+    private static readonly string[] Mods = [ "Vanilla", "BTOS2"/*, "Legacy"*/ ];
+    public static readonly string[] FileTypes = [ "png", "jpg" ];
 
     public void Debug()
     {
@@ -75,10 +76,10 @@ public class IconPack(string name)
                     continue;
 
                 if (!AssetManager.GlobalEasterEggs.ContainsKey(name))
-                    AssetManager.GlobalEasterEggs[name] = new();
+                    AssetManager.GlobalEasterEggs[name] = [];
 
-                BaseIcons[name] = new();
-                EasterEggs[name] = new();
+                BaseIcons[name] = [];
+                EasterEggs[name] = [];
                 var baseName = name + (name is "Custom" or "PlayerNumbers" ? "" : "Base");
                 var baseFolder = Path.Combine(PackPath, baseName);
 
@@ -91,10 +92,8 @@ public class IconPack(string name)
                             var filePath = Path.Combine(baseFolder, $"{file.SanitisePath()}.{type}");
                             var sprite = AssetManager.LoadDiskSprite(filePath.SanitisePath(), baseName, Name, type);
 
-                            if (sprite == null)
-                                continue;
-
-                            BaseIcons[name][filePath.SanitisePath(true)] = sprite;
+                            if (sprite)
+                                BaseIcons[name][filePath.SanitisePath(true)] = sprite;
                         }
                     }
                 }
@@ -276,7 +275,7 @@ public class IconPack(string name)
                         AssetManager.GlobalEasterEggs["Regular"].TryGetValue(name, out sprites);
                 }
 
-                sprites ??= new();
+                sprites ??= [];
             }
 
             if (sprites.Count == 0)
@@ -287,7 +286,7 @@ public class IconPack(string name)
                         EasterEggs["Regular"].TryGetValue(name, out sprites);
                 }
 
-                sprites ??= new();
+                sprites ??= [];
             }
 
             if (sprites.Count > 0)

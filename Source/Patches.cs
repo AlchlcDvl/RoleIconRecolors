@@ -458,12 +458,12 @@ public static class CacheDefaultSpriteSheet
     public static TMP_SpriteAsset Cache1;
     public static TMP_SpriteAsset Cache2;
 
-    private static readonly string[] Assets = [ "Cast", "LobbyIcons", "MiscIcons", "PlayerNumbers", "RoleIcons", "SalemTmpIcons", "TrialReportIcons" ];
+    private static readonly List<string> Assets = [ "Cast", "LobbyIcons", "MiscIcons", "PlayerNumbers", "RoleIcons", "SalemTmpIcons", "TrialReportIcons" ];
 
     public static bool Prefix(HomeInterfaceService __instance)
     {
         Logging.LogMessage("Patching HomeInterfaceService.Init");
-        Assets.ToList().ForEach(key =>
+        Assets.ForEach(key =>
         {
             Debug.Log($"HomeInterfaceService:: Add Sprite Asset {key}");
             var asset = __instance.LoadResource<TMP_SpriteAsset>($"TmpSpriteAssets/{key}.asset");
