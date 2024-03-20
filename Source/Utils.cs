@@ -268,6 +268,9 @@ public static class Utils
         FactionTypePlus.AUDITOR => "Auditor",
         FactionTypePlus.STARSPAWN => "Starspawn",
         FactionTypePlus.INQUISITOR => "Inquisitor",
+        /*FactionTypePlus.EGOIST => "Egoist",
+        FactionTypePlus.COMPLIANT => "Compliant",
+        FactionTypePlus.PANDORA => "Pandora",*/
         _ => "Blank"
     };
 

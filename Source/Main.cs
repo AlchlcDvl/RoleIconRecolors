@@ -58,7 +58,7 @@ public class Recolors
     public ModSettings.DropdownSetting DownloadIcons => new()
     {
         Name = "Download Recommended Icon Packs",
-        Description = "Downloads icon packs recommended by the mod creator.\nVanilla - Icons used in the vanilla game to be used as a reference for icon packs.\nBTOS2 - Icons used in BTOS2 games to be used as a reference for icons specifically set for BTOS2.\nRecolors - Art by MysticMismagius, Haapsalu, faketier, splarg, Det, Wevit and Nidoskull.",
+        Description = "Downloads icon packs recommended by the mod creator.\nVanilla - Icons used in the vanilla game to be used as a reference for icon packs.\nBTOS2 - Icons used in BTOS2 games to be used as a reference for icons specifically set for BTOS2.\nRecolors - Art by MysticMismagius, Haapsalu, faketier, splarg, Det, Wevit, Nova and Nidoskull.",
         Options = [ "None", "Vanilla", "BTOS2", "Recolors" ],
         OnChanged = Download.DownloadIcons
     };

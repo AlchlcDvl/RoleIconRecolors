@@ -12,9 +12,9 @@ public class IconPack(string name)
 
     private string PackPath => Path.Combine(AssetManager.ModPath, Name);
 
-    private static readonly string[] Folders = [ "Regular", "Town", "Coven", "SerialKiller", "Arsonist", "Werewolf", "Shroud", "Apocalypse", "Executioner", "Jester", "Pirate",
-        "Doomsayer", "Judge", "Auditor", "Starspawn", "Inquisitor", "Vampire", "CursedSoul", "Jackal", "Lions", "Frogs", "Hawks", "VIP", /*"Mafia", "Amnesiac", "Juggernaut",
-        "GuardianAngel", "Evils", "PlayerNumbers",*/ "Custom" ];
+    private static readonly string[] Folders = [ "Regular", "Town", "Coven", "SerialKiller", "Arsonist", "Werewolf", "Shroud", "Apocalypse", "Executioner", "Jester", "Pirate", "Doomsayer",
+        "Judge", "Auditor", "Starspawn", "Inquisitor", "Vampire", "CursedSoul", "Jackal", "Lions", "Frogs", "Hawks", "VIP", "Pandora", "Compliant", "Egoist", /*"Mafia", "Amnesiac",
+        "Juggernaut", "GuardianAngel", "Evils", "PlayerNumbers",*/ "Custom" ];
     private static readonly string[] Mods = [ "Vanilla", "BTOS2"/*, "Legacy"*/ ];
     public static readonly string[] FileTypes = [ "png", "jpg" ];
 
