@@ -235,9 +235,12 @@ public static class Utils
 
     public static string FactionName(FactionType faction, bool btos = false)
     {
+        if (Constants.FactionOverridden)
+            return Constants.FactionOverride;
+
         try
         {
-            return Constants.FactionOverridden ? Constants.FactionOverride : (Constants.IsBTOS2 || btos ? BTOSFactionName(faction) : VanillaFactionName(faction));
+            return Constants.IsBTOS2 || btos ? BTOSFactionName(faction) : VanillaFactionName(faction);
         }
         catch
         {
