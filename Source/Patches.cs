@@ -474,12 +474,7 @@ public static class CacheDefaultSpriteSheet
                 Cache2 = asset;
 
             if (key is "RoleIcons" or "PlayerNumbers")
-            {
-                Utils.DumpSprite(asset.spriteSheet as Texture2D, key);
-
-                if (key == "PlayerNumbers")
-                    MaterialReferenceManager.AddSpriteAsset(asset);
-            }
+                Utils.DumpSprite(asset.spriteSheet as Texture2D, key, Path.Combine(AssetManager.ModPath, "Vanilla"));
             else
                 MaterialReferenceManager.AddSpriteAsset(asset);
         });
@@ -504,24 +499,14 @@ public static class PatchAttackDefense
         var icon1 = __instance.transform.Find("AttackIcon").Find("Icon").GetComponent<Image>();
 
         if (icon1)
-        {
-            AssetManager.Attack ??= icon1.sprite;
             icon1.sprite = attack.IsValid() ? attack : AssetManager.Attack;
-        }
 
         var defLevel = Constants.IsBTOS2 ? (__instance.myData.IsEthereal() ? 4 : data.defense) : data.defense;
         var defense = AssetManager.GetSprite($"Defense{Utils.GetLevel(defLevel, false)}");
         var icon2 = __instance.transform.Find("DefenseIcon").Find("Icon").GetComponent<Image>();
 
         if (icon2)
-        {
-            if (Constants.IsBTOS2 && __instance.myData.IsEthereal())
-                AssetManager.Ethereal ??= icon2.sprite;
-            else
-                AssetManager.Defense ??= icon2.sprite;
-
-            icon2.sprite = defense.IsValid() ? defense : AssetManager.Defense;
-        }
+            icon2.sprite = defense.IsValid() ? defense : (Constants.IsBTOS2 && __instance.myData.IsEthereal() ? AssetManager.Ethereal : AssetManager.Defense);
     }
 }
 
@@ -538,24 +523,14 @@ public static class PatchAttackDefensePopup
         var icon1 = __instance.transform.Find("AttackIcon").Find("Icon").GetComponent<Image>();
 
         if (icon1)
-        {
-            AssetManager.Attack ??= icon1.sprite;
             icon1.sprite = attack.IsValid() ? attack : AssetManager.Attack;
-        }
 
         var defLevel = Constants.IsBTOS2 ? (__instance.myData.IsEthereal() ? 4 : data.defense) : data.defense;
         var defense = AssetManager.GetSprite($"Defense{Utils.GetLevel(defLevel, false)}");
         var icon2 = __instance.transform.Find("DefenseIcon").Find("Icon").GetComponent<Image>();
 
         if (icon2)
-        {
-            if (Constants.IsBTOS2 && __instance.myData.IsEthereal())
-                AssetManager.Ethereal ??= icon2.sprite;
-            else
-                AssetManager.Defense ??= icon2.sprite;
-
-            icon2.sprite = defense.IsValid() ? defense : AssetManager.Defense;
-        }
+            icon2.sprite = defense.IsValid() ? defense : (Constants.IsBTOS2 && __instance.myData.IsEthereal() ? AssetManager.Ethereal : AssetManager.Defense);
     }
 }
 
@@ -595,7 +570,7 @@ public static class RoleMenuPopupControllerPatch
 }
 
 [HarmonyPatch(typeof(DownloadContributorTags), nameof(DownloadContributorTags.AddTMPSprites))]
-[HarmonyPriority(Priority.Low)]
+[HarmonyPriority(Priority.VeryLow)]
 public static class ApplicationControllerPatch
 {
     public static void Postfix()
@@ -611,18 +586,20 @@ public static class ApplicationControllerPatch
                         return (pack.BTOS2MentionStyles.TryGetValue(Constants.CurrentStyle, out var style) ? style : AssetManager.BTOS2Asset) ?? AssetManager.BTOS2Asset;
                     else if (str == "RoleIcons")
                     {
-                        return ((pack.MentionStyles.TryGetValue(Constants.CurrentStyle, out var style) ? style : AssetManager.VanillaAsset) ?? AssetManager.VanillaAsset) ??
+                        return ((pack.MentionStyles.TryGetValue(Constants.CurrentStyle, out var style) ? style : AssetManager.VanillaAsset1) ?? AssetManager.VanillaAsset1) ??
                             CacheDefaultSpriteSheet.Cache1;
                     }
+                    else if (str == "PlayerNumbers")
+                        return (pack.PlayerNumbers ?? AssetManager.VanillaAsset2) ?? CacheDefaultSpriteSheet.Cache2;
                     else
                         return oldSpriteAssetRequest(_, str);
                 }
                 else if (str == "BTOSRoleIcons")
                     return AssetManager.BTOS2Asset;
                 else if (str == "RoleIcons")
-                    return AssetManager.VanillaAsset ?? CacheDefaultSpriteSheet.Cache1;
-                /*else if (str == "PlayerNumbers")
-                    return CacheDefaultSpriteSheet.Cache2;*/
+                    return AssetManager.VanillaAsset1 ?? CacheDefaultSpriteSheet.Cache1;
+                else if (str == "PlayerNumbers")
+                    return AssetManager.VanillaAsset2 ?? CacheDefaultSpriteSheet.Cache2;
                 else
                     return oldSpriteAssetRequest(_, str);
             }
@@ -633,9 +610,9 @@ public static class ApplicationControllerPatch
                 if (str == "BTOSRoleIcons")
                     return AssetManager.BTOS2Asset;
                 else if (str == "RoleIcons")
-                    return AssetManager.VanillaAsset ?? CacheDefaultSpriteSheet.Cache1;
-                /*else if (str == "PlayerNumbers")
-                    return CacheDefaultSpriteSheet.Cache2;*/
+                    return AssetManager.VanillaAsset1 ?? CacheDefaultSpriteSheet.Cache1;
+                else if (str == "PlayerNumbers")
+                    return AssetManager.VanillaAsset2 ?? CacheDefaultSpriteSheet.Cache2;
                 else
                     return oldSpriteAssetRequest(_, str);
             }

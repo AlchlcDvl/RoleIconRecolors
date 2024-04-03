@@ -368,3 +368,4 @@ FodyWeavers.xsd
 TODO.txt
 
 *.exe
+Source/Lib/Legacy.dll

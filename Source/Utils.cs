@@ -1,3 +1,5 @@
+using LegacyClient.Info;
+
 namespace IconPacks;
 
 public static class Utils
@@ -6,26 +8,30 @@ public static class Utils
         "Bodyguard_Ability", "Cleric_Ability", "Coroner_Ability", "CovenLeader_Ability", "Crusader_Ability", "CursedSoul_Ability", "Death_Ability", "Dreamweaver_Ability", "Enchanter_Ability",
         "Executioner_Ability", "Famine_Ability", "HexMaster_Ability", "Illusionist_Ability", "Investigator_Ability", "Jailor_Ability","Jailor_Ability_2", "Jester_Ability", "Jinx_Ability",
         "Lookout_Ability", "Medusa_Ability", "Monarch_Ability", "Necromancer_Ability_1", "Necromancer_Ability_2", "Pestilence_Ability", "Plaguebearer_Ability", "Poisoner_Ability",
-        "PotionMaster_Ability_1", "PotionMaster_Ability_2", "Psychic_Ability", "Retributionist_Ability_1", "Retributionist_Ability_2", "Seer_Ability_1", "Seer_Ability_2",
-        "SerialKiller_Ability", "Sheriff_Ability", "Shroud_Ability", "SoulCollector_Ability", "Spy_Ability", "TavernKeeper_Ability", "Tracker_Ability", "Trapper_Ability",
+        "PotionMaster_Ability_1", "PotionMaster_Ability_2", "Psychic_Ability", "Retributionist_Ability_1", "Retributionist_Ability_2", "Seer_Ability_1", "Seer_Ability_2", "Shroud_Special",
+        "SerialKiller_Ability", "Sheriff_Ability", "Shroud_Ability", "SoulCollector_Ability", "Spy_Ability", "TavernKeeper_Ability", "Tracker_Ability", "Trapper_Ability", "Oracle_Special",
         "Trickster_Ability", "Vampire_Ability", "Vigilante_Ability", "VoodooMaster_Ability", "War_Ability_1", "War_Ability_2", "Werewolf_Ability_1", "Werewolf_Ability_2", "Wildling_Ability",
         "Witch_Ability_1", "Witch_Ability_2", "Jailor_Special", "Cleric_Special", "Mayor_Special", "Jester_Special", "Executioner_Special", "Bodyguard_Special", "Veteran_Special",
         "Trapper_Special", "Pirate_Special", "Admirer_Special", "Arsonist_Special", "Marshal_Special", "Socialite_Special", "Poisoner_Special", "CovenLeader_Special", "Coroner_Special",
-        "SerialKiller_Special", "Shroud_Special", "Starspawn_Ability", "Banshee_Ability", "Judge_Ability", "Jackal_Ability", "Auditor_Ability", "Inquisitor_Ability",
-        "Judge_Special", "Auditor_Special", "Inquisitor_Special", "Starspawn_Special", "Oracle_Special" ];
-
-    private static readonly Role[] ExceptRoles = [ Role.NONE, Role.ROLE_COUNT, Role.UNKNOWN, Role.HANGMAN ];
+        "SerialKiller_Special", "Starspawn_Ability", "Banshee_Ability", "Judge_Ability", "Jackal_Ability", "Auditor_Ability", "Inquisitor_Ability", "Judge_Special", "Auditor_Special",
+        "Inquisitor_Special", "Starspawn_Special" ];
 
     //List of roles modified by Dum's mod
     private static readonly Role[] ChangedByToS1UI = [ Role.JAILOR, Role.CLERIC, Role.MAYOR, Role.JESTER, Role.EXECUTIONER, Role.BODYGUARD, Role.VETERAN, Role.TRAPPER, Role.PIRATE,
         Role.ADMIRER, Role.ARSONIST, Role.MARSHAL, Role.SOCIALITE, Role.POISONER, Role.COVENLEADER, Role.CORONER, Role.SERIALKILLER, Role.SHROUD, Role.ROLE_COUNT, (Role)57, (Role)58,
         (Role)59, (Role)60, (Role)61 ];
 
-    public static string RoleName(Role role, bool btos = false)
+    public static string RoleName(Role role, ModType mod = ModType.None)
     {
         try
         {
-            return Constants.IsBTOS2 || btos ? BTOSRoleName(role) : VanillaRoleName(role);
+            return mod switch
+            {
+                ModType.Vanilla => VanillaRoleName(role),
+                ModType.BTOS2 => BTOSRoleName(role),
+                ModType.Legacy => LegacyRoleName(role),
+                _ => Constants.IsBTOS2 ? BTOSRoleName(role) : (Constants.IsLegacy ? LegacyRoleName(role) : VanillaRoleName(role)),
+            };
         }
         catch
         {
@@ -141,6 +147,132 @@ public static class Utils
         _ => "Blank"
     };
 
+    private static string LegacyRoleName(Role role) => role switch
+    {
+        LegacyRole.Admirer => "Admirer",
+        LegacyRole.Amnesiac => "Amnesiac",
+        LegacyRole.Bodyguard => "Bodyguard",
+        LegacyRole.Cleric => "Cleric",
+        LegacyRole.Coroner => "Coroner",
+        LegacyRole.Crusader => "Crusader",
+        LegacyRole.Deputy => "Deputy",
+        LegacyRole.Investigator => "Investigator",
+        LegacyRole.Jailor => "Jailor",
+        LegacyRole.Lookout => "Lookout",
+        LegacyRole.Mayor => "Mayor",
+        LegacyRole.Monarch => "Monarch",
+        LegacyRole.Prosecutor => "Prosecutor",
+        LegacyRole.Psychic => "Psychic",
+        LegacyRole.Retributionist => "Retributionist",
+        LegacyRole.Seer => "Seer",
+        LegacyRole.Sheriff => "Sheriff",
+        LegacyRole.Spy => "Spy",
+        LegacyRole.TavernKeeper => "TavernKeeper",
+        LegacyRole.Tracker => "Tracker",
+        LegacyRole.Trapper => "Trapper",
+        LegacyRole.Trickster => "Trickster",
+        LegacyRole.Veteran => "Veteran",
+        LegacyRole.Vigilante => "Vigilante",
+        LegacyRole.Conjurer => "Conjurer",
+        LegacyRole.CovenLeader => "CovenLeader",
+        LegacyRole.Dreamweaver => "Dreamweaver",
+        LegacyRole.Enchanter => "Enchanter",
+        LegacyRole.HexMaster => "HexMaster",
+        LegacyRole.Illusionist => "Illusionist",
+        LegacyRole.Jinx => "Jinx",
+        LegacyRole.Medusa => "Medusa",
+        LegacyRole.Necromancer => "Necromancer",
+        LegacyRole.Poisoner => "Poisoner",
+        LegacyRole.PotionMaster => "PotionMaster",
+        LegacyRole.Ritualist => "Ritualist",
+        LegacyRole.VoodooMaster => "VoodooMaster",
+        LegacyRole.Wildling => "Wildling",
+        LegacyRole.Witch => "Witch",
+        LegacyRole.Arsonist => "Arsonist",
+        LegacyRole.Baker => "Baker",
+        LegacyRole.Berserker => "Berserker",
+        LegacyRole.Doomsayer => "Doomsayer",
+        LegacyRole.Executioner => "Executioner",
+        LegacyRole.Jester => "Jester",
+        LegacyRole.Pirate => "Pirate",
+        LegacyRole.Plaguebearer => "Plaguebearer",
+        LegacyRole.SerialKiller => "SerialKiller",
+        LegacyRole.Shroud => "Shroud",
+        LegacyRole.Reaper => "Reaper",
+        LegacyRole.Werewolf => "Werewolf",
+        LegacyRole.Vampire => "Vampire",
+        LegacyRole.CursedSoul => "CursedSoul",
+        LegacyRole.Socialite => "Socialite",
+        LegacyRole.Marshal => "Marshal",
+        LegacyRole.Famine => "Famine",
+        LegacyRole.War => "War",
+        LegacyRole.Pestilence => "Pestilence",
+        LegacyRole.Death => "Death",
+        LegacyRole.Medium => "Medium",
+        LegacyRole.Saint => "Saint",
+        LegacyRole.Transporter => "Transporter",
+        LegacyRole.Ambusher => "Ambusher",
+        LegacyRole.Assassin => "Assassin",
+        LegacyRole.Blackmailer => "Blackmailer",
+        LegacyRole.Consigliere => "Consigliere",
+        LegacyRole.Consort => "Consort",
+        LegacyRole.Disguiser => "Disguiser",
+        LegacyRole.Framer => "Framer",
+        LegacyRole.Forger => "Forger",
+        LegacyRole.Godfather => "Godfather",
+        LegacyRole.Hypnotist => "Hypnotist",
+        LegacyRole.Janitor => "Janitor",
+        LegacyRole.Mafioso => "Mafioso",
+        LegacyRole.Wraith => "Wraith",
+        LegacyRole.GuardianAngel => "GuardianAngel",
+        LegacyRole.Juggernaut => "Juggernaut",
+        LegacyRole.RandomTown => "RandomTown",
+        LegacyRole.TownInvestigative => "TownInvestigative",
+        LegacyRole.TownProtective => "TownProtective",
+        LegacyRole.TownKilling => "TownKilling",
+        LegacyRole.TownSupport => "TownSupport",
+        LegacyRole.TownPower => "TownPower",
+        LegacyRole.RandomCoven => "RandomCoven",
+        LegacyRole.CovenKilling => "CovenKilling",
+        LegacyRole.CovenUtility => "CovenUtility",
+        LegacyRole.CovenDeception => "CovenDeception",
+        LegacyRole.CovenPower => "CovenPower",
+        LegacyRole.RandomNeutral => "RandomNeutral",
+        LegacyRole.NeutralKilling => "NeutralKilling",
+        LegacyRole.NeutralEvil => "NeutralEvil",
+        LegacyRole.NeutralApocalypse => "NeutralApocalypse",
+        LegacyRole.NeutralChaos => "NeutralChaos",
+        LegacyRole.RandomMafia => "RandomMafia",
+        LegacyRole.MafiaDeception => "MafiaDeception",
+        LegacyRole.MafiaKilling => "MafiaKilling",
+        LegacyRole.MafiaPower => "MafiaPower",
+        LegacyRole.MafiaUtility => "MafiaUtility",
+        LegacyRole.AnyEvil => "AnyEvil",
+        LegacyRole.FactionedEvil => "FactionedEvil",
+        LegacyRole.NonTown => "NonTown",
+        LegacyRole.NonCoven => "NonCoven",
+        LegacyRole.NonMafia => "NonMafia",
+        LegacyRole.NonNeutral => "NonNeutral",
+        LegacyRole.Any => "Any",
+        LegacyRole.TrueAny => "TrueAny",
+        LegacyRole.CovenTT => "CovenTownTraitor",
+        LegacyRole.MafiaTT => "MafiaTownTraitor",
+        LegacyRole.GhostTown => "GhostTown",
+        LegacyRole.PerfectTown => "PerfectTown",
+        LegacyRole.SlowMode => "SlowMode",
+        LegacyRole.FastMode => "FastMode",
+        LegacyRole.AnonVotes => "AnonVotes",
+        LegacyRole.SecretKillers => "SecretKillers",
+        LegacyRole.HiddenRoles => "HiddenRoles",
+        LegacyRole.OneTrial => "OneTrial",
+        LegacyRole.TownVEvils => "TownVEvils",
+        LegacyRole.Lovers => "Lovers",
+        LegacyRole.Hidden => "Hidden",
+        LegacyRole.Cleaned => "Cleaned",
+        LegacyRole.Stoned => "Stoned",
+        _ => "Blank"
+    };
+
     private static string VanillaRoleName(Role role) => role switch
     {
         Role.ADMIRER => "Admirer",
@@ -233,14 +365,20 @@ public static class Utils
         _ => "Blank"
     };
 
-    public static string FactionName(FactionType faction, bool btos = false)
+    public static string FactionName(FactionType faction, ModType mod = ModType.None)
     {
         if (Constants.FactionOverridden)
             return Constants.FactionOverride;
 
         try
         {
-            return Constants.IsBTOS2 || btos ? BTOSFactionName(faction) : VanillaFactionName(faction);
+            return mod switch
+            {
+                ModType.Vanilla => VanillaFactionName(faction),
+                ModType.BTOS2 => BTOSFactionName(faction),
+                ModType.Legacy => LegacyFactionName(faction),
+                _ => Constants.IsBTOS2 ? BTOSFactionName(faction) : (Constants.IsLegacy ? LegacyFactionName(faction) : VanillaFactionName(faction)),
+            };
         }
         catch
         {
@@ -274,6 +412,29 @@ public static class Utils
         /*FactionTypePlus.EGOIST => "Egoist",
         FactionTypePlus.COMPLIANT => "Compliant",
         FactionTypePlus.PANDORA => "Pandora",*/
+        _ => "Blank"
+    };
+
+    private static string LegacyFactionName(FactionType faction) => faction switch
+    {
+        LegacyFactionType.Amnesiac => "Amnesiac",
+        LegacyFactionType.Town => "Town",
+        LegacyFactionType.Coven => "Coven",
+        LegacyFactionType.Mafia => "Mafia",
+        LegacyFactionType.SerialKiller => "SerialKiller",
+        LegacyFactionType.Arsonist => "Arsonist",
+        LegacyFactionType.Werewolf => "Werewolf",
+        LegacyFactionType.Shroud => "Shroud",
+        LegacyFactionType.Apocalypse => "Apocalypse",
+        LegacyFactionType.Executioner => "Executioner",
+        LegacyFactionType.Jester => "Jester",
+        LegacyFactionType.Pirate => "Pirate",
+        LegacyFactionType.Doomsayer => "Doomsayer",
+        LegacyFactionType.Vampire => "Vampire",
+        LegacyFactionType.CursedSoul => "CursedSoul",
+        LegacyFactionType.Juggernaut => "Juggernaut",
+        LegacyFactionType.GuardianAngel => "GuardianAngel",
+        LegacyFactionType.Evils => "Evils",
         _ => "Blank"
     };
 
@@ -336,20 +497,39 @@ public static class Utils
 
     public static bool Skippable(string name) => SkippableNames.Contains(name);
 
-    public static (Dictionary<string, string>, Dictionary<string, int>) Filtered(bool vanilla = true)
+    public static (Dictionary<string, string>, Dictionary<string, int>) Filtered(ModType mod = ModType.Vanilla)
     {
-        // these roles dont have sprites so just ignore them
-        var roles = !vanilla ? typeof(RolePlus)
-            .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)
-            .Where(fi => fi.IsLiteral && !fi.IsInitOnly && fi.FieldType == typeof(Role))
-            .Select(x => (Role)x.GetRawConstantValue())
-            .Where(x => x is not (RolePlus.NONE or Role.HANGMAN or RolePlus.UNKNOWN or RolePlus.ROLE_COUNT)) :
-            ((Role[])Enum.GetValues(typeof(Role))).Except(ExceptRoles);
+        var roles = new List<Role>();
 
-        // map all roles to (role name, role number) so we can make a dict
+        if (mod == ModType.BTOS2)
+        {
+            roles.AddRange(typeof(RolePlus)
+                .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)
+                .Where(fi => fi.IsLiteral && !fi.IsInitOnly && fi.FieldType == typeof(Role))
+                .Select(x => (Role)x.GetRawConstantValue())
+                .Where(x => x is not (RolePlus.NONE or Role.HANGMAN or RolePlus.UNKNOWN or RolePlus.ROLE_COUNT)));
+        }
+        else if (mod == ModType.Legacy)
+        {
+            roles.AddRange(typeof(LegacyRole)
+                .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)
+                .Where(fi => fi.IsLiteral && !fi.IsInitOnly && fi.FieldType == typeof(Role))
+                .Select(x => (Role)x.GetRawConstantValue())
+                .Where(x => x is not (LegacyRole.None or LegacyRole.Hangman or LegacyRole.Unknown or LegacyRole.RoleCount)));
+        }
+        else if (mod == ModType.Vanilla)
+        {
+            roles.AddRange(((Role[])Enum
+                .GetValues(typeof(Role)))
+                .Where(x => x is not (Role.NONE or Role.ROLE_COUNT or Role.UNKNOWN or Role.HANGMAN)));
+        }
+        else
+        {
+            Logging.LogError($"Invalid mod type was used: {(int)mod}");
+            return ([], []);
+        }
+
         var rolesWithIndex = roles.Select(role => (role.ToString().ToLower(), (int)role)).ToDictionary(rolesSelect => rolesSelect.Item1.ToLower(), rolesSelect => rolesSelect.Item2);
-
-        // dict allows us to find dict[rolename.tolower] and get Role{number} for later use in spritecharacters
         return (rolesWithIndex.ToDictionary(rolesSelect => rolesSelect.Key.ToLower(), rolesSelect => $"Role{rolesSelect.Value}"), rolesWithIndex);
     }
 
@@ -381,4 +561,37 @@ public static class Utils
     private static bool IsTransformedApocVanilla(this Role role) => role is Role.DEATH or Role.FAMINE or Role.WAR or Role.PESTILENCE;
 
     public static bool IsValid(this Sprite sprite) => sprite && sprite != AssetManager.Blank;
+
+    public static string EffectName(EffectType effect) => effect switch
+    {
+        EffectType.EXECUTIONER_TARGET => "ExeTarget",
+        EffectType.HEXED => "Hexed",
+        EffectType.KNIGHTED => "Knighted",
+        EffectType.REVEALED_MAYOR => "RevealedMayor",
+        EffectType.DISCONNECTED => "Disconnected",
+        EffectType.CONNECTING => "Connecting",
+        EffectType.LOVER => "Lover",
+        EffectType.DOUSED => "Doused",
+        EffectType.PLAGUED => "Plagued",
+        EffectType.NECRONOMICON => "Necronomicon",
+        EffectType.TRAPPED => "Trapped",
+        EffectType.BREAD => "Bread",
+        EffectType.HANGOVER => "Hangover",
+        EffectType.VOODOOED => "Silenced",
+        EffectType.DREAMWOVE => "Dreamwoven",
+        EffectType.INSANE => "Insane",
+        EffectType.VIP => "VIP",
+        EffectType.BUG => "Bugged",
+        EffectType.SCENT_TRACK => "Tracked",
+        EffectType.PESTILENCE => "Pestilence",
+        EffectType.REVEALED_MARSHAL => "RevealedMarshal",
+        (EffectType)100 => Constants.IsBTOS2 ? "Recruit" : (Constants.IsLegacy ? "CovenTownTraitor" : "Blank"),
+        (EffectType)101 => Constants.IsBTOS2 ? "Deafened" : (Constants.IsLegacy ? "MafiaTownTraitor": "Blank"),
+        (EffectType)102 => Constants.IsBTOS2 ? "CovenTownTraitor" : (Constants.IsLegacy ? "Transported": "Blank"),
+        (EffectType)103 => Constants.IsBTOS2 ? "ApocTownTraitor" : (Constants.IsLegacy ? "Enchanted": "Blank"),
+        (EffectType)104 => Constants.IsBTOS2 ? "Audited" : (Constants.IsLegacy ? "Reaped": "Blank"),
+        (EffectType)105 => "Enchanted",
+        (EffectType)106 => "Accompanied",
+        _ => "Blank"
+    };
 }

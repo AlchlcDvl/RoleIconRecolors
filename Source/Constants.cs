@@ -28,6 +28,24 @@ public static class Constants
             }
         }
     }
+    public static bool LegacyExists => ModStates.IsLoaded("legacy.salem");
+    public static bool IsLegacy
+    {
+        get
+        {
+            try
+            {
+                if (LegacyExists)
+                    return LegacyInfo.IsModded;
+                else
+                    return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+    }
     public static bool IsNecroActive
     {
         get

@@ -14,16 +14,17 @@ public static class AssetManager
     public static Sprite Defense;
     public static Sprite Ethereal;
 
-    public static TMP_SpriteAsset VanillaAsset;
+    public static TMP_SpriteAsset VanillaAsset1;
+    public static TMP_SpriteAsset VanillaAsset2;
     public static TMP_SpriteAsset BTOS2Asset;
-    public static bool SpriteSheetLoaded;
 
     public static string ModPath => Path.Combine(Path.GetDirectoryName(Application.dataPath), "SalemModLoader", "ModFolders", "Recolors");
 
-    private static readonly string[] Avoid = [ "Attributes", "Necronomicon", "Neutral", "NeutralApocalypse", "NeutralEvil", "NeutralKilling", "Town", "TownInvestigative",
-        "TownKilling", "TownSupport", "TownProtective", "TownPower", "CovenKilling", "CovenDeception", "CovenUtility", "CovenPower", "Coven", "SlowMode", "FastMode", "AnonVoting",
-        "SecretKillers", "HiddenRoles", "OneTrial", "RandomApocalypse", "Any", "RegularCoven", "RegularTown", "NeutralPariah", "NeutralSpecial", "TownTraitor", "PerfectTown", "NecroPass",
-        "Teams", "AnonNames", "WalkingDead", "Hidden", "Stoned"/*, "Mafia", "MafiaDeception", "MafiaKilling", "MafiaUtility", "MafiaPower", "Cleaned", "NeutralChaos"*/ ];
+    private static readonly string[] Avoid = [ "Attributes", "Necronomicon", "Neutral", "NeutralApocalypse", "NeutralEvil", "NeutralKilling", "Town", "TownInvestigative", "Teams", "Hidden",
+        "TownKilling", "TownSupport", "TownProtective", "TownPower", "CovenKilling", "CovenDeception", "CovenUtility", "CovenPower", "Coven", "SlowMode", "FastMode", "AnonVoting", "Stoned",
+        "SecretKillers", "HiddenRoles", "OneTrial", "RandomApocalypse", "Any", "CommonCoven", "CommonTown", "NeutralPariah", "NeutralSpecial", "TownTraitor", "PerfectTown", "NecroPass",
+        "AnonNames", "WalkingDead", "Mafia", "MafiaDeception", "MafiaKilling", "MafiaUtility", "MafiaPower", "Cleaned", "NeutralChaos", "TownVEvils", "NonTown", "NonCoven", "NonMafia",
+        "NonNeutral", "FactionedEvil", "Lovers" ];
 
     private static readonly string[] ToRemove = [ ".png", ".jpg" ];
 
@@ -87,6 +88,10 @@ public static class AssetManager
             }
         });
 
+        Attack = Witchcraft.Witchcraft.Assets["Attack"];
+        Defense = Witchcraft.Witchcraft.Assets["Defense"];
+        Ethereal = Witchcraft.Witchcraft.Assets["Ethereal"];
+
         if (Constants.BTOS2Exists)
         {
             BTOS2Asset = BTOSInfo.assetBundle.LoadAsset<TMP_SpriteAsset>("Roles");
@@ -100,11 +105,11 @@ public static class AssetManager
                 };
             }
 
-            Utils.DumpSprite(BTOS2Asset.spriteSheet as Texture2D, "BTOSRoleIcons");
+            Utils.DumpSprite(BTOS2Asset.spriteSheet as Texture2D, "BTOSRoleIcons_Modified", Path.Combine(ModPath, "BTOS2"));
         }
 
         TryLoadingSprites(Constants.CurrentPack);
-        LoadVanillaSpriteSheet();
+        LoadVanillaSpriteSheets();
     }
 
     private static Texture2D EmptyTexture() => new(2, 2, TextureFormat.ARGB32, true);
@@ -174,6 +179,7 @@ public static class AssetManager
         path = path.Split('\\')[^1];
         ToRemove.ForEach(x => path = path.Replace(x, ""));
         path = path.Replace(Resources, "");
+        path = path.Replace("Marshall", "Marshal");
 
         if (removeIcon)
         {
@@ -230,19 +236,25 @@ public static class AssetManager
     {
         IconPack pack = null;
         TMP_SpriteAsset asset = null;
-        var diagnostic = $"Uh oh, something happened here\nPack Name: {Constants.CurrentPack}\nStyle Name: {Constants.CurrentStyle}\nFaction Override: {Constants.FactionOverride}";
+        var diagnostic = $"Uh oh, something happened here\nPack Name: {Constants.CurrentPack}\nStyle Name: {Constants.CurrentStyle}\nFaction Override: {Constants.FactionOverride}\n" +
+            "";
 
         if (!CacheDefaultSpriteSheet.Cache1)
             diagnostic += "\nVanilla Sheet Does Not Exist";
 
-        if (!VanillaAsset)
+        if (!CacheDefaultSpriteSheet.Cache2)
+            diagnostic += "\nVanilla Player Numbers Sheet Does Not Exist";
+
+        if (!VanillaAsset1)
             diagnostic += "\nModified Vanilla Sheet Does Not Exist";
+
+        if (!VanillaAsset2)
+            diagnostic += "\nModified Player Numbers Sheet Does Not Exist";
 
         if (!BTOS2Asset && Constants.BTOS2Exists)
             diagnostic += "\nBTOS2 Sheet Does Not Exist";
 
-        if (Constants.IsBTOS2)
-            diagnostic += "\nCurrently In A BTOS2 Game";
+        diagnostic += $"\nCurrently In A {(Constants.IsBTOS2 ? "BTOS2" : "Vanilla")} Game";
 
         if (Constants.EnableIcons && !IconPacks.TryGetValue(Constants.CurrentPack, out pack))
             diagnostic += "\nNo Loaded Icon Pack";
@@ -252,6 +264,8 @@ public static class AssetManager
             diagnostic += "\nLoaded Icon Pack Does Not Have A Valid Mention Style";
         else if (!asset)
             diagnostic += "\nLoaded Mention Style Was Null";
+        else if (!pack.PlayerNumbers)
+            diagnostic += "\nLoaded Player Numbers Was Null";
 
         diagnostic += $"\nError: {e}";
         Logging.LogError(diagnostic);
@@ -319,26 +333,21 @@ public static class AssetManager
     }
 
     // love ya pat
-    public static void LoadVanillaSpriteSheet()
+    public static void LoadVanillaSpriteSheets()
     {
         try
         {
-            if (SpriteSheetLoaded)
-                return;
-
-            SpriteSheetLoaded = true;
             var (rolesWithIndexDict, rolesWithIndex) = Utils.Filtered();
             var textures = new List<Texture2D>();
             var sprites = new List<Sprite>();
 
-            // now get all the sprites that we want to load
             foreach (var (role, roleInt) in rolesWithIndex)
             {
                 var actualRole = (Role)roleInt;
                 var name = Utils.RoleName(actualRole);
                 var sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name, out var sprite1) ? sprite1 : Blank;
 
-                if (sprite != Blank)
+                if (sprite != Blank && sprite != null)
                 {
                     sprite.name = sprite.texture.name = role;
                     textures.Add(sprite.texture);
@@ -348,20 +357,49 @@ public static class AssetManager
                     Logging.LogWarning($"NO ICON FOR {name}?!");
             }
 
-            // set spritecharacter name to "Role{number}" so that the game can find correct roles
-            VanillaAsset = BuildGlyphs(sprites.ToArray(), textures.ToArray(), "RoleIcons", rolesWithIndexDict);
-            Utils.DumpSprite(VanillaAsset.spriteSheet as Texture2D, "RoleIcons_Modified");
+            VanillaAsset1 = BuildGlyphs([..sprites], [..textures], "RoleIcons", rolesWithIndexDict);
+            Utils.DumpSprite(VanillaAsset1.spriteSheet as Texture2D, "RoleIcons_Modified", Path.Combine(ModPath, "Vanilla"));
         }
         catch (Exception e)
         {
             Logging.LogError(e);
-            VanillaAsset = null;
-            SpriteSheetLoaded = false;
+            VanillaAsset1 = null;
+        }
+
+        try
+        {
+            var dict = new List<string>();
+            var textures = new List<Texture2D>();
+            var sprites = new List<Sprite>();
+
+            for (var i = 0; i < 16; i++)
+            {
+                var sprite = Witchcraft.Witchcraft.Assets.TryGetValue($"{i}", out var sprite1) ? sprite1 : Blank;
+
+                if (sprite != Blank)
+                {
+                    sprite.name = sprite.texture.name = $"PlayerNumbers_{i}";
+                    textures.Add(sprite.texture);
+                    sprites.Add(sprite);
+                }
+                else
+                    Logging.LogWarning($"NO ICON FOR {i}?!");
+
+                dict.Add($"PlayerNumbers_{i}");
+            }
+
+            VanillaAsset2 = BuildGlyphs([..sprites], [..textures], "PlayerNumbers", dict.ToDictionary(x => x, x => x), false);
+            Utils.DumpSprite(VanillaAsset2.spriteSheet as Texture2D, "PlayerNumbers_Modified", Path.Combine(ModPath, "Vanilla"));
+        }
+        catch (Exception e)
+        {
+            Logging.LogError(e);
+            VanillaAsset2 = null;
         }
     }
 
     // courtesy of pat, love ya mate
-    public static TMP_SpriteAsset BuildGlyphs(Sprite[] sprites, Texture2D[] textures, string spriteAssetName, Dictionary<string, string> rolesWithIndexDict)
+    public static TMP_SpriteAsset BuildGlyphs(Sprite[] sprites, Texture2D[] textures, string spriteAssetName, Dictionary<string, string> rolesWithIndexDict, bool shouldLower = true)
     {
         var asset = ScriptableObject.CreateInstance<TMP_SpriteAsset>();
         var image = new Texture2D(4096, 2048) { name = spriteAssetName };
@@ -392,8 +430,7 @@ public static class AssetManager
 
             var character = new TMP_SpriteCharacter(0, asset, glyph)
             {
-                // renaming to $"Role{(int)role}" should occur here
-                name = rolesWithIndexDict[glyph.sprite.name.ToLower()],
+                name = rolesWithIndexDict[shouldLower ? glyph.sprite.name.ToLower() : glyph.sprite.name],
                 glyphIndex = (uint)i,
             };
 
