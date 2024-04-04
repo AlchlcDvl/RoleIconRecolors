@@ -60,7 +60,8 @@ public class IconPack(string name)
             {
                 if (Enum.TryParse<ModType>(mod, out var type))
                 {
-                    if ((type == ModType.BTOS2 && !Constants.BTOS2Exists) || (type == ModType.Legacy && !Constants.LegacyExists))
+                    if (type == ModType.BTOS2 && !Constants.BTOS2Exists)
+                    //if ((type == ModType.BTOS2 && !Constants.BTOS2Exists) || (type == ModType.Legacy && !Constants.LegacyExists))
                         continue;
 
                     var assets = Assets[type] = new(mod);
@@ -236,7 +237,6 @@ public class IconPack(string name)
 
                 try
                 {
-                    Logging.LogMessage(mod);
                     var (rolesWithIndexDict, rolesWithIndex) = Utils.Filtered(mod);
                     var sprites = new List<Sprite>();
 
@@ -280,53 +280,61 @@ public class IconPack(string name)
 
     public Sprite GetSprite(string iconName, bool allowEE, string type, bool log, ModType? mod = null)
     {
-        mod ??= Utils.GetGameType();
-
-        if (!Assets[mod.Value].BaseIcons[type].TryGetValue(iconName, out var sprite))
+        try
         {
-            if (log)
-                Logging.LogWarning($"Couldn't find {iconName} in {Name}'s {type} > {mod} resources");
+            mod ??= Utils.GetGameType();
 
-            if (type != "Regular" && !Assets[mod.Value].BaseIcons["Regular"].TryGetValue(iconName, out sprite))
+            if (!Assets[mod.Value].BaseIcons[type].TryGetValue(iconName, out var sprite))
             {
                 if (log)
-                    Logging.LogWarning($"Couldn't find {iconName} in {Name}'s Regular > {mod} resources");
+                    Logging.LogWarning($"Couldn't find {iconName} in {Name}'s {type} > {mod} resources");
 
-                sprite = null;
+                if (type != "Regular" && !Assets[mod.Value].BaseIcons["Regular"].TryGetValue(iconName, out sprite))
+                {
+                    if (log)
+                        Logging.LogWarning($"Couldn't find {iconName} in {Name}'s Regular > {mod} resources");
+
+                    sprite = null;
+                }
             }
-        }
 
-        if ((URandom.RandomRangeInt(1, 101) <= Constants.EasterEggChance && allowEE) || !sprite.IsValid())
+            if ((URandom.RandomRangeInt(1, 101) <= Constants.EasterEggChance && allowEE) || !sprite.IsValid())
+            {
+                var sprites = new List<Sprite>();
+
+                if (Constants.AllEasterEggs)
+                {
+                    if (!AssetManager.GlobalEasterEggs[type].TryGetValue(iconName, out sprites))
+                    {
+                        if (type != "Regular")
+                            AssetManager.GlobalEasterEggs["Regular"].TryGetValue(iconName, out sprites);
+                    }
+
+                    sprites ??= [];
+                }
+
+                if (sprites.Count == 0)
+                {
+                    if (!Assets[mod.Value].EasterEggs[type].TryGetValue(iconName, out sprites))
+                    {
+                        if (type != "Regular")
+                            Assets[mod.Value].EasterEggs["Regular"].TryGetValue(iconName, out sprites);
+                    }
+
+                    sprites ??= [];
+                }
+
+                if (sprites.Count > 0)
+                    return sprites.Random();
+            }
+
+            return sprite ?? AssetManager.Blank;
+        }
+        catch (Exception e)
         {
-            var sprites = new List<Sprite>();
-
-            if (Constants.AllEasterEggs)
-            {
-                if (!AssetManager.GlobalEasterEggs[type].TryGetValue(iconName, out sprites))
-                {
-                    if (type != "Regular")
-                        AssetManager.GlobalEasterEggs["Regular"].TryGetValue(iconName, out sprites);
-                }
-
-                sprites ??= [];
-            }
-
-            if (sprites.Count == 0)
-            {
-                if (!Assets[mod.Value].EasterEggs[type].TryGetValue(iconName, out sprites))
-                {
-                    if (type != "Regular")
-                        Assets[mod.Value].EasterEggs["Regular"].TryGetValue(iconName, out sprites);
-                }
-
-                sprites ??= [];
-            }
-
-            if (sprites.Count > 0)
-                return sprites.Random();
+            Logging.LogError(e);
+            return AssetManager.Blank;
         }
-
-        return sprite ?? AssetManager.Blank;
     }
 
     public static implicit operator bool(IconPack exists) => exists != null;

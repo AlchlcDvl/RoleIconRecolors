@@ -4,6 +4,6 @@ public enum ModType
 {
     Vanilla,
     BTOS2,
-    Legacy,
+    //Legacy,
     None
 }

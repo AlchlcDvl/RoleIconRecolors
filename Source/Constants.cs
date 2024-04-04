@@ -12,7 +12,7 @@ public static class Constants
     public static bool FactionOverridden => FactionOverride != "None";
     public static bool EnableIcons => CurrentPack != "Vanilla";
     public static bool BTOS2Exists => ModStates.IsLoaded("curtis.tuba.better.tos2");
-    public static bool LegacyExists => ModStates.IsLoaded("legacy.salem");
+    //public static bool LegacyExists => ModStates.IsLoaded("legacy.salem");
     public static bool IsBTOS2
     {
         get
@@ -27,7 +27,7 @@ public static class Constants
             }
         }
     }
-    public static bool IsLegacy
+    /*public static bool IsLegacy
     {
         get
         {
@@ -40,7 +40,7 @@ public static class Constants
                 return false;
             }
         }
-    }
+    }*/
     public static bool IsNecroActive
     {
         get

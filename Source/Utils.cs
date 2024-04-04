@@ -37,8 +37,8 @@ public static class Utils
             {
                 ModType.Vanilla => VanillaRoleName(role),
                 ModType.BTOS2 => BTOSRoleName(role),
-                ModType.Legacy => LegacyRoleName(role),
-                _ => Constants.IsBTOS2 ? BTOSRoleName(role) : (Constants.IsLegacy ? LegacyRoleName(role) : VanillaRoleName(role)),
+                //ModType.Legacy => LegacyRoleName(role),
+                _ => Constants.IsBTOS2 ? BTOSRoleName(role) : /*(Constants.IsLegacy ? LegacyRoleName(role) : */VanillaRoleName(role),//),
             };
         }
         catch
@@ -155,7 +155,7 @@ public static class Utils
         _ => "Blank"
     };
 
-    private static string LegacyRoleName(Role role) => role switch
+    /*private static string LegacyRoleName(Role role) => role switch
     {
         LegacyClient.Info.LegacyRole.Admirer => "Admirer",
         LegacyClient.Info.LegacyRole.Amnesiac => "Amnesiac",
@@ -279,7 +279,7 @@ public static class Utils
         LegacyClient.Info.LegacyRole.Cleaned => "Cleaned",
         LegacyClient.Info.LegacyRole.Stoned => "Stoned",
         _ => "Blank"
-    };
+    };*/
 
     private static string VanillaRoleName(Role role) => role switch
     {
@@ -384,8 +384,8 @@ public static class Utils
             {
                 ModType.Vanilla => VanillaFactionName(faction),
                 ModType.BTOS2 => BTOSFactionName(faction),
-                ModType.Legacy => LegacyFactionName(faction),
-                _ => Constants.IsBTOS2 ? BTOSFactionName(faction) : (Constants.IsLegacy ? LegacyFactionName(faction) : VanillaFactionName(faction)),
+                //ModType.Legacy => LegacyFactionName(faction),
+                _ => Constants.IsBTOS2 ? BTOSFactionName(faction) : /*(Constants.IsLegacy ? LegacyFactionName(faction) : */VanillaFactionName(faction),//),
             };
         }
         catch
@@ -423,7 +423,7 @@ public static class Utils
         _ => "Blank"
     };
 
-    private static string LegacyFactionName(FactionType faction) => faction switch
+    /*private static string LegacyFactionName(FactionType faction) => faction switch
     {
         LegacyClient.Info.LegacyFactionType.Amnesiac => "Amnesiac",
         LegacyClient.Info.LegacyFactionType.Town => "Town",
@@ -444,7 +444,7 @@ public static class Utils
         LegacyClient.Info.LegacyFactionType.GuardianAngel => "GuardianAngel",
         LegacyClient.Info.LegacyFactionType.Evils => "Evils",
         _ => "Blank"
-    };
+    };*/
 
     private static string VanillaFactionName(FactionType faction) => faction switch
     {
@@ -495,8 +495,8 @@ public static class Utils
             {
                 ModType.Vanilla => IsApocVanilla(role),
                 ModType.BTOS2 => IsApocBTOS2(role),
-                ModType.Legacy => IsApocLegacy(role),
-                _ => Constants.IsBTOS2 ? IsApocBTOS2(role) : (Constants.IsLegacy ? IsApocLegacy(role) : IsApocVanilla(role)),
+                //ModType.Legacy => IsApocLegacy(role),
+                _ => Constants.IsBTOS2 ? IsApocBTOS2(role) : /*(Constants.IsLegacy ? IsApocLegacy(role) : */IsApocVanilla(role),//),
             };
         }
         catch
@@ -511,9 +511,9 @@ public static class Utils
     public static bool IsApocBTOS2(this Role role) => role is BetterTOS2.RolePlus.BERSERKER or BetterTOS2.RolePlus.WAR or BetterTOS2.RolePlus.BAKER or BetterTOS2.RolePlus.FAMINE or
         BetterTOS2.RolePlus.SOUL_COLLECTOR or BetterTOS2.RolePlus.DEATH or BetterTOS2.RolePlus.PLAGUEBEARER or BetterTOS2.RolePlus.PESTILENCE;
 
-    public static bool IsApocLegacy(this Role role) => role is LegacyClient.Info.LegacyRole.Berserker or LegacyClient.Info.LegacyRole.War or LegacyClient.Info.LegacyRole.Baker or
+    /*public static bool IsApocLegacy(this Role role) => role is LegacyClient.Info.LegacyRole.Berserker or LegacyClient.Info.LegacyRole.War or LegacyClient.Info.LegacyRole.Baker or
         LegacyClient.Info.LegacyRole.Famine or LegacyClient.Info.LegacyRole.Reaper or LegacyClient.Info.LegacyRole.Death or LegacyClient.Info.LegacyRole.Plaguebearer or
-        LegacyClient.Info.LegacyRole.Pestilence;
+        LegacyClient.Info.LegacyRole.Pestilence;*/
 
     public static bool Skippable(string name) => GetGameType() switch
     {
@@ -530,12 +530,12 @@ public static class Utils
                 .Where(fi => fi.IsLiteral && !fi.IsInitOnly && fi.FieldType == typeof(Role))
                 .Select(x => (Role)x.GetRawConstantValue())
                 .Where(x => x is not (BetterTOS2.RolePlus.NONE or Role.HANGMAN or BetterTOS2.RolePlus.UNKNOWN or BetterTOS2.RolePlus.ROLE_COUNT)),
-            ModType.Legacy => typeof(LegacyClient.Info.LegacyRole)
+            /*ModType.Legacy => typeof(LegacyClient.Info.LegacyRole)
                 .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)
                 .Where(fi => fi.IsLiteral && !fi.IsInitOnly && fi.FieldType == typeof(Role))
                 .Select(x => (Role)x.GetRawConstantValue())
                 .Where(x => x is not (LegacyClient.Info.LegacyRole.None or LegacyClient.Info.LegacyRole.Hangman or LegacyClient.Info.LegacyRole.Unknown or
-                    LegacyClient.Info.LegacyRole.RoleCount)),
+                    LegacyClient.Info.LegacyRole.RoleCount)),*/
             _ => ((Role[])Enum.GetValues(typeof(Role))).Where(x => x is not (Role.NONE or Role.ROLE_COUNT or Role.UNKNOWN or Role.HANGMAN))
         };
 
@@ -595,16 +595,21 @@ public static class Utils
         EffectType.SCENT_TRACK => "Tracked",
         EffectType.PESTILENCE => "Pestilence",
         EffectType.REVEALED_MARSHAL => "RevealedMarshal",
-        (EffectType)100 => Constants.IsBTOS2 ? "Recruit" : (Constants.IsLegacy ? "CovenTownTraitor" : "Blank"),
+        (EffectType)100 => Constants.IsBTOS2 ? "Recruit" : "Blank",
+        (EffectType)101 => Constants.IsBTOS2 ? "Deafened" : "Blank",
+        (EffectType)102 => Constants.IsBTOS2 ? "CovenTownTraitor" : "Blank",
+        (EffectType)103 => Constants.IsBTOS2 ? "ApocTownTraitor" : "Blank",
+        (EffectType)104 => Constants.IsBTOS2 ? "Audited" : "Blank",
+        /*(EffectType)100 => Constants.IsBTOS2 ? "Recruit" : (Constants.IsLegacy ? "CovenTownTraitor" : "Blank"),
         (EffectType)101 => Constants.IsBTOS2 ? "Deafened" : (Constants.IsLegacy ? "MafiaTownTraitor": "Blank"),
         (EffectType)102 => Constants.IsBTOS2 ? "CovenTownTraitor" : (Constants.IsLegacy ? "Transported": "Blank"),
         (EffectType)103 => Constants.IsBTOS2 ? "ApocTownTraitor" : (Constants.IsLegacy ? "Enchanted": "Blank"),
-        (EffectType)104 => Constants.IsBTOS2 ? "Audited" : (Constants.IsLegacy ? "Reaped": "Blank"),
-        (EffectType)105 => "Enchanted",
-        (EffectType)106 => "Accompanied",
-        (EffectType)107 => "PandoraTownTraitor",
-        (EffectType)108 => "Egoist",
-        (EffectType)109 => "Reaped",
+        (EffectType)104 => Constants.IsBTOS2 ? "Audited" : (Constants.IsLegacy ? "Reaped": "Blank"),*/
+        (EffectType)105 => Constants.IsBTOS2 ? "Enchanted" : "Blank",
+        (EffectType)106 => Constants.IsBTOS2 ? "Accompanied" : "Blank",
+        (EffectType)107 => Constants.IsBTOS2 ? "PandoraTownTraitor" : "Blank",
+        (EffectType)108 => Constants.IsBTOS2 ? "Egoist" : "Blank",
+        (EffectType)109 => Constants.IsBTOS2 ? "Reaped" : "Blank",
         _ => "Blank"
     };
 
@@ -612,8 +617,8 @@ public static class Utils
     {
         if (Constants.IsBTOS2)
             return ModType.BTOS2;
-        else if (Constants.IsLegacy)
-            return ModType.Legacy;
+        /*else if (Constants.IsLegacy)
+            return ModType.Legacy;*/
         else
             return ModType.Vanilla;
     }
@@ -646,14 +651,14 @@ public static class Utils
                     BetterTOS2.RolePlus.PLAGUEBEARER => BetterTOS2.RolePlus.PESTILENCE,
                     _ => role
                 },
-                ModType.Legacy => role switch
+                /*ModType.Legacy => role switch
                 {
                     LegacyClient.Info.LegacyRole.Baker => LegacyClient.Info.LegacyRole.Famine,
                     LegacyClient.Info.LegacyRole.Berserker => LegacyClient.Info.LegacyRole.War,
                     LegacyClient.Info.LegacyRole.Reaper => LegacyClient.Info.LegacyRole.Death,
                     LegacyClient.Info.LegacyRole.Plaguebearer => LegacyClient.Info.LegacyRole.Pestilence,
                     _ => role
-                },
+                },*/
                 _ => role switch
                 {
                     Role.BAKER => Role.FAMINE,
@@ -685,7 +690,7 @@ public static class Utils
             return mod switch
             {
                 ModType.BTOS2 => BetterTOS2.RolePlus.NECROMANCER,
-                ModType.Legacy => LegacyClient.Info.LegacyRole.Necromancer,
+                //ModType.Legacy => LegacyClient.Info.LegacyRole.Necromancer,
                 _ => Role.NECROMANCER,
             };
         }
@@ -703,7 +708,7 @@ public static class Utils
             return mod switch
             {
                 ModType.BTOS2 => BetterTOS2.RolePlus.WAR,
-                ModType.Legacy => LegacyClient.Info.LegacyRole.War,
+                //ModType.Legacy => LegacyClient.Info.LegacyRole.War,
                 _ => Role.WAR,
             };
         }
