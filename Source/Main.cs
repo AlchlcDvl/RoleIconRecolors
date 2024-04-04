@@ -72,15 +72,15 @@ public class Recolors
 
     public ModSettings.DropdownSetting FactionOverride1 => new()
     {
-        Name = "Override Faction",
+        Name = "Override Vanilla Faction",
         Description = "Only icons from the selected faction will appear in vanilla games.",
         Options = GetFactionOverrides(ModType.Vanilla)
     };
 
     public ModSettings.DropdownSetting FactionOverride2 => new()
     {
-        Name = "Override Faction",
-        Description = "Only icons from the selected faction will appearin BTOS2 games.",
+        Name = "Override BTOS2 Faction",
+        Description = "Only icons from the selected faction will appear in BTOS2 games.",
         Options = GetFactionOverrides(ModType.BTOS2)
     };
 
