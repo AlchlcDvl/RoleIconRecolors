@@ -237,7 +237,7 @@ public static class AssetManager
         IconPack pack = null;
         TMP_SpriteAsset asset = null;
         var diagnostic = $"Uh oh, something happened here\nPack Name: {Constants.CurrentPack}\nStyle Name: {Constants.CurrentStyle}\nFaction Override: {Constants.FactionOverride}\n" +
-            "";
+            $"Custom Numbers: {Constants.CustomNumbers}";
 
         if (!CacheDefaultSpriteSheet.Cache1)
             diagnostic += "\nVanilla Sheet Does Not Exist";
@@ -344,7 +344,7 @@ public static class AssetManager
             foreach (var (role, roleInt) in rolesWithIndex)
             {
                 var actualRole = (Role)roleInt;
-                var name = Utils.RoleName(actualRole);
+                var name = Utils.RoleName(actualRole, ModType.Vanilla);
                 var sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name, out var sprite1) ? sprite1 : Blank;
 
                 if (sprite != Blank && sprite != null)

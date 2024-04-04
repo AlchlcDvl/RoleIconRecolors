@@ -70,6 +70,13 @@ public class Recolors
         Options = GetFactionOverrides()
     };
 
+    public ModSettings.CheckboxSetting CustomNumbers => new()
+    {
+        Name = "Use Custom Numbers",
+        Description = "Select whether you want to use the mod's rendition of player numbers or the game's.",
+        DefaultValue = false
+    };
+
     private static List<string> GetPackNames()
     {
         try

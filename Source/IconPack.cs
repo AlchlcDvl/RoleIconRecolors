@@ -16,7 +16,7 @@ public class IconPack(string name)
 
     private static readonly string[] Folders = [ "Regular", "Town", "Coven", "SerialKiller", "Arsonist", "Werewolf", "Shroud", "Apocalypse", "Executioner", "Jester", "Pirate", "Doomsayer",
         "Judge", "Auditor", "Starspawn", "Inquisitor", "Vampire", "CursedSoul", "Jackal", "Lions", "Frogs", "Hawks", "VIP", "Pandora", "Compliant", "Egoist", "PlayerNumbers",  "Custom",
-        "Mafia", "Amnesiac", "Juggernaut", "GuardianAngel", "Evils" ];
+        /*"Mafia", "Amnesiac", "Juggernaut", "GuardianAngel", "Evils"*/ ];
     //private static readonly string[] Mods = [ "Vanilla", "BTOS2"/*, "Legacy"*/ ];
     public static readonly string[] FileTypes = [ "png", "jpg" ];
 
@@ -92,6 +92,9 @@ public class IconPack(string name)
 
         BTOS2MentionStyles.Values.ForEach(UObject.Destroy);
         BTOS2MentionStyles.Clear();
+
+        LegacyMentionStyles.Values.ForEach(UObject.Destroy);
+        LegacyMentionStyles.Clear();
     }
 
     public void Reload()
@@ -105,15 +108,12 @@ public class IconPack(string name)
 
     public void Load()
     {
+        Logging.LogMessage($"Loading {Name}", true);
+
         try
         {
-            Logging.LogMessage($"Loading {Name}");
-
             foreach (var name in Folders)
             {
-                if ((IsBTOS2ModdedFolder(name) && !Constants.BTOS2Exists) || (IsLegacyModdedFolder(name) && !Constants.LegacyExists))
-                    continue;
-
                 if (!AssetManager.GlobalEasterEggs.ContainsKey(name))
                     AssetManager.GlobalEasterEggs[name] = [];
 
@@ -186,15 +186,50 @@ public class IconPack(string name)
 
         // love ya pat
 
-        var (rolesWithIndexDict, rolesWithIndex) = Utils.Filtered();
+        var (rolesWithIndexDict, rolesWithIndex) = (new Dictionary<string, string>(), new Dictionary<string, int>());
+
+        if (BaseIcons.TryGetValue("PlayerNumbers", out var list2) && list2.Count > 0)
+        {
+            try
+            {
+                var textures = new List<Texture2D>();
+                var sprites = new List<Sprite>();
+
+                for (var i = 0; i < 16; i++)
+                {
+                    var sprite = GetSprite($"{i}", false, "PlayerNumbers", false);
+
+                    if (sprite == AssetManager.Blank || sprite == null)
+                        sprite = Witchcraft.Witchcraft.Assets.TryGetValue($"{i}", out var sprite1) ? sprite1 : AssetManager.Blank;
+
+                    if (sprite != AssetManager.Blank && sprite != null)
+                    {
+                        sprite.name = sprite.texture.name = $"PlayerNumbers_{i}";
+                        textures.Add(sprite.texture);
+                        sprites.Add(sprite);
+                    }
+                    else
+                        Logging.LogWarning($"NO PLAYER NUMBER ICON FOR {i}?!");
+
+                    rolesWithIndexDict.Add($"PlayerNumbers_{i}", $"PlayerNumbers_{i}");
+                }
+
+                PlayerNumbers = AssetManager.BuildGlyphs([..sprites], [..textures], $"PlayerNumbers ({Name})", rolesWithIndexDict, false);
+                Utils.DumpSprite(PlayerNumbers.spriteSheet as Texture2D, "PlayerNumbers", PackPath);
+            }
+            catch (Exception e)
+            {
+                Logging.LogError(e);
+                PlayerNumbers = null;
+            }
+        }
+
+        (rolesWithIndexDict, rolesWithIndex) = Utils.Filtered();
 
         foreach (var style in Folders)
         {
-            if (MentionStyles.ContainsKey(style) || (BaseIcons.TryGetValue(style, out var list) && list.Count == 0) || !BaseIcons.ContainsKey(style) || IsBTOS2ModdedFolder(style) || style ==
-                "PlayerNumbers")
-            {
+            if (/*IsLegacyModdedFolder(style) ||*/ IsBTOS2ModdedFolder(style) || style == "PlayerNumbers")
                 continue;
-            }
 
             try
             {
@@ -204,7 +239,7 @@ public class IconPack(string name)
                 foreach (var (role, roleInt) in rolesWithIndex)
                 {
                     var actualRole = (Role)roleInt;
-                    var name = Utils.RoleName(actualRole);
+                    var name = Utils.RoleName(actualRole, ModType.Vanilla);
                     var sprite = GetSprite(name, false, style, false);
 
                     if ((sprite == AssetManager.Blank || sprite == null) && style != "Regular")
@@ -234,61 +269,20 @@ public class IconPack(string name)
             }
         }
 
-        if (BaseIcons.TryGetValue("PlayerNumbers", out var list2) && list2.Count > 0)
-        {
-            try
-            {
-                rolesWithIndexDict = [];
-                var textures = new List<Texture2D>();
-                var sprites = new List<Sprite>();
-
-                for (var i = 0; i < 16; i++)
-                {
-                    var sprite = GetSprite($"{i}", false, "PlayerNumbers", false);
-
-                    if (sprite == AssetManager.Blank || sprite == null)
-                        sprite = Witchcraft.Witchcraft.Assets.TryGetValue($"{i}", out var sprite1) ? sprite1 : AssetManager.Blank;
-
-                    if (sprite != AssetManager.Blank && sprite != null)
-                    {
-                        sprite.name = sprite.texture.name = $"PlayerNumbers_{i}";
-                        textures.Add(sprite.texture);
-                        sprites.Add(sprite);
-                    }
-                    else
-                        Logging.LogWarning($"NO ICON FOR {i}?!");
-
-                    rolesWithIndexDict.Add($"PlayerNumbers_{i}", $"PlayerNumbers_{i}");
-                }
-
-                PlayerNumbers = AssetManager.BuildGlyphs([..sprites], [..textures], $"PlayerNumbers ({Name})", rolesWithIndexDict, false);
-                Utils.DumpSprite(PlayerNumbers.spriteSheet as Texture2D, "PlayerNumbers", PackPath);
-            }
-            catch (Exception e)
-            {
-                Logging.LogError(e);
-                PlayerNumbers = null;
-            }
-        }
-
         if (Constants.BTOS2Exists)
         {
             (rolesWithIndexDict, rolesWithIndex) = Utils.Filtered(ModType.BTOS2);
 
             foreach (var style in Folders)
             {
-                if (BTOS2MentionStyles.ContainsKey(style) || (BaseIcons.TryGetValue(style, out var list) && list.Count == 0) || !BaseIcons.ContainsKey(style) || style == "Executioner" ||
-                    style == "PlayerNumbers")
-                {
+                if (style is "Executioner" or "PlayerNumbers")
                     continue;
-                }
 
                 try
                 {
                     var textures = new List<Texture2D>();
                     var sprites = new List<Sprite>();
 
-                    // now get all the sprites that we want to load
                     foreach (var (role, roleInt) in rolesWithIndex)
                     {
                         var name = Utils.RoleName((Role)roleInt, ModType.BTOS2);
@@ -325,13 +319,13 @@ public class IconPack(string name)
             }
         }
 
-        if (Constants.LegacyExists)
+        /*if (Constants.LegacyExists)
         {
             (rolesWithIndexDict, rolesWithIndex) = Utils.Filtered(ModType.Legacy);
 
             foreach (var style in Folders)
             {
-                if (LegacyMentionStyles.ContainsKey(style) || (BaseIcons.TryGetValue(style, out var list) && list.Count == 0) || !BaseIcons.ContainsKey(style) || style == "PlayerNumbers")
+                if (style == "PlayerNumbers")
                     continue;
 
                 try
@@ -339,17 +333,16 @@ public class IconPack(string name)
                     var textures = new List<Texture2D>();
                     var sprites = new List<Sprite>();
 
-                    // now get all the sprites that we want to load
                     foreach (var (role, roleInt) in rolesWithIndex)
                     {
-                        var name = Utils.RoleName((Role)roleInt, ModType.BTOS2);
+                        var name = Utils.RoleName((Role)roleInt, ModType.Legacy);
                         var sprite = GetSprite(name, false, style, false);
 
                         if ((sprite == AssetManager.Blank || sprite == null) && style != "Regular")
                             sprite = GetSprite(name, false, "Regular", false);
 
                         if (sprite == AssetManager.Blank || sprite == null)
-                            sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name + "_BTOS2", out var sprite1) ? sprite1 : AssetManager.Blank;
+                            sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name + "_Legacy", out var sprite1) ? sprite1 : AssetManager.Blank;
 
                         if (sprite == AssetManager.Blank || sprite == null)
                             sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name, out var sprite1) ? sprite1 : AssetManager.Blank;
@@ -361,7 +354,7 @@ public class IconPack(string name)
                             sprites.Add(sprite);
                         }
                         else
-                            Logging.LogWarning($"NO BTOS2 ICON FOR {name}?!");
+                            Logging.LogWarning($"NO LEGACY ICON FOR {name}?!");
                     }
 
                     var asset = AssetManager.BuildGlyphs([..sprites], [..textures], $"LegacyRoleIcons ({Name}, {style})", rolesWithIndexDict);
@@ -374,7 +367,9 @@ public class IconPack(string name)
                     LegacyMentionStyles[style] = null;
                 }
             }
-        }
+        }*/
+
+        Logging.LogMessage($"{Name} Loaded!", true);
     }
 
     public Sprite GetSprite(string name, bool allowEE, string type, bool log)
@@ -431,5 +426,5 @@ public class IconPack(string name)
     private static bool IsBTOS2ModdedFolder(string folderName) => folderName is "Jackal" or "Judge" or "Auditor" or "Starspawn" or "Inquisitor" or "Lions" or "Frogs" or "Hawks" or "Pandora"
         or "Compliant" or "Egoist";
 
-    private static bool IsLegacyModdedFolder(string folderName) => folderName is "Mafia" or "Amnesiac" or "Juggernaut" or "GuardianAngel" or "Evils";
+    //private static bool IsLegacyModdedFolder(string folderName) => folderName is "Mafia" or "Amnesiac" or "Juggernaut" or "GuardianAngel" or "Evils";
 }

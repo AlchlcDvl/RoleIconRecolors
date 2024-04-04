@@ -501,7 +501,7 @@ public static class Utils
     {
         var roles = new List<Role>();
 
-        if (mod == ModType.BTOS2)
+        if (mod == ModType.BTOS2 && Constants.BTOS2Exists)
         {
             roles.AddRange(typeof(RolePlus)
                 .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)
@@ -509,7 +509,7 @@ public static class Utils
                 .Select(x => (Role)x.GetRawConstantValue())
                 .Where(x => x is not (RolePlus.NONE or Role.HANGMAN or RolePlus.UNKNOWN or RolePlus.ROLE_COUNT)));
         }
-        else if (mod == ModType.Legacy)
+        else if (mod == ModType.Legacy && Constants.LegacyExists)
         {
             roles.AddRange(typeof(LegacyRole)
                 .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)

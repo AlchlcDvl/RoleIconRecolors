@@ -8,6 +8,7 @@ public static class Constants
     public static string CurrentPack => ModSettings.GetString("Selected Icon Pack", "alchlcsystm.recolors");
     public static string CurrentStyle => ModSettings.GetString("Selected Mention Style", "alchlcsystm.recolors");
     public static string FactionOverride => ModSettings.GetString("Override Faction", "alchlcsystm.recolors");
+    public static bool CustomNumbers => ModSettings.GetBool("Use Custom Numbers", "alchlcsystm.recolors");
     public static bool FactionOverridden => FactionOverride != "None";
     public static bool EnableIcons => CurrentPack != "Vanilla";
     public static bool BTOS2Exists => ModStates.IsLoaded("curtis.tuba.better.tos2");

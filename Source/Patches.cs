@@ -590,7 +590,7 @@ public static class ApplicationControllerPatch
                             CacheDefaultSpriteSheet.Cache1;
                     }
                     else if (str == "PlayerNumbers")
-                        return (pack.PlayerNumbers ?? AssetManager.VanillaAsset2) ?? CacheDefaultSpriteSheet.Cache2;
+                        return (Constants.CustomNumbers ? (pack.PlayerNumbers ?? AssetManager.VanillaAsset2) : AssetManager.VanillaAsset2) ?? CacheDefaultSpriteSheet.Cache2;
                     else
                         return oldSpriteAssetRequest(_, str);
                 }
