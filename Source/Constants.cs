@@ -19,7 +19,7 @@ public static class Constants
             try
             {
                 if (BTOS2Exists)
-                    return BTOSInfo.IS_MODDED;
+                    return BetterTOS2.BTOSInfo.IS_MODDED;
                 else
                     return false;
             }
@@ -37,7 +37,7 @@ public static class Constants
             try
             {
                 if (LegacyExists)
-                    return LegacyInfo.IsModded;
+                    return LegacyClient.LegacyInfo.IsModded;
                 else
                     return false;
             }

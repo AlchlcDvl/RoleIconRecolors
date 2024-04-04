@@ -66,28 +66,14 @@ public static class PatchRoleCards
 
         if (Constants.IsTransformed)
         {
-            if (Constants.IsBTOS2)
+            role = role switch
             {
-                role = role switch
-                {
-                    RolePlus.BAKER => RolePlus.FAMINE,
-                    RolePlus.BERSERKER => RolePlus.WAR,
-                    RolePlus.SOUL_COLLECTOR => RolePlus.DEATH,
-                    RolePlus.PLAGUEBEARER => RolePlus.PESTILENCE,
-                    _ => role
-                };
-            }
-            else
-            {
-                role = role switch
-                {
-                    Role.BAKER => Role.FAMINE,
-                    Role.BERSERKER => Role.WAR,
-                    Role.SOULCOLLECTOR => Role.DEATH,
-                    Role.PLAGUEBEARER => Role.PESTILENCE,
-                    _ => role
-                };
-            }
+                Role.BAKER => Role.FAMINE,
+                Role.BERSERKER => Role.WAR,
+                Role.SOULCOLLECTOR => Role.DEATH,
+                Role.PLAGUEBEARER => Role.PESTILENCE,
+                _ => role
+            };
         }
 
         var panel = __instance.GetComponentInParent<RoleCardPanel>();
@@ -104,7 +90,7 @@ public static class PatchRoleCards
         var specialName = $"{name}_Special";
         var special = AssetManager.GetSprite(specialName, faction);
 
-        if (special.IsValid() && panel.specialAbilityPanel && !(role == (Constants.IsBTOS2 ? RolePlus.NECROMANCER : Role.NECROMANCER) && !Constants.IsNecroActive))
+        if (special.IsValid() && panel.specialAbilityPanel && !(role == Role.NECROMANCER && !Constants.IsNecroActive))
             panel.specialAbilityPanel.useButton.abilityIcon.sprite = special;
 
         var abilityname = $"{name}_Ability";
@@ -136,7 +122,7 @@ public static class PatchRoleCards
         var abilityname2 = $"{name}_Ability_2";
         var ability2 = AssetManager.GetSprite(abilityname2, faction);
 
-        if (ability2.IsValid() && panel.roleInfoButtons.Exists(index) && role != (Constants.IsBTOS2 ? RolePlus.WAR : Role.WAR))
+        if (ability2.IsValid() && panel.roleInfoButtons.Exists(index) && role != Role.WAR)
         {
             panel.roleInfoButtons[index].abilityIcon.sprite = ability2;
             index++;
@@ -191,28 +177,14 @@ public static class PatchAbilityPanel
 
         if (Constants.IsTransformed)
         {
-            if (Constants.IsBTOS2)
+            role = role switch
             {
-                role = role switch
-                {
-                    RolePlus.BAKER => RolePlus.FAMINE,
-                    RolePlus.BERSERKER => RolePlus.WAR,
-                    RolePlus.SOUL_COLLECTOR => RolePlus.DEATH,
-                    RolePlus.PLAGUEBEARER => RolePlus.PESTILENCE,
-                    _ => role
-                };
-            }
-            else
-            {
-                role = role switch
-                {
-                    Role.BAKER => Role.FAMINE,
-                    Role.BERSERKER => Role.WAR,
-                    Role.SOULCOLLECTOR => Role.DEATH,
-                    Role.PLAGUEBEARER => Role.PESTILENCE,
-                    _ => role
-                };
-            }
+                Role.BAKER => Role.FAMINE,
+                Role.BERSERKER => Role.WAR,
+                Role.SOULCOLLECTOR => Role.DEATH,
+                Role.PLAGUEBEARER => Role.PESTILENCE,
+                _ => role
+            };
         }
 
         switch (overrideType)

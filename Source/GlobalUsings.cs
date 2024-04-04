@@ -17,8 +17,4 @@ global using Services;
 
 global using TMPro;
 
-global using BetterTOS2;
-
-global using LegacyClient;
-
 global using Witchcraft.Utils;

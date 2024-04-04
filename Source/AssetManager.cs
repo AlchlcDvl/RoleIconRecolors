@@ -93,21 +93,24 @@ public static class AssetManager
         Defense = Witchcraft.Witchcraft.Assets["Defense"];
         Ethereal = Witchcraft.Witchcraft.Assets["Ethereal"];
 
-        if (Constants.BTOS2Exists)
+        try
         {
-            BTOS2Asset = BTOSInfo.assetBundle.LoadAsset<TMP_SpriteAsset>("Roles");
-
-            for (var i = 0; i < BTOS2Asset.spriteCharacterTable.Count; i++)
+            if (Constants.BTOS2Exists)
             {
-                BTOS2Asset.spriteGlyphTable[i].metrics = new()
-                {
-                    horizontalBearingX = 0f,
-                    horizontalBearingY = 224f
-                };
-            }
+                BTOS2Asset = BetterTOS2.BTOSInfo.assetBundle.LoadAsset<TMP_SpriteAsset>("Roles");
 
-            Utils.DumpSprite(BTOS2Asset.spriteSheet as Texture2D, "BTOSRoleIcons", Path.Combine(ModPath, "BTOS2"));
-        }
+                for (var i = 0; i < BTOS2Asset.spriteCharacterTable.Count; i++)
+                {
+                    BTOS2Asset.spriteGlyphTable[i].metrics = new()
+                    {
+                        horizontalBearingX = 0f,
+                        horizontalBearingY = 224f
+                    };
+                }
+
+                Utils.DumpSprite(BTOS2Asset.spriteSheet as Texture2D, "BTOSRoleIcons", Path.Combine(ModPath, "BTOS2"));
+            }
+        } catch {}
 
         TryLoadingSprites(Constants.CurrentPack);
         LoadVanillaSpriteSheets();
