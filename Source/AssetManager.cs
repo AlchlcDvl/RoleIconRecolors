@@ -282,7 +282,7 @@ public static class AssetManager
                 if (!CacheScrollSprites.ContainsKey(y.id))
                     CacheScrollSprites[y.id] = y.decoration.sprite;
 
-                if (sprite != Blank || CacheScrollSprites.TryGetValue(y.id, out sprite))
+                if (sprite.IsValid() || CacheScrollSprites.TryGetValue(y.id, out sprite))
                     y.decoration.sprite = sprite;
                 else
                     CacheScrollSprites[y.id] = y.decoration.sprite;
@@ -295,7 +295,7 @@ public static class AssetManager
                 if (!CacheScrollSprites.ContainsKey(y.id))
                     CacheScrollSprites[y.id] = y.decoration.sprite;
 
-                if (sprite != Blank || CacheScrollSprites.TryGetValue(y.id, out sprite))
+                if (sprite.IsValid() || CacheScrollSprites.TryGetValue(y.id, out sprite))
                     y.decoration.sprite = sprite;
                 else
                     CacheScrollSprites[y.id] = y.decoration.sprite;
@@ -347,7 +347,7 @@ public static class AssetManager
                 var name = Utils.RoleName(actualRole, ModType.Vanilla);
                 var sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name, out var sprite1) ? sprite1 : Blank;
 
-                if (sprite != Blank && sprite != null)
+                if (!sprite.IsValid())
                 {
                     sprite.name = sprite.texture.name = role;
                     textures.Add(sprite.texture);
@@ -376,7 +376,7 @@ public static class AssetManager
             {
                 var sprite = Witchcraft.Witchcraft.Assets.TryGetValue($"{i}", out var sprite1) ? sprite1 : Blank;
 
-                if (sprite != Blank)
+                if (sprite.IsValid())
                 {
                     sprite.name = sprite.texture.name = $"PlayerNumbers_{i}";
                     textures.Add(sprite.texture);

@@ -199,10 +199,10 @@ public class IconPack(string name)
                 {
                     var sprite = GetSprite($"{i}", false, "PlayerNumbers", false);
 
-                    if (sprite == AssetManager.Blank || sprite == null)
+                    if (!sprite.IsValid())
                         sprite = Witchcraft.Witchcraft.Assets.TryGetValue($"{i}", out var sprite1) ? sprite1 : AssetManager.Blank;
 
-                    if (sprite != AssetManager.Blank && sprite != null)
+                    if (sprite.IsValid())
                     {
                         sprite.name = sprite.texture.name = $"PlayerNumbers_{i}";
                         textures.Add(sprite.texture);
@@ -228,7 +228,7 @@ public class IconPack(string name)
 
         foreach (var style in Folders)
         {
-            if (/*IsLegacyModdedFolder(style) ||*/ IsBTOS2ModdedFolder(style) || style == "PlayerNumbers")
+            if (/*IsLegacyModdedFolder(style) || */IsBTOS2ModdedFolder(style) || style == "PlayerNumbers")
                 continue;
 
             try
@@ -242,13 +242,13 @@ public class IconPack(string name)
                     var name = Utils.RoleName(actualRole, ModType.Vanilla);
                     var sprite = GetSprite(name, false, style, false);
 
-                    if ((sprite == AssetManager.Blank || sprite == null) && style != "Regular")
+                    if (!sprite.IsValid() && style != "Regular")
                         sprite = GetSprite(name, false, "Regular", false);
 
-                    if (sprite == AssetManager.Blank || sprite == null)
+                    if (!sprite.IsValid())
                         sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name, out var sprite1) ? sprite1 : AssetManager.Blank;
 
-                    if (sprite != AssetManager.Blank && sprite != null)
+                    if (sprite.IsValid())
                     {
                         sprite.name = sprite.texture.name = role;
                         textures.Add(sprite.texture);
@@ -288,16 +288,16 @@ public class IconPack(string name)
                         var name = Utils.RoleName((Role)roleInt, ModType.BTOS2);
                         var sprite = GetSprite(name, false, style, false);
 
-                        if ((sprite == AssetManager.Blank || sprite == null) && style != "Regular")
+                        if (!sprite.IsValid() && style != "Regular")
                             sprite = GetSprite(name, false, "Regular", false);
 
-                        if (sprite == AssetManager.Blank || sprite == null)
+                        if (!sprite.IsValid())
                             sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name + "_BTOS2", out var sprite1) ? sprite1 : AssetManager.Blank;
 
-                        if (sprite == AssetManager.Blank || sprite == null)
+                        if (!sprite.IsValid())
                             sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name, out var sprite1) ? sprite1 : AssetManager.Blank;
 
-                        if (sprite != AssetManager.Blank && sprite != null)
+                        if (sprite.IsValid())
                         {
                             sprite.name = sprite.texture.name = role;
                             textures.Add(sprite.texture);
@@ -338,16 +338,16 @@ public class IconPack(string name)
                         var name = Utils.RoleName((Role)roleInt, ModType.Legacy);
                         var sprite = GetSprite(name, false, style, false);
 
-                        if ((sprite == AssetManager.Blank || sprite == null) && style != "Regular")
+                        if (!sprite.IsValid() && style != "Regular")
                             sprite = GetSprite(name, false, "Regular", false);
 
-                        if (sprite == AssetManager.Blank || sprite == null)
+                        if (!sprite.IsValid())
                             sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name + "_Legacy", out var sprite1) ? sprite1 : AssetManager.Blank;
 
-                        if (sprite == AssetManager.Blank || sprite == null)
+                        if (!sprite.IsValid())
                             sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name, out var sprite1) ? sprite1 : AssetManager.Blank;
 
-                        if (sprite != AssetManager.Blank && sprite != null)
+                        if (sprite.IsValid())
                         {
                             sprite.name = sprite.texture.name = role;
                             textures.Add(sprite.texture);
