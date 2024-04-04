@@ -42,6 +42,7 @@ public class IconAssets(string name)
         }
 
         Logging.LogMessage($"{MentionStyles.Count} mention styles exist!");
+        Logging.LogMessage($"{Name} Debugged!");
     }
 
     public void Delete()

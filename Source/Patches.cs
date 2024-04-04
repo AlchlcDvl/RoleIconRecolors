@@ -64,17 +64,7 @@ public static class PatchRoleCards
 
         Logging.LogMessage("Patching RoleCardPanelBackground.SetRole");
 
-        if (Constants.IsTransformed)
-        {
-            role = role switch
-            {
-                Role.BAKER => Role.FAMINE,
-                Role.BERSERKER => Role.WAR,
-                Role.SOULCOLLECTOR => Role.DEATH,
-                Role.PLAGUEBEARER => Role.PESTILENCE,
-                _ => role
-            };
-        }
+        role = Constants.IsTransformed ? Utils.GetTransformedVersion(role) : role;
 
         var panel = __instance.GetComponentInParent<RoleCardPanel>();
         //this determines if the role in question is changed by dum's mod
@@ -90,7 +80,7 @@ public static class PatchRoleCards
         var specialName = $"{name}_Special";
         var special = AssetManager.GetSprite(specialName, faction);
 
-        if (special.IsValid() && panel.specialAbilityPanel && !(role == Role.NECROMANCER && !Constants.IsNecroActive))
+        if (special.IsValid() && panel.specialAbilityPanel && !(role == Utils.GetNecro() && !Constants.IsNecroActive))
             panel.specialAbilityPanel.useButton.abilityIcon.sprite = special;
 
         var abilityname = $"{name}_Ability";
@@ -122,7 +112,7 @@ public static class PatchRoleCards
         var abilityname2 = $"{name}_Ability_2";
         var ability2 = AssetManager.GetSprite(abilityname2, faction);
 
-        if (ability2.IsValid() && panel.roleInfoButtons.Exists(index) && role != Role.WAR)
+        if (ability2.IsValid() && panel.roleInfoButtons.Exists(index) && role != Utils.GetWar())
         {
             panel.roleInfoButtons[index].abilityIcon.sprite = ability2;
             index++;
@@ -174,18 +164,7 @@ public static class PatchAbilityPanel
         Logging.LogMessage("Patching TosAbilityPanelListItem.OverrideIconAndText");
         var role = Pepper.GetMyRole();
         var faction = Pepper.GetMyFaction();
-
-        if (Constants.IsTransformed)
-        {
-            role = role switch
-            {
-                Role.BAKER => Role.FAMINE,
-                Role.BERSERKER => Role.WAR,
-                Role.SOULCOLLECTOR => Role.DEATH,
-                Role.PLAGUEBEARER => Role.PESTILENCE,
-                _ => role
-            };
-        }
+        role = Constants.IsTransformed ? Utils.GetTransformedVersion(role) : role;
 
         switch (overrideType)
         {
@@ -320,7 +299,7 @@ public static class PatchGuideRoleCards
         var specialName = $"{name}_Special";
         var special = AssetManager.GetSprite(specialName, faction);
 
-        if (special.IsValid() && __instance.specialAbilityPanel && role != Role.NECROMANCER)
+        if (special.IsValid() && __instance.specialAbilityPanel && role != Utils.GetNecro())
             __instance.specialAbilityPanel.useButton.abilityIcon.sprite = special;
 
         var abilityname = $"{name}_Ability";

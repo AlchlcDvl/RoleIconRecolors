@@ -12,16 +12,14 @@ public static class Constants
     public static bool FactionOverridden => FactionOverride != "None";
     public static bool EnableIcons => CurrentPack != "Vanilla";
     public static bool BTOS2Exists => ModStates.IsLoaded("curtis.tuba.better.tos2");
+    public static bool LegacyExists => ModStates.IsLoaded("legacy.salem");
     public static bool IsBTOS2
     {
         get
         {
             try
             {
-                if (BTOS2Exists)
-                    return BetterTOS2.BTOSInfo.IS_MODDED;
-                else
-                    return false;
+                return BTOS2Exists && BetterTOS2.BTOSInfo.IS_MODDED;
             }
             catch
             {
@@ -29,17 +27,13 @@ public static class Constants
             }
         }
     }
-    public static bool LegacyExists => ModStates.IsLoaded("legacy.salem");
     public static bool IsLegacy
     {
         get
         {
             try
             {
-                if (LegacyExists)
-                    return LegacyClient.LegacyInfo.IsModded;
-                else
-                    return false;
+                return LegacyExists && LegacyClient.LegacyInfo.IsModded;
             }
             catch
             {

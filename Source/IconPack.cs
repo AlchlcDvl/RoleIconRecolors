@@ -29,6 +29,8 @@ public class IconPack(string name)
 
         if (PlayerNumbers)
             Logging.LogMessage($"{Name} has a PlayerNumbers sprite sheet!");
+
+        Logging.LogMessage($"{Name} Debugged!");
     }
 
     public void Delete()
@@ -123,7 +125,7 @@ public class IconPack(string name)
                         }
                         else
                         {
-                            Logging.LogWarning($"{Name} {eeName} folder doesn't exist");
+                            Logging.LogWarning($"{Name} {mod} {eeName} folder doesn't exist");
                             Directory.CreateDirectory(eeFolder);
                         }
                     }
@@ -151,7 +153,7 @@ public class IconPack(string name)
                     }
                     else
                     {
-                        Logging.LogWarning($"{Name} Custom folder doesn't exist");
+                        Logging.LogWarning($"{Name} {mod} Custom folder doesn't exist");
                         Directory.CreateDirectory(folder);
                     }
                 }
@@ -234,6 +236,7 @@ public class IconPack(string name)
 
                 try
                 {
+                    Logging.LogMessage(mod);
                     var (rolesWithIndexDict, rolesWithIndex) = Utils.Filtered(mod);
                     var sprites = new List<Sprite>();
 

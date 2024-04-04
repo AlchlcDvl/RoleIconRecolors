@@ -74,6 +74,11 @@ public static class AssetManager
         if (!Directory.Exists(ModPath))
             Directory.CreateDirectory(ModPath);
 
+        var vanilla = Path.Combine(ModPath, "Vanilla");
+
+        if (!Directory.Exists(vanilla))
+            Directory.CreateDirectory(vanilla);
+
         Core.GetManifestResourceNames().ForEach(x =>
         {
             if (x.EndsWith(".png"))
@@ -97,6 +102,11 @@ public static class AssetManager
         {
             if (Constants.BTOS2Exists)
             {
+                var btos = Path.Combine(ModPath, "BTOS2");
+
+                if (!Directory.Exists(btos))
+                    Directory.CreateDirectory(btos);
+
                 BTOS2Asset = BetterTOS2.BTOSInfo.assetBundle.LoadAsset<TMP_SpriteAsset>("Roles");
 
                 for (var i = 0; i < BTOS2Asset.spriteCharacterTable.Count; i++)

@@ -487,11 +487,17 @@ public static class Utils
         _ => "None"
     };
 
-    public static bool IsApoc(this Role role, bool btos = false)
+    public static bool IsApoc(this Role role, ModType mod = ModType.None)
     {
         try
         {
-            return Constants.IsBTOS2 || btos ? IsApocBTos(role) : IsApocVanilla(role);
+            return mod switch
+            {
+                ModType.Vanilla => IsApocVanilla(role),
+                ModType.BTOS2 => IsApocBTOS2(role),
+                ModType.Legacy => IsApocLegacy(role),
+                _ => Constants.IsBTOS2 ? IsApocBTOS2(role) : (Constants.IsLegacy ? IsApocLegacy(role) : IsApocVanilla(role)),
+            };
         }
         catch
         {
@@ -499,9 +505,15 @@ public static class Utils
         }
     }
 
-    public static bool IsApocVanilla(this Role role) => role is Role.BERSERKER or Role.WAR or Role.BAKER or Role.FAMINE or Role.SOULCOLLECTOR or Role.DEATH or Role.PLAGUEBEARER or Role.PESTILENCE;
+    public static bool IsApocVanilla(this Role role) => role is Role.BERSERKER or Role.WAR or Role.BAKER or Role.FAMINE or Role.SOULCOLLECTOR or Role.DEATH or Role.PLAGUEBEARER or
+        Role.PESTILENCE;
 
-    public static bool IsApocBTos(this Role role) => role is BetterTOS2.RolePlus.BERSERKER or BetterTOS2.RolePlus.WAR or BetterTOS2.RolePlus.BAKER or BetterTOS2.RolePlus.FAMINE or BetterTOS2.RolePlus.SOUL_COLLECTOR or BetterTOS2.RolePlus.DEATH or BetterTOS2.RolePlus.PLAGUEBEARER or BetterTOS2.RolePlus.PESTILENCE;
+    public static bool IsApocBTOS2(this Role role) => role is BetterTOS2.RolePlus.BERSERKER or BetterTOS2.RolePlus.WAR or BetterTOS2.RolePlus.BAKER or BetterTOS2.RolePlus.FAMINE or
+        BetterTOS2.RolePlus.SOUL_COLLECTOR or BetterTOS2.RolePlus.DEATH or BetterTOS2.RolePlus.PLAGUEBEARER or BetterTOS2.RolePlus.PESTILENCE;
+
+    public static bool IsApocLegacy(this Role role) => role is LegacyClient.Info.LegacyRole.Berserker or LegacyClient.Info.LegacyRole.War or LegacyClient.Info.LegacyRole.Baker or
+        LegacyClient.Info.LegacyRole.Famine or LegacyClient.Info.LegacyRole.Reaper or LegacyClient.Info.LegacyRole.Death or LegacyClient.Info.LegacyRole.Plaguebearer or
+        LegacyClient.Info.LegacyRole.Pestilence;
 
     public static bool Skippable(string name) => GetGameType() switch
     {
@@ -509,37 +521,23 @@ public static class Utils
         _ => VanillaSkippableNames.Contains(name)
     };
 
-    public static (Dictionary<string, string>, Dictionary<string, int>) Filtered(ModType mod = ModType.Vanilla)
+    public static (Dictionary<string, string>, Dictionary<string, int>) Filtered(ModType mod = ModType.None)
     {
-        var roles = new List<Role>();
-
-        if (mod == ModType.BTOS2 && Constants.BTOS2Exists)
+        var roles = mod switch
         {
-            roles.AddRange(typeof(BetterTOS2.RolePlus)
+            ModType.BTOS2 => typeof(BetterTOS2.RolePlus)
                 .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)
                 .Where(fi => fi.IsLiteral && !fi.IsInitOnly && fi.FieldType == typeof(Role))
                 .Select(x => (Role)x.GetRawConstantValue())
-                .Where(x => x is not (BetterTOS2.RolePlus.NONE or Role.HANGMAN or BetterTOS2.RolePlus.UNKNOWN or BetterTOS2.RolePlus.ROLE_COUNT)));
-        }
-        else if (mod == ModType.Legacy && Constants.LegacyExists)
-        {
-            roles.AddRange(typeof(LegacyClient.Info.LegacyRole)
+                .Where(x => x is not (BetterTOS2.RolePlus.NONE or Role.HANGMAN or BetterTOS2.RolePlus.UNKNOWN or BetterTOS2.RolePlus.ROLE_COUNT)),
+            ModType.Legacy => typeof(LegacyClient.Info.LegacyRole)
                 .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)
                 .Where(fi => fi.IsLiteral && !fi.IsInitOnly && fi.FieldType == typeof(Role))
                 .Select(x => (Role)x.GetRawConstantValue())
-                .Where(x => x is not (LegacyClient.Info.LegacyRole.None or LegacyClient.Info.LegacyRole.Hangman or LegacyClient.Info.LegacyRole.Unknown or LegacyClient.Info.LegacyRole.RoleCount)));
-        }
-        else if (mod == ModType.Vanilla)
-        {
-            roles.AddRange(((Role[])Enum
-                .GetValues(typeof(Role)))
-                .Where(x => x is not (Role.NONE or Role.ROLE_COUNT or Role.UNKNOWN or Role.HANGMAN)));
-        }
-        else
-        {
-            Logging.LogError($"Invalid mod type was used: {(int)mod}");
-            return ([], []);
-        }
+                .Where(x => x is not (LegacyClient.Info.LegacyRole.None or LegacyClient.Info.LegacyRole.Hangman or LegacyClient.Info.LegacyRole.Unknown or
+                    LegacyClient.Info.LegacyRole.RoleCount)),
+            _ => ((Role[])Enum.GetValues(typeof(Role))).Where(x => x is not (Role.NONE or Role.ROLE_COUNT or Role.UNKNOWN or Role.HANGMAN))
+        };
 
         var rolesWithIndex = roles.Select(role => (role.ToString().ToLower(), (int)role)).ToDictionary(rolesSelect => rolesSelect.Item1.ToLower(), rolesSelect => rolesSelect.Item2);
         return (rolesWithIndex.ToDictionary(rolesSelect => rolesSelect.Key.ToLower(), rolesSelect => $"Role{rolesSelect.Value}"), rolesWithIndex);
@@ -604,6 +602,9 @@ public static class Utils
         (EffectType)104 => Constants.IsBTOS2 ? "Audited" : (Constants.IsLegacy ? "Reaped": "Blank"),
         (EffectType)105 => "Enchanted",
         (EffectType)106 => "Accompanied",
+        (EffectType)107 => "PandoraTownTraitor",
+        (EffectType)108 => "Egoist",
+        (EffectType)109 => "Reaped",
         _ => "Blank"
     };
 
@@ -626,6 +627,89 @@ public static class Utils
         catch
         {
             return false;
+        }
+    }
+
+    public static Role GetTransformedVersion(Role role, ModType? mod = null)
+    {
+        try
+        {
+            mod ??= GetGameType();
+
+            return mod switch
+            {
+                ModType.BTOS2 => role switch
+                {
+                    BetterTOS2.RolePlus.BAKER => BetterTOS2.RolePlus.FAMINE,
+                    BetterTOS2.RolePlus.BERSERKER => BetterTOS2.RolePlus.WAR,
+                    BetterTOS2.RolePlus.SOUL_COLLECTOR => BetterTOS2.RolePlus.DEATH,
+                    BetterTOS2.RolePlus.PLAGUEBEARER => BetterTOS2.RolePlus.PESTILENCE,
+                    _ => role
+                },
+                ModType.Legacy => role switch
+                {
+                    LegacyClient.Info.LegacyRole.Baker => LegacyClient.Info.LegacyRole.Famine,
+                    LegacyClient.Info.LegacyRole.Berserker => LegacyClient.Info.LegacyRole.War,
+                    LegacyClient.Info.LegacyRole.Reaper => LegacyClient.Info.LegacyRole.Death,
+                    LegacyClient.Info.LegacyRole.Plaguebearer => LegacyClient.Info.LegacyRole.Pestilence,
+                    _ => role
+                },
+                _ => role switch
+                {
+                    Role.BAKER => Role.FAMINE,
+                    Role.BERSERKER => Role.WAR,
+                    Role.SOULCOLLECTOR => Role.DEATH,
+                    Role.PLAGUEBEARER => Role.PESTILENCE,
+                    _ => role
+                }
+            };
+        }
+        catch
+        {
+            return role switch
+            {
+                Role.BAKER => Role.FAMINE,
+                Role.BERSERKER => Role.WAR,
+                Role.SOULCOLLECTOR => Role.DEATH,
+                Role.PLAGUEBEARER => Role.PESTILENCE,
+                _ => role
+            };
+        }
+    }
+
+    public static Role GetNecro(ModType? mod = null)
+    {
+        try
+        {
+            mod ??= GetGameType();
+            return mod switch
+            {
+                ModType.BTOS2 => BetterTOS2.RolePlus.NECROMANCER,
+                ModType.Legacy => LegacyClient.Info.LegacyRole.Necromancer,
+                _ => Role.NECROMANCER,
+            };
+        }
+        catch
+        {
+            return Role.NECROMANCER;
+        }
+    }
+
+    public static Role GetWar(ModType? mod = null)
+    {
+        try
+        {
+            mod ??= GetGameType();
+            return mod switch
+            {
+                ModType.BTOS2 => BetterTOS2.RolePlus.WAR,
+                ModType.Legacy => LegacyClient.Info.LegacyRole.War,
+                _ => Role.WAR,
+            };
+        }
+        catch
+        {
+            return Role.WAR;
         }
     }
 }

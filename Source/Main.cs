@@ -59,15 +59,8 @@ public class Recolors
     {
         Name = "Selected BTOS2 Mention Style",
         Description = "The selected mention style will dictate which icons are used for the mentions. May require a game restart.",
-        Options = GetMentionStyles(ModType.BTOS2)
-    };
-
-    public ModSettings.DropdownSetting DownloadIcons => new()
-    {
-        Name = "Download Recommended Icon Packs",
-        Description = "Downloads icon packs recommended by the mod creator.\nVanilla - Icons used in the vanilla game to be used as a reference for icon packs.\nBTOS2 - Icons used in BTOS2 games to be used as a reference for icons specifically set for BTOS2.\nRecolors - Art by MysticMismagius, Haapsalu, faketier, splarg, Det, Wevit, Nova and Nidoskull.",
-        Options = [ "None", "Vanilla", "BTOS2", "Recolors" ],
-        OnChanged = Download.DownloadIcons
+        Options = GetMentionStyles(ModType.BTOS2),
+        Available = Constants.BTOS2Exists
     };
 
     public ModSettings.DropdownSetting FactionOverride1 => new()
@@ -81,7 +74,8 @@ public class Recolors
     {
         Name = "Override BTOS2 Faction",
         Description = "Only icons from the selected faction will appear in BTOS2 games.",
-        Options = GetFactionOverrides(ModType.BTOS2)
+        Options = GetFactionOverrides(ModType.BTOS2),
+        Available = Constants.BTOS2Exists
     };
 
     public ModSettings.CheckboxSetting CustomNumbers => new()
@@ -89,6 +83,14 @@ public class Recolors
         Name = "Use Custom Numbers",
         Description = "Select whether you want to use the mod's rendition of player numbers or the game's.",
         DefaultValue = false
+    };
+
+    public ModSettings.DropdownSetting DownloadIcons => new()
+    {
+        Name = "Download Recommended Icon Packs",
+        Description = "Downloads icon packs recommended by the mod creator.\nVanilla - Icons used in the vanilla game to be used as a reference for icon packs.\nBTOS2 - Icons used in BTOS2 games to be used as a reference for icons specifically set for BTOS2.\nRecolors - Art by MysticMismagius, Haapsalu, faketier, splarg, Det, Wevit, Nova and Nidoskull.",
+        Options = [ "None", "Vanilla", "BTOS2", "Recolors" ],
+        OnChanged = Download.DownloadIcons
     };
 
     private static List<string> GetPackNames()
@@ -119,21 +121,22 @@ public class Recolors
 
             if (AssetManager.IconPacks.TryGetValue(Constants.CurrentPack, out var pack))
             {
-                var assets = pack.Assets[mod];
-
-                foreach (var (folder, icons) in assets.BaseIcons)
+                if (pack.Assets.TryGetValue(mod, out var assets))
                 {
-                    if (icons.Count > 0 && assets.MentionStyles[folder])
-                        result.Add(folder);
+                    foreach (var (folder, icons) in assets.BaseIcons)
+                    {
+                        if (icons.Count > 0 && assets.MentionStyles.TryGetValue(folder, out var sheet) && sheet)
+                            result.Add(folder);
+                    }
                 }
             }
 
-            result.Add("Vanilla");
+            result.Add(mod.ToString());
             return result;
         }
         catch
         {
-            return [ "Vanilla" ];
+            return [ mod.ToString() ];
         }
     }
 
@@ -145,10 +148,13 @@ public class Recolors
 
             if (AssetManager.IconPacks.TryGetValue(Constants.CurrentPack, out var pack))
             {
-                foreach (var (folder, icons) in pack.Assets[mod].BaseIcons)
+                if (pack.Assets.TryGetValue(mod, out var assets))
                 {
-                    if (icons.Count > 0)
-                        result.Add(folder);
+                    foreach (var (folder, icons) in assets.BaseIcons)
+                    {
+                        if (icons.Count > 0)
+                            result.Add(folder);
+                    }
                 }
             }
 
