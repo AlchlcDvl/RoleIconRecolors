@@ -232,15 +232,13 @@ public static class AssetManager
                 exists.Reload();
             else
             {
-                IconPacks.Remove(packName);
-                exists = new(packName);
+                exists = IconPacks[packName] = new(packName);
                 exists.Load();
 
                 if (CacheDefaultSpriteSheet.ServiceExists)
                     SetScrollSprites();
 
                 exists.Debug();
-                IconPacks.Add(packName, exists);
             }
 
             foreach (var (pack, ip) in IconPacks)

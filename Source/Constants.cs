@@ -6,8 +6,8 @@ public static class Constants
     public static bool AllEasterEggs => ModSettings.GetBool("All Easter Eggs Are Active", "alchlcsystm.recolors");
     public static int EasterEggChance => ModSettings.GetInt("Easter Egg Icon Chance", "alchlcsystm.recolors");
     public static string CurrentPack => ModSettings.GetString("Selected Icon Pack", "alchlcsystm.recolors");
-    public static string CurrentStyle => ModSettings.GetString($"Selected {(IsBTOS2 ? "BTOS2" : "Vanilla")} Mention Style", "alchlcsystm.recolors");
-    public static string FactionOverride => ModSettings.GetString($"Override {(IsBTOS2 ? "BTOS2" : "Vanilla")} Faction", "alchlcsystm.recolors");
+    public static string CurrentStyle => ModSettings.GetString($"Selected {Utils.GetGameType()} Mention Style", "alchlcsystm.recolors");
+    public static string FactionOverride => ModSettings.GetString($"Override {Utils.GetGameType()} Faction", "alchlcsystm.recolors");
     public static bool CustomNumbers => ModSettings.GetBool("Use Custom Numbers", "alchlcsystm.recolors");
     public static bool FactionOverridden => FactionOverride != "None";
     public static bool EnableIcons => CurrentPack != "Vanilla";
