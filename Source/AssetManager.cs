@@ -17,14 +17,15 @@ public static class AssetManager
     public static TMP_SpriteAsset VanillaAsset1;
     public static TMP_SpriteAsset VanillaAsset2;
     public static TMP_SpriteAsset BTOS2Asset;
+    //public static TMP_SpriteAsset LegacyAsset;
 
     public static string ModPath => Path.Combine(Path.GetDirectoryName(Application.dataPath), "SalemModLoader", "ModFolders", "Recolors");
 
     private static readonly string[] Avoid = [ "Attributes", "Necronomicon", "Neutral", "NeutralApocalypse", "NeutralEvil", "NeutralKilling", "Town", "TownInvestigative", "Teams", "Hidden",
         "TownKilling", "TownSupport", "TownProtective", "TownPower", "CovenKilling", "CovenDeception", "CovenUtility", "CovenPower", "Coven", "SlowMode", "FastMode", "AnonVoting", "Stoned",
         "SecretKillers", "HiddenRoles", "OneTrial", "RandomApocalypse", "Any", "CommonCoven", "CommonTown", "NeutralPariah", "NeutralSpecial", "TownTraitor", "PerfectTown", "NecroPass",
-        "AnonNames", "WalkingDead", "Mafia", "MafiaDeception", "MafiaKilling", "MafiaUtility", "MafiaPower", "Cleaned", "NeutralChaos", "TownVEvils", "NonTown", "NonCoven", "NonMafia",
-        "NonNeutral", "FactionedEvil", "Lovers" ];
+        "AnonNames", "WalkingDead", /*"Mafia", "MafiaDeception", "MafiaKilling", "MafiaUtility", "MafiaPower", "Cleaned", "NeutralChaos", "TownVEvils", "NonTown", "NonCoven", "NonMafia",
+        "NonNeutral", "FactionedEvil", "Lovers"*/ ];
 
     private static readonly string[] ToRemove = [ ".png", ".jpg" ];
 
@@ -105,7 +106,7 @@ public static class AssetManager
                 };
             }
 
-            Utils.DumpSprite(BTOS2Asset.spriteSheet as Texture2D, "BTOSRoleIcons_Modified", Path.Combine(ModPath, "BTOS2"));
+            Utils.DumpSprite(BTOS2Asset.spriteSheet as Texture2D, "BTOSRoleIcons", Path.Combine(ModPath, "BTOS2"));
         }
 
         TryLoadingSprites(Constants.CurrentPack);
@@ -114,12 +115,11 @@ public static class AssetManager
 
     private static Texture2D EmptyTexture() => new(2, 2, TextureFormat.ARGB32, true);
 
-    private static Texture2D LoadDiskTexture(string fileName, string subfolder, string folder, string filetype)
+    private static Texture2D LoadDiskTexture(string fileName, string path)
     {
         try
         {
             fileName = fileName.SanitisePath();
-            var path = Path.Combine(ModPath, folder, subfolder, $"{fileName}.{filetype}");
             var texture = EmptyTexture();
             texture.LoadImage(File.ReadAllBytes(path), false);
             texture.hideFlags |= HideFlags.DontUnloadUnusedAsset;
@@ -128,25 +128,30 @@ public static class AssetManager
         }
         catch (Exception e)
         {
-            Logging.LogError($"Error loading {folder} > {subfolder} > {fileName} ({filetype})\n{e}");
+            Logging.LogError($"Error loading {path}\n{e}");
             return null;
         }
     }
 
-    public static Sprite LoadDiskSprite(string fileName, string subfolder, string folder, string filetype)
+    public static Sprite LoadDiskSprite(string fileName, string subfolder, string folder, string superfolder, string filetype) => LoadDiskSprite(fileName, Path.Combine(ModPath, superfolder,
+        folder, subfolder, $"{fileName.SanitisePath()}.{filetype}"));
+
+    public static Sprite LoadDiskSprite(string fileName, string subfolder, string folder, string filetype) => LoadDiskSprite(fileName, Path.Combine(ModPath, folder, subfolder,
+        $"{fileName.SanitisePath()}.{filetype}"));
+
+    public static Sprite LoadDiskSprite(string fileName, string path)
     {
         try
         {
             fileName = fileName.SanitisePath();
-            var path = Path.Combine(ModPath, folder, subfolder, $"{fileName}.{filetype}");
 
             if (!File.Exists(path))
             {
-                Logging.LogError($"Path {folder} > {subfolder} > {fileName} was missing");
+                Logging.LogError($"Path {path} was missing");
                 return null;
             }
 
-            var texture = LoadDiskTexture(path.SanitisePath(), subfolder, folder, filetype);
+            var texture = LoadDiskTexture(fileName, path);
 
             if (texture == null)
             {
@@ -215,7 +220,6 @@ public static class AssetManager
             else
             {
                 IconPacks.Remove(packName);
-                exists?.Delete();
                 exists = new(packName);
                 exists.Load();
 
@@ -224,6 +228,12 @@ public static class AssetManager
 
                 exists.Debug();
                 IconPacks.Add(packName, exists);
+            }
+
+            foreach (var (pack, ip) in IconPacks)
+            {
+                if (pack != packName)
+                    ip.Delete();
             }
         }
         catch (Exception e)
@@ -236,6 +246,7 @@ public static class AssetManager
     {
         IconPack pack = null;
         TMP_SpriteAsset asset = null;
+        IconAssets assets = null;
         var diagnostic = $"Uh oh, something happened here\nPack Name: {Constants.CurrentPack}\nStyle Name: {Constants.CurrentStyle}\nFaction Override: {Constants.FactionOverride}\n" +
             $"Custom Numbers: {Constants.CustomNumbers}";
 
@@ -260,12 +271,14 @@ public static class AssetManager
             diagnostic += "\nNo Loaded Icon Pack";
         else if (pack == null)
             diagnostic += "\nLoaded Icon Pack Was Null";
-        else if (!pack.MentionStyles.TryGetValue(Constants.CurrentStyle, out asset))
+        else if (!pack.PlayerNumbers)
+            diagnostic += "\nLoaded Player Numbers Was Null";
+        else if (!pack.Assets.TryGetValue(Utils.GetGameType(), out assets))
+            diagnostic += "\nInvalid Game Type Was Detected";
+        else if (!assets.MentionStyles.TryGetValue(Constants.CurrentStyle, out asset))
             diagnostic += "\nLoaded Icon Pack Does Not Have A Valid Mention Style";
         else if (!asset)
             diagnostic += "\nLoaded Mention Style Was Null";
-        else if (!pack.PlayerNumbers)
-            diagnostic += "\nLoaded Player Numbers Was Null";
 
         diagnostic += $"\nError: {e}";
         Logging.LogError(diagnostic);
@@ -338,26 +351,22 @@ public static class AssetManager
         try
         {
             var (rolesWithIndexDict, rolesWithIndex) = Utils.Filtered();
-            var textures = new List<Texture2D>();
             var sprites = new List<Sprite>();
 
             foreach (var (role, roleInt) in rolesWithIndex)
             {
-                var actualRole = (Role)roleInt;
-                var name = Utils.RoleName(actualRole, ModType.Vanilla);
-                var sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name, out var sprite1) ? sprite1 : Blank;
+                var name = Utils.RoleName((Role)roleInt, ModType.Vanilla);
 
-                if (!sprite.IsValid())
+                if (Witchcraft.Witchcraft.Assets.TryGetValue(name, out var sprite) && sprite.IsValid())
                 {
                     sprite.name = sprite.texture.name = role;
-                    textures.Add(sprite.texture);
                     sprites.Add(sprite);
                 }
                 else
-                    Logging.LogWarning($"NO ICON FOR {name}?!");
+                    Logging.LogWarning($"NO VANILLA ICON FOR {name}?!");
             }
 
-            VanillaAsset1 = BuildGlyphs([..sprites], [..textures], "RoleIcons", rolesWithIndexDict);
+            VanillaAsset1 = BuildGlyphs([..sprites], [..sprites.Select(x => x.texture)], "RoleIcons", rolesWithIndexDict);
             Utils.DumpSprite(VanillaAsset1.spriteSheet as Texture2D, "RoleIcons_Modified", Path.Combine(ModPath, "Vanilla"));
         }
         catch (Exception e)
@@ -369,7 +378,6 @@ public static class AssetManager
         try
         {
             var dict = new List<string>();
-            var textures = new List<Texture2D>();
             var sprites = new List<Sprite>();
 
             for (var i = 0; i < 16; i++)
@@ -379,16 +387,15 @@ public static class AssetManager
                 if (sprite.IsValid())
                 {
                     sprite.name = sprite.texture.name = $"PlayerNumbers_{i}";
-                    textures.Add(sprite.texture);
                     sprites.Add(sprite);
                 }
                 else
-                    Logging.LogWarning($"NO ICON FOR {i}?!");
+                    Logging.LogWarning($"NO NUMBER ICON FOR {i}?!");
 
                 dict.Add($"PlayerNumbers_{i}");
             }
 
-            VanillaAsset2 = BuildGlyphs([..sprites], [..textures], "PlayerNumbers", dict.ToDictionary(x => x, x => x), false);
+            VanillaAsset2 = BuildGlyphs([..sprites], [..sprites.Select(x => x.texture)], "PlayerNumbers", dict.ToDictionary(x => x, x => x), false);
             Utils.DumpSprite(VanillaAsset2.spriteSheet as Texture2D, "PlayerNumbers_Modified", Path.Combine(ModPath, "Vanilla"));
         }
         catch (Exception e)

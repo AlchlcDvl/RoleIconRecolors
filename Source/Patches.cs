@@ -583,11 +583,13 @@ public static class ApplicationControllerPatch
                 if (AssetManager.IconPacks.TryGetValue(Constants.CurrentPack, out var pack))
                 {
                     if (str == "BTOSRoleIcons")
-                        return (pack.BTOS2MentionStyles.TryGetValue(Constants.CurrentStyle, out var style) ? style : AssetManager.BTOS2Asset) ?? AssetManager.BTOS2Asset;
+                        return (pack.Assets[ModType.BTOS2].MentionStyles.TryGetValue(Constants.CurrentStyle, out var style) ? style : AssetManager.BTOS2Asset) ?? AssetManager.BTOS2Asset;
+                    /*else if (str == "LegacyRoleIcons")
+                        return (pack.Assets[ModType.Legacy].MentionStyles.TryGetValue(Constants.CurrentStyle, out var style) ? style : AssetManager.LegacyAsset) ?? AssetManager.LegacyAsset;*/
                     else if (str == "RoleIcons")
                     {
-                        return ((pack.MentionStyles.TryGetValue(Constants.CurrentStyle, out var style) ? style : AssetManager.VanillaAsset1) ?? AssetManager.VanillaAsset1) ??
-                            CacheDefaultSpriteSheet.Cache1;
+                        return ((pack.Assets[ModType.Vanilla].MentionStyles.TryGetValue(Constants.CurrentStyle, out var style) ? style : AssetManager.VanillaAsset1) ??
+                            AssetManager.VanillaAsset1) ?? CacheDefaultSpriteSheet.Cache1;
                     }
                     else if (str == "PlayerNumbers")
                         return (Constants.CustomNumbers ? (pack.PlayerNumbers ?? AssetManager.VanillaAsset2) : AssetManager.VanillaAsset2) ?? CacheDefaultSpriteSheet.Cache2;

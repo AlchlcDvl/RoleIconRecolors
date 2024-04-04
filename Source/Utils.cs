@@ -4,7 +4,7 @@ namespace IconPacks;
 
 public static class Utils
 {
-    private static readonly string[] SkippableNames = [ "Admirer_Ability", "Amnesiac_Ability", "Arsonist_Ability", "Attributes_Coven", "Baker_Ability", "Berserker_Ability",
+    private static readonly string[] VanillaSkippableNames = [ "Admirer_Ability", "Amnesiac_Ability", "Arsonist_Ability", "Attributes_Coven", "Baker_Ability", "Berserker_Ability",
         "Bodyguard_Ability", "Cleric_Ability", "Coroner_Ability", "CovenLeader_Ability", "Crusader_Ability", "CursedSoul_Ability", "Death_Ability", "Dreamweaver_Ability", "Enchanter_Ability",
         "Executioner_Ability", "Famine_Ability", "HexMaster_Ability", "Illusionist_Ability", "Investigator_Ability", "Jailor_Ability","Jailor_Ability_2", "Jester_Ability", "Jinx_Ability",
         "Lookout_Ability", "Medusa_Ability", "Monarch_Ability", "Necromancer_Ability_1", "Necromancer_Ability_2", "Pestilence_Ability", "Plaguebearer_Ability", "Poisoner_Ability",
@@ -13,8 +13,18 @@ public static class Utils
         "Trickster_Ability", "Vampire_Ability", "Vigilante_Ability", "VoodooMaster_Ability", "War_Ability_1", "War_Ability_2", "Werewolf_Ability_1", "Werewolf_Ability_2", "Wildling_Ability",
         "Witch_Ability_1", "Witch_Ability_2", "Jailor_Special", "Cleric_Special", "Mayor_Special", "Jester_Special", "Executioner_Special", "Bodyguard_Special", "Veteran_Special",
         "Trapper_Special", "Pirate_Special", "Admirer_Special", "Arsonist_Special", "Marshal_Special", "Socialite_Special", "Poisoner_Special", "CovenLeader_Special", "Coroner_Special",
-        "SerialKiller_Special", "Starspawn_Ability", "Banshee_Ability", "Judge_Ability", "Jackal_Ability", "Auditor_Ability", "Inquisitor_Ability", "Judge_Special", "Auditor_Special",
-        "Inquisitor_Special", "Starspawn_Special" ];
+        "SerialKiller_Special" ];
+    private static readonly string[] BTOS2SkippableNames = [ "Admirer_Ability", "Amnesiac_Ability", "Arsonist_Ability", "Attributes_Coven", "Baker_Ability_1", "Berserker_Ability",
+        "Bodyguard_Ability", "Cleric_Ability", "Coroner_Ability", "CovenLeader_Ability", "Crusader_Ability", "CursedSoul_Ability", "Death_Ability", "Dreamweaver_Ability", "Enchanter_Ability",
+        "Famine_Ability", "HexMaster_Ability", "Illusionist_Ability", "Investigator_Ability", "Jailor_Ability","Jailor_Ability_2", "Jester_Ability", "Jinx_Ability", "Judge_Ability",
+        "Lookout_Ability", "Medusa_Ability", "Monarch_Ability", "Necromancer_Ability_1", "Necromancer_Ability_2", "Pestilence_Ability", "Plaguebearer_Ability", "Poisoner_Ability",
+        "PotionMaster_Ability_1", "PotionMaster_Ability_2", "Psychic_Ability", "Retributionist_Ability_1", "Retributionist_Ability_2", "Seer_Ability_1", "Seer_Ability_2", "Shroud_Special",
+        "SerialKiller_Ability", "Sheriff_Ability", "Shroud_Ability", "SoulCollector_Ability", "Spy_Ability", "TavernKeeper_Ability", "Tracker_Ability", "Trapper_Ability", "Oracle_Special",
+        "Trickster_Ability", "Vampire_Ability", "Vigilante_Ability", "VoodooMaster_Ability", "War_Ability_1", "War_Ability_2", "Werewolf_Ability_1", "Werewolf_Ability_2", "Wildling_Ability",
+        "Witch_Ability_1", "Witch_Ability_2", "Jailor_Special", "Cleric_Special", "Mayor_Special", "Jester_Special", "Bodyguard_Special", "Veteran_Special", "Trapper_Special",
+        "Pirate_Special", "Admirer_Special", "Arsonist_Special", "Marshal_Special", "Poisoner_Special", "CovenLeader_Special", "Coroner_Special", "SerialKiller_Special", "Starspawn_Ability",
+        "Banshee_Ability", "Jackal_Ability", "Auditor_Ability", "Inquisitor_Ability", "Judge_Special", "Auditor_Special", "Inquisitor_Special", "Starspawn_Special", "Baker_Ability_2",
+        "Baker_Special" ];
 
     //List of roles modified by Dum's mod
     private static readonly Role[] ChangedByToS1UI = [ Role.JAILOR, Role.CLERIC, Role.MAYOR, Role.JESTER, Role.EXECUTIONER, Role.BODYGUARD, Role.VETERAN, Role.TRAPPER, Role.PIRATE,
@@ -495,7 +505,11 @@ public static class Utils
 
     public static bool IsApocBTos(this Role role) => role is RolePlus.BERSERKER or RolePlus.WAR or RolePlus.BAKER or RolePlus.FAMINE or RolePlus.SOUL_COLLECTOR or RolePlus.DEATH or RolePlus.PLAGUEBEARER or RolePlus.PESTILENCE;
 
-    public static bool Skippable(string name) => SkippableNames.Contains(name);
+    public static bool Skippable(string name) => GetGameType() switch
+    {
+        ModType.BTOS2 => BTOS2SkippableNames.Contains(name),
+        _ => VanillaSkippableNames.Contains(name)
+    };
 
     public static (Dictionary<string, string>, Dictionary<string, int>) Filtered(ModType mod = ModType.Vanilla)
     {
@@ -594,4 +608,14 @@ public static class Utils
         (EffectType)106 => "Accompanied",
         _ => "Blank"
     };
+
+    public static ModType GetGameType()
+    {
+        if (Constants.IsBTOS2)
+            return ModType.BTOS2;
+        else if (Constants.IsLegacy)
+            return ModType.Legacy;
+        else
+            return ModType.Vanilla;
+    }
 }

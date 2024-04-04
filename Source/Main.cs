@@ -48,11 +48,18 @@ public class Recolors
         OnChanged = AssetManager.TryLoadingSprites
     };
 
-    public ModSettings.DropdownSetting ChoiceMentions => new()
+    public ModSettings.DropdownSetting ChoiceMentions1 => new()
     {
-        Name = "Selected Mention Style",
-        Description = "The selected mention style will dictate which icons are used for the mentions. If the selection is TT or VIP and certain icons don't exist, the mod will instead use the main icons of the pack and if even those don't exist, then the vanilla icons. May require a game restart.",
-        Options = GetMentionStyles()
+        Name = "Selected Vanilla Mention Style",
+        Description = "The selected mention style will dictate which icons are used for the mentions. May require a game restart.",
+        Options = GetMentionStyles(ModType.Vanilla)
+    };
+
+    public ModSettings.DropdownSetting ChoiceMentions2 => new()
+    {
+        Name = "Selected BTOS2 Mention Style",
+        Description = "The selected mention style will dictate which icons are used for the mentions. May require a game restart.",
+        Options = GetMentionStyles(ModType.BTOS2)
     };
 
     public ModSettings.DropdownSetting DownloadIcons => new()
@@ -63,11 +70,18 @@ public class Recolors
         OnChanged = Download.DownloadIcons
     };
 
-    public ModSettings.DropdownSetting FactionOverride => new()
+    public ModSettings.DropdownSetting FactionOverride1 => new()
     {
         Name = "Override Faction",
-        Description = "Only icons from the selected faction will appear.",
-        Options = GetFactionOverrides()
+        Description = "Only icons from the selected faction will appear in vanilla games.",
+        Options = GetFactionOverrides(ModType.Vanilla)
+    };
+
+    public ModSettings.DropdownSetting FactionOverride2 => new()
+    {
+        Name = "Override Faction",
+        Description = "Only icons from the selected faction will appearin BTOS2 games.",
+        Options = GetFactionOverrides(ModType.BTOS2)
     };
 
     public ModSettings.CheckboxSetting CustomNumbers => new()
@@ -97,7 +111,7 @@ public class Recolors
         }
     }
 
-    private static List<string> GetMentionStyles()
+    private static List<string> GetMentionStyles(ModType mod)
     {
         try
         {
@@ -105,9 +119,11 @@ public class Recolors
 
             if (AssetManager.IconPacks.TryGetValue(Constants.CurrentPack, out var pack))
             {
-                foreach (var (folder, icons) in pack.BaseIcons)
+                var assets = pack.Assets[mod];
+
+                foreach (var (folder, icons) in assets.BaseIcons)
                 {
-                    if (icons.Count > 0 && (pack.MentionStyles[folder] || pack.BTOS2MentionStyles[folder]))
+                    if (icons.Count > 0 && assets.MentionStyles[folder])
                         result.Add(folder);
                 }
             }
@@ -121,7 +137,7 @@ public class Recolors
         }
     }
 
-    private static List<string> GetFactionOverrides()
+    private static List<string> GetFactionOverrides(ModType mod)
     {
         try
         {
@@ -129,7 +145,7 @@ public class Recolors
 
             if (AssetManager.IconPacks.TryGetValue(Constants.CurrentPack, out var pack))
             {
-                foreach (var (folder, icons) in pack.BaseIcons)
+                foreach (var (folder, icons) in pack.Assets[mod].BaseIcons)
                 {
                     if (icons.Count > 0)
                         result.Add(folder);
