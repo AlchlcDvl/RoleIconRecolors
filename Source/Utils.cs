@@ -26,8 +26,8 @@ public static class Utils
 
     //List of roles modified by Dum's mod
     private static readonly Role[] ChangedByToS1UI = [ Role.JAILOR, Role.CLERIC, Role.MAYOR, Role.JESTER, Role.EXECUTIONER, Role.BODYGUARD, Role.VETERAN, Role.TRAPPER, Role.PIRATE,
-        Role.ADMIRER, Role.ARSONIST, Role.MARSHAL, Role.SOCIALITE, Role.POISONER, Role.COVENLEADER, Role.CORONER, Role.SERIALKILLER, Role.SHROUD, Role.ROLE_COUNT, (Role)57, (Role)58,
-        (Role)59, (Role)60, (Role)61 ];
+        Role.ADMIRER, Role.ARSONIST, Role.MARSHAL, Role.SOCIALITE, Role.POISONER, Role.COVENLEADER, Role.CORONER, Role.SERIALKILLER, Role.SHROUD, /*Role.ROLE_COUNT, (Role)57, (Role)58,
+        (Role)59, (Role)60, (Role)61*/ ];
 
     public static string RoleName(Role role, ModType mod = ModType.None)
     {
@@ -157,127 +157,127 @@ public static class Utils
 
     /*private static string LegacyRoleName(Role role) => role switch
     {
-        LegacyClient.Info.LegacyRole.Admirer => "Admirer",
-        LegacyClient.Info.LegacyRole.Amnesiac => "Amnesiac",
-        LegacyClient.Info.LegacyRole.Bodyguard => "Bodyguard",
-        LegacyClient.Info.LegacyRole.Cleric => "Cleric",
-        LegacyClient.Info.LegacyRole.Coroner => "Coroner",
-        LegacyClient.Info.LegacyRole.Crusader => "Crusader",
-        LegacyClient.Info.LegacyRole.Deputy => "Deputy",
-        LegacyClient.Info.LegacyRole.Investigator => "Investigator",
-        LegacyClient.Info.LegacyRole.Jailor => "Jailor",
-        LegacyClient.Info.LegacyRole.Lookout => "Lookout",
-        LegacyClient.Info.LegacyRole.Mayor => "Mayor",
-        LegacyClient.Info.LegacyRole.Monarch => "Monarch",
-        LegacyClient.Info.LegacyRole.Prosecutor => "Prosecutor",
-        LegacyClient.Info.LegacyRole.Psychic => "Psychic",
-        LegacyClient.Info.LegacyRole.Retributionist => "Retributionist",
-        LegacyClient.Info.LegacyRole.Seer => "Seer",
-        LegacyClient.Info.LegacyRole.Sheriff => "Sheriff",
-        LegacyClient.Info.LegacyRole.Spy => "Spy",
-        LegacyClient.Info.LegacyRole.TavernKeeper => "TavernKeeper",
-        LegacyClient.Info.LegacyRole.Tracker => "Tracker",
-        LegacyClient.Info.LegacyRole.Trapper => "Trapper",
-        LegacyClient.Info.LegacyRole.Trickster => "Trickster",
-        LegacyClient.Info.LegacyRole.Veteran => "Veteran",
-        LegacyClient.Info.LegacyRole.Vigilante => "Vigilante",
-        LegacyClient.Info.LegacyRole.Conjurer => "Conjurer",
-        LegacyClient.Info.LegacyRole.CovenLeader => "CovenLeader",
-        LegacyClient.Info.LegacyRole.Dreamweaver => "Dreamweaver",
-        LegacyClient.Info.LegacyRole.Enchanter => "Enchanter",
-        LegacyClient.Info.LegacyRole.HexMaster => "HexMaster",
-        LegacyClient.Info.LegacyRole.Illusionist => "Illusionist",
-        LegacyClient.Info.LegacyRole.Jinx => "Jinx",
-        LegacyClient.Info.LegacyRole.Medusa => "Medusa",
-        LegacyClient.Info.LegacyRole.Necromancer => "Necromancer",
-        LegacyClient.Info.LegacyRole.Poisoner => "Poisoner",
-        LegacyClient.Info.LegacyRole.PotionMaster => "PotionMaster",
-        LegacyClient.Info.LegacyRole.Ritualist => "Ritualist",
-        LegacyClient.Info.LegacyRole.VoodooMaster => "VoodooMaster",
-        LegacyClient.Info.LegacyRole.Wildling => "Wildling",
-        LegacyClient.Info.LegacyRole.Witch => "Witch",
-        LegacyClient.Info.LegacyRole.Arsonist => "Arsonist",
-        LegacyClient.Info.LegacyRole.Baker => "Baker",
-        LegacyClient.Info.LegacyRole.Berserker => "Berserker",
-        LegacyClient.Info.LegacyRole.Doomsayer => "Doomsayer",
-        LegacyClient.Info.LegacyRole.Executioner => "Executioner",
-        LegacyClient.Info.LegacyRole.Jester => "Jester",
-        LegacyClient.Info.LegacyRole.Pirate => "Pirate",
-        LegacyClient.Info.LegacyRole.Plaguebearer => "Plaguebearer",
-        LegacyClient.Info.LegacyRole.SerialKiller => "SerialKiller",
-        LegacyClient.Info.LegacyRole.Shroud => "Shroud",
-        LegacyClient.Info.LegacyRole.Reaper => "Reaper",
-        LegacyClient.Info.LegacyRole.Werewolf => "Werewolf",
-        LegacyClient.Info.LegacyRole.Vampire => "Vampire",
-        LegacyClient.Info.LegacyRole.CursedSoul => "CursedSoul",
-        LegacyClient.Info.LegacyRole.Socialite => "Socialite",
-        LegacyClient.Info.LegacyRole.Marshal => "Marshal",
-        LegacyClient.Info.LegacyRole.Famine => "Famine",
-        LegacyClient.Info.LegacyRole.War => "War",
-        LegacyClient.Info.LegacyRole.Pestilence => "Pestilence",
-        LegacyClient.Info.LegacyRole.Death => "Death",
-        LegacyClient.Info.LegacyRole.Medium => "Medium",
-        LegacyClient.Info.LegacyRole.Saint => "Saint",
-        LegacyClient.Info.LegacyRole.Transporter => "Transporter",
-        LegacyClient.Info.LegacyRole.Ambusher => "Ambusher",
-        LegacyClient.Info.LegacyRole.Assassin => "Assassin",
-        LegacyClient.Info.LegacyRole.Blackmailer => "Blackmailer",
-        LegacyClient.Info.LegacyRole.Consigliere => "Consigliere",
-        LegacyClient.Info.LegacyRole.Consort => "Consort",
-        LegacyClient.Info.LegacyRole.Disguiser => "Disguiser",
-        LegacyClient.Info.LegacyRole.Framer => "Framer",
-        LegacyClient.Info.LegacyRole.Forger => "Forger",
-        LegacyClient.Info.LegacyRole.Godfather => "Godfather",
-        LegacyClient.Info.LegacyRole.Hypnotist => "Hypnotist",
-        LegacyClient.Info.LegacyRole.Janitor => "Janitor",
-        LegacyClient.Info.LegacyRole.Mafioso => "Mafioso",
-        LegacyClient.Info.LegacyRole.Wraith => "Wraith",
-        LegacyClient.Info.LegacyRole.GuardianAngel => "GuardianAngel",
-        LegacyClient.Info.LegacyRole.Juggernaut => "Juggernaut",
-        LegacyClient.Info.LegacyRole.RandomTown => "RandomTown",
-        LegacyClient.Info.LegacyRole.TownInvestigative => "TownInvestigative",
-        LegacyClient.Info.LegacyRole.TownProtective => "TownProtective",
-        LegacyClient.Info.LegacyRole.TownKilling => "TownKilling",
-        LegacyClient.Info.LegacyRole.TownSupport => "TownSupport",
-        LegacyClient.Info.LegacyRole.TownPower => "TownPower",
-        LegacyClient.Info.LegacyRole.RandomCoven => "RandomCoven",
-        LegacyClient.Info.LegacyRole.CovenKilling => "CovenKilling",
-        LegacyClient.Info.LegacyRole.CovenUtility => "CovenUtility",
-        LegacyClient.Info.LegacyRole.CovenDeception => "CovenDeception",
-        LegacyClient.Info.LegacyRole.CovenPower => "CovenPower",
-        LegacyClient.Info.LegacyRole.RandomNeutral => "RandomNeutral",
-        LegacyClient.Info.LegacyRole.NeutralKilling => "NeutralKilling",
-        LegacyClient.Info.LegacyRole.NeutralEvil => "NeutralEvil",
-        LegacyClient.Info.LegacyRole.NeutralApocalypse => "NeutralApocalypse",
-        LegacyClient.Info.LegacyRole.NeutralChaos => "NeutralChaos",
-        LegacyClient.Info.LegacyRole.RandomMafia => "RandomMafia",
-        LegacyClient.Info.LegacyRole.MafiaDeception => "MafiaDeception",
-        LegacyClient.Info.LegacyRole.MafiaKilling => "MafiaKilling",
-        LegacyClient.Info.LegacyRole.MafiaPower => "MafiaPower",
-        LegacyClient.Info.LegacyRole.MafiaUtility => "MafiaUtility",
-        LegacyClient.Info.LegacyRole.AnyEvil => "AnyEvil",
-        LegacyClient.Info.LegacyRole.FactionedEvil => "FactionedEvil",
-        LegacyClient.Info.LegacyRole.NonTown => "NonTown",
-        LegacyClient.Info.LegacyRole.NonCoven => "NonCoven",
-        LegacyClient.Info.LegacyRole.NonMafia => "NonMafia",
-        LegacyClient.Info.LegacyRole.NonNeutral => "NonNeutral",
-        LegacyClient.Info.LegacyRole.Any => "Any",
-        LegacyClient.Info.LegacyRole.TrueAny => "TrueAny",
-        LegacyClient.Info.LegacyRole.CovenTT => "CovenTownTraitor",
-        LegacyClient.Info.LegacyRole.MafiaTT => "MafiaTownTraitor",
-        LegacyClient.Info.LegacyRole.GhostTown => "GhostTown",
-        LegacyClient.Info.LegacyRole.PerfectTown => "PerfectTown",
-        LegacyClient.Info.LegacyRole.SlowMode => "SlowMode",
-        LegacyClient.Info.LegacyRole.FastMode => "FastMode",
-        LegacyClient.Info.LegacyRole.AnonVotes => "AnonVotes",
-        LegacyClient.Info.LegacyRole.SecretKillers => "SecretKillers",
-        LegacyClient.Info.LegacyRole.HiddenRoles => "HiddenRoles",
-        LegacyClient.Info.LegacyRole.OneTrial => "OneTrial",
-        LegacyClient.Info.LegacyRole.TownVEvils => "TownVEvils",
-        LegacyClient.Info.LegacyRole.Lovers => "Lovers",
-        LegacyClient.Info.LegacyRole.Hidden => "Hidden",
-        LegacyClient.Info.LegacyRole.Cleaned => "Cleaned",
-        LegacyClient.Info.LegacyRole.Stoned => "Stoned",
+        LegacyRole.Admirer => "Admirer",
+        LegacyRole.Amnesiac => "Amnesiac",
+        LegacyRole.Bodyguard => "Bodyguard",
+        LegacyRole.Cleric => "Cleric",
+        LegacyRole.Coroner => "Coroner",
+        LegacyRole.Crusader => "Crusader",
+        LegacyRole.Deputy => "Deputy",
+        LegacyRole.Investigator => "Investigator",
+        LegacyRole.Jailor => "Jailor",
+        LegacyRole.Lookout => "Lookout",
+        LegacyRole.Mayor => "Mayor",
+        LegacyRole.Monarch => "Monarch",
+        LegacyRole.Prosecutor => "Prosecutor",
+        LegacyRole.Psychic => "Psychic",
+        LegacyRole.Retributionist => "Retributionist",
+        LegacyRole.Seer => "Seer",
+        LegacyRole.Sheriff => "Sheriff",
+        LegacyRole.Spy => "Spy",
+        LegacyRole.TavernKeeper => "TavernKeeper",
+        LegacyRole.Tracker => "Tracker",
+        LegacyRole.Trapper => "Trapper",
+        LegacyRole.Trickster => "Trickster",
+        LegacyRole.Veteran => "Veteran",
+        LegacyRole.Vigilante => "Vigilante",
+        LegacyRole.Conjurer => "Conjurer",
+        LegacyRole.CovenLeader => "CovenLeader",
+        LegacyRole.Dreamweaver => "Dreamweaver",
+        LegacyRole.Enchanter => "Enchanter",
+        LegacyRole.HexMaster => "HexMaster",
+        LegacyRole.Illusionist => "Illusionist",
+        LegacyRole.Jinx => "Jinx",
+        LegacyRole.Medusa => "Medusa",
+        LegacyRole.Necromancer => "Necromancer",
+        LegacyRole.Poisoner => "Poisoner",
+        LegacyRole.PotionMaster => "PotionMaster",
+        LegacyRole.Ritualist => "Ritualist",
+        LegacyRole.VoodooMaster => "VoodooMaster",
+        LegacyRole.Wildling => "Wildling",
+        LegacyRole.Witch => "Witch",
+        LegacyRole.Arsonist => "Arsonist",
+        LegacyRole.Baker => "Baker",
+        LegacyRole.Berserker => "Berserker",
+        LegacyRole.Doomsayer => "Doomsayer",
+        LegacyRole.Executioner => "Executioner",
+        LegacyRole.Jester => "Jester",
+        LegacyRole.Pirate => "Pirate",
+        LegacyRole.Plaguebearer => "Plaguebearer",
+        LegacyRole.SerialKiller => "SerialKiller",
+        LegacyRole.Shroud => "Shroud",
+        LegacyRole.Reaper => "Reaper",
+        LegacyRole.Werewolf => "Werewolf",
+        LegacyRole.Vampire => "Vampire",
+        LegacyRole.CursedSoul => "CursedSoul",
+        LegacyRole.Socialite => "Socialite",
+        LegacyRole.Marshal => "Marshal",
+        LegacyRole.Famine => "Famine",
+        LegacyRole.War => "War",
+        LegacyRole.Pestilence => "Pestilence",
+        LegacyRole.Death => "Death",
+        LegacyRole.Medium => "Medium",
+        LegacyRole.Saint => "Saint",
+        LegacyRole.Transporter => "Transporter",
+        LegacyRole.Ambusher => "Ambusher",
+        LegacyRole.Assassin => "Assassin",
+        LegacyRole.Blackmailer => "Blackmailer",
+        LegacyRole.Consigliere => "Consigliere",
+        LegacyRole.Consort => "Consort",
+        LegacyRole.Disguiser => "Disguiser",
+        LegacyRole.Framer => "Framer",
+        LegacyRole.Forger => "Forger",
+        LegacyRole.Godfather => "Godfather",
+        LegacyRole.Hypnotist => "Hypnotist",
+        LegacyRole.Janitor => "Janitor",
+        LegacyRole.Mafioso => "Mafioso",
+        LegacyRole.Wraith => "Wraith",
+        LegacyRole.GuardianAngel => "GuardianAngel",
+        LegacyRole.Juggernaut => "Juggernaut",
+        LegacyRole.RandomTown => "RandomTown",
+        LegacyRole.TownInvestigative => "TownInvestigative",
+        LegacyRole.TownProtective => "TownProtective",
+        LegacyRole.TownKilling => "TownKilling",
+        LegacyRole.TownSupport => "TownSupport",
+        LegacyRole.TownPower => "TownPower",
+        LegacyRole.RandomCoven => "RandomCoven",
+        LegacyRole.CovenKilling => "CovenKilling",
+        LegacyRole.CovenUtility => "CovenUtility",
+        LegacyRole.CovenDeception => "CovenDeception",
+        LegacyRole.CovenPower => "CovenPower",
+        LegacyRole.RandomNeutral => "RandomNeutral",
+        LegacyRole.NeutralKilling => "NeutralKilling",
+        LegacyRole.NeutralEvil => "NeutralEvil",
+        LegacyRole.NeutralApocalypse => "NeutralApocalypse",
+        LegacyRole.NeutralChaos => "NeutralChaos",
+        LegacyRole.RandomMafia => "RandomMafia",
+        LegacyRole.MafiaDeception => "MafiaDeception",
+        LegacyRole.MafiaKilling => "MafiaKilling",
+        LegacyRole.MafiaPower => "MafiaPower",
+        LegacyRole.MafiaUtility => "MafiaUtility",
+        LegacyRole.AnyEvil => "AnyEvil",
+        LegacyRole.FactionedEvil => "FactionedEvil",
+        LegacyRole.NonTown => "NonTown",
+        LegacyRole.NonCoven => "NonCoven",
+        LegacyRole.NonMafia => "NonMafia",
+        LegacyRole.NonNeutral => "NonNeutral",
+        LegacyRole.Any => "Any",
+        LegacyRole.TrueAny => "TrueAny",
+        LegacyRole.CovenTT => "CovenTownTraitor",
+        LegacyRole.MafiaTT => "MafiaTownTraitor",
+        LegacyRole.GhostTown => "GhostTown",
+        LegacyRole.PerfectTown => "PerfectTown",
+        LegacyRole.SlowMode => "SlowMode",
+        LegacyRole.FastMode => "FastMode",
+        LegacyRole.AnonVotes => "AnonVotes",
+        LegacyRole.SecretKillers => "SecretKillers",
+        LegacyRole.HiddenRoles => "HiddenRoles",
+        LegacyRole.OneTrial => "OneTrial",
+        LegacyRole.TownVEvils => "TownVEvils",
+        LegacyRole.Lovers => "Lovers",
+        LegacyRole.Hidden => "Hidden",
+        LegacyRole.Cleaned => "Cleaned",
+        LegacyRole.Stoned => "Stoned",
         _ => "Blank"
     };*/
 
@@ -422,24 +422,24 @@ public static class Utils
 
     /*private static string LegacyFactionName(FactionType faction) => faction switch
     {
-        LegacyClient.Info.LegacyFactionType.Amnesiac => "Amnesiac",
-        LegacyClient.Info.LegacyFactionType.Town => "Town",
-        LegacyClient.Info.LegacyFactionType.Coven => "Coven",
-        LegacyClient.Info.LegacyFactionType.Mafia => "Mafia",
-        LegacyClient.Info.LegacyFactionType.SerialKiller => "SerialKiller",
-        LegacyClient.Info.LegacyFactionType.Arsonist => "Arsonist",
-        LegacyClient.Info.LegacyFactionType.Werewolf => "Werewolf",
-        LegacyClient.Info.LegacyFactionType.Shroud => "Shroud",
-        LegacyClient.Info.LegacyFactionType.Apocalypse => "Apocalypse",
-        LegacyClient.Info.LegacyFactionType.Executioner => "Executioner",
-        LegacyClient.Info.LegacyFactionType.Jester => "Jester",
-        LegacyClient.Info.LegacyFactionType.Pirate => "Pirate",
-        LegacyClient.Info.LegacyFactionType.Doomsayer => "Doomsayer",
-        LegacyClient.Info.LegacyFactionType.Vampire => "Vampire",
-        LegacyClient.Info.LegacyFactionType.CursedSoul => "CursedSoul",
-        LegacyClient.Info.LegacyFactionType.Juggernaut => "Juggernaut",
-        LegacyClient.Info.LegacyFactionType.GuardianAngel => "GuardianAngel",
-        LegacyClient.Info.LegacyFactionType.Evils => "Evils",
+        LegacyFaction.Amnesiac => "Amnesiac",
+        LegacyFaction.Town => "Town",
+        LegacyFaction.Coven => "Coven",
+        LegacyFaction.Mafia => "Mafia",
+        LegacyFaction.SerialKiller => "SerialKiller",
+        LegacyFaction.Arsonist => "Arsonist",
+        LegacyFaction.Werewolf => "Werewolf",
+        LegacyFaction.Shroud => "Shroud",
+        LegacyFaction.Apocalypse => "Apocalypse",
+        LegacyFaction.Executioner => "Executioner",
+        LegacyFaction.Jester => "Jester",
+        LegacyFaction.Pirate => "Pirate",
+        LegacyFaction.Doomsayer => "Doomsayer",
+        LegacyFaction.Vampire => "Vampire",
+        LegacyFaction.CursedSoul => "CursedSoul",
+        LegacyFaction.Juggernaut => "Juggernaut",
+        LegacyFaction.GuardianAngel => "GuardianAngel",
+        LegacyFaction.Evils => "Evils",
         _ => "Blank"
     };*/
 
@@ -508,9 +508,8 @@ public static class Utils
     public static bool IsApocBTOS2(this Role role) => role is BTOS2Role.Berserker or BTOS2Role.War or BTOS2Role.Baker or BTOS2Role.Famine or BTOS2Role.SoulCollector or BTOS2Role.Death or
         BTOS2Role.Plaguebearer or BTOS2Role.Pestilence;
 
-    /*public static bool IsApocLegacy(this Role role) => role is LegacyClient.Info.LegacyRole.Berserker or LegacyClient.Info.LegacyRole.War or LegacyClient.Info.LegacyRole.Baker or
-        LegacyClient.Info.LegacyRole.Famine or LegacyClient.Info.LegacyRole.Reaper or LegacyClient.Info.LegacyRole.Death or LegacyClient.Info.LegacyRole.Plaguebearer or
-        LegacyClient.Info.LegacyRole.Pestilence;*/
+    /*public static bool IsApocLegacy(this Role role) => role is LegacyRole.Berserker or LegacyRole.War or LegacyRole.Baker or LegacyRole.Famine or LegacyRole.Reaper or LegacyRole.Death or
+        LegacyRole.Plaguebearer or LegacyRole.Pestilence;*/
 
     public static bool Skippable(string name) => GetGameType() switch
     {
@@ -527,12 +526,11 @@ public static class Utils
                 .Where(fi => fi.IsLiteral && !fi.IsInitOnly && fi.FieldType == typeof(Role))
                 .Select(x => (Role)x.GetRawConstantValue())
                 .Where(x => x is not (BTOS2Role.None or BTOS2Role.Hangman or BTOS2Role.Unknown or BTOS2Role.RoleCount)),
-            /*ModType.Legacy => typeof(LegacyClient.Info.LegacyRole)
+            /*ModType.Legacy => typeof(LegacyRole)
                 .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)
                 .Where(fi => fi.IsLiteral && !fi.IsInitOnly && fi.FieldType == typeof(Role))
                 .Select(x => (Role)x.GetRawConstantValue())
-                .Where(x => x is not (LegacyClient.Info.LegacyRole.None or LegacyClient.Info.LegacyRole.Hangman or LegacyClient.Info.LegacyRole.Unknown or
-                    LegacyClient.Info.LegacyRole.RoleCount)),*/
+                .Where(x => x is not (LegacyRole.None or LegacyRole.Hangman or LegacyRole.Unknown or LegacyRole.RoleCount)),*/
             _ => ((Role[])Enum.GetValues(typeof(Role))).Where(x => x is not (Role.NONE or Role.ROLE_COUNT or Role.UNKNOWN or Role.HANGMAN))
         };
 
@@ -551,11 +549,17 @@ public static class Utils
         File.WriteAllBytes(assetPath, texture.Decompress().EncodeToPNG());
     }
 
-    public static bool IsTransformedApoc(this Role role)
+    public static bool IsTransformedApoc(this Role role, ModType mod = ModType.None)
     {
         try
         {
-            return Constants.IsBTOS2 ? IsTransformedApocBTOS(role) : IsTransformedApocVanilla(role);
+            return mod switch
+            {
+                ModType.Vanilla => IsTransformedApocVanilla(role),
+                ModType.BTOS2 => IsTransformedApocBTOS(role),
+                //ModType.Legacy => LegacyFactionName(faction),
+                _ => Constants.IsBTOS2 ? IsTransformedApocBTOS(role) : /*(Constants.IsLegacy ? LegacyFactionName(faction) : */IsTransformedApocVanilla(role),//),
+            };
         }
         catch
         {
@@ -566,6 +570,8 @@ public static class Utils
     private static bool IsTransformedApocBTOS(this Role role) => role is BTOS2Role.Death or BTOS2Role.Famine or BTOS2Role.War or BTOS2Role.Pestilence;
 
     private static bool IsTransformedApocVanilla(this Role role) => role is Role.DEATH or Role.FAMINE or Role.WAR or Role.PESTILENCE;
+
+    //private static bool IsTransformedApocLegacy(this Role role) => role is LegacyRole.Death or LegacyRole.Famine or LegacyRole.War or LegacyRole.Pestilence;
 
     public static bool IsValid(this Sprite sprite) => sprite && sprite != AssetManager.Blank;
 
@@ -615,13 +621,27 @@ public static class Utils
 
     public static ModType GetGameType()
     {
-        if (Constants.IsBTOS2)
+        if (Constants.IsBTOS2 || FindCasualQueue())
             return ModType.BTOS2;
         /*else if (Constants.IsLegacy)
             return ModType.Legacy;*/
         else
             return ModType.Vanilla;
     }
+
+    public static bool FindCasualQueue()
+    {
+        try
+        {
+            return FindCasualQueueBypass();
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    private static bool FindCasualQueueBypass() => BetterTOS2.BTOSInfo.CasualModeController;
 
     public static bool IsEthereal(this UIRoleData.UIRoleDataInstance ui)
     {
@@ -640,7 +660,6 @@ public static class Utils
         try
         {
             mod ??= GetGameType();
-
             return mod switch
             {
                 ModType.BTOS2 => role switch
@@ -653,10 +672,10 @@ public static class Utils
                 },
                 /*ModType.Legacy => role switch
                 {
-                    LegacyClient.Info.LegacyRole.Baker => LegacyClient.Info.LegacyRole.Famine,
-                    LegacyClient.Info.LegacyRole.Berserker => LegacyClient.Info.LegacyRole.War,
-                    LegacyClient.Info.LegacyRole.Reaper => LegacyClient.Info.LegacyRole.Death,
-                    LegacyClient.Info.LegacyRole.Plaguebearer => LegacyClient.Info.LegacyRole.Pestilence,
+                    LegacyRole.Baker => LegacyRole.Famine,
+                    LegacyRole.Berserker => LegacyRole.War,
+                    LegacyRole.Reaper => LegacyRole.Death,
+                    LegacyRole.Plaguebearer => LegacyRole.Pestilence,
                     _ => role
                 },*/
                 _ => role switch
@@ -690,7 +709,7 @@ public static class Utils
             return mod switch
             {
                 ModType.BTOS2 => BTOS2Role.Necromancer,
-                //ModType.Legacy => LegacyClient.Info.LegacyRole.Necromancer,
+                //ModType.Legacy => LegacyRole.Necromancer,
                 _ => Role.NECROMANCER,
             };
         }
@@ -708,7 +727,7 @@ public static class Utils
             return mod switch
             {
                 ModType.BTOS2 => BTOS2Role.War,
-                //ModType.Legacy => LegacyClient.Info.LegacyRole.War,
+                //ModType.Legacy => LegacyRole.War,
                 _ => Role.WAR,
             };
         }

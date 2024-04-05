@@ -14,10 +14,10 @@ public static class AssetManager
     public static Sprite Defense;
     public static Sprite Ethereal;
 
-    public static TMP_SpriteAsset VanillaAsset1;
-    public static TMP_SpriteAsset VanillaAsset2;
-    public static TMP_SpriteAsset BTOS2Asset1;
-    public static TMP_SpriteAsset BTOS2Asset2;
+    public static TMP_SpriteAsset Vanilla1;
+    public static TMP_SpriteAsset Vanilla2;
+    public static TMP_SpriteAsset BTOS2_1;
+    public static TMP_SpriteAsset BTOS2_2;
     //public static TMP_SpriteAsset LegacyAsset;
 
     public static string ModPath => Path.Combine(Path.GetDirectoryName(Application.dataPath), "SalemModLoader", "ModFolders", "Recolors");
@@ -118,18 +118,18 @@ public static class AssetManager
             if (!Directory.Exists(btos))
                 Directory.CreateDirectory(btos);
 
-            BTOS2Asset1 = BetterTOS2.BTOSInfo.assetBundle.LoadAsset<TMP_SpriteAsset>("Roles");
+            BTOS2_1 = BetterTOS2.BTOSInfo.assetBundle.LoadAsset<TMP_SpriteAsset>("Roles");
 
-            for (var i = 0; i < BTOS2Asset1.spriteCharacterTable.Count; i++)
+            for (var i = 0; i < BTOS2_1.spriteCharacterTable.Count; i++)
             {
-                BTOS2Asset1.spriteGlyphTable[i].metrics = new()
+                BTOS2_1.spriteGlyphTable[i].metrics = new()
                 {
                     horizontalBearingX = 0f,
                     horizontalBearingY = 224f
                 };
             }
 
-            Utils.DumpSprite(BTOS2Asset1.spriteSheet as Texture2D, "BTOSRoleIcons", Path.Combine(ModPath, "BTOS2"));
+            Utils.DumpSprite(BTOS2_1.spriteSheet as Texture2D, "BTOSRoleIcons", Path.Combine(ModPath, "BTOS2"));
             LoadBTOS2SpriteSheet();
         }
     }
@@ -243,7 +243,7 @@ public static class AssetManager
                 exists = IconPacks[packName] = new(packName);
                 exists.Load();
 
-                if (CacheDefaultSpriteSheet.ServiceExists)
+                if (CacheDefaults.ServiceExists)
                     SetScrollSprites();
 
                 exists.Debug();
@@ -269,28 +269,28 @@ public static class AssetManager
         var diagnostic = $"Uh oh, something happened here\nPack Name: {Constants.CurrentPack}\nStyle Name: {Constants.CurrentStyle}\nFaction Override: {Constants.FactionOverride}\n" +
             $"Custom Numbers: {Constants.CustomNumbers}";
 
-        if (!CacheDefaultSpriteSheet.Cache1)
+        if (!CacheDefaults.RoleIcons)
             diagnostic += "\nVanilla Sheet Does Not Exist";
 
-        if (!CacheDefaultSpriteSheet.Cache2)
+        if (!CacheDefaults.Numbers)
             diagnostic += "\nVanilla Player Numbers Sheet Does Not Exist";
 
-        if (!VanillaAsset1)
+        if (!Vanilla1)
             diagnostic += "\nModified Vanilla Sheet Does Not Exist";
 
-        if (!VanillaAsset2)
+        if (!Vanilla2)
             diagnostic += "\nModified Player Numbers Sheet Does Not Exist";
 
         if (Constants.BTOS2Exists)
         {
-            if (!BTOS2Asset1)
+            if (!BTOS2_1)
                 diagnostic += "\nBTOS2 Sheet Does Not Exist";
 
-            if (!BTOS2Asset2)
+            if (!BTOS2_2)
                 diagnostic += "\nModified BTOS2 Sheet Does Not Exist";
         }
 
-        diagnostic += $"\nCurrently In A {(Constants.IsBTOS2 ? "BTOS2" : "Vanilla")} Game";
+        diagnostic += $"\nCurrently In A {Utils.GetGameType()} Game";
 
         if (Constants.EnableIcons && !IconPacks.TryGetValue(Constants.CurrentPack, out pack))
             diagnostic += "\nNo Loaded Icon Pack";
@@ -391,13 +391,13 @@ public static class AssetManager
                     Logging.LogWarning($"NO VANILLA ICON FOR {name}?!");
             }
 
-            VanillaAsset1 = BuildGlyphs([..sprites], [..sprites.Select(x => x.texture)], "RoleIcons", rolesWithIndexDict);
-            Utils.DumpSprite(VanillaAsset1.spriteSheet as Texture2D, "RoleIcons_Modified", Path.Combine(ModPath, "Vanilla"));
+            Vanilla1 = BuildGlyphs([..sprites], [..sprites.Select(x => x.texture)], "RoleIcons", rolesWithIndexDict);
+            Utils.DumpSprite(Vanilla1.spriteSheet as Texture2D, "RoleIcons_Modified", Path.Combine(ModPath, "Vanilla"));
         }
         catch (Exception e)
         {
             Logging.LogError(e);
-            VanillaAsset1 = null;
+            Vanilla1 = null;
         }
 
         try
@@ -420,13 +420,13 @@ public static class AssetManager
                 dict.Add($"PlayerNumbers_{i}");
             }
 
-            VanillaAsset2 = BuildGlyphs([..sprites], [..sprites.Select(x => x.texture)], "PlayerNumbers", dict.ToDictionary(x => x, x => x), false);
-            Utils.DumpSprite(VanillaAsset2.spriteSheet as Texture2D, "PlayerNumbers_Modified", Path.Combine(ModPath, "Vanilla"));
+            Vanilla2 = BuildGlyphs([..sprites], [..sprites.Select(x => x.texture)], "PlayerNumbers", dict.ToDictionary(x => x, x => x), false);
+            Utils.DumpSprite(Vanilla2.spriteSheet as Texture2D, "PlayerNumbers_Modified", Path.Combine(ModPath, "Vanilla"));
         }
         catch (Exception e)
         {
             Logging.LogError(e);
-            VanillaAsset2 = null;
+            Vanilla2 = null;
         }
     }
     public static void LoadBTOS2SpriteSheet()
@@ -453,13 +453,13 @@ public static class AssetManager
                     Logging.LogWarning($"NO BTOS2 ICON FOR {name}?!");
             }
 
-            BTOS2Asset2 = BuildGlyphs([..sprites], [..sprites.Select(x => x.texture)], "BTOSRoleIcons", rolesWithIndexDict);
-            Utils.DumpSprite(BTOS2Asset2.spriteSheet as Texture2D, "BTOS2RoleIcons_Modified", Path.Combine(ModPath, "BTOS2"));
+            BTOS2_2 = BuildGlyphs([..sprites], [..sprites.Select(x => x.texture)], "BTOSRoleIcons", rolesWithIndexDict);
+            Utils.DumpSprite(BTOS2_2.spriteSheet as Texture2D, "BTOS2RoleIcons_Modified", Path.Combine(ModPath, "BTOS2"));
         }
         catch (Exception e)
         {
             Logging.LogError(e);
-            BTOS2Asset2 = null;
+            BTOS2_2 = null;
         }
     }
 
