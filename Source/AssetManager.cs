@@ -375,7 +375,7 @@ public static class AssetManager
     {
         try
         {
-            var (rolesWithIndexDict, rolesWithIndex) = Utils.Filtered(ModType.BTOS2);
+            var (rolesWithIndexDict, rolesWithIndex) = Utils.Filtered(ModType.Vanilla);
             var sprites = new List<Sprite>();
 
             foreach (var (role, roleInt) in rolesWithIndex)
