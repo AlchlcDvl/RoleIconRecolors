@@ -98,32 +98,37 @@ public static class AssetManager
         Defense = Witchcraft.Witchcraft.Assets["Defense"];
         Ethereal = Witchcraft.Witchcraft.Assets["Ethereal"];
 
-        try
-        {
-            if (Constants.BTOS2Exists)
-            {
-                var btos = Path.Combine(ModPath, "BTOS2");
-
-                if (!Directory.Exists(btos))
-                    Directory.CreateDirectory(btos);
-
-                BTOS2Asset = BetterTOS2.BTOSInfo.assetBundle.LoadAsset<TMP_SpriteAsset>("Roles");
-
-                for (var i = 0; i < BTOS2Asset.spriteCharacterTable.Count; i++)
-                {
-                    BTOS2Asset.spriteGlyphTable[i].metrics = new()
-                    {
-                        horizontalBearingX = 0f,
-                        horizontalBearingY = 224f
-                    };
-                }
-
-                Utils.DumpSprite(BTOS2Asset.spriteSheet as Texture2D, "BTOSRoleIcons", Path.Combine(ModPath, "BTOS2"));
-            }
-        } catch {}
-
         TryLoadingSprites(Constants.CurrentPack);
         LoadVanillaSpriteSheets();
+
+        try
+        {
+            DumpBTOSSpriteSheet();
+        } catch {}
+    }
+
+    private static void DumpBTOSSpriteSheet()
+    {
+        if (Constants.BTOS2Exists)
+        {
+            var btos = Path.Combine(ModPath, "BTOS2");
+
+            if (!Directory.Exists(btos))
+                Directory.CreateDirectory(btos);
+
+            BTOS2Asset = BetterTOS2.BTOSInfo.assetBundle.LoadAsset<TMP_SpriteAsset>("Roles");
+
+            for (var i = 0; i < BTOS2Asset.spriteCharacterTable.Count; i++)
+            {
+                BTOS2Asset.spriteGlyphTable[i].metrics = new()
+                {
+                    horizontalBearingX = 0f,
+                    horizontalBearingY = 224f
+                };
+            }
+
+            Utils.DumpSprite(BTOS2Asset.spriteSheet as Texture2D, "BTOSRoleIcons", Path.Combine(ModPath, "BTOS2"));
+        }
     }
 
     private static Texture2D EmptyTexture() => new(2, 2, TextureFormat.ARGB32, true);

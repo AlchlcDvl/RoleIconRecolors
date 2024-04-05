@@ -49,109 +49,109 @@ public static class Utils
 
     private static string BTOSRoleName(Role role) => role switch
     {
-        BetterTOS2.RolePlus.ADMIRER => "Admirer",
-        BetterTOS2.RolePlus.AMNESIAC => "Amnesiac",
-        BetterTOS2.RolePlus.BODYGUARD => "Bodyguard",
-        BetterTOS2.RolePlus.CLERIC => "Cleric",
-        BetterTOS2.RolePlus.CORONER => "Coroner",
-        BetterTOS2.RolePlus.CRUSADER => "Crusader",
-        BetterTOS2.RolePlus.DEPUTY => "Deputy",
-        BetterTOS2.RolePlus.INVESTIGATOR => "Investigator",
-        BetterTOS2.RolePlus.JAILOR => "Jailor",
-        BetterTOS2.RolePlus.LOOKOUT => "Lookout",
-        BetterTOS2.RolePlus.MAYOR => "Mayor",
-        BetterTOS2.RolePlus.MONARCH => "Monarch",
-        BetterTOS2.RolePlus.PROSECUTOR => "Prosecutor",
-        BetterTOS2.RolePlus.PSYCHIC => "Psychic",
-        BetterTOS2.RolePlus.RETRIBUTIONIST => "Retributionist",
-        BetterTOS2.RolePlus.SEER => "Seer",
-        BetterTOS2.RolePlus.SHERIFF => "Sheriff",
-        BetterTOS2.RolePlus.SPY => "Spy",
-        BetterTOS2.RolePlus.TAVERN_KEEPER => "TavernKeeper",
-        BetterTOS2.RolePlus.TRACKER => "Tracker",
-        BetterTOS2.RolePlus.TRAPPER => "Trapper",
-        BetterTOS2.RolePlus.TRICKSTER => "Trickster",
-        BetterTOS2.RolePlus.VETERAN => "Veteran",
-        BetterTOS2.RolePlus.VIGILANTE => "Vigilante",
-        BetterTOS2.RolePlus.CONJURER => "Conjurer",
-        BetterTOS2.RolePlus.COVEN_LEADER => "CovenLeader",
-        BetterTOS2.RolePlus.DREAMWEAVER => "Dreamweaver",
-        BetterTOS2.RolePlus.ENCHANTER => "Enchanter",
-        BetterTOS2.RolePlus.HEX_MASTER => "HexMaster",
-        BetterTOS2.RolePlus.ILLUSIONIST => "Illusionist",
-        BetterTOS2.RolePlus.JINX => "Jinx",
-        BetterTOS2.RolePlus.MEDUSA => "Medusa",
-        BetterTOS2.RolePlus.NECROMANCER => "Necromancer",
-        BetterTOS2.RolePlus.POISONER => "Poisoner",
-        BetterTOS2.RolePlus.POTION_MASTER => "PotionMaster",
-        BetterTOS2.RolePlus.RITUALIST => "Ritualist",
-        BetterTOS2.RolePlus.VOODOO_MASTER => "VoodooMaster",
-        BetterTOS2.RolePlus.WILDLING => "Wildling",
-        BetterTOS2.RolePlus.WITCH => "Witch",
-        BetterTOS2.RolePlus.ARSONIST => "Arsonist",
-        BetterTOS2.RolePlus.BAKER => "Baker",
-        BetterTOS2.RolePlus.BERSERKER => "Berserker",
-        BetterTOS2.RolePlus.DOOMSAYER => "Doomsayer",
-        BetterTOS2.RolePlus.EXECUTIONER => "Executioner",
-        BetterTOS2.RolePlus.JESTER => "Jester",
-        BetterTOS2.RolePlus.PIRATE => "Pirate",
-        BetterTOS2.RolePlus.PLAGUEBEARER => "Plaguebearer",
-        BetterTOS2.RolePlus.SERIAL_KILLER => "SerialKiller",
-        BetterTOS2.RolePlus.SHROUD => "Shroud",
-        BetterTOS2.RolePlus.SOUL_COLLECTOR => "SoulCollector",
-        BetterTOS2.RolePlus.WEREWOLF => "Werewolf",
-        BetterTOS2.RolePlus.FAMINE => "Famine",
-        BetterTOS2.RolePlus.WAR => "War",
-        BetterTOS2.RolePlus.PESTILENCE => "Pestilence",
-        BetterTOS2.RolePlus.DEATH => "Death",
-        BetterTOS2.RolePlus.CURSED_SOUL => "CursedSoul",
-        BetterTOS2.RolePlus.BANSHEE => "Banshee",
-        BetterTOS2.RolePlus.JACKAL => "Jackal",
-        BetterTOS2.RolePlus.MARSHAL => "Marshal",
-        BetterTOS2.RolePlus.JUDGE => "Judge",
-        BetterTOS2.RolePlus.AUDITOR => "Auditor",
-        BetterTOS2.RolePlus.INQUISITOR => "Inquisitor",
-        BetterTOS2.RolePlus.STARSPAWN => "Starspawn",
-        BetterTOS2.RolePlus.ORACLE => "Oracle",
-        BetterTOS2.RolePlus.VAMPIRE => "Vampire",
-        BetterTOS2.RolePlus.STONED => "Stoned",
-        BetterTOS2.RolePlus.RANDOM_TOWN => "Town",
-        BetterTOS2.RolePlus.RANDOM_COVEN => "Coven",
-        BetterTOS2.RolePlus.RANDOM_NEUTRAL => "Neutral",
-        BetterTOS2.RolePlus.TOWN_INVESTIGATIVE => "TownInvestigative",
-        BetterTOS2.RolePlus.TOWN_PROTECTIVE => "TownProtective",
-        BetterTOS2.RolePlus.TOWN_KILLING => "TownKilling",
-        BetterTOS2.RolePlus.TOWN_SUPPORT => "TownSupport",
-        BetterTOS2.RolePlus.TOWN_POWER => "TownPower",
-        BetterTOS2.RolePlus.COVEN_KILLING => "CovenKilling",
-        BetterTOS2.RolePlus.COVEN_UTILITY => "CovenUtility",
-        BetterTOS2.RolePlus.COVEN_DECEPTION => "CovenDeception",
-        BetterTOS2.RolePlus.COVEN_POWER => "CovenPower",
-        BetterTOS2.RolePlus.NEUTRAL_KILLING => "NeutralKilling",
-        BetterTOS2.RolePlus.NEUTRAL_EVIL => "NeutralEvil",
-        BetterTOS2.RolePlus.TRUE_ANY => "TrueAny",
-        BetterTOS2.RolePlus.REGULAR_COVEN => "CommonCoven",
-        BetterTOS2.RolePlus.REGULAR_TOWN => "CommonTown",
-        BetterTOS2.RolePlus.RANDOM_APOCALYPSE => "RandomApocalypse",
-        BetterTOS2.RolePlus.NEUTRAL_PARIAH => "NeutralPariah",
-        BetterTOS2.RolePlus.NEUTRAL_SPECIAL => "NeutralSpecial",
-        BetterTOS2.RolePlus.ANY => "Any",
-        BetterTOS2.RolePlus.COVEN_TOWN_TRAITOR => "CovenTownTraitor",
-        BetterTOS2.RolePlus.APOC_TOWN_TRAITOR => "ApocTownTraitor",
-        BetterTOS2.RolePlus.PERFECT_TOWN => "PerfectTown",
-        BetterTOS2.RolePlus.GHOST_TOWN => "GhostTown",
-        BetterTOS2.RolePlus.VIP => "VIP",
-        BetterTOS2.RolePlus.SLOW_MODE => "SlowMode",
-        BetterTOS2.RolePlus.FAST_MODE => "FastMode",
-        BetterTOS2.RolePlus.ANON_VOTING => "AnonVoting",
-        BetterTOS2.RolePlus.SECRET_KILLERS => "SecretKillers",
-        BetterTOS2.RolePlus.HIDDEN_ROLES => "HiddenRoles",
-        BetterTOS2.RolePlus.ONE_TRIAL => "OneTrial",
-        BetterTOS2.RolePlus.NECRO_PASSING => "NecroPass",
-        BetterTOS2.RolePlus.TEAMS => "Teams",
-        BetterTOS2.RolePlus.ANON_PLAYERS => "AnonNames",
-        BetterTOS2.RolePlus.WALKING_DEAD => "WalkingDead",
-        BetterTOS2.RolePlus.HIDDEN => "Hidden",
+        BTOS2Role.Admirer => "Admirer",
+        BTOS2Role.Amnesiac => "Amnesiac",
+        BTOS2Role.Bodyguard => "Bodyguard",
+        BTOS2Role.Cleric => "Cleric",
+        BTOS2Role.Coroner => "Coroner",
+        BTOS2Role.Crusader => "Crusader",
+        BTOS2Role.Deputy => "Deputy",
+        BTOS2Role.Investigator => "Investigator",
+        BTOS2Role.Jailor => "Jailor",
+        BTOS2Role.Lookout => "Lookout",
+        BTOS2Role.Mayor => "Mayor",
+        BTOS2Role.Monarch => "Monarch",
+        BTOS2Role.Prosecutor => "Prosecutor",
+        BTOS2Role.Psychic => "Psychic",
+        BTOS2Role.Retributionist => "Retributionist",
+        BTOS2Role.Seer => "Seer",
+        BTOS2Role.Sheriff => "Sheriff",
+        BTOS2Role.Spy => "Spy",
+        BTOS2Role.TavernKeeper => "TavernKeeper",
+        BTOS2Role.Tracker => "Tracker",
+        BTOS2Role.Trapper => "Trapper",
+        BTOS2Role.Trickster => "Trickster",
+        BTOS2Role.Veteran => "Veteran",
+        BTOS2Role.Vigilante => "Vigilante",
+        BTOS2Role.Conjurer => "Conjurer",
+        BTOS2Role.CovenLeader => "CovenLeader",
+        BTOS2Role.Dreamweaver => "Dreamweaver",
+        BTOS2Role.Enchanter => "Enchanter",
+        BTOS2Role.HexMaster => "HexMaster",
+        BTOS2Role.Illusionist => "Illusionist",
+        BTOS2Role.Jinx => "Jinx",
+        BTOS2Role.Medusa => "Medusa",
+        BTOS2Role.Necromancer => "Necromancer",
+        BTOS2Role.Poisoner => "Poisoner",
+        BTOS2Role.PotionMaster => "PotionMaster",
+        BTOS2Role.Ritualist => "Ritualist",
+        BTOS2Role.VoodooMaster => "VoodooMaster",
+        BTOS2Role.Wildling => "Wildling",
+        BTOS2Role.Witch => "Witch",
+        BTOS2Role.Arsonist => "Arsonist",
+        BTOS2Role.Baker => "Baker",
+        BTOS2Role.Berserker => "Berserker",
+        BTOS2Role.Doomsayer => "Doomsayer",
+        BTOS2Role.Executioner => "Executioner",
+        BTOS2Role.Jester => "Jester",
+        BTOS2Role.Pirate => "Pirate",
+        BTOS2Role.Plaguebearer => "Plaguebearer",
+        BTOS2Role.SerialKiller => "SerialKiller",
+        BTOS2Role.Shroud => "Shroud",
+        BTOS2Role.SoulCollector => "SoulCollector",
+        BTOS2Role.Werewolf => "Werewolf",
+        BTOS2Role.Famine => "Famine",
+        BTOS2Role.War => "War",
+        BTOS2Role.Pestilence => "Pestilence",
+        BTOS2Role.Death => "Death",
+        BTOS2Role.CursedSoul => "CursedSoul",
+        BTOS2Role.Banshee => "Banshee",
+        BTOS2Role.Jackal => "Jackal",
+        BTOS2Role.Marshal => "Marshal",
+        BTOS2Role.Judge => "Judge",
+        BTOS2Role.Auditor => "Auditor",
+        BTOS2Role.Inquisitor => "Inquisitor",
+        BTOS2Role.Starspawn => "Starspawn",
+        BTOS2Role.Oracle => "Oracle",
+        BTOS2Role.Vampire => "Vampire",
+        BTOS2Role.Stoned => "Stoned",
+        BTOS2Role.RandomTown => "Town",
+        BTOS2Role.RandomCoven => "Coven",
+        BTOS2Role.RandomNeutral => "Neutral",
+        BTOS2Role.TownInvestigative => "TownInvestigative",
+        BTOS2Role.TownProtective => "TownProtective",
+        BTOS2Role.TownKilling => "TownKilling",
+        BTOS2Role.TownSupport => "TownSupport",
+        BTOS2Role.TownPower => "TownPower",
+        BTOS2Role.CovenKilling => "CovenKilling",
+        BTOS2Role.CovenUtility => "CovenUtility",
+        BTOS2Role.CovenDeception => "CovenDeception",
+        BTOS2Role.CovenPower => "CovenPower",
+        BTOS2Role.NeutralKilling => "NeutralKilling",
+        BTOS2Role.NeutralEvil => "NeutralEvil",
+        BTOS2Role.TrueAny => "TrueAny",
+        BTOS2Role.CommonCoven => "CommonCoven",
+        BTOS2Role.CommonTown => "CommonTown",
+        BTOS2Role.RandomApocalypse => "RandomApocalypse",
+        BTOS2Role.NeutralPariah => "NeutralPariah",
+        BTOS2Role.NeutralSpecial => "NeutralSpecial",
+        BTOS2Role.Any => "Any",
+        BTOS2Role.CovenTownTraitor => "CovenTownTraitor",
+        BTOS2Role.ApocTownTraitor => "ApocTownTraitor",
+        BTOS2Role.PerfectTown => "PerfectTown",
+        BTOS2Role.GhostTown => "GhostTown",
+        BTOS2Role.VIP => "VIP",
+        BTOS2Role.SlowMode => "SlowMode",
+        BTOS2Role.FastMode => "FastMode",
+        BTOS2Role.AnonVoting => "AnonVoting",
+        BTOS2Role.SecretKillers => "SecretKillers",
+        BTOS2Role.HiddenRoles => "HiddenRoles",
+        BTOS2Role.OneTrial => "OneTrial",
+        BTOS2Role.NecroPass => "NecroPass",
+        BTOS2Role.Teams => "Teams",
+        BTOS2Role.AnonNames => "AnonNames",
+        BTOS2Role.WalkingDead => "WalkingDead",
+        BTOS2Role.Hidden => "Hidden",
         _ => "Blank"
     };
 
@@ -396,30 +396,27 @@ public static class Utils
 
     private static string BTOSFactionName(FactionType faction) => faction switch
     {
-        BetterTOS2.FactionTypePlus.TOWN => "Town",
-        BetterTOS2.FactionTypePlus.COVEN => "Coven",
-        BetterTOS2.FactionTypePlus.SERIALKILLER => "SerialKiller",
-        BetterTOS2.FactionTypePlus.ARSONIST => "Arsonist",
-        BetterTOS2.FactionTypePlus.WEREWOLF => "Werewolf",
-        BetterTOS2.FactionTypePlus.SHROUD => "Shroud",
-        BetterTOS2.FactionTypePlus.APOCALYPSE => "Apocalypse",
-        BetterTOS2.FactionTypePlus.EXECUTIONER => "Executioner",
-        BetterTOS2.FactionTypePlus.JESTER => "Jester",
-        BetterTOS2.FactionTypePlus.PIRATE => "Pirate",
-        BetterTOS2.FactionTypePlus.DOOMSAYER => "Doomsayer",
-        BetterTOS2.FactionTypePlus.VAMPIRE => "Vampire",
-        BetterTOS2.FactionTypePlus.CURSEDSOUL => "CursedSoul",
-        BetterTOS2.FactionTypePlus.JACKAL => "Jackal",
-        BetterTOS2.FactionTypePlus.FROGS => "Frogs",
-        BetterTOS2.FactionTypePlus.LIONS => "Lions",
-        BetterTOS2.FactionTypePlus.HAWKS => "Hawks",
-        BetterTOS2.FactionTypePlus.JUDGE => "Judge",
-        BetterTOS2.FactionTypePlus.AUDITOR => "Auditor",
-        BetterTOS2.FactionTypePlus.STARSPAWN => "Starspawn",
-        BetterTOS2.FactionTypePlus.INQUISITOR => "Inquisitor",
-        /*BetterTOS2.FactionTypePlus.EGOIST => "Egoist",
-        BetterTOS2.FactionTypePlus.COMPLIANT => "Compliant",
-        BetterTOS2.FactionTypePlus.PANDORA => "Pandora",*/
+        BTOS2Faction.Town => "Town",
+        BTOS2Faction.Coven => "Coven",
+        BTOS2Faction.SerialKiller => "SerialKiller",
+        BTOS2Faction.Arsonist => "Arsonist",
+        BTOS2Faction.Werewolf => "Werewolf",
+        BTOS2Faction.Shroud => "Shroud",
+        BTOS2Faction.Apocalypse => "Apocalypse",
+        BTOS2Faction.Executioner => "Executioner",
+        BTOS2Faction.Jester => "Jester",
+        BTOS2Faction.Pirate => "Pirate",
+        BTOS2Faction.Doomsayer => "Doomsayer",
+        BTOS2Faction.Vampire => "Vampire",
+        BTOS2Faction.CursedSoul => "CursedSoul",
+        BTOS2Faction.Jackal => "Jackal",
+        BTOS2Faction.Frogs => "Frogs",
+        BTOS2Faction.Lions => "Lions",
+        BTOS2Faction.Hawks => "Hawks",
+        BTOS2Faction.Judge => "Judge",
+        BTOS2Faction.Auditor => "Auditor",
+        BTOS2Faction.Starspawn => "Starspawn",
+        BTOS2Faction.Inquisitor => "Inquisitor",
         _ => "Blank"
     };
 
@@ -508,8 +505,8 @@ public static class Utils
     public static bool IsApocVanilla(this Role role) => role is Role.BERSERKER or Role.WAR or Role.BAKER or Role.FAMINE or Role.SOULCOLLECTOR or Role.DEATH or Role.PLAGUEBEARER or
         Role.PESTILENCE;
 
-    public static bool IsApocBTOS2(this Role role) => role is BetterTOS2.RolePlus.BERSERKER or BetterTOS2.RolePlus.WAR or BetterTOS2.RolePlus.BAKER or BetterTOS2.RolePlus.FAMINE or
-        BetterTOS2.RolePlus.SOUL_COLLECTOR or BetterTOS2.RolePlus.DEATH or BetterTOS2.RolePlus.PLAGUEBEARER or BetterTOS2.RolePlus.PESTILENCE;
+    public static bool IsApocBTOS2(this Role role) => role is BTOS2Role.Berserker or BTOS2Role.War or BTOS2Role.Baker or BTOS2Role.Famine or BTOS2Role.SoulCollector or BTOS2Role.Death or
+        BTOS2Role.Plaguebearer or BTOS2Role.Pestilence;
 
     /*public static bool IsApocLegacy(this Role role) => role is LegacyClient.Info.LegacyRole.Berserker or LegacyClient.Info.LegacyRole.War or LegacyClient.Info.LegacyRole.Baker or
         LegacyClient.Info.LegacyRole.Famine or LegacyClient.Info.LegacyRole.Reaper or LegacyClient.Info.LegacyRole.Death or LegacyClient.Info.LegacyRole.Plaguebearer or
@@ -525,11 +522,11 @@ public static class Utils
     {
         var roles = mod switch
         {
-            ModType.BTOS2 => typeof(BetterTOS2.RolePlus)
+            ModType.BTOS2 => typeof(BTOS2Role)
                 .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)
                 .Where(fi => fi.IsLiteral && !fi.IsInitOnly && fi.FieldType == typeof(Role))
                 .Select(x => (Role)x.GetRawConstantValue())
-                .Where(x => x is not (BetterTOS2.RolePlus.NONE or Role.HANGMAN or BetterTOS2.RolePlus.UNKNOWN or BetterTOS2.RolePlus.ROLE_COUNT)),
+                .Where(x => x is not (BTOS2Role.None or BTOS2Role.Hangman or BTOS2Role.Unknown or BTOS2Role.RoleCount)),
             /*ModType.Legacy => typeof(LegacyClient.Info.LegacyRole)
                 .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)
                 .Where(fi => fi.IsLiteral && !fi.IsInitOnly && fi.FieldType == typeof(Role))
@@ -566,7 +563,7 @@ public static class Utils
         }
     }
 
-    private static bool IsTransformedApocBTOS(this Role role) => role is BetterTOS2.RolePlus.DEATH or BetterTOS2.RolePlus.FAMINE or BetterTOS2.RolePlus.WAR or BetterTOS2.RolePlus.PESTILENCE;
+    private static bool IsTransformedApocBTOS(this Role role) => role is BTOS2Role.Death or BTOS2Role.Famine or BTOS2Role.War or BTOS2Role.Pestilence;
 
     private static bool IsTransformedApocVanilla(this Role role) => role is Role.DEATH or Role.FAMINE or Role.WAR or Role.PESTILENCE;
 
@@ -595,21 +592,24 @@ public static class Utils
         EffectType.SCENT_TRACK => "Tracked",
         EffectType.PESTILENCE => "Pestilence",
         EffectType.REVEALED_MARSHAL => "RevealedMarshal",
-        (EffectType)100 => Constants.IsBTOS2 ? "Recruit" : "Blank",
-        (EffectType)101 => Constants.IsBTOS2 ? "Deafened" : "Blank",
-        (EffectType)102 => Constants.IsBTOS2 ? "CovenTownTraitor" : "Blank",
-        (EffectType)103 => Constants.IsBTOS2 ? "ApocTownTraitor" : "Blank",
-        (EffectType)104 => Constants.IsBTOS2 ? "Audited" : "Blank",
-        /*(EffectType)100 => Constants.IsBTOS2 ? "Recruit" : (Constants.IsLegacy ? "CovenTownTraitor" : "Blank"),
-        (EffectType)101 => Constants.IsBTOS2 ? "Deafened" : (Constants.IsLegacy ? "MafiaTownTraitor": "Blank"),
-        (EffectType)102 => Constants.IsBTOS2 ? "CovenTownTraitor" : (Constants.IsLegacy ? "Transported": "Blank"),
-        (EffectType)103 => Constants.IsBTOS2 ? "ApocTownTraitor" : (Constants.IsLegacy ? "Enchanted": "Blank"),
-        (EffectType)104 => Constants.IsBTOS2 ? "Audited" : (Constants.IsLegacy ? "Reaped": "Blank"),*/
-        (EffectType)105 => Constants.IsBTOS2 ? "Enchanted" : "Blank",
-        (EffectType)106 => Constants.IsBTOS2 ? "Accompanied" : "Blank",
-        (EffectType)107 => Constants.IsBTOS2 ? "PandoraTownTraitor" : "Blank",
-        (EffectType)108 => Constants.IsBTOS2 ? "Egoist" : "Blank",
-        (EffectType)109 => Constants.IsBTOS2 ? "Reaped" : "Blank",
+        (EffectType)100 => "Recruit",
+        (EffectType)101 => "Deafened",
+        (EffectType)102 or (EffectType)200 => "CovenTownTraitor",
+        (EffectType)103 => "ApocTownTraitor",
+        (EffectType)104 => "Audited",
+        (EffectType)105 or (EffectType)203 => "Enchanted",
+        (EffectType)106 => "Accompanied",
+        (EffectType)107 => "PandoraTownTraitor",
+        (EffectType)108 => "Egoist",
+        (EffectType)204 or (EffectType)109 => "Reaped",
+        (EffectType)201 => "MafiaTownTraitor",
+        (EffectType)202 => "Transported",
+        (EffectType)205 => "Hypnotised",
+        (EffectType)206 => "Gazed",
+        (EffectType)207 => "RevealedDeputy",
+        (EffectType)208 => "Blackmailed",
+        (EffectType)209 => "Blessed",
+        (EffectType)210 => "Framed",
         _ => "Blank"
     };
 
@@ -627,7 +627,7 @@ public static class Utils
     {
         try
         {
-            return BetterTOS2.UIRoleDataExtension.EtherealList.TryGetValue(ui.role, out var eth) && eth;
+            return Constants.IsBTOS2 && ui.role is BTOS2Role.Judge or BTOS2Role.Auditor or BTOS2Role.Starspawn;
         }
         catch
         {
@@ -645,10 +645,10 @@ public static class Utils
             {
                 ModType.BTOS2 => role switch
                 {
-                    BetterTOS2.RolePlus.BAKER => BetterTOS2.RolePlus.FAMINE,
-                    BetterTOS2.RolePlus.BERSERKER => BetterTOS2.RolePlus.WAR,
-                    BetterTOS2.RolePlus.SOUL_COLLECTOR => BetterTOS2.RolePlus.DEATH,
-                    BetterTOS2.RolePlus.PLAGUEBEARER => BetterTOS2.RolePlus.PESTILENCE,
+                    BTOS2Role.Baker => BTOS2Role.Famine,
+                    BTOS2Role.Berserker => BTOS2Role.War,
+                    BTOS2Role.SoulCollector => BTOS2Role.Death,
+                    BTOS2Role.Plaguebearer => BTOS2Role.Pestilence,
                     _ => role
                 },
                 /*ModType.Legacy => role switch
@@ -689,7 +689,7 @@ public static class Utils
             mod ??= GetGameType();
             return mod switch
             {
-                ModType.BTOS2 => BetterTOS2.RolePlus.NECROMANCER,
+                ModType.BTOS2 => BTOS2Role.Necromancer,
                 //ModType.Legacy => LegacyClient.Info.LegacyRole.Necromancer,
                 _ => Role.NECROMANCER,
             };
@@ -707,7 +707,7 @@ public static class Utils
             mod ??= GetGameType();
             return mod switch
             {
-                ModType.BTOS2 => BetterTOS2.RolePlus.WAR,
+                ModType.BTOS2 => BTOS2Role.War,
                 //ModType.Legacy => LegacyClient.Info.LegacyRole.War,
                 _ => Role.WAR,
             };

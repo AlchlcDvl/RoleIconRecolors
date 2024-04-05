@@ -243,16 +243,16 @@ public class IconPack(string name)
                     foreach (var (role, roleInt) in rolesWithIndex)
                     {
                         var name2 = Utils.RoleName((Role)roleInt, mod);
-                        var sprite = GetSprite(name2, false, style, false, mod);
+                        var sprite = assets.BaseIcons.TryGetValue(style, out var icons2) ? (icons2.TryGetValue(name2, out var sprite1) ? sprite1 : AssetManager.Blank) : AssetManager.Blank;
 
                         if (!sprite.IsValid() && style != "Regular")
-                            sprite = GetSprite(name2, false, "Regular", false, mod);
+                            sprite = assets.BaseIcons.TryGetValue("Regular", out icons2) ? (icons2.TryGetValue(name2, out sprite1) ? sprite1 : AssetManager.Blank) : AssetManager.Blank;
 
                         if (!sprite.IsValid())
-                            sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name2 + $"_{mod}", out var sprite1) ? sprite1 : AssetManager.Blank;
+                            sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name2 + $"_{mod}", out sprite1) ? sprite1 : AssetManager.Blank;
 
                         if (!sprite.IsValid())
-                            sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name2, out var sprite1) ? sprite1 : AssetManager.Blank;
+                            sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name2, out sprite1) ? sprite1 : AssetManager.Blank;
 
                         if (sprite.IsValid())
                         {
@@ -284,12 +284,18 @@ public class IconPack(string name)
         {
             mod ??= Utils.GetGameType();
 
-            if (!Assets[mod.Value].BaseIcons[type].TryGetValue(iconName, out var sprite))
+            if (!Assets.TryGetValue(mod.Value, out var assets))
+            {
+                Logging.LogError($"Error finding {iconName} in {Name}'s {type} > {mod} resources");
+                return AssetManager.Blank;
+            }
+
+            if (!assets.BaseIcons[type].TryGetValue(iconName, out var sprite))
             {
                 if (log)
                     Logging.LogWarning($"Couldn't find {iconName} in {Name}'s {type} > {mod} resources");
 
-                if (type != "Regular" && !Assets[mod.Value].BaseIcons["Regular"].TryGetValue(iconName, out sprite))
+                if (type != "Regular" && !assets.BaseIcons["Regular"].TryGetValue(iconName, out sprite))
                 {
                     if (log)
                         Logging.LogWarning($"Couldn't find {iconName} in {Name}'s Regular > {mod} resources");
@@ -315,10 +321,10 @@ public class IconPack(string name)
 
                 if (sprites.Count == 0)
                 {
-                    if (!Assets[mod.Value].EasterEggs[type].TryGetValue(iconName, out sprites))
+                    if (!assets.EasterEggs[type].TryGetValue(iconName, out sprites))
                     {
                         if (type != "Regular")
-                            Assets[mod.Value].EasterEggs["Regular"].TryGetValue(iconName, out sprites);
+                            assets.EasterEggs["Regular"].TryGetValue(iconName, out sprites);
                     }
 
                     sprites ??= [];

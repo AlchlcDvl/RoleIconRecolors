@@ -10,6 +10,7 @@ public class Recolors
     public void Start()
     {
         Logging.InitVoid("IconPacks");
+        Logging.LogMessage("Recolouring...", true);
 
         try
         {

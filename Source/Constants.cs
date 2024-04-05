@@ -11,15 +11,15 @@ public static class Constants
     public static bool CustomNumbers => ModSettings.GetBool("Use Custom Numbers", "alchlcsystm.recolors");
     public static bool FactionOverridden => FactionOverride != "None";
     public static bool EnableIcons => CurrentPack != "Vanilla";
-    public static bool BTOS2Exists => ModStates.IsLoaded("curtis.tuba.better.tos2");
-    //public static bool LegacyExists => ModStates.IsLoaded("legacy.salem");
+    public static bool BTOS2Exists => ModStates.IsEnabled("curtis.tuba.better.tos2");
+    //public static bool LegacyExists => ModStates.IsEnabled("legacy.salem");
     public static bool IsBTOS2
     {
         get
         {
             try
             {
-                return BTOS2Exists && BetterTOS2.BTOSInfo.IS_MODDED;
+                return IsBTOS2Bypass();
             }
             catch
             {
@@ -27,20 +27,22 @@ public static class Constants
             }
         }
     }
+    private static bool IsBTOS2Bypass() => BTOS2Exists && BetterTOS2.BTOSInfo.IS_MODDED;
     /*public static bool IsLegacy
     {
         get
         {
             try
             {
-                return LegacyExists && LegacyClient.LegacyInfo.IsModded;
+                return IsLegacyBypass();
             }
             catch
             {
                 return false;
             }
         }
-    }*/
+    }
+    private static bool IsLegacyBypass() => LegacyExists && LegacyClient.LegacyInfo.IsModded;*/
     public static bool IsNecroActive
     {
         get
