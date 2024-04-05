@@ -16,7 +16,8 @@ public static class AssetManager
 
     public static TMP_SpriteAsset VanillaAsset1;
     public static TMP_SpriteAsset VanillaAsset2;
-    public static TMP_SpriteAsset BTOS2Asset;
+    public static TMP_SpriteAsset BTOS2Asset1;
+    public static TMP_SpriteAsset BTOS2Asset2;
     //public static TMP_SpriteAsset LegacyAsset;
 
     public static string ModPath => Path.Combine(Path.GetDirectoryName(Application.dataPath), "SalemModLoader", "ModFolders", "Recolors");
@@ -24,8 +25,10 @@ public static class AssetManager
     private static readonly string[] Avoid = [ "Attributes", "Necronomicon", "Neutral", "NeutralApocalypse", "NeutralEvil", "NeutralKilling", "Town", "TownInvestigative", "Teams", "Hidden",
         "TownKilling", "TownSupport", "TownProtective", "TownPower", "CovenKilling", "CovenDeception", "CovenUtility", "CovenPower", "Coven", "SlowMode", "FastMode", "AnonVoting", "Stoned",
         "SecretKillers", "HiddenRoles", "OneTrial", "RandomApocalypse", "Any", "CommonCoven", "CommonTown", "NeutralPariah", "NeutralSpecial", "TownTraitor", "PerfectTown", "NecroPass",
-        "AnonNames", "WalkingDead", /*"Mafia", "MafiaDeception", "MafiaKilling", "MafiaUtility", "MafiaPower", "Cleaned", "NeutralChaos", "TownVEvils", "NonTown", "NonCoven", "NonMafia",
-        "NonNeutral", "FactionedEvil", "Lovers"*/ ];
+        "AnonNames", "WalkingDead", "ExeTarget", "Hexed", "Knighted", "RevealedMayor", "Disconnected", "Connecting", "Lovers", "Doused", "Plagued", "RevealedMarshal", "Trapped", "Bread",
+        "Hangover", "Silenced", "Dreamwoven", "Insane", "Bugged", "Tracked", "Pest", "Recruit", "Deafened", "Audited", "Enchanted", "Accompanied", "Egoist", "Reaped", /*"Transported",
+        "Hypnotised", "Gazed", "RevealedDeputy", "Blackmailed", "Blessed", "Framed", "Mafia", "MafiaDeception", "MafiaKilling", "MafiaUtility", "MafiaPower", "Cleaned", "NeutralChaos",
+        "TownVEvils", "NonTown", "NonCoven", "NonMafia", "NonNeutral", "FactionedEvil", "Lovers"*/ ];
 
     private static readonly string[] ToRemove = [ ".png", ".jpg" ];
 
@@ -39,9 +42,8 @@ public static class AssetManager
             return Blank;
 
         packName ??= Constants.CurrentPack;
-        faction ??= "Regular";
 
-        if (faction == "Blank")
+        if (faction is null or "Blank")
             faction = "Regular";
 
         if (!IconPacks.TryGetValue(packName, out var pack))
@@ -116,18 +118,19 @@ public static class AssetManager
             if (!Directory.Exists(btos))
                 Directory.CreateDirectory(btos);
 
-            BTOS2Asset = BetterTOS2.BTOSInfo.assetBundle.LoadAsset<TMP_SpriteAsset>("Roles");
+            BTOS2Asset1 = BetterTOS2.BTOSInfo.assetBundle.LoadAsset<TMP_SpriteAsset>("Roles");
 
-            for (var i = 0; i < BTOS2Asset.spriteCharacterTable.Count; i++)
+            for (var i = 0; i < BTOS2Asset1.spriteCharacterTable.Count; i++)
             {
-                BTOS2Asset.spriteGlyphTable[i].metrics = new()
+                BTOS2Asset1.spriteGlyphTable[i].metrics = new()
                 {
                     horizontalBearingX = 0f,
                     horizontalBearingY = 224f
                 };
             }
 
-            Utils.DumpSprite(BTOS2Asset.spriteSheet as Texture2D, "BTOSRoleIcons", Path.Combine(ModPath, "BTOS2"));
+            Utils.DumpSprite(BTOS2Asset1.spriteSheet as Texture2D, "BTOSRoleIcons", Path.Combine(ModPath, "BTOS2"));
+            LoadBTOS2SpriteSheet();
         }
     }
 
@@ -278,8 +281,14 @@ public static class AssetManager
         if (!VanillaAsset2)
             diagnostic += "\nModified Player Numbers Sheet Does Not Exist";
 
-        if (!BTOS2Asset && Constants.BTOS2Exists)
-            diagnostic += "\nBTOS2 Sheet Does Not Exist";
+        if (Constants.BTOS2Exists)
+        {
+            if (!BTOS2Asset1)
+                diagnostic += "\nBTOS2 Sheet Does Not Exist";
+
+            if (!BTOS2Asset2)
+                diagnostic += "\nModified BTOS2 Sheet Does Not Exist";
+        }
 
         diagnostic += $"\nCurrently In A {(Constants.IsBTOS2 ? "BTOS2" : "Vanilla")} Game";
 
@@ -366,7 +375,7 @@ public static class AssetManager
     {
         try
         {
-            var (rolesWithIndexDict, rolesWithIndex) = Utils.Filtered();
+            var (rolesWithIndexDict, rolesWithIndex) = Utils.Filtered(ModType.BTOS2);
             var sprites = new List<Sprite>();
 
             foreach (var (role, roleInt) in rolesWithIndex)
@@ -418,6 +427,39 @@ public static class AssetManager
         {
             Logging.LogError(e);
             VanillaAsset2 = null;
+        }
+    }
+    public static void LoadBTOS2SpriteSheet()
+    {
+        try
+        {
+            var (rolesWithIndexDict, rolesWithIndex) = Utils.Filtered(ModType.BTOS2);
+            var sprites = new List<Sprite>();
+
+            foreach (var (role, roleInt) in rolesWithIndex)
+            {
+                var name = Utils.RoleName((Role)roleInt, ModType.BTOS2);
+                var sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name + "_BTOS2", out var sprite1) ? sprite1 : Blank;
+
+                if (!sprite.IsValid())
+                    sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name, out sprite1) ? sprite1 : Blank;
+
+                if (sprite.IsValid())
+                {
+                    sprite.name = sprite.texture.name = role;
+                    sprites.Add(sprite);
+                }
+                else
+                    Logging.LogWarning($"NO BTOS2 ICON FOR {name}?!");
+            }
+
+            BTOS2Asset2 = BuildGlyphs([..sprites], [..sprites.Select(x => x.texture)], "BTOSRoleIcons", rolesWithIndexDict);
+            Utils.DumpSprite(BTOS2Asset2.spriteSheet as Texture2D, "BTOS2RoleIcons_Modified", Path.Combine(ModPath, "BTOS2"));
+        }
+        catch (Exception e)
+        {
+            Logging.LogError(e);
+            BTOS2Asset2 = null;
         }
     }
 

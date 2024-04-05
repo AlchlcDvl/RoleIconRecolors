@@ -3,6 +3,7 @@ using Home.Services;
 using UnityEngine.UI;
 using SalemModLoader;
 using Server.Shared.Extensions;
+using Game.Services;
 
 namespace IconPacks;
 
@@ -520,6 +521,21 @@ public static class RoleMenuPopupControllerPatch
     }
 }
 
+[HarmonyPatch(typeof(PlayerEffectsService), nameof(PlayerEffectsService.GetEffect))]
+public static class PlayerEffectsServicePatch
+{
+    private static readonly Dictionary<EffectType, Sprite> EffectSprites = [];
+
+    public static void Postfix(ref EffectType effectType, ref PlayerEffectInfo __result)
+    {
+        if (!EffectSprites.ContainsKey(effectType))
+            EffectSprites[effectType] = __result.sprite;
+
+        var sprite = AssetManager.GetSprite(Utils.EffectName(effectType), false);
+        __result.sprite = sprite.IsValid() ? sprite : EffectSprites[effectType];
+    }
+}
+
 [HarmonyPatch(typeof(DownloadContributorTags), nameof(DownloadContributorTags.AddTMPSprites))]
 [HarmonyPriority(Priority.VeryLow)]
 public static class ApplicationControllerPatch
@@ -534,7 +550,10 @@ public static class ApplicationControllerPatch
                 if (AssetManager.IconPacks.TryGetValue(Constants.CurrentPack, out var pack))
                 {
                     if (str == "BTOSRoleIcons")
-                        return (pack.Assets[ModType.BTOS2].MentionStyles.TryGetValue(Constants.CurrentStyle, out var style) ? style : AssetManager.BTOS2Asset) ?? AssetManager.BTOS2Asset;
+                    {
+                        return ((pack.Assets[ModType.BTOS2].MentionStyles.TryGetValue(Constants.CurrentStyle, out var style) ? style : AssetManager.BTOS2Asset2) ?? AssetManager.BTOS2Asset2)
+                            ?? AssetManager.BTOS2Asset1;
+                    }
                     /*else if (str == "LegacyRoleIcons")
                         return (pack.Assets[ModType.Legacy].MentionStyles.TryGetValue(Constants.CurrentStyle, out var style) ? style : AssetManager.LegacyAsset) ?? AssetManager.LegacyAsset;*/
                     else if (str == "RoleIcons")
@@ -548,7 +567,7 @@ public static class ApplicationControllerPatch
                         return oldSpriteAssetRequest(_, str);
                 }
                 else if (str == "BTOSRoleIcons")
-                    return AssetManager.BTOS2Asset;
+                    return AssetManager.BTOS2Asset2 ?? AssetManager.BTOS2Asset1;
                 else if (str == "RoleIcons")
                     return AssetManager.VanillaAsset1 ?? CacheDefaultSpriteSheet.Cache1;
                 else if (str == "PlayerNumbers")
@@ -561,7 +580,7 @@ public static class ApplicationControllerPatch
                 AssetManager.RunDiagnostics(e);
 
                 if (str == "BTOSRoleIcons")
-                    return AssetManager.BTOS2Asset;
+                    return AssetManager.BTOS2Asset2 ?? AssetManager.BTOS2Asset1;
                 else if (str == "RoleIcons")
                     return AssetManager.VanillaAsset1 ?? CacheDefaultSpriteSheet.Cache1;
                 else if (str == "PlayerNumbers")
