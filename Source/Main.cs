@@ -53,7 +53,8 @@ public class Recolors
     {
         Name = "Selected Vanilla Mention Style",
         Description = "The selected mention style will dictate which icons are used for the mentions. May require a game restart.",
-        Options = GetMentionStyles(ModType.Vanilla)
+        Options = GetMentionStyles(ModType.Vanilla),
+        Available = Constants.EnableIcons
     };
 
     public ModSettings.DropdownSetting ChoiceMentions2 => new()
@@ -61,14 +62,15 @@ public class Recolors
         Name = "Selected BTOS2 Mention Style",
         Description = "The selected mention style will dictate which icons are used for the mentions. May require a game restart.",
         Options = GetMentionStyles(ModType.BTOS2),
-        Available = Constants.BTOS2Exists
+        Available = Constants.BTOS2Exists && Constants.EnableIcons
     };
 
     public ModSettings.DropdownSetting FactionOverride1 => new()
     {
         Name = "Override Vanilla Faction",
         Description = "Only icons from the selected faction will appear in vanilla games.",
-        Options = GetFactionOverrides(ModType.Vanilla)
+        Options = GetFactionOverrides(ModType.Vanilla),
+        Available = Constants.EnableIcons
     };
 
     public ModSettings.DropdownSetting FactionOverride2 => new()
@@ -76,20 +78,19 @@ public class Recolors
         Name = "Override BTOS2 Faction",
         Description = "Only icons from the selected faction will appear in BTOS2 games.",
         Options = GetFactionOverrides(ModType.BTOS2),
-        Available = Constants.BTOS2Exists
+        Available = Constants.BTOS2Exists && Constants.EnableIcons
     };
 
     public ModSettings.CheckboxSetting CustomNumbers => new()
     {
         Name = "Use Custom Numbers",
-        Description = "Select whether you want to use the mod's rendition of player numbers or the game's.",
-        DefaultValue = false
+        Description = "Select whether you want to use the mod's rendition of player numbers or the game's."
     };
 
     public ModSettings.DropdownSetting DownloadIcons => new()
     {
         Name = "Download Recommended Icon Packs",
-        Description = "Downloads icon packs recommended by the mod creator.\nVanilla - Icons used in the vanilla game to be used as a reference for icon packs.\nBTOS2 - Icons used in BTOS2 games to be used as a reference for icons specifically set for BTOS2.\nRecolors - Art by MysticMismagius, Haapsalu, faketier, splarg, Det, Wevit, Nova and Nidoskull.",
+        Description = "Downloads icon packs recommended by the mod creator.\nVanilla - Icons used in the vanilla game to be used as a reference for icon packs.\nBTOS2 - Icons used in BTOS2 games to be used as a reference for icons specifically set for BTOS2.\nRecolors - Art by MysticMismagius, Haapsalu, faketier, splarg, Det, Wevit, Nova, moiler and Nidoskull.",
         Options = [ "None", "Vanilla", "BTOS2", "Recolors" ],
         OnChanged = Download.DownloadIcons
     };

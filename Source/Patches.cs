@@ -135,8 +135,11 @@ public static class PatchRoleCards
             isModifiedByTos1UI = false;
         }
 
-        var attributename = role.IsTransformedApoc() ? "Attributes_Horsemen" : $"Attributes_{faction}";
-        var attribute = AssetManager.GetSprite(attributename);
+        var attributename = "Attributes_";
+        var attribute = AssetManager.GetSprite(attributename + name, faction);
+
+        if (!attribute.IsValid())
+            attribute = AssetManager.GetSprite(attributename + (role.IsTransformedApoc() ? "Horsemen" : faction));
 
         if (attribute.IsValid() && panel.roleInfoButtons.Exists(index))
         {
@@ -354,8 +357,11 @@ public static class PatchGuideRoleCards
             isModifiedByTos1UI = false;
         }
 
-        var attributename = role.IsTransformedApoc() ? "Attributes_Horsemen" : $"Attributes_{faction}";
-        var attribute = AssetManager.GetSprite(attributename);
+        var attributename = "Attributes_";
+        var attribute = AssetManager.GetSprite(attributename + name, faction);
+
+        if (!attribute.IsValid())
+            attribute = AssetManager.GetSprite(attributename + (role.IsTransformedApoc() ? "Horsemen" : faction));
 
         if (attribute.IsValid() && __instance.roleInfoButtons.Exists(index))
         {
@@ -497,7 +503,11 @@ public static class PlayerPopupControllerPatch
             return;
 
         Logging.LogMessage("Patching PlayerPopupController.SetRoleIcon");
-        var sprite = AssetManager.GetSprite(Utils.RoleName(__instance.m_role), Utils.FactionName(__instance.m_role.GetFaction()));
+
+        if (!Service.Game.Sim.simulation.knownRolesAndFactions.Data.TryGetValue(__instance.m_discussionPlayerState.position, out var tuple))
+            return;
+
+        var sprite = AssetManager.GetSprite(Utils.RoleName(__instance.m_role), Utils.FactionName(tuple.Item2));
 
         if (sprite.IsValid() && __instance.RoleIcon)
             __instance.RoleIcon.sprite = sprite;
@@ -533,30 +543,64 @@ public static class PlayerEffectsServicePatch
         if (!EffectSprites.ContainsKey(effectType))
             EffectSprites[effectType] = __result.sprite;
 
+        if (!Constants.EnableIcons)
+            return;
+
+        Logging.LogMessage("Patching PlayerEffectsService.GetEffect");
         var sprite = AssetManager.GetSprite(Utils.EffectName(effectType), false);
         __result.sprite = sprite.IsValid() ? sprite : EffectSprites[effectType];
     }
 }
 
 [HarmonyPatch(typeof(GameSimulation), nameof(GameSimulation.GetRoleIconAndNameInlineString))]
-[HarmonyPriority(Priority.VeryLow)]
 public static class GetRoleIconAndNameInlineStringPatch
 {
-    public static void Postfix(ref FactionType factionType, ref string __result) => __result = __result.Replace("RoleIcons", $"RoleIcons ({Utils.FactionName(factionType)})");
+    public static void Postfix(ref FactionType factionType, ref string __result)
+    {
+        if (!Constants.EnableIcons)
+            return;
+
+        Logging.LogMessage("Patching GameSimulation.GetRoleIconAndNameInlineString");
+        __result = __result.Replace("RoleIcons", $"RoleIcons ({Utils.FactionName(factionType)})");
+    }
 }
 
 [HarmonyPatch(typeof(GameSimulation), nameof(GameSimulation.GetTownTraitorRoleIconAndNameInlineString))]
 public static class GetTownTraitorRoleIconAndNameInlineStringPatch
 {
-    public static void Postfix(ref string __result) => __result = __result.Replace("RoleIcons", "RoleIcons (Coven)");
+    public static void Postfix(ref string __result)
+    {
+        if (!Constants.EnableIcons)
+            return;
+
+        Logging.LogMessage("Patching GameSimulation.GetTownTraitorRoleIconAndNameInlineString");
+        __result = __result.Replace("RoleIcons", "RoleIcons (Coven)");
+    }
+}
+
+[HarmonyPatch(typeof(GameSimulation), nameof(GameSimulation.GetVIPRoleIconAndNameInlineString))]
+public static class GetVIPRoleIconAndNameInlineStringPatch
+{
+    public static void Postfix(GameSimulation __instance, ref string __result)
+    {
+        if (!Constants.EnableIcons)
+            return;
+
+        Logging.LogMessage("Patching GameSimulation.GetVIPRoleIconAndNameInlineString");
+        __result = __result.Replace(__instance.GetVIPText(), "<sprite=\"RoleIcons\" name=\"Role201\">");
+    }
 }
 
 [HarmonyPatch(typeof(TosCharacterNametag), nameof(TosCharacterNametag.WrapCharacterName))]
-[HarmonyPriority(Priority.VeryLow)]
 public static class TosCharacterNametagPatch
 {
     public static void Postfix(TosCharacterNametag __instance, ref string __result)
     {
+        if (!Constants.EnableIcons)
+            return;
+
+        Logging.LogMessage("Patching TosCharacterNametag.WrapCharacterName");
+
         if (!Pepper.IsLobbyPhase() && Service.Game.Sim.simulation.knownRolesAndFactions.Data.TryGetValue(__instance.tosCharacter.position, out var tuple))
             __result = __result.Replace("RoleIcons", $"RoleIcons ({Utils.FactionName(tuple.Item2)})");
     }
@@ -564,10 +608,11 @@ public static class TosCharacterNametagPatch
 
 [HarmonyPatch(typeof(DownloadContributorTags), nameof(DownloadContributorTags.AddTMPSprites))]
 [HarmonyPriority(Priority.VeryLow)]
-public static class ApplicationControllerPatch
+public static class ReplaceTMPSpritesPatch
 {
     public static void Postfix()
     {
+        Logging.LogMessage("Patching DownloadContributorTags.AddTMPSprites");
         var oldSpriteAssetRequest = Traverse.Create<TMP_Text>().Field<Func<int, string, TMP_SpriteAsset>>("OnSpriteAssetRequest").Value;
         TMP_Text.OnSpriteAssetRequest += (_, str) =>
         {
@@ -581,6 +626,8 @@ public static class ApplicationControllerPatch
 
                 if (str.Contains("BTOSRoleIcons"))
                     return AssetManager.BTOS2_2 ?? AssetManager.BTOS2_1;
+                /*else if (str.Contains("LegacyRoleIcons"))
+                    return AssetManager.Legacy2 ?? AssetManager.Legacy1;*/
                 else if (str.Contains("RoleIcons"))
                     return AssetManager.Vanilla1 ?? CacheDefaults.RoleIcons;
                 else if (str == "PlayerNumbers")
@@ -597,48 +644,37 @@ public static class ApplicationControllerPatch
         {
             if (AssetManager.IconPacks.TryGetValue(Constants.CurrentPack, out var pack))
             {
-                if (str == "BTOSRoleIcons")
+                if (str.Contains("RoleIcons"))
                 {
-                    if (!pack.Assets[ModType.BTOS2].MentionStyles.TryGetValue(Constants.CurrentStyle, out var style) || !style)
-                    {
-                        Logging.LogError($"{Constants.CurrentPack} BTOS Mention Style {Constants.CurrentStyle} was null or missing");
-                        return AssetManager.BTOS2_2 ?? AssetManager.BTOS2_1;
-                    }
-                    else
-                        return style;
-                }
-                /*else if (str == "LegacyRoleIcons")
-                    return (pack.Assets[ModType.Legacy].MentionStyles.TryGetValue(Constants.CurrentStyle, out var style) ? style : AssetManager.LegacyAsset) ?? AssetManager.LegacyAsset;*/
-                else if (str == "RoleIcons")
-                {
-                    if (!pack.Assets[ModType.Vanilla].MentionStyles.TryGetValue(Constants.CurrentStyle, out var style) || !style)
-                    {
-                        Logging.LogError($"{Constants.CurrentPack} Vanilla Mention Style {Constants.CurrentStyle} was null or missing");
-                        return AssetManager.Vanilla1 ?? CacheDefaults.RoleIcons;
-                    }
-                    else
-                        return style;
-                }
-                else if (str.Contains("BTOSRoleIcons"))
-                {
-                    var deconstructed = str.Replace("BTOSRoleIcons (", "").Replace(")", "");
+                    var mod = ModType.Vanilla;
 
-                    if (!pack.Assets[ModType.BTOS2].MentionStyles.TryGetValue(deconstructed, out var style) || !style)
-                    {
-                        Logging.LogError($"{Constants.CurrentPack} BTOS2 Mention Style {deconstructed} was null or missing");
-                        return AssetManager.BTOS2_2 ?? AssetManager.BTOS2_1;
-                    }
-                    else
-                        return style;
-                }
-                else if (str.Contains("RoleIcons"))
-                {
-                    var deconstructed = str.Replace("RoleIcons (", "").Replace(")", "");
+                    if (str.Contains("BTOS"))
+                        mod = ModType.BTOS2;
 
-                    if (!pack.Assets[ModType.Vanilla].MentionStyles.TryGetValue(deconstructed, out var style) || !style)
+                    var deconstructed = Constants.CurrentPack;
+
+                    if (str.Contains("("))
+                        deconstructed = str.Replace("RoleIcons (", "").Replace(")", "").Replace("BTOS", "");
+
+                    var defaultSprite = AssetManager.Vanilla1 ?? CacheDefaults.RoleIcons;
+
+                    if (mod == ModType.BTOS2)
+                        defaultSprite = AssetManager.BTOS2_2 ?? AssetManager.BTOS2_1;
+
+                    if (!pack.Assets.TryGetValue(mod, out var assets))
                     {
-                        Logging.LogError($"{Constants.CurrentPack} Vanilla Mention Style {deconstructed} was null or missing");
-                        return AssetManager.Vanilla1 ?? CacheDefaults.RoleIcons;
+                        Logging.LogError($"Unable to find {Constants.CurrentPack} assets for {mod}");
+                        return defaultSprite;
+                    }
+                    else if (!assets.MentionStyles.TryGetValue(deconstructed, out var style) || !style)
+                    {
+                        Logging.LogError($"{Constants.CurrentPack} {mod} Mention Style {deconstructed} was null or missing");
+                        return defaultSprite;
+                    }
+                    else if (!assets.MentionStyles.TryGetValue("Regular", out style) || !style)
+                    {
+                        Logging.LogError($"{Constants.CurrentPack} {mod} Mention Style Regular was null or missing");
+                        return defaultSprite;
                     }
                     else
                         return style;
@@ -659,9 +695,11 @@ public static class ApplicationControllerPatch
             else
                 Logging.LogError($"{Constants.CurrentPack} doesn't have an icon pack");
 
-            if (str == "BTOSRoleIcons")
+            if (str.Contains("BTOSRoleIcons"))
                 return AssetManager.BTOS2_2 ?? AssetManager.BTOS2_1;
-            else if (str == "RoleIcons")
+            /*else if (str.Contains("LegacyRoleIcons"))
+                return AssetManager.Legacy2 ?? AssetManager.Legacy1;*/
+            else if (str.Contains("RoleIcons"))
                 return AssetManager.Vanilla1 ?? CacheDefaults.RoleIcons;
             else if (str == "PlayerNumbers")
                 return AssetManager.Vanilla2 ?? CacheDefaults.Numbers;
@@ -674,6 +712,8 @@ public static class ApplicationControllerPatch
 
             if (str.Contains("BTOSRoleIcons"))
                 return AssetManager.BTOS2_2 ?? AssetManager.BTOS2_1;
+            /*else if (str.Contains("LegacyRoleIcons"))
+                return AssetManager.Legacy2 ?? AssetManager.Legacy1;*/
             else if (str.Contains("RoleIcons"))
                 return AssetManager.Vanilla1 ?? CacheDefaults.RoleIcons;
             else if (str == "PlayerNumbers")

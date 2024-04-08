@@ -10,12 +10,12 @@ public class IconPack(string name)
 
     private string PackPath => Path.Combine(AssetManager.ModPath, Name);
 
-    private static readonly string[] VanillaFolders = [ "Regular", "Town", "Coven", "SerialKiller", "Arsonist", "Werewolf", "Shroud", "Apocalypse", "VIP", "Jester", "Pirate", "Executioner",
-        "Doomsayer", "Vampire", "CursedSoul" ];
-    /*private static readonly string[] LegacyFolders = [ "Regular", "Town", "Coven", "SerialKiller", "Arsonist", "Werewolf", "Shroud", "Apocalypse", "VIP", "Executioner", "Jester", "Pirate",
-        "Doomsayer", "Vampire", "CursedSoul", "Mafia", "Amnesiac", "Juggernaut", "GuardianAngel", "Evils" ];*/
-    private static readonly string[] BTOS2Folders = [ "Regular", "Town", "Coven", "SerialKiller", "Arsonist", "Werewolf", "Shroud", "Apocalypse", "VIP", "Jester", "Pirate", "Compliant",
-        "Doomsayer", "Judge", "Auditor", "Starspawn", "Inquisitor", "Vampire", "CursedSoul", "Jackal", "Lions", "Frogs", "Hawks", "Pandora", "Egoist" ];
+    private static readonly string[] VanillaFolders = [ "Regular", "Town", "Coven", "SerialKiller", "Arsonist", "Werewolf", "Shroud", "Apocalypse", "VIP", "Jester", "Pirate", "Doomsayer",
+        "Vampire", "CursedSoul", "Executioner" ];
+    /*private static readonly string[] LegacyFolders = [ "Regular", "Town", "Coven", "SerialKiller", "Arsonist", "Werewolf", "Shroud", "Apocalypse", "VIP", "Jester", "Pirate", "Doomsayer",
+        "Vampire", "CursedSoul", "Mafia", "Amnesiac", "Juggernaut", "GuardianAngel", "Evils" ];*/
+    private static readonly string[] BTOS2Folders = [ "Regular", "Town", "Coven", "SerialKiller", "Arsonist", "Werewolf", "Shroud", "Apocalypse", "VIP", "Jester", "Pirate", "Doomsayer",
+        "Vampire", "CursedSoul", "Judge", "Auditor", "Starspawn", "Inquisitor", "Jackal", "Lions", "Frogs", "Hawks", "Pandora", "Egoist" ];
     private static readonly string[] Mods = [ "Vanilla", "BTOS2"/*, "Legacy"*/, "PlayerNumbers" ];
     private static readonly Dictionary<string, string[]> ModsToFolders = new() { { "Vanilla", VanillaFolders }, { "BTOS2", BTOS2Folders }/*, { "Legacy", LegacyFolders }*/ };
     public static readonly string[] FileTypes = [ "png", "jpg" ];
@@ -218,7 +218,7 @@ public class IconPack(string name)
                     numbers.Add($"PlayerNumbers_{i}");
                 }
 
-                PlayerNumbers = AssetManager.BuildGlyphs([..sprites], [..sprites.Select(x => x.texture)], $"PlayerNumbers ({Name})", numbers.ToDictionary(x => x, x => x), false);
+                PlayerNumbers = AssetManager.BuildGlyphs([..sprites], [..sprites.Select(x => x.texture)], $"PlayerNumbers ({Name})", numbers.ToDictionary(x => x, x => (x, 0)), false);
                 Utils.DumpSprite(PlayerNumbers.spriteSheet as Texture2D, "PlayerNumbers", PackPath);
             }
             catch (Exception e)
@@ -237,16 +237,16 @@ public class IconPack(string name)
 
                 try
                 {
-                    var (rolesWithIndexDict, rolesWithIndex) = Utils.Filtered(mod);
+                    var index = Utils.Filtered(mod);
                     var sprites = new List<Sprite>();
 
-                    foreach (var (role, roleInt) in rolesWithIndex)
+                    foreach (var (role, (_, roleInt)) in index)
                     {
                         var name2 = Utils.RoleName((Role)roleInt, mod);
-                        var sprite = assets.BaseIcons.TryGetValue(style, out var icons2) ? (icons2.TryGetValue(name2, out var sprite1) ? sprite1 : AssetManager.Blank) : AssetManager.Blank;
+                        var sprite = icons.TryGetValue(name2, out var sprite1) ? sprite1 : AssetManager.Blank;
 
-                        if (!sprite.IsValid() && style != "Regular")
-                            sprite = assets.BaseIcons.TryGetValue("Regular", out icons2) ? (icons2.TryGetValue(name2, out sprite1) ? sprite1 : AssetManager.Blank) : AssetManager.Blank;
+                        if (!sprite.IsValid() && style != "Regular" && assets.BaseIcons.TryGetValue("Regular", out var icons2))
+                            sprite = icons2.TryGetValue(name2, out sprite1) ? sprite1 : AssetManager.Blank;
 
                         if (!sprite.IsValid())
                             sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name2 + $"_{mod}", out sprite1) ? sprite1 : AssetManager.Blank;
@@ -263,7 +263,7 @@ public class IconPack(string name)
                             Logging.LogWarning($"NO {mod.ToString().ToUpper()} ICON FOR {name2}?!");
                     }
 
-                    var asset = AssetManager.BuildGlyphs([..sprites], [..sprites.Select(x => x.texture)], $"{mod}RoleIcons ({Name}, {style})", rolesWithIndexDict);
+                    var asset = AssetManager.BuildGlyphs([..sprites], [..sprites.Select(x => x.texture)], $"{mod}RoleIcons ({Name}, {style})", index);
                     assets.MentionStyles[style] = asset;
                     Utils.DumpSprite(asset.spriteSheet as Texture2D, $"{style}{mod}RoleIcons", Path.Combine(PackPath, $"{mod}"));
                 }
@@ -290,21 +290,27 @@ public class IconPack(string name)
                 return AssetManager.Blank;
             }
 
-            if (!assets.BaseIcons[type].TryGetValue(iconName, out var sprite))
+            if (!assets.BaseIcons[type].TryGetValue(iconName + $"_{mod}", out var sprite))
+            {
+                if (type != "Regular")
+                    assets.BaseIcons["Regular"].TryGetValue(iconName + $"_{mod}", out sprite);
+            }
+
+            if (!sprite.IsValid() && !assets.BaseIcons[type].TryGetValue(iconName, out sprite))
             {
                 if (log)
                     Logging.LogWarning($"Couldn't find {iconName} in {Name}'s {type} > {mod} resources");
 
-                if (type != "Regular" && !assets.BaseIcons["Regular"].TryGetValue(iconName, out sprite))
+                if (type != "Regular")
                 {
                     if (log)
                         Logging.LogWarning($"Couldn't find {iconName} in {Name}'s Regular > {mod} resources");
 
-                    sprite = null;
+                    assets.BaseIcons["Regular"].TryGetValue(iconName, out sprite);
                 }
             }
 
-            if ((URandom.RandomRangeInt(1, 101) <= Constants.EasterEggChance && allowEE) || !sprite.IsValid())
+            if ((URandom.RandomRangeInt(1, 101) <= Constants.EasterEggChance && allowEE && sprite.IsValid()) || !sprite.IsValid())
             {
                 var sprites = new List<Sprite>();
 

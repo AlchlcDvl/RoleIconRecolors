@@ -18,17 +18,16 @@ public static class AssetManager
     public static TMP_SpriteAsset Vanilla2;
     public static TMP_SpriteAsset BTOS2_1;
     public static TMP_SpriteAsset BTOS2_2;
-    //public static TMP_SpriteAsset LegacyAsset;
+    //public static TMP_SpriteAsset Legacy1;
+    //public static TMP_SpriteAsset Legacy2;
 
     public static string ModPath => Path.Combine(Path.GetDirectoryName(Application.dataPath), "SalemModLoader", "ModFolders", "Recolors");
 
-    private static readonly string[] Avoid = [ "Attributes", "Necronomicon", "Neutral", "NeutralApocalypse", "NeutralEvil", "NeutralKilling", "Town", "TownInvestigative", "Teams", "Hidden",
-        "TownKilling", "TownSupport", "TownProtective", "TownPower", "CovenKilling", "CovenDeception", "CovenUtility", "CovenPower", "Coven", "SlowMode", "FastMode", "AnonVoting", "Stoned",
-        "SecretKillers", "HiddenRoles", "OneTrial", "RandomApocalypse", "Any", "CommonCoven", "CommonTown", "NeutralPariah", "NeutralSpecial", "TownTraitor", "PerfectTown", "NecroPass",
-        "AnonNames", "WalkingDead", "ExeTarget", "Hexed", "Knighted", "RevealedMayor", "Disconnected", "Connecting", "Lovers", "Doused", "Plagued", "RevealedMarshal", "Trapped", "Bread",
-        "Hangover", "Silenced", "Dreamwoven", "Insane", "Bugged", "Tracked", "Pest", "Recruit", "Deafened", "Audited", "Enchanted", "Accompanied", "Egoist", "Reaped", /*"Transported",
-        "Hypnotised", "Gazed", "RevealedDeputy", "Blackmailed", "Blessed", "Framed", "Mafia", "MafiaDeception", "MafiaKilling", "MafiaUtility", "MafiaPower", "Cleaned", "NeutralChaos",
-        "TownVEvils", "NonTown", "NonCoven", "NonMafia", "NonNeutral", "FactionedEvil", "Lovers"*/ ];
+    private static readonly string[] Avoid = [ "Attributes", "Necronomicon", "Neutral", "NeutralApocalypse", "NeutralEvil", "NeutralKilling", "Town", "Coven", "SlowMode", "FastMode", "Any",
+        "Stoned", "SecretKillers", "HiddenRoles", "OneTrial", "RandomApocalypse", "TownTraitor", "PerfectTown", "NecroPass", "Anon", "WalkingDead", "ExeTarget", "Hexed", "Knighted", "Bread",
+        "Revealed", "Disconnected", "Connecting", "Lovers", "Doused", "Plagued", "Revealed", "Trapped", "Hangover", "Silenced", "Dreamwoven", "Insane", "Bugged", "Tracked", "Sickness",
+        "Reaped", "Recruit", "Deafened", "Audited", "Enchanted", "Accompanied", "Egoist", /*"Transported", "Hypnotised", "Gazed", "Blackmailed", "Blessed", "Framed", "Mafia", "Cleaned",
+        "Lovers", "FactionedEvil"*/ ];
 
     private static readonly string[] ToRemove = [ ".png", ".jpg" ];
 
@@ -43,7 +42,7 @@ public static class AssetManager
 
         packName ??= Constants.CurrentPack;
 
-        if (faction is null or "Blank")
+        if (faction is null or "Blank" || (Avoid.Any(name.Contains) && !name.Contains("Leader")))
             faction = "Regular";
 
         if (!IconPacks.TryGetValue(packName, out var pack))
@@ -53,12 +52,7 @@ public static class AssetManager
             return Blank;
         }
 
-        var type = faction;
-
-        if (Avoid.Any(name.Contains))
-            type = "Regular";
-        else if (Constants.IsLocalVIP)
-            type = "VIP";
+        var type = Constants.IsLocalVIP ? "VIP" : faction;
 
         try
         {
@@ -375,10 +369,10 @@ public static class AssetManager
     {
         try
         {
-            var (rolesWithIndexDict, rolesWithIndex) = Utils.Filtered(ModType.Vanilla);
+            var index = Utils.Filtered(ModType.Vanilla);
             var sprites = new List<Sprite>();
 
-            foreach (var (role, roleInt) in rolesWithIndex)
+            foreach (var (role, (_, roleInt)) in index)
             {
                 var name = Utils.RoleName((Role)roleInt, ModType.Vanilla);
 
@@ -391,7 +385,7 @@ public static class AssetManager
                     Logging.LogWarning($"NO VANILLA ICON FOR {name}?!");
             }
 
-            Vanilla1 = BuildGlyphs([..sprites], [..sprites.Select(x => x.texture)], "RoleIcons", rolesWithIndexDict);
+            Vanilla1 = BuildGlyphs([..sprites], [..sprites.Select(x => x.texture)], "RoleIcons", index);
             Utils.DumpSprite(Vanilla1.spriteSheet as Texture2D, "RoleIcons_Modified", Path.Combine(ModPath, "Vanilla"));
         }
         catch (Exception e)
@@ -420,7 +414,7 @@ public static class AssetManager
                 dict.Add($"PlayerNumbers_{i}");
             }
 
-            Vanilla2 = BuildGlyphs([..sprites], [..sprites.Select(x => x.texture)], "PlayerNumbers", dict.ToDictionary(x => x, x => x), false);
+            Vanilla2 = BuildGlyphs([..sprites], [..sprites.Select(x => x.texture)], "PlayerNumbers", dict.ToDictionary(x => x, x => (x, 0)), false);
             Utils.DumpSprite(Vanilla2.spriteSheet as Texture2D, "PlayerNumbers_Modified", Path.Combine(ModPath, "Vanilla"));
         }
         catch (Exception e)
@@ -433,10 +427,10 @@ public static class AssetManager
     {
         try
         {
-            var (rolesWithIndexDict, rolesWithIndex) = Utils.Filtered(ModType.BTOS2);
+            var index = Utils.Filtered(ModType.BTOS2);
             var sprites = new List<Sprite>();
 
-            foreach (var (role, roleInt) in rolesWithIndex)
+            foreach (var (role, (_, roleInt)) in index)
             {
                 var name = Utils.RoleName((Role)roleInt, ModType.BTOS2);
                 var sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name + "_BTOS2", out var sprite1) ? sprite1 : Blank;
@@ -453,7 +447,7 @@ public static class AssetManager
                     Logging.LogWarning($"NO BTOS2 ICON FOR {name}?!");
             }
 
-            BTOS2_2 = BuildGlyphs([..sprites], [..sprites.Select(x => x.texture)], "BTOSRoleIcons", rolesWithIndexDict);
+            BTOS2_2 = BuildGlyphs([..sprites], [..sprites.Select(x => x.texture)], "BTOSRoleIcons", index);
             Utils.DumpSprite(BTOS2_2.spriteSheet as Texture2D, "BTOS2RoleIcons_Modified", Path.Combine(ModPath, "BTOS2"));
         }
         catch (Exception e)
@@ -464,7 +458,7 @@ public static class AssetManager
     }
 
     // courtesy of pat, love ya mate
-    public static TMP_SpriteAsset BuildGlyphs(Sprite[] sprites, Texture2D[] textures, string spriteAssetName, Dictionary<string, string> rolesWithIndexDict, bool shouldLower = true)
+    public static TMP_SpriteAsset BuildGlyphs(Sprite[] sprites, Texture2D[] textures, string spriteAssetName, Dictionary<string, (string, int)> index, bool shouldLower = true)
     {
         var asset = ScriptableObject.CreateInstance<TMP_SpriteAsset>();
         var image = new Texture2D(4096, 2048) { name = spriteAssetName };
@@ -495,7 +489,7 @@ public static class AssetManager
 
             var character = new TMP_SpriteCharacter(0, asset, glyph)
             {
-                name = rolesWithIndexDict[shouldLower ? glyph.sprite.name.ToLower() : glyph.sprite.name],
+                name = index[shouldLower ? glyph.sprite.name.ToLower() : glyph.sprite.name].Item1,
                 glyphIndex = (uint)i,
             };
 

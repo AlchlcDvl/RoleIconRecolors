@@ -29,6 +29,8 @@ public static class Utils
         Role.ADMIRER, Role.ARSONIST, Role.MARSHAL, Role.SOCIALITE, Role.POISONER, Role.COVENLEADER, Role.CORONER, Role.SERIALKILLER, Role.SHROUD, /*Role.ROLE_COUNT, (Role)57, (Role)58,
         (Role)59, (Role)60, (Role)61*/ ];
 
+    public static readonly Dictionary<ModType, Dictionary<string, (string, int)>> RoleStuff = [];
+
     public static string RoleName(Role role, ModType mod = ModType.None)
     {
         try
@@ -517,8 +519,11 @@ public static class Utils
         _ => VanillaSkippableNames.Contains(name)
     };
 
-    public static (Dictionary<string, string>, Dictionary<string, int>) Filtered(ModType mod = ModType.None)
+    public static Dictionary<string, (string, int)> Filtered(ModType mod = ModType.Vanilla)
     {
+        if (RoleStuff.TryGetValue(mod, out var result))
+            return result;
+
         var roles = mod switch
         {
             ModType.BTOS2 => typeof(BTOS2Role)
@@ -534,8 +539,8 @@ public static class Utils
             _ => ((Role[])Enum.GetValues(typeof(Role))).Where(x => x is not (Role.NONE or Role.ROLE_COUNT or Role.UNKNOWN or Role.HANGMAN))
         };
 
-        var rolesWithIndex = roles.Select(role => (role.ToString().ToLower(), (int)role)).ToDictionary(rolesSelect => rolesSelect.Item1.ToLower(), rolesSelect => rolesSelect.Item2);
-        return (rolesWithIndex.ToDictionary(rolesSelect => rolesSelect.Key.ToLower(), rolesSelect => $"Role{rolesSelect.Value}"), rolesWithIndex);
+        var rolesWithIndex = roles.ToDictionary(role => role.ToString().ToLower(), role => ($"Role{(int)role}", (int)role));
+        return RoleStuff[mod] = rolesWithIndex;
     }
 
     public static void DumpSprite(Texture2D texture, string fileName, string path = null)
@@ -616,6 +621,7 @@ public static class Utils
         (EffectType)208 => "Blackmailed",
         (EffectType)209 => "Blessed",
         (EffectType)210 => "Framed",
+        (EffectType)211 => "RevealedProsecutor",
         _ => "Blank"
     };
 
@@ -736,4 +742,55 @@ public static class Utils
             return Role.WAR;
         }
     }
+
+    /*public static FactionType GetFactionType(this Role role, ModType? mod = null)
+    {
+        mod ??= GetGameType();
+
+        if ((int)role is > 0 and < 25)
+            return FactionType.TOWN;
+        else if ((int)role is > 24 and < 40)
+            return FactionType.COVEN;
+        else if ((int)role is 41 or 42 or 47 or 50 or 250 or 251 or 252 or 253)
+            return FactionType.APOCALYPSE;
+        else if ((int)role is (41 or 42 or 47 or 50) and < 54)
+        {
+            return role switch
+            {
+                Role.ARSONIST => FactionType.ARSONIST,
+                Role.DOOMSAYER => FactionType.DOOMSAYER,
+                Role.EXECUTIONER => FactionType.EXECUTIONER,
+                Role.JESTER => FactionType.JESTER,
+                Role.PIRATE => FactionType.PIRATE,
+                Role.SERIALKILLER => FactionType.SERIALKILLER,
+                Role.SHROUD => FactionType.SHROUD,
+                Role.WEREWOLF => FactionType.WEREWOLF,
+                Role.VAMPIRE => FactionType.VAMPIRE,
+                Role.CURSED_SOUL => FactionType.CURSED_SOUL,
+                _ => FactionType.NONE
+            };
+        }
+
+        if (mod == ModType.BTOS2)
+        {
+            return role switch
+            {
+                BTOS2Role.Banshee => BTOS2Faction.Coven,
+                BTOS2Role.Marshal or BTOS2Role.Oracle => BTOS2Faction.Town,
+                BTOS2Role.Jackal => BTOS2Faction.Jackal,
+                BTOS2Role.Judge => BTOS2Faction.Judge,
+                BTOS2Role.Auditor => BTOS2Faction.Auditor,
+                BTOS2Role.Inquisitor => BTOS2Faction.Inquisitor,
+                BTOS2Role.Starspawn => BTOS2Faction.Starspawn,
+                _ => BTOS2Faction.None
+            };
+        }
+        else if (mod == ModType.Vanilla)
+        {
+            if ((int)role is 54 or 55)
+                return FactionType.TOWN;
+        }
+
+        return FactionType.NONE;
+    }*/
 }
