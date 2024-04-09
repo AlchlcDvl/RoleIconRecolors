@@ -42,7 +42,34 @@ public class IconAssets(string name)
         }
 
         Logging.LogMessage($"{MentionStyles.Count} mention styles exist!");
+        Logging.LogMessage($"{CountAssets()} assets exist!");
         Logging.LogMessage($"{Name} Debugged!");
+    }
+
+    public int CountAssets()
+    {
+        Logging.LogMessage($"Counting {Name}");
+        var count = 0;
+
+        foreach (var (name1, icons) in BaseIcons)
+        {
+            foreach (var (name2, icon) in icons)
+            {
+                if (icon.IsValid())
+                    count++;
+            }
+        }
+
+        foreach (var (name1, icons) in EasterEggs)
+        {
+            foreach (var (name2, icon) in icons)
+            {
+                if (icon.Count > 0)
+                    count += icon.Count;
+            }
+        }
+
+        return count;
     }
 
     public void Delete()

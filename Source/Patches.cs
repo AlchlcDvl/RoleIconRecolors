@@ -434,7 +434,7 @@ public static class CacheDefaults
                 Numbers = asset;
 
             if (key is "RoleIcons" or "PlayerNumbers")
-                Utils.DumpSprite(asset.spriteSheet as Texture2D, key, Path.Combine(AssetManager.ModPath, "Vanilla"));
+                Utils.DumpSprite(asset.spriteSheet as Texture2D, key, Path.Combine(AssetManager.ModPath, "Vanilla"), true);
             else
                 MaterialReferenceManager.AddSpriteAsset(asset);
         });
@@ -614,11 +614,11 @@ public static class ReplaceTMPSpritesPatch
     {
         Logging.LogMessage("Patching DownloadContributorTags.AddTMPSprites");
         var oldSpriteAssetRequest = Traverse.Create<TMP_Text>().Field<Func<int, string, TMP_SpriteAsset>>("OnSpriteAssetRequest").Value;
-        TMP_Text.OnSpriteAssetRequest += (_, str) =>
+        TMP_Text.OnSpriteAssetRequest += (index, str) =>
         {
             try
             {
-                return Request(_, str, oldSpriteAssetRequest);
+                return Request(index, str, oldSpriteAssetRequest);
             }
             catch (Exception e)
             {
@@ -633,12 +633,12 @@ public static class ReplaceTMPSpritesPatch
                 else if (str == "PlayerNumbers")
                     return AssetManager.Vanilla2 ?? CacheDefaults.Numbers;
                 else
-                    return oldSpriteAssetRequest(_, str);
+                    return oldSpriteAssetRequest(index, str);
             }
         };
     }
 
-    private static TMP_SpriteAsset Request(int _, string str, Func<int, string, TMP_SpriteAsset> oldSpriteAssetRequest)
+    private static TMP_SpriteAsset Request(int index, string str, Func<int, string, TMP_SpriteAsset> oldSpriteAssetRequest)
     {
         try
         {
@@ -663,17 +663,17 @@ public static class ReplaceTMPSpritesPatch
 
                     if (!pack.Assets.TryGetValue(mod, out var assets))
                     {
-                        Logging.LogError($"Unable to find {Constants.CurrentPack} assets for {mod}");
+                        Logging.LogWarning($"Unable to find {Constants.CurrentPack} assets for {mod}");
                         return defaultSprite;
                     }
                     else if (!assets.MentionStyles.TryGetValue(deconstructed, out var style) || !style)
                     {
-                        Logging.LogError($"{Constants.CurrentPack} {mod} Mention Style {deconstructed} was null or missing");
+                        Logging.LogWarning($"{Constants.CurrentPack} {mod} Mention Style {deconstructed} was null or missing");
                         return defaultSprite;
                     }
                     else if (!assets.MentionStyles.TryGetValue("Regular", out style) || !style)
                     {
-                        Logging.LogError($"{Constants.CurrentPack} {mod} Mention Style Regular was null or missing");
+                        Logging.LogWarning($"{Constants.CurrentPack} {mod} Mention Style Regular was null or missing");
                         return defaultSprite;
                     }
                     else
@@ -683,17 +683,17 @@ public static class ReplaceTMPSpritesPatch
                 {
                     if (!pack.PlayerNumbers)
                     {
-                        Logging.LogError($"{Constants.CurrentPack} PlayerNumber was null or missing");
+                        Logging.LogWarning($"{Constants.CurrentPack} PlayerNumber was null or missing");
                         return AssetManager.Vanilla2 ?? CacheDefaults.Numbers;
                     }
                     else
                         return pack.PlayerNumbers;
                 }
                 else
-                    return oldSpriteAssetRequest(_, str);
+                    return oldSpriteAssetRequest(index, str);
             }
             else
-                Logging.LogError($"{Constants.CurrentPack} doesn't have an icon pack");
+                Logging.LogWarning($"{Constants.CurrentPack} doesn't have an icon pack");
 
             if (str.Contains("BTOSRoleIcons"))
                 return AssetManager.BTOS2_2 ?? AssetManager.BTOS2_1;
@@ -704,7 +704,7 @@ public static class ReplaceTMPSpritesPatch
             else if (str == "PlayerNumbers")
                 return AssetManager.Vanilla2 ?? CacheDefaults.Numbers;
             else
-                return oldSpriteAssetRequest(_, str);
+                return oldSpriteAssetRequest(index, str);
         }
         catch (Exception e)
         {
@@ -719,7 +719,7 @@ public static class ReplaceTMPSpritesPatch
             else if (str == "PlayerNumbers")
                 return AssetManager.Vanilla2 ?? CacheDefaults.Numbers;
             else
-                return oldSpriteAssetRequest(_, str);
+                return oldSpriteAssetRequest(index, str);
         }
     }
 }

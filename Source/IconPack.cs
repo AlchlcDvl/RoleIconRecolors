@@ -27,6 +27,10 @@ public class IconPack(string name)
         Assets.ForEach((_, y) => y.Debug());
         Logging.LogMessage($"{Name} {Assets.Count} asset sets loaded!");
 
+        var count = 0;
+        Assets.ForEach((_, y) => count += y.CountAssets());
+        Logging.LogMessage($"{Name} {count} assets exist!");
+
         if (PlayerNumbers)
             Logging.LogMessage($"{Name} has a PlayerNumbers sprite sheet!");
 
@@ -219,7 +223,7 @@ public class IconPack(string name)
                 }
 
                 PlayerNumbers = AssetManager.BuildGlyphs([..sprites], [..sprites.Select(x => x.texture)], $"PlayerNumbers ({Name})", numbers.ToDictionary(x => x, x => (x, 0)), false);
-                Utils.DumpSprite(PlayerNumbers.spriteSheet as Texture2D, "PlayerNumbers", PackPath);
+                Utils.DumpSprite(PlayerNumbers.spriteSheet as Texture2D, "PlayerNumbers", Path.Combine(PackPath, "PlayerNumbers"));
             }
             catch (Exception e)
             {
@@ -280,73 +284,65 @@ public class IconPack(string name)
 
     public Sprite GetSprite(string iconName, bool allowEE, string type, bool log, ModType? mod = null)
     {
-        try
+        mod ??= Utils.GetGameType();
+
+        if (!Assets.TryGetValue(mod.Value, out var assets))
         {
-            mod ??= Utils.GetGameType();
-
-            if (!Assets.TryGetValue(mod.Value, out var assets))
-            {
-                Logging.LogError($"Error finding {iconName} in {Name}'s {type} > {mod} resources");
-                return AssetManager.Blank;
-            }
-
-            if (!assets.BaseIcons[type].TryGetValue(iconName + $"_{mod}", out var sprite))
-            {
-                if (type != "Regular")
-                    assets.BaseIcons["Regular"].TryGetValue(iconName + $"_{mod}", out sprite);
-            }
-
-            if (!sprite.IsValid() && !assets.BaseIcons[type].TryGetValue(iconName, out sprite))
-            {
-                if (log)
-                    Logging.LogWarning($"Couldn't find {iconName} in {Name}'s {type} > {mod} resources");
-
-                if (type != "Regular")
-                {
-                    if (log)
-                        Logging.LogWarning($"Couldn't find {iconName} in {Name}'s Regular > {mod} resources");
-
-                    assets.BaseIcons["Regular"].TryGetValue(iconName, out sprite);
-                }
-            }
-
-            if ((URandom.RandomRangeInt(1, 101) <= Constants.EasterEggChance && allowEE && sprite.IsValid()) || !sprite.IsValid())
-            {
-                var sprites = new List<Sprite>();
-
-                if (Constants.AllEasterEggs)
-                {
-                    if (!AssetManager.GlobalEasterEggs[type].TryGetValue(iconName, out sprites))
-                    {
-                        if (type != "Regular")
-                            AssetManager.GlobalEasterEggs["Regular"].TryGetValue(iconName, out sprites);
-                    }
-
-                    sprites ??= [];
-                }
-
-                if (sprites.Count == 0)
-                {
-                    if (!assets.EasterEggs[type].TryGetValue(iconName, out sprites))
-                    {
-                        if (type != "Regular")
-                            assets.EasterEggs["Regular"].TryGetValue(iconName, out sprites);
-                    }
-
-                    sprites ??= [];
-                }
-
-                if (sprites.Count > 0)
-                    return sprites.Random();
-            }
-
-            return sprite ?? AssetManager.Blank;
-        }
-        catch (Exception e)
-        {
-            Logging.LogError(e);
+            Logging.LogError($"Error finding {iconName} in {Name}'s {type} > {mod} resources");
             return AssetManager.Blank;
         }
+
+        if (!assets.BaseIcons[type].TryGetValue(iconName + $"_{mod}", out var sprite))
+        {
+            if (type != "Regular")
+                assets.BaseIcons["Regular"].TryGetValue(iconName + $"_{mod}", out sprite);
+        }
+
+        if (!sprite.IsValid() && !assets.BaseIcons[type].TryGetValue(iconName, out sprite))
+        {
+            if (log)
+                Logging.LogWarning($"Couldn't find {iconName} in {Name}'s {type} > {mod} resources");
+
+            if (type != "Regular")
+            {
+                if (log)
+                    Logging.LogWarning($"Couldn't find {iconName} in {Name}'s Regular > {mod} resources");
+
+                assets.BaseIcons["Regular"].TryGetValue(iconName, out sprite);
+            }
+        }
+
+        if ((URandom.RandomRangeInt(1, 101) <= Constants.EasterEggChance && allowEE && sprite.IsValid()) || !sprite.IsValid())
+        {
+            var sprites = new List<Sprite>();
+
+            if (Constants.AllEasterEggs)
+            {
+                if (!AssetManager.GlobalEasterEggs[type].TryGetValue(iconName, out sprites))
+                {
+                    if (type != "Regular")
+                        AssetManager.GlobalEasterEggs["Regular"].TryGetValue(iconName, out sprites);
+                }
+
+                sprites ??= [];
+            }
+
+            if (sprites.Count == 0)
+            {
+                if (!assets.EasterEggs[type].TryGetValue(iconName, out sprites))
+                {
+                    if (type != "Regular")
+                        assets.EasterEggs["Regular"].TryGetValue(iconName, out sprites);
+                }
+
+                sprites ??= [];
+            }
+
+            if (sprites.Count > 0)
+                return sprites.Random();
+        }
+
+        return sprite ?? AssetManager.Blank;
     }
 
     public static implicit operator bool(IconPack exists) => exists != null;

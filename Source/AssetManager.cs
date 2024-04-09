@@ -139,7 +139,7 @@ public static class AssetManager
             texture.LoadImage(File.ReadAllBytes(path), false);
             texture.hideFlags |= HideFlags.DontUnloadUnusedAsset;
             texture.name = fileName;
-            return texture.DontDestroy().Decompress();
+            return texture.DontDestroy();
         }
         catch (Exception e)
         {
@@ -500,9 +500,8 @@ public static class AssetManager
         asset.name = spriteAssetName;
         asset.material = new(Shader.Find("TextMeshPro/Sprite"));
         AccessTools.Property(asset.GetType(), "version").SetValue(asset, "1.1.0");
-        var decompressed = image.Decompress();
-        asset.material.mainTexture = decompressed;
-        asset.spriteSheet = decompressed;
+        asset.material.mainTexture = image;
+        asset.spriteSheet = image;
         asset.UpdateLookupTables();
         asset.hideFlags |= HideFlags.DontUnloadUnusedAsset;
         return asset.DontDestroy();

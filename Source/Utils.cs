@@ -543,7 +543,7 @@ public static class Utils
         return RoleStuff[mod] = rolesWithIndex;
     }
 
-    public static void DumpSprite(Texture2D texture, string fileName, string path = null)
+    public static void DumpSprite(Texture2D texture, string fileName, string path = null, bool decompress = false)
     {
         path ??= AssetManager.ModPath;
         var assetPath = Path.Combine(path, $"{fileName}.png");
@@ -551,7 +551,7 @@ public static class Utils
         if (File.Exists(assetPath))
             File.Delete(assetPath);
 
-        File.WriteAllBytes(assetPath, texture.Decompress().EncodeToPNG());
+        File.WriteAllBytes(assetPath, decompress ? texture.Decompress().EncodeToPNG() : texture.EncodeToPNG());
     }
 
     public static bool IsTransformedApoc(this Role role, ModType mod = ModType.None)
