@@ -194,7 +194,7 @@ public class IconPack(string name)
         }
         catch (Exception e)
         {
-            Logging.LogError(e);
+            Logging.LogError($"Unable to load sprites for {Name} because:\n{e}");
         }
 
         // love ya pat
@@ -227,7 +227,7 @@ public class IconPack(string name)
             }
             catch (Exception e)
             {
-                Logging.LogError(e);
+                Logging.LogError($"Unable to create custom player numbers for {Name} because:\n{e}");
                 PlayerNumbers = null;
             }
         }
@@ -273,7 +273,7 @@ public class IconPack(string name)
                 }
                 catch (Exception e)
                 {
-                    Logging.LogError(e);
+                    Logging.LogError($"Unable to create custom role icons for {Name} {style} because:\n{e}");
                     assets.MentionStyles[style] = null;
                 }
             }

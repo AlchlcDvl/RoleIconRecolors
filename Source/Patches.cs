@@ -6,6 +6,9 @@ using Server.Shared.Extensions;
 using Game.Services;
 using Game.Simulation;
 using Game.Characters;
+using Game.Chat.Decoders;
+using Server.Shared.Messages;
+using Server.Shared.State.Chat;
 
 namespace IconPacks;
 
@@ -17,7 +20,6 @@ public static class PatchRoleDeckBuilder
         if (!Constants.EnableIcons)
             return;
 
-        Logging.LogMessage("Patching RoleCardListItem.SetData");
         var icon = AssetManager.GetSprite(Utils.RoleName(role), Utils.FactionName(role.GetFaction()), false);
 
         if (__instance.roleImage && icon.IsValid())
@@ -33,7 +35,6 @@ public static class PatchRoleListPanel
         if (!Constants.EnableIcons || a_isBan)
             return;
 
-        Logging.LogMessage("Patching RoleDeckListItem.SetData");
         var icon = AssetManager.GetSprite(Utils.RoleName(a_role), Utils.FactionName(a_role.GetFaction()), false);
 
         if (__instance.roleImage && icon.IsValid())
@@ -49,7 +50,6 @@ public static class PatchBrowserRoleListPanel
         if (!Constants.EnableIcons || a_isBan)
             return;
 
-        Logging.LogMessage("Patching GameBrowserRoleDeckListItem.SetData");
         var icon = AssetManager.GetSprite(Utils.RoleName(a_role), Utils.FactionName(a_role.GetFaction()), false);
 
         if (__instance.roleImage && icon.IsValid())
@@ -64,8 +64,6 @@ public static class PatchRoleCards
     {
         if (!Constants.EnableIcons)
             return;
-
-        Logging.LogMessage("Patching RoleCardPanelBackground.SetRole");
 
         role = Constants.IsTransformed ? Utils.GetTransformedVersion(role) : role;
 
@@ -167,7 +165,6 @@ public static class PatchAbilityPanel
         if (!Constants.EnableIcons || overrideType == TosAbilityPanelListItem.OverrideAbilityType.VOTING)
             return;
 
-        Logging.LogMessage("Patching TosAbilityPanelListItem.OverrideIconAndText");
         var role = Pepper.GetMyRole();
         var faction = Pepper.GetMyFaction();
         role = Constants.IsTransformed ? Utils.GetTransformedVersion(role) : role;
@@ -259,7 +256,6 @@ public static class SpecialAbilityPanelPatch
         if (!Constants.EnableIcons)
             return;
 
-        Logging.LogMessage("Patching SpecialAbilityPopupGenericListItem.SetData");
         var special = AssetManager.GetSprite($"{Utils.RoleName(Pepper.GetMyRole())}_Special", Utils.FactionName(Pepper.GetMyFaction()));
 
         if (special.IsValid())
@@ -275,7 +271,6 @@ public static class PatchRitualistGuessMenu
         if (!Constants.EnableIcons)
             return;
 
-        Logging.LogMessage("Patching SpecialAbilityPopupRadialIcon.SetData");
         var icon = AssetManager.GetSprite(Utils.RoleName(a_role), Utils.FactionName(a_role.GetFaction()), false);
 
         if (__instance.roleIcon && icon.IsValid())
@@ -291,7 +286,6 @@ public static class PatchGuideRoleCards
         if (!Constants.EnableIcons)
             return;
 
-        Logging.LogMessage("Patching RoleCardPopupPanel.SetRole");
         var index = 0;
         var name = Utils.RoleName(role);
         var faction = Utils.FactionName(role.GetFaction());
@@ -389,8 +383,6 @@ public static class PatchDoomsayerLeaving
         if (!Constants.EnableIcons || Constants.IsBTOS2)
             return;
 
-        Logging.LogMessage("Patching DoomsayerLeavesCinematicPlayer.Init");
-
         var role1 = __instance.doomsayerLeavesCinematicData.roles[0];
         var role2 = __instance.doomsayerLeavesCinematicData.roles[1];
         var role3 = __instance.doomsayerLeavesCinematicData.roles[2];
@@ -422,7 +414,6 @@ public static class CacheDefaults
 
     public static bool Prefix(HomeInterfaceService __instance)
     {
-        Logging.LogMessage("Patching HomeInterfaceService.Init");
         Assets.ForEach(key =>
         {
             Debug.Log($"HomeInterfaceService:: Add Sprite Asset {key}");
@@ -454,7 +445,6 @@ public static class PatchAttackDefense
         if (!Constants.EnableIcons)
             return;
 
-        Logging.LogMessage("Patching RoleCardPanel.ShowAttackAndDefense");
         var attack = AssetManager.GetSprite($"Attack{Utils.GetLevel(data.attack, true)}");
         var icon1 = __instance.transform.Find("AttackIcon").Find("Icon").GetComponent<Image>();
 
@@ -478,7 +468,6 @@ public static class PatchAttackDefensePopup
         if (!Constants.EnableIcons)
             return;
 
-        Logging.LogMessage("Patching RoleCardPopupPanel.ShowAttackAndDefense");
         var attack = AssetManager.GetSprite($"Attack{Utils.GetLevel(data.attack, true)}");
         var icon1 = __instance.transform.Find("AttackIcon").Find("Icon").GetComponent<Image>();
 
@@ -502,8 +491,6 @@ public static class PlayerPopupControllerPatch
         if (!Constants.EnableIcons)
             return;
 
-        Logging.LogMessage("Patching PlayerPopupController.SetRoleIcon");
-
         if (!Service.Game.Sim.simulation.knownRolesAndFactions.Data.TryGetValue(__instance.m_discussionPlayerState.position, out var tuple))
             return;
 
@@ -522,7 +509,6 @@ public static class RoleMenuPopupControllerPatch
         if (!Constants.EnableIcons)
             return;
 
-        Logging.LogMessage("Patching RoleMenuPopupController.SetRoleIconAndLabels");
         var sprite = AssetManager.GetSprite(Utils.RoleName(__instance.m_role), Utils.FactionName(__instance.m_role.GetFaction()));
 
         if (sprite.IsValid() && __instance.RoleIconImage && __instance.HeaderRoleIconImage)
@@ -546,7 +532,6 @@ public static class PlayerEffectsServicePatch
         if (!Constants.EnableIcons)
             return;
 
-        Logging.LogMessage("Patching PlayerEffectsService.GetEffect");
         var sprite = AssetManager.GetSprite(Utils.EffectName(effectType), false);
         __result.sprite = sprite.IsValid() ? sprite : EffectSprites[effectType];
     }
@@ -557,11 +542,8 @@ public static class GetRoleIconAndNameInlineStringPatch
 {
     public static void Postfix(ref FactionType factionType, ref string __result)
     {
-        if (!Constants.EnableIcons)
-            return;
-
-        Logging.LogMessage("Patching GameSimulation.GetRoleIconAndNameInlineString");
-        __result = __result.Replace("RoleIcons", $"RoleIcons ({Utils.FactionName(factionType)})");
+        if (Constants.EnableIcons)
+            __result = __result.Replace("RoleIcons", $"RoleIcons ({Utils.FactionName(factionType)})");
     }
 }
 
@@ -570,11 +552,8 @@ public static class GetTownTraitorRoleIconAndNameInlineStringPatch
 {
     public static void Postfix(ref string __result)
     {
-        if (!Constants.EnableIcons)
-            return;
-
-        Logging.LogMessage("Patching GameSimulation.GetTownTraitorRoleIconAndNameInlineString");
-        __result = __result.Replace("RoleIcons", "RoleIcons (Coven)");
+        if (Constants.EnableIcons)
+            __result = __result.Replace("RoleIcons", "RoleIcons (Coven)");
     }
 }
 
@@ -583,11 +562,8 @@ public static class GetVIPRoleIconAndNameInlineStringPatch
 {
     public static void Postfix(GameSimulation __instance, ref string __result)
     {
-        if (!Constants.EnableIcons)
-            return;
-
-        Logging.LogMessage("Patching GameSimulation.GetVIPRoleIconAndNameInlineString");
-        __result = __result.Replace(__instance.GetVIPText(), "<sprite=\"RoleIcons\" name=\"Role201\">");
+        if (Constants.EnableIcons)
+            __result = __result.Replace("RoleIcons", "RoleIcons (VIP)").Replace(__instance.GetVIPText(), "<sprite=\"RoleIcons (VIP)\" name=\"Role201\">");
     }
 }
 
@@ -596,13 +572,22 @@ public static class TosCharacterNametagPatch
 {
     public static void Postfix(TosCharacterNametag __instance, ref string __result)
     {
-        if (!Constants.EnableIcons)
-            return;
-
-        Logging.LogMessage("Patching TosCharacterNametag.WrapCharacterName");
-
-        if (!Pepper.IsLobbyPhase() && Service.Game.Sim.simulation.knownRolesAndFactions.Data.TryGetValue(__instance.tosCharacter.position, out var tuple))
+        if (Constants.EnableIcons && !Pepper.IsLobbyPhase() && Service.Game.Sim.simulation.knownRolesAndFactions.Data.TryGetValue(__instance.tosCharacter.position, out var tuple))
             __result = __result.Replace("RoleIcons", $"RoleIcons ({Utils.FactionName(tuple.Item2)})");
+    }
+}
+
+[HarmonyPatch(typeof(BaseDecoder), nameof(BaseDecoder.Decode))]
+[HarmonyPatch(typeof(BaseDecoder), nameof(BaseDecoder.Encode))]
+public static class FixDecodingAndEncoding
+{
+    public static void Postfix(ref ChatLogMessage chatLogMessage, ref string __result)
+    {
+        if (Constants.EnableIcons && chatLogMessage.chatLogEntry is ChatLogChatMessageEntry entry && Service.Game.Sim.simulation.knownRolesAndFactions.Data.TryGetValue(entry.speakerId, out
+            var tuple))
+        {
+            __result = __result.Replace("RoleIcons", $"RoleIcons ({Utils.FactionName(tuple.Item2)})");
+        }
     }
 }
 
@@ -612,7 +597,6 @@ public static class ReplaceTMPSpritesPatch
 {
     public static void Postfix()
     {
-        Logging.LogMessage("Patching DownloadContributorTags.AddTMPSprites");
         var oldSpriteAssetRequest = Traverse.Create<TMP_Text>().Field<Func<int, string, TMP_SpriteAsset>>("OnSpriteAssetRequest").Value;
         TMP_Text.OnSpriteAssetRequest += (index, str) =>
         {
@@ -651,7 +635,7 @@ public static class ReplaceTMPSpritesPatch
                     if (str.Contains("BTOS"))
                         mod = ModType.BTOS2;
 
-                    var deconstructed = Constants.CurrentPack;
+                    var deconstructed = Constants.CurrentStyle;
 
                     if (str.Contains("("))
                         deconstructed = str.Replace("RoleIcons (", "").Replace(")", "").Replace("BTOS", "");
@@ -661,33 +645,23 @@ public static class ReplaceTMPSpritesPatch
                     if (mod == ModType.BTOS2)
                         defaultSprite = AssetManager.BTOS2_2 ?? AssetManager.BTOS2_1;
 
+                    TMP_SpriteAsset style = null;
+
                     if (!pack.Assets.TryGetValue(mod, out var assets))
-                    {
                         Logging.LogWarning($"Unable to find {Constants.CurrentPack} assets for {mod}");
-                        return defaultSprite;
-                    }
-                    else if (!assets.MentionStyles.TryGetValue(deconstructed, out var style) || !style)
-                    {
+                    else if (!assets.MentionStyles.TryGetValue(deconstructed, out style))
                         Logging.LogWarning($"{Constants.CurrentPack} {mod} Mention Style {deconstructed} was null or missing");
-                        return defaultSprite;
-                    }
-                    else if (!assets.MentionStyles.TryGetValue("Regular", out style) || !style)
-                    {
+                    else if (!assets.MentionStyles.TryGetValue("Regular", out style))
                         Logging.LogWarning($"{Constants.CurrentPack} {mod} Mention Style Regular was null or missing");
-                        return defaultSprite;
-                    }
-                    else
-                        return style;
+
+                    return style ?? defaultSprite;
                 }
                 else if (str == "PlayerNumbers")
                 {
                     if (!pack.PlayerNumbers)
-                    {
                         Logging.LogWarning($"{Constants.CurrentPack} PlayerNumber was null or missing");
-                        return AssetManager.Vanilla2 ?? CacheDefaults.Numbers;
-                    }
-                    else
-                        return pack.PlayerNumbers;
+
+                    return pack.PlayerNumbers ?? AssetManager.Vanilla2 ?? CacheDefaults.Numbers;
                 }
                 else
                     return oldSpriteAssetRequest(index, str);

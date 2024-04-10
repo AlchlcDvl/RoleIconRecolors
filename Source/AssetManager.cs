@@ -123,7 +123,7 @@ public static class AssetManager
                 };
             }
 
-            Utils.DumpSprite(BTOS2_1.spriteSheet as Texture2D, "BTOSRoleIcons", Path.Combine(ModPath, "BTOS2"));
+            Utils.DumpSprite(BTOS2_1.spriteSheet as Texture2D, "BTOSRoleIcons", Path.Combine(ModPath, "BTOS2"), true);
             LoadBTOS2SpriteSheet();
         }
     }
@@ -188,7 +188,7 @@ public static class AssetManager
         }
         catch (Exception e)
         {
-            Logging.LogError(e);
+            Logging.LogError($"Unable to set sprite for {path} because:\n{e}");
             return null;
         }
     }
@@ -251,7 +251,7 @@ public static class AssetManager
         }
         catch (Exception e)
         {
-            Logging.LogError(e);
+            Logging.LogError($"Unable to load icon pack {packName} because:\n{e}");
         }
     }
 
@@ -335,7 +335,7 @@ public static class AssetManager
         }
         catch (Exception e)
         {
-            Logging.LogError(e);
+            Logging.LogError($"Unable to set scroll sprites because:\n{e}");
         }
     }
 
@@ -359,7 +359,7 @@ public static class AssetManager
         }
         catch (Exception e)
         {
-            Logging.LogError(e);
+            Logging.LogError($"Unable to decompress {source.name} because:\n{e}");
             return source;
         }
     }
@@ -390,7 +390,7 @@ public static class AssetManager
         }
         catch (Exception e)
         {
-            Logging.LogError(e);
+            Logging.LogError($"Unable to create modified vanilla role icons sheet because:\n{e}");
             Vanilla1 = null;
         }
 
@@ -419,7 +419,7 @@ public static class AssetManager
         }
         catch (Exception e)
         {
-            Logging.LogError(e);
+            Logging.LogError($"Unable to create modified player numbers sheet because:\n{e}");
             Vanilla2 = null;
         }
     }
@@ -452,7 +452,7 @@ public static class AssetManager
         }
         catch (Exception e)
         {
-            Logging.LogError(e);
+            Logging.LogError($"Unable to create modified btos role icons sheet because:\n{e}");
             BTOS2_2 = null;
         }
     }
@@ -500,8 +500,7 @@ public static class AssetManager
         asset.name = spriteAssetName;
         asset.material = new(Shader.Find("TextMeshPro/Sprite"));
         AccessTools.Property(asset.GetType(), "version").SetValue(asset, "1.1.0");
-        asset.material.mainTexture = image;
-        asset.spriteSheet = image;
+        asset.material.mainTexture = asset.spriteSheet = image;
         asset.UpdateLookupTables();
         asset.hideFlags |= HideFlags.DontUnloadUnusedAsset;
         return asset.DontDestroy();
