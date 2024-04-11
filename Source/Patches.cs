@@ -657,10 +657,11 @@ public static class ReplaceTMPSpritesPatch
             }
             else if (str == "PlayerNumbers")
             {
-                if (!pack.PlayerNumbers)
+                if (!pack.PlayerNumbers && Constants.CustomNumbers)
                     Logging.LogWarning($"{Constants.CurrentPack} PlayerNumber was null");
 
                 asset = pack.PlayerNumbers ?? AssetManager.Vanilla2 ?? CacheDefaults.Numbers;
+                return Constants.CustomNumbers;
             }
 
             return (str.Contains("RoleIcons") || str == "PlayerNumbers") && asset;

@@ -56,6 +56,9 @@ public class IconPack(string name)
 
     public void Load()
     {
+        if (Name is "Vanilla" or "BTOS2")
+            return;
+
         Logging.LogMessage($"Loading {Name}", true);
 
         try
@@ -97,7 +100,7 @@ public class IconPack(string name)
                         }
                         else
                         {
-                            Logging.LogWarning($"{Name} {baseName} folder doesn't exist");
+                            Logging.LogWarning($"{Name} {mod} {baseName} folder doesn't exist");
                             Directory.CreateDirectory(baseFolder);
                         }
 
