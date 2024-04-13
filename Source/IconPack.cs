@@ -285,7 +285,7 @@ public class IconPack(string name)
         Logging.LogMessage($"{Name} Loaded!", true);
     }
 
-    public Sprite GetSprite(string iconName, bool allowEE, string type, bool log, ModType? mod = null)
+    public Sprite GetSprite(string iconName, bool allowEE, string type, ModType? mod = null)
     {
         mod ??= Utils.GetGameType();
 
@@ -303,19 +303,11 @@ public class IconPack(string name)
 
         if (!sprite.IsValid() && !assets.BaseIcons[type].TryGetValue(iconName, out sprite))
         {
-            if (log)
-                Logging.LogWarning($"Couldn't find {iconName} in {Name}'s {type} > {mod} resources");
-
             if (type != "Regular")
-            {
-                if (log)
-                    Logging.LogWarning($"Couldn't find {iconName} in {Name}'s Regular > {mod} resources");
-
                 assets.BaseIcons["Regular"].TryGetValue(iconName, out sprite);
-            }
         }
 
-        if ((URandom.RandomRangeInt(1, 101) <= Constants.EasterEggChance && allowEE && sprite.IsValid()) || !sprite.IsValid())
+        if (!sprite.IsValid() || (URandom.RandomRangeInt(1, 101) <= Constants.EasterEggChance && allowEE))
         {
             var sprites = new List<Sprite>();
 

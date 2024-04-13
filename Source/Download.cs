@@ -15,8 +15,6 @@ public static class Download
 
     private static IEnumerator CoDownload(string packName)
     {
-        Logging.LogMessage($"Downloading {packName}");
-
         if (!SupportedPacks.Contains(packName))
         {
             Logging.LogError($"Wrong pack name {packName}");
@@ -34,13 +32,21 @@ public static class Download
 
         if (Directory.Exists(pack))
         {
-            Logging.LogMessage("Clearing");
             var packinfo = new DirectoryInfo(pack);
             var dirs = packinfo.GetDirectories().Select(x => x.FullName);
 
             foreach (var dir in dirs)
             {
                 var info = new DirectoryInfo(dir);
+                var dir2 = info.GetDirectories().Select(x => x.FullName);
+
+                foreach (var dir3 in dir2)
+                {
+                    var inf2 = new DirectoryInfo(dir3);
+                    inf2.GetFiles("*.png").Select(x => x.FullName).ForEach(File.Delete);
+                    inf2.GetFiles("*.jpg").Select(x => x.FullName).ForEach(File.Delete);
+                }
+
                 info.GetFiles("*.png").Select(x => x.FullName).ForEach(File.Delete);
                 info.GetFiles("*.jpg").Select(x => x.FullName).ForEach(File.Delete);
             }
@@ -51,9 +57,7 @@ public static class Download
         else
             Directory.CreateDirectory(pack);
 
-        var link = $"{REPO}/{packName}.json";
-        var www = UnityWebRequest.Get(link);
-        Logging.LogMessage($"Visiting {link}");
+        var www = UnityWebRequest.Get($"{REPO}/{packName}.json");
         yield return www.SendWebRequest();
 
         while (!www.isDone)
@@ -65,19 +69,15 @@ public static class Download
             yield break;
         }
 
-        Logging.LogMessage("Converting");
         var json = JsonConvert.DeserializeObject<List<Asset>>(www.downloadHandler.text);
 
         foreach (var asset in json)
         {
-            Logging.LogMessage($"Setting {asset.Name}");
             asset.FileType ??= "png";
             asset.Folder ??= packName.Replace(" ", "");
             asset.Pack = packName;
 
-            var link2 = $"{REPO}/{asset.DownloadLink()}";
-            var www2 = UnityWebRequest.Get(link2);
-            Logging.LogMessage($"Visiting {link2}");
+            var www2 = UnityWebRequest.Get($"{REPO}/{asset.DownloadLink()}");
             yield return www2.SendWebRequest();
 
             while (!www2.isDone)
@@ -92,7 +92,6 @@ public static class Download
             if (!Directory.Exists(asset.FolderPath()))
                 Directory.CreateDirectory(asset.FolderPath());
 
-            Logging.LogMessage($"Downloading {asset.Name}");
             var persistTask = File.WriteAllBytesAsync(asset.FilePath(), www2.downloadHandler.data);
 
             while (!persistTask.IsCompleted)
@@ -112,7 +111,6 @@ public static class Download
 
         Recolors.Open();
         Running[packName] = false;
-        Logging.LogMessage("Done");
         yield break;
     }
 }

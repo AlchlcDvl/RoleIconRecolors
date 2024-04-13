@@ -33,9 +33,9 @@ public static class AssetManager
 
     private static Assembly Core => typeof(Recolors).Assembly;
 
-    public static Sprite GetSprite(string name, string faction, bool allowEE = true, string packName = null, bool log = true) => GetSprite(name, allowEE, faction, packName, log);
+    public static Sprite GetSprite(string name, string faction, bool allowEE = true, string packName = null, ModType? mod = null) => GetSprite(name, allowEE, faction, packName, mod);
 
-    public static Sprite GetSprite(string name, bool allowEE = true, string faction = null, string packName = null, bool log = true)
+    public static Sprite GetSprite(string name, bool allowEE = true, string faction = null, string packName = null, ModType? mod = null)
     {
         if (name.Contains("Blank") || !Constants.EnableIcons || IconPacks.Count == 0)
             return Blank;
@@ -56,7 +56,7 @@ public static class AssetManager
 
         try
         {
-            return pack.GetSprite(name, allowEE, type, log);
+            return pack.GetSprite(name, allowEE, type, mod);
         }
         catch (Exception e)
         {

@@ -492,7 +492,7 @@ public static class PlayerPopupControllerPatch
             return;
 
         if (!Service.Game.Sim.simulation.knownRolesAndFactions.Data.TryGetValue(__instance.m_discussionPlayerState.position, out var tuple))
-            return;
+            tuple = new(__instance.m_role, __instance.m_role.GetFaction());
 
         var sprite = AssetManager.GetSprite(Utils.RoleName(__instance.m_role), Utils.FactionName(tuple.Item2));
 
@@ -511,10 +511,13 @@ public static class RoleMenuPopupControllerPatch
 
         var sprite = AssetManager.GetSprite(Utils.RoleName(__instance.m_role), Utils.FactionName(__instance.m_role.GetFaction()));
 
-        if (sprite.IsValid() && __instance.RoleIconImage && __instance.HeaderRoleIconImage)
+        if (sprite.IsValid())
         {
-            __instance.RoleIconImage.sprite = sprite;
-            __instance.HeaderRoleIconImage.sprite = sprite;
+            if (__instance.RoleIconImage)
+                __instance.RoleIconImage.sprite = sprite;
+
+            if (__instance.HeaderRoleIconImage)
+                __instance.HeaderRoleIconImage.sprite = sprite;
         }
     }
 }
@@ -530,7 +533,10 @@ public static class PlayerEffectsServicePatch
             EffectSprites[effectType] = __result.sprite;
 
         if (!Constants.EnableIcons)
+        {
+            __result.sprite = EffectSprites[effectType];
             return;
+        }
 
         var sprite = AssetManager.GetSprite(Utils.EffectName(effectType), false);
         __result.sprite = sprite.IsValid() ? sprite : EffectSprites[effectType];
@@ -627,6 +633,9 @@ public static class ReplaceTMPSpritesPatch
     {
         asset = null;
 
+        if (!Constants.EnableIcons)
+            return false;
+
         if (AssetManager.IconPacks.TryGetValue(Constants.CurrentPack, out var pack))
         {
             if (str.Contains("RoleIcons"))
@@ -638,7 +647,7 @@ public static class ReplaceTMPSpritesPatch
 
                 var deconstructed = Constants.CurrentStyle;
 
-                if (str.Contains("("))
+                if (str.Contains("(") && !str.Contains("Blank"))
                     deconstructed = str.Replace("RoleIcons (", "").Replace(")", "").Replace("BTOS", "");
 
                 var defaultSprite = AssetManager.Vanilla1 ?? CacheDefaults.RoleIcons;
@@ -661,7 +670,7 @@ public static class ReplaceTMPSpritesPatch
                     Logging.LogWarning($"{Constants.CurrentPack} PlayerNumber was null");
 
                 asset = pack.PlayerNumbers ?? AssetManager.Vanilla2 ?? CacheDefaults.Numbers;
-                return Constants.CustomNumbers;
+                return Constants.CustomNumbers && asset;
             }
 
             return (str.Contains("RoleIcons") || str == "PlayerNumbers") && asset;

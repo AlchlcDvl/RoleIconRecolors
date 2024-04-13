@@ -31,10 +31,11 @@ public static class Utils
 
     public static readonly Dictionary<ModType, Dictionary<string, (string, int)>> RoleStuff = [];
 
-    public static string RoleName(Role role, ModType mod = ModType.None)
+    public static string RoleName(Role role, ModType? mod = null)
     {
         try
         {
+            mod ??= GetGameType();
             return mod switch
             {
                 ModType.Vanilla => VanillaRoleName(role),
@@ -375,13 +376,14 @@ public static class Utils
         _ => "Blank"
     };
 
-    public static string FactionName(FactionType faction, ModType mod = ModType.None)
+    public static string FactionName(FactionType faction, ModType? mod = null)
     {
         if (Constants.FactionOverridden)
             return Constants.FactionOverride;
 
         try
         {
+            mod ??= GetGameType();
             return mod switch
             {
                 ModType.Vanilla => VanillaFactionName(faction),
@@ -486,10 +488,11 @@ public static class Utils
         _ => "None"
     };
 
-    public static bool IsApoc(this Role role, ModType mod = ModType.None)
+    public static bool IsApoc(this Role role, ModType? mod = null)
     {
         try
         {
+            mod ??= GetGameType();
             return mod switch
             {
                 ModType.Vanilla => IsApocVanilla(role),

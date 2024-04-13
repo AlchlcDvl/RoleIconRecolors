@@ -288,10 +288,6 @@
         "Folder": "CovenBase"
     },
     {
-        "Name": "Jinx_Ability",
-        "Folder": "CovenBase"
-    },
-    {
         "Name": "Lookout",
         "Folder": "TownBase"
     },
@@ -309,10 +305,6 @@
     },
     {
         "Name": "Medusa",
-        "Folder": "CovenBase"
-    },
-    {
-        "Name": "Medusa_Ability",
         "Folder": "CovenBase"
     },
     {
@@ -506,10 +498,6 @@
     {
         "Name": "TavernKeeper_Ability",
         "Folder": "TownBase"
-    },
-    {
-        "Name": "Town",
-        "Folder": "RegularBase"
     },
     {
         "Name": "Tracker",
@@ -1116,10 +1104,6 @@
         "Folder": "CovenBase"
     },
     {
-        "Name": "Cleric_Special",
-        "Folder": "CovenBase"
-    },
-    {
         "Name": "Coroner_Ability",
         "Folder": "CovenBase"
     },
@@ -1177,10 +1161,6 @@
     },
     {
         "Name": "Pestilence_Ability",
-        "Folder": "CovenBase"
-    },
-    {
-        "Name": "Plaguebearer",
         "Folder": "CovenBase"
     },
     {
