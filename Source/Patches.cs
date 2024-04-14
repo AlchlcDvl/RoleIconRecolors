@@ -566,10 +566,10 @@ public static class GetTownTraitorRoleIconAndNameInlineStringPatch
 [HarmonyPatch(typeof(GameSimulation), nameof(GameSimulation.GetVIPRoleIconAndNameInlineString))]
 public static class GetVIPRoleIconAndNameInlineStringPatch
 {
-    public static void Postfix(GameSimulation __instance, ref string __result)
+    public static void Postfix(ref string __result)
     {
         if (Constants.EnableIcons)
-            __result = __result.Replace("RoleIcons", "RoleIcons (VIP)").Replace(__instance.GetVIPText(), "<sprite=\"RoleIcons (VIP)\" name=\"Role201\">");
+            __result = __result.Replace("RoleIcons", "RoleIcons (VIP)") + "<sprite=\"RoleIcons (VIP)\" name=\"Role201\">";
     }
 }
 
@@ -644,22 +644,26 @@ public static class ReplaceTMPSpritesPatch
 
                 if (str.Contains("BTOS"))
                     mod = ModType.BTOS2;
+                /*else if (str.Contains("Legacy"))
+                    mod = ModType.Legacy;*/
 
                 var deconstructed = Constants.CurrentStyle;
 
                 if (str.Contains("(") && !str.Contains("Blank"))
-                    deconstructed = str.Replace("RoleIcons (", "").Replace(")", "").Replace("BTOS", "");
+                    deconstructed = str.Replace("RoleIcons (", "").Replace(")", "").Replace("BTOS", "")/*.Replace("Legacy", "")*/;
 
-                var defaultSprite = AssetManager.Vanilla1 ?? CacheDefaults.RoleIcons;
-
-                if (mod == ModType.BTOS2)
-                    defaultSprite = AssetManager.BTOS2_2 ?? AssetManager.BTOS2_1;
+                var defaultSprite = mod switch
+                {
+                    ModType.BTOS2 => AssetManager.BTOS2_2 ?? AssetManager.BTOS2_1,
+                    //ModType.Legacy => AssetManager.Legacy2 ?? AssetManager.Legacy1,
+                    _ => AssetManager.Vanilla1 ?? CacheDefaults.RoleIcons
+                };
 
                 if (!pack.Assets.TryGetValue(mod, out var assets))
                     Logging.LogWarning($"Unable to find {Constants.CurrentPack} assets for {mod}");
                 else if (!assets.MentionStyles.TryGetValue(deconstructed, out asset))
                     Logging.LogWarning($"{Constants.CurrentPack} {mod} Mention Style {deconstructed} was null or missing");
-                else if (!assets.MentionStyles.TryGetValue("Regular", out asset))
+                else if (deconstructed != "Regular" && !assets.MentionStyles.TryGetValue("Regular", out asset))
                     Logging.LogWarning($"{Constants.CurrentPack} {mod} Mention Style Regular was null or missing");
 
                 asset ??= defaultSprite;

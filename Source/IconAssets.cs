@@ -6,19 +6,24 @@ public class IconAssets(string name)
 
     public Dictionary<string, Dictionary<string, Sprite>> BaseIcons { get; set; } = [];
     public Dictionary<string, Dictionary<string, List<Sprite>>> EasterEggs { get; set; } = [];
-
     public Dictionary<string, TMP_SpriteAsset> MentionStyles { get; set; } = [];
+
+    public int Count { get; set; }
 
     public void Debug()
     {
         Logging.LogMessage($"Debugging {Name}");
+        Count = 0;
 
         foreach (var (name1, icons) in BaseIcons)
         {
             foreach (var (name2, icon) in icons)
             {
                 if (icon.IsValid())
+                {
                     Logging.LogMessage($"{name2} has a(n) {name1} sprite!");
+                    Count++;
+                }
             }
         }
 
@@ -29,11 +34,15 @@ public class IconAssets(string name)
             foreach (var (name2, icon) in icons)
             {
                 if (icon.Count > 0)
+                {
                     Logging.LogMessage($"{name2} has {icon.Count} {name1} easter egg sprite(s)!");
+                    Count += icon.Count;
+                }
             }
         }
 
         Logging.LogMessage($"{EasterEggs.Count} easter egg assets loaded!");
+        Logging.LogMessage($"{Count} image assets exist!");
 
         foreach (var (name2, sheet) in MentionStyles)
         {
@@ -42,40 +51,14 @@ public class IconAssets(string name)
         }
 
         Logging.LogMessage($"{MentionStyles.Count} mention styles exist!");
-        Logging.LogMessage($"{CountAssets()} assets exist!");
+        Logging.LogMessage($"{MentionStyles.Count + Count} net assets exist!");
         Logging.LogMessage($"{Name} Debugged!");
-    }
-
-    public int CountAssets()
-    {
-        Logging.LogMessage($"Counting {Name}");
-        var count = 0;
-
-        foreach (var (name1, icons) in BaseIcons)
-        {
-            foreach (var (name2, icon) in icons)
-            {
-                if (icon.IsValid())
-                    count++;
-            }
-        }
-
-        foreach (var (name1, icons) in EasterEggs)
-        {
-            foreach (var (name2, icon) in icons)
-            {
-                if (icon.Count > 0)
-                    count += icon.Count;
-            }
-        }
-
-        return count;
     }
 
     public void Delete()
     {
-        BaseIcons.ForEach((_, x) => x.Values.ForEach(UObject.Destroy));
-        BaseIcons.ForEach((_, x) => x.Clear());
+        BaseIcons.Values.ForEach(x => x.Values.ForEach(UObject.Destroy));
+        BaseIcons.Values.ForEach(x => x.Clear());
         BaseIcons.Clear();
 
         EasterEggs.Values.ForEach(x => x.Values.ForEach(y => y.ForEach(UObject.Destroy)));

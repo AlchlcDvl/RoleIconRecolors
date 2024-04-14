@@ -385,7 +385,7 @@ public static class AssetManager
                     Logging.LogWarning($"NO VANILLA ICON FOR {name}?!");
             }
 
-            Vanilla1 = BuildGlyphs([..sprites], [..sprites.Select(x => x.texture)], "RoleIcons", index);
+            Vanilla1 = BuildGlyphs([..sprites], "RoleIcons", index);
             Utils.DumpSprite(Vanilla1.spriteSheet as Texture2D, "RoleIcons_Modified", Path.Combine(ModPath, "Vanilla"));
         }
         catch (Exception e)
@@ -414,7 +414,7 @@ public static class AssetManager
                 dict.Add($"PlayerNumbers_{i}");
             }
 
-            Vanilla2 = BuildGlyphs([..sprites], [..sprites.Select(x => x.texture)], "PlayerNumbers", dict.ToDictionary(x => x, x => (x, 0)), false);
+            Vanilla2 = BuildGlyphs([..sprites], "PlayerNumbers", dict.ToDictionary(x => x, x => (x, 0)), false);
             Utils.DumpSprite(Vanilla2.spriteSheet as Texture2D, "PlayerNumbers_Modified", Path.Combine(ModPath, "Vanilla"));
         }
         catch (Exception e)
@@ -447,7 +447,7 @@ public static class AssetManager
                     Logging.LogWarning($"NO BTOS2 ICON FOR {name}?!");
             }
 
-            BTOS2_2 = BuildGlyphs([..sprites], [..sprites.Select(x => x.texture)], "BTOSRoleIcons", index);
+            BTOS2_2 = BuildGlyphs([..sprites], "BTOSRoleIcons", index);
             Utils.DumpSprite(BTOS2_2.spriteSheet as Texture2D, "BTOS2RoleIcons_Modified", Path.Combine(ModPath, "BTOS2"));
         }
         catch (Exception e)
@@ -458,8 +458,9 @@ public static class AssetManager
     }
 
     // courtesy of pat, love ya mate
-    public static TMP_SpriteAsset BuildGlyphs(Sprite[] sprites, Texture2D[] textures, string spriteAssetName, Dictionary<string, (string, int)> index, bool shouldLower = true)
+    public static TMP_SpriteAsset BuildGlyphs(Sprite[] sprites, string spriteAssetName, Dictionary<string, (string, int)> index, bool shouldLower = true)
     {
+        var textures = sprites.Select(x => x.texture).ToArray();
         var asset = ScriptableObject.CreateInstance<TMP_SpriteAsset>();
         var image = new Texture2D(4096, 2048) { name = spriteAssetName };
         var rects = image.PackTextures(textures, 2);

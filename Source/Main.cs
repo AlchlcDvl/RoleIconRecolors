@@ -52,16 +52,16 @@ public class Recolors
     public ModSettings.DropdownSetting ChoiceMentions1 => new()
     {
         Name = "Selected Vanilla Mention Style",
-        Description = "The selected mention style will dictate which icons are used for the mentions. May require a game restart.",
-        Options = GetMentionStyles(ModType.Vanilla),
+        Description = "The selected mention style will dictate which icons are used for the icons in text. May require a game restart.",
+        Options = GetOptions(ModType.Vanilla, true),
         Available = Constants.EnableIcons
     };
 
     public ModSettings.DropdownSetting ChoiceMentions2 => new()
     {
         Name = "Selected BTOS2 Mention Style",
-        Description = "The selected mention style will dictate which icons are used for the mentions. May require a game restart.",
-        Options = GetMentionStyles(ModType.BTOS2),
+        Description = "The selected mention style will dictate which icons are used for the icons in text. May require a game restart.",
+        Options = GetOptions(ModType.BTOS2, true),
         Available = Constants.BTOS2Exists && Constants.EnableIcons
     };
 
@@ -69,7 +69,7 @@ public class Recolors
     {
         Name = "Override Vanilla Faction",
         Description = "Only icons from the selected faction will appear in vanilla games.",
-        Options = GetFactionOverrides(ModType.Vanilla),
+        Options = GetOptions(ModType.Vanilla, false),
         Available = Constants.EnableIcons
     };
 
@@ -77,7 +77,7 @@ public class Recolors
     {
         Name = "Override BTOS2 Faction",
         Description = "Only icons from the selected faction will appear in BTOS2 games.",
-        Options = GetFactionOverrides(ModType.BTOS2),
+        Options = GetOptions(ModType.BTOS2, false),
         Available = Constants.BTOS2Exists && Constants.EnableIcons
     };
 
@@ -90,7 +90,7 @@ public class Recolors
     public ModSettings.DropdownSetting DownloadIcons => new()
     {
         Name = "Download Recommended Icon Packs",
-        Description = "Downloads icon packs recommended by the mod creator.\nVanilla - Icons used in the vanilla game to be used as a reference for icon packs.\nBTOS2 - Icons used in BTOS2 games to be used as a reference for icons specifically set for BTOS2.\nRecolors - Art by MysticMismagius, Haapsalu, faketier, splarg, Det, Wevit, Nova, moiler and Nidoskull.",
+        Description = "Downloads icon packs recommended by the mod creator.\nVanilla - Icons used in the vanilla game to be used as a reference for icon packs.\nBTOS2 - Icons used in BTOS2 games to be used as a reference for icons specifically set for BTOS2.\nRecolors - Art by MysticMismagius, Haapsalu, faketier, splarg, Det, Wevit, Nova, moiler, NexusOfChaos and Nidoskull.",
         Options = [ "None", "Vanilla", "BTOS2", "Recolors" ],
         OnChanged = Download.DownloadIcons
     };
@@ -115,7 +115,7 @@ public class Recolors
         }
     }
 
-    private static List<string> GetMentionStyles(ModType mod)
+    private static List<string> GetOptions(ModType mod, bool mentionStyle)
     {
         try
         {
@@ -123,26 +123,43 @@ public class Recolors
 
             if (AssetManager.IconPacks.TryGetValue(Constants.CurrentPack, out var pack))
             {
-                if (pack.Assets.TryGetValue(mod, out var assets))
+                result.Add(mentionStyle ? "Regular" : "None");
+
+                if (pack.Assets.TryGetValue(ModType.Common, out var assets))
                 {
                     foreach (var (folder, icons) in assets.BaseIcons)
                     {
-                        if (icons.Count > 0 && assets.MentionStyles.TryGetValue(folder, out var sheet) && sheet)
+                        if (icons.Count > 0 && !result.Contains(folder) && folder != "Custom")
                             result.Add(folder);
                     }
                 }
-            }
 
-            result.Add(mod.ToString());
+                if (pack.Assets.TryGetValue(mod, out assets))
+                {
+                    foreach (var (folder, icons) in assets.BaseIcons)
+                    {
+                        if (icons.Count > 0 && !result.Contains(folder) && folder != "Custom")
+                            result.Add(folder);
+                    }
+                }
+
+                result.Add("Custom");
+            }
+            else
+                result.Add("None");
+
+            if (mentionStyle)
+                result.Add(mod.ToString());
+
             return result;
         }
         catch
         {
-            return [ mod.ToString() ];
+            return [ mentionStyle ? mod.ToString() : "None" ];
         }
     }
 
-    private static List<string> GetFactionOverrides(ModType mod)
+    /*private static List<string> GetFactionOverrides(ModType mod)
     {
         try
         {
@@ -150,14 +167,25 @@ public class Recolors
 
             if (AssetManager.IconPacks.TryGetValue(Constants.CurrentPack, out var pack))
             {
-                if (pack.Assets.TryGetValue(mod, out var assets))
+                if (pack.Assets.TryGetValue(ModType.Common, out var assets))
                 {
                     foreach (var (folder, icons) in assets.BaseIcons)
                     {
-                        if (icons.Count > 0)
+                        if (icons.Count > 0 && !result.Contains(folder) && folder != "Custom")
                             result.Add(folder);
                     }
                 }
+
+                if (pack.Assets.TryGetValue(mod, out assets))
+                {
+                    foreach (var (folder, icons) in assets.BaseIcons)
+                    {
+                        if (icons.Count > 0 && !result.Contains(folder) && folder != "Custom")
+                            result.Add(folder);
+                    }
+                }
+
+                result.Add("Custom");
             }
 
             return result;
@@ -166,5 +194,5 @@ public class Recolors
         {
             return [ "None" ];
         }
-    }
+    }*/
 }
