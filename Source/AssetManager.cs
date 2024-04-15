@@ -33,9 +33,9 @@ public static class AssetManager
 
     private static Assembly Core => typeof(Recolors).Assembly;
 
-    public static Sprite GetSprite(string name, string faction, bool allowEE = true, string packName = null, ModType? mod = null) => GetSprite(name, allowEE, faction, packName, mod);
+    public static Sprite GetSprite(string name, string faction, bool allowEE = true, string packName = null) => GetSprite(name, allowEE, faction, packName);
 
-    public static Sprite GetSprite(string name, bool allowEE = true, string faction = null, string packName = null, ModType? mod = null)
+    public static Sprite GetSprite(string name, bool allowEE = true, string faction = null, string packName = null)
     {
         if (name.Contains("Blank") || !Constants.EnableIcons || IconPacks.Count == 0)
             return Blank;
@@ -56,7 +56,7 @@ public static class AssetManager
 
         try
         {
-            return pack.GetSprite(name, allowEE, type, mod);
+            return pack.GetSprite(name, allowEE, type);
         }
         catch (Exception e)
         {
@@ -462,7 +462,7 @@ public static class AssetManager
     {
         var textures = sprites.Select(x => x.texture).ToArray();
         var asset = ScriptableObject.CreateInstance<TMP_SpriteAsset>();
-        var image = new Texture2D(4096, 2048) { name = spriteAssetName };
+        var image = new Texture2D(4096, 4096) { name = spriteAssetName };
         var rects = image.PackTextures(textures, 2);
 
         for (var i = 0; i < rects.Length; i++)

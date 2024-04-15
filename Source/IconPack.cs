@@ -17,7 +17,8 @@ public class IconPack(string name)
     private static readonly string[] VanillaFolders = [ "Executioner" ];
     private static readonly string[] BTOS2Folders = [ "Judge", "Auditor", "Starspawn", "Inquisitor", "Jackal", "Lions", "Frogs", "Hawks", "Pandora", "Egoist" ];
     /*private static readonly string[] LegacyFolders = [ "Mafia", "Amnesiac", "Juggernaut", "GuardianAngel", "Evils" ];*/
-    private static readonly string[] Mods = [ "Common", "Vanilla", "BTOS2"/*, "Legacy"*/, "PlayerNumbers" ];
+    private static readonly string[] MainFolders = [ "Common", "Vanilla", "BTOS2"/*, "Legacy"*/, "PlayerNumbers" ];
+    private static readonly string[] Mods = [ "Vanilla", "BTOS2"/*, "Legacy"*/ ];
     private static readonly Dictionary<string, string[]> ModsToFolders = new()
     {
         { "Common", CommonFolders },
@@ -81,7 +82,7 @@ public class IconPack(string name)
 
         try
         {
-            foreach (var mod in Mods)
+            foreach (var mod in MainFolders)
             {
                 if (Enum.TryParse<ModType>(mod, out var type))
                 {
@@ -274,9 +275,12 @@ public class IconPack(string name)
                     foreach (var (role, (_, roleInt)) in index)
                     {
                         var name2 = Utils.RoleName((Role)roleInt, mod);
-                        var sprite = icons.TryGetValue(name2, out var sprite1) ? sprite1 : AssetManager.Blank;
+                        var sprite = icons.TryGetValue(name2 + $"_{mod}", out var sprite1) ? sprite1 : AssetManager.Blank;
 
-                        if (!sprite.IsValid() && style != "Regular" && assets.BaseIcons.TryGetValue("Regular", out var icons2))
+                        if (!sprite.IsValid())
+                            sprite = icons.TryGetValue(name2, out sprite1) ? sprite1 : AssetManager.Blank;
+
+                        if (!sprite.IsValid() && Assets[ModType.Common].BaseIcons.TryGetValue("Regular", out var icons2))
                             sprite = icons2.TryGetValue(name2, out sprite1) ? sprite1 : AssetManager.Blank;
 
                         if (!sprite.IsValid())
@@ -311,105 +315,76 @@ public class IconPack(string name)
             if (icons.Count == 0)
                 continue;
 
-            try
+            foreach (var mod in Mods)
             {
-                var index = Utils.Filtered(ModType.Vanilla);
-                var sprites = new List<Sprite>();
-
-                foreach (var (role, (_, roleInt)) in index)
+                try
                 {
-                    var name2 = Utils.RoleName((Role)roleInt, ModType.Vanilla);
-                    var sprite = icons.TryGetValue(name2, out var sprite1) ? sprite1 : AssetManager.Blank;
+                    var type = Enum.Parse<ModType>(mod);
+                    var index = Utils.Filtered(type);
+                    var sprites = new List<Sprite>();
 
-                    if (!sprite.IsValid() && style != "Regular" && Assets[ModType.Common].BaseIcons.TryGetValue("Regular", out var icons2))
-                        sprite = icons2.TryGetValue(name2, out sprite1) ? sprite1 : AssetManager.Blank;
-
-                    if (!sprite.IsValid())
-                        sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name2 + "_Vanilla", out sprite1) ? sprite1 : AssetManager.Blank;
-
-                    if (!sprite.IsValid())
-                        sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name2, out sprite1) ? sprite1 : AssetManager.Blank;
-
-                    if (sprite.IsValid())
+                    foreach (var (role, (_, roleInt)) in index)
                     {
-                        sprite.name = sprite.texture.name = role;
-                        sprites.Add(sprite);
+                        var name2 = Utils.RoleName((Role)roleInt, type);
+                        var sprite = icons.TryGetValue(name2 + $"_{mod}", out var sprite1) ? sprite1 : AssetManager.Blank;
+
+                        if (!sprite.IsValid())
+                            sprite = icons.TryGetValue(name2, out sprite1) ? sprite1 : AssetManager.Blank;
+
+                        if (!sprite.IsValid() && style != "Regular" && Assets[ModType.Common].BaseIcons.TryGetValue("Regular", out var icons2))
+                            sprite = icons2.TryGetValue(name2 + $"_{mod}", out sprite1) ? sprite1 : AssetManager.Blank;
+
+                        if (!sprite.IsValid() && style != "Regular" && Assets[ModType.Common].BaseIcons.TryGetValue("Regular", out icons2))
+                            sprite = icons2.TryGetValue(name2, out sprite1) ? sprite1 : AssetManager.Blank;
+
+                        if (!sprite.IsValid())
+                            sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name2 + $"_{mod}", out sprite1) ? sprite1 : AssetManager.Blank;
+
+                        if (!sprite.IsValid())
+                            sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name2, out sprite1) ? sprite1 : AssetManager.Blank;
+
+                        if (sprite.IsValid())
+                        {
+                            sprite.name = sprite.texture.name = role;
+                            sprites.Add(sprite);
+                        }
+                        else
+                            Logging.LogWarning($"NO {mod.ToUpper()} ICON FOR {name2}?!");
                     }
-                    else
-                        Logging.LogWarning($"NO VANILLA ICON FOR {name2}?!");
+
+                    var asset = AssetManager.BuildGlyphs([..sprites], $"{mod}RoleIcons ({Name}, {style})", index);
+                    Assets[type].MentionStyles[style] = asset;
+                    Utils.DumpSprite(asset.spriteSheet as Texture2D, $"{style}{mod}RoleIcons", Path.Combine(PackPath, mod));
                 }
-
-                var asset = AssetManager.BuildGlyphs([..sprites], $"VanillaRoleIcons ({Name}, {style})", index);
-                Assets[ModType.Vanilla].MentionStyles[style] = asset;
-                Utils.DumpSprite(asset.spriteSheet as Texture2D, $"{style}VanillaRoleIcons", Path.Combine(PackPath, "Vanilla"));
-
-                index = Utils.Filtered(ModType.BTOS2);
-                sprites = [];
-
-                foreach (var (role, (_, roleInt)) in index)
+                catch (Exception e)
                 {
-                    var name2 = Utils.RoleName((Role)roleInt, ModType.BTOS2);
-                    var sprite = icons.TryGetValue(name2, out var sprite1) ? sprite1 : AssetManager.Blank;
-
-                    if (!sprite.IsValid() && style != "Regular" && Assets[ModType.Common].BaseIcons.TryGetValue("Regular", out var icons2))
-                        sprite = icons2.TryGetValue(name2, out sprite1) ? sprite1 : AssetManager.Blank;
-
-                    if (!sprite.IsValid())
-                        sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name2 + "_BTOS2", out sprite1) ? sprite1 : AssetManager.Blank;
-
-                    if (!sprite.IsValid())
-                        sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name2, out sprite1) ? sprite1 : AssetManager.Blank;
-
-                    if (sprite.IsValid())
-                    {
-                        sprite.name = sprite.texture.name = role;
-                        sprites.Add(sprite);
-                    }
-                    else
-                        Logging.LogWarning($"NO BTOS2 ICON FOR {name2}?!");
+                    Logging.LogError($"Unable to create custom role icons for {Name} {style} because:\n{e}");
+                    Assets[ModType.Vanilla].MentionStyles[style] = Assets[ModType.BTOS2].MentionStyles[style] = null;
                 }
-
-                asset = AssetManager.BuildGlyphs([..sprites], $"BTOS2RoleIcons ({Name}, {style})", index);
-                Assets[ModType.BTOS2].MentionStyles[style] = asset;
-                Utils.DumpSprite(asset.spriteSheet as Texture2D, $"{style}BTOS2RoleIcons", Path.Combine(PackPath, "BTOS2"));
-            }
-            catch (Exception e)
-            {
-                Logging.LogError($"Unable to create custom role icons for {Name} {style} because:\n{e}");
-                Assets[ModType.Vanilla].MentionStyles[style] = Assets[ModType.BTOS2].MentionStyles[style] = null;
             }
         }
 
         Logging.LogMessage($"{Name} Loaded!", true);
     }
 
-    public Sprite GetSprite(string iconName, bool allowEE, string type, ModType? mod = null)
+    public Sprite GetSprite(string iconName, bool allowEE, string type)
     {
-        mod ??= Utils.GetGameType();
+        var folders = ModsToFolders.Values.ToList().Find(x => x.Contains(type));
+        var key = ModsToFolders.GetKey(folders);
 
-        if (!Assets.TryGetValue(mod.Value, out var assets))
-        {
-            if (!Assets.TryGetValue(ModType.Common, out assets))
-                return AssetManager.Blank;
-        }
+        if (!Assets.TryGetValue(Enum.Parse<ModType>(key), out var assets))
+            return AssetManager.Blank;
 
         if (!assets.BaseIcons.TryGetValue(type, out var icons))
         {
             if (type != "Regular")
-                assets.BaseIcons.TryGetValue("Regular", out icons);
+                Assets[ModType.Common].BaseIcons.TryGetValue("Regular", out icons);
+            else
+                return AssetManager.Blank;
         }
 
-        if (!Assets.TryGetValue(ModType.Common, out assets))
-            return AssetManager.Blank;
-
-        if (!assets.BaseIcons.TryGetValue(type, out icons))
-        {
-            if (type != "Regular")
-                assets.BaseIcons.TryGetValue("Regular", out icons);
-        }
-
-        if (!icons.TryGetValue(iconName + $"_{mod}", out var sprite))
-            assets.BaseIcons[type].TryGetValue(iconName, out sprite);
+        if (!icons.TryGetValue(iconName + $"_{key}", out var sprite))
+            icons.TryGetValue(iconName, out sprite);
 
         if (!sprite.IsValid() || (URandom.RandomRangeInt(1, 101) <= Constants.EasterEggChance && allowEE))
         {

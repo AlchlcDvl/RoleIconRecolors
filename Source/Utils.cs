@@ -746,6 +746,31 @@ public static class Utils
         }
     }
 
+    public static TKey GetKey<TKey, TValue>(this IDictionary<TKey, TValue> dict, TValue value)
+    {
+        foreach (var (key, value2) in dict)
+        {
+            if (value.Equals(value2))
+                return key;
+        }
+
+        return default;
+    }
+
+    public static bool TryGetKey<TKey, TValue>(this IDictionary<TKey, TValue> dict, TValue value, out TKey key)
+    {
+        try
+        {
+            key = dict.GetKey(value);
+            return true;
+        }
+        catch
+        {
+            key = default;
+            return false;
+        }
+    }
+
     /*public static FactionType GetFactionType(this Role role, ModType? mod = null)
     {
         mod ??= GetGameType();
