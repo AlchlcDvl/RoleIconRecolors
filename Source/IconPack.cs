@@ -280,8 +280,13 @@ public class IconPack(string name)
                         if (!sprite.IsValid())
                             sprite = icons.TryGetValue(name2, out sprite1) ? sprite1 : AssetManager.Blank;
 
-                        if (!sprite.IsValid() && Assets[ModType.Common].BaseIcons.TryGetValue("Regular", out var icons2))
-                            sprite = icons2.TryGetValue(name2, out sprite1) ? sprite1 : AssetManager.Blank;
+                        if (!sprite.IsValid() && style != "Regular" && Assets[ModType.Common].BaseIcons.TryGetValue("Regular", out var icons2))
+                        {
+                            sprite = icons2.TryGetValue(name2 + $"_{mod}", out sprite1) ? sprite1 : AssetManager.Blank;
+
+                            if (!sprite.IsValid())
+                                sprite = icons2.TryGetValue(name2, out sprite1) ? sprite1 : AssetManager.Blank;
+                        }
 
                         if (!sprite.IsValid())
                             sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name2 + $"_{mod}", out sprite1) ? sprite1 : AssetManager.Blank;
@@ -332,10 +337,12 @@ public class IconPack(string name)
                             sprite = icons.TryGetValue(name2, out sprite1) ? sprite1 : AssetManager.Blank;
 
                         if (!sprite.IsValid() && style != "Regular" && Assets[ModType.Common].BaseIcons.TryGetValue("Regular", out var icons2))
+                        {
                             sprite = icons2.TryGetValue(name2 + $"_{mod}", out sprite1) ? sprite1 : AssetManager.Blank;
 
-                        if (!sprite.IsValid() && style != "Regular" && Assets[ModType.Common].BaseIcons.TryGetValue("Regular", out icons2))
-                            sprite = icons2.TryGetValue(name2, out sprite1) ? sprite1 : AssetManager.Blank;
+                            if (!sprite.IsValid())
+                                sprite = icons2.TryGetValue(name2, out sprite1) ? sprite1 : AssetManager.Blank;
+                        }
 
                         if (!sprite.IsValid())
                             sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name2 + $"_{mod}", out sprite1) ? sprite1 : AssetManager.Blank;
@@ -379,8 +386,6 @@ public class IconPack(string name)
         {
             if (type != "Regular")
                 Assets[ModType.Common].BaseIcons.TryGetValue("Regular", out icons);
-            else
-                return AssetManager.Blank;
         }
 
         if (!icons.TryGetValue(iconName + $"_{key}", out var sprite))
@@ -403,10 +408,16 @@ public class IconPack(string name)
 
             if (sprites.Count == 0)
             {
-                if (!assets.EasterEggs[type].TryGetValue(iconName, out sprites))
+                if (!assets.EasterEggs.TryGetValue(type, out var icons3))
                 {
                     if (type != "Regular")
-                        assets.EasterEggs["Regular"].TryGetValue(iconName, out sprites);
+                        Assets[ModType.Common].EasterEggs.TryGetValue("Regular", out icons3);
+                }
+
+                if (!icons3.TryGetValue(iconName, out sprites))
+                {
+                    if (type != "Regular")
+                        Assets[ModType.Common].EasterEggs["Regular"].TryGetValue(iconName, out sprites);
                 }
 
                 sprites ??= [];

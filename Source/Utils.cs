@@ -467,7 +467,7 @@ public static class Utils
 
     public static bool ModifiedByToS1UI(Role role) => ChangedByToS1UI.Contains(role);
 
-    public static bool Exists(this List<BaseAbilityButton> list, int index)
+    public static bool IsValid(this List<BaseAbilityButton> list, int index)
     {
         try
         {
@@ -767,6 +767,30 @@ public static class Utils
         catch
         {
             key = default;
+            return false;
+        }
+    }
+
+    public static bool IsValid(this SpecialAbilityPopupPanel panel)
+    {
+        try
+        {
+            return panel && panel.useButton && panel.useButton.abilityIcon;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    public static bool IsValid(this SpecialAbilityPanel panel)
+    {
+        try
+        {
+            return panel && panel.useButton && panel.useButton.abilityIcon;
+        }
+        catch
+        {
             return false;
         }
     }

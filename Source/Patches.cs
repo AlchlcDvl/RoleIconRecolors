@@ -81,7 +81,7 @@ public static class PatchRoleCards
         var specialName = $"{name}_Special";
         var special = AssetManager.GetSprite(specialName, faction);
 
-        if (special.IsValid() && panel.specialAbilityPanel && !(role == Utils.GetNecro() && !Constants.IsNecroActive))
+        if (special.IsValid() && panel.specialAbilityPanel.IsValid() && !(role == Utils.GetNecro() && !Constants.IsNecroActive))
             panel.specialAbilityPanel.useButton.abilityIcon.sprite = special;
 
         var abilityname = $"{name}_Ability";
@@ -90,7 +90,7 @@ public static class PatchRoleCards
         if (!ability1.IsValid())
             ability1 = AssetManager.GetSprite(abilityname + "_1", faction);
 
-        if (ability1.IsValid() && panel.roleInfoButtons.Exists(index))
+        if (ability1.IsValid() && panel.roleInfoButtons.IsValid(index))
         {
             panel.roleInfoButtons[index].abilityIcon.sprite = ability1;
             index++;
@@ -113,7 +113,7 @@ public static class PatchRoleCards
         var abilityname2 = $"{name}_Ability_2";
         var ability2 = AssetManager.GetSprite(abilityname2, faction);
 
-        if (ability2.IsValid() && panel.roleInfoButtons.Exists(index) && role != Utils.GetWar())
+        if (ability2.IsValid() && panel.roleInfoButtons.IsValid(index) && role != Utils.GetWar())
         {
             panel.roleInfoButtons[index].abilityIcon.sprite = ability2;
             index++;
@@ -139,7 +139,7 @@ public static class PatchRoleCards
         if (!attribute.IsValid())
             attribute = AssetManager.GetSprite(attributename + (role.IsTransformedApoc() ? "Horsemen" : faction));
 
-        if (attribute.IsValid() && panel.roleInfoButtons.Exists(index))
+        if (attribute.IsValid() && panel.roleInfoButtons.IsValid(index))
         {
             panel.roleInfoButtons[index].abilityIcon.sprite = attribute;
             index++;
@@ -152,7 +152,7 @@ public static class PatchRoleCards
 
         var nommy = AssetManager.GetSprite("Necronomicon");
 
-        if (nommy.IsValid() && Constants.IsNecroActive && panel.roleInfoButtons.Exists(index))
+        if (nommy.IsValid() && Constants.IsNecroActive && panel.roleInfoButtons.IsValid(index))
             panel.roleInfoButtons[index].abilityIcon.sprite = nommy;
     }
 }
@@ -299,7 +299,7 @@ public static class PatchGuideRoleCards
         var specialName = $"{name}_Special";
         var special = AssetManager.GetSprite(specialName, faction);
 
-        if (special.IsValid() && __instance.specialAbilityPanel && role != Utils.GetNecro())
+        if (special.IsValid() && __instance.specialAbilityPanel.IsValid() && role != Utils.GetNecro())
             __instance.specialAbilityPanel.useButton.abilityIcon.sprite = special;
 
         var abilityname = $"{name}_Ability";
@@ -308,7 +308,7 @@ public static class PatchGuideRoleCards
         if (!ability1.IsValid())
             ability1 = AssetManager.GetSprite(abilityname + "_1", faction);
 
-        if (ability1.IsValid() && __instance.roleInfoButtons.Exists(index))
+        if (ability1.IsValid() && __instance.roleInfoButtons.IsValid(index))
         {
             __instance.roleInfoButtons[index].abilityIcon.sprite = ability1;
             index++;
@@ -317,7 +317,7 @@ public static class PatchGuideRoleCards
             index++;
         else if (isModifiedByTos1UI)
         {
-            if (special.IsValid() && __instance.roleInfoButtons.Exists(index))
+            if (special.IsValid() && __instance.roleInfoButtons.IsValid(index))
             {
                 __instance.roleInfoButtons[index].abilityIcon.sprite = special;
                 index++;
@@ -331,7 +331,7 @@ public static class PatchGuideRoleCards
         var abilityname2 = $"{name}_Ability_2";
         var ability2 = AssetManager.GetSprite(abilityname2, faction);
 
-        if (ability2.IsValid() && __instance.roleInfoButtons.Exists(index))
+        if (ability2.IsValid() && __instance.roleInfoButtons.IsValid(index))
         {
             __instance.roleInfoButtons[index].abilityIcon.sprite = ability2;
             index++;
@@ -340,7 +340,7 @@ public static class PatchGuideRoleCards
             index++;
         else if (isModifiedByTos1UI)
         {
-            if (special.IsValid() && __instance.roleInfoButtons.Exists(index))
+            if (special.IsValid() && __instance.roleInfoButtons.IsValid(index))
             {
                 __instance.roleInfoButtons[index].abilityIcon.sprite = special;
                 index++;
@@ -357,7 +357,7 @@ public static class PatchGuideRoleCards
         if (!attribute.IsValid())
             attribute = AssetManager.GetSprite(attributename + (role.IsTransformedApoc() ? "Horsemen" : faction));
 
-        if (attribute.IsValid() && __instance.roleInfoButtons.Exists(index))
+        if (attribute.IsValid() && __instance.roleInfoButtons.IsValid(index))
         {
             __instance.roleInfoButtons[index].abilityIcon.sprite = attribute;
             index++;
@@ -370,7 +370,7 @@ public static class PatchGuideRoleCards
 
         var nommy = AssetManager.GetSprite("Necronomicon");
 
-        if (nommy.IsValid() && __instance.roleInfoButtons.Exists(index))
+        if (nommy.IsValid() && __instance.roleInfoButtons.IsValid(index))
             __instance.roleInfoButtons[index].abilityIcon.sprite = nommy;
     }
 }
@@ -391,13 +391,13 @@ public static class PatchDoomsayerLeaving
         var sprite2 = AssetManager.GetSprite(Utils.RoleName(role2), Utils.FactionName(role2.GetFaction()));
         var sprite3 = AssetManager.GetSprite(Utils.RoleName(role3), Utils.FactionName(role3.GetFaction()));
 
-        if (sprite1.IsValid())
+        if (sprite1.IsValid() && __instance.otherCharacterRole1)
             __instance.otherCharacterRole1.sprite = sprite1;
 
-        if (sprite2.IsValid())
+        if (sprite2.IsValid() && __instance.otherCharacterRole2)
             __instance.otherCharacterRole2.sprite = sprite2;
 
-        if (sprite3.IsValid())
+        if (sprite3.IsValid() && __instance.otherCharacterRole3)
             __instance.otherCharacterRole3.sprite = sprite3;
     }
 }
