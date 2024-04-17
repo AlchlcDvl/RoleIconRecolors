@@ -20,14 +20,13 @@ public static class Utils
         "SerialKiller_Ability", "Sheriff_Ability", "Shroud_Ability", "SoulCollector_Ability", "Spy_Ability", "TavernKeeper_Ability", "Tracker_Ability", "Trapper_Ability", "Oracle_Special",
         "Trickster_Ability", "Vampire_Ability", "Vigilante_Ability", "VoodooMaster_Ability", "War_Ability_1", "War_Ability_2", "Werewolf_Ability_1", "Werewolf_Ability_2", "Wildling_Ability",
         "Witch_Ability_1", "Witch_Ability_2", "Jailor_Special", "Cleric_Special", "Mayor_Special", "Jester_Special", "Bodyguard_Special", "Veteran_Special", "Trapper_Special",
-        "Pirate_Special", "Admirer_Special", "Arsonist_Special", "Marshal_Special", "Poisoner_Special", "CovenLeader_Special", "Coroner_Special", "SerialKiller_Special", "Starspawn_Ability",
-        "Banshee_Ability", "Jackal_Ability", "Auditor_Ability", "Inquisitor_Ability", "Judge_Special", "Auditor_Special", "Inquisitor_Special", "Starspawn_Special", "Baker_Ability_2",
-        "Baker_Special" ];
+        "Pirate_Special", "Arsonist_Special", "Marshal_Special", "Poisoner_Special", "CovenLeader_Special", "Coroner_Special", "SerialKiller_Special", "Starspawn_Ability", "Banshee_Ability",
+        "Jackal_Ability", "Auditor_Ability", "Inquisitor_Ability", "Judge_Special", "Auditor_Special", "Inquisitor_Special", "Starspawn_Special", "Baker_Ability_2", "Baker_Special" ];
 
     //List of roles modified by Dum's mod
     private static readonly Role[] ChangedByToS1UI = [ Role.JAILOR, Role.CLERIC, Role.MAYOR, Role.JESTER, Role.EXECUTIONER, Role.BODYGUARD, Role.VETERAN, Role.TRAPPER, Role.PIRATE,
         Role.ADMIRER, Role.ARSONIST, Role.MARSHAL, Role.SOCIALITE, Role.POISONER, Role.COVENLEADER, Role.CORONER, Role.SERIALKILLER, Role.SHROUD, /*Role.ROLE_COUNT, (Role)57, (Role)58,
-        (Role)59, (Role)60, (Role)61*/ ];
+        (Role)59, (Role)60, (Role)61, Role.BAKER*/ ];
 
     public static readonly Dictionary<ModType, Dictionary<string, (string, int)>> RoleStuff = [];
 
@@ -746,31 +745,6 @@ public static class Utils
         }
     }
 
-    public static TKey GetKey<TKey, TValue>(this IDictionary<TKey, TValue> dict, TValue value)
-    {
-        foreach (var (key, value2) in dict)
-        {
-            if (value.Equals(value2))
-                return key;
-        }
-
-        return default;
-    }
-
-    public static bool TryGetKey<TKey, TValue>(this IDictionary<TKey, TValue> dict, TValue value, out TKey key)
-    {
-        try
-        {
-            key = dict.GetKey(value);
-            return true;
-        }
-        catch
-        {
-            key = default;
-            return false;
-        }
-    }
-
     public static bool IsValid(this SpecialAbilityPopupPanel panel)
     {
         try
@@ -844,5 +818,30 @@ public static class Utils
         }
 
         return FactionType.NONE;
+    }
+
+    public static TKey GetKey<TKey, TValue>(this IDictionary<TKey, TValue> dict, TValue value)
+    {
+        foreach (var (key, value2) in dict)
+        {
+            if (value.Equals(value2))
+                return key;
+        }
+
+        return default;
+    }
+
+    public static bool TryGetKey<TKey, TValue>(this IDictionary<TKey, TValue> dict, TValue value, out TKey key)
+    {
+        try
+        {
+            key = dict.GetKey(value);
+            return true;
+        }
+        catch
+        {
+            key = default;
+            return false;
+        }
     }*/
 }
