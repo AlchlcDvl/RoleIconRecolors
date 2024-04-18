@@ -105,26 +105,35 @@ public static class AssetManager
 
     private static void DumpBTOSSpriteSheet()
     {
-        if (Constants.BTOS2Exists)
+        if (!Constants.BTOS2Exists)
+            return;
+
+        var btos = Path.Combine(ModPath, "BTOS2");
+
+        if (!Directory.Exists(btos))
+            Directory.CreateDirectory(btos);
+
+        BTOS2_1 = BetterTOS2.BTOSInfo.assetBundle.LoadAsset<TMP_SpriteAsset>("Roles");
+
+        for (var i = 0; i < BTOS2_1.spriteCharacterTable.Count; i++)
         {
-            var btos = Path.Combine(ModPath, "BTOS2");
-
-            if (!Directory.Exists(btos))
-                Directory.CreateDirectory(btos);
-
-            BTOS2_1 = BetterTOS2.BTOSInfo.assetBundle.LoadAsset<TMP_SpriteAsset>("Roles");
-
-            for (var i = 0; i < BTOS2_1.spriteCharacterTable.Count; i++)
+            BTOS2_1.spriteGlyphTable[i].metrics = new()
             {
-                BTOS2_1.spriteGlyphTable[i].metrics = new()
-                {
-                    horizontalBearingX = 0f,
-                    horizontalBearingY = 224f
-                };
-            }
+                horizontalBearingX = 0f,
+                horizontalBearingY = 224f
+            };
+        }
 
-            Utils.DumpSprite(BTOS2_1.spriteSheet as Texture2D, "BTOSRoleIcons", Path.Combine(ModPath, "BTOS2"), true);
-            LoadBTOS2SpriteSheet();
+        Utils.DumpSprite(BTOS2_1.spriteSheet as Texture2D, "BTOSRoleIcons", Path.Combine(ModPath, "BTOS2"), true);
+        LoadBTOS2SpriteSheet();
+
+        try
+        {
+            BTOS2Compatibility.Init();
+        }
+        catch (Exception ex)
+        {
+            Logging.LogError(ex);
         }
     }
 

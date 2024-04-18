@@ -32,6 +32,7 @@
         <Reference Include="BetterTOS2"><HintPath>Lib\BetterTOS2.dll</HintPath></Reference>
         <Reference Include="Witchcraft"><HintPath>Lib\Witchcraft.dll</HintPath></Reference>
         <Reference Include="Legacy"><HintPath>Lib\Legacy.dll</HintPath></Reference>
+        <Reference Include="Microsoft.CSharp"><HintPath>Lib\Microsoft.CSharp.dll</HintPath></Reference>
     </ItemGroup>
 
     <Target Name="Copy" AfterTargets="Build" Condition="'$(TOS)' != ''">

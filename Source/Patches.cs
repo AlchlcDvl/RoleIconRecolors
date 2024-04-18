@@ -1,6 +1,5 @@
 using Cinematics.Players;
 using Home.Services;
-using UnityEngine.UI;
 using SalemModLoader;
 using Server.Shared.Extensions;
 using Game.Services;
@@ -594,6 +593,37 @@ public static class FixDecodingAndEncoding
         {
             __result = __result.Replace("RoleIcons", $"RoleIcons ({Utils.FactionName(tuple.Item2)})");
         }
+    }
+}
+
+[HarmonyPatch(typeof(SpecialAbilityPopupPotionMaster), nameof(SpecialAbilityPopupPotionMaster.Start))]
+[HarmonyPriority(Priority.Low)]
+public static class PMBakerMenuPatch
+{
+    public static void Postfix(SpecialAbilityPopupPotionMaster __instance)
+    {
+        if (!Constants.EnableIcons)
+            return;
+
+        var role = Utils.RoleName(Pepper.GetMyRole());
+        var faction = Utils.FactionName(Pepper.GetMyFaction());
+
+        var sprite1 = AssetManager.GetSprite($"{role}_Ability_1", faction);
+        var sprite2 = AssetManager.GetSprite($"{role}_Ability_2", faction);
+        var sprite3 = AssetManager.GetSprite($"{role}_Special", faction);
+
+        var image1 = __instance.transform.Find("Background/ShieldPotion").GetComponentInChildren<Image>();
+        var image2 = __instance.transform.Find("Background/RevealPotion").GetComponentInChildren<Image>();
+        var image3 = __instance.transform.Find("Background/KillPotion").GetComponentInChildren<Image>();
+
+        if (sprite1.IsValid() && image1)
+            image1.sprite = sprite1;
+
+        if (sprite2.IsValid() && image2)
+            image2.sprite = sprite2;
+
+        if (sprite3.IsValid() && image3)
+            image3.sprite = sprite3;
     }
 }
 
