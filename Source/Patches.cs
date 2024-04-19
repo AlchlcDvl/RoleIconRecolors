@@ -548,7 +548,7 @@ public static class GetRoleIconAndNameInlineStringPatch
     public static void Postfix(ref FactionType factionType, ref string __result)
     {
         if (Constants.EnableIcons)
-            __result = __result.Replace("RoleIcons", $"RoleIcons ({Utils.FactionName(factionType)})");
+            __result = __result.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(factionType)})\"");
     }
 }
 
@@ -558,7 +558,7 @@ public static class GetTownTraitorRoleIconAndNameInlineStringPatch
     public static void Postfix(ref string __result)
     {
         if (Constants.EnableIcons)
-            __result = __result.Replace("RoleIcons", "RoleIcons (Coven)");
+            __result = __result.Replace("RoleIcons\"", "RoleIcons (Coven)\"");
     }
 }
 
@@ -568,17 +568,17 @@ public static class GetVIPRoleIconAndNameInlineStringPatch
     public static void Postfix(ref string __result)
     {
         if (Constants.EnableIcons)
-            __result = __result.Replace("RoleIcons", "RoleIcons (VIP)") + "<sprite=\"RoleIcons (VIP)\" name=\"Role201\">";
+            __result = __result.Replace("RoleIcons\"", "RoleIcons (VIP)\"") + " <sprite=\"RoleIcons (VIP)\" name=\"Role201\">";
     }
 }
 
-[HarmonyPatch(typeof(TosCharacterNametag), nameof(TosCharacterNametag.WrapCharacterName))]
+[HarmonyPatch(typeof(TosCharacterNametag), nameof(TosCharacterNametag.ColouredName))]
 public static class TosCharacterNametagPatch
 {
-    public static void Postfix(TosCharacterNametag __instance, ref string __result)
+    public static void Postfix(ref FactionType factionType, ref string __result)
     {
-        if (Constants.EnableIcons && !Pepper.IsLobbyPhase() && Service.Game.Sim.simulation.knownRolesAndFactions.Data.TryGetValue(__instance.tosCharacter.position, out var tuple))
-            __result = __result.Replace("RoleIcons", $"RoleIcons ({Utils.FactionName(tuple.Item2)})");
+        if (Constants.EnableIcons)
+            __result = __result.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(factionType)})\"");
     }
 }
 
@@ -591,7 +591,7 @@ public static class FixDecodingAndEncoding
         if (Constants.EnableIcons && chatLogMessage.chatLogEntry is ChatLogChatMessageEntry entry && Service.Game.Sim.simulation.knownRolesAndFactions.Data.TryGetValue(entry.speakerId, out
             var tuple))
         {
-            __result = __result.Replace("RoleIcons", $"RoleIcons ({Utils.FactionName(tuple.Item2)})");
+            __result = __result.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(tuple.Item2)})\"");
         }
     }
 }
