@@ -47,6 +47,17 @@ public static class BTOS2Compatibility
 
         if (nommy.IsValid() && image)
             image.sprite = nommy;
+
+        var id = (int)__instance.data.Item1;
+
+        if (!Service.Game.Sim.simulation.knownRolesAndFactions.Data.TryGetValue(id, out var tuple))
+            return;
+
+        var image2 = controller.transform.Find("RoleIcon").GetComponentInChildren<Image>();
+        var sprite = AssetManager.GetSprite(Utils.RoleName(tuple.Item1), Utils.FactionName(tuple.Item2));
+
+        if (sprite.IsValid() && image2)
+            image2.sprite = sprite;
     }
 
     public static void ItemPostfix2(dynamic __instance, dynamic message)

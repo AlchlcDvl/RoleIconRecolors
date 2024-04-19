@@ -23,11 +23,11 @@ public static class AssetManager
 
     public static string ModPath => Path.Combine(Path.GetDirectoryName(Application.dataPath), "SalemModLoader", "ModFolders", "Recolors");
 
-    private static readonly string[] Avoid = [ "Attributes", "Necronomicon", "Neutral", "NeutralApocalypse", "NeutralEvil", "NeutralKilling", "Town", "Coven", "SlowMode", "FastMode", "Any",
+    private static readonly string[] Avoid = [ "Necronomicon", "Neutral", "NeutralApocalypse", "NeutralEvil", "NeutralKilling", "Town", "Coven", "SlowMode", "FastMode", "Any", "Recruit",
         "Stoned", "SecretKillers", "HiddenRoles", "OneTrial", "RandomApocalypse", "TownTraitor", "PerfectTown", "NecroPass", "Anon", "WalkingDead", "ExeTarget", "Hexed", "Knighted", "Bread",
         "Revealed", "Disconnected", "Connecting", "Lovers", "Doused", "Plagued", "Revealed", "Trapped", "Hangover", "Silenced", "Dreamwoven", "Insane", "Bugged", "Tracked", "Sickness",
-        "Reaped", "Recruit", "Deafened", "Audited", "Enchanted", "Accompanied", "Egoist", /*"Transported", "Hypnotised", "Gazed", "Blackmailed", "Blessed", "Framed", "Mafia", "Cleaned",
-        "Lovers", "FactionedEvil"*/ ];
+        "Reaped", "Deafened", "Audited", "Enchanted", "Accompanied", "Egoist", /*"Transported", "Hypnotised", "Gazed", "Blackmailed", "Blessed", "Framed", "Mafia", "Cleaned", "Lovers",
+        "FactionedEvil"*/ ];
 
     private static readonly string[] ToRemove = [ ".png", ".jpg" ];
 
@@ -56,7 +56,12 @@ public static class AssetManager
 
         try
         {
-            return pack.GetSprite(name, allowEE, type);
+            var sprite = pack.GetSprite(name, allowEE, type);
+
+            if (!sprite.IsValid())
+                sprite = pack.GetSprite(name, allowEE, "Regular");
+
+            return sprite ?? Blank;
         }
         catch (Exception e)
         {

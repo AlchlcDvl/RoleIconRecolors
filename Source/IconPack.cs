@@ -274,13 +274,32 @@ public class IconPack(string name)
 
                     foreach (var (role, (_, roleInt)) in index)
                     {
-                        var name2 = Utils.RoleName((Role)roleInt, mod);
+                        var roleEnum = (Role)roleInt;
+                        var name2 = Utils.RoleName(roleEnum, mod);
+                        var factionEnum = roleEnum.GetFactionType(mod);
+                        var name3 = Utils.FactionName(factionEnum, mod);
                         var sprite = icons.TryGetValue(name2 + $"_{mod}", out var sprite1) ? sprite1 : AssetManager.Blank;
 
                         if (!sprite.IsValid())
                             sprite = icons.TryGetValue(name2, out sprite1) ? sprite1 : AssetManager.Blank;
 
-                        if (!sprite.IsValid() && style != "Regular" && Assets[ModType.Common].BaseIcons.TryGetValue("Regular", out var icons2))
+                        if (!sprite.IsValid() && name3 != style && assets.BaseIcons.TryGetValue(name3, out var icons2))
+                        {
+                            sprite = icons2.TryGetValue(name2 + $"_{mod}", out sprite1) ? sprite1 : AssetManager.Blank;
+
+                            if (!sprite.IsValid())
+                                sprite = icons2.TryGetValue(name2, out sprite1) ? sprite1 : AssetManager.Blank;
+                        }
+
+                        if (!sprite.IsValid() && name3 != style && Assets[ModType.Common].BaseIcons.TryGetValue(name3, out icons2))
+                        {
+                            sprite = icons2.TryGetValue(name2 + $"_{mod}", out sprite1) ? sprite1 : AssetManager.Blank;
+
+                            if (!sprite.IsValid())
+                                sprite = icons2.TryGetValue(name2, out sprite1) ? sprite1 : AssetManager.Blank;
+                        }
+
+                        if (!sprite.IsValid() && style != "Regular" && Assets[ModType.Common].BaseIcons.TryGetValue("Regular", out icons2))
                         {
                             sprite = icons2.TryGetValue(name2 + $"_{mod}", out sprite1) ? sprite1 : AssetManager.Blank;
 
@@ -325,18 +344,42 @@ public class IconPack(string name)
                 try
                 {
                     var type = Enum.Parse<ModType>(mod);
+
+                    if (type == ModType.BTOS2 && !Constants.BTOS2Exists)
+                    //if ((type == ModType.BTOS2 && !Constants.BTOS2Exists) || (type == ModType.Legacy && !Constants.LegacyExists))
+                        continue;
+
                     var index = Utils.Filtered(type);
                     var sprites = new List<Sprite>();
 
                     foreach (var (role, (_, roleInt)) in index)
                     {
-                        var name2 = Utils.RoleName((Role)roleInt, type);
+                        var roleEnum = (Role)roleInt;
+                        var name2 = Utils.RoleName(roleEnum, type);
+                        var factionEnum = roleEnum.GetFactionType(type);
+                        var name3 = Utils.FactionName(factionEnum, type);
                         var sprite = icons.TryGetValue(name2 + $"_{mod}", out var sprite1) ? sprite1 : AssetManager.Blank;
 
                         if (!sprite.IsValid())
                             sprite = icons.TryGetValue(name2, out sprite1) ? sprite1 : AssetManager.Blank;
 
-                        if (!sprite.IsValid() && style != "Regular" && Assets[ModType.Common].BaseIcons.TryGetValue("Regular", out var icons2))
+                        if (!sprite.IsValid() && name3 != style && Assets[type].BaseIcons.TryGetValue(name3, out var icons2))
+                        {
+                            sprite = icons2.TryGetValue(name2 + $"_{mod}", out sprite1) ? sprite1 : AssetManager.Blank;
+
+                            if (!sprite.IsValid())
+                                sprite = icons2.TryGetValue(name2, out sprite1) ? sprite1 : AssetManager.Blank;
+                        }
+
+                        if (!sprite.IsValid() && name3 != style && Assets[ModType.Common].BaseIcons.TryGetValue(name3, out icons2))
+                        {
+                            sprite = icons2.TryGetValue(name2 + $"_{mod}", out sprite1) ? sprite1 : AssetManager.Blank;
+
+                            if (!sprite.IsValid())
+                                sprite = icons2.TryGetValue(name2, out sprite1) ? sprite1 : AssetManager.Blank;
+                        }
+
+                        if (!sprite.IsValid() && style != "Regular" && Assets[ModType.Common].BaseIcons.TryGetValue("Regular", out icons2))
                         {
                             sprite = icons2.TryGetValue(name2 + $"_{mod}", out sprite1) ? sprite1 : AssetManager.Blank;
 

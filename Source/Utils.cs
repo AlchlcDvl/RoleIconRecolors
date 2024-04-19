@@ -769,7 +769,7 @@ public static class Utils
         }
     }
 
-    /*public static FactionType GetFactionType(this Role role, ModType? mod = null)
+    public static FactionType GetFactionType(this Role role, ModType? mod = null)
     {
         mod ??= GetGameType();
 
@@ -779,7 +779,7 @@ public static class Utils
             return FactionType.COVEN;
         else if ((int)role is 41 or 42 or 47 or 50 or 250 or 251 or 252 or 253)
             return FactionType.APOCALYPSE;
-        else if ((int)role is (41 or 42 or 47 or 50) and < 54)
+        else if ((int)role is (not (41 or 42 or 47 or 50)) and < 54)
         {
             return role switch
             {
@@ -820,7 +820,7 @@ public static class Utils
         return FactionType.NONE;
     }
 
-    public static TKey GetKey<TKey, TValue>(this IDictionary<TKey, TValue> dict, TValue value)
+    /*public static TKey GetKey<TKey, TValue>(this IDictionary<TKey, TValue> dict, TValue value)
     {
         foreach (var (key, value2) in dict)
         {
