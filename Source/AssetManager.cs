@@ -321,9 +321,9 @@ public static class AssetManager
     {
         try
         {
-            Service.Home.Scrolls.scrollInfoLookup_.ForEach((_, y) =>
+            Service.Home.Scrolls.scrollInfoLookup_.Values.ForEach(y =>
             {
-                var sprite = GetSprite(Utils.RoleName(y.role), false);
+                var sprite = GetSprite(Utils.RoleName(y.role), Utils.FactionName(y.role.GetFactionType()), false);
 
                 if (!CacheScrollSprites.ContainsKey(y.id))
                     CacheScrollSprites[y.id] = y.decoration.sprite;
@@ -334,9 +334,9 @@ public static class AssetManager
                     CacheScrollSprites[y.id] = y.decoration.sprite;
             });
 
-            Service.Home.Scrolls.cursedScrollInfoLookup_.ForEach((_, y) =>
+            Service.Home.Scrolls.cursedScrollInfoLookup_.Values.ForEach(y =>
             {
-                var sprite = GetSprite(Utils.RoleName(y.role), false);
+                var sprite = GetSprite(Utils.RoleName(y.role), Utils.FactionName(y.role.GetFactionType()), false);
 
                 if (!CacheScrollSprites.ContainsKey(y.id))
                     CacheScrollSprites[y.id] = y.decoration.sprite;
