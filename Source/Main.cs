@@ -23,7 +23,7 @@ public class Recolors
             Logging.LogError($"Something failed because this happened D:\n{e}");
         }
 
-        Logging.LogMessage("Recolored!", true);
+        Logging.LogMessage("Recoloured!", true);
     }
 
     public static readonly SalemMenuButton MenuButton = new()

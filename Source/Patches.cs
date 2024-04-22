@@ -1,13 +1,13 @@
 using Cinematics.Players;
 using Home.Services;
 using SalemModLoader;
-using Server.Shared.Extensions;
 using Game.Services;
 using Game.Simulation;
 using Game.Characters;
 using Game.Chat.Decoders;
 using Server.Shared.Messages;
 using Server.Shared.State.Chat;
+using Home.Shared;
 
 namespace IconPacks;
 
@@ -19,10 +19,16 @@ public static class PatchRoleDeckBuilder
         if (!Constants.EnableIcons)
             return;
 
-        var icon = AssetManager.GetSprite(Utils.RoleName(role), Utils.FactionName(role.GetFaction()), false);
+        var icon = AssetManager.GetSprite(Utils.RoleName(role), Utils.FactionName(role.GetFactionType()), false);
 
         if (__instance.roleImage && icon.IsValid())
             __instance.roleImage.sprite = icon;
+
+        var banned = __instance.bannedImageGO.GetComponent<Image>();
+        var sprite = AssetManager.GetSprite("Banned", false);
+
+        if (sprite.IsValid() && banned)
+            banned.sprite = sprite;
     }
 }
 
@@ -31,10 +37,10 @@ public static class PatchRoleListPanel
 {
     public static void Postfix(RoleDeckListItem __instance, ref Role a_role, ref bool a_isBan)
     {
-        if (!Constants.EnableIcons || a_isBan)
+        if (!Constants.EnableIcons)
             return;
 
-        var icon = AssetManager.GetSprite(Utils.RoleName(a_role), Utils.FactionName(a_role.GetFaction()), false);
+        var icon = a_isBan ? AssetManager.GetSprite("Banned", false) : AssetManager.GetSprite(Utils.RoleName(a_role), Utils.FactionName(a_role.GetFactionType()), false);
 
         if (__instance.roleImage && icon.IsValid())
             __instance.roleImage.sprite = icon;
@@ -46,10 +52,10 @@ public static class PatchBrowserRoleListPanel
 {
     public static void Postfix(GameBrowserRoleDeckListItem __instance, ref Role a_role, ref bool a_isBan)
     {
-        if (!Constants.EnableIcons || a_isBan)
+        if (!Constants.EnableIcons)
             return;
 
-        var icon = AssetManager.GetSprite(Utils.RoleName(a_role), Utils.FactionName(a_role.GetFaction()), false);
+        var icon = a_isBan ? AssetManager.GetSprite("Banned", false) : AssetManager.GetSprite(Utils.RoleName(a_role), Utils.FactionName(a_role.GetFactionType()), false);
 
         if (__instance.roleImage && icon.IsValid())
             __instance.roleImage.sprite = icon;
@@ -72,22 +78,36 @@ public static class PatchRoleCards
         var index = 0;
         var name = Utils.RoleName(role);
         var faction = Utils.FactionName(Pepper.GetMyFaction());
-        var sprite = AssetManager.GetSprite(name, faction);
+        var ogfaction = Utils.FactionName(role.GetFactionType());
+        var reg = ogfaction == faction;
+        var sprite = AssetManager.GetSprite(reg, name, faction);
+
+        if (!sprite.IsValid() && !reg)
+            sprite = AssetManager.GetSprite(name, ogfaction);
 
         if (sprite.IsValid() && panel.roleIcon)
             panel.roleIcon.sprite = sprite;
 
         var specialName = $"{name}_Special";
-        var special = AssetManager.GetSprite(specialName, faction);
+        var special = AssetManager.GetSprite(reg, specialName, faction);
+
+        if (!special.IsValid() && !reg)
+            special = AssetManager.GetSprite(specialName, ogfaction);
 
         if (special.IsValid() && panel.specialAbilityPanel.IsValid() && !(role == Utils.GetNecro() && !Constants.IsNecroActive))
             panel.specialAbilityPanel.useButton.abilityIcon.sprite = special;
 
         var abilityname = $"{name}_Ability";
-        var ability1 = AssetManager.GetSprite(abilityname, faction);
+        var ability1 = AssetManager.GetSprite(reg, abilityname, faction);
 
         if (!ability1.IsValid())
-            ability1 = AssetManager.GetSprite(abilityname + "_1", faction);
+            ability1 = AssetManager.GetSprite(reg, abilityname + "_1", faction);
+
+        if (!ability1.IsValid() && !reg)
+            ability1 = AssetManager.GetSprite(abilityname, ogfaction);
+
+        if (!ability1.IsValid() && !reg)
+            ability1 = AssetManager.GetSprite(abilityname + "_1", ogfaction);
 
         if (ability1.IsValid() && panel.roleInfoButtons.IsValid(index))
         {
@@ -98,7 +118,7 @@ public static class PatchRoleCards
             index++;
         else if (isModifiedByTos1UI)
         {
-            if (special.IsValid())
+            if (special.IsValid() && panel.roleInfoButtons.IsValid(index))
             {
                 panel.roleInfoButtons[index].abilityIcon.sprite = special;
                 index++;
@@ -110,7 +130,10 @@ public static class PatchRoleCards
         }
 
         var abilityname2 = $"{name}_Ability_2";
-        var ability2 = AssetManager.GetSprite(abilityname2, faction);
+        var ability2 = AssetManager.GetSprite(reg, abilityname2, faction);
+
+        if (!ability2.IsValid() && !reg)
+            ability2 = AssetManager.GetSprite(abilityname2, ogfaction);
 
         if (ability2.IsValid() && panel.roleInfoButtons.IsValid(index) && role != Utils.GetWar())
         {
@@ -121,7 +144,7 @@ public static class PatchRoleCards
             index++;
         else if (isModifiedByTos1UI)
         {
-            if (special.IsValid())
+            if (special.IsValid() && panel.roleInfoButtons.IsValid(index))
             {
                 panel.roleInfoButtons[index].abilityIcon.sprite = special;
                 index++;
@@ -133,10 +156,16 @@ public static class PatchRoleCards
         }
 
         var attributename = "Attributes_";
-        var attribute = AssetManager.GetSprite(attributename + name, faction);
+        var attribute = AssetManager.GetSprite(reg, attributename + name, faction);
 
         if (!attribute.IsValid())
-            attribute = AssetManager.GetSprite(attributename + (role.IsTransformedApoc() ? "Horsemen" : faction));
+            attribute = AssetManager.GetSprite(reg, attributename + (role.IsTransformedApoc() ? "Horsemen" : faction), faction);
+
+        if (!attribute.IsValid() && !reg)
+            attribute = AssetManager.GetSprite(attributename + name, ogfaction);
+
+        if (!attribute.IsValid() && !reg)
+            attribute = AssetManager.GetSprite(attributename + (role.IsTransformedApoc() ? "Horsemen" : faction), ogfaction);
 
         if (attribute.IsValid() && panel.roleInfoButtons.IsValid(index))
         {
@@ -146,7 +175,7 @@ public static class PatchRoleCards
         else if (Utils.Skippable(attributename))
             index++;
 
-        if (faction != "Coven")
+        if (ogfaction != "Coven")
             return;
 
         var nommy = AssetManager.GetSprite("Necronomicon");
@@ -165,36 +194,40 @@ public static class PatchAbilityPanel
             return;
 
         var role = Pepper.GetMyRole();
-        var faction = Pepper.GetMyFaction();
+        var faction = Utils.FactionName(Pepper.GetMyFaction());
         role = Constants.IsTransformed ? Utils.GetTransformedVersion(role) : role;
+        var ogfaction = Utils.FactionName(role.GetFactionType());
+        var name = Utils.RoleName(role);
+        var reg = ogfaction != faction;
 
         switch (overrideType)
         {
             case TosAbilityPanelListItem.OverrideAbilityType.NECRO_ATTACK:
                 var nommy = AssetManager.GetSprite("Necronomicon", Constants.PlayerPanelEasterEggs);
 
-                if (nommy.IsValid())
+                if (nommy.IsValid() && __instance.choice1Sprite && role != Role.ILLUSIONIST)
+                    __instance.choice1Sprite.sprite = nommy;
+
+                if (role == Role.ILLUSIONIST && __instance.choice2Sprite)
                 {
-                    if (role == Role.ILLUSIONIST && __instance.choice2Sprite)
-                    {
-                        __instance.choice2Sprite.sprite = nommy;
-                        var illu = AssetManager.GetSprite("Illusionist_Ability", Utils.FactionName(faction), Constants.PlayerPanelEasterEggs);
+                    __instance.choice2Sprite.sprite = nommy;
+                    var illu = AssetManager.GetSprite(reg, "Illusionist_Ability", faction, Constants.PlayerPanelEasterEggs);
 
-                        if (illu.IsValid() && __instance.choice1Sprite)
-                            __instance.choice1Sprite.sprite = illu;
-                    }
-                    else if (__instance.choice1Sprite)
-                    {
-                        __instance.choice1Sprite.sprite = nommy;
+                    if (!illu.IsValid() && !reg)
+                        illu = AssetManager.GetSprite("Illusionist_Ability", ogfaction, Constants.PlayerPanelEasterEggs);
 
-                        if (role == Role.WITCH)
-                        {
-                            var target = AssetManager.GetSprite("Witch_Ability_2", Utils.FactionName(faction), Constants.PlayerPanelEasterEggs);
+                    if (illu.IsValid() && __instance.choice1Sprite)
+                        __instance.choice1Sprite.sprite = illu;
+                }
+                else if (role == Role.WITCH)
+                {
+                    var target = AssetManager.GetSprite(reg, "Witch_Ability_2", faction, Constants.PlayerPanelEasterEggs);
 
-                            if (target.IsValid() && __instance.choice2Sprite)
-                                __instance.choice2Sprite.sprite = target;
-                        }
-                    }
+                    if (!target.IsValid() && !reg)
+                        target = AssetManager.GetSprite("Witch_Ability_2", ogfaction, Constants.PlayerPanelEasterEggs);
+
+                    if (target.IsValid() && __instance.choice2Sprite)
+                        __instance.choice2Sprite.sprite = target;
                 }
 
                 break;
@@ -203,7 +236,10 @@ public static class PatchAbilityPanel
             case TosAbilityPanelListItem.OverrideAbilityType.POISONER_POISON:
             case TosAbilityPanelListItem.OverrideAbilityType.SHROUD:
             case TosAbilityPanelListItem.OverrideAbilityType.INVESTIGATOR:
-                var special = AssetManager.GetSprite($"{Utils.RoleName(role)}_Special", Utils.FactionName(faction), Constants.PlayerPanelEasterEggs);
+                var special = AssetManager.GetSprite(reg, $"{name}_Special", faction, Constants.PlayerPanelEasterEggs);
+
+                if (!special.IsValid() && !reg)
+                    special = AssetManager.GetSprite($"{name}_Special", ogfaction, Constants.PlayerPanelEasterEggs);
 
                 if (special.IsValid() && __instance.choice1Sprite)
                     __instance.choice1Sprite.sprite = special;
@@ -211,7 +247,10 @@ public static class PatchAbilityPanel
                 break;
 
             case TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_HEAL:
-                var ab1 = AssetManager.GetSprite($"{Utils.RoleName(role)}_Ability_1", Utils.FactionName(faction), Constants.PlayerPanelEasterEggs);
+                var ab1 = AssetManager.GetSprite(reg, $"{name}_Ability_1", faction, Constants.PlayerPanelEasterEggs);
+
+                if (!ab1.IsValid() && !reg)
+                    ab1 = AssetManager.GetSprite($"{name}_Ability_1", ogfaction, Constants.PlayerPanelEasterEggs);
 
                 if (ab1.IsValid() && __instance.choice1Sprite)
                     __instance.choice1Sprite.sprite = ab1;
@@ -220,7 +259,10 @@ public static class PatchAbilityPanel
 
             case TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_REVEAL:
             case TosAbilityPanelListItem.OverrideAbilityType.WEREWOLF_NON_FULL_MOON:
-                var ab2 = AssetManager.GetSprite($"{Utils.RoleName(role)}_Ability_2", Utils.FactionName(faction), Constants.PlayerPanelEasterEggs);
+                var ab2 = AssetManager.GetSprite(reg, $"{name}_Ability_2", faction, Constants.PlayerPanelEasterEggs);
+
+                if (!ab2.IsValid() && !reg)
+                    ab2 = AssetManager.GetSprite($"{name}_Ability_2", ogfaction, Constants.PlayerPanelEasterEggs);
 
                 if (ab2.IsValid() && __instance.choice1Sprite)
                     __instance.choice1Sprite.sprite = ab2;
@@ -228,16 +270,25 @@ public static class PatchAbilityPanel
                 break;
 
             default:
-                var abilityName = $"{Utils.RoleName(role)}_Ability";
-                var ability1 = AssetManager.GetSprite(abilityName, Utils.FactionName(faction), Constants.PlayerPanelEasterEggs);
+                var abilityName = $"{name}_Ability";
+                var ability1 = AssetManager.GetSprite(reg, abilityName, faction, Constants.PlayerPanelEasterEggs);
 
                 if (!ability1.IsValid())
-                    ability1 = AssetManager.GetSprite(abilityName + "_1", Utils.FactionName(faction), Constants.PlayerPanelEasterEggs);
+                    ability1 = AssetManager.GetSprite(reg, abilityName + "_1", faction, Constants.PlayerPanelEasterEggs);
+
+                if (!ability1.IsValid() && !reg)
+                    ability1 = AssetManager.GetSprite(abilityName, ogfaction, Constants.PlayerPanelEasterEggs);
+
+                if (!ability1.IsValid() && !reg)
+                    ability1 = AssetManager.GetSprite(abilityName + "_1", ogfaction, Constants.PlayerPanelEasterEggs);
 
                 if (ability1.IsValid() && __instance.choice1Sprite)
                     __instance.choice1Sprite.sprite = ability1;
 
-                var ability2 = AssetManager.GetSprite($"{Utils.RoleName(role)}_Ability_2", Utils.FactionName(faction), Constants.PlayerPanelEasterEggs);
+                var ability2 = AssetManager.GetSprite(reg, $"{name}_Ability_2", faction, Constants.PlayerPanelEasterEggs);
+
+                if (!ability1.IsValid() && !reg)
+                    ability1 = AssetManager.GetSprite($"{name}_Ability_2", ogfaction, Constants.PlayerPanelEasterEggs);
 
                 if (ability2.IsValid() && __instance.choice2Sprite)
                     __instance.choice2Sprite.sprite = ability2;
@@ -255,9 +306,17 @@ public static class SpecialAbilityPanelPatch
         if (!Constants.EnableIcons)
             return;
 
-        var special = AssetManager.GetSprite($"{Utils.RoleName(Pepper.GetMyRole())}_Special", Utils.FactionName(Pepper.GetMyFaction()));
+        var role = Pepper.GetMyRole();
+        var name = $"{Utils.RoleName(role)}_Special";
+        var faction = Utils.FactionName(Pepper.GetMyFaction());
+        var ogfaction = Utils.FactionName(role.GetFactionType());
+        var reg = faction != ogfaction;
+        var special = AssetManager.GetSprite(reg, name, faction);
 
-        if (special.IsValid())
+        if (!special.IsValid() && !reg)
+            special = AssetManager.GetSprite(name, ogfaction);
+
+        if (special.IsValid() && __instance.choiceSprite)
             __instance.choiceSprite.sprite = special;
     }
 }
@@ -270,7 +329,7 @@ public static class PatchRitualistGuessMenu
         if (!Constants.EnableIcons)
             return;
 
-        var icon = AssetManager.GetSprite(Utils.RoleName(a_role), Utils.FactionName(a_role.GetFaction()), false);
+        var icon = AssetManager.GetSprite(Utils.RoleName(a_role), Utils.FactionName(a_role.GetFactionType()), false);
 
         if (__instance.roleIcon && icon.IsValid())
             __instance.roleIcon.sprite = icon;
@@ -287,7 +346,7 @@ public static class PatchGuideRoleCards
 
         var index = 0;
         var name = Utils.RoleName(role);
-        var faction = Utils.FactionName(role.GetFaction());
+        var faction = Utils.FactionName(role.GetFactionType());
         var sprite = AssetManager.GetSprite(name, faction);
         //this determines if the role in question is changed by dum's mod
         var isModifiedByTos1UI = Utils.ModifiedByToS1UI(role) && ModStates.IsLoaded("dum.oldui");
@@ -386,9 +445,9 @@ public static class PatchDoomsayerLeaving
         var role2 = __instance.doomsayerLeavesCinematicData.roles[1];
         var role3 = __instance.doomsayerLeavesCinematicData.roles[2];
 
-        var sprite1 = AssetManager.GetSprite(Utils.RoleName(role1), Utils.FactionName(role1.GetFaction()));
-        var sprite2 = AssetManager.GetSprite(Utils.RoleName(role2), Utils.FactionName(role2.GetFaction()));
-        var sprite3 = AssetManager.GetSprite(Utils.RoleName(role3), Utils.FactionName(role3.GetFaction()));
+        var sprite1 = AssetManager.GetSprite(Utils.RoleName(role1), Utils.FactionName(role1.GetFactionType()));
+        var sprite2 = AssetManager.GetSprite(Utils.RoleName(role2), Utils.FactionName(role2.GetFactionType()));
+        var sprite3 = AssetManager.GetSprite(Utils.RoleName(role3), Utils.FactionName(role3.GetFactionType()));
 
         if (sprite1.IsValid() && __instance.otherCharacterRole1)
             __instance.otherCharacterRole1.sprite = sprite1;
@@ -450,12 +509,12 @@ public static class PatchAttackDefense
         if (icon1)
             icon1.sprite = attack.IsValid() ? attack : AssetManager.Attack;
 
-        var defLevel = Constants.IsBTOS2 ? (__instance.myData.IsEthereal() ? 4 : data.defense) : data.defense;
-        var defense = AssetManager.GetSprite($"Defense{Utils.GetLevel(defLevel, false)}");
+        var eth = __instance.myData.IsEthereal();
+        var defense = AssetManager.GetSprite($"Defense{Utils.GetLevel(eth ? 4 : data.defense, false)}");
         var icon2 = __instance.transform.Find("DefenseIcon").Find("Icon").GetComponent<Image>();
 
         if (icon2)
-            icon2.sprite = defense.IsValid() ? defense : (Constants.IsBTOS2 && __instance.myData.IsEthereal() ? AssetManager.Ethereal : AssetManager.Defense);
+            icon2.sprite = defense.IsValid() ? defense : (eth ? AssetManager.Ethereal : AssetManager.Defense);
     }
 }
 
@@ -473,12 +532,12 @@ public static class PatchAttackDefensePopup
         if (icon1)
             icon1.sprite = attack.IsValid() ? attack : AssetManager.Attack;
 
-        var defLevel = Constants.IsBTOS2 ? (__instance.myData.IsEthereal() ? 4 : data.defense) : data.defense;
-        var defense = AssetManager.GetSprite($"Defense{Utils.GetLevel(defLevel, false)}");
+        var eth = __instance.myData.IsEthereal();
+        var defense = AssetManager.GetSprite($"Defense{Utils.GetLevel(eth ? 4 : data.defense, false)}");
         var icon2 = __instance.transform.Find("DefenseIcon").Find("Icon").GetComponent<Image>();
 
         if (icon2)
-            icon2.sprite = defense.IsValid() ? defense : (Constants.IsBTOS2 && __instance.myData.IsEthereal() ? AssetManager.Ethereal : AssetManager.Defense);
+            icon2.sprite = defense.IsValid() ? defense : (eth ? AssetManager.Ethereal : AssetManager.Defense);
     }
 }
 
@@ -490,10 +549,17 @@ public static class PlayerPopupControllerPatch
         if (!Constants.EnableIcons)
             return;
 
-        if (!Service.Game.Sim.simulation.knownRolesAndFactions.Data.TryGetValue(__instance.m_discussionPlayerState.position, out var tuple))
-            tuple = new(__instance.m_role, __instance.m_role.GetFaction());
+        var faction = __instance.m_role.GetFactionType();
 
-        var sprite = AssetManager.GetSprite(Utils.RoleName(__instance.m_role), Utils.FactionName(tuple.Item2));
+        if (!Service.Game.Sim.simulation.knownRolesAndFactions.Data.TryGetValue(__instance.m_discussionPlayerState.position, out var tuple))
+            tuple = new(__instance.m_role, faction);
+
+        var reg = tuple.Item2 != faction;
+        var name = Utils.RoleName(tuple.Item1);
+        var sprite = AssetManager.GetSprite(reg, name, Utils.FactionName(tuple.Item2));
+
+        if (reg && !sprite.IsValid())
+            sprite = AssetManager.GetSprite(name, Utils.FactionName(faction));
 
         if (sprite.IsValid() && __instance.RoleIcon)
             __instance.RoleIcon.sprite = sprite;
@@ -508,7 +574,7 @@ public static class RoleMenuPopupControllerPatch
         if (!Constants.EnableIcons)
             return;
 
-        var sprite = AssetManager.GetSprite(Utils.RoleName(__instance.m_role), Utils.FactionName(__instance.m_role.GetFaction()));
+        var sprite = AssetManager.GetSprite(Utils.RoleName(__instance.m_role), Utils.FactionName(__instance.m_role.GetFactionType()));
 
         if (sprite.IsValid())
         {
@@ -537,7 +603,12 @@ public static class PlayerEffectsServicePatch
             return;
         }
 
-        var sprite = AssetManager.GetSprite(Utils.EffectName(effectType), false);
+        var effect = Utils.EffectName(effectType);
+        var sprite = AssetManager.GetSprite(effect + "_Effect", Constants.PlayerPanelEasterEggs);
+
+        if (!sprite.IsValid())
+            sprite = AssetManager.GetSprite(effect, Constants.PlayerPanelEasterEggs);
+
         __result.sprite = sprite.IsValid() ? sprite : EffectSprites[effectType];
     }
 }
@@ -605,12 +676,24 @@ public static class PMBakerMenuPatch
         if (!Constants.EnableIcons)
             return;
 
-        var role = Utils.RoleName(Pepper.GetMyRole());
+        var role = Pepper.GetMyRole();
+        var name = Utils.RoleName(role);
         var faction = Utils.FactionName(Pepper.GetMyFaction());
+        var ogfaction = Utils.FactionName(role.GetFactionType());
+        var reg = ogfaction != faction;
 
-        var sprite1 = AssetManager.GetSprite($"{role}_Ability_1", faction);
-        var sprite2 = AssetManager.GetSprite($"{role}_Ability_2", faction);
-        var sprite3 = AssetManager.GetSprite($"{role}_Special", faction);
+        var sprite1 = AssetManager.GetSprite(reg, $"{name}_Ability_1", faction);
+        var sprite2 = AssetManager.GetSprite(reg, $"{name}_Ability_2", faction);
+        var sprite3 = AssetManager.GetSprite(reg, $"{name}_Special", faction);
+
+        if (!sprite1.IsValid() && !reg)
+            sprite1 = AssetManager.GetSprite($"{name}_Ability_1", ogfaction);
+
+        if (!sprite2.IsValid() && !reg)
+            sprite2 = AssetManager.GetSprite($"{name}_Ability_2", ogfaction);
+
+        if (!sprite3.IsValid() && !reg)
+            sprite3 = AssetManager.GetSprite($"{name}_Special", ogfaction);
 
         var image1 = __instance.transform.Find("Background/ShieldPotion").GetComponentInChildren<Image>();
         var image2 = __instance.transform.Find("Background/RevealPotion").GetComponentInChildren<Image>();
@@ -624,6 +707,27 @@ public static class PMBakerMenuPatch
 
         if (sprite3.IsValid() && image3)
             image3.sprite = sprite3;
+    }
+}
+
+[HarmonyPatch(typeof(PlayerPopupController), nameof(PlayerPopupController.SetRoleName))]
+[HarmonyPriority(Priority.Low)]
+public static class RemoveTextIconFromPlayerPopupBecauseWhyIsItThere
+{
+    public static void Postfix(PlayerPopupController __instance)
+    {
+        var killRecord = Service.Game.Sim.simulation.killRecords.Data.Find(k => k.playerId == __instance.m_discussionPlayerState.position);
+        var text = ClientRoleExtensions.ToColorizedDisplayString(__instance.m_role) ?? "";
+
+        if (killRecord != null)
+        {
+            text = Service.Game.Sim.simulation.GetRoleNameLinkString(killRecord.playerRole, killRecord.playerFaction) ?? "";
+
+            if ((int)__instance.m_hiddenRole is not (241 or 0))
+                text = ClientRoleExtensions.ToColorizedDisplayString(__instance.m_hiddenRole) + " (" + text + ")";
+        }
+
+        __instance.RoleLabel.SetText(text);
     }
 }
 
@@ -691,10 +795,15 @@ public static class ReplaceTMPSpritesPatch
 
                 if (!pack.Assets.TryGetValue(mod, out var assets))
                     Logging.LogWarning($"Unable to find {Constants.CurrentPack} assets for {mod}");
-                else if (!assets.MentionStyles.TryGetValue(deconstructed, out asset))
+
+                if (!assets.MentionStyles.TryGetValue(deconstructed, out asset))
                     Logging.LogWarning($"{Constants.CurrentPack} {mod} Mention Style {deconstructed} was null or missing");
-                else if (deconstructed != "Regular" && !assets.MentionStyles.TryGetValue("Regular", out asset))
-                    Logging.LogWarning($"{Constants.CurrentPack} {mod} Mention Style Regular was null or missing");
+
+                if (!asset && deconstructed != "Regular")
+                {
+                    if (!assets.MentionStyles.TryGetValue("Regular", out asset))
+                        Logging.LogWarning($"{Constants.CurrentPack} {mod} Mention Style Regular was null or missing");
+                }
 
                 asset ??= defaultSprite;
             }

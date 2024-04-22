@@ -23,19 +23,22 @@ public static class AssetManager
 
     public static string ModPath => Path.Combine(Path.GetDirectoryName(Application.dataPath), "SalemModLoader", "ModFolders", "Recolors");
 
-    private static readonly string[] Avoid = [ "Necronomicon", "Neutral", "NeutralApocalypse", "NeutralEvil", "NeutralKilling", "Town", "Coven", "SlowMode", "FastMode", "Any", "Recruit",
-        "Stoned", "SecretKillers", "HiddenRoles", "OneTrial", "RandomApocalypse", "TownTraitor", "PerfectTown", "NecroPass", "Anon", "WalkingDead", "ExeTarget", "Hexed", "Knighted", "Bread",
-        "Revealed", "Disconnected", "Connecting", "Lovers", "Doused", "Plagued", "Revealed", "Trapped", "Hangover", "Silenced", "Dreamwoven", "Insane", "Bugged", "Tracked", "Sickness",
-        "Reaped", "Deafened", "Audited", "Enchanted", "Accompanied", "Egoist", /*"Transported", "Hypnotised", "Gazed", "Blackmailed", "Blessed", "Framed", "Mafia", "Cleaned", "Lovers",
-        "FactionedEvil"*/ ];
+    private static readonly string[] Avoid = [ "Necronomicon", "Neutral", "Town", "Coven", "SlowMode", "FastMode", "Any", "Recruit", "Stoned", "SecretKillers", "HiddenRoles", "OneTrial",
+        "RandomApocalypse", "TownTraitor", "PerfectTown", "NecroPass", "Anon", "WalkingDead", "ExeTarget", "Hexed", "Knighted", "Bread", "Revealed", "Disconnected", "Connecting", "Lovers",
+        "Doused", "Plagued", "Revealed", "Trapped", "Hangover", "Silenced", "Dreamwoven", "Insane", "Bugged", "Tracked", "Sickness", "Reaped", "Deafened", "Audited", "Enchanted", "Egoist",
+        "Accompanied", "Banned", "SpeakingSpirits", /*"Transported", "Hypnotised", "Gazed", "Blackmailed", "Blessed", "Framed", "Mafia", "Cleaned", "Lovers", "FactionedEvil", "TownVEvils"*/
+        ];
 
     private static readonly string[] ToRemove = [ ".png", ".jpg" ];
 
     private static Assembly Core => typeof(Recolors).Assembly;
 
-    public static Sprite GetSprite(string name, string faction, bool allowEE = true, string packName = null) => GetSprite(name, allowEE, faction, packName);
+    public static Sprite GetSprite(bool skipRegular, string name, string faction, bool allowEE = false, string packName = null) => GetSprite(name, allowEE, faction, packName, skipRegular);
 
-    public static Sprite GetSprite(string name, bool allowEE = true, string faction = null, string packName = null)
+    public static Sprite GetSprite(string name, string faction, bool allowEE = true, string packName = null, bool skipRegular = false) => GetSprite(name, allowEE, faction, packName,
+        skipRegular);
+
+    public static Sprite GetSprite(string name, bool allowEE = true, string faction = null, string packName = null, bool skipRegular = false)
     {
         if (name.Contains("Blank") || !Constants.EnableIcons || IconPacks.Count == 0)
             return Blank;
@@ -53,19 +56,26 @@ public static class AssetManager
         }
 
         var type = Constants.IsLocalVIP ? "VIP" : faction;
+        var mod = Utils.GetGameType();
 
         try
         {
-            var sprite = pack.GetSprite(name, allowEE, type);
+            var sprite = pack.GetSprite(name + $"_{mod}", allowEE, type);
+
+            if (!skipRegular && type != "Regular" && !sprite.IsValid())
+                sprite = pack.GetSprite(name, allowEE, type);
 
             if (!sprite.IsValid())
+                sprite = pack.GetSprite(name + $"_{mod}", allowEE, "Regular");
+
+            if (!skipRegular && type != "Regular" && !sprite.IsValid())
                 sprite = pack.GetSprite(name, allowEE, "Regular");
 
             return sprite ?? Blank;
         }
         catch (Exception e)
         {
-            Logging.LogError($"Error finding {name}'s sprite from {packName} {type}\n{e}");
+            Logging.LogError($"Error finding {name}'s sprite from {packName} {type} during a {mod} game\n{e}");
             return Blank;
         }
     }
@@ -209,11 +219,12 @@ public static class AssetManager
 
     public static string SanitisePath(this string path, bool removeIcon = false)
     {
-        path = path.Split('/')[^1];
-        path = path.Split('\\')[^1];
+        path = path.Split('/').Last();
+        path = path.Split('\\').Last();
         ToRemove.ForEach(x => path = path.Replace(x, ""));
         path = path.Replace(Resources, "");
         path = path.Replace("Marshall", "Marshal");
+        path = path.Split('.').Last();
 
         if (removeIcon)
         {
@@ -274,6 +285,7 @@ public static class AssetManager
         IconPack pack = null;
         TMP_SpriteAsset asset = null;
         IconAssets assets = null;
+        var game = Utils.GetGameType();
         var diagnostic = $"Uh oh, something happened here\nPack Name: {Constants.CurrentPack}\nStyle Name: {Constants.CurrentStyle}\nFaction Override: {Constants.FactionOverride}\n" +
             $"Custom Numbers: {Constants.CustomNumbers}";
 
@@ -298,7 +310,7 @@ public static class AssetManager
                 diagnostic += "\nModified BTOS2 Sheet Does Not Exist";
         }
 
-        diagnostic += $"\nCurrently In A {Utils.GetGameType()} Game";
+        diagnostic += $"\nCurrently In A {game} Game";
 
         if (Constants.EnableIcons && !IconPacks.TryGetValue(Constants.CurrentPack, out pack))
             diagnostic += "\nNo Loaded Icon Pack";
@@ -306,7 +318,7 @@ public static class AssetManager
             diagnostic += "\nLoaded Icon Pack Was Null";
         else if (!pack.PlayerNumbers)
             diagnostic += "\nLoaded Player Numbers Was Null";
-        else if (!pack.Assets.TryGetValue(Utils.GetGameType(), out assets))
+        else if (!pack.Assets.TryGetValue(game, out assets))
             diagnostic += "\nInvalid Game Type Was Detected";
         else if (!assets.MentionStyles.TryGetValue(Constants.CurrentStyle, out asset))
             diagnostic += "\nLoaded Icon Pack Does Not Have A Valid Mention Style";

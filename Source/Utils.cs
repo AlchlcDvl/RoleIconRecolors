@@ -603,7 +603,7 @@ public static class Utils
         EffectType.VIP => "VIP",
         EffectType.BUG => "Bugged",
         EffectType.SCENT_TRACK => "Tracked",
-        EffectType.PESTILENCE => "Pest",
+        EffectType.PESTILENCE => "Sickness",
         EffectType.REVEALED_MARSHAL => "RevealedMarshal",
         (EffectType)100 => "Recruit",
         (EffectType)101 => "Deafened",
