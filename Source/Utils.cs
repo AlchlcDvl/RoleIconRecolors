@@ -547,6 +547,9 @@ public static class Utils
 
     public static void DumpSprite(Texture2D texture, string fileName, string path = null, bool decompress = false)
     {
+        if (!Constants.DumpSheets)
+            return;
+
         path ??= AssetManager.ModPath;
         var assetPath = Path.Combine(path, $"{fileName}.png");
 

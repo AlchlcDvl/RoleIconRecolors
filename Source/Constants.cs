@@ -9,6 +9,7 @@ public static class Constants
     public static string CurrentStyle => ModSettings.GetString($"Selected {Utils.GetGameType()} Mention Style", "alchlcsystm.recolors");
     public static string FactionOverride => ModSettings.GetString($"Override {Utils.GetGameType()} Faction", "alchlcsystm.recolors");
     public static bool CustomNumbers => ModSettings.GetBool("Use Custom Numbers", "alchlcsystm.recolors");
+    public static bool DumpSheets => ModSettings.GetBool("Dump Sprite Sheets", "alchlcsystm.recolors");
     public static bool FactionOverridden => FactionOverride != "None";
     public static bool EnableIcons => CurrentPack != "Vanilla";
     public static bool BTOS2Exists => ModStates.IsEnabled("curtis.tuba.better.tos2");

@@ -223,6 +223,8 @@ public class IconPack(string name)
             Logging.LogError($"Unable to load sprites for {Name} because:\n{e}");
         }
 
+        Logging.LogMessage($"Loaded {Name} sprites");
+
         // love ya pat
         var numbers = new List<string>();
 

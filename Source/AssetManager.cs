@@ -40,7 +40,7 @@ public static class AssetManager
 
     public static Sprite GetSprite(string name, bool allowEE = true, string faction = null, string packName = null, bool skipRegular = false)
     {
-        if (name.Contains("Blank") || !Constants.EnableIcons || IconPacks.Count == 0)
+        if (name.Contains("Blank") || !Constants.EnableIcons || IconPacks.Count == 0 || !Constants.EnableIcons)
             return Blank;
 
         packName ??= Constants.CurrentPack;
@@ -62,14 +62,16 @@ public static class AssetManager
         {
             var sprite = pack.GetSprite(name + $"_{mod}", allowEE, type);
 
-            if (!skipRegular && type != "Regular" && !sprite.IsValid())
+            if (!sprite.IsValid())
                 sprite = pack.GetSprite(name, allowEE, type);
 
-            if (!sprite.IsValid())
+            if (type != "Regular" && !sprite.IsValid() && !skipRegular)
+            {
                 sprite = pack.GetSprite(name + $"_{mod}", allowEE, "Regular");
 
-            if (!skipRegular && type != "Regular" && !sprite.IsValid())
-                sprite = pack.GetSprite(name, allowEE, "Regular");
+                if (type != "Regular" && !sprite.IsValid())
+                    sprite = pack.GetSprite(name, allowEE, "Regular");
+            }
 
             return sprite ?? Blank;
         }
@@ -488,7 +490,7 @@ public static class AssetManager
     {
         var textures = sprites.Select(x => x.texture).ToArray();
         var asset = ScriptableObject.CreateInstance<TMP_SpriteAsset>();
-        var image = new Texture2D(4096, 4096) { name = spriteAssetName };
+        var image = new Texture2D(2048, 2048) { name = spriteAssetName };
         var rects = image.PackTextures(textures, 2);
 
         for (var i = 0; i < rects.Length; i++)

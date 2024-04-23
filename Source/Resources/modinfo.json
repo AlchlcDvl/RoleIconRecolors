@@ -24,6 +24,13 @@
         "Description": "Toggles whether all of the previously selected icon pack's easter eggs will be used, or only the selected icon pack's.",
         "DefaultValue": false,
         "AvailableInGame": true
+      },
+      {
+        "Name": "Dump Sprite Sheets",
+        "SettingID": "recolors.spritesheets",
+        "Description": "Toggles whether game sprite sheets are dumped so pack debugging is possible.",
+        "DefaultValue": false,
+        "AvailableInGame": true
       }
     ],
     "IntegerInputSettings":
