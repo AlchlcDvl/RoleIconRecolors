@@ -16,15 +16,15 @@ public class IconPack(string name)
         "Vampire", "CursedSoul" ];
     private static readonly string[] VanillaFolders = [ "Executioner" ];
     private static readonly string[] BTOS2Folders = [ "Judge", "Auditor", "Starspawn", "Inquisitor", "Jackal", "Lions", "Frogs", "Hawks", "Pandora", "Egoist" ];
-    /*private static readonly string[] LegacyFolders = [ "Mafia", "Amnesiac", "Juggernaut", "GuardianAngel", "Evils" ];*/
-    private static readonly string[] MainFolders = [ "Common", "Vanilla", "BTOS2"/*, "Legacy"*/, "PlayerNumbers" ];
-    private static readonly string[] Mods = [ "Vanilla", "BTOS2"/*, "Legacy"*/ ];
+    private static readonly string[] LegacyFolders = [ "Mafia", "Amnesiac", "Juggernaut", "GuardianAngel", "Evils" ];
+    private static readonly string[] MainFolders = [ "Common", "Vanilla", "BTOS2", "Legacy", "PlayerNumbers" ];
+    private static readonly string[] Mods = [ "Vanilla", "BTOS2", "Legacy" ];
     private static readonly Dictionary<string, string[]> ModsToFolders = new()
     {
         { "Common", CommonFolders },
         { "Vanilla", VanillaFolders },
-        { "BTOS2", BTOS2Folders }/*,
-        { "Legacy", LegacyFolders }*/
+        { "BTOS2", BTOS2Folders },
+        { "Legacy", LegacyFolders }
     };
     public static readonly string[] FileTypes = [ "png", "jpg" ];
 
@@ -88,8 +88,7 @@ public class IconPack(string name)
                 {
                     var assets = Assets[type] = new(mod);
 
-                    if (type == ModType.BTOS2 && !Constants.BTOS2Exists)
-                    //if ((type == ModType.BTOS2 && !Constants.BTOS2Exists) || (type == ModType.Legacy && !Constants.LegacyExists))
+                    if ((type == ModType.BTOS2 && !Constants.BTOS2Exists) || (type == ModType.Legacy && !Constants.LegacyExists))
                         continue;
 
                     var modPath = Path.Combine(PackPath, mod);
@@ -348,8 +347,7 @@ public class IconPack(string name)
                 {
                     var type = Enum.Parse<ModType>(mod);
 
-                    if (type == ModType.BTOS2 && !Constants.BTOS2Exists)
-                    //if ((type == ModType.BTOS2 && !Constants.BTOS2Exists) || (type == ModType.Legacy && !Constants.LegacyExists))
+                    if ((type == ModType.BTOS2 && !Constants.BTOS2Exists) || (type == ModType.Legacy && !Constants.LegacyExists))
                         continue;
 
                     var index = Utils.Filtered(type);

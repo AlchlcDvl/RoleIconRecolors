@@ -17,8 +17,7 @@ public static class BTOS2Compatibility
         if (btos2Mod == null)
             return;
 
-        var path = Path.Combine(Path.GetDirectoryName(Application.dataPath), "SalemModLoader", "Mods", "BetterTOS2.dll");
-        BTOS2Assembly = Assembly.LoadFile(path);
+        BTOS2Assembly = Assembly.LoadFile(btos2Mod.AssemblyPath);
 
         if (BTOS2Assembly == null)
             return;
@@ -71,7 +70,7 @@ public static class BTOS2Compatibility
             image2.sprite = sprite;
     }
 
-    public static void ItemPostfix2(dynamic __instance, dynamic message)
+    public static void ItemPostfix2(dynamic __instance, ref dynamic message)
     {
         if (!Constants.EnableIcons)
             return;

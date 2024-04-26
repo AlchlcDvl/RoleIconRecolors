@@ -718,10 +718,17 @@ public static class FixDecodingAndEncoding
 {
     public static void Postfix(ref ChatLogMessage chatLogMessage, ref string __result)
     {
-        if (Constants.EnableIcons && chatLogMessage.chatLogEntry is ChatLogChatMessageEntry entry && Service.Game.Sim.simulation.knownRolesAndFactions.Data.TryGetValue(entry.speakerId, out
-            var tuple))
+        if (Constants.EnableIcons && chatLogMessage.chatLogEntry is ChatLogChatMessageEntry entry)
         {
-            __result = __result.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(tuple.Item2)})\"");
+            var faction = "Regular";
+
+            if (Service.Game.Sim.simulation.knownRolesAndFactions.Data.TryGetValue(entry.speakerId, out var tuple))
+                faction = Utils.FactionName(tuple.Item2);
+
+            if (entry.speakerId == Pepper.GetMyPosition())
+                faction = Utils.FactionName(Pepper.GetMyFaction());
+
+            __result = __result.Replace("RoleIcons\"", $"RoleIcons ({faction})\"");
         }
     }
 }
@@ -811,8 +818,8 @@ public static class ReplaceTMPSpritesPatch
 
             if (str.Contains("BTOSRoleIcons"))
                 return AssetManager.BTOS2_2 ?? AssetManager.BTOS2_1;
-            /*else if (str.Contains("LegacyRoleIcons"))
-                return AssetManager.Legacy2 ?? AssetManager.Legacy1;*/
+            else if (str.Contains("LegacyRoleIcons"))
+                return AssetManager.Legacy2 ?? AssetManager.Legacy1;
             else if (str.Contains("RoleIcons"))
                 return AssetManager.Vanilla1 ?? CacheDefaults.RoleIcons;
             else if (str == "PlayerNumbers")
@@ -837,18 +844,18 @@ public static class ReplaceTMPSpritesPatch
 
                 if (str.Contains("BTOS"))
                     mod = ModType.BTOS2;
-                /*else if (str.Contains("Legacy"))
-                    mod = ModType.Legacy;*/
+                else if (str.Contains("Legacy"))
+                    mod = ModType.Legacy;
 
                 var deconstructed = Constants.CurrentStyle;
 
                 if (str.Contains("(") && !str.Contains("Blank"))
-                    deconstructed = str.Replace("RoleIcons (", "").Replace(")", "").Replace("BTOS", "")/*.Replace("Legacy", "")*/;
+                    deconstructed = str.Replace("RoleIcons (", "").Replace(")", "").Replace("BTOS", "").Replace("Legacy", "");
 
                 var defaultSprite = mod switch
                 {
                     ModType.BTOS2 => AssetManager.BTOS2_2 ?? AssetManager.BTOS2_1,
-                    //ModType.Legacy => AssetManager.Legacy2 ?? AssetManager.Legacy1,
+                    ModType.Legacy => AssetManager.Legacy2 ?? AssetManager.Legacy1,
                     _ => AssetManager.Vanilla1 ?? CacheDefaults.RoleIcons
                 };
 
