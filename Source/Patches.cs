@@ -8,6 +8,7 @@ using Game.Chat.Decoders;
 using Server.Shared.Messages;
 using Server.Shared.State.Chat;
 using Home.Shared;
+//using Home.LoginScene;
 
 namespace IconPacks;
 
@@ -63,7 +64,7 @@ public static class PatchBrowserRoleListPanel
 }
 
 [HarmonyPatch]
-public static class PatchRoleCards1
+public static class PatchRoleCards
 {
     [HarmonyPatch(typeof(RoleCardPanelBackground), nameof(RoleCardPanelBackground.SetRole))]
     public static class Patch1
@@ -71,7 +72,10 @@ public static class PatchRoleCards1
         public static void Postfix(RoleCardPanelBackground __instance, ref Role role)
         {
             if (Constants.EnableIcons)
-                ChangeRoleCard(__instance.GetComponentInParent<RoleCardPanel>(), role, Pepper.GetMyFaction());
+            {
+                var panel = __instance.GetComponentInParent<RoleCardPanel>();
+                ChangeRoleCard(panel?.roleIcon, panel?.specialAbilityPanel?.useButton?.abilityIcon, panel?.roleInfoButtons, role, Pepper.GetMyFaction());
+            }
         }
     }
 
@@ -81,12 +85,26 @@ public static class PatchRoleCards1
         public static void Postfix(RoleCardPanel __instance, ref PlayerIdentityData playerIdentityData)
         {
             if (Constants.EnableIcons)
-                ChangeRoleCard(__instance, playerIdentityData.role, playerIdentityData.faction);
+            {
+                ChangeRoleCard(__instance?.roleIcon, __instance?.specialAbilityPanel?.useButton?.abilityIcon, __instance?.roleInfoButtons, playerIdentityData.role,
+                    playerIdentityData.faction);
+            }
         }
     }
 
-    private static void ChangeRoleCard(RoleCardPanel panel, Role role, FactionType factionType)
+    [HarmonyPatch(typeof(RoleCardPopupPanel), nameof(RoleCardPopupPanel.SetRole))]
+    public static class Patch3
     {
+        public static void Postfix(RoleCardPopupPanel __instance, ref Role role)
+        {
+            if (Constants.EnableIcons)
+                ChangeRoleCard(__instance?.roleIcon, __instance?.specialAbilityPanel?.useButton?.abilityIcon, __instance?.roleInfoButtons, role, role.GetFactionType(), true);
+        }
+    }
+
+    private static void ChangeRoleCard(Image roleIcon, Image specialAbilityPanel, List<BaseAbilityButton> roleInfoButtons, Role role, FactionType factionType, bool isGuide = false)
+    {
+        roleInfoButtons ??= [];
         role = Constants.IsTransformed ? Utils.GetTransformedVersion(role) : role;
 
         //this determines if the role in question is changed by dum's mod
@@ -101,8 +119,8 @@ public static class PatchRoleCards1
         if (!sprite.IsValid() && reg)
             sprite = AssetManager.GetSprite(name, ogfaction);
 
-        if (sprite.IsValid() && panel.roleIcon)
-            panel.roleIcon.sprite = sprite;
+        if (sprite.IsValid() && roleIcon)
+            roleIcon.sprite = sprite;
 
         var specialName = $"{name}_Special";
         var special = AssetManager.GetSprite(reg, specialName, faction);
@@ -110,8 +128,8 @@ public static class PatchRoleCards1
         if (!special.IsValid() && reg)
             special = AssetManager.GetSprite(specialName, ogfaction);
 
-        if (special.IsValid() && panel.specialAbilityPanel.IsValid() && !(role == Utils.GetNecro() && !Constants.IsNecroActive))
-            panel.specialAbilityPanel.useButton.abilityIcon.sprite = special;
+        if (special.IsValid() && specialAbilityPanel && !(role == Utils.GetNecro() && !Constants.IsNecroActive))
+            specialAbilityPanel.sprite = special;
 
         var abilityname = $"{name}_Ability";
         var ability1 = AssetManager.GetSprite(reg, abilityname, faction);
@@ -125,18 +143,18 @@ public static class PatchRoleCards1
         if (!ability1.IsValid() && reg)
             ability1 = AssetManager.GetSprite(abilityname + "_1", ogfaction);
 
-        if (ability1.IsValid() && panel.roleInfoButtons.IsValid(index))
+        if (ability1.IsValid() && roleInfoButtons.IsValid(index))
         {
-            panel.roleInfoButtons[index].abilityIcon.sprite = ability1;
+            roleInfoButtons[index].abilityIcon.sprite = ability1;
             index++;
         }
         else if (Utils.Skippable(abilityname) || Utils.Skippable(abilityname + "_1"))
             index++;
         else if (isModifiedByTos1UI)
         {
-            if (special.IsValid() && panel.roleInfoButtons.IsValid(index))
+            if (special.IsValid() && roleInfoButtons.IsValid(index))
             {
-                panel.roleInfoButtons[index].abilityIcon.sprite = special;
+                roleInfoButtons[index].abilityIcon.sprite = special;
                 index++;
             }
             else if (Utils.Skippable(specialName))
@@ -151,18 +169,18 @@ public static class PatchRoleCards1
         if (!ability2.IsValid() && reg)
             ability2 = AssetManager.GetSprite(abilityname2, ogfaction);
 
-        if (ability2.IsValid() && panel.roleInfoButtons.IsValid(index) && role != Utils.GetWar())
+        if (ability2.IsValid() && roleInfoButtons.IsValid(index) && role != Utils.GetWar())
         {
-            panel.roleInfoButtons[index].abilityIcon.sprite = ability2;
+            roleInfoButtons[index].abilityIcon.sprite = ability2;
             index++;
         }
         else if (Utils.Skippable(abilityname2))
             index++;
         else if (isModifiedByTos1UI)
         {
-            if (special.IsValid() && panel.roleInfoButtons.IsValid(index))
+            if (special.IsValid() && roleInfoButtons.IsValid(index))
             {
-                panel.roleInfoButtons[index].abilityIcon.sprite = special;
+                roleInfoButtons[index].abilityIcon.sprite = special;
                 index++;
             }
             else if (Utils.Skippable(specialName))
@@ -183,9 +201,9 @@ public static class PatchRoleCards1
         if (!attribute.IsValid() && reg)
             attribute = AssetManager.GetSprite(attributename + (role.IsTransformedApoc() ? "Horsemen" : faction), ogfaction);
 
-        if (attribute.IsValid() && panel.roleInfoButtons.IsValid(index))
+        if (attribute.IsValid() && roleInfoButtons.IsValid(index))
         {
-            panel.roleInfoButtons[index].abilityIcon.sprite = attribute;
+            roleInfoButtons[index].abilityIcon.sprite = attribute;
             index++;
         }
         else if (Utils.Skippable(attributename))
@@ -196,8 +214,8 @@ public static class PatchRoleCards1
 
         var nommy = AssetManager.GetSprite("Necronomicon");
 
-        if (nommy.IsValid() && Constants.IsNecroActive && panel.roleInfoButtons.IsValid(index))
-            panel.roleInfoButtons[index].abilityIcon.sprite = nommy;
+        if (nommy.IsValid() && (Constants.IsNecroActive || isGuide) && roleInfoButtons.IsValid(index))
+            roleInfoButtons[index].abilityIcon.sprite = nommy;
     }
 }
 
@@ -349,103 +367,6 @@ public static class PatchRitualistGuessMenu
 
         if (__instance.roleIcon && icon.IsValid())
             __instance.roleIcon.sprite = icon;
-    }
-}
-
-[HarmonyPatch(typeof(RoleCardPopupPanel), nameof(RoleCardPopupPanel.SetRole))]
-public static class PatchGuideRoleCards
-{
-    public static void Postfix(RoleCardPopupPanel __instance, ref Role role)
-    {
-        if (!Constants.EnableIcons)
-            return;
-
-        var index = 0;
-        var name = Utils.RoleName(role);
-        var faction = Utils.FactionName(role.GetFactionType());
-        var sprite = AssetManager.GetSprite(name, faction);
-        //this determines if the role in question is changed by dum's mod
-        var isModifiedByTos1UI = Utils.ModifiedByToS1UI(role) && ModStates.IsLoaded("dum.oldui");
-
-        if (sprite.IsValid() && __instance.roleIcon)
-            __instance.roleIcon.sprite = sprite;
-
-        var specialName = $"{name}_Special";
-        var special = AssetManager.GetSprite(specialName, faction);
-
-        if (special.IsValid() && __instance.specialAbilityPanel.IsValid() && role != Utils.GetNecro())
-            __instance.specialAbilityPanel.useButton.abilityIcon.sprite = special;
-
-        var abilityname = $"{name}_Ability";
-        var ability1 = AssetManager.GetSprite(abilityname, faction);
-
-        if (!ability1.IsValid())
-            ability1 = AssetManager.GetSprite(abilityname + "_1", faction);
-
-        if (ability1.IsValid() && __instance.roleInfoButtons.IsValid(index))
-        {
-            __instance.roleInfoButtons[index].abilityIcon.sprite = ability1;
-            index++;
-        }
-        else if (Utils.Skippable(abilityname) || Utils.Skippable(abilityname + "_1"))
-            index++;
-        else if (isModifiedByTos1UI)
-        {
-            if (special.IsValid() && __instance.roleInfoButtons.IsValid(index))
-            {
-                __instance.roleInfoButtons[index].abilityIcon.sprite = special;
-                index++;
-            }
-            else if (Utils.Skippable(specialName))
-                index++;
-
-            isModifiedByTos1UI = false;
-        }
-
-        var abilityname2 = $"{name}_Ability_2";
-        var ability2 = AssetManager.GetSprite(abilityname2, faction);
-
-        if (ability2.IsValid() && __instance.roleInfoButtons.IsValid(index))
-        {
-            __instance.roleInfoButtons[index].abilityIcon.sprite = ability2;
-            index++;
-        }
-        else if (Utils.Skippable(abilityname2))
-            index++;
-        else if (isModifiedByTos1UI)
-        {
-            if (special.IsValid() && __instance.roleInfoButtons.IsValid(index))
-            {
-                __instance.roleInfoButtons[index].abilityIcon.sprite = special;
-                index++;
-            }
-            else if (Utils.Skippable(specialName))
-                index++;
-
-            isModifiedByTos1UI = false;
-        }
-
-        var attributename = "Attributes_";
-        var attribute = AssetManager.GetSprite(attributename + name, faction);
-
-        if (!attribute.IsValid())
-            attribute = AssetManager.GetSprite(attributename + (role.IsTransformedApoc() ? "Horsemen" : faction));
-
-        if (attribute.IsValid() && __instance.roleInfoButtons.IsValid(index))
-        {
-            __instance.roleInfoButtons[index].abilityIcon.sprite = attribute;
-            index++;
-        }
-        else if (Utils.Skippable(attributename))
-            index++;
-
-        if (faction != "Coven")
-            return;
-
-        var nommy = AssetManager.GetSprite("Necronomicon");
-
-        if (nommy.IsValid() && __instance.roleInfoButtons.IsValid(index))
-            __instance.roleInfoButtons[index].abilityIcon.sprite = nommy;
     }
 }
 
@@ -797,6 +718,15 @@ public static class RemoveTextIconFromPlayerPopupBecauseWhyIsItThere
     }
 }
 
+/*[HarmonyPatch(typeof(LoginSceneController), nameof(LoginSceneController.Start))]
+public static class HandlePacks
+{
+    public static void Prefix()
+    {
+
+    }
+}*/
+
 [HarmonyPatch(typeof(DownloadContributorTags), nameof(DownloadContributorTags.AddTMPSprites))]
 [HarmonyPriority(Priority.VeryLow)]
 public static class ReplaceTMPSpritesPatch
@@ -818,8 +748,6 @@ public static class ReplaceTMPSpritesPatch
 
             if (str.Contains("BTOSRoleIcons"))
                 return AssetManager.BTOS2_2 ?? AssetManager.BTOS2_1;
-            else if (str.Contains("LegacyRoleIcons"))
-                return AssetManager.Legacy2 ?? AssetManager.Legacy1;
             else if (str.Contains("RoleIcons"))
                 return AssetManager.Vanilla1 ?? CacheDefaults.RoleIcons;
             else if (str == "PlayerNumbers")
@@ -844,8 +772,6 @@ public static class ReplaceTMPSpritesPatch
 
                 if (str.Contains("BTOS"))
                     mod = ModType.BTOS2;
-                else if (str.Contains("Legacy"))
-                    mod = ModType.Legacy;
 
                 var deconstructed = Constants.CurrentStyle;
 
@@ -855,7 +781,6 @@ public static class ReplaceTMPSpritesPatch
                 var defaultSprite = mod switch
                 {
                     ModType.BTOS2 => AssetManager.BTOS2_2 ?? AssetManager.BTOS2_1,
-                    ModType.Legacy => AssetManager.Legacy2 ?? AssetManager.Legacy1,
                     _ => AssetManager.Vanilla1 ?? CacheDefaults.RoleIcons
                 };
 

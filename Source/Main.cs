@@ -16,7 +16,6 @@ public class Recolors
         {
             AssetManager.LoadAssets();
             MenuButton.Icon = AssetManager.Thumbnail;
-            ModSettings.SetString("Download Recommended Icon Packs", "None", "alchlcsystm.recolors");
         }
         catch (Exception e)
         {
@@ -87,14 +86,6 @@ public class Recolors
         Description = "Select whether you want to use the mod's rendition of player numbers or the game's."
     };
 
-    public ModSettings.DropdownSetting DownloadIcons => new()
-    {
-        Name = "Download Recommended Icon Packs",
-        Description = "Downloads icon packs recommended by the mod creator.\nVanilla - Icons used in the vanilla game to be used as a reference for icon packs.\nBTOS2 - Icons used in BTOS2 games to be used as a reference for icons specifically set for BTOS2.\nRecolors - Art by MysticMismagius, Haapsalu, faketier, splarg, Det, Wevit, Nova, moiler, NexusOfChaos and Nidoskull.",
-        Options = [ "None", "Vanilla", "BTOS2", "Recolors" ],
-        OnChanged = Download.DownloadIcons
-    };
-
     private static List<string> GetPackNames()
     {
         try
@@ -158,41 +149,4 @@ public class Recolors
             return [ mentionStyle ? mod.ToString() : "None" ];
         }
     }
-
-    /*private static List<string> GetFactionOverrides(ModType mod)
-    {
-        try
-        {
-            var result = new List<string>() { "None" };
-
-            if (AssetManager.IconPacks.TryGetValue(Constants.CurrentPack, out var pack))
-            {
-                if (pack.Assets.TryGetValue(ModType.Common, out var assets))
-                {
-                    foreach (var (folder, icons) in assets.BaseIcons)
-                    {
-                        if (icons.Count > 0 && !result.Contains(folder) && folder != "Custom")
-                            result.Add(folder);
-                    }
-                }
-
-                if (pack.Assets.TryGetValue(mod, out assets))
-                {
-                    foreach (var (folder, icons) in assets.BaseIcons)
-                    {
-                        if (icons.Count > 0 && !result.Contains(folder) && folder != "Custom")
-                            result.Add(folder);
-                    }
-                }
-
-                result.Add("Custom");
-            }
-
-            return result;
-        }
-        catch
-        {
-            return [ "None" ];
-        }
-    }*/
 }

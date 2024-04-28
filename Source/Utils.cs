@@ -37,10 +37,8 @@ public static class Utils
             mod ??= GetGameType();
             return mod switch
             {
-                ModType.Vanilla => VanillaRoleName(role),
                 ModType.BTOS2 => BTOSRoleName(role),
-                //ModType.Legacy => LegacyRoleName(role),
-                _ => Constants.IsBTOS2 ? BTOSRoleName(role) : /*(Constants.IsLegacy ? LegacyRoleName(role) : */VanillaRoleName(role),//),
+                _ => VanillaRoleName(role)
             };
         }
         catch
@@ -157,132 +155,6 @@ public static class Utils
         _ => "Blank"
     };
 
-    /*private static string LegacyRoleName(Role role) => role switch
-    {
-        LegacyRole.Admirer => "Admirer",
-        LegacyRole.Amnesiac => "Amnesiac",
-        LegacyRole.Bodyguard => "Bodyguard",
-        LegacyRole.Cleric => "Cleric",
-        LegacyRole.Coroner => "Coroner",
-        LegacyRole.Crusader => "Crusader",
-        LegacyRole.Deputy => "Deputy",
-        LegacyRole.Investigator => "Investigator",
-        LegacyRole.Jailor => "Jailor",
-        LegacyRole.Lookout => "Lookout",
-        LegacyRole.Mayor => "Mayor",
-        LegacyRole.Monarch => "Monarch",
-        LegacyRole.Prosecutor => "Prosecutor",
-        LegacyRole.Psychic => "Psychic",
-        LegacyRole.Retributionist => "Retributionist",
-        LegacyRole.Seer => "Seer",
-        LegacyRole.Sheriff => "Sheriff",
-        LegacyRole.Spy => "Spy",
-        LegacyRole.TavernKeeper => "TavernKeeper",
-        LegacyRole.Tracker => "Tracker",
-        LegacyRole.Trapper => "Trapper",
-        LegacyRole.Trickster => "Trickster",
-        LegacyRole.Veteran => "Veteran",
-        LegacyRole.Vigilante => "Vigilante",
-        LegacyRole.Conjurer => "Conjurer",
-        LegacyRole.CovenLeader => "CovenLeader",
-        LegacyRole.Dreamweaver => "Dreamweaver",
-        LegacyRole.Enchanter => "Enchanter",
-        LegacyRole.HexMaster => "HexMaster",
-        LegacyRole.Illusionist => "Illusionist",
-        LegacyRole.Jinx => "Jinx",
-        LegacyRole.Medusa => "Medusa",
-        LegacyRole.Necromancer => "Necromancer",
-        LegacyRole.Poisoner => "Poisoner",
-        LegacyRole.PotionMaster => "PotionMaster",
-        LegacyRole.Ritualist => "Ritualist",
-        LegacyRole.VoodooMaster => "VoodooMaster",
-        LegacyRole.Wildling => "Wildling",
-        LegacyRole.Witch => "Witch",
-        LegacyRole.Arsonist => "Arsonist",
-        LegacyRole.Baker => "Baker",
-        LegacyRole.Berserker => "Berserker",
-        LegacyRole.Doomsayer => "Doomsayer",
-        LegacyRole.Executioner => "Executioner",
-        LegacyRole.Jester => "Jester",
-        LegacyRole.Pirate => "Pirate",
-        LegacyRole.Plaguebearer => "Plaguebearer",
-        LegacyRole.SerialKiller => "SerialKiller",
-        LegacyRole.Shroud => "Shroud",
-        LegacyRole.Reaper => "Reaper",
-        LegacyRole.Werewolf => "Werewolf",
-        LegacyRole.Vampire => "Vampire",
-        LegacyRole.CursedSoul => "CursedSoul",
-        LegacyRole.Socialite => "Socialite",
-        LegacyRole.Marshal => "Marshal",
-        LegacyRole.Famine => "Famine",
-        LegacyRole.War => "War",
-        LegacyRole.Pestilence => "Pestilence",
-        LegacyRole.Death => "Death",
-        LegacyRole.Medium => "Medium",
-        LegacyRole.Saint => "Saint",
-        LegacyRole.Transporter => "Transporter",
-        LegacyRole.Ambusher => "Ambusher",
-        LegacyRole.Assassin => "Assassin",
-        LegacyRole.Blackmailer => "Blackmailer",
-        LegacyRole.Consigliere => "Consigliere",
-        LegacyRole.Consort => "Consort",
-        LegacyRole.Disguiser => "Disguiser",
-        LegacyRole.Framer => "Framer",
-        LegacyRole.Forger => "Forger",
-        LegacyRole.Godfather => "Godfather",
-        LegacyRole.Hypnotist => "Hypnotist",
-        LegacyRole.Janitor => "Janitor",
-        LegacyRole.Mafioso => "Mafioso",
-        LegacyRole.Wraith => "Wraith",
-        LegacyRole.GuardianAngel => "GuardianAngel",
-        LegacyRole.Juggernaut => "Juggernaut",
-        LegacyRole.RandomTown => "RandomTown",
-        LegacyRole.TownInvestigative => "TownInvestigative",
-        LegacyRole.TownProtective => "TownProtective",
-        LegacyRole.TownKilling => "TownKilling",
-        LegacyRole.TownSupport => "TownSupport",
-        LegacyRole.TownPower => "TownPower",
-        LegacyRole.RandomCoven => "RandomCoven",
-        LegacyRole.CovenKilling => "CovenKilling",
-        LegacyRole.CovenUtility => "CovenUtility",
-        LegacyRole.CovenDeception => "CovenDeception",
-        LegacyRole.CovenPower => "CovenPower",
-        LegacyRole.RandomNeutral => "RandomNeutral",
-        LegacyRole.NeutralKilling => "NeutralKilling",
-        LegacyRole.NeutralEvil => "NeutralEvil",
-        LegacyRole.NeutralApocalypse => "NeutralApocalypse",
-        LegacyRole.NeutralChaos => "NeutralChaos",
-        LegacyRole.RandomMafia => "RandomMafia",
-        LegacyRole.MafiaDeception => "MafiaDeception",
-        LegacyRole.MafiaKilling => "MafiaKilling",
-        LegacyRole.MafiaPower => "MafiaPower",
-        LegacyRole.MafiaUtility => "MafiaUtility",
-        LegacyRole.AnyEvil => "AnyEvil",
-        LegacyRole.FactionedEvil => "FactionedEvil",
-        LegacyRole.NonTown => "NonTown",
-        LegacyRole.NonCoven => "NonCoven",
-        LegacyRole.NonMafia => "NonMafia",
-        LegacyRole.NonNeutral => "NonNeutral",
-        LegacyRole.Any => "Any",
-        LegacyRole.TrueAny => "TrueAny",
-        LegacyRole.CovenTT => "CovenTownTraitor",
-        LegacyRole.MafiaTT => "MafiaTownTraitor",
-        LegacyRole.GhostTown => "GhostTown",
-        LegacyRole.PerfectTown => "PerfectTown",
-        LegacyRole.SlowMode => "SlowMode",
-        LegacyRole.FastMode => "FastMode",
-        LegacyRole.AnonVotes => "AnonVotes",
-        LegacyRole.SecretKillers => "SecretKillers",
-        LegacyRole.HiddenRoles => "HiddenRoles",
-        LegacyRole.OneTrial => "OneTrial",
-        LegacyRole.TownVEvils => "TownVEvils",
-        LegacyRole.Lovers => "Lovers",
-        LegacyRole.Hidden => "Hidden",
-        LegacyRole.Cleaned => "Cleaned",
-        LegacyRole.Stoned => "Stoned",
-        _ => "Blank"
-    };*/
-
     private static string VanillaRoleName(Role role) => role switch
     {
         Role.ADMIRER => "Admirer",
@@ -385,10 +257,8 @@ public static class Utils
             mod ??= GetGameType();
             return mod switch
             {
-                ModType.Vanilla => VanillaFactionName(faction),
                 ModType.BTOS2 => BTOSFactionName(faction),
-                //ModType.Legacy => LegacyFactionName(faction),
-                _ => Constants.IsBTOS2 ? BTOSFactionName(faction) : /*(Constants.IsLegacy ? LegacyFactionName(faction) : */VanillaFactionName(faction),//),
+                _ => VanillaFactionName(faction)
             };
         }
         catch
@@ -422,29 +292,6 @@ public static class Utils
         BTOS2Faction.Inquisitor => "Inquisitor",
         _ => "Blank"
     };
-
-    /*private static string LegacyFactionName(FactionType faction) => faction switch
-    {
-        LegacyFaction.Amnesiac => "Amnesiac",
-        LegacyFaction.Town => "Town",
-        LegacyFaction.Coven => "Coven",
-        LegacyFaction.Mafia => "Mafia",
-        LegacyFaction.SerialKiller => "SerialKiller",
-        LegacyFaction.Arsonist => "Arsonist",
-        LegacyFaction.Werewolf => "Werewolf",
-        LegacyFaction.Shroud => "Shroud",
-        LegacyFaction.Apocalypse => "Apocalypse",
-        LegacyFaction.Executioner => "Executioner",
-        LegacyFaction.Jester => "Jester",
-        LegacyFaction.Pirate => "Pirate",
-        LegacyFaction.Doomsayer => "Doomsayer",
-        LegacyFaction.Vampire => "Vampire",
-        LegacyFaction.CursedSoul => "CursedSoul",
-        LegacyFaction.Juggernaut => "Juggernaut",
-        LegacyFaction.GuardianAngel => "GuardianAngel",
-        LegacyFaction.Evils => "Evils",
-        _ => "Blank"
-    };*/
 
     private static string VanillaFactionName(FactionType faction) => faction switch
     {
@@ -494,10 +341,8 @@ public static class Utils
             mod ??= GetGameType();
             return mod switch
             {
-                ModType.Vanilla => IsApocVanilla(role),
                 ModType.BTOS2 => IsApocBTOS2(role),
-                //ModType.Legacy => IsApocLegacy(role),
-                _ => Constants.IsBTOS2 ? IsApocBTOS2(role) : /*(Constants.IsLegacy ? IsApocLegacy(role) : */IsApocVanilla(role),//),
+                _ => IsApocVanilla(role),
             };
         }
         catch
@@ -511,9 +356,6 @@ public static class Utils
 
     public static bool IsApocBTOS2(this Role role) => role is BTOS2Role.Berserker or BTOS2Role.War or BTOS2Role.Baker or BTOS2Role.Famine or BTOS2Role.SoulCollector or BTOS2Role.Death or
         BTOS2Role.Plaguebearer or BTOS2Role.Pestilence;
-
-    /*public static bool IsApocLegacy(this Role role) => role is LegacyRole.Berserker or LegacyRole.War or LegacyRole.Baker or LegacyRole.Famine or LegacyRole.Reaper or LegacyRole.Death or
-        LegacyRole.Plaguebearer or LegacyRole.Pestilence;*/
 
     public static bool Skippable(string name) => GetGameType() switch
     {
@@ -533,11 +375,6 @@ public static class Utils
                 .Where(fi => fi.IsLiteral && !fi.IsInitOnly && fi.FieldType == typeof(Role))
                 .Select(x => (Role)x.GetRawConstantValue())
                 .Where(x => x is not (BTOS2Role.None or BTOS2Role.Hangman or BTOS2Role.Unknown or BTOS2Role.RoleCount)),
-            /*ModType.Legacy => typeof(LegacyRole)
-                .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)
-                .Where(fi => fi.IsLiteral && !fi.IsInitOnly && fi.FieldType == typeof(Role))
-                .Select(x => (Role)x.GetRawConstantValue())
-                .Where(x => x is not (LegacyRole.None or LegacyRole.Hangman or LegacyRole.Unknown or LegacyRole.RoleCount)),*/
             _ => ((Role[])Enum.GetValues(typeof(Role))).Where(x => x is not (Role.NONE or Role.ROLE_COUNT or Role.UNKNOWN or Role.HANGMAN))
         };
 
@@ -565,10 +402,8 @@ public static class Utils
         {
             return mod switch
             {
-                ModType.Vanilla => IsTransformedApocVanilla(role),
                 ModType.BTOS2 => IsTransformedApocBTOS(role),
-                //ModType.Legacy => LegacyFactionName(faction),
-                _ => Constants.IsBTOS2 ? IsTransformedApocBTOS(role) : /*(Constants.IsLegacy ? LegacyFactionName(faction) : */IsTransformedApocVanilla(role),//),
+                _ => IsTransformedApocVanilla(role),
             };
         }
         catch
@@ -580,8 +415,6 @@ public static class Utils
     private static bool IsTransformedApocBTOS(this Role role) => role is BTOS2Role.Death or BTOS2Role.Famine or BTOS2Role.War or BTOS2Role.Pestilence;
 
     private static bool IsTransformedApocVanilla(this Role role) => role is Role.DEATH or Role.FAMINE or Role.WAR or Role.PESTILENCE;
-
-    //private static bool IsTransformedApocLegacy(this Role role) => role is LegacyRole.Death or LegacyRole.Famine or LegacyRole.War or LegacyRole.Pestilence;
 
     public static bool IsValid(this Sprite sprite) => sprite && sprite != AssetManager.Blank;
 
@@ -634,8 +467,6 @@ public static class Utils
     {
         if (Constants.IsBTOS2 || FindCasualQueue())
             return ModType.BTOS2;
-        /*else if (Constants.IsLegacy)
-            return ModType.Legacy;*/
         else
             return ModType.Vanilla;
     }
@@ -681,14 +512,6 @@ public static class Utils
                     BTOS2Role.Plaguebearer => BTOS2Role.Pestilence,
                     _ => role
                 },
-                /*ModType.Legacy => role switch
-                {
-                    LegacyRole.Baker => LegacyRole.Famine,
-                    LegacyRole.Berserker => LegacyRole.War,
-                    LegacyRole.Reaper => LegacyRole.Death,
-                    LegacyRole.Plaguebearer => LegacyRole.Pestilence,
-                    _ => role
-                },*/
                 _ => role switch
                 {
                     Role.BAKER => Role.FAMINE,
@@ -720,7 +543,6 @@ public static class Utils
             return mod switch
             {
                 ModType.BTOS2 => BTOS2Role.Necromancer,
-                //ModType.Legacy => LegacyRole.Necromancer,
                 _ => Role.NECROMANCER,
             };
         }
@@ -738,37 +560,12 @@ public static class Utils
             return mod switch
             {
                 ModType.BTOS2 => BTOS2Role.War,
-                //ModType.Legacy => LegacyRole.War,
                 _ => Role.WAR,
             };
         }
         catch
         {
             return Role.WAR;
-        }
-    }
-
-    public static bool IsValid(this SpecialAbilityPopupPanel panel)
-    {
-        try
-        {
-            return panel && panel.useButton && panel.useButton.abilityIcon;
-        }
-        catch
-        {
-            return false;
-        }
-    }
-
-    public static bool IsValid(this SpecialAbilityPanel panel)
-    {
-        try
-        {
-            return panel && panel.useButton && panel.useButton.abilityIcon;
-        }
-        catch
-        {
-            return false;
         }
     }
 
@@ -822,29 +619,4 @@ public static class Utils
 
         return FactionType.NONE;
     }
-
-    /*public static TKey GetKey<TKey, TValue>(this IDictionary<TKey, TValue> dict, TValue value)
-    {
-        foreach (var (key, value2) in dict)
-        {
-            if (value.Equals(value2))
-                return key;
-        }
-
-        return default;
-    }
-
-    public static bool TryGetKey<TKey, TValue>(this IDictionary<TKey, TValue> dict, TValue value, out TKey key)
-    {
-        try
-        {
-            key = dict.GetKey(value);
-            return true;
-        }
-        catch
-        {
-            key = default;
-            return false;
-        }
-    }*/
 }

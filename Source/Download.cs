@@ -1,4 +1,4 @@
-using System.Collections;
+/*using System.Collections;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
 using Home.Shared;
@@ -8,19 +8,52 @@ namespace IconPacks;
 public static class Download
 {
     private const string REPO = "https://raw.githubusercontent.com/AlchlcDvl/RoleIconRecolors/main";
-    private static readonly string[] SupportedPacks = [ "Vanilla", "BTOS2", "Recolors" ];
     private static readonly Dictionary<string, bool> Running = [];
+    private static bool HandlerRunning;
+    private static readonly Dictionary<string, PackJson> Packs = [];
+
+    public static void HandlePackData() => ApplicationController.ApplicationContext.StartCoroutine(CoHandlePackData());
+
+    private static IEnumerator CoHandlePackData()
+    {
+        if (HandlerRunning)
+            yield break;
+
+        HandlerRunning = true;
+
+        var www = UnityWebRequest.Get($"{REPO}/Packs.json");
+        yield return www.SendWebRequest();
+
+        while (!www.isDone)
+            yield return new WaitForEndOfFrame();
+
+        if (www.result != UnityWebRequest.Result.Success)
+        {
+            Logging.LogError(www.error);
+            HandlerRunning = false;
+            yield break;
+        }
+
+        var json = JsonConvert.DeserializeObject<List<PackJson>>(www.downloadHandler.text);
+
+        foreach (var jsonPack in json)
+        {
+            jsonPack.Branch ??= "main";
+            jsonPack.RepoOwner ??= "AlchlcDvl";
+            jsonPack.RepoName ??= "RoleIconRecolors";
+            jsonPack.Name ??= jsonPack.RepoName;
+            jsonPack.JsonName ??= jsonPack.Name;
+            Packs.Add(jsonPack.Name, jsonPack);
+        }
+
+        HandlerRunning = false;
+        yield break;
+    }
 
     public static void DownloadIcons(string packName) => ApplicationController.ApplicationContext.StartCoroutine(CoDownload(packName));
 
     private static IEnumerator CoDownload(string packName)
     {
-        if (!SupportedPacks.Contains(packName))
-        {
-            Logging.LogError($"Wrong pack name {packName}");
-            yield break;
-        }
-
         if (Running.TryGetValue(packName, out var running) && running)
         {
             Logging.LogError($"{packName} download is still running");
@@ -66,6 +99,7 @@ public static class Download
         if (www.result != UnityWebRequest.Result.Success)
         {
             Logging.LogError(www.error);
+            Running[packName] = false;
             yield break;
         }
 
@@ -113,4 +147,4 @@ public static class Download
         Running[packName] = false;
         yield break;
     }
-}
+}*/

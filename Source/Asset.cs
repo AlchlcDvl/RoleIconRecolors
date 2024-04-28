@@ -1,33 +1,28 @@
-namespace IconPacks;
+/*namespace IconPacks;
 
 public class Asset
 {
     public string Name { get; set; }
+    public string Mod { get; set; }
     public string Folder { get; set; }
     public string Pack { get; set; }
     public string FileType { get; set; }
 
-    public string FilePath()
-    {
-        if (Pack is "Vanilla" or "BTOS2" || string.IsNullOrWhiteSpace(Folder) || string.IsNullOrWhiteSpace(Pack))
-            return Path.Combine(AssetManager.ModPath, Pack, $"{Name}.{FileType}");
-        else
-            return Path.Combine(AssetManager.ModPath, Pack, Folder, $"{Name}.{FileType}");
-    }
+    public string FilePath() => Path.Combine(FolderPath(), $"{Name}.{FileType}");
 
     public string FolderPath()
     {
-        if (Pack is "Vanilla" or "BTOS2" || string.IsNullOrWhiteSpace(Folder) || string.IsNullOrWhiteSpace(Pack))
+        if (Pack is "Vanilla" or "BTOS2")
             return Path.Combine(AssetManager.ModPath, Pack);
         else
-            return Path.Combine(AssetManager.ModPath, Pack, Folder);
+            return Path.Combine(AssetManager.ModPath, Pack, Mod, Folder);
     }
 
     public string DownloadLink()
     {
-        if (Pack is "Vanilla" or  "BTOS2" || string.IsNullOrWhiteSpace(Folder) || string.IsNullOrWhiteSpace(Pack))
+        if (Pack is "Vanilla" or  "BTOS2")
             return $"{Pack}/{Name}.{FileType}";
         else
             return $"{Pack}/{Folder}/{Name}.{FileType}";
     }
-}
+}*/

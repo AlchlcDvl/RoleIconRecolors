@@ -10,31 +10,36 @@ public static class BTOS2Compatibility
 
     private static Type BookPassingMenuListItemControllerType { get; set; }
 
-    public static void Init()
+    public static bool BTOS2Patched { get; set; }
+
+    public static bool Init()
     {
-        var btos2Mod = ModStates.EnabledMods.Find(x => x.HarmonyId == "curtis.tuba.better.tos2");
+        try
+        {
+            var btos2Mod = ModStates.EnabledMods.Find(x => x.HarmonyId == "curtis.tuba.better.tos2");
 
-        if (btos2Mod == null)
-            return;
+            BTOS2Assembly = Assembly.LoadFile(btos2Mod.AssemblyPath);
 
-        BTOS2Assembly = Assembly.LoadFile(btos2Mod.AssemblyPath);
+            BTOS2PatchesHarmony = new("alchlcsystm.recolors.btos2patches");
 
-        if (BTOS2Assembly == null)
-            return;
+            BTOS2Types = AccessTools.GetTypesFromAssembly(BTOS2Assembly);
 
-        BTOS2PatchesHarmony = new("alchlcsystm.recolors.btos2patches");
+            BookPassingMenuListItemControllerType = BTOS2Types.FirstOrDefault(x => x.Name == "BookPassingMenuListItemController");
 
-        BTOS2Types = AccessTools.GetTypesFromAssembly(BTOS2Assembly);
+            var awakeMethod = AccessTools.Method(BookPassingMenuListItemControllerType, "Awake");
 
-        BookPassingMenuListItemControllerType = BTOS2Types.FirstOrDefault(x => x.Name == "BookPassingMenuListItemController");
+            var voteForType = BTOS2Types.FirstOrDefault(x => x.Name == "VoteForNecroMessage");
+            var handleItemVoteMethod = AccessTools.Method(BookPassingMenuListItemControllerType, "HandleVote", [ voteForType ]);
 
-        var awakeMethod = AccessTools.Method(BookPassingMenuListItemControllerType, "Awake");
-
-        var voteForType = BTOS2Types.FirstOrDefault(x => x.Name == "VoteForNecroMessage");
-        var handleItemVoteMethod = AccessTools.Method(BookPassingMenuListItemControllerType, "HandleVote", [ voteForType ]);
-
-        BTOS2PatchesHarmony.Patch(awakeMethod, null, new(AccessTools.Method(typeof(BTOS2Compatibility), nameof(ItemPostfix1))));
-        BTOS2PatchesHarmony.Patch(handleItemVoteMethod, null, new(AccessTools.Method(typeof(BTOS2Compatibility), nameof(ItemPostfix2))));
+            BTOS2PatchesHarmony.Patch(awakeMethod, null, new(AccessTools.Method(typeof(BTOS2Compatibility), nameof(ItemPostfix1))));
+            BTOS2PatchesHarmony.Patch(handleItemVoteMethod, null, new(AccessTools.Method(typeof(BTOS2Compatibility), nameof(ItemPostfix2))));
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Logging.LogError($"BTOS2 compatbility patch loading failed because:\n{ex}");
+            return false;
+        }
     }
 
     public static void ItemPostfix1(dynamic __instance)

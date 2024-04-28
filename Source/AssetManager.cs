@@ -18,15 +18,13 @@ public static class AssetManager
     public static TMP_SpriteAsset Vanilla2;
     public static TMP_SpriteAsset BTOS2_1;
     public static TMP_SpriteAsset BTOS2_2;
-    public static TMP_SpriteAsset Legacy1;
-    public static TMP_SpriteAsset Legacy2;
 
     public static string ModPath => Path.Combine(Path.GetDirectoryName(Application.dataPath), "SalemModLoader", "ModFolders", "Recolors");
 
     private static readonly string[] Avoid = [ "Necronomicon", "Neutral", "Town", "Coven", "SlowMode", "FastMode", "Any", "Recruit", "Stoned", "SecretKillers", "HiddenRoles", "OneTrial",
         "RandomApocalypse", "TownTraitor", "PerfectTown", "NecroPass", "Anon", "WalkingDead", "ExeTarget", "Hexed", "Knighted", "Bread", "Revealed", "Disconnected", "Connecting", "Lovers",
         "Doused", "Plagued", "Revealed", "Trapped", "Hangover", "Silenced", "Dreamwoven", "Insane", "Bugged", "Tracked", "Sickness", "Reaped", "Deafened", "Audited", "Enchanted", "Egoist",
-        "Accompanied", "Banned", "SpeakingSpirits", "Transported", "Hypnotised", "Gazed", "Blackmailed", "Blessed", "Framed", "Mafia", "Cleaned", "Lovers", "FactionedEvil", "TownVEvils" ];
+        "Accompanied", "Banned", "SpeakingSpirits" ];
 
     private static readonly string[] ToRemove = [ ".png", ".jpg" ];
 
@@ -143,14 +141,7 @@ public static class AssetManager
         Utils.DumpSprite(BTOS2_1.spriteSheet as Texture2D, "BTOSRoleIcons", Path.Combine(ModPath, "BTOS2"), true);
         LoadBTOS2SpriteSheet();
 
-        try
-        {
-            BTOS2Compatibility.Init();
-        }
-        catch (Exception ex)
-        {
-            Logging.LogError(ex);
-        }
+        BTOS2Compatibility.BTOS2Patched = BTOS2Compatibility.Init();
     }
 
     private static Texture2D EmptyTexture() => new(2, 2, TextureFormat.ARGB32, true);
