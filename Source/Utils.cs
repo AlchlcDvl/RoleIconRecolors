@@ -535,7 +535,7 @@ public static class Utils
         }
     }
 
-    public static Role GetNecro(ModType? mod = null)
+    /*public static Role GetNecro(ModType? mod = null)
     {
         try
         {
@@ -550,7 +550,7 @@ public static class Utils
         {
             return Role.NECROMANCER;
         }
-    }
+    }*/
 
     public static Role GetWar(ModType? mod = null)
     {

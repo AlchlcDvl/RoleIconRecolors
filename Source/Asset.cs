@@ -1,4 +1,4 @@
-/*namespace IconPacks;
+namespace IconPacks;
 
 public class Asset
 {
@@ -12,10 +12,12 @@ public class Asset
 
     public string FolderPath()
     {
+        var path = Path.Combine(AssetManager.ModPath, Pack);
+
         if (Pack is "Vanilla" or "BTOS2")
-            return Path.Combine(AssetManager.ModPath, Pack);
+            return path;
         else
-            return Path.Combine(AssetManager.ModPath, Pack, Mod, Folder);
+            return Path.Combine(path, Mod, Folder);
     }
 
     public string DownloadLink()
@@ -23,6 +25,6 @@ public class Asset
         if (Pack is "Vanilla" or  "BTOS2")
             return $"{Pack}/{Name}.{FileType}";
         else
-            return $"{Pack}/{Folder}/{Name}.{FileType}";
+            return $"{Pack}/{Mod}/{Folder}/{Name}.{FileType}";
     }
-}*/
+}

@@ -1,5 +1,3 @@
-using System.Diagnostics;
-
 namespace IconPacks;
 
 [SalemMod]
@@ -15,7 +13,7 @@ public class Recolors
         try
         {
             AssetManager.LoadAssets();
-            MenuButton.Icon = AssetManager.Thumbnail;
+            IconPacks.Icon = AssetManager.Thumbnail;
         }
         catch (Exception e)
         {
@@ -25,19 +23,18 @@ public class Recolors
         Logging.LogMessage("Recoloured!", true);
     }
 
-    public static readonly SalemMenuButton MenuButton = new()
+    public static readonly SalemMenuButton IconPacks = new()
     {
-        Label = "Open Icons Folder",
-        OnClick = Open
+        Label = "Icon Packs",
+        OnClick = OpenMenu
     };
 
-    public static void Open()
+    public static void OpenMenu()
     {
-        // code stolen from jan who stole from tuba
-        if (Environment.OSVersion.Platform is PlatformID.MacOSX or PlatformID.Unix)
-            Process.Start("open", $"\"{AssetManager.ModPath}\"");
-        else
-            Application.OpenURL($"file://{AssetManager.ModPath}");
+        var go = UObject.Instantiate(FromAssetBundle.LoadGameObject($"{AssetManager.Resources}DownloaderUI", "DownloaderUI"), CacheHomeSceneController.Controller.SafeArea.transform, false);
+        go.transform.localPosition = new(0, 0, 0);
+        go.transform.localScale = new(2.25f, 2.25f, 2.25f);
+        go.AddComponent<DownloadController>();
     }
 
     public ModSettings.DropdownSetting SelectedIconPack => new()

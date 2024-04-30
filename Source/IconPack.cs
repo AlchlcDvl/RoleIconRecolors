@@ -15,7 +15,7 @@ public class IconPack(string name)
     private static readonly string[] CommonFolders = [ "Regular", "Town", "Coven", "SerialKiller", "Arsonist", "Werewolf", "Shroud", "Apocalypse", "VIP", "Jester", "Pirate", "Doomsayer",
         "Vampire", "CursedSoul" ];
     private static readonly string[] VanillaFolders = [ "Executioner" ];
-    private static readonly string[] BTOS2Folders = [ "Judge", "Auditor", "Starspawn", "Inquisitor", "Jackal", "Lions", "Frogs", "Hawks", "Pandora", "Egoist" ];
+    private static readonly string[] BTOS2Folders = [ "Judge", "Auditor", "Starspawn", "Inquisitor", "Jackal", "Lions", "Frogs", "Hawks", "Pandora", "Egoist", "Compliant" ];
     private static readonly string[] MainFolders = [ "Common", "Vanilla", "BTOS2", "PlayerNumbers" ];
     private static readonly string[] Mods = [ "Vanilla", "BTOS2" ];
     private static readonly Dictionary<string, string[]> ModsToFolders = new()

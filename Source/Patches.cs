@@ -8,7 +8,8 @@ using Game.Chat.Decoders;
 using Server.Shared.Messages;
 using Server.Shared.State.Chat;
 using Home.Shared;
-//using Home.LoginScene;
+using Home.LoginScene;
+using Home.HomeScene;
 
 namespace IconPacks;
 
@@ -128,7 +129,7 @@ public static class PatchRoleCards
         if (!special.IsValid() && reg)
             special = AssetManager.GetSprite(specialName, ogfaction);
 
-        if (special.IsValid() && specialAbilityPanel && !(role == Utils.GetNecro() && !Constants.IsNecroActive))
+        if (special.IsValid() && specialAbilityPanel)
             specialAbilityPanel.sprite = special;
 
         var abilityname = $"{name}_Ability";
@@ -169,7 +170,7 @@ public static class PatchRoleCards
         if (!ability2.IsValid() && reg)
             ability2 = AssetManager.GetSprite(abilityname2, ogfaction);
 
-        if (ability2.IsValid() && roleInfoButtons.IsValid(index) && role != Utils.GetWar())
+        if (ability2.IsValid() && roleInfoButtons.IsValid(index) && !(role == Utils.GetWar() && !isGuide))
         {
             roleInfoButtons[index].abilityIcon.sprite = ability2;
             index++;
@@ -400,10 +401,10 @@ public static class PatchDoomsayerLeaving
 [HarmonyPatch(typeof(HomeInterfaceService), nameof(HomeInterfaceService.Init))]
 public static class CacheDefaults
 {
-    public static bool ServiceExists;
+    public static bool ServiceExists { get; private set; }
 
-    public static TMP_SpriteAsset RoleIcons;
-    public static TMP_SpriteAsset Numbers;
+    public static TMP_SpriteAsset RoleIcons { get; private set; }
+    public static TMP_SpriteAsset Numbers { get; private set; }
 
     private static readonly List<string> Assets = [ "Cast", "LobbyIcons", "MiscIcons", "PlayerNumbers", "RoleIcons", "SalemTmpIcons", "TrialReportIcons" ];
 
@@ -718,14 +719,19 @@ public static class RemoveTextIconFromPlayerPopupBecauseWhyIsItThere
     }
 }
 
-/*[HarmonyPatch(typeof(LoginSceneController), nameof(LoginSceneController.Start))]
+[HarmonyPatch(typeof(LoginSceneController), nameof(LoginSceneController.Start))]
 public static class HandlePacks
 {
-    public static void Prefix()
-    {
+    public static void Prefix() => DownloadController.HandlePackData();
+}
 
-    }
-}*/
+[HarmonyPatch(typeof(HomeSceneController), nameof(HomeSceneController.Start))]
+public static class CacheHomeSceneController
+{
+    public static HomeSceneController Controller { get; private set; }
+
+    public static void Prefix(HomeSceneController __instance) => Controller = __instance;
+}
 
 [HarmonyPatch(typeof(DownloadContributorTags), nameof(DownloadContributorTags.AddTMPSprites))]
 [HarmonyPriority(Priority.VeryLow)]
@@ -776,7 +782,7 @@ public static class ReplaceTMPSpritesPatch
                 var deconstructed = Constants.CurrentStyle;
 
                 if (str.Contains("(") && !str.Contains("Blank"))
-                    deconstructed = str.Replace("RoleIcons (", "").Replace(")", "").Replace("BTOS", "").Replace("Legacy", "");
+                    deconstructed = str.Replace("RoleIcons (", "").Replace(")", "").Replace("BTOS", "");
 
                 var defaultSprite = mod switch
                 {

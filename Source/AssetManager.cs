@@ -2,22 +2,22 @@ namespace IconPacks;
 
 public static class AssetManager
 {
-    private const string Resources = "IconPacks.Resources.";
+    public const string Resources = "IconPacks.Resources.";
 
     public static readonly Dictionary<string, Dictionary<string, List<Sprite>>> GlobalEasterEggs = [];
     public static readonly Dictionary<string, IconPack> IconPacks = [];
     public static readonly Dictionary<int, Sprite> CacheScrollSprites = [];
 
-    public static Sprite Blank;
-    public static Sprite Thumbnail;
-    public static Sprite Attack;
-    public static Sprite Defense;
-    public static Sprite Ethereal;
+    public static Sprite Blank { get; private set; }
+    public static Sprite Thumbnail { get; private set; }
+    public static Sprite Attack { get; private set; }
+    public static Sprite Defense { get; private set; }
+    public static Sprite Ethereal { get; private set; }
 
-    public static TMP_SpriteAsset Vanilla1;
-    public static TMP_SpriteAsset Vanilla2;
-    public static TMP_SpriteAsset BTOS2_1;
-    public static TMP_SpriteAsset BTOS2_2;
+    public static TMP_SpriteAsset Vanilla1 { get; private set; }
+    public static TMP_SpriteAsset Vanilla2 { get; private set; }
+    public static TMP_SpriteAsset BTOS2_1 { get; private set; }
+    public static TMP_SpriteAsset BTOS2_2 { get; private set; }
 
     public static string ModPath => Path.Combine(Path.GetDirectoryName(Application.dataPath), "SalemModLoader", "ModFolders", "Recolors");
 
