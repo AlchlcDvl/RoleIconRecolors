@@ -26,6 +26,7 @@ public class DownloadController : UIController
     private GameObject NoPacks;
     private GameObject PackTemplate;
     private GameObject ScrollView;
+
     private readonly List<GameObject> PackGOs = [];
 
     private static TMP_FontAsset GameFont;
@@ -38,6 +39,12 @@ public class DownloadController : UIController
     }
 
     public void OnDestroy() => StopCoroutine(SetupMenu());
+
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+            gameObject.Destroy();
+    }
 
     public void CacheObjects()
     {
@@ -85,7 +92,11 @@ public class DownloadController : UIController
             var go = Instantiate(PackTemplate, PackTemplate.transform.parent);
             go.name = packName;
             go.transform.Find("PackName").GetComponent<TextMeshProUGUI>().SetText(packName);
-            go.transform.Find("RepoLink").GetComponent<TextMeshProUGUI>().SetText(packJson.Link());
+            var link = go.transform.Find("RepoLink");
+            var linkText = packJson.PackLink();
+            link.GetComponentInChildren<TextMeshProUGUI>().SetText(linkText);
+            link.GetComponent<Button>().onClick.AddListener(() => Application.OpenURL(linkText));
+            link.gameObject.AddComponent<TooltipTrigger>().NonLocalizedString = "Click To Copy Link To Clipboard";
             go.transform.Find("PackJSONLink").GetComponent<TextMeshProUGUI>().SetText(packJson.JsonLink());
             var button = go.transform.Find("Download");
             button.GetComponent<Button>().onClick.AddListener(() => DownloadIcons(packName));
@@ -106,24 +117,28 @@ public class DownloadController : UIController
 
         if (StringUtils.IsNullEmptyOrWhiteSpace(name))
         {
-            Logging.LogError("Tried to create json link with no pack name");
+            Logging.LogError("Tried to generate pack link with no pack name");
             return;
         }
 
         var packJson = new PackJson()
         {
             Name = name,
-            RepoName = RepoName.GetComponent<TMP_InputField>().text,
-            RepoOwner = RepoOwner.GetComponent<TMP_InputField>().text,
-            Branch = BranchName.GetComponent<TMP_InputField>().text,
-            JsonName = JsonName.GetComponent<TMP_InputField>().text,
+            RepoName = RepoName.GetComponent<TMP_InputField>().text ?? "RoleIconRecolors",
+            RepoOwner = RepoOwner.GetComponent<TMP_InputField>().text ?? "AlchlcDvl",
+            Branch = BranchName.GetComponent<TMP_InputField>().text ?? "main",
+            JsonName = JsonName.GetComponent<TMP_InputField>().text ?? name,
         };
         packJson.SetDefaults();
         Packs[packJson.Name] = packJson;
         var go = Instantiate(PackTemplate, PackTemplate.transform.parent);
         go.name = packJson.Name;
         go.transform.Find("PackName").GetComponent<TextMeshProUGUI>().SetText(packJson.Name);
-        go.transform.Find("RepoLink").GetComponent<TextMeshProUGUI>().SetText(packJson.Link());
+        var link = go.transform.Find("RepoLink");
+        var linkText = packJson.PackLink();
+        link.GetComponentInChildren<TextMeshProUGUI>().SetText(linkText);
+        link.GetComponent<Button>().onClick.AddListener(() => Application.OpenURL(linkText));
+        link.gameObject.AddComponent<TooltipTrigger>().NonLocalizedString = "Click To Copy Link To Clipboard";
         go.transform.Find("PackJSONLink").GetComponent<TextMeshProUGUI>().SetText(packJson.JsonLink());
         var button = go.transform.Find("Download");
         button.GetComponent<Button>().onClick.AddListener(() => DownloadIcons(packJson.Name));
@@ -135,18 +150,16 @@ public class DownloadController : UIController
         PackGOs.Add(go);
     }
 
-    public static void HandlePackData() => HandlePackData(REPO);
+    public static void HandlePackData() => ApplicationController.ApplicationContext.StartCoroutine(CoHandlePackData());
 
-    public static void HandlePackData(string url) => ApplicationController.ApplicationContext.StartCoroutine(CoHandlePackData(url));
-
-    private static IEnumerator CoHandlePackData(string url)
+    private static IEnumerator CoHandlePackData()
     {
         if (HandlerRunning)
             yield break;
 
         HandlerRunning = true;
 
-        var www = UnityWebRequest.Get($"{url}/Packs.json");
+        var www = UnityWebRequest.Get($"{REPO}/Packs.json");
         yield return www.SendWebRequest();
 
         while (!www.isDone)

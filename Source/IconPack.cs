@@ -13,8 +13,8 @@ public class IconPack(string name)
     private string PackPath => Path.Combine(AssetManager.ModPath, Name);
 
     private static readonly string[] CommonFolders = [ "Regular", "Town", "Coven", "SerialKiller", "Arsonist", "Werewolf", "Shroud", "Apocalypse", "VIP", "Jester", "Pirate", "Doomsayer",
-        "Vampire", "CursedSoul" ];
-    private static readonly string[] VanillaFolders = [ "Executioner" ];
+        "Vampire", "CursedSoul", "Executioner" ];
+    private static readonly string[] VanillaFolders = [];
     private static readonly string[] BTOS2Folders = [ "Judge", "Auditor", "Starspawn", "Inquisitor", "Jackal", "Lions", "Frogs", "Hawks", "Pandora", "Egoist", "Compliant" ];
     private static readonly string[] MainFolders = [ "Common", "Vanilla", "BTOS2", "PlayerNumbers" ];
     private static readonly string[] Mods = [ "Vanilla", "BTOS2" ];
@@ -234,7 +234,7 @@ public class IconPack(string name)
                 for (var i = 0; i < 16; i++)
                 {
                     if (!NumberSprites.TryGetValue($"{i}", out var sprite))
-                        sprite = Witchcraft.Witchcraft.Assets.TryGetValue($"{i}", out var sprite1) ? sprite1 : AssetManager.Blank;
+                        sprite = AssetManager.Assets.TryGetValue($"{i}", out var sprite1) ? sprite1 : AssetManager.Blank;
 
                     if (sprite.IsValid())
                     {
@@ -308,10 +308,10 @@ public class IconPack(string name)
                         }
 
                         if (!sprite.IsValid())
-                            sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name2 + $"_{mod}", out sprite1) ? sprite1 : AssetManager.Blank;
+                            sprite = AssetManager.Assets.TryGetValue(name2 + $"_{mod}", out sprite1) ? sprite1 : AssetManager.Blank;
 
                         if (!sprite.IsValid())
-                            sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name2, out sprite1) ? sprite1 : AssetManager.Blank;
+                            sprite = AssetManager.Assets.TryGetValue(name2, out sprite1) ? sprite1 : AssetManager.Blank;
 
                         if (sprite.IsValid())
                         {
@@ -387,10 +387,10 @@ public class IconPack(string name)
                         }
 
                         if (!sprite.IsValid())
-                            sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name2 + $"_{mod}", out sprite1) ? sprite1 : AssetManager.Blank;
+                            sprite = AssetManager.Assets.TryGetValue(name2 + $"_{mod}", out sprite1) ? sprite1 : AssetManager.Blank;
 
                         if (!sprite.IsValid())
-                            sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name2, out sprite1) ? sprite1 : AssetManager.Blank;
+                            sprite = AssetManager.Assets.TryGetValue(name2, out sprite1) ? sprite1 : AssetManager.Blank;
 
                         if (sprite.IsValid())
                         {

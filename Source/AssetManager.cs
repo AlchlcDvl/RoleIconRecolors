@@ -7,6 +7,7 @@ public static class AssetManager
     public static readonly Dictionary<string, Dictionary<string, List<Sprite>>> GlobalEasterEggs = [];
     public static readonly Dictionary<string, IconPack> IconPacks = [];
     public static readonly Dictionary<int, Sprite> CacheScrollSprites = [];
+    public static readonly Dictionary<string, Sprite> Assets = [];
 
     public static Sprite Blank { get; private set; }
     public static Sprite Thumbnail { get; private set; }
@@ -19,12 +20,15 @@ public static class AssetManager
     public static TMP_SpriteAsset BTOS2_1 { get; private set; }
     public static TMP_SpriteAsset BTOS2_2 { get; private set; }
 
+    public static AssetBundle Bundle { get; set; }
+    public static GameObject UI { get; set; }
+
     public static string ModPath => Path.Combine(Path.GetDirectoryName(Application.dataPath), "SalemModLoader", "ModFolders", "Recolors");
 
-    private static readonly string[] Avoid = [ "Necronomicon", "Neutral", "Town", "Coven", "SlowMode", "FastMode", "Any", "Recruit", "Stoned", "SecretKillers", "HiddenRoles", "OneTrial",
-        "RandomApocalypse", "TownTraitor", "PerfectTown", "NecroPass", "Anon", "WalkingDead", "ExeTarget", "Hexed", "Knighted", "Bread", "Revealed", "Disconnected", "Connecting", "Lovers",
-        "Doused", "Plagued", "Revealed", "Trapped", "Hangover", "Silenced", "Dreamwoven", "Insane", "Bugged", "Tracked", "Sickness", "Reaped", "Deafened", "Audited", "Enchanted", "Egoist",
-        "Accompanied", "Banned", "SpeakingSpirits" ];
+    private static readonly string[] Avoid = [ "Necronomicon", "Neutral", "Town", "Coven", "SlowMode", "FastMode", "Any", "Recruit", "Stoned", "Secret", "HiddenRoles", "OneTrial", "Doused",
+        "RandomApocalypse", "TownTraitor", "PerfectTown", "NecroPass", "Anon", "WalkingDead", "ExeTarget", "Hexed", "Knighted", "Bread", "Revealed", "Disconnected", "Connecting", "Plagued",
+        "Revealed", "Trapped", "Hangover", "Silenced", "Dreamwoven", "Insane", "Bugged", "Tracked", "Sickness", "Reaped", "Deafened", "Audited", "Enchanted", "Egoist", "Accompanied",
+        "Banned", "SpeakingSpirits", "WarlockCursed", "Secret", "CompliantKillers", "PandorasBox" ];
 
     private static readonly string[] ToRemove = [ ".png", ".jpg" ];
 
@@ -101,23 +105,32 @@ public static class AssetManager
                     Blank = sprite;
                 else if (x.Contains("Thumbnail"))
                     Thumbnail = sprite;
+                else if (x.Contains("Attack"))
+                    Attack = sprite;
+                else if (x.Contains("Defense"))
+                    Defense = sprite;
+                else if (x.Contains("Ethereal"))
+                    Ethereal = sprite;
+                else
+                    Assets[sprite.name] = sprite;
             }
         });
 
-        Attack = Witchcraft.Witchcraft.Assets["Attack"];
-        Defense = Witchcraft.Witchcraft.Assets["Defense"];
-        Ethereal = Witchcraft.Witchcraft.Assets["Ethereal"];
+        Bundle = FromAssetBundle.GetAssetBundleFromResources($"{Resources}Assets", Core);
+
+        UI = Bundle.LoadAsset<GameObject>("DownloaderUI");
+        Bundle.LoadAllAssets<Sprite>().ForEach(x => Assets[x.name] = x);
 
         TryLoadingSprites(Constants.CurrentPack);
         LoadVanillaSpriteSheets();
 
         try
         {
-            DumpBTOSSpriteSheet();
+            LoadBTOS();
         } catch {}
     }
 
-    private static void DumpBTOSSpriteSheet()
+    private static void LoadBTOS()
     {
         if (!Constants.BTOS2Exists)
             return;
@@ -164,6 +177,29 @@ public static class AssetManager
         }
     }
 
+    private static Sprite LoadSprite(Texture2D texture, string path = null)
+    {
+        try
+        {
+            var sprite = Sprite.Create(texture, new(0, 0, texture.width, texture.height), new(0.5f, 0.5f), 100);
+
+            if (sprite == null)
+            {
+                Logging.LogError($"Uh oh sprite loading error at {path}");
+                return null;
+            }
+
+            sprite.hideFlags |= HideFlags.DontUnloadUnusedAsset;
+            sprite.name = texture.name;
+            return sprite.DontDestroy();
+        }
+        catch (Exception e)
+        {
+            Logging.LogError($"Error loading {path}\n{e}");
+            return null;
+        }
+    }
+
     public static Sprite LoadDiskSprite(string fileName, string subfolder, string folder, string superfolder, string filetype) => LoadDiskSprite(fileName, Path.Combine(ModPath, superfolder,
         folder, subfolder, $"{fileName.SanitisePath()}.{filetype}"));
 
@@ -190,17 +226,7 @@ public static class AssetManager
                 return null;
             }
 
-            var sprite = Sprite.Create(texture, new(0, 0, texture.width, texture.height), new(0.5f, 0.5f), 100);
-
-            if (sprite == null)
-            {
-                Logging.LogError($"Uh oh sprite loading error at {path}");
-                return null;
-            }
-
-            sprite.hideFlags |= HideFlags.DontUnloadUnusedAsset;
-            sprite.name = texture.name;
-            return sprite.DontDestroy();
+            return LoadSprite(texture, path);
         }
         catch (Exception e)
         {
@@ -393,8 +419,12 @@ public static class AssetManager
             foreach (var (role, (_, roleInt)) in index)
             {
                 var name = Utils.RoleName((Role)roleInt, ModType.Vanilla);
+                var sprite = Assets.TryGetValue(name + "_Vanilla", out var sprite1) ? sprite1 : Blank;
 
-                if (Witchcraft.Witchcraft.Assets.TryGetValue(name, out var sprite) && sprite.IsValid())
+                if (!sprite.IsValid())
+                    sprite = Assets.TryGetValue(name, out sprite1) ? sprite1 : Blank;
+
+                if (sprite.IsValid())
                 {
                     sprite.name = sprite.texture.name = role;
                     sprites.Add(sprite);
@@ -419,7 +449,7 @@ public static class AssetManager
 
             for (var i = 0; i < 16; i++)
             {
-                var sprite = Witchcraft.Witchcraft.Assets.TryGetValue($"{i}", out var sprite1) ? sprite1 : Blank;
+                var sprite = Assets.TryGetValue($"{i}", out var sprite1) ? sprite1 : Blank;
 
                 if (sprite.IsValid())
                 {
@@ -451,10 +481,10 @@ public static class AssetManager
             foreach (var (role, (_, roleInt)) in index)
             {
                 var name = Utils.RoleName((Role)roleInt, ModType.BTOS2);
-                var sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name + "_BTOS2", out var sprite1) ? sprite1 : Blank;
+                var sprite = Assets.TryGetValue(name + "_BTOS2", out var sprite1) ? sprite1 : Blank;
 
                 if (!sprite.IsValid())
-                    sprite = Witchcraft.Witchcraft.Assets.TryGetValue(name, out sprite1) ? sprite1 : Blank;
+                    sprite = Assets.TryGetValue(name, out sprite1) ? sprite1 : Blank;
 
                 if (sprite.IsValid())
                 {

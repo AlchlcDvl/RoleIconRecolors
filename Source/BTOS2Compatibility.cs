@@ -9,6 +9,12 @@ public static class BTOS2Compatibility
     private static Assembly BTOS2Assembly { get; set; }
 
     private static Type BookPassingMenuListItemControllerType { get; set; }
+    private static Type VoteForType { get; set; }
+
+    private static Type RoleDeckPlusPanelControllerType { get; set; }
+    private static Type DeckItemType { get; set; }
+
+    private static Type MenuRoleType { get; set; }
 
     public static bool BTOS2Patched { get; set; }
 
@@ -25,14 +31,27 @@ public static class BTOS2Compatibility
             BTOS2Types = AccessTools.GetTypesFromAssembly(BTOS2Assembly);
 
             BookPassingMenuListItemControllerType = BTOS2Types.FirstOrDefault(x => x.Name == "BookPassingMenuListItemController");
+            VoteForType = BTOS2Types.FirstOrDefault(x => x.Name == "VoteForNecroMessage");
+
+            RoleDeckPlusPanelControllerType = BTOS2Types.FirstOrDefault(x => x.Name == "RoleDeckPlusPanelController");
+            DeckItemType = BTOS2Types.FirstOrDefault(x => x.Name.Contains("DeckItem") && !x.Name.Contains("ItemType"));
+
+            MenuRoleType = BTOS2Types.FirstOrDefault(x => x.Name.Contains("MenuRole"));
 
             var awakeMethod = AccessTools.Method(BookPassingMenuListItemControllerType, "Awake");
 
-            var voteForType = BTOS2Types.FirstOrDefault(x => x.Name == "VoteForNecroMessage");
-            var handleItemVoteMethod = AccessTools.Method(BookPassingMenuListItemControllerType, "HandleVote", [ voteForType ]);
+            var handleItemVoteMethod = AccessTools.Method(BookPassingMenuListItemControllerType, "HandleVote", [ VoteForType ]);
 
-            BTOS2PatchesHarmony.Patch(awakeMethod, null, new(AccessTools.Method(typeof(BTOS2Compatibility), nameof(ItemPostfix1))));
-            BTOS2PatchesHarmony.Patch(handleItemVoteMethod, null, new(AccessTools.Method(typeof(BTOS2Compatibility), nameof(ItemPostfix2))));
+            var setDataMethod = AccessTools.Method(DeckItemType, "SetData", [ typeof(Role), typeof(FactionType), typeof(bool), RoleDeckPlusPanelControllerType ]);
+
+            var refreshDataMethod = AccessTools.Method(MenuRoleType, "RefreshData");
+
+            var compatType = typeof(BTOS2Compatibility);
+
+            BTOS2PatchesHarmony.Patch(awakeMethod, null, new(AccessTools.Method(compatType, nameof(ItemPostfix1))));
+            BTOS2PatchesHarmony.Patch(handleItemVoteMethod, null, new(AccessTools.Method(compatType, nameof(ItemPostfix2))));
+            BTOS2PatchesHarmony.Patch(setDataMethod, null, new(AccessTools.Method(compatType, nameof(ItemPostfix3))));
+            BTOS2PatchesHarmony.Patch(refreshDataMethod, null, new(AccessTools.Method(compatType, nameof(ItemPostfix4))));
             return true;
         }
         catch (Exception ex)
@@ -102,5 +121,65 @@ public static class BTOS2Compatibility
 
         if (sprite.IsValid() && image)
             image.sprite = sprite;
+    }
+
+    public static void ItemPostfix3(dynamic __instance, Role a_role, FactionType faction, bool isBan)
+    {
+        if (!Constants.EnableIcons)
+            return;
+
+        var roleIcon = (Image)AccessTools.Field(DeckItemType, "roleIcon").GetValue(__instance);
+
+        if (!roleIcon)
+            return;
+
+        if (isBan)
+        {
+            var sprite2 = AssetManager.GetSprite("Banned");
+
+            if (sprite2.IsValid())
+                roleIcon.sprite = sprite2;
+
+            return;
+        }
+
+        var ogfaction = a_role.GetFactionType(ModType.BTOS2);
+        var reg = ogfaction != faction;
+        var name = Utils.RoleName(a_role);
+        var sprite = AssetManager.GetSprite(reg, name, Utils.FactionName(faction));
+
+        if (!sprite.IsValid() && reg)
+            sprite = AssetManager.GetSprite(name, Utils.FactionName(ogfaction));
+
+        if (sprite.IsValid())
+            roleIcon.sprite = sprite;
+    }
+
+    public static void ItemPostfix4(dynamic __instance)
+    {
+        if (!Constants.EnableIcons)
+            return;
+
+        var roleIcon = (Image)AccessTools.Field(MenuRoleType, "icon").GetValue(__instance);
+
+        if (!roleIcon)
+            return;
+
+        var role = (Role)AccessTools.Field(MenuRoleType, "role").GetValue(__instance);
+        var sprite = AssetManager.GetSprite(Utils.RoleName(role), Utils.FactionName(role.GetFactionType()));
+
+        if (sprite.IsValid())
+            roleIcon.sprite = sprite;
+
+        var banned = (GameObject)AccessTools.Field(MenuRoleType, "banned").GetValue(__instance);
+
+        if (!banned)
+            return;
+
+        var bannedIcon = banned.GetComponent<Image>();
+        var bannedSprite = AssetManager.GetSprite("Banned");
+
+        if (bannedIcon && bannedSprite.IsValid())
+            bannedIcon.sprite = bannedSprite;
     }
 }

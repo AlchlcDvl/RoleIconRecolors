@@ -74,8 +74,9 @@ public static class BTOS2Role
     public const Role Inquisitor = (Role)59;
     public const Role Starspawn = (Role)60;
     public const Role Oracle = (Role)61;
+    public const Role Warlock = (Role)62;
 
-    public const Role RoleCount = (Role)62;
+    public const Role RoleCount = (Role)63;
 
     // Buckets
     public const Role TrueAny = Role.RANDOM_TOWN;
@@ -116,6 +117,18 @@ public static class BTOS2Role
     public const Role Teams = (Role)213;
     public const Role AnonNames = (Role)214;
     public const Role WalkingDead = (Role)215;
+    public const Role Egoist = (Role)216;
+    public const Role SpeakingSpirits = (Role)217;
+    public const Role SecretObjectives = (Role)218;
+    public const Role NoLastWills = (Role)219;
+    public const Role Immovable = (Role)220;
+    public const Role CompliantKillers = (Role)221;
+    public const Role PoandorasBox = (Role)222;
+    public const Role BallotVoting = (Role)223;
+    public const Role Individuality = (Role)224;
+    public const Role Snitch = (Role)225;
+    public const Role CovenVIP = (Role)226;
+    public const Role SecretWhispers = (Role)227;
 
     // Special part 2
     public const Role Hangman = Role.HANGMAN;
@@ -154,4 +167,7 @@ public static class BTOS2Faction
     public const FactionType Auditor = (FactionType)39;
     public const FactionType Inquisitor = (FactionType)40;
     public const FactionType Starspawn = (FactionType)41;
+    public const FactionType Egoist = (FactionType)42;
+    public const FactionType Pandora = (FactionType)43;
+    public const FactionType Compliance = (FactionType)44;
 }

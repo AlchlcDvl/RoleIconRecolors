@@ -31,7 +31,7 @@ public class Recolors
 
     public static void OpenMenu()
     {
-        var go = UObject.Instantiate(FromAssetBundle.LoadGameObject($"{AssetManager.Resources}DownloaderUI", "DownloaderUI"), CacheHomeSceneController.Controller.SafeArea.transform, false);
+        var go = UObject.Instantiate(AssetManager.UI, CacheHomeSceneController.Controller.SafeArea.transform, false);
         go.transform.localPosition = new(0, 0, 0);
         go.transform.localScale = new(2.25f, 2.25f, 2.25f);
         go.AddComponent<DownloadController>();
@@ -40,7 +40,7 @@ public class Recolors
     public ModSettings.DropdownSetting SelectedIconPack => new()
     {
         Name = "Selected Icon Pack",
-        Description = "The selected icon will start replacing the visible icons with the images you put in. If it can't find the valid image or pack, it will be replaced by the mod's default files. May require a game restart for the mentions to change.\nVanilla - No pack selected.",
+        Description = "The selected icon will start replacing the visible icons with the images you put in. If it can't find the valid image or pack, it will be replaced by the mod's default files. May require a game restart for the in-text icons to change.\nVanilla - No pack selected.",
         Options = GetPackNames(),
         OnChanged = AssetManager.TryLoadingSprites
     };
