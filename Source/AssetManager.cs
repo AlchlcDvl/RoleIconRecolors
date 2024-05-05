@@ -27,7 +27,7 @@ public static class AssetManager
 
     private static readonly string[] Avoid = [ "Necronomicon", "Neutral", "Town", "Coven", "SlowMode", "FastMode", "Any", "Recruit", "Stoned", "Secret", "HiddenRoles", "OneTrial", "Doused",
         "RandomApocalypse", "TownTraitor", "PerfectTown", "NecroPass", "Anon", "WalkingDead", "ExeTarget", "Hexed", "Knighted", "Bread", "Revealed", "Disconnected", "Connecting", "Plagued",
-        "Revealed", "Trapped", "Hangover", "Silenced", "Dreamwoven", "Insane", "Bugged", "Tracked", "Sickness", "Reaped", "Deafened", "Audited", "Enchanted", "Egoist", "Accompanied",
+        "Revealed", "Trapped", "Hangover", "Silenced", "Dreamwoven", "Insane", "Bugged", "Tracked", "Sickness", "Reaped", "Deafened", "Audited", "Enchanted", "Egotist", "Accompanied",
         "Banned", "SpeakingSpirits", "WarlockCursed", "Secret", "CompliantKillers", "PandorasBox" ];
 
     private static readonly string[] ToRemove = [ ".png", ".jpg" ];
@@ -56,7 +56,13 @@ public static class AssetManager
             return Blank;
         }
 
-        var type = Constants.IsLocalVIP ? "VIP" : faction;
+        var type = faction;
+
+        if (Constants.IsNecroActive)
+            type = "Necronomicon";
+        else if (Constants.IsLocalVIP)
+            type = "VIP";
+
         var mod = Utils.GetGameType();
 
         try
@@ -72,6 +78,22 @@ public static class AssetManager
 
                 if (type != "Regular" && !sprite.IsValid())
                     sprite = pack.GetSprite(name, allowEE, "Regular");
+            }
+
+            if (!sprite.IsValid() && type != faction)
+            {
+                sprite = pack.GetSprite(name + $"_{mod}", allowEE, faction);
+
+                if (!sprite.IsValid())
+                    sprite = pack.GetSprite(name, allowEE, faction);
+
+                if (faction != "Regular" && !sprite.IsValid() && !skipRegular)
+                {
+                    sprite = pack.GetSprite(name + $"_{mod}", allowEE, "Regular");
+
+                    if (faction != "Regular" && !sprite.IsValid())
+                        sprite = pack.GetSprite(name, allowEE, "Regular");
+                }
             }
 
             return sprite ?? Blank;

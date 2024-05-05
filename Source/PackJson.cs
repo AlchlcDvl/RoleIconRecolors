@@ -12,7 +12,7 @@ public class PackJson
 
     public string RawLink() => $"https://raw.githubusercontent.com/{RepoOwner}/{RepoName}/{Branch}";
 
-    public string PackLink() => $"https://github.com/{RepoOwner}/{RepoName}/{Name}";
+    public string PackLink() => $"{Link()}/{Name}";
 
     public string Link() => $"https://github.com/{RepoOwner}/{RepoName}";
 

@@ -26,6 +26,8 @@ public class DownloadController : UIController
     private GameObject NoPacks;
     private GameObject PackTemplate;
     private GameObject ScrollView;
+    private Scrollbar Scroll;
+    private float Value;
 
     private readonly List<GameObject> PackGOs = [];
 
@@ -59,6 +61,8 @@ public class DownloadController : UIController
         BranchName = transform.Find("Inputs/BranchName").gameObject;
         JsonName = transform.Find("Inputs/JsonName").gameObject;
         PackTemplate = transform.Find("ScrollView/Viewport/Content/PackTemplate").gameObject;
+        Scroll = transform.Find("ScrollView/ScrollbarVertical").GetComponent<Scrollbar>();
+        Value = Scroll.value;
 
         GameFont = ApplicationController.ApplicationContext.FontControllerSource.fonts[0].tmp_FontAsset;
         GameFontMaterial = ApplicationController.ApplicationContext.FontControllerSource.fonts[0].standardFontMaterial;
@@ -86,6 +90,7 @@ public class DownloadController : UIController
         NoPacks.SetActive(Packs.Count == 0);
         ScrollView.SetActive(Packs.Count > 0);
         PackTemplate.SetActive(false);
+        var time = 0f;
 
         foreach (var (packName, packJson) in Packs)
         {
@@ -106,8 +111,16 @@ public class DownloadController : UIController
             go.transform.localPosition = pos;
             go.SetActive(true);
             PackGOs.Add(go);
+            time += Time.deltaTime;
+
+            if (time > 0.1f)
+            {
+                time = 0f;
+                yield return new WaitForEndOfFrame();
+            }
         }
 
+        Scroll.value = Value * PackGOs.Count / 3;
         yield break;
     }
 
@@ -148,6 +161,7 @@ public class DownloadController : UIController
         go.transform.localPosition = pos;
         go.SetActive(true);
         PackGOs.Add(go);
+        Scroll.value = Value * PackGOs.Count / 3;
     }
 
     public static void HandlePackData() => ApplicationController.ApplicationContext.StartCoroutine(CoHandlePackData());

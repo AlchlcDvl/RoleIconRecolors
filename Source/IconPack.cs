@@ -13,9 +13,9 @@ public class IconPack(string name)
     private string PackPath => Path.Combine(AssetManager.ModPath, Name);
 
     private static readonly string[] CommonFolders = [ "Regular", "Town", "Coven", "SerialKiller", "Arsonist", "Werewolf", "Shroud", "Apocalypse", "VIP", "Jester", "Pirate", "Doomsayer",
-        "Vampire", "CursedSoul", "Executioner" ];
+        "Vampire", "CursedSoul", "Executioner", "Necronomicon" ];
     private static readonly string[] VanillaFolders = [];
-    private static readonly string[] BTOS2Folders = [ "Judge", "Auditor", "Starspawn", "Inquisitor", "Jackal", "Lions", "Frogs", "Hawks", "Pandora", "Egoist", "Compliant" ];
+    private static readonly string[] BTOS2Folders = [ "Judge", "Auditor", "Starspawn", "Inquisitor", "Jackal", "Lions", "Frogs", "Hawks", "Pandora", "Egotist", "Compliance" ];
     private static readonly string[] MainFolders = [ "Common", "Vanilla", "BTOS2", "PlayerNumbers" ];
     private static readonly string[] Mods = [ "Vanilla", "BTOS2" ];
     private static readonly Dictionary<string, string[]> ModsToFolders = new()

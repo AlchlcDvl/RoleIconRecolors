@@ -16,6 +16,8 @@ public static class BTOS2Compatibility
 
     private static Type MenuRoleType { get; set; }
 
+    private static Type OracleMenuControllerListItemType { get; set; }
+
     public static bool BTOS2Patched { get; set; }
 
     public static bool Init()
@@ -38,20 +40,25 @@ public static class BTOS2Compatibility
 
             MenuRoleType = BTOS2Types.FirstOrDefault(x => x.Name.Contains("MenuRole"));
 
+            OracleMenuControllerListItemType = BTOS2Types.FirstOrDefault(x => x.Name.Contains("OracleMenuControllerListItem"));
+
             var awakeMethod = AccessTools.Method(BookPassingMenuListItemControllerType, "Awake");
 
             var handleItemVoteMethod = AccessTools.Method(BookPassingMenuListItemControllerType, "HandleVote", [ VoteForType ]);
 
-            var setDataMethod = AccessTools.Method(DeckItemType, "SetData", [ typeof(Role), typeof(FactionType), typeof(bool), RoleDeckPlusPanelControllerType ]);
+            var setDataMethod1 = AccessTools.Method(DeckItemType, "SetData", [ typeof(Role), typeof(FactionType), typeof(bool), RoleDeckPlusPanelControllerType ]);
 
             var refreshDataMethod = AccessTools.Method(MenuRoleType, "RefreshData");
+
+            var setDataMethod2 = AccessTools.Method(OracleMenuControllerListItemType, "SetData");
 
             var compatType = typeof(BTOS2Compatibility);
 
             BTOS2PatchesHarmony.Patch(awakeMethod, null, new(AccessTools.Method(compatType, nameof(ItemPostfix1))));
             BTOS2PatchesHarmony.Patch(handleItemVoteMethod, null, new(AccessTools.Method(compatType, nameof(ItemPostfix2))));
-            BTOS2PatchesHarmony.Patch(setDataMethod, null, new(AccessTools.Method(compatType, nameof(ItemPostfix3))));
+            BTOS2PatchesHarmony.Patch(setDataMethod1, null, new(AccessTools.Method(compatType, nameof(ItemPostfix3))));
             BTOS2PatchesHarmony.Patch(refreshDataMethod, null, new(AccessTools.Method(compatType, nameof(ItemPostfix4))));
+            BTOS2PatchesHarmony.Patch(setDataMethod2, null, new(AccessTools.Method(compatType, nameof(ItemPostfix5))));
             return true;
         }
         catch (Exception ex)
@@ -181,5 +188,22 @@ public static class BTOS2Compatibility
 
         if (bannedIcon && bannedSprite.IsValid())
             bannedIcon.sprite = bannedSprite;
+    }
+
+    public static void ItemPostfix5(dynamic __instance)
+    {
+        if (!Constants.EnableIcons)
+            return;
+
+        var roleIcon = (Image)AccessTools.Field(OracleMenuControllerListItemType, "RoleIcon").GetValue(__instance);
+
+        if (!roleIcon)
+            return;
+
+        var role = (Role)AccessTools.Field(OracleMenuControllerListItemType, "role").GetValue(__instance);
+        var sprite = AssetManager.GetSprite(Utils.RoleName(role), Utils.FactionName(role.GetFactionType()));
+
+        if (sprite.IsValid())
+            roleIcon.sprite = sprite;
     }
 }

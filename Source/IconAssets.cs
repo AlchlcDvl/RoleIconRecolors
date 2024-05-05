@@ -33,10 +33,12 @@ public class IconAssets(string name)
         {
             foreach (var (name2, icon) in icons)
             {
-                if (icon.Count > 0)
+                var count = icon.Count(x => x.IsValid());
+
+                if (count > 0)
                 {
                     Logging.LogMessage($"{name2} has {icon.Count} {name1} easter egg sprite(s)!");
-                    Count += icon.Count;
+                    Count += count;
                 }
             }
         }

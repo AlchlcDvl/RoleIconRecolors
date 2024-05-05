@@ -2,19 +2,19 @@ namespace IconPacks;
 
 public static class Utils
 {
-    private static readonly string[] VanillaSkippableNames = [ "Baker_Ability", "Admirer_Special" ];
+    private static readonly string[] VanillaSkippableNames = [ "Baker_Ability", "Admirer_Special", "Executioner_Ability" ];
     private static readonly string[] BTOS2SkippableNames = [ "Baker_Ability_1", "Baker_Ability_2", "Baker_Special", "Jackal_Ability", "Auditor_Ability", "Inquisitor_Ability",
         "Banshee_Ability", "Deputy_Ability", "Trickster_Special", "Warlock_Ability", "Starspawn_Ability", "Starspawn_Special", "Judge_Special", "Auditor_Special", "Inquisitor_Special",
         "Judge_Ability", "Illusionist_Special" ];
-    private static readonly string[] CommonSkippableNames = [ "Admirer_Ability", "Amnesiac_Ability", "Arsonist_Ability", "Attributes_Coven", "Berserker_Ability",
+    private static readonly string[] CommonSkippableNames = [ "Admirer_Ability", "Amnesiac_Ability", "Arsonist_Ability", "Attributes_Coven", "Berserker_Ability", "Marshal_Special",
         "Bodyguard_Ability", "Cleric_Ability", "Coroner_Ability", "CovenLeader_Ability", "Crusader_Ability", "CursedSoul_Ability", "Death_Ability", "Dreamweaver_Ability", "Enchanter_Ability",
-        "Famine_Ability", "HexMaster_Ability", "Illusionist_Ability", "Investigator_Ability", "Jailor_Ability", "Jester_Ability", "Jinx_Ability",
-        "Lookout_Ability", "Medusa_Ability", "Monarch_Ability", "Necromancer_Ability_1", "Necromancer_Ability_2", "Pestilence_Ability", "Plaguebearer_Ability", "Poisoner_Ability",
-        "PotionMaster_Ability_1", "PotionMaster_Ability_2", "Psychic_Ability", "Retributionist_Ability_1", "Retributionist_Ability_2", "Seer_Ability_1", "Seer_Ability_2", "Shroud_Special",
-        "SerialKiller_Ability", "Sheriff_Ability", "Shroud_Ability", "SoulCollector_Ability", "Spy_Ability", "TavernKeeper_Ability", "Tracker_Ability", "Trapper_Ability", "Oracle_Special",
-        "Trickster_Ability", "Vampire_Ability", "Vigilante_Ability", "VoodooMaster_Ability", "War_Ability_1", "War_Ability_2", "Werewolf_Ability_1", "Werewolf_Ability_2", "Wildling_Ability",
-        "Witch_Ability_1", "Witch_Ability_2", "Jailor_Special", "Cleric_Special", "Mayor_Special", "Jester_Special", "Bodyguard_Special", "Veteran_Special", "Trapper_Special",
-        "Pirate_Special", "Arsonist_Special", "Marshal_Special", "Poisoner_Special", "CovenLeader_Special", "Coroner_Special", "SerialKiller_Special" ];
+        "Famine_Ability", "HexMaster_Ability", "Illusionist_Ability", "Investigator_Ability", "Jailor_Ability", "Jester_Ability", "Jinx_Ability", "Lookout_Ability", "Medusa_Ability",
+        "Monarch_Ability", "Necromancer_Ability_1", "Necromancer_Ability_2", "Pestilence_Ability", "Plaguebearer_Ability", "Poisoner_Ability", "PotionMaster_Ability_1",
+        "PotionMaster_Ability_2", "Psychic_Ability", "Retributionist_Ability_1", "Retributionist_Ability_2", "Seer_Ability_1", "Seer_Ability_2", "Shroud_Special", "SerialKiller_Ability",
+        "Sheriff_Ability", "Shroud_Ability", "SoulCollector_Ability", "Spy_Ability", "TavernKeeper_Ability", "Tracker_Ability", "Trapper_Ability", "Oracle_Special", "Trickster_Ability",
+        "Vampire_Ability", "Vigilante_Ability", "VoodooMaster_Ability", "War_Ability_1", "War_Ability_2", "Werewolf_Ability_1", "Werewolf_Ability_2", "Wildling_Ability", "Witch_Ability_1",
+        "Witch_Ability_2", "Jailor_Special", "Cleric_Special", "Mayor_Special", "Jester_Special", "Bodyguard_Special", "Veteran_Special", "Trapper_Special", "Pirate_Special",
+        "Arsonist_Special", "Poisoner_Special", "CovenLeader_Special", "Coroner_Special", "SerialKiller_Special" ];
 
     //List of roles modified by Dum's mod
     private static readonly Role[] ChangedByToS1UI = [ Role.JAILOR, Role.CLERIC, Role.MAYOR, Role.JESTER, Role.EXECUTIONER, Role.BODYGUARD, Role.VETERAN, Role.TRAPPER, Role.PIRATE,
@@ -145,14 +145,14 @@ public static class Utils
         BTOS2Role.Teams => "Teams",
         BTOS2Role.AnonNames => "AnonNames",
         BTOS2Role.WalkingDead => "WalkingDead",
-        BTOS2Role.Egoist => "Egoist",
+        BTOS2Role.Egotist => "Egotist",
         BTOS2Role.SpeakingSpirits => "SpeakingSpirits",
         BTOS2Role.SecretObjectives => "SecretObjectives",
         BTOS2Role.NoLastWills => "NoLastWills",
         BTOS2Role.Immovable => "Immovable",
         BTOS2Role.CompliantKillers => "CompliantKillers",
-        BTOS2Role.PoandorasBox => "PoandorasBox",
-        BTOS2Role.BallotVoting => "BallotVoting",
+        BTOS2Role.PoandorasBox => "PandorasBox",
+        //BTOS2Role.BallotVoting => "BallotVoting",
         BTOS2Role.Individuality => "Individuality",
         BTOS2Role.Snitch => "Snitch",
         BTOS2Role.CovenVIP => "CovenVIP",
@@ -296,7 +296,7 @@ public static class Utils
         BTOS2Faction.Auditor => "Auditor",
         BTOS2Faction.Starspawn => "Starspawn",
         BTOS2Faction.Inquisitor => "Inquisitor",
-        BTOS2Faction.Egoist => "Egoist",
+        BTOS2Faction.Egotist => "Egotist",
         BTOS2Faction.Pandora => "Pandora",
         BTOS2Faction.Compliance => "Compliance",
         _ => "Blank"
@@ -465,7 +465,7 @@ public static class Utils
         (EffectType)105/* or (EffectType)203*/ => "Enchanted",
         (EffectType)106 => "Accompanied",
         (EffectType)107 => "PandoraTownTraitor",
-        (EffectType)108 => "Egoist",
+        (EffectType)108 => "Egotist",
         (EffectType)109/* or (EffectType)204*/ => "Reaped",
         (EffectType)110 => "WarlockCursed",
         (EffectType)111 => "SecretObjective",

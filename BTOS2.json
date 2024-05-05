@@ -40,7 +40,7 @@
     { "Name": "CovenVIP" },
     { "Name": "Deputy_Ability_BTOS" },
     { "Name": "Deputy_Special_BTOS" },
-    { "Name": "Egoist" },
+    { "Name": "Egotist" },
     { "Name": "Immovable" },
     { "Name": "NoLastWills" },
     { "Name": "PandorasBox" },
@@ -51,6 +51,7 @@
     { "Name": "VIP_BTOS" },
     { "Name": "Warlock_Ability" },
     { "Name": "Warlock" },
-    { "Name": "Warlock_Cursed" },
+    { "Name": "WarlockCursed" },
+    { "Name": "Individuality" },
     { "Name": "RandomApocalypse" }
 ]
