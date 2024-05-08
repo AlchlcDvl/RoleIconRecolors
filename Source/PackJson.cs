@@ -7,12 +7,11 @@ public class PackJson
     public string RepoName { get; set; }
     public string Branch { get; set; }
     public string JsonName { get; set; }
+    public string Credits { get; set; }
 
     public string JsonLink() => $"{RawLink()}/{JsonName}.json";
 
     public string RawLink() => $"https://raw.githubusercontent.com/{RepoOwner}/{RepoName}/{Branch}";
-
-    public string PackLink() => $"{Link()}/{Name}";
 
     public string Link() => $"https://github.com/{RepoOwner}/{RepoName}";
 

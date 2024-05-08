@@ -98,10 +98,10 @@ public class DownloadController : UIController
             go.name = packName;
             go.transform.Find("PackName").GetComponent<TextMeshProUGUI>().SetText(packName);
             var link = go.transform.Find("RepoLink");
-            var linkText = packJson.PackLink();
+            var linkText = packJson.Link();
             link.GetComponentInChildren<TextMeshProUGUI>().SetText(linkText);
             link.GetComponent<Button>().onClick.AddListener(() => Application.OpenURL(linkText));
-            link.gameObject.AddComponent<TooltipTrigger>().NonLocalizedString = "Click To Copy Link To Clipboard";
+            link.gameObject.AddComponent<TooltipTrigger>().NonLocalizedString = "Open Link";
             go.transform.Find("PackJSONLink").GetComponent<TextMeshProUGUI>().SetText(packJson.JsonLink());
             var button = go.transform.Find("Download");
             button.GetComponent<Button>().onClick.AddListener(() => DownloadIcons(packName));
@@ -111,6 +111,10 @@ public class DownloadController : UIController
             go.transform.localPosition = pos;
             go.SetActive(true);
             PackGOs.Add(go);
+
+            if (!StringUtils.IsNullEmptyOrWhiteSpace(packJson.Credits))
+                go.AddComponent<TooltipTrigger>().NonLocalizedString = packJson.Credits;
+
             time += Time.deltaTime;
 
             if (time > 0.1f)
@@ -120,7 +124,7 @@ public class DownloadController : UIController
             }
         }
 
-        Scroll.value = Value * PackGOs.Count / 3;
+        Scroll.value = Value * (PackGOs.Count == 0 ? 1 : (PackGOs.Count / 3));
         yield break;
     }
 
@@ -148,10 +152,10 @@ public class DownloadController : UIController
         go.name = packJson.Name;
         go.transform.Find("PackName").GetComponent<TextMeshProUGUI>().SetText(packJson.Name);
         var link = go.transform.Find("RepoLink");
-        var linkText = packJson.PackLink();
+        var linkText = packJson.Link();
         link.GetComponentInChildren<TextMeshProUGUI>().SetText(linkText);
         link.GetComponent<Button>().onClick.AddListener(() => Application.OpenURL(linkText));
-        link.gameObject.AddComponent<TooltipTrigger>().NonLocalizedString = "Click To Copy Link To Clipboard";
+        link.gameObject.AddComponent<TooltipTrigger>().NonLocalizedString = "Open Link";
         go.transform.Find("PackJSONLink").GetComponent<TextMeshProUGUI>().SetText(packJson.JsonLink());
         var button = go.transform.Find("Download");
         button.GetComponent<Button>().onClick.AddListener(() => DownloadIcons(packJson.Name));
@@ -161,7 +165,7 @@ public class DownloadController : UIController
         go.transform.localPosition = pos;
         go.SetActive(true);
         PackGOs.Add(go);
-        Scroll.value = Value * PackGOs.Count / 3;
+        Scroll.value = Value * (PackGOs.Count == 0 ? 1 : (PackGOs.Count / 3));
     }
 
     public static void HandlePackData() => ApplicationController.ApplicationContext.StartCoroutine(CoHandlePackData());
@@ -202,6 +206,8 @@ public class DownloadController : UIController
 
     private static IEnumerator CoDownloadIcons(string packName)
     {
+        packName = packName.Replace(" ", "");
+
         if (Running.TryGetValue(packName, out var running) && running)
         {
             Logging.LogError($"{packName} download is still running");
@@ -254,47 +260,130 @@ public class DownloadController : UIController
             yield break;
         }
 
-        var json = JsonConvert.DeserializeObject<List<Asset>>(www.downloadHandler.text);
+        var json = JsonConvert.DeserializeObject<JsonItem>(www.downloadHandler.text);
 
-        foreach (var asset in json)
+        if (json.Assets != null)
         {
-            asset.FileType ??= "png";
-            asset.Folder ??= packName.Replace(" ", "");
-            asset.Pack = packName;
-
-            var www2 = UnityWebRequest.Get($"{packJson.RawLink()}/{asset.DownloadLink()}");
-            yield return www2.SendWebRequest();
-
-            while (!www2.isDone)
-                yield return new WaitForEndOfFrame();
-
-            if (www2.result != UnityWebRequest.Result.Success)
+            foreach (var asset in json.Assets)
             {
-                Logging.LogError(www2.error);
-                continue;
-            }
+                asset.FileType ??= "png";
 
-            var folder = asset.FolderPath();
+                var www2 = UnityWebRequest.Get($"{packJson.RawLink()}/{asset.FileName()}");
+                yield return www2.SendWebRequest();
 
-            if (!Directory.Exists(folder))
-                Directory.CreateDirectory(folder);
+                while (!www2.isDone)
+                    yield return new WaitForEndOfFrame();
 
-            var persistTask = File.WriteAllBytesAsync(asset.FilePath(), www2.downloadHandler.data);
-
-            while (!persistTask.IsCompleted)
-            {
-                if (persistTask.Exception != null)
+                if (www2.result != UnityWebRequest.Result.Success)
                 {
-                    Logging.LogError(persistTask.Exception);
-                    break;
+                    Logging.LogError(www2.error);
+                    continue;
                 }
 
-                yield return new WaitForEndOfFrame();
+                var path = Path.Combine(pack, asset.FileName());
+
+                if (File.Exists(path))
+                    File.Delete(path);
+
+                var persistTask = File.WriteAllBytesAsync(path, www2.downloadHandler.data);
+
+                while (!persistTask.IsCompleted)
+                {
+                    if (persistTask.Exception != null)
+                    {
+                        Logging.LogError(persistTask.Exception);
+                        break;
+                    }
+
+                    yield return new WaitForEndOfFrame();
+                }
             }
         }
+        else
+        {
+            foreach (var mod in json.ModAssets)
+            {
+                if (mod.Assets != null)
+                {
+                    foreach (var asset in mod.Assets)
+                    {
+                        asset.FileType ??= "png";
 
-        if (packName is not ("Vanilla" or "BTOS2"))
+                        var www2 = UnityWebRequest.Get($"{packJson.RawLink()}/{mod.Name}/{asset.FileName()}");
+                        yield return www2.SendWebRequest();
+
+                        while (!www2.isDone)
+                            yield return new WaitForEndOfFrame();
+
+                        if (www2.result != UnityWebRequest.Result.Success)
+                        {
+                            Logging.LogError(www2.error);
+                            continue;
+                        }
+
+                        var path = Path.Combine(pack, mod.Name, asset.FileName());
+
+                        if (File.Exists(path))
+                            File.Delete(path);
+
+                        var persistTask = File.WriteAllBytesAsync(path, www2.downloadHandler.data);
+
+                        while (!persistTask.IsCompleted)
+                        {
+                            if (persistTask.Exception != null)
+                            {
+                                Logging.LogError(persistTask.Exception);
+                                break;
+                            }
+
+                            yield return new WaitForEndOfFrame();
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var folder in mod.Folders)
+                    {
+                        foreach (var asset in folder.Assets)
+                        {
+                            asset.FileType ??= "png";
+
+                            var www2 = UnityWebRequest.Get($"{packJson.RawLink()}/{mod.Name}/{folder.Name}/{asset.FileName()}");
+                            yield return www2.SendWebRequest();
+
+                            while (!www2.isDone)
+                                yield return new WaitForEndOfFrame();
+
+                            if (www2.result != UnityWebRequest.Result.Success)
+                            {
+                                Logging.LogError(www2.error);
+                                continue;
+                            }
+
+                            var path = Path.Combine(pack, mod.Name, folder.Name, asset.FileName());
+
+                            if (File.Exists(path))
+                                File.Delete(path);
+
+                            var persistTask = File.WriteAllBytesAsync(path, www2.downloadHandler.data);
+
+                            while (!persistTask.IsCompleted)
+                            {
+                                if (persistTask.Exception != null)
+                                {
+                                    Logging.LogError(persistTask.Exception);
+                                    break;
+                                }
+
+                                yield return new WaitForEndOfFrame();
+                            }
+                        }
+                    }
+                }
+            }
+
             AssetManager.TryLoadingSprites(packName);
+        }
 
         OpenDirectory();
         Running[packName] = false;

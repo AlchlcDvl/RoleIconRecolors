@@ -1,5 +1,14 @@
 [
-    { "Name": "Recolors" },
-    { "Name": "Vanilla" },
-    { "Name": "BTOS2" }
+    {
+        "Name": "Recolors",
+        "Credits": "MysticMismagius, Haapsalu, faketier, splarg, Det, Wevit, Nova, moiler, NexusOfChaos, Loonie and Nidoskull"
+    },
+    {
+        "Name": "Vanilla",
+        "Credits": "BlankMediaGames"
+    },
+    {
+        "Name": "BTOS2",
+        "Credits": "Curtis, TubaAntics and Nuggy"
+    }
 ]

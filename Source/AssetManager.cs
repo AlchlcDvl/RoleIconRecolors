@@ -133,8 +133,8 @@ public static class AssetManager
                     Defense = sprite;
                 else if (x.Contains("Ethereal"))
                     Ethereal = sprite;
-                else
-                    Assets[sprite.name] = sprite;
+
+                Assets[sprite.name] = sprite;
             }
         });
 

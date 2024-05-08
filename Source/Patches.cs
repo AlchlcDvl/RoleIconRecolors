@@ -822,3 +822,16 @@ public static class ReplaceTMPSpritesPatch
         }
     }
 }
+
+[HarmonyPatch(typeof(GameModifierPopupController), nameof(GameModifierPopupController.Show))]
+[HarmonyPriority(Priority.VeryLow)]
+public static class ChangeGameModifierPopup
+{
+    public static void Postfix(GameModifierPopupController __instance)
+    {
+        var sprite = AssetManager.GetSprite(Utils.RoleName(__instance.CurrentRole));
+
+        if (sprite.IsValid() && __instance.roleIcon)
+            __instance.roleIcon.sprite = sprite;
+    }
+}
