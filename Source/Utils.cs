@@ -16,7 +16,7 @@ public static class Utils
         "Witch_Ability_2", "Jailor_Special", "Cleric_Special", "Mayor_Special", "Jester_Special", "Bodyguard_Special", "Veteran_Special", "Trapper_Special", "Pirate_Special",
         "Arsonist_Special", "Poisoner_Special", "CovenLeader_Special", "Coroner_Special", "SerialKiller_Special" ];
 
-    //List of roles modified by Dum's mod
+    // List of roles modified by Dum's mod
     private static readonly Role[] ChangedByToS1UI = [ Role.JAILOR, Role.CLERIC, Role.MAYOR, Role.JESTER, Role.EXECUTIONER, Role.BODYGUARD, Role.VETERAN, Role.TRAPPER, Role.PIRATE,
         Role.ADMIRER, Role.ARSONIST, Role.MARSHAL, Role.SOCIALITE, Role.POISONER, Role.COVENLEADER, Role.CORONER, Role.SERIALKILLER, Role.SHROUD, /*Role.ROLE_COUNT, (Role)57, (Role)58,
         (Role)59, (Role)60, (Role)61, Role.BAKER*/ ];
@@ -152,7 +152,7 @@ public static class Utils
         BTOS2Role.Immovable => "Immovable",
         BTOS2Role.CompliantKillers => "CompliantKillers",
         BTOS2Role.PoandorasBox => "PandorasBox",
-        //BTOS2Role.BallotVoting => "BallotVoting",
+        // BTOS2Role.BallotVoting => "BallotVoting",
         BTOS2Role.Individuality => "Individuality",
         BTOS2Role.Snitch => "Snitch",
         BTOS2Role.CovenVIP => "CovenVIP",
@@ -253,9 +253,11 @@ public static class Utils
         _ => "Blank"
     };
 
-    public static string FactionName(FactionType faction, ModType? mod = null)
+    public static string FactionName(FactionType faction, bool allowOverides, ModType? mod = null) => FactionName(faction, mod, allowOverides);
+
+    public static string FactionName(FactionType faction, ModType? mod = null, bool allowOverides = true)
     {
-        if (Constants.FactionOverridden)
+        if (Constants.FactionOverridden && allowOverides)
             return Constants.FactionOverride;
 
         try
@@ -264,12 +266,12 @@ public static class Utils
             return mod switch
             {
                 ModType.BTOS2 => BTOSFactionName(faction),
-                _ => VanillaFactionName(faction)
+                _ => allowOverides ? FactionName(faction, false, mod) : VanillaFactionName(faction)
             };
         }
         catch
         {
-            return VanillaFactionName(faction);
+            return allowOverides ? FactionName(faction, false, mod) : VanillaFactionName(faction);
         }
     }
 

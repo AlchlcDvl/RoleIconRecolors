@@ -10,5 +10,10 @@
     {
         "Name": "BTOS2",
         "Credits": "Curtis, TubaAntics and Nuggy"
+    },
+    {
+        "RepoName": "LoonsRecolors",
+        "Credits": "Loonie",
+        "RepoOwner": "Loonie-Toons"
     }
 ]

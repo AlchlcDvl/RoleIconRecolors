@@ -124,7 +124,7 @@ public static class BTOS2Role
     public const Role Immovable = (Role)220;
     public const Role CompliantKillers = (Role)221;
     public const Role PoandorasBox = (Role)222;
-    //public const Role BallotVoting = (Role)223;
+    // public const Role BallotVoting = (Role)223;
     public const Role Individuality = (Role)224;
     public const Role Snitch = (Role)225;
     public const Role CovenVIP = (Role)226;

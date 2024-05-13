@@ -108,12 +108,12 @@ public static class PatchRoleCards
         roleInfoButtons ??= [];
         role = Constants.IsTransformed ? Utils.GetTransformedVersion(role) : role;
 
-        //this determines if the role in question is changed by dum's mod
+        // this determines if the role in question is changed by dum's mod
         var isModifiedByTos1UI = Utils.ModifiedByToS1UI(role) && ModStates.IsLoaded("dum.oldui");
         var index = 0;
         var name = Utils.RoleName(role);
         var faction = Utils.FactionName(factionType);
-        var ogfaction = Utils.FactionName(role.GetFactionType());
+        var ogfaction = Utils.FactionName(role.GetFactionType(), false);
         var reg = ogfaction != faction;
         var sprite = AssetManager.GetSprite(reg, name, faction);
 
@@ -231,7 +231,7 @@ public static class PatchAbilityPanel
         var role = Pepper.GetMyRole();
         var faction = Utils.FactionName(Pepper.GetMyFaction());
         role = Constants.IsTransformed ? Utils.GetTransformedVersion(role) : role;
-        var ogfaction = Utils.FactionName(role.GetFactionType());
+        var ogfaction = Utils.FactionName(role.GetFactionType(), false);
         var name = Utils.RoleName(role);
         var reg = ogfaction != faction;
 
@@ -344,7 +344,7 @@ public static class SpecialAbilityPanelPatch
         var role = Pepper.GetMyRole();
         var name = $"{Utils.RoleName(role)}_Special";
         var faction = Utils.FactionName(Pepper.GetMyFaction());
-        var ogfaction = Utils.FactionName(role.GetFactionType());
+        var ogfaction = Utils.FactionName(role.GetFactionType(), false);
         var reg = faction != ogfaction;
         var special = AssetManager.GetSprite(reg, name, faction);
 
@@ -499,7 +499,7 @@ public static class PlayerPopupControllerPatch
         var sprite = AssetManager.GetSprite(reg, name, Utils.FactionName(faction));
 
         if (reg && !sprite.IsValid())
-            sprite = AssetManager.GetSprite(name, Utils.FactionName(ogfaction));
+            sprite = AssetManager.GetSprite(name, Utils.FactionName(ogfaction, false));
 
         if (sprite.IsValid() && __instance.RoleIcon)
             __instance.RoleIcon.sprite = sprite;
@@ -533,7 +533,7 @@ public static class InitialiseRolePanel
         var sprite = AssetManager.GetSprite(reg, name, Utils.FactionName(faction));
 
         if (reg && !sprite.IsValid())
-            sprite = AssetManager.GetSprite(name, Utils.FactionName(ogfaction));
+            sprite = AssetManager.GetSprite(name, Utils.FactionName(ogfaction, false));
 
         if (sprite.IsValid() && __instance.RoleIcon)
             __instance.RoleIcon.sprite = sprite;
@@ -595,7 +595,7 @@ public static class GetRoleIconAndNameInlineStringPatch
     public static void Postfix(ref FactionType factionType, ref string __result)
     {
         if (Constants.EnableIcons)
-            __result = __result.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(factionType)})\"");
+            __result = __result.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(factionType, false)})\"");
     }
 }
 
@@ -630,7 +630,7 @@ public static class TosCharacterNametagPatch
         if (__instance.tosCharacter.position == Pepper.GetMyPosition())
             factionType = Pepper.GetMyFaction();
 
-        __result = __result.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(factionType)})\"");
+        __result = __result.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(factionType, false)})\"");
     }
 }
 
@@ -645,10 +645,10 @@ public static class FixDecodingAndEncoding
             var faction = "Regular";
 
             if (Service.Game.Sim.simulation.knownRolesAndFactions.Data.TryGetValue(entry.speakerId, out var tuple))
-                faction = Utils.FactionName(tuple.Item2);
+                faction = Utils.FactionName(tuple.Item2, false);
 
             if (entry.speakerId == Pepper.GetMyPosition())
-                faction = Utils.FactionName(Pepper.GetMyFaction());
+                faction = Utils.FactionName(Pepper.GetMyFaction(), false);
 
             __result = __result.Replace("RoleIcons\"", $"RoleIcons ({faction})\"");
         }
@@ -667,7 +667,7 @@ public static class PMBakerMenuPatch
         var role = Pepper.GetMyRole();
         var name = Utils.RoleName(role);
         var faction = Utils.FactionName(Pepper.GetMyFaction());
-        var ogfaction = Utils.FactionName(role.GetFactionType());
+        var ogfaction = Utils.FactionName(role.GetFactionType(), false);
         var reg = ogfaction != faction;
 
         var sprite1 = AssetManager.GetSprite(reg, $"{name}_Ability_1", faction);

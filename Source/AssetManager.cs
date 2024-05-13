@@ -7,7 +7,6 @@ public static class AssetManager
     public static readonly Dictionary<string, Dictionary<string, List<Sprite>>> GlobalEasterEggs = [];
     public static readonly Dictionary<string, IconPack> IconPacks = [];
     public static readonly Dictionary<int, Sprite> CacheScrollSprites = [];
-    public static readonly Dictionary<string, Sprite> Assets = [];
 
     public static Sprite Blank { get; private set; }
     public static Sprite Thumbnail { get; private set; }
@@ -21,14 +20,13 @@ public static class AssetManager
     public static TMP_SpriteAsset BTOS2_2 { get; private set; }
 
     public static AssetBundle Bundle { get; set; }
-    public static GameObject UI { get; set; }
+    public static readonly Dictionary<string, Sprite> Assets = [];
+    public static readonly Dictionary<string, GameObject> AssetGOs = [];
 
     public static string ModPath => Path.Combine(Path.GetDirectoryName(Application.dataPath), "SalemModLoader", "ModFolders", "Recolors");
 
-    private static readonly string[] Avoid = [ "Necronomicon", "Neutral", "Town", "Coven", "SlowMode", "FastMode", "Any", "Recruit", "Stoned", "Secret", "HiddenRoles", "OneTrial", "Doused",
-        "RandomApocalypse", "TownTraitor", "PerfectTown", "NecroPass", "Anon", "WalkingDead", "ExeTarget", "Hexed", "Knighted", "Bread", "Revealed", "Disconnected", "Connecting", "Plagued",
-        "Revealed", "Trapped", "Hangover", "Silenced", "Dreamwoven", "Insane", "Bugged", "Tracked", "Sickness", "Reaped", "Deafened", "Audited", "Enchanted", "Egotist", "Accompanied",
-        "Banned", "SpeakingSpirits", "WarlockCursed", "Secret", "CompliantKillers", "PandorasBox" ];
+    private static readonly string[] Avoid = [ "Necronomicon", "Recruit", "Doused", "ExeTarget", "Hexed", "Knighted", "Bread", "Revealed", "Disconnected", "Connecting", "Plagued", "Revealed",
+        "Trapped", "Hangover", "Silenced", "Dreamwoven", "Insane", "Bugged", "Tracked", "Sickness", "Reaped", "Deafened", "Audited", "Enchanted", "Accompanied", "Banned", "WarlockCursed" ];
 
     private static readonly string[] ToRemove = [ ".png", ".jpg" ];
 
@@ -41,12 +39,12 @@ public static class AssetManager
 
     public static Sprite GetSprite(string name, bool allowEE = true, string faction = null, string packName = null, bool skipRegular = false)
     {
-        if (name.Contains("Blank") || !Constants.EnableIcons || IconPacks.Count == 0 || !Constants.EnableIcons)
+        if (name.Contains("Blank") || !Constants.EnableIcons || IconPacks.Count == 0)
             return Blank;
 
         packName ??= Constants.CurrentPack;
 
-        if (faction is null or "Blank" || (Avoid.Any(name.Contains) && !name.Contains("Leader")))
+        if ((faction is (null or "Blank") and (not "Regular")) || Avoid.Any(name.Contains))
             faction = "Regular";
 
         if (!IconPacks.TryGetValue(packName, out var pack))
@@ -139,9 +137,8 @@ public static class AssetManager
         });
 
         Bundle = FromAssetBundle.GetAssetBundleFromResources($"{Resources}Assets", Core);
-
-        UI = Bundle.LoadAsset<GameObject>("DownloaderUI");
         Bundle.LoadAllAssets<Sprite>().ForEach(x => Assets[x.name] = x);
+        Bundle.LoadAllAssets<GameObject>().ForEach(x => AssetGOs[x.name] = x);
 
         TryLoadingSprites(Constants.CurrentPack);
         LoadVanillaSpriteSheets();

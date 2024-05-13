@@ -31,7 +31,7 @@ public class Recolors
 
     public static void OpenMenu()
     {
-        var go = UObject.Instantiate(AssetManager.UI, CacheHomeSceneController.Controller.SafeArea.transform, false);
+        var go = UObject.Instantiate(AssetManager.AssetGOs["DownloaderUI"], CacheHomeSceneController.Controller.SafeArea.transform, false);
         go.transform.localPosition = new(0, 0, 0);
         go.transform.localScale = new(2.25f, 2.25f, 2.25f);
         go.AddComponent<DownloadController>();
@@ -80,7 +80,35 @@ public class Recolors
     public ModSettings.CheckboxSetting CustomNumbers => new()
     {
         Name = "Use Custom Numbers",
-        Description = "Select whether you want to use the mod's rendition of player numbers or the game's."
+        Description = "Select whether you want to use the icon pack's rendition of player numbers or the game's.",
+        Available = Constants.EnableIcons
+    };
+
+    public ModSettings.IntegerInputSetting EasterEggChance => new()
+    {
+        Name = "Easter Egg Icon Chance",
+        Description = "The chance of a different than normal icon appearing for roles.",
+        DefaultValue = 5,
+        AvailableInGame = true,
+        Available = Constants.EnableIcons
+    };
+
+    public ModSettings.CheckboxSetting AllEasterEggs => new()
+    {
+        Name = "All Easter Eggs Are Active",
+        Description = "Toggles whether all of the previously selected icon pack's easter eggs will be used, or only the selected icon pack's.",
+        DefaultValue = false,
+        AvailableInGame = true,
+        Available = Constants.EnableIcons && Constants.EasterEggChance > 0
+    };
+
+    public ModSettings.CheckboxSetting PlayerPanelEasterEggs => new()
+    {
+        Name = "Enable Easter Eggs In Player Panel",
+        Description = "Toggles whether easter egg icons appear or not in the ability panel.",
+        DefaultValue = false,
+        AvailableInGame = true,
+        Available = Constants.EnableIcons && Constants.EasterEggChance > 0
     };
 
     private static List<string> GetPackNames()

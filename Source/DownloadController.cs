@@ -27,6 +27,7 @@ public class DownloadController : UIController
     private GameObject PackTemplate;
     private GameObject ScrollView;
     private Scrollbar Scroll;
+    private GameObject WaitingScreen;
     private float Value;
 
     private readonly List<GameObject> PackGOs = [];
@@ -40,7 +41,11 @@ public class DownloadController : UIController
         StartCoroutine(SetupMenu());
     }
 
-    public void OnDestroy() => StopCoroutine(SetupMenu());
+    public void OnDestroy()
+    {
+        WaitingScreen.Destroy();
+        StopCoroutine(SetupMenu());
+    }
 
     public void Update()
     {
@@ -61,6 +66,10 @@ public class DownloadController : UIController
         BranchName = transform.Find("Inputs/BranchName").gameObject;
         JsonName = transform.Find("Inputs/JsonName").gameObject;
         PackTemplate = transform.Find("ScrollView/Viewport/Content/PackTemplate").gameObject;
+        WaitingScreen = Instantiate(AssetManager.AssetGOs["WaitingScreen"], transform);
+        WaitingScreen.transform.localPosition = new(0, 0, 0);
+        WaitingScreen.SetActive(false);
+
         Scroll = transform.Find("ScrollView/ScrollbarVertical").GetComponent<Scrollbar>();
         Value = Scroll.value;
 
@@ -147,10 +156,10 @@ public class DownloadController : UIController
             JsonName = JsonName.GetComponent<TMP_InputField>().text ?? name,
         };
         packJson.SetDefaults();
-        Packs[packJson.Name] = packJson;
+        Packs[name] = packJson;
         var go = Instantiate(PackTemplate, PackTemplate.transform.parent);
-        go.name = packJson.Name;
-        go.transform.Find("PackName").GetComponent<TextMeshProUGUI>().SetText(packJson.Name);
+        go.name = name;
+        go.transform.Find("PackName").GetComponent<TextMeshProUGUI>().SetText(name);
         var link = go.transform.Find("RepoLink");
         var linkText = packJson.Link();
         link.GetComponentInChildren<TextMeshProUGUI>().SetText(linkText);
@@ -158,14 +167,17 @@ public class DownloadController : UIController
         link.gameObject.AddComponent<TooltipTrigger>().NonLocalizedString = "Open Link";
         go.transform.Find("PackJSONLink").GetComponent<TextMeshProUGUI>().SetText(packJson.JsonLink());
         var button = go.transform.Find("Download");
-        button.GetComponent<Button>().onClick.AddListener(() => DownloadIcons(packJson.Name));
-        button.gameObject.AddComponent<TooltipTrigger>().NonLocalizedString = $"Download {packJson.Name}";
+        button.GetComponent<Button>().onClick.AddListener(() => DownloadIcons(name));
+        button.gameObject.AddComponent<TooltipTrigger>().NonLocalizedString = $"Download {name}";
         var pos = go.transform.localPosition;
         pos.y -= 98.3551f * PackGOs.Count;
         go.transform.localPosition = pos;
         go.SetActive(true);
         PackGOs.Add(go);
         Scroll.value = Value * (PackGOs.Count == 0 ? 1 : (PackGOs.Count / 3));
+
+        if (!StringUtils.IsNullEmptyOrWhiteSpace(packJson.Credits))
+            go.AddComponent<TooltipTrigger>().NonLocalizedString = packJson.Credits;
     }
 
     public static void HandlePackData() => ApplicationController.ApplicationContext.StartCoroutine(CoHandlePackData());
