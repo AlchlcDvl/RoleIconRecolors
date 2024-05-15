@@ -44,9 +44,6 @@ public static class AssetManager
 
         packName ??= Constants.CurrentPack;
 
-        if ((faction is (null or "Blank") and (not "Regular")) || Avoid.Any(name.Contains))
-            faction = "Regular";
-
         if (!IconPacks.TryGetValue(packName, out var pack))
         {
             Logging.LogError($"Error finding {packName} in loaded packs");
@@ -54,31 +51,34 @@ public static class AssetManager
             return Blank;
         }
 
-        var type = faction;
+        var og = faction;
 
         if (Constants.IsNecroActive)
-            type = "Necronomicon";
+            faction = "Necronomicon";
         else if (Constants.IsLocalVIP)
-            type = "VIP";
+            faction = "VIP";
+
+        if (faction is null or "Blank" || Avoid.Any(name.Contains))
+            faction = "Regular";
 
         var mod = Utils.GetGameType();
 
         try
         {
-            var sprite = pack.GetSprite(name + $"_{mod}", allowEE, type);
+            var sprite = pack.GetSprite(name + $"_{mod}", allowEE, faction);
 
             if (!sprite.IsValid())
-                sprite = pack.GetSprite(name, allowEE, type);
+                sprite = pack.GetSprite(name, allowEE, faction);
 
-            if (type != "Regular" && !sprite.IsValid() && !skipRegular)
+            if (faction != "Regular" && !sprite.IsValid() && !skipRegular)
             {
                 sprite = pack.GetSprite(name + $"_{mod}", allowEE, "Regular");
 
-                if (type != "Regular" && !sprite.IsValid())
+                if (faction != "Regular" && !sprite.IsValid())
                     sprite = pack.GetSprite(name, allowEE, "Regular");
             }
 
-            if (!sprite.IsValid() && type != faction)
+            if (!sprite.IsValid() && og != faction)
             {
                 sprite = pack.GetSprite(name + $"_{mod}", allowEE, faction);
 
@@ -98,7 +98,7 @@ public static class AssetManager
         }
         catch (Exception e)
         {
-            Logging.LogError($"Error finding {name}'s sprite from {packName} {type} during a {mod} game\n{e}");
+            Logging.LogError($"Error finding {name}'s sprite from {packName} {faction} during a {mod} game\n{e}");
             return Blank;
         }
     }

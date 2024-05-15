@@ -266,12 +266,12 @@ public static class Utils
             return mod switch
             {
                 ModType.BTOS2 => BTOSFactionName(faction),
-                _ => allowOverides ? FactionName(faction, false, mod) : VanillaFactionName(faction)
+                _ => VanillaFactionName(faction)
             };
         }
         catch
         {
-            return allowOverides ? FactionName(faction, false, mod) : VanillaFactionName(faction);
+            return VanillaFactionName(faction);
         }
     }
 

@@ -8,6 +8,7 @@ public class PackJson
     public string Branch { get; set; }
     public string JsonName { get; set; }
     public string Credits { get; set; }
+    public string DisplayName { get; set; }
 
     public string JsonLink() => $"{RawLink()}/{JsonName}.json";
 
@@ -22,5 +23,6 @@ public class PackJson
         RepoName ??= "RoleIconRecolors";
         Name ??= RepoName;
         JsonName ??= Name;
+        DisplayName ??= Name;
     }
 }

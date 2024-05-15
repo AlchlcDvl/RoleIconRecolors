@@ -21,7 +21,6 @@
         { "Name": "Inquisitor" },
         { "Name": "Jackal" },
         { "Name": "Jackal_Ability" },
-        { "Name": "Jester_Special" },
         { "Name": "Judge" },
         { "Name": "Judge_Ability" },
         { "Name": "Judge_Special" },
@@ -29,6 +28,7 @@
         { "Name": "NeutralPariah" },
         { "Name": "NeutralSpecial" },
         { "Name": "Oracle" },
+        { "Name": "Illusionist_Special_BTOS" },
         { "Name": "Oracle_Special" },
         { "Name": "Starspawn" },
         { "Name": "Starspawn_Ability" },
@@ -55,6 +55,17 @@
         { "Name": "Warlock" },
         { "Name": "WarlockCursed" },
         { "Name": "Individuality" },
-        { "Name": "RandomApocalypse" }
+        { "Name": "RandomApocalypse" },
+        { "Name": "Attributes_Auditor" },
+        { "Name": "Attributes_Compliance" },
+        { "Name": "Attributes_Egotist" },
+        { "Name": "Attributes_Frogs" },
+        { "Name": "Attributes_Hawks" },
+        { "Name": "Attributes_Inquisitor" },
+        { "Name": "Attributes_Jackal" },
+        { "Name": "Attributes_Judge" },
+        { "Name": "Attributes_Lions" },
+        { "Name": "Attributes_Pandora" },
+        { "Name": "Attributes_Startspawn" }
     ]
 }

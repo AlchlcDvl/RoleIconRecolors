@@ -67,10 +67,12 @@ public class DownloadController : UIController
         JsonName = transform.Find("Inputs/JsonName").gameObject;
         PackTemplate = transform.Find("ScrollView/Viewport/Content/PackTemplate").gameObject;
         WaitingScreen = Instantiate(AssetManager.AssetGOs["WaitingScreen"], transform);
-        WaitingScreen.transform.localPosition = new(0, 0, 0);
+        WaitingScreen.transform.localPosition = new(0, 0, -1f);
         WaitingScreen.SetActive(false);
 
         Scroll = transform.Find("ScrollView/ScrollbarVertical").GetComponent<Scrollbar>();
+        Scroll.gameObject.AddComponent<ContentSizeFitter>();
+        Scroll.gameObject.AddComponent<VerticalLayoutGroup>();
         Value = Scroll.value;
 
         GameFont = ApplicationController.ApplicationContext.FontControllerSource.fonts[0].tmp_FontAsset;
@@ -105,7 +107,7 @@ public class DownloadController : UIController
         {
             var go = Instantiate(PackTemplate, PackTemplate.transform.parent);
             go.name = packName;
-            go.transform.Find("PackName").GetComponent<TextMeshProUGUI>().SetText(packName);
+            go.transform.Find("PackName").GetComponent<TextMeshProUGUI>().SetText(packJson.DisplayName);
             var link = go.transform.Find("RepoLink");
             var linkText = packJson.Link();
             link.GetComponentInChildren<TextMeshProUGUI>().SetText(linkText);
@@ -159,7 +161,7 @@ public class DownloadController : UIController
         Packs[name] = packJson;
         var go = Instantiate(PackTemplate, PackTemplate.transform.parent);
         go.name = name;
-        go.transform.Find("PackName").GetComponent<TextMeshProUGUI>().SetText(name);
+        go.transform.Find("PackName").GetComponent<TextMeshProUGUI>().SetText(packJson.DisplayName);
         var link = go.transform.Find("RepoLink");
         var linkText = packJson.Link();
         link.GetComponentInChildren<TextMeshProUGUI>().SetText(linkText);
@@ -311,7 +313,8 @@ public class DownloadController : UIController
                 }
             }
         }
-        else
+
+        if (json.ModAssets != null)
         {
             foreach (var mod in json.ModAssets)
             {
@@ -352,10 +355,14 @@ public class DownloadController : UIController
                         }
                     }
                 }
-                else
+
+                if (mod.Folders != null)
                 {
                     foreach (var folder in mod.Folders)
                     {
+                        if (folder.Assets == null)
+                            continue;
+
                         foreach (var asset in folder.Assets)
                         {
                             asset.FileType ??= "png";
