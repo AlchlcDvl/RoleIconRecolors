@@ -1,6 +1,7 @@
 {
     "Assets":
     [
+        { "Name": "Accompanied" },
         { "Name": "AnonNames" },
         { "Name": "ApocTownTraitor" },
         { "Name": "Auditor_Ability" },
@@ -34,7 +35,6 @@
         { "Name": "Starspawn_Ability" },
         { "Name": "Starspawn_Special" },
         { "Name": "Teams" },
-        { "Name": "Trickster_Special_BTOS" },
         { "Name": "TrueAny" },
         { "Name": "WalkingDead" },
         { "Name": "SpeakingSpirits" },
@@ -66,6 +66,13 @@
         { "Name": "Attributes_Judge" },
         { "Name": "Attributes_Lions" },
         { "Name": "Attributes_Pandora" },
+        { "Name": "Audited" },
+        { "Name": "CommonNeutral" },
+        { "Name": "Deafened" },
+        { "Name": "Enchanted" },
+        { "Name": "PandoraTownTraitor" },
+        { "Name": "Reaped" },
+        { "Name": "SecretObjective" },
         { "Name": "Attributes_Startspawn" }
     ]
 }

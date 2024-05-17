@@ -28,7 +28,6 @@ public class DownloadController : UIController
     private GameObject ScrollView;
     private Scrollbar Scroll;
     private GameObject WaitingScreen;
-    private float Value;
 
     private readonly List<GameObject> PackGOs = [];
 
@@ -71,9 +70,6 @@ public class DownloadController : UIController
         WaitingScreen.SetActive(false);
 
         Scroll = transform.Find("ScrollView/ScrollbarVertical").GetComponent<Scrollbar>();
-        Scroll.gameObject.AddComponent<ContentSizeFitter>();
-        Scroll.gameObject.AddComponent<VerticalLayoutGroup>();
-        Value = Scroll.value;
 
         GameFont = ApplicationController.ApplicationContext.FontControllerSource.fonts[0].tmp_FontAsset;
         GameFontMaterial = ApplicationController.ApplicationContext.FontControllerSource.fonts[0].standardFontMaterial;
@@ -91,6 +87,9 @@ public class DownloadController : UIController
         Back.AddComponent<TooltipTrigger>().NonLocalizedString = "Close Packs Menu";
         OpenDir.GetComponent<Button>().onClick.AddListener(OpenDirectory);
         OpenDir.AddComponent<TooltipTrigger>().NonLocalizedString = "Open Icons Folder";
+        var dirButton = OpenDir.AddComponent<HoverEffect>();
+        dirButton.OnMouseOver.AddListener(() => OpenDir.GetComponent<Image>().sprite = AssetManager.Assets["OpenChest"]);
+        dirButton.OnMouseOut.AddListener(() => OpenDir.GetComponent<Image>().sprite = AssetManager.Assets["ClosedChest"]);
         Confirm.GetComponent<Button>().onClick.AddListener(GenerateLinkAndAddToPackCount);
         Confirm.AddComponent<TooltipTrigger>().NonLocalizedString = "Confirm Link Parameters And Generate Link";
         PackName.AddComponent<TooltipTrigger>().NonLocalizedString = "Name Of The Icon Pack (REQUIRED)";
@@ -135,7 +134,6 @@ public class DownloadController : UIController
             }
         }
 
-        Scroll.value = Value * (PackGOs.Count == 0 ? 1 : (PackGOs.Count / 3));
         yield break;
     }
 
@@ -176,7 +174,6 @@ public class DownloadController : UIController
         go.transform.localPosition = pos;
         go.SetActive(true);
         PackGOs.Add(go);
-        Scroll.value = Value * (PackGOs.Count == 0 ? 1 : (PackGOs.Count / 3));
 
         if (!StringUtils.IsNullEmptyOrWhiteSpace(packJson.Credits))
             go.AddComponent<TooltipTrigger>().NonLocalizedString = packJson.Credits;
@@ -232,31 +229,7 @@ public class DownloadController : UIController
         Running[packName] = true;
         var pack = Path.Combine(AssetManager.ModPath, packName);
 
-        if (Directory.Exists(pack))
-        {
-            var packinfo = new DirectoryInfo(pack);
-            var dirs = packinfo.GetDirectories().Select(x => x.FullName);
-
-            foreach (var dir in dirs)
-            {
-                var info = new DirectoryInfo(dir);
-                var dir2 = info.GetDirectories().Select(x => x.FullName);
-
-                foreach (var dir3 in dir2)
-                {
-                    var inf2 = new DirectoryInfo(dir3);
-                    inf2.GetFiles("*.png").Select(x => x.FullName).ForEach(File.Delete);
-                    inf2.GetFiles("*.jpg").Select(x => x.FullName).ForEach(File.Delete);
-                }
-
-                info.GetFiles("*.png").Select(x => x.FullName).ForEach(File.Delete);
-                info.GetFiles("*.jpg").Select(x => x.FullName).ForEach(File.Delete);
-            }
-
-            packinfo.GetFiles("*.png").Select(x => x.FullName).ForEach(File.Delete);
-            packinfo.GetFiles("*.jpg").Select(x => x.FullName).ForEach(File.Delete);
-        }
-        else
+        if (!Directory.Exists(pack))
             Directory.CreateDirectory(pack);
 
         var packJson = Packs[packName];

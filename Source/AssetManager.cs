@@ -154,6 +154,11 @@ public static class AssetManager
         if (!Constants.BTOS2Exists)
             return;
 
+        BTOS2Compatibility.BTOS2Patched = BTOS2Compatibility.Init();
+
+        if (!BTOS2Compatibility.BTOS2Patched)
+            return;
+
         var btos = Path.Combine(ModPath, "BTOS2");
 
         if (!Directory.Exists(btos))
@@ -172,8 +177,6 @@ public static class AssetManager
 
         Utils.DumpSprite(BTOS2_1.spriteSheet as Texture2D, "BTOSRoleIcons", Path.Combine(ModPath, "BTOS2"), true);
         LoadBTOS2SpriteSheet();
-
-        BTOS2Compatibility.BTOS2Patched = BTOS2Compatibility.Init();
     }
 
     private static Texture2D EmptyTexture() => new(2, 2, TextureFormat.ARGB32, true);

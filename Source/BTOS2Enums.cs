@@ -100,6 +100,7 @@ public static class BTOS2Role
     public const Role NeutralKilling = (Role)118;
     public const Role NeutralPariah = (Role)119;
     public const Role NeutralSpecial = (Role)120;
+    public const Role CommonNeutral = (Role)121;
 
     // Modifiers
     public const Role VIP = Role.VIP;

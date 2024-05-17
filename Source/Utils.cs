@@ -158,6 +158,7 @@ public static class Utils
         BTOS2Role.CovenVIP => "CovenVIP",
         BTOS2Role.SecretWhispers => "SecretWhispers",
         BTOS2Role.Hidden => "Hidden",
+        BTOS2Role.CommonNeutral => "CommonNeutral",
         _ => "Blank"
     };
 
@@ -249,6 +250,8 @@ public static class Utils
         Role.KILLER_ROLES_HIDDEN => "SecretKillers",
         Role.ROLES_ON_DEATH_HIDDEN => "HiddenRoles",
         Role.ONE_TRIAL_PER_DAY => "OneTrial",
+        Role.COMMON_COVEN => "CommonCoven",
+        Role.COMMON_TOWN => "CommonTown",
         Role.HIDDEN => "Hidden",
         _ => "Blank"
     };
@@ -453,12 +456,13 @@ public static class Utils
         EffectType.HANGOVER => "Hangover",
         EffectType.VOODOOED => "Silenced",
         EffectType.DREAMWOVE => "Dreamwoven",
-        EffectType.INSANE => "Insane",
+        EffectType.INSANE => "Insomniac",
         EffectType.VIP => "VIP",
         EffectType.BUG => "Bugged",
         EffectType.SCENT_TRACK => "Tracked",
         EffectType.PESTILENCE => "Sickness",
         EffectType.REVEALED_MARSHAL => "RevealedMarshal",
+        EffectType.SOCIALITE_GUEST => "Guest",
         (EffectType)100 => "Recruit",
         (EffectType)101 => "Deafened",
         (EffectType)102/* or (EffectType)200*/ => "CovenTownTraitor",
@@ -471,15 +475,6 @@ public static class Utils
         (EffectType)109/* or (EffectType)204*/ => "Reaped",
         (EffectType)110 => "WarlockCursed",
         (EffectType)111 => "SecretObjective",
-        /*(EffectType)201 => "MafiaTownTraitor",
-        (EffectType)202 => "Transported",
-        (EffectType)205 => "Hypnotised",
-        (EffectType)206 => "Gazed",
-        (EffectType)207 => "RevealedDeputy",
-        (EffectType)208 => "Blackmailed",
-        (EffectType)209 => "Blessed",
-        (EffectType)210 => "Framed",
-        (EffectType)211 => "RevealedProsecutor",*/
         _ => "Blank"
     };
 

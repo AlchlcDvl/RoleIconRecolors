@@ -1,4 +1,3 @@
-using Cinematics.Players;
 using Home.Services;
 using SalemModLoader;
 using Game.Services;
@@ -68,39 +67,27 @@ public static class PatchBrowserRoleListPanel
 public static class PatchRoleCards
 {
     [HarmonyPatch(typeof(RoleCardPanelBackground), nameof(RoleCardPanelBackground.SetRole))]
-    public static class Patch1
+    public static void Postfix(RoleCardPanelBackground __instance, ref Role role)
     {
-        public static void Postfix(RoleCardPanelBackground __instance, ref Role role)
+        if (Constants.EnableIcons)
         {
-            if (Constants.EnableIcons)
-            {
-                var panel = __instance.GetComponentInParent<RoleCardPanel>();
-                ChangeRoleCard(panel?.roleIcon, panel?.specialAbilityPanel?.useButton?.abilityIcon, panel?.roleInfoButtons, role, Pepper.GetMyFaction());
-            }
+            var panel = __instance.GetComponentInParent<RoleCardPanel>();
+            ChangeRoleCard(panel?.roleIcon, panel?.specialAbilityPanel?.useButton?.abilityIcon, panel?.roleInfoButtons, role, Pepper.GetMyFaction());
         }
     }
 
     [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.HandleOnMyIdentityChanged))]
-    public static class Patch2
+    public static void Postfix(RoleCardPanel __instance, ref PlayerIdentityData playerIdentityData)
     {
-        public static void Postfix(RoleCardPanel __instance, ref PlayerIdentityData playerIdentityData)
-        {
-            if (Constants.EnableIcons)
-            {
-                ChangeRoleCard(__instance?.roleIcon, __instance?.specialAbilityPanel?.useButton?.abilityIcon, __instance?.roleInfoButtons, playerIdentityData.role,
-                    playerIdentityData.faction);
-            }
-        }
+        if (Constants.EnableIcons)
+            ChangeRoleCard(__instance?.roleIcon, __instance?.specialAbilityPanel?.useButton?.abilityIcon, __instance?.roleInfoButtons, playerIdentityData.role, playerIdentityData.faction);
     }
 
     [HarmonyPatch(typeof(RoleCardPopupPanel), nameof(RoleCardPopupPanel.SetRole))]
-    public static class Patch3
+    public static void Postfix(RoleCardPopupPanel __instance, ref Role role)
     {
-        public static void Postfix(RoleCardPopupPanel __instance, ref Role role)
-        {
-            if (Constants.EnableIcons)
-                ChangeRoleCard(__instance?.roleIcon, __instance?.specialAbilityPanel?.useButton?.abilityIcon, __instance?.roleInfoButtons, role, role.GetFactionType(), true);
-        }
+        if (Constants.EnableIcons)
+            ChangeRoleCard(__instance?.roleIcon, __instance?.specialAbilityPanel?.useButton?.abilityIcon, __instance?.roleInfoButtons, role, role.GetFactionType(), true);
     }
 
     private static void ChangeRoleCard(Image roleIcon, Image specialAbilityPanel, List<BaseAbilityButton> roleInfoButtons, Role role, FactionType factionType, bool isGuide = false)
@@ -368,33 +355,6 @@ public static class PatchRitualistGuessMenu
 
         if (__instance.roleIcon && icon.IsValid())
             __instance.roleIcon.sprite = icon;
-    }
-}
-
-[HarmonyPatch(typeof(DoomsayerLeavesCinematicPlayer), nameof(DoomsayerLeavesCinematicPlayer.Init))]
-public static class PatchDoomsayerLeaving
-{
-    public static void Postfix(DoomsayerLeavesCinematicPlayer __instance)
-    {
-        if (!Constants.EnableIcons || Constants.IsBTOS2)
-            return;
-
-        var role1 = __instance.doomsayerLeavesCinematicData.roles[0];
-        var role2 = __instance.doomsayerLeavesCinematicData.roles[1];
-        var role3 = __instance.doomsayerLeavesCinematicData.roles[2];
-
-        var sprite1 = AssetManager.GetSprite(Utils.RoleName(role1), Utils.FactionName(role1.GetFactionType()));
-        var sprite2 = AssetManager.GetSprite(Utils.RoleName(role2), Utils.FactionName(role2.GetFactionType()));
-        var sprite3 = AssetManager.GetSprite(Utils.RoleName(role3), Utils.FactionName(role3.GetFactionType()));
-
-        if (sprite1.IsValid() && __instance.otherCharacterRole1)
-            __instance.otherCharacterRole1.sprite = sprite1;
-
-        if (sprite2.IsValid() && __instance.otherCharacterRole2)
-            __instance.otherCharacterRole2.sprite = sprite2;
-
-        if (sprite3.IsValid() && __instance.otherCharacterRole3)
-            __instance.otherCharacterRole3.sprite = sprite3;
     }
 }
 
@@ -833,5 +793,70 @@ public static class ChangeGameModifierPopup
 
         if (sprite.IsValid() && __instance.roleIcon)
             __instance.roleIcon.sprite = sprite;
+    }
+}
+
+[HarmonyPatch(typeof(NecroPassingVoteEntry))]
+public static class NecroPassPatches
+{
+    [HarmonyPatch(nameof(NecroPassingVoteEntry.RefreshData))]
+    [HarmonyPostfix]
+    public static void RefreshDataPatch(NecroPassingVoteEntry __instance)
+    {
+        if (!Constants.EnableIcons)
+            return;
+
+        var nommy = AssetManager.GetSprite("Necronomicon");
+
+        if (__instance.BookIcon && nommy.IsValid())
+            __instance.BookIcon.sprite = nommy;
+
+        if (!Service.Game.Sim.simulation.knownRolesAndFactions.Data.TryGetValue(__instance.Position, out var tuple))
+            return;
+
+        if (Pepper.GetMyPosition() == __instance.Position)
+            tuple = new(Pepper.GetMyRole(), Pepper.GetMyFaction());
+
+        var ogfaction = tuple.Item1.GetFactionType();
+        var reg = ogfaction != tuple.Item2;
+        var role = Utils.RoleName(tuple.Item1);
+        var sprite = AssetManager.GetSprite(reg, role, Utils.FactionName(tuple.Item2));
+
+        if (!sprite.IsValid() && reg)
+            sprite = AssetManager.GetSprite(role, Utils.FactionName(ogfaction));
+
+        if (sprite.IsValid() && __instance.RoleIcon)
+            __instance.RoleIcon.sprite = sprite;
+    }
+
+    [HarmonyPatch(nameof(NecroPassingVoteEntry.UpdateVoteState))]
+    [HarmonyPostfix]
+    public static void UpdateVoteStatePatch(NecroPassingVoteEntry __instance)
+    {
+        if (!Constants.EnableIcons)
+            return;
+
+        for (var i = 0; i < __instance.m_votes.Count; i++)
+        {
+            var id = __instance.m_votes[i];
+
+            if (!Service.Game.Sim.simulation.knownRolesAndFactions.Data.TryGetValue(id, out var tuple))
+                continue;
+
+            if (Pepper.GetMyPosition() == id)
+                tuple = new(Pepper.GetMyRole(), Pepper.GetMyFaction());
+
+            var bust = __instance.m_roleBusts[i];
+            var ogfaction = tuple.Item1.GetFactionType();
+            var reg = ogfaction != tuple.Item2;
+            var role = Utils.RoleName(tuple.Item1);
+            var sprite = AssetManager.GetSprite(reg, role, Utils.FactionName(tuple.Item2));
+
+            if (!sprite.IsValid() && reg)
+                sprite = AssetManager.GetSprite(role, Utils.FactionName(ogfaction));
+
+            if (sprite.IsValid() && bust)
+                bust.sprite = sprite;
+        }
     }
 }
