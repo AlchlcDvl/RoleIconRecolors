@@ -797,6 +797,7 @@ public static class ChangeGameModifierPopup
 }
 
 [HarmonyPatch(typeof(NecroPassingVoteEntry))]
+[HarmonyPriority(Priority.VeryLow)]
 public static class NecroPassPatches
 {
     [HarmonyPatch(nameof(NecroPassingVoteEntry.RefreshData))]

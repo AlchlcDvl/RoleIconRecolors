@@ -26,7 +26,6 @@ public class DownloadController : UIController
     private GameObject NoPacks;
     private GameObject PackTemplate;
     private GameObject ScrollView;
-    private Scrollbar Scroll;
     private GameObject WaitingScreen;
 
     private readonly List<GameObject> PackGOs = [];
@@ -68,8 +67,6 @@ public class DownloadController : UIController
         WaitingScreen = Instantiate(AssetManager.AssetGOs["WaitingScreen"], transform);
         WaitingScreen.transform.localPosition = new(0, 0, -1f);
         WaitingScreen.SetActive(false);
-
-        Scroll = transform.Find("ScrollView/ScrollbarVertical").GetComponent<Scrollbar>();
 
         GameFont = ApplicationController.ApplicationContext.FontControllerSource.fonts[0].tmp_FontAsset;
         GameFontMaterial = ApplicationController.ApplicationContext.FontControllerSource.fonts[0].standardFontMaterial;

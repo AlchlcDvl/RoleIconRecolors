@@ -7,7 +7,7 @@ public class HoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public Button.ButtonClickedEvent OnMouseOver;
     public Button.ButtonClickedEvent OnMouseOut;
 
-    public void Aawake()
+    public void Awake()
     {
         OnMouseOver = new();
         OnMouseOut = new();
