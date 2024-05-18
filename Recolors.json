@@ -36,6 +36,7 @@
                     "Assets":
                     [
                         { "Name": "CursedSoul" },
+                        { "Name": "Amnesiac" },
                         { "Name": "Inquisitor" },
                         { "Name": "Inquisitor_Ability" },
                         { "Name": "Inquisitor_Special" }
