@@ -79,6 +79,7 @@
         { "Name": "Cleric_Ability" },
         { "Name": "Cleric_Special" },
         { "Name": "CommonCoven" },
+        { "Name": "CommonNeutral" },
         { "Name": "CommonTown" },
         { "Name": "CompliantKillers" },
         { "Name": "Conjurer" },
