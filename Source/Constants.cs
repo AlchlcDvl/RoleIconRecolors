@@ -4,15 +4,21 @@ public static class Constants
 {
     public static bool PlayerPanelEasterEggs => ModSettings.GetBool("Enable Easter Eggs In Player Panel", "alchlcsystm.recolors");
     public static bool AllEasterEggs => ModSettings.GetBool("All Easter Eggs Are Active", "alchlcsystm.recolors");
-    public static int EasterEggChance => ModSettings.GetInt("Easter Egg Icon Chance", "alchlcsystm.recolors");
+    public static int EasterEggChance() 
+    { 
+        return ModSettings.GetInt("Easter Egg Icon Chance", "alchlcsystm.recolors"); 
+    }
     public static string CurrentPack => ModSettings.GetString("Selected Icon Pack", "alchlcsystm.recolors");
     public static string CurrentStyle => ModSettings.GetString($"Selected {Utils.GetGameType()} Mention Style", "alchlcsystm.recolors");
     public static string FactionOverride => ModSettings.GetString($"Override {Utils.GetGameType()} Faction", "alchlcsystm.recolors");
     public static bool CustomNumbers => ModSettings.GetBool("Use Custom Numbers", "alchlcsystm.recolors");
     public static bool DumpSheets => ModSettings.GetBool("Dump Sprite Sheets", "alchlcsystm.recolors");
     public static bool FactionOverridden => FactionOverride != "None";
-    public static bool EnableIcons => CurrentPack != "Vanilla";
-    public static bool BTOS2Exists => ModStates.IsEnabled("curtis.tuba.better.tos2");
+    public static bool EnableIcons()
+    {
+        return CurrentPack != "Vanilla";
+    }
+    public static bool BTOS2Exists() { return ModStates.IsEnabled("curtis.tuba.better.tos2"); }
     public static bool IsBTOS2
     {
         get
@@ -27,7 +33,7 @@ public static class Constants
             }
         }
     }
-    private static bool IsBTOS2Bypass() => BTOS2Exists && BetterTOS2.BTOSInfo.IS_MODDED;
+    private static bool IsBTOS2Bypass() => BTOS2Exists() && BetterTOS2.BTOSInfo.IS_MODDED;
     public static bool IsNecroActive
     {
         get

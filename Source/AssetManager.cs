@@ -39,7 +39,7 @@ public static class AssetManager
 
     public static Sprite GetSprite(string name, bool allowEE = true, string faction = null, string packName = null, bool skipRegular = false)
     {
-        if (name.Contains("Blank") || !Constants.EnableIcons || IconPacks.Count == 0)
+        if (name.Contains("Blank") || !Constants.EnableIcons() || IconPacks.Count == 0)
             return Blank;
 
         packName ??= Constants.CurrentPack;
@@ -151,7 +151,7 @@ public static class AssetManager
 
     private static void LoadBTOS()
     {
-        if (!Constants.BTOS2Exists)
+        if (!Constants.BTOS2Exists())
             return;
 
         BTOS2Compatibility.BTOS2Patched = BTOS2Compatibility.Init();
@@ -341,7 +341,7 @@ public static class AssetManager
         if (!Vanilla2)
             diagnostic += "\nModified Player Numbers Sheet Does Not Exist";
 
-        if (Constants.BTOS2Exists)
+        if (Constants.BTOS2Exists())
         {
             if (!BTOS2_1)
                 diagnostic += "\nBTOS2 Sheet Does Not Exist";
@@ -352,7 +352,7 @@ public static class AssetManager
 
         diagnostic += $"\nCurrently In A {game} Game";
 
-        if (Constants.EnableIcons && !IconPacks.TryGetValue(Constants.CurrentPack, out pack))
+        if (Constants.EnableIcons() && !IconPacks.TryGetValue(Constants.CurrentPack, out pack))
             diagnostic += "\nNo Loaded Icon Pack";
         else if (pack == null)
             diagnostic += "\nLoaded Icon Pack Was Null";

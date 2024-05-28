@@ -17,7 +17,7 @@ public static class PatchRoleDeckBuilder
 {
     public static void Postfix(RoleCardListItem __instance, ref Role role)
     {
-        if (!Constants.EnableIcons)
+        if (!Constants.EnableIcons())
             return;
 
         var icon = AssetManager.GetSprite(Utils.RoleName(role), Utils.FactionName(role.GetFactionType()), false);
@@ -38,7 +38,7 @@ public static class PatchRoleListPanel
 {
     public static void Postfix(RoleDeckListItem __instance, ref Role a_role, ref bool a_isBan)
     {
-        if (!Constants.EnableIcons)
+        if (!Constants.EnableIcons())
             return;
 
         var icon = a_isBan ? AssetManager.GetSprite("Banned", false) : AssetManager.GetSprite(Utils.RoleName(a_role), Utils.FactionName(a_role.GetFactionType()), false);
@@ -53,7 +53,7 @@ public static class PatchBrowserRoleListPanel
 {
     public static void Postfix(GameBrowserRoleDeckListItem __instance, ref Role a_role, ref bool a_isBan)
     {
-        if (!Constants.EnableIcons)
+        if (!Constants.EnableIcons())
             return;
 
         var icon = a_isBan ? AssetManager.GetSprite("Banned", false) : AssetManager.GetSprite(Utils.RoleName(a_role), Utils.FactionName(a_role.GetFactionType()), false);
@@ -69,7 +69,7 @@ public static class PatchRoleCards
     [HarmonyPatch(typeof(RoleCardPanelBackground), nameof(RoleCardPanelBackground.SetRole))]
     public static void Postfix(RoleCardPanelBackground __instance, ref Role role)
     {
-        if (Constants.EnableIcons)
+        if (Constants.EnableIcons())
         {
             var panel = __instance.GetComponentInParent<RoleCardPanel>();
             ChangeRoleCard(panel?.roleIcon, panel?.specialAbilityPanel?.useButton?.abilityIcon, panel?.roleInfoButtons, role, Pepper.GetMyFaction());
@@ -79,14 +79,14 @@ public static class PatchRoleCards
     [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.HandleOnMyIdentityChanged))]
     public static void Postfix(RoleCardPanel __instance, ref PlayerIdentityData playerIdentityData)
     {
-        if (Constants.EnableIcons)
+        if (Constants.EnableIcons())
             ChangeRoleCard(__instance?.roleIcon, __instance?.specialAbilityPanel?.useButton?.abilityIcon, __instance?.roleInfoButtons, playerIdentityData.role, playerIdentityData.faction);
     }
 
     [HarmonyPatch(typeof(RoleCardPopupPanel), nameof(RoleCardPopupPanel.SetRole))]
     public static void Postfix(RoleCardPopupPanel __instance, ref Role role)
     {
-        if (Constants.EnableIcons)
+        if (Constants.EnableIcons())
             ChangeRoleCard(__instance?.roleIcon, __instance?.specialAbilityPanel?.useButton?.abilityIcon, __instance?.roleInfoButtons, role, role.GetFactionType(), true);
     }
 
@@ -212,7 +212,7 @@ public static class PatchAbilityPanel
 {
     public static void Postfix(TosAbilityPanelListItem __instance, ref TosAbilityPanelListItem.OverrideAbilityType overrideType)
     {
-        if (!Constants.EnableIcons || overrideType == TosAbilityPanelListItem.OverrideAbilityType.VOTING)
+        if (!Constants.EnableIcons() || overrideType == TosAbilityPanelListItem.OverrideAbilityType.VOTING)
             return;
 
         var role = Pepper.GetMyRole();
@@ -325,7 +325,7 @@ public static class SpecialAbilityPanelPatch
 {
     public static void Postfix(SpecialAbilityPopupGenericListItem __instance)
     {
-        if (!Constants.EnableIcons)
+        if (!Constants.EnableIcons())
             return;
 
         var role = Pepper.GetMyRole();
@@ -348,7 +348,7 @@ public static class PatchRitualistGuessMenu
 {
     public static void Postfix(SpecialAbilityPopupRadialIcon __instance, ref Role a_role)
     {
-        if (!Constants.EnableIcons)
+        if (!Constants.EnableIcons())
             return;
 
         var icon = AssetManager.GetSprite(Utils.RoleName(a_role), Utils.FactionName(a_role.GetFactionType()), false);
@@ -398,7 +398,7 @@ public static class PatchAttackDefense
 {
     public static void Postfix(RoleCardPanel __instance, ref RoleCardData data)
     {
-        if (!Constants.EnableIcons)
+        if (!Constants.EnableIcons())
             return;
 
         var attack = AssetManager.GetSprite($"Attack{Utils.GetLevel(data.attack, true)}");
@@ -421,7 +421,7 @@ public static class PatchAttackDefensePopup
 {
     public static void Postfix(RoleCardPopupPanel __instance, ref RoleCardData data)
     {
-        if (!Constants.EnableIcons)
+        if (!Constants.EnableIcons())
             return;
 
         var attack = AssetManager.GetSprite($"Attack{Utils.GetLevel(data.attack, true)}");
@@ -444,7 +444,7 @@ public static class PlayerPopupControllerPatch
 {
     public static void Postfix(PlayerPopupController __instance)
     {
-        if (!Constants.EnableIcons)
+        if (!Constants.EnableIcons())
             return;
 
         var killRecord = Service.Game.Sim.simulation.killRecords.Data.Find(k => k.playerId == __instance.m_discussionPlayerState.position);
@@ -471,7 +471,7 @@ public static class InitialiseRolePanel
 {
     public static void Postfix(PlayerPopupController __instance)
     {
-        if (!Constants.EnableIcons || !Pepper.IsGamePhasePlay())
+        if (!Constants.EnableIcons() || !Pepper.IsGamePhasePlay())
             return;
 
         var killRecord = Service.Game.Sim.simulation.killRecords.Data.Find(k => k.playerId == __instance.m_discussionPlayerState.position);
@@ -507,7 +507,7 @@ public static class RoleMenuPopupControllerPatch
 {
     public static void Postfix(RoleMenuPopupController __instance)
     {
-        if (!Constants.EnableIcons)
+        if (!Constants.EnableIcons())
             return;
 
         var sprite = AssetManager.GetSprite(Utils.RoleName(__instance.m_role), Utils.FactionName(__instance.m_role.GetFactionType()));
@@ -533,7 +533,7 @@ public static class PlayerEffectsServicePatch
         if (!EffectSprites.ContainsKey(effectType))
             EffectSprites[effectType] = __result.sprite;
 
-        if (!Constants.EnableIcons)
+        if (!Constants.EnableIcons())
         {
             __result.sprite = EffectSprites[effectType];
             return;
@@ -554,7 +554,7 @@ public static class GetRoleIconAndNameInlineStringPatch
 {
     public static void Postfix(ref FactionType factionType, ref string __result)
     {
-        if (Constants.EnableIcons)
+        if (Constants.EnableIcons())
             __result = __result.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(factionType, false)})\"");
     }
 }
@@ -564,7 +564,7 @@ public static class GetTownTraitorRoleIconAndNameInlineStringPatch
 {
     public static void Postfix(ref string __result)
     {
-        if (Constants.EnableIcons)
+        if (Constants.EnableIcons())
             __result = __result.Replace("RoleIcons\"", "RoleIcons (Coven)\"");
     }
 }
@@ -574,7 +574,7 @@ public static class GetVIPRoleIconAndNameInlineStringPatch
 {
     public static void Postfix(ref string __result)
     {
-        if (Constants.EnableIcons)
+        if (Constants.EnableIcons())
             __result = __result.Replace("RoleIcons\"", "RoleIcons (VIP)\"") + " <sprite=\"RoleIcons (VIP)\" name=\"Role201\">";
     }
 }
@@ -584,7 +584,7 @@ public static class TosCharacterNametagPatch
 {
     public static void Postfix(TosCharacterNametag __instance, ref FactionType factionType, ref string __result)
     {
-        if (!Constants.EnableIcons)
+        if (!Constants.EnableIcons())
             return;
 
         if (__instance.tosCharacter.position == Pepper.GetMyPosition())
@@ -600,7 +600,7 @@ public static class FixDecodingAndEncoding
 {
     public static void Postfix(ref ChatLogMessage chatLogMessage, ref string __result)
     {
-        if (Constants.EnableIcons && chatLogMessage.chatLogEntry is ChatLogChatMessageEntry entry)
+        if (Constants.EnableIcons() && chatLogMessage.chatLogEntry is ChatLogChatMessageEntry entry)
         {
             var faction = "Regular";
 
@@ -621,7 +621,7 @@ public static class PMBakerMenuPatch
 {
     public static void Postfix(SpecialAbilityPopupPotionMaster __instance)
     {
-        if (!Constants.EnableIcons)
+        if (!Constants.EnableIcons())
             return;
 
         var role = Pepper.GetMyRole();
@@ -727,7 +727,7 @@ public static class ReplaceTMPSpritesPatch
     {
         asset = null;
 
-        if (!Constants.EnableIcons)
+        if (!Constants.EnableIcons())
             return false;
 
         if (AssetManager.IconPacks.TryGetValue(Constants.CurrentPack, out var pack))
@@ -804,7 +804,7 @@ public static class NecroPassPatches
     [HarmonyPostfix]
     public static void RefreshDataPatch(NecroPassingVoteEntry __instance)
     {
-        if (!Constants.EnableIcons)
+        if (!Constants.EnableIcons())
             return;
 
         var nommy = AssetManager.GetSprite("Necronomicon");
@@ -834,7 +834,7 @@ public static class NecroPassPatches
     [HarmonyPostfix]
     public static void UpdateVoteStatePatch(NecroPassingVoteEntry __instance)
     {
-        if (!Constants.EnableIcons)
+        if (!Constants.EnableIcons())
             return;
 
         for (var i = 0; i < __instance.m_votes.Count; i++)

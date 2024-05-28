@@ -59,7 +59,7 @@ public static class BTOS2Compatibility
 
     public static void ItemPostfix1(dynamic __instance, ref Role a_role, ref FactionType faction, ref bool isBan)
     {
-        if (!Constants.EnableIcons)
+        if (!Constants.EnableIcons())
             return;
 
         var roleIcon = (Image)AccessTools.Field(DeckItemType, "roleIcon").GetValue(__instance);
@@ -91,7 +91,7 @@ public static class BTOS2Compatibility
 
     public static void ItemPostfix2(dynamic __instance)
     {
-        if (!Constants.EnableIcons)
+        if (!Constants.EnableIcons())
             return;
 
         var roleIcon = (Image)AccessTools.Field(MenuRoleType, "icon").GetValue(__instance);
@@ -119,7 +119,7 @@ public static class BTOS2Compatibility
 
     public static void ItemPostfix3(dynamic __instance)
     {
-        if (!Constants.EnableIcons)
+        if (!Constants.EnableIcons())
             return;
 
         var roleIcon = (Image)AccessTools.Field(OracleMenuControllerListItemType, "RoleIcon").GetValue(__instance);

@@ -50,7 +50,7 @@ public class Recolors
         Name = "Selected Vanilla Mention Style",
         Description = "The selected mention style will dictate which icons are used for the icons in text. May require a game restart.",
         Options = GetOptions(ModType.Vanilla, true),
-        Available = Constants.EnableIcons
+        Available = Constants.EnableIcons()
     };
 
     public ModSettings.DropdownSetting ChoiceMentions2 => new()
@@ -58,7 +58,7 @@ public class Recolors
         Name = "Selected BTOS2 Mention Style",
         Description = "The selected mention style will dictate which icons are used for the icons in text. May require a game restart.",
         Options = GetOptions(ModType.BTOS2, true),
-        Available = Constants.BTOS2Exists && Constants.EnableIcons
+        Available = Constants.BTOS2Exists() && Constants.EnableIcons()
     };
 
     public ModSettings.DropdownSetting FactionOverride1 => new()
@@ -66,7 +66,7 @@ public class Recolors
         Name = "Override Vanilla Faction",
         Description = "Only icons from the selected faction will appear in vanilla games.",
         Options = GetOptions(ModType.Vanilla, false),
-        Available = Constants.EnableIcons
+        Available = Constants.EnableIcons()
     };
 
     public ModSettings.DropdownSetting FactionOverride2 => new()
@@ -74,14 +74,14 @@ public class Recolors
         Name = "Override BTOS2 Faction",
         Description = "Only icons from the selected faction will appear in BTOS2 games.",
         Options = GetOptions(ModType.BTOS2, false),
-        Available = Constants.BTOS2Exists && Constants.EnableIcons
+        Available = Constants.BTOS2Exists() && Constants.EnableIcons()
     };
 
     public ModSettings.CheckboxSetting CustomNumbers => new()
     {
         Name = "Use Custom Numbers",
         Description = "Select whether you want to use the icon pack's rendition of player numbers or the game's.",
-        Available = Constants.EnableIcons
+        Available = Constants.EnableIcons()
     };
 
     public ModSettings.IntegerInputSetting EasterEggChance => new()
@@ -90,7 +90,7 @@ public class Recolors
         Description = "The chance of a different than normal icon appearing for roles.",
         DefaultValue = 5,
         AvailableInGame = true,
-        Available = Constants.EnableIcons
+        Available = Constants.EnableIcons()
     };
 
     public ModSettings.CheckboxSetting AllEasterEggs => new()
@@ -99,7 +99,7 @@ public class Recolors
         Description = "Toggles whether all of the previously selected icon pack's easter eggs will be used, or only the selected icon pack's.",
         DefaultValue = false,
         AvailableInGame = true,
-        Available = Constants.EnableIcons && Constants.EasterEggChance > 0
+        Available = Constants.EnableIcons() && (Constants.EasterEggChance() > 0)
     };
 
     public ModSettings.CheckboxSetting PlayerPanelEasterEggs => new()
@@ -108,7 +108,7 @@ public class Recolors
         Description = "Toggles whether easter egg icons appear or not in the ability panel.",
         DefaultValue = false,
         AvailableInGame = true,
-        Available = Constants.EnableIcons && Constants.EasterEggChance > 0
+        Available = Constants.EnableIcons() && (Constants.EasterEggChance() > 0)
     };
 
     private static List<string> GetPackNames()

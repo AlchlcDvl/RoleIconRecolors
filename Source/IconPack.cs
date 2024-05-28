@@ -86,7 +86,7 @@ public class IconPack(string name)
                 {
                     var assets = Assets[type] = new(mod);
 
-                    if (type == ModType.BTOS2 && !Constants.BTOS2Exists)
+                    if (type == ModType.BTOS2 && !Constants.BTOS2Exists())
                         continue;
 
                     var modPath = Path.Combine(PackPath, mod);
@@ -345,7 +345,7 @@ public class IconPack(string name)
                 {
                     var type = Enum.Parse<ModType>(mod);
 
-                    if (type == ModType.BTOS2 && !Constants.BTOS2Exists)
+                    if (type == ModType.BTOS2 && !Constants.BTOS2Exists())
                         continue;
 
                     var index = Utils.Filtered(type);
@@ -441,7 +441,7 @@ public class IconPack(string name)
         icons ??= [];
         icons.TryGetValue(iconName, out var sprite);
 
-        if (URandom.RandomRangeInt(1, 101) <= Constants.EasterEggChance && (allowEE || !sprite.IsValid()))
+        if (URandom.RandomRangeInt(1, 101) <= Constants.EasterEggChance() && (allowEE || !sprite.IsValid()))
         {
             var sprites = new List<Sprite>();
 
