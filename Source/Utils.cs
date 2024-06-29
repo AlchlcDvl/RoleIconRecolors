@@ -1,4 +1,4 @@
-namespace IconPacks;
+namespace FancyUI;
 
 public static class Utils
 {
@@ -262,8 +262,8 @@ public static class Utils
 
     public static string FactionName(FactionType faction, ModType? mod = null, bool allowOverides = true)
     {
-        if (Constants.FactionOverridden && allowOverides)
-            return Constants.FactionOverride;
+        if (Constants.FactionOverridden() && allowOverides)
+            return Constants.FactionOverride();
 
         try
         {
@@ -306,7 +306,7 @@ public static class Utils
         BTOS2Faction.Egotist => "Egotist",
         BTOS2Faction.Pandora => "Pandora",
         BTOS2Faction.Compliance => "Compliance",
-        _ => "Blank"
+        _ => "Factionless"
     };
 
     private static string VanillaFactionName(FactionType faction) => faction switch
@@ -324,7 +324,7 @@ public static class Utils
         FactionType.DOOMSAYER => "Doomsayer",
         FactionType.VAMPIRE => "Vampire",
         FactionType.CURSED_SOUL => "CursedSoul",
-        _ => "Blank"
+        _ => "Factionless"
     };
 
     public static bool ModifiedByToS1UI(Role role) => ChangedByToS1UI.Contains(role);
@@ -423,7 +423,7 @@ public static class Utils
 
     public static void DumpSprite(Texture2D texture, string fileName = null, string path = null, bool decompress = false, bool skipSetting = false)
     {
-        if (!Constants.DumpSheets && !skipSetting)
+        if (!Constants.DumpSheets() && !skipSetting)
             return;
 
         path ??= AssetManager.ModPath;
@@ -499,7 +499,7 @@ public static class Utils
 
     public static ModType GetGameType()
     {
-        if (Constants.IsBTOS2 || FindCasualQueue())
+        if (Constants.IsBTOS2() || FindCasualQueue())
             return ModType.BTOS2;
         else
             return ModType.Vanilla;
@@ -523,7 +523,7 @@ public static class Utils
     {
         try
         {
-            return Constants.IsBTOS2 && ui.role is BTOS2Role.Judge or BTOS2Role.Auditor or BTOS2Role.Starspawn;
+            return Constants.IsBTOS2() && ui.role is BTOS2Role.Judge or BTOS2Role.Auditor or BTOS2Role.Starspawn;
         }
         catch
         {

@@ -1,8 +1,8 @@
-namespace IconPacks;
+namespace FancyUI;
 
 public static class AssetManager
 {
-    public const string Resources = "IconPacks.Resources.";
+    public const string Resources = "FancyUI.Resources.";
 
     public static readonly Dictionary<string, Dictionary<string, List<Sprite>>> GlobalEasterEggs = [];
     public static readonly Dictionary<string, IconPack> IconPacks = [];
@@ -23,14 +23,14 @@ public static class AssetManager
     public static readonly Dictionary<string, Sprite> Assets = [];
     public static readonly Dictionary<string, GameObject> AssetGOs = [];
 
-    public static string ModPath => Path.Combine(Path.GetDirectoryName(Application.dataPath), "SalemModLoader", "ModFolders", "Recolors");
+    public static string ModPath => Path.Combine(Path.GetDirectoryName(Application.dataPath), "SalemModLoader", "ModFolders", "FancyUI");
 
     private static readonly string[] Avoid = [ "Necronomicon", "Recruit", "Doused", "ExeTarget", "Hexed", "Knighted", "Bread", "Revealed", "Disconnected", "Connecting", "Plagued", "Revealed",
         "Trapped", "Hangover", "Silenced", "Dreamwoven", "Insane", "Bugged", "Tracked", "Sickness", "Reaped", "Deafened", "Audited", "Enchanted", "Accompanied", "Banned", "WarlockCursed" ];
 
     private static readonly string[] ToRemove = [ ".png", ".jpg" ];
 
-    private static Assembly Core => typeof(Recolors).Assembly;
+    private static Assembly Core => typeof(Fancy).Assembly;
 
     public static Sprite GetSprite(bool skipRegular, string name, string faction, bool allowEE = false, string packName = null) => GetSprite(name, allowEE, faction, packName, skipRegular);
 
@@ -39,23 +39,23 @@ public static class AssetManager
 
     public static Sprite GetSprite(string name, bool allowEE = true, string faction = null, string packName = null, bool skipRegular = false)
     {
-        if (name.Contains("Blank") || !Constants.EnableIcons || IconPacks.Count == 0)
+        if (name.Contains("Blank") || !Constants.EnableIcons() || IconPacks.Count == 0)
             return Blank;
 
-        packName ??= Constants.CurrentPack;
+        packName ??= Constants.CurrentPack();
 
         if (!IconPacks.TryGetValue(packName, out var pack))
         {
             Logging.LogError($"Error finding {packName} in loaded packs");
-            ModSettings.SetString("Selected Icon Pack", "Vanilla", "alchlcsystm.recolors");
+            ModSettings.SetString("Selected Icon Pack", "Vanilla", "alchlcsystm.fancy.ui");
             return Blank;
         }
 
         var og = faction;
 
-        if (Constants.IsNecroActive)
+        if (Constants.IsNecroActive())
             faction = "Necronomicon";
-        else if (Constants.IsLocalVIP)
+        else if (Constants.IsLocalVIP())
             faction = "VIP";
 
         if (faction is null or "Blank" || Avoid.Any(name.Contains))
@@ -94,6 +94,14 @@ public static class AssetManager
                 }
             }
 
+            if (!sprite.IsValid())
+            {
+                sprite = pack.GetSprite(name + $"_{mod}", allowEE, "Factionless");
+
+                if (!sprite.IsValid())
+                    sprite = pack.GetSprite(name, allowEE, "Factionless");
+            }
+
             return sprite ?? Blank;
         }
         catch (Exception e)
@@ -108,7 +116,22 @@ public static class AssetManager
         if (!Directory.Exists(ModPath))
             Directory.CreateDirectory(ModPath);
 
-        var vanilla = Path.Combine(ModPath, "Vanilla");
+        var iconpacks = Path.Combine(ModPath, "IconPacks");
+
+        if (!Directory.Exists(iconpacks))
+            Directory.CreateDirectory(iconpacks);
+
+        var vanilla = Path.Combine(iconpacks, "Vanilla");
+
+        if (!Directory.Exists(vanilla))
+            Directory.CreateDirectory(vanilla);
+
+        var silsets = Path.Combine(ModPath, "SilhouetteSets");
+
+        if (!Directory.Exists(silsets))
+            Directory.CreateDirectory(silsets);
+
+        vanilla = Path.Combine(silsets, "Vanilla");
 
         if (!Directory.Exists(vanilla))
             Directory.CreateDirectory(vanilla);
@@ -140,7 +163,7 @@ public static class AssetManager
         Bundle.LoadAllAssets<Sprite>().ForEach(x => Assets[x.name] = x);
         Bundle.LoadAllAssets<GameObject>().ForEach(x => AssetGOs[x.name] = x);
 
-        TryLoadingSprites(Constants.CurrentPack);
+        TryLoadingSprites(Constants.CurrentPack(), PackType.IconPacks);
         LoadVanillaSpriteSheets();
 
         try
@@ -151,7 +174,7 @@ public static class AssetManager
 
     private static void LoadBTOS()
     {
-        if (!Constants.BTOS2Exists)
+        if (!Constants.BTOS2Exists())
             return;
 
         BTOS2Compatibility.BTOS2Patched = BTOS2Compatibility.Init();
@@ -159,7 +182,12 @@ public static class AssetManager
         if (!BTOS2Compatibility.BTOS2Patched)
             return;
 
-        var btos = Path.Combine(ModPath, "BTOS2");
+        var btos = Path.Combine(ModPath, "IconPacks", "BTOS2");
+
+        if (!Directory.Exists(btos))
+            Directory.CreateDirectory(btos);
+
+        btos = Path.Combine(ModPath, "SilhouetteSets", "BTOS2");
 
         if (!Directory.Exists(btos))
             Directory.CreateDirectory(btos);
@@ -175,7 +203,7 @@ public static class AssetManager
             };
         }
 
-        Utils.DumpSprite(BTOS2_1.spriteSheet as Texture2D, "BTOSRoleIcons", Path.Combine(ModPath, "BTOS2"), true);
+        Utils.DumpSprite(BTOS2_1.spriteSheet as Texture2D, "BTOSRoleIcons", Path.Combine(ModPath, "IconPacks", "BTOS2"), true);
         LoadBTOS2SpriteSheet();
     }
 
@@ -222,10 +250,10 @@ public static class AssetManager
         }
     }
 
-    public static Sprite LoadDiskSprite(string fileName, string subfolder, string folder, string superfolder, string filetype) => LoadDiskSprite(fileName, Path.Combine(ModPath, superfolder,
+    public static Sprite LoadDiskSprite(string fileName, string subfolder, string folder, string superfolder, string filetype) => LoadDiskSprite(fileName, Path.Combine(ModPath, "IconPacks", superfolder,
         folder, subfolder, $"{fileName.SanitisePath()}.{filetype}"));
 
-    public static Sprite LoadDiskSprite(string fileName, string subfolder, string folder, string filetype) => LoadDiskSprite(fileName, Path.Combine(ModPath, folder, subfolder,
+    public static Sprite LoadDiskSprite(string fileName, string subfolder, string folder, string filetype) => LoadDiskSprite(fileName, Path.Combine(ModPath, "IconPacks", folder, subfolder,
         $"{fileName.SanitisePath()}.{filetype}"));
 
     public static Sprite LoadDiskSprite(string fileName, string path)
@@ -282,14 +310,14 @@ public static class AssetManager
         return path;
     }
 
-    public static void TryLoadingSprites(string packName)
+    public static void TryLoadingSprites(string packName, PackType type)
     {
-        var folder = Path.Combine(ModPath, packName);
+        var folder = Path.Combine(ModPath, $"{type}", packName);
 
         if (!Directory.Exists(folder))
         {
             Logging.LogError($"{packName} was missing");
-            ModSettings.SetString("Selected Icon Pack", "Vanilla", "alchlcsystm.recolors");
+            ModSettings.SetString("Selected Icon Pack", "Vanilla", "alchlcsystm.fancy.ui");
             return;
         }
 
@@ -326,8 +354,8 @@ public static class AssetManager
         TMP_SpriteAsset asset = null;
         IconAssets assets = null;
         var game = Utils.GetGameType();
-        var diagnostic = $"Uh oh, something happened here\nPack Name: {Constants.CurrentPack}\nStyle Name: {Constants.CurrentStyle}\nFaction Override: {Constants.FactionOverride}\n" +
-            $"Custom Numbers: {Constants.CustomNumbers}";
+        var diagnostic = $"Uh oh, something happened here\nPack Name: {Constants.CurrentPack()}\nStyle Name: {Constants.CurrentStyle()}\nFaction Override: {Constants.FactionOverride()}\n" +
+            $"Custom Numbers: {Constants.CustomNumbers()}";
 
         if (!CacheDefaults.RoleIcons)
             diagnostic += "\nVanilla Sheet Does Not Exist";
@@ -341,7 +369,7 @@ public static class AssetManager
         if (!Vanilla2)
             diagnostic += "\nModified Player Numbers Sheet Does Not Exist";
 
-        if (Constants.BTOS2Exists)
+        if (Constants.BTOS2Exists())
         {
             if (!BTOS2_1)
                 diagnostic += "\nBTOS2 Sheet Does Not Exist";
@@ -352,7 +380,7 @@ public static class AssetManager
 
         diagnostic += $"\nCurrently In A {game} Game";
 
-        if (Constants.EnableIcons && !IconPacks.TryGetValue(Constants.CurrentPack, out pack))
+        if (Constants.EnableIcons() && !IconPacks.TryGetValue(Constants.CurrentPack(), out pack))
             diagnostic += "\nNo Loaded Icon Pack";
         else if (pack == null)
             diagnostic += "\nLoaded Icon Pack Was Null";
@@ -360,7 +388,7 @@ public static class AssetManager
             diagnostic += "\nLoaded Player Numbers Was Null";
         else if (!pack.Assets.TryGetValue(game, out assets))
             diagnostic += "\nInvalid Game Type Was Detected";
-        else if (!assets.MentionStyles.TryGetValue(Constants.CurrentStyle, out asset))
+        else if (!assets.MentionStyles.TryGetValue(Constants.CurrentStyle(), out asset))
             diagnostic += "\nLoaded Icon Pack Does Not Have A Valid Mention Style";
         else if (!asset)
             diagnostic += "\nLoaded Mention Style Was Null";
@@ -456,7 +484,7 @@ public static class AssetManager
             }
 
             Vanilla1 = BuildGlyphs([..sprites], "RoleIcons", index);
-            Utils.DumpSprite(Vanilla1.spriteSheet as Texture2D, "RoleIcons_Modified", Path.Combine(ModPath, "Vanilla"));
+            Utils.DumpSprite(Vanilla1.spriteSheet as Texture2D, "RoleIcons_Modified", Path.Combine(ModPath, "IconPacks", "Vanilla"));
         }
         catch (Exception e)
         {
@@ -485,7 +513,7 @@ public static class AssetManager
             }
 
             Vanilla2 = BuildGlyphs([..sprites], "PlayerNumbers", dict.ToDictionary(x => x, x => (x, 0)), false);
-            Utils.DumpSprite(Vanilla2.spriteSheet as Texture2D, "PlayerNumbers_Modified", Path.Combine(ModPath, "Vanilla"));
+            Utils.DumpSprite(Vanilla2.spriteSheet as Texture2D, "PlayerNumbers_Modified", Path.Combine(ModPath, "IconPacks", "Vanilla"));
         }
         catch (Exception e)
         {
@@ -518,7 +546,7 @@ public static class AssetManager
             }
 
             BTOS2_2 = BuildGlyphs([..sprites], "BTOSRoleIcons", index);
-            Utils.DumpSprite(BTOS2_2.spriteSheet as Texture2D, "BTOS2RoleIcons_Modified", Path.Combine(ModPath, "BTOS2"));
+            Utils.DumpSprite(BTOS2_2.spriteSheet as Texture2D, "BTOS2RoleIcons_Modified", Path.Combine(ModPath, "IconPacks", "BTOS2"));
         }
         catch (Exception e)
         {

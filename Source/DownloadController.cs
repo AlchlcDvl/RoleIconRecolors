@@ -6,7 +6,7 @@ using Home.Common;
 using Home.Common.Tooltips;
 using System.Diagnostics;
 
-namespace IconPacks;
+namespace FancyUI;
 
 public class DownloadController : UIController
 {
@@ -224,7 +224,7 @@ public class DownloadController : UIController
 
         ApplicationController.ApplicationContext.EnableTransitionOverlay(true, true, $"Downloading {packName}");
         Running[packName] = true;
-        var pack = Path.Combine(AssetManager.ModPath, packName);
+        var pack = Path.Combine(AssetManager.ModPath, "IconPacks", packName);
 
         if (!Directory.Exists(pack))
             Directory.CreateDirectory(pack);
@@ -371,7 +371,7 @@ public class DownloadController : UIController
                 }
             }
 
-            AssetManager.TryLoadingSprites(packName);
+            AssetManager.TryLoadingSprites(packName, PackType.IconPacks);
         }
 
         OpenDirectory();

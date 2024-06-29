@@ -1,6 +1,6 @@
 using UnityEngine.EventSystems;
 
-namespace IconPacks;
+namespace FancyUI;
 
 public class HoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IEventSystemHandler
 {

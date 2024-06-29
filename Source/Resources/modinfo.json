@@ -1,9 +1,9 @@
 {
-  "HarmonyId": "alchlcsystm.recolors",
-  "DisplayName": "Icon Packs",
+  "HarmonyId": "alchlcsystm.fancy.ui",
+  "DisplayName": "Fancy UI",
   "Authors": [ "AlchlcSystm" ],
-  "Description": "The customisation mod for most in-game icons! Credits to MysticMismagius for the icon and mod idea and Pat for coding help!",
-  "Version": "2.0.1",
+  "Description": "THE customisation mod for TOS2! Credits to MysticMismagius and Harry James Potter for the icons and mod ideas and Pat for coding help!",
+  "Version": "2.0.2",
   "Discord": "https://discord.gg/cd27aDQDY9",
   "Platforms": [ "Windows", "Mac" ],
   "RequiredMods": [ "alchlcsystm.witchcraft" ],

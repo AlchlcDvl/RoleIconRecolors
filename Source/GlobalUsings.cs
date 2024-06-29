@@ -19,3 +19,5 @@ global using Services;
 global using TMPro;
 
 global using Witchcraft.Utils;
+
+global using FancyUI.IconPacks;

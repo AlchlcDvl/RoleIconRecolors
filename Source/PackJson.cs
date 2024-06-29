@@ -1,4 +1,4 @@
-namespace IconPacks;
+namespace FancyUI;
 
 public class PackJson
 {
