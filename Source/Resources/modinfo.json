@@ -18,6 +18,18 @@
         "DefaultValue": false,
         "AvailableInGame": true
       }
+    ],
+    "SliderSettings":
+    [
+      {
+        "Name": "Silhouette Animation Duration",
+        "SettingID": "recolors.animduration",
+        "Description": "Dictates how long should one iteration of an animation last for.",
+        "DefaultValue": 2,
+        "MinValue": 0.5,
+        "MaxValue": 10,
+        "AvailableInGame": true
+      }
     ]
   }
 }

@@ -78,6 +78,14 @@ public static class AssetManager
                     sprite = pack.GetSprite(name, allowEE, "Regular");
             }
 
+            if (!sprite.IsValid() && faction == "Necronomicon")
+            {
+                sprite = pack.GetSprite(name + $"_{mod}", allowEE, "Coven");
+
+                if (!sprite.IsValid())
+                    sprite = pack.GetSprite(name, allowEE, "Coven");
+            }
+
             if (!sprite.IsValid() && og != faction)
             {
                 sprite = pack.GetSprite(name + $"_{mod}", allowEE, faction);
@@ -94,12 +102,28 @@ public static class AssetManager
                 }
             }
 
-            if (!sprite.IsValid())
+            if (faction != "Factionless" && !sprite.IsValid() && !skipRegular)
+            {
+                sprite = pack.GetSprite(name + $"_{mod}", allowEE, "Factionless");
+
+                if (faction != "Factionless" && !sprite.IsValid())
+                    sprite = pack.GetSprite(name, allowEE, "Factionless");
+            }
+
+            if (!sprite.IsValid() && faction != "Factionless")
             {
                 sprite = pack.GetSprite(name + $"_{mod}", allowEE, "Factionless");
 
                 if (!sprite.IsValid())
                     sprite = pack.GetSprite(name, allowEE, "Factionless");
+
+                if (faction != "Regular" && !sprite.IsValid() && !skipRegular)
+                {
+                    sprite = pack.GetSprite(name + $"_{mod}", allowEE, "Regular");
+
+                    if (faction != "Regular" && !sprite.IsValid())
+                        sprite = pack.GetSprite(name, allowEE, "Regular");
+                }
             }
 
             return sprite ?? Blank;

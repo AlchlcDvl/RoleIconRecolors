@@ -58,6 +58,6 @@ public static class Constants
         catch
         {
             return false;
-            }
+        }
     }
 }
