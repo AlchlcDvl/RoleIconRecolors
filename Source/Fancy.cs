@@ -34,7 +34,7 @@ public class Fancy
         var go = UObject.Instantiate(AssetManager.AssetGOs["DownloaderUI"], CacheHomeSceneController.Controller.SafeArea.transform, false);
         go.transform.localPosition = new(0, 0, 0);
         go.transform.localScale = new(2.25f, 2.25f, 2.25f);
-        go.AddComponent<DownloadController>();
+        go.AddComponent<FancyMenu>();
     }
 
     public ModSettings.DropdownSetting SelectedIconPack => new()

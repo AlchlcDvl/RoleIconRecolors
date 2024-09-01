@@ -3,20 +3,23 @@ using UnityEngine.Networking;
 using Newtonsoft.Json;
 using Home.Shared;
 using Home.Common;
-using Home.Common.Tooltips;
 using System.Diagnostics;
 
 namespace FancyUI;
 
-public class DownloadController : UIController
+public class FancyMenu : UIController
 {
     private const string REPO = "https://raw.githubusercontent.com/AlchlcDvl/RoleIconRecolors/main";
     private static readonly Dictionary<string, bool> Running = [];
     private static bool HandlerRunning;
-    private static readonly Dictionary<string, PackJson> Packs = [];
+    public static readonly List<PackJson> Packs = [];
+
+    public static FancyMenu Instance { get; private set; }
 
     private GameObject Back;
     private GameObject OpenDir;
+    private GameObject Next;
+    private GameObject Previous;
     private GameObject Confirm;
     private GameObject PackName;
     private GameObject RepoName;
@@ -24,11 +27,14 @@ public class DownloadController : UIController
     private GameObject BranchName;
     private GameObject JsonName;
     private GameObject NoPacks;
-    private GameObject PackTemplate;
-    private GameObject ScrollView;
+    private GameObject Pack1;
+    private GameObject Pack2;
+    private GameObject Pack3;
+    private GameObject Pack4;
     private GameObject WaitingScreen;
 
-    private readonly List<GameObject> PackGOs = [];
+    private TextMeshProUGUI CounterTMP;
+    private int Page;
 
     private static TMP_FontAsset GameFont;
     private static Material GameFontMaterial;
@@ -41,7 +47,7 @@ public class DownloadController : UIController
 
     public void OnDestroy()
     {
-        WaitingScreen.Destroy();
+        RemoveObjects();
         StopCoroutine(SetupMenu());
     }
 
@@ -51,19 +57,34 @@ public class DownloadController : UIController
             gameObject.Destroy();
     }
 
+    private void RemoveObjects()
+    {
+        Instance = null;
+        WaitingScreen.Destroy();
+        GeneralUtils.SaveText("OtherPacks.json", JsonConvert.SerializeObject(Packs.Where(x => !x.FromMainRepo)), path: AssetManager.ModPath);
+    }
+
     public void CacheObjects()
     {
+        Instance = this;
         Back = transform.Find("Buttons/Back").gameObject;
 		OpenDir = transform.Find("Buttons/Directory").gameObject;
 		Confirm = transform.Find("Buttons/Confirm").gameObject;
+		Next = transform.Find("Pages/Next").gameObject;
+		Previous = transform.Find("Pages/Previous").gameObject;
         NoPacks = transform.Find("NoPacks").gameObject;
-        ScrollView = transform.Find("ScrollView").gameObject;
+        Pack1 = transform.Find("Pack1").gameObject;
+        Pack2 = transform.Find("Pack2").gameObject;
+        Pack3 = transform.Find("Pack3").gameObject;
+        Pack4 = transform.Find("Pack4").gameObject;
         PackName = transform.Find("Inputs/PackName").gameObject;
         RepoName = transform.Find("Inputs/RepoName").gameObject;
         RepoOwner = transform.Find("Inputs/RepoOwner").gameObject;
         BranchName = transform.Find("Inputs/BranchName").gameObject;
         JsonName = transform.Find("Inputs/JsonName").gameObject;
-        PackTemplate = transform.Find("ScrollView/Viewport/Content/PackTemplate").gameObject;
+
+        CounterTMP = transform.Find("Pages").GetComponent<TextMeshProUGUI>();
+
         WaitingScreen = Instantiate(AssetManager.AssetGOs["WaitingScreen"], transform);
         WaitingScreen.transform.localPosition = new(0, 0, -1f);
         WaitingScreen.SetActive(false);
@@ -84,6 +105,11 @@ public class DownloadController : UIController
         Back.AddComponent<TooltipTrigger>().NonLocalizedString = "Close Packs Menu";
         OpenDir.GetComponent<Button>().onClick.AddListener(OpenDirectory);
         OpenDir.AddComponent<TooltipTrigger>().NonLocalizedString = "Open Icons Folder";
+        Next.AddComponent<TooltipTrigger>().NonLocalizedString = "Next Page";
+        Next.GetComponent<Button>().onClick.AddListener(() => ChangePage(true));
+        Previous.AddComponent<TooltipTrigger>().NonLocalizedString = "Previous Page";
+        Previous.GetComponent<Button>().onClick.AddListener(() => ChangePage(false));
+        CounterTMP.gameObject.AddComponent<TooltipTrigger>().NonLocalizedString = "Page Counter";
         var dirButton = OpenDir.AddComponent<HoverEffect>();
         dirButton.OnMouseOver.AddListener(() => OpenDir.GetComponent<Image>().sprite = AssetManager.Assets["OpenChest"]);
         dirButton.OnMouseOut.AddListener(() => OpenDir.GetComponent<Image>().sprite = AssetManager.Assets["ClosedChest"]);
@@ -94,44 +120,38 @@ public class DownloadController : UIController
         RepoOwner.AddComponent<TooltipTrigger>().NonLocalizedString = "Name Of The Icon Pack GitHub Repository Owner (Defaults To: AlchlcDvl)";
         JsonName.AddComponent<TooltipTrigger>().NonLocalizedString = "Name Of The Icon Pack GitHub Json File (Defaults To: Name Of Your Pack)";
         BranchName.AddComponent<TooltipTrigger>().NonLocalizedString = "Name Of The Icon Pack GitHub Repository Branch The Pack Is In (Defaults To: main)";
-        NoPacks.SetActive(Packs.Count == 0);
-        ScrollView.SetActive(Packs.Count > 0);
-        PackTemplate.SetActive(false);
-        var time = 0f;
-
-        foreach (var (packName, packJson) in Packs)
-        {
-            var go = Instantiate(PackTemplate, PackTemplate.transform.parent);
-            go.name = packName;
-            go.transform.Find("PackName").GetComponent<TextMeshProUGUI>().SetText(packJson.DisplayName);
-            var link = go.transform.Find("RepoLink");
-            var linkText = packJson.Link();
-            link.GetComponentInChildren<TextMeshProUGUI>().SetText(linkText);
-            link.GetComponent<Button>().onClick.AddListener(() => Application.OpenURL(linkText));
-            link.gameObject.AddComponent<TooltipTrigger>().NonLocalizedString = "Open Link";
-            go.transform.Find("PackJSONLink").GetComponent<TextMeshProUGUI>().SetText(packJson.JsonLink());
-            var button = go.transform.Find("Download");
-            button.GetComponent<Button>().onClick.AddListener(() => DownloadIcons(packName));
-            button.gameObject.AddComponent<TooltipTrigger>().NonLocalizedString = $"Download {packName}";
-            var pos = go.transform.localPosition;
-            pos.y -= 98.3551f * PackGOs.Count;
-            go.transform.localPosition = pos;
-            go.SetActive(true);
-            PackGOs.Add(go);
-
-            if (!StringUtils.IsNullEmptyOrWhiteSpace(packJson.Credits))
-                go.AddComponent<TooltipTrigger>().NonLocalizedString = packJson.Credits;
-
-            time += Time.deltaTime;
-
-            if (time > 0.1f)
-            {
-                time = 0f;
-                yield return new WaitForEndOfFrame();
-            }
-        }
-
+        SetPage();
         yield break;
+    }
+
+    private void ChangePage(bool increment)
+    {
+        Page += increment ? 1 : -1;
+        var funnyMath = (Packs.Count / 3) + (Packs.Count % 3 == 0 ? 0 : 1);
+
+        if (Page < 0)
+            Page = funnyMath;
+        else if (Page > funnyMath)
+            Page = 0;
+
+        SetPage();
+    }
+
+    private void SetPage()
+    {
+        Pack1.SetActive(Packs.Count > 0);
+        Pack2.SetActive(Packs.Count < 5 || ((Page * 3) + 2) <= Packs.Count);
+        Pack3.SetActive(Packs.Count < 5 || ((Page + 1) * 3) <= Packs.Count);
+        Pack4.SetActive(Packs.Count == 4);
+        NoPacks.SetActive(Packs.Count == 0);
+        CounterTMP.gameObject.SetActive(Packs.Count > 4);
+        var funnyMath = (Packs.Count / 3) + (Packs.Count % 3 == 0 ? 0 : 1);
+        var unfunnyMath = Page + 1;
+        CounterTMP.SetText($"{unfunnyMath}/{funnyMath}");
+        Pack1.SetUpPack(Page, 1);
+        Pack2.SetUpPack(Page, 2);
+        Pack3.SetUpPack(Page, 3);
+        Pack4.SetUpPack(Page, 4);
     }
 
     private void GenerateLinkAndAddToPackCount()
@@ -153,27 +173,8 @@ public class DownloadController : UIController
             JsonName = JsonName.GetComponent<TMP_InputField>().text ?? name,
         };
         packJson.SetDefaults();
-        Packs[name] = packJson;
-        var go = Instantiate(PackTemplate, PackTemplate.transform.parent);
-        go.name = name;
-        go.transform.Find("PackName").GetComponent<TextMeshProUGUI>().SetText(packJson.DisplayName);
-        var link = go.transform.Find("RepoLink");
-        var linkText = packJson.Link();
-        link.GetComponentInChildren<TextMeshProUGUI>().SetText(linkText);
-        link.GetComponent<Button>().onClick.AddListener(() => Application.OpenURL(linkText));
-        link.gameObject.AddComponent<TooltipTrigger>().NonLocalizedString = "Open Link";
-        go.transform.Find("PackJSONLink").GetComponent<TextMeshProUGUI>().SetText(packJson.JsonLink());
-        var button = go.transform.Find("Download");
-        button.GetComponent<Button>().onClick.AddListener(() => DownloadIcons(name));
-        button.gameObject.AddComponent<TooltipTrigger>().NonLocalizedString = $"Download {name}";
-        var pos = go.transform.localPosition;
-        pos.y -= 98.3551f * PackGOs.Count;
-        go.transform.localPosition = pos;
-        go.SetActive(true);
-        PackGOs.Add(go);
-
-        if (!StringUtils.IsNullEmptyOrWhiteSpace(packJson.Credits))
-            go.AddComponent<TooltipTrigger>().NonLocalizedString = packJson.Credits;
+        Packs.Add(packJson);
+        SetPage();
     }
 
     public static void HandlePackData() => ApplicationController.ApplicationContext.StartCoroutine(CoHandlePackData());
@@ -198,14 +199,16 @@ public class DownloadController : UIController
             yield break;
         }
 
-        var json = JsonConvert.DeserializeObject<List<PackJson>>(www.downloadHandler.text);
+        Packs.Clear();
+        Packs.AddRange(JsonConvert.DeserializeObject<List<PackJson>>(www.downloadHandler.text));
+        Packs.ForEach(x => x.FromMainRepo = true);
 
-        foreach (var jsonPack in json)
-        {
-            jsonPack.SetDefaults();
-            Packs[jsonPack.Name] = jsonPack;
-        }
+        var others = GeneralUtils.ReadText("OtherPacks.json", AssetManager.ModPath);
 
+        if (!StringUtils.IsNullEmptyOrWhiteSpace(others))
+            Packs.AddRange(JsonConvert.DeserializeObject<List<PackJson>>(others));
+
+        Packs.ForEach(x => x.SetDefaults());
         HandlerRunning = false;
         yield break;
     }
@@ -229,7 +232,14 @@ public class DownloadController : UIController
         if (!Directory.Exists(pack))
             Directory.CreateDirectory(pack);
 
-        var packJson = Packs[packName];
+        var packJson = Packs.Find(x => x.Name == packName);
+
+        if (packJson == null)
+        {
+            Logging.LogError($"{packName} somehow doesn't exist");
+            yield break;
+        }
+
         var www = UnityWebRequest.Get(packJson.JsonLink());
         yield return www.SendWebRequest();
 

@@ -9,6 +9,7 @@ public class PackJson
     public string JsonName { get; set; }
     public string Credits { get; set; }
     public string DisplayName { get; set; }
+    public bool FromMainRepo { get; set; }
 
     public string JsonLink() => $"{RawLink()}/{JsonName}.json";
 

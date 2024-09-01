@@ -240,9 +240,8 @@ public static class AssetManager
             fileName = fileName.SanitisePath();
             var texture = EmptyTexture();
             texture.LoadImage(File.ReadAllBytes(path), false);
-            texture.hideFlags |= HideFlags.DontUnloadUnusedAsset;
             texture.name = fileName;
-            return texture.DontDestroy();
+            return texture.DontUnload().DontDestroy();
         }
         catch (Exception e)
         {
@@ -263,9 +262,8 @@ public static class AssetManager
                 return null;
             }
 
-            sprite.hideFlags |= HideFlags.DontUnloadUnusedAsset;
             sprite.name = texture.name;
-            return sprite.DontDestroy();
+            return sprite.DontUnload().DontDestroy();
         }
         catch (Exception e)
         {
@@ -472,8 +470,7 @@ public static class AssetManager
             readableText.Apply();
             RenderTexture.active = previous;
             RenderTexture.ReleaseTemporary(renderTex);
-            readableText.hideFlags |= HideFlags.DontUnloadUnusedAsset;
-            return readableText.DontDestroy();
+            return readableText.DontUnload().DontDestroy();
         }
         catch (Exception e)
         {
@@ -625,7 +622,22 @@ public static class AssetManager
         AccessTools.Property(asset.GetType(), "version").SetValue(asset, "1.1.0");
         asset.material.mainTexture = asset.spriteSheet = image;
         asset.UpdateLookupTables();
-        asset.hideFlags |= HideFlags.DontUnloadUnusedAsset;
-        return asset.DontDestroy();
+        return asset.DontUnload().DontDestroy();
+    }
+
+    // Why the hell am I not allowed to make extension methods in instance classes smhh
+    public static void SetUpPack(this GameObject pack, int page, int index)
+    {
+        var packJson = FancyMenu.Packs[FancyMenu.Packs.Count < 5 ? (index - 1) : ((page * 3) + index)];
+        pack.transform.Find("PackName").GetComponent<TextMeshProUGUI>().SetText(packJson.DisplayName);
+        var link = pack.transform.Find("RepoButton");
+        link.GetComponent<Button>().onClick.AddListener(() => Application.OpenURL(packJson.Link()));
+        link.gameObject.EnsureComponent<TooltipTrigger>().NonLocalizedString = "Open Link";
+        var button = pack.transform.Find("Download");
+        button.GetComponent<Button>().onClick.AddListener(() => FancyMenu.DownloadIcons(packJson.Name));
+        button.gameObject.EnsureComponent<TooltipTrigger>().NonLocalizedString = $"Download {packJson.Name}";
+
+        if (!StringUtils.IsNullEmptyOrWhiteSpace(packJson.Credits))
+            pack.EnsureComponent<TooltipTrigger>().NonLocalizedString = packJson.Credits;
     }
 }

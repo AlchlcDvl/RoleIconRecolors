@@ -689,7 +689,7 @@ public static class RemoveTextIconFromPlayerPopupBecauseWhyIsItThere
 [HarmonyPatch(typeof(LoginSceneController), nameof(LoginSceneController.Start))]
 public static class HandlePacks
 {
-    public static void Prefix() => DownloadController.HandlePackData();
+    public static void Prefix() => FancyMenu.HandlePackData();
 }
 
 [HarmonyPatch(typeof(HomeSceneController), nameof(HomeSceneController.Start))]
