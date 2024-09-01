@@ -1,7 +1,9 @@
 [
     {
         "Name": "Recolors",
-        "Credits": "MysticMismagius, Haapsalu, faketier, splarg, Det, Wevit, Nova, moiler, NexusOfChaos, Loonie and Nidoskull"
+        "Credits": "MysticMismagius, Haapsalu, faketier, splarg, Det, Wevit, Nova, moiler, NexusOfChaos, Loonie and Nidoskull",
+        "RepoOwner": "Nidoskull",
+        "RepoName": "CommunityRecolors"
     },
     {
         "Name": "Vanilla",
@@ -10,11 +12,6 @@
     {
         "Name": "BTOS2",
         "Credits": "Curtis, TubaAntics and Nuggy"
-    },
-    {
-        "Name": "All",
-        "DisplayName": "All (BTOS2 + Vanilla)",
-        "Credits": "BlankMediaGames, Curtis, TubaAntics and Nuggy"
     },
     {
         "RepoName": "LoonsRecolors",

@@ -369,4 +369,4 @@ TODO.txt
 
 *.exe
 Source/Lib/Legacy.dll
-Ignore.cs
+Ignore.*
