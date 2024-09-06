@@ -460,6 +460,7 @@ public static class Utils
 
     public static string EffectName(EffectType effect) => effect switch
     {
+        // Vanilla
         EffectType.EXECUTIONER_TARGET => "ExeTarget",
         EffectType.HEXED => "Hexed",
         EffectType.KNIGHTED => "Knighted",
@@ -482,16 +483,18 @@ public static class Utils
         EffectType.PESTILENCE => "Sickness",
         EffectType.REVEALED_MARSHAL => "RevealedMarshal",
         EffectType.SOCIALITE_GUEST => "Guest",
+
+        // BTOS2
         (EffectType)100 => "Recruit",
         (EffectType)101 => "Deafened",
-        (EffectType)102/* or (EffectType)200*/ => "CovenTownTraitor",
+        (EffectType)102 => "CovenTownTraitor",
         (EffectType)103 => "ApocTownTraitor",
         (EffectType)104 => "Audited",
-        (EffectType)105/* or (EffectType)203*/ => "Enchanted",
+        (EffectType)105 => "Enchanted",
         (EffectType)106 => "Accompanied",
         (EffectType)107 => "PandoraTownTraitor",
         (EffectType)108 => "Egotist",
-        (EffectType)109/* or (EffectType)204*/ => "Reaped",
+        (EffectType)109 => "Reaped",
         (EffectType)110 => "WarlockCursed",
         (EffectType)111 => "SecretObjective",
         _ => "Blank"
@@ -568,23 +571,6 @@ public static class Utils
             };
         }
     }
-
-    /*public static Role GetNecro(ModType? mod = null)
-    {
-        try
-        {
-            mod ??= GetGameType();
-            return mod switch
-            {
-                ModType.BTOS2 => BTOS2Role.Necromancer,
-                _ => Role.NECROMANCER,
-            };
-        }
-        catch
-        {
-            return Role.NECROMANCER;
-        }
-    }*/
 
     public static Role GetWar(ModType? mod = null)
     {

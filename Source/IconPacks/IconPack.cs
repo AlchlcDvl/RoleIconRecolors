@@ -39,12 +39,14 @@ public class IconPack(string name)
             count += assets.Count;
         }
 
+        if (PlayerNumbers)
+        {
+            Logging.LogMessage($"{Name} has a PlayerNumbers sprite sheet!");
+            count++;
+        }
+
         Logging.LogMessage($"{Name} {Assets.Count} asset sets loaded!");
         Logging.LogMessage($"{Name} {count} total assets exist!");
-
-        if (PlayerNumbers)
-            Logging.LogMessage($"{Name} has a PlayerNumbers sprite sheet!");
-
         Logging.LogMessage($"{Name} Debugged!");
     }
 
@@ -376,17 +378,10 @@ public class IconPack(string name)
 
     public Sprite GetSprite(string iconName, bool allowEE, string type)
     {
-        var key = GetModKey(type);
-
-        if (!Assets.TryGetValue(Enum.Parse<ModType>(key), out var assets))
+        if (!Assets.TryGetValue(GetModKey(type), out var assets))
             return AssetManager.Blank;
 
-        if (!assets.BaseIcons.TryGetValue(type, out var icons))
-        {
-            if (type != "Regular")
-                Assets[ModType.Common].BaseIcons.TryGetValue("Regular", out icons);
-        }
-
+        assets.BaseIcons.TryGetValue(type, out var icons);
         icons ??= [];
         icons.TryGetValue(iconName, out var sprite);
 
@@ -396,31 +391,15 @@ public class IconPack(string name)
 
             if (Constants.AllEasterEggs())
             {
-                if (!AssetManager.GlobalEasterEggs[type].TryGetValue(iconName, out sprites))
-                {
-                    if (type != "Regular")
-                        AssetManager.GlobalEasterEggs["Regular"].TryGetValue(iconName, out sprites);
-                }
-
+                AssetManager.GlobalEasterEggs[type].TryGetValue(iconName, out sprites);
                 sprites ??= [];
             }
 
             if (sprites.Count == 0)
             {
-                if (!assets.EasterEggs.TryGetValue(type, out var icons3))
-                {
-                    if (type != "Regular")
-                        Assets[ModType.Common].EasterEggs.TryGetValue("Regular", out icons3);
-                }
-
+                assets.EasterEggs.TryGetValue(type, out var icons3);
                 icons3 ??= [];
-
-                if (!icons3.TryGetValue(iconName, out sprites))
-                {
-                    if (type != "Regular")
-                        Assets[ModType.Common].EasterEggs["Regular"].TryGetValue(iconName, out sprites);
-                }
-
+                icons3.TryGetValue(iconName, out sprites);
                 sprites ??= [];
             }
 
@@ -433,19 +412,13 @@ public class IconPack(string name)
 
     public static implicit operator bool(IconPack exists) => exists != null;
 
-    public static string GetModKey(string folder)
+    public static ModType GetModKey(string folder)
     {
-        var key = "";
-
-        foreach (var (key2, folders) in ModsToFolders)
-        {
-            if (folders.Contains(folder))
-                key = key2;
-        }
+        var key = ModsToFolders.ToList().Find(x => x.Value.Contains(folder)).Key ?? null;
 
         if (StringUtils.IsNullEmptyOrWhiteSpace(key))
             key = "Common";
 
-        return key;
+        return Enum.Parse<ModType>(key);
     }
 }

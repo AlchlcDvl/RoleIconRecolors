@@ -37,7 +37,7 @@ public class IconAssets(string name)
 
                 if (count > 0)
                 {
-                    Logging.LogMessage($"{name2} has {icon.Count} {name1} easter egg sprite(s)!");
+                    Logging.LogMessage($"{name2} has {count} {name1} easter egg sprite(s)!");
                     Count += count;
                 }
             }
@@ -49,11 +49,14 @@ public class IconAssets(string name)
         foreach (var (name2, sheet) in MentionStyles)
         {
             if (sheet)
+            {
                 Logging.LogMessage($"{name2} mention style exists!");
+                Count++;
+            }
         }
 
         Logging.LogMessage($"{MentionStyles.Count} mention styles exist!");
-        Logging.LogMessage($"{MentionStyles.Count + Count} net assets exist!");
+        Logging.LogMessage($"{Count} net assets exist!");
         Logging.LogMessage($"{Name} Debugged!");
     }
 

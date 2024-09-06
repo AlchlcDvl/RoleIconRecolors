@@ -41,31 +41,6 @@ public class FancyMenu : UIController
 
     public void Start()
     {
-        CacheObjects();
-        StartCoroutine(SetupMenu());
-    }
-
-    public void OnDestroy()
-    {
-        RemoveObjects();
-        StopCoroutine(SetupMenu());
-    }
-
-    public void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-            gameObject.Destroy();
-    }
-
-    private void RemoveObjects()
-    {
-        Instance = null;
-        WaitingScreen.Destroy();
-        GeneralUtils.SaveText("OtherPacks.json", JsonConvert.SerializeObject(Packs.Where(x => !x.FromMainRepo)), path: AssetManager.ModPath);
-    }
-
-    public void CacheObjects()
-    {
         Instance = this;
         Back = transform.Find("Buttons/Back").gameObject;
 		OpenDir = transform.Find("Buttons/Directory").gameObject;
@@ -97,9 +72,25 @@ public class FancyMenu : UIController
             tmp.font = GameFont;
             tmp.fontMaterial = GameFontMaterial;
         }
+
+        SetupMenu();
     }
 
-    private IEnumerator SetupMenu()
+    public void OnDestroy()
+    {
+        Instance = null;
+        WaitingScreen.Destroy();
+        GeneralUtils.SaveText("OtherPacks.json", JsonConvert.SerializeObject(Packs.Where(x => !x.FromMainRepo).ToList(), typeof(List<PackJson>), Formatting.Indented, new()),
+            path: AssetManager.ModPath);
+    }
+
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+            gameObject.Destroy();
+    }
+
+    private void SetupMenu()
     {
         Back.GetComponent<Button>().onClick.AddListener(gameObject.Destroy);
         Back.AddComponent<TooltipTrigger>().NonLocalizedString = "Close Packs Menu";
@@ -121,7 +112,6 @@ public class FancyMenu : UIController
         JsonName.AddComponent<TooltipTrigger>().NonLocalizedString = "Name Of The Icon Pack GitHub Json File (Defaults To: Name Of Your Pack)";
         BranchName.AddComponent<TooltipTrigger>().NonLocalizedString = "Name Of The Icon Pack GitHub Repository Branch The Pack Is In (Defaults To: main)";
         SetPage();
-        yield break;
     }
 
     private void ChangePage(bool increment)
@@ -148,10 +138,26 @@ public class FancyMenu : UIController
         var funnyMath = (Packs.Count / 3) + (Packs.Count % 3 == 0 ? 0 : 1);
         var unfunnyMath = Page + 1;
         CounterTMP.SetText($"{unfunnyMath}/{funnyMath}");
-        Pack1.SetUpPack(Page, 1);
-        Pack2.SetUpPack(Page, 2);
-        Pack3.SetUpPack(Page, 3);
-        Pack4.SetUpPack(Page, 4);
+        SetUpPack(Pack1, Page, 1);
+        SetUpPack(Pack2, Page, 2);
+        SetUpPack(Pack3, Page, 3);
+        SetUpPack(Pack4, Page, 4);
+    }
+
+    // Why the hell am I not allowed to make extension methods in instance classes smhh
+    private static void SetUpPack(GameObject pack, int page, int index)
+    {
+        var packJson = Packs[Packs.Count < 5 ? (index - 1) : ((page * 3) + index)];
+        pack.transform.Find("PackName").GetComponent<TextMeshProUGUI>().SetText(packJson.DisplayName);
+        var link = pack.transform.Find("RepoButton");
+        link.GetComponent<Button>().onClick.AddListener(() => Application.OpenURL(packJson.Link()));
+        link.gameObject.EnsureComponent<TooltipTrigger>().NonLocalizedString = "Open Link";
+        var button = pack.transform.Find("Download");
+        button.GetComponent<Button>().onClick.AddListener(() => DownloadIcons(packJson.Name));
+        button.gameObject.EnsureComponent<TooltipTrigger>().NonLocalizedString = $"Download {packJson.Name}";
+
+        if (!StringUtils.IsNullEmptyOrWhiteSpace(packJson.Credits))
+            pack.EnsureComponent<TooltipTrigger>().NonLocalizedString = packJson.Credits;
     }
 
     private void GenerateLinkAndAddToPackCount()

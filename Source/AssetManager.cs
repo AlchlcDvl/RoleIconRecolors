@@ -51,6 +51,9 @@ public static class AssetManager
             return Blank;
         }
 
+        if (StringUtils.IsNullEmptyOrWhiteSpace(faction) || faction == "Blank" || Avoid.Any(name.Contains))
+            faction = "Regular";
+
         var og = faction;
 
         if (Constants.IsNecroActive())
@@ -58,72 +61,37 @@ public static class AssetManager
         else if (Constants.IsLocalVIP())
             faction = "VIP";
 
-        if (faction is null or "Blank" || Avoid.Any(name.Contains))
-            faction = "Regular";
-
         var mod = Utils.GetGameType();
 
         try
         {
-            var sprite = pack.GetSprite(name + $"_{mod}", allowEE, faction);
+            var sprite = pack.GetSprite($"{name}_{mod}", allowEE, faction);
 
             if (!sprite.IsValid())
                 sprite = pack.GetSprite(name, allowEE, faction);
 
+            if (!sprite.IsValid() && og != faction)
+            {
+                sprite = pack.GetSprite($"{name}_{mod}", allowEE, og);
+
+                if (!sprite.IsValid())
+                    sprite = pack.GetSprite(name, allowEE, og);
+            }
+
             if (faction != "Regular" && !sprite.IsValid() && !skipRegular)
             {
-                sprite = pack.GetSprite(name + $"_{mod}", allowEE, "Regular");
+                sprite = pack.GetSprite($"{name}_{mod}", allowEE, "Regular");
 
                 if (faction != "Regular" && !sprite.IsValid())
                     sprite = pack.GetSprite(name, allowEE, "Regular");
             }
 
-            if (!sprite.IsValid() && faction == "Necronomicon")
-            {
-                sprite = pack.GetSprite(name + $"_{mod}", allowEE, "Coven");
-
-                if (!sprite.IsValid())
-                    sprite = pack.GetSprite(name, allowEE, "Coven");
-            }
-
-            if (!sprite.IsValid() && og != faction)
-            {
-                sprite = pack.GetSprite(name + $"_{mod}", allowEE, faction);
-
-                if (!sprite.IsValid())
-                    sprite = pack.GetSprite(name, allowEE, faction);
-
-                if (faction != "Regular" && !sprite.IsValid() && !skipRegular)
-                {
-                    sprite = pack.GetSprite(name + $"_{mod}", allowEE, "Regular");
-
-                    if (faction != "Regular" && !sprite.IsValid())
-                        sprite = pack.GetSprite(name, allowEE, "Regular");
-                }
-            }
-
-            if (faction != "Factionless" && !sprite.IsValid() && !skipRegular)
-            {
-                sprite = pack.GetSprite(name + $"_{mod}", allowEE, "Factionless");
-
-                if (faction != "Factionless" && !sprite.IsValid())
-                    sprite = pack.GetSprite(name, allowEE, "Factionless");
-            }
-
             if (!sprite.IsValid() && faction != "Factionless")
             {
-                sprite = pack.GetSprite(name + $"_{mod}", allowEE, "Factionless");
+                sprite = pack.GetSprite($"{name}_{mod}", allowEE, "Factionless");
 
                 if (!sprite.IsValid())
                     sprite = pack.GetSprite(name, allowEE, "Factionless");
-
-                if (faction != "Regular" && !sprite.IsValid() && !skipRegular)
-                {
-                    sprite = pack.GetSprite(name + $"_{mod}", allowEE, "Regular");
-
-                    if (faction != "Regular" && !sprite.IsValid())
-                        sprite = pack.GetSprite(name, allowEE, "Regular");
-                }
             }
 
             return sprite ?? Blank;
@@ -201,6 +169,7 @@ public static class AssetManager
         if (!Constants.BTOS2Exists())
             return;
 
+        Logging.LogMessage("BTOS2 Detected; Initiating Compatibility...");
         BTOS2Compatibility.BTOS2Patched = BTOS2Compatibility.Init();
 
         if (!BTOS2Compatibility.BTOS2Patched)
@@ -625,19 +594,8 @@ public static class AssetManager
         return asset.DontUnload().DontDestroy();
     }
 
-    // Why the hell am I not allowed to make extension methods in instance classes smhh
-    public static void SetUpPack(this GameObject pack, int page, int index)
-    {
-        var packJson = FancyMenu.Packs[FancyMenu.Packs.Count < 5 ? (index - 1) : ((page * 3) + index)];
-        pack.transform.Find("PackName").GetComponent<TextMeshProUGUI>().SetText(packJson.DisplayName);
-        var link = pack.transform.Find("RepoButton");
-        link.GetComponent<Button>().onClick.AddListener(() => Application.OpenURL(packJson.Link()));
-        link.gameObject.EnsureComponent<TooltipTrigger>().NonLocalizedString = "Open Link";
-        var button = pack.transform.Find("Download");
-        button.GetComponent<Button>().onClick.AddListener(() => FancyMenu.DownloadIcons(packJson.Name));
-        button.gameObject.EnsureComponent<TooltipTrigger>().NonLocalizedString = $"Download {packJson.Name}";
+    // public static void EncodeFramesToGif(string fileName, Sprite[] frames, string path = null)
+    // {
 
-        if (!StringUtils.IsNullEmptyOrWhiteSpace(packJson.Credits))
-            pack.EnsureComponent<TooltipTrigger>().NonLocalizedString = packJson.Credits;
-    }
+    // }
 }
