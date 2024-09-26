@@ -40,6 +40,35 @@ public class SilhouetteSet(string name) : Pack(name, PackType.SilhouetteSets)
 
                 if (Enum.TryParse<ModType>(mod, out var type))
                 {
+                    var assets = Assets[type] = new(mod);
+
+                    if (type == ModType.BTOS2 && !Constants.BTOS2Exists())
+                        continue;
+
+                    foreach (var name1 in ModsToFolders[mod])
+                    {
+                        var folder = Path.Combine(modPath, name1);
+
+                        if (Directory.Exists(folder))
+                        {
+                            // foreach (var type1 in FileTypes)
+                            // {
+                            //     foreach (var file in Directory.GetFiles(folder, $"*.{type1}"))
+                            //     {
+                            //         var filePath = Path.Combine(baseFolder, $"{file.SanitisePath()}.{type1}");
+                            //         var sprite = AssetManager.LoadDiskSprite(filePath.SanitisePath(), baseName, mod, Name, type1);
+
+                            //         if (sprite.IsValid())
+                            //             assets.BaseIcons[name1][filePath.SanitisePath(true)] = sprite;
+                            //     }
+                            // }
+                        }
+                        else
+                        {
+                            Logging.LogWarning($"{Name} {mod} {folder} folder doesn't exist");
+                            Directory.CreateDirectory(folder);
+                        }
+                    }
                 }
             }
         }

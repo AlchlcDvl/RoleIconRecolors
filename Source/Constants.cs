@@ -30,6 +30,14 @@ public static class Constants
 
     public static bool BTOS2Exists() => ModStates.IsEnabled("curtis.tuba.better.tos2");
 
+    public static bool ColorSwapperPlusExists() => ModStates.IsEnabled("det.rolecustomizationmod");
+
+    public static string GetMainUIThemeType() => ModSettings.GetString("Main UI Theme", "alchlcsystm.fancy.ui");
+
+    public static Color GetMainUIThemeColor() => ModSettings.GetColor("Main UI Theme Color", "alchlcsystm.fancy.ui");
+
+    public static bool CustomMainUIEnabled() => GetMainUIThemeType() != "Default";
+
     public static bool IsBTOS2()
     {
         try

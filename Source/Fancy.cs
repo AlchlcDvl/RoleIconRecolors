@@ -121,6 +121,20 @@ public class Fancy
         OnChanged = x => AssetManager.TryLoadingSprites(x, PackType.SilhouetteSets)
     };
 
+    public ModSettings.DropdownSetting MainUITheme => new()
+    {
+        Name = "Main UI Theme",
+        Description = "Dictates how the wood of the main UI loooks like.",
+        Options = [ "Default", "Custom Input" ],
+    };
+
+    public ModSettings.ColorPickerSetting MainUIThemeInput => new()
+    {
+        Name = "Main UI Theme Color",
+        Description = "Dictates how the wood of the main UI loooks like",
+        Available = Constants.GetMainUIThemeType() == "Custom Input"
+    };
+
     private static List<string> GetPackNames(PackType type)
     {
         try

@@ -27,6 +27,10 @@ public static class AssetManager
     public static readonly Dictionary<string, GameObject> AssetGOs = [];
     public static readonly Dictionary<string, List<Sprite>> Assets2 = [];
 
+    public static AssetBundle WoodBundle { get; set; }
+    public static Material Grayscale { get; private set; }
+    public static Material DefaultWood { get; set; }
+
     public static SilhouetteAnimation Loading { get; private set; }
 
     public static string ModPath => Path.Combine(Path.GetDirectoryName(Application.dataPath), "SalemModLoader", "ModFolders", "FancyUI");
@@ -172,6 +176,9 @@ public static class AssetManager
         Bundle = FromAssetBundle.GetAssetBundleFromResources($"{Resources}Assets", Core);
         Bundle.LoadAllAssets<Sprite>().ForEach(x => Assets[x.name] = x);
         Bundle.LoadAllAssets<GameObject>().ForEach(x => AssetGOs[x.name] = x);
+
+        WoodBundle = FromAssetBundle.GetAssetBundleFromResources($"{Resources}WoodMaterials", Core);
+        Grayscale = WoodBundle.LoadAsset<Material>("GrayscaleM");
 
         TryLoadingSprites(Constants.CurrentPack(), PackType.IconPacks);
         LoadVanillaSpriteSheets();
