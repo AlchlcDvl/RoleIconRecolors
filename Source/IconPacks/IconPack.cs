@@ -1,33 +1,13 @@
 namespace FancyUI.IconPacks;
 
-public class IconPack(string name)
+public class IconPack(string name) : Pack(name, PackType.IconPacks)
 {
     public Dictionary<ModType, IconAssets> Assets { get; set; } = [];
     public Dictionary<string, Sprite> NumberSprites { get; set; } = [];
     public Dictionary<string, bool> SpriteSheetCanExist { get; set; } = [];
     public TMP_SpriteAsset PlayerNumbers { get; set; }
 
-    public string Name { get; } = name;
-
-    public bool Deleted { get; set; }
-
-    public string PackPath => Path.Combine(AssetManager.ModPath, "IconPacks", Name);
-
-    private static readonly string[] CommonFolders = [ "Regular", "Town", "Coven", "SerialKiller", "Arsonist", "Werewolf", "Shroud", "Apocalypse", "VIP", "Jester", "Pirate", "Doomsayer",
-        "Vampire", "CursedSoul", "Executioner", "Necronomicon", "Factionless" ];
-    private static readonly string[] VanillaFolders = [];
-    private static readonly string[] BTOS2Folders = [ "Judge", "Auditor", "Starspawn", "Inquisitor", "Jackal", "Lions", "Frogs", "Hawks", "Pandora", "Egotist", "Compliance" ];
-    private static readonly string[] MainFolders = [ "Common", "Vanilla", "BTOS2", "PlayerNumbers" ];
-    private static readonly string[] Mods = [ "Vanilla", "BTOS2" ];
-    private static readonly Dictionary<string, string[]> ModsToFolders = new()
-    {
-        { "Common", CommonFolders },
-        { "Vanilla", VanillaFolders },
-        { "BTOS2", BTOS2Folders }
-    };
-    public static readonly string[] FileTypes = [ "png", "jpg" ];
-
-    public void Debug()
+    public override void Debug()
     {
         Logging.LogMessage($"Debugging {Name}");
 
@@ -50,7 +30,7 @@ public class IconPack(string name)
         Logging.LogMessage($"{Name} Debugged!");
     }
 
-    public void Delete()
+    public override void Delete()
     {
         if (Deleted)
             return;
@@ -60,7 +40,7 @@ public class IconPack(string name)
         Logging.LogMessage($"{Name} Deleted!", true);
     }
 
-    public void Reload()
+    public override void Reload()
     {
         Logging.LogMessage($"Reloading {Name}", true);
         Delete();
@@ -70,7 +50,7 @@ public class IconPack(string name)
         Logging.LogMessage($"{Name} Reloaded!", true);
     }
 
-    public void Load()
+    public override void Load()
     {
         if (Name is "Vanilla" or "BTOS2")
         {
@@ -78,21 +58,28 @@ public class IconPack(string name)
             return;
         }
 
-        Logging.LogMessage($"Loading {Name}", true);
+        Logging.LogMessage($"Loading {Name} Icon Pack", true);
         Deleted = false;
 
         try
         {
             foreach (var mod in MainFolders)
             {
+                var modPath = Path.Combine(PackPath, mod);
+
+                if (!Directory.Exists(modPath))
+                {
+                    Directory.CreateDirectory(modPath);
+                    Logging.LogWarning($"{Name} {mod} folder doesn't exist");
+                    continue;
+                }
+
                 if (Enum.TryParse<ModType>(mod, out var type))
                 {
                     var assets = Assets[type] = new(mod);
 
                     if (type == ModType.BTOS2 && !Constants.BTOS2Exists())
                         continue;
-
-                    var modPath = Path.Combine(PackPath, mod);
 
                     foreach (var name1 in ModsToFolders[mod])
                     {
@@ -190,30 +177,16 @@ public class IconPack(string name)
                 }
                 else
                 {
-
-                    if (!AssetManager.GlobalEasterEggs.ContainsKey("PlayerNumbers"))
-                        AssetManager.GlobalEasterEggs["PlayerNumbers"] = [];
-
-                    var folder = Path.Combine(PackPath, "PlayerNumbers");
-
-                    if (Directory.Exists(folder))
+                    foreach (var type1 in FileTypes)
                     {
-                        foreach (var type1 in FileTypes)
+                        foreach (var file in Directory.GetFiles(modPath, $"*.{type1}"))
                         {
-                            foreach (var file in Directory.GetFiles(folder, $"*.{type1}"))
-                            {
-                                var filePath = Path.Combine(folder, $"{file.SanitisePath()}.{type1}");
-                                var sprite = AssetManager.LoadDiskSprite(filePath.SanitisePath(), "PlayerNumbers", Name, type1);
+                            var filePath = Path.Combine(modPath, $"{file.SanitisePath()}.{type1}");
+                            var sprite = AssetManager.LoadDiskSprite(filePath.SanitisePath(), "PlayerNumbers", Name, type1);
 
-                                if (sprite.IsValid())
-                                    NumberSprites[filePath.SanitisePath(true)] = sprite;
-                            }
+                            if (sprite.IsValid())
+                                NumberSprites[filePath.SanitisePath(true)] = sprite;
                         }
-                    }
-                    else
-                    {
-                        Logging.LogWarning($"{Name} PlayerNumbers folder doesn't exist");
-                        Directory.CreateDirectory(folder);
                     }
                 }
             }

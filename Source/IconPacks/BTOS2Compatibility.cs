@@ -45,6 +45,7 @@ public static class BTOS2IPCompatibility
             BTOS2PatchesHarmony.Patch(setDataMethod1, null, new(AccessTools.Method(compatType, nameof(ItemPostfix1))));
             BTOS2PatchesHarmony.Patch(refreshDataMethod, null, new(AccessTools.Method(compatType, nameof(ItemPostfix2))));
             BTOS2PatchesHarmony.Patch(setDataMethod2, null, new(AccessTools.Method(compatType, nameof(ItemPostfix3))));
+            Logging.LogMessage("BTOS2 compatibility was successful");
             return true;
         }
         catch (Exception ex)

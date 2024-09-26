@@ -1,8 +1,8 @@
 
 <p align="center">
     <img width="400px" src="./Images/Thumbnail.png" align="center" alt="logo" />
-    <h2 align="center">Icon Packs</h2>
-    <p align="center">The customisation mod that lets you add a bit of flair to icons!
+    <h2 align="center">Fancy UI</h2>
+    <p align="center">The customisation mod that lets you add a bit of flair to your game!
 </p>
 
 <p align="center">
@@ -11,15 +11,15 @@
 
 -----------------------
 
-# Icon Packs Mod
+# Fancy UI Mod
 
-With this mod you can edit (most) renditions of game icons to your own liking! Paired with the Color Swapper and Text Editor mod, you now have a (mostly) fully customisable game experience!
+With this mod you can edit (most) visual renditions of the game to your own liking! Paired with the Color Swapper, Text Editor and Misc Role Customisations mods, you now have an *almost* fully customisable game experience!
 
 -----------------------
 
 # Contents
 
-- [**Icon Packs Mod**](#icon-packs-mod)
+- [**Fancy UI Mod**](#fancy-ui-mod)
 - [**Contents**](#contents)
 - [**Pack Creation**](#pack-creation)
 - [**Image Rules**](#image-rules)
@@ -78,3 +78,4 @@ To quote the "Salem Mod Loader" [Discord](https://discord.gg/AdpRqzstfj).
 
 To quote a developer in the official Town of Salem 2 [Discord](https://discord.gg/townofsalem2). [Message Link](https://discord.com/channels/1110363758792036352/1111801081060655154/1112876123852906617)
 > We plan to have official mod support, but having a good base is important. A new player won't have a mod preinstalled.
+https://github.com/Turninator95/UniGif

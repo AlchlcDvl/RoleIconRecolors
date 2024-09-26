@@ -7,7 +7,7 @@ public class Fancy
 {
     public void Start()
     {
-        Logging.InitVoid("Fancy");
+        Logging.InitVoid();
         Logging.LogMessage("Fancifying...", true);
 
         try
@@ -51,7 +51,7 @@ public class Fancy
         Description = "The selected mention style will dictate which icons are used for the icons in text. May require a game restart.",
         Options = GetOptions(ModType.Vanilla, true),
         Available = Constants.EnableIcons(),
-        OnChanged = x => AttemptCreateSpriteSheet(ModType.Vanilla, x)
+        // OnChanged = x => AttemptCreateSpriteSheet(ModType.Vanilla, x)
     };
 
     public ModSettings.DropdownSetting ChoiceMentions2 => new()
@@ -60,7 +60,7 @@ public class Fancy
         Description = "The selected mention style will dictate which icons are used for the icons in text. May require a game restart.",
         Options = GetOptions(ModType.BTOS2, true),
         Available = Constants.BTOS2Exists() && Constants.EnableIcons(),
-        OnChanged = x => AttemptCreateSpriteSheet(ModType.BTOS2, x)
+        // OnChanged = x => AttemptCreateSpriteSheet(ModType.BTOS2, x)
     };
 
     public ModSettings.DropdownSetting FactionOverride1 => new()
@@ -176,6 +176,8 @@ public class Fancy
 
             if (mentionStyle)
                 result.Add(mod.ToString());
+            else
+                result.Remove("Regular");
 
             return result;
         }
@@ -185,22 +187,22 @@ public class Fancy
         }
     }
 
-    private static void AttemptCreateSpriteSheet(ModType mod, string name)
-    {
-        if (AssetManager.IconPacks.TryGetValue(Constants.CurrentPack(), out var pack))
-        {
-            if (!pack.Assets.TryGetValue(mod, out var iconAssets))
-                return;
+    // private static void AttemptCreateSpriteSheet(ModType mod, string name)
+    // {
+    //     if (AssetManager.IconPacks.TryGetValue(Constants.CurrentPack(), out var pack))
+    //     {
+    //         if (!pack.Assets.TryGetValue(mod, out var iconAssets))
+    //             return;
 
-            var modName = mod.ToString();
+    //         var modName = mod.ToString();
 
-            if ((!iconAssets.MentionStyles.TryGetValue(name, out var asset) || !asset) && iconAssets.BaseIcons.TryGetValue(name, out var baseIcons))
-            {
-                iconAssets.MentionStyles[name] = asset = pack.BuildSpriteSheet(mod, modName, name, baseIcons);
+    //         if ((!iconAssets.MentionStyles.TryGetValue(name, out var asset) || !asset) && iconAssets.BaseIcons.TryGetValue(name, out var baseIcons))
+    //         {
+    //             iconAssets.MentionStyles[name] = asset = pack.BuildSpriteSheet(mod, modName, name, baseIcons);
 
-                if (asset)
-                    Utils.DumpSprite(asset.spriteSheet as Texture2D, $"{name}{mod}RoleIcons", Path.Combine(pack.PackPath, modName));
-            }
-        }
-    }
+    //             if (asset)
+    //                 Utils.DumpSprite(asset.spriteSheet as Texture2D, $"{name}{mod}RoleIcons", Path.Combine(pack.PackPath, modName));
+    //         }
+    //     }
+    // }
 }

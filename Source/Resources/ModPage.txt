@@ -1,0 +1,48 @@
+Welcome to Fancy UI!, the tool that lets you customize <i>almost</i> anything in-game! This is an in-game guide on how to organise/set up a pack for icons or silhouettes. This mod is a culmination of a lot of ideas being thrown around for creativity's sake, resulting in this abomination (lol). Special thanks to MysticMismagius and Harry James Potter with the icon assets
+
+<size=200%><b>Icon Pack Creation:</b></size>
+<indent=4%>Step 1: Navigate to <b>[Your Town Of Salem 2 Installation Folder] > SalemModLoader > ModFolders > FancyUI > IconPacks</b> in your file explorer.
+Step 2: Create a folder and name it something you want your icon pack to be.
+Step 3: Navigate to the mod settings menu and select your icon pack in the <b>Selected Icon Pack</b> drop down setting.
+Step 4: Go back to your file explorer and enter the folder for your icon pack. There should be some folders made for you.
+Step 5: Populate the folders (only the lowest level ones, aka the roles/faction folders) with the images you want to replace, icons that don't have an image will be left unchanged.</indent>
+
+<size=200%><b>Changelog:</b></size>
+
+<size=150%><b><indent=4%>v2.0.0</indent></b></size>
+<indent=7%>- Rebranded to Fancy UI!
+- Added the ability to modify role silhouettes (WIP)
+- Added the ability to modify the UI wood colors (WIP)
+- Added the ability to modify effect icons in the player list
+- Added the ability to modify player numbers in player mentions
+- Added a UI for the mod
+- Pack downloads are no longer hardcoded, you can now set up custom downloads using github links
+- Improved on how sprite assets are handled and loaded
+- Improved Mac compatibility
+- Fixed a bunch of performance issues</indent>
+
+<size=150%><b><indent=4%>v1.2.1 (Formerly Icon Packs)</indent></b></size>
+<indent=7%>- Improved compatibility with old ui
+- Moved the vanilla fixes into their own mod
+- Patched another instance of role icons that was missed earlier</indent>
+
+<size=150%><b><indent=4%>v1.2.0 (Formerly Icon Packs)</indent></b></size>
+<indent=7%>- Added "Selected Mention Style" option that lets you toggle between the icon pack's main, TT or VIP icons or customise which icons you want to use via Custom; or use the vanilla mentions
+- Added a new "Custom" folder parameter for the new option
+- Improved some more inter mod-compatibility
+- Improved how mentions are created (thanks pat)
+- Improved how icon pack images are loaded
+- Fixed the issue with the missing attack/defense icons not loading correctly
+- Fixed a tiny issue in the Recolours credits</indent>
+
+<size=150%><b><indent=4%>v1.1.0 (Formerly Icon Packs)</indent></b></size>
+<indent=7%>- Added the ability to set the icons for game modifiers, the hidden role icon (when the hidden roles game modifier is active) and the attack sword and the defense shield as per their levels
+- Fixed a bug on the player list panel for transformed horsemen using their base role's ability buttons
+- Added a vanilla fix for setting your role name correctly as a horseman in the player list
+- The main menu buttons for downloading icons have been moved to the drop down settings (for future supported icon packs)
+- The mod will now dump an image into your icon pack's folder which is the image used by the game's mentions. You can refer to this image to debug any issues with role mentions
+- Added compatibility to Dum's old jailor mod
+- Cleaned up the code a bit</indent>
+
+<size=150%><b><indent=4%>v1.0.0 (Formerly Icon Packs)</indent></b></size>
+<indent=7%>- Mod released!</indent>

@@ -254,10 +254,8 @@ public static class PatchAbilityPanel
 
                 break;
 
-            case TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_ATTACK:
-            case TosAbilityPanelListItem.OverrideAbilityType.POISONER_POISON:
-            case TosAbilityPanelListItem.OverrideAbilityType.SHROUD:
-            case TosAbilityPanelListItem.OverrideAbilityType.INVESTIGATOR:
+            case TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_ATTACK or TosAbilityPanelListItem.OverrideAbilityType.POISONER_POISON or
+                TosAbilityPanelListItem.OverrideAbilityType.SHROUD or TosAbilityPanelListItem.OverrideAbilityType.INVESTIGATOR:
                 var special = AssetManager.GetSprite(reg, $"{name}_Special", faction, Constants.PlayerPanelEasterEggs());
 
                 if (!special.IsValid() && reg)
@@ -279,8 +277,7 @@ public static class PatchAbilityPanel
 
                 break;
 
-            case TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_REVEAL:
-            case TosAbilityPanelListItem.OverrideAbilityType.WEREWOLF_NON_FULL_MOON:
+            case TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_REVEAL or TosAbilityPanelListItem.OverrideAbilityType.WEREWOLF_NON_FULL_MOON:
                 var ab2 = AssetManager.GetSprite(reg, $"{name}_Ability_2", faction, Constants.PlayerPanelEasterEggs());
 
                 if (!ab2.IsValid() && reg)
@@ -578,7 +575,7 @@ public static class GetVIPRoleIconAndNameInlineStringPatch
     public static void Postfix(ref string __result)
     {
         if (Constants.EnableIcons())
-            __result = __result.Replace("RoleIcons\"", "RoleIcons (VIP)\"") + " <sprite=\"RoleIcons (VIP)\" name=\"Role201\">";
+            __result = __result.Replace("RoleIcons\"", "RoleIcons (VIP)\"") + " <sprite=\"RoleIcons\" name=\"Role201\">";
     }
 }
 
@@ -707,7 +704,6 @@ public static class ReplaceTMPSpritesPatch
     public static void Postfix()
     {
         var oldSpriteAssetRequest = Traverse.Create<TMP_Text>().Field<Func<int, string, TMP_SpriteAsset>>("OnSpriteAssetRequest").Value;
-        TMP_Text.OnSpriteAssetRequest -= oldSpriteAssetRequest;
         TMP_Text.OnSpriteAssetRequest += (index, str) =>
         {
             try
@@ -752,12 +748,6 @@ public static class ReplaceTMPSpritesPatch
                 if (str.Contains("(") && !str.Contains("Blank"))
                     deconstructed = str.Replace("RoleIcons (", "").Replace(")", "").Replace("BTOS", "");
 
-                var defaultSprite = mod switch
-                {
-                    ModType.BTOS2 => AssetManager.BTOS2_2 ?? AssetManager.BTOS2_1,
-                    _ => AssetManager.Vanilla1 ?? CacheDefaults.RoleIcons
-                };
-
                 if (!pack.Assets.TryGetValue(mod, out var assets))
                     Logging.LogWarning($"Unable to find {Constants.CurrentPack()} assets for {mod}");
                 else
@@ -775,7 +765,11 @@ public static class ReplaceTMPSpritesPatch
                         assets.MentionStyles[deconstructed] = asset = pack.BuildSpriteSheet(mod, mod.ToString(), deconstructed, assets.BaseIcons[deconstructed]);
                 }
 
-                asset ??= defaultSprite;
+                asset ??= mod switch
+                {
+                    ModType.BTOS2 => AssetManager.BTOS2_2 ?? AssetManager.BTOS2_1,
+                    _ => AssetManager.Vanilla1 ?? CacheDefaults.RoleIcons
+                };
             }
             else if (str == "PlayerNumbers")
             {
@@ -810,7 +804,6 @@ public static class ChangeGameModifierPopup
 }
 
 [HarmonyPatch(typeof(NecroPassingVoteEntry))]
-[HarmonyPriority(Priority.VeryLow)]
 public static class NecroPassPatches
 {
     [HarmonyPatch(nameof(NecroPassingVoteEntry.RefreshData))]

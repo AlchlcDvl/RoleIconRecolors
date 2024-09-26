@@ -1,3 +1,6 @@
+using FancyUI.SilhouetteSwapper;
+using Witchcraft.Gifs;
+
 namespace FancyUI;
 
 public static class AssetManager
@@ -22,6 +25,9 @@ public static class AssetManager
     public static AssetBundle Bundle { get; set; }
     public static readonly Dictionary<string, Sprite> Assets = [];
     public static readonly Dictionary<string, GameObject> AssetGOs = [];
+    public static readonly Dictionary<string, List<Sprite>> Assets2 = [];
+
+    public static SilhouetteAnimation Loading { get; private set; }
 
     public static string ModPath => Path.Combine(Path.GetDirectoryName(Application.dataPath), "SalemModLoader", "ModFolders", "FancyUI");
 
@@ -32,12 +38,13 @@ public static class AssetManager
 
     private static Assembly Core => typeof(Fancy).Assembly;
 
-    public static Sprite GetSprite(bool skipRegular, string name, string faction, bool allowEE = false, string packName = null) => GetSprite(name, allowEE, faction, packName, skipRegular);
+    public static Sprite GetSprite(bool skipFactionless, string name, string faction, bool allowEE = false, string packName = null) => GetSprite(name, allowEE, faction, packName,
+        skipFactionless);
 
-    public static Sprite GetSprite(string name, string faction, bool allowEE = true, string packName = null, bool skipRegular = false) => GetSprite(name, allowEE, faction, packName,
-        skipRegular);
+    public static Sprite GetSprite(string name, string faction, bool allowEE = true, string packName = null, bool skipFactionless = false) => GetSprite(name, allowEE, faction, packName,
+        skipFactionless);
 
-    public static Sprite GetSprite(string name, bool allowEE = true, string faction = null, string packName = null, bool skipRegular = false)
+    public static Sprite GetSprite(string name, bool allowEE = true, string faction = null, string packName = null, bool skipFactionless = false)
     {
         if (name.Contains("Blank") || !Constants.EnableIcons() || IconPacks.Count == 0)
             return Blank;
@@ -78,7 +85,7 @@ public static class AssetManager
                     sprite = pack.GetSprite(name, allowEE, og);
             }
 
-            if (faction != "Regular" && !sprite.IsValid() && !skipRegular)
+            if (faction != "Regular" && !sprite.IsValid())
             {
                 sprite = pack.GetSprite($"{name}_{mod}", allowEE, "Regular");
 
@@ -86,7 +93,7 @@ public static class AssetManager
                     sprite = pack.GetSprite(name, allowEE, "Regular");
             }
 
-            if (!sprite.IsValid() && faction != "Factionless")
+            if (!sprite.IsValid() && faction != "Factionless" && !skipFactionless)
             {
                 sprite = pack.GetSprite($"{name}_{mod}", allowEE, "Factionless");
 
@@ -148,6 +155,17 @@ public static class AssetManager
                     Ethereal = sprite;
 
                 Assets[sprite.name] = sprite;
+            }
+            else if (x.EndsWith(".gif"))
+            {
+                var sprites = GifLoader.LoadGifFromResources(x);
+                sprites.ForEach(y => y.hideFlags |= HideFlags.DontUnloadUnusedAsset);
+                sprites.ForEach(y => y.name = y.texture.name = $"{x.SanitisePath()}{sprites.IndexOf(y)}");
+
+                if (x.Contains("Loading"))
+                    Loading = new("Loading") { Frames = sprites };
+
+                Assets2[x.SanitisePath()] = sprites;
             }
         });
 
