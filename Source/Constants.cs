@@ -34,7 +34,11 @@ public static class Constants
 
     public static string GetMainUIThemeType() => ModSettings.GetString("Main UI Theme", "alchlcsystm.fancy.ui");
 
-    public static Color GetMainUIThemeColor() => ModSettings.GetColor("Main UI Theme Color", "alchlcsystm.fancy.ui");
+    public static Color GetMainUIThemeWoodColor() => ModSettings.GetColor("Main UI Theme Wood Color", "alchlcsystm.fancy.ui");
+
+    public static Color GetMainUIThemeMetalColor() => ModSettings.GetColor("Main UI Theme Metal Color", "alchlcsystm.fancy.ui");
+
+    public static Color GetMainUIThemePaperColor() => ModSettings.GetColor("Main UI Theme Paper Color", "alchlcsystm.fancy.ui");
 
     public static bool CustomMainUIEnabled() => GetMainUIThemeType() != "Default";
 

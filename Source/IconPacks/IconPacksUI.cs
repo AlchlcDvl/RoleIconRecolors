@@ -2,24 +2,21 @@ using System.Collections;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
 using Home.Shared;
-using Home.Common;
 using System.Diagnostics;
 
-namespace FancyUI;
+namespace FancyUI.IconPacks;
 
-public class FancyMenu : UIController
+public class IconPacksUI : UIController
 {
     private const string REPO = "https://raw.githubusercontent.com/AlchlcDvl/RoleIconRecolors/main";
     private static readonly Dictionary<string, bool> Running = [];
     private static bool HandlerRunning;
     public static readonly List<PackJson> Packs = [];
 
-    public static FancyMenu Instance { get; private set; }
+    public static IconPacksUI Instance { get; private set; }
 
     private GameObject Back;
     private GameObject OpenDir;
-    private GameObject Next;
-    private GameObject Previous;
     private GameObject Confirm;
     private GameObject PackName;
     private GameObject RepoName;
@@ -27,51 +24,26 @@ public class FancyMenu : UIController
     private GameObject BranchName;
     private GameObject JsonName;
     private GameObject NoPacks;
-    private GameObject Pack1;
-    private GameObject Pack2;
-    private GameObject Pack3;
-    private GameObject Pack4;
-    private GameObject WaitingScreen;
+    private GameObject PackTemplate;
 
-    private TextMeshProUGUI CounterTMP;
-    private int Page;
+    public bool Abort { get; set; }
 
-    private static TMP_FontAsset GameFont;
-    private static Material GameFontMaterial;
+    private readonly List<GameObject> PackGOs = [];
 
     public void Start()
     {
         Instance = this;
+
         Back = transform.Find("Buttons/Back").gameObject;
 		OpenDir = transform.Find("Buttons/Directory").gameObject;
-		Confirm = transform.Find("Buttons/Confirm").gameObject;
-		Next = transform.Find("Pages/Next").gameObject;
-		Previous = transform.Find("Pages/Previous").gameObject;
-        NoPacks = transform.Find("NoPacks").gameObject;
-        Pack1 = transform.Find("Pack1").gameObject;
-        Pack2 = transform.Find("Pack2").gameObject;
-        Pack3 = transform.Find("Pack3").gameObject;
-        Pack4 = transform.Find("Pack4").gameObject;
+		Confirm = transform.Find("Inputs/Confirm").gameObject;
+        NoPacks = transform.Find("ScrollView/NoPacks").gameObject;
         PackName = transform.Find("Inputs/PackName").gameObject;
         RepoName = transform.Find("Inputs/RepoName").gameObject;
         RepoOwner = transform.Find("Inputs/RepoOwner").gameObject;
         BranchName = transform.Find("Inputs/BranchName").gameObject;
         JsonName = transform.Find("Inputs/JsonName").gameObject;
-
-        CounterTMP = transform.Find("Pages").GetComponent<TextMeshProUGUI>();
-
-        WaitingScreen = Instantiate(AssetManager.AssetGOs["WaitingScreen"], transform);
-        WaitingScreen.transform.localPosition = new(0, 0, -1f);
-        WaitingScreen.SetActive(false);
-
-        GameFont = ApplicationController.ApplicationContext.FontControllerSource.fonts[0].tmp_FontAsset;
-        GameFontMaterial = ApplicationController.ApplicationContext.FontControllerSource.fonts[0].standardFontMaterial;
-
-        foreach (var tmp in transform.GetComponentsInChildren<TextMeshProUGUI>())
-        {
-            tmp.font = GameFont;
-            tmp.fontMaterial = GameFontMaterial;
-        }
+        PackTemplate = transform.Find("ScrollView/Viewport/Content/PackTemplate").gameObject;
 
         SetupMenu();
     }
@@ -79,85 +51,60 @@ public class FancyMenu : UIController
     public void OnDestroy()
     {
         Instance = null;
-        WaitingScreen.Destroy();
         GeneralUtils.SaveText("OtherPacks.json", JsonConvert.SerializeObject(Packs.Where(x => !x.FromMainRepo).ToList(), typeof(List<PackJson>), Formatting.Indented, new()),
-            path: AssetManager.ModPath);
-    }
-
-    public void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-            gameObject.Destroy();
+            path: AssetManager.IPPath);
     }
 
     private void SetupMenu()
     {
-        Back.GetComponent<Button>().onClick.AddListener(gameObject.Destroy);
+        Back.GetComponent<Button>().onClick.AddListener(GoBack);
         Back.AddComponent<TooltipTrigger>().NonLocalizedString = "Close Packs Menu";
+
         OpenDir.GetComponent<Button>().onClick.AddListener(OpenDirectory);
         OpenDir.AddComponent<TooltipTrigger>().NonLocalizedString = "Open Icons Folder";
-        Next.AddComponent<TooltipTrigger>().NonLocalizedString = "Next Page";
-        Next.GetComponent<Button>().onClick.AddListener(() => ChangePage(true));
-        Previous.AddComponent<TooltipTrigger>().NonLocalizedString = "Previous Page";
-        Previous.GetComponent<Button>().onClick.AddListener(() => ChangePage(false));
-        CounterTMP.gameObject.AddComponent<TooltipTrigger>().NonLocalizedString = "Page Counter";
+
         var dirButton = OpenDir.AddComponent<HoverEffect>();
         dirButton.OnMouseOver.AddListener(() => OpenDir.GetComponent<Image>().sprite = AssetManager.Assets["OpenChest"]);
         dirButton.OnMouseOut.AddListener(() => OpenDir.GetComponent<Image>().sprite = AssetManager.Assets["ClosedChest"]);
+
         Confirm.GetComponent<Button>().onClick.AddListener(GenerateLinkAndAddToPackCount);
         Confirm.AddComponent<TooltipTrigger>().NonLocalizedString = "Confirm Link Parameters And Generate Link";
+
         PackName.AddComponent<TooltipTrigger>().NonLocalizedString = "Name Of The Icon Pack (REQUIRED)";
         RepoName.AddComponent<TooltipTrigger>().NonLocalizedString = "Name Of The Icon Pack GitHub Repository (Defaults To: RoleIconRecolors)";
         RepoOwner.AddComponent<TooltipTrigger>().NonLocalizedString = "Name Of The Icon Pack GitHub Repository Owner (Defaults To: AlchlcDvl)";
         JsonName.AddComponent<TooltipTrigger>().NonLocalizedString = "Name Of The Icon Pack GitHub Json File (Defaults To: Name Of Your Pack)";
         BranchName.AddComponent<TooltipTrigger>().NonLocalizedString = "Name Of The Icon Pack GitHub Repository Branch The Pack Is In (Defaults To: main)";
-        SetPage();
-    }
 
-    private void ChangePage(bool increment)
-    {
-        Page += increment ? 1 : -1;
-        var funnyMath = (Packs.Count / 3) + (Packs.Count % 3 == 0 ? 0 : 1);
+        Packs.ForEach(SetUpPack);
 
-        if (Page < 0)
-            Page = funnyMath;
-        else if (Page > funnyMath)
-            Page = 0;
-
-        SetPage();
-    }
-
-    private void SetPage()
-    {
-        Pack1.SetActive(Packs.Count > 0);
-        Pack2.SetActive(Packs.Count < 5 || ((Page * 3) + 2) <= Packs.Count);
-        Pack3.SetActive(Packs.Count < 5 || ((Page + 1) * 3) <= Packs.Count);
-        Pack4.SetActive(Packs.Count == 4);
+        PackTemplate.SetActive(false);
         NoPacks.SetActive(Packs.Count == 0);
-        CounterTMP.gameObject.SetActive(Packs.Count > 4);
-        var funnyMath = (Packs.Count / 3) + (Packs.Count % 3 == 0 ? 0 : 1);
-        var unfunnyMath = Page + 1;
-        CounterTMP.SetText($"{unfunnyMath}/{funnyMath}");
-        SetUpPack(Pack1, Page, 1);
-        SetUpPack(Pack2, Page, 2);
-        SetUpPack(Pack3, Page, 3);
-        SetUpPack(Pack4, Page, 4);
+    }
+
+    public void GoBack()
+    {
+        gameObject.SetActive(false);
+        FancyUI.Instance.gameObject.SetActive(true);
     }
 
     // Why the hell am I not allowed to make extension methods in instance classes smhh
-    private static void SetUpPack(GameObject pack, int page, int index)
+    private void SetUpPack(PackJson packJson)
     {
-        var packJson = Packs[Packs.Count < 5 ? (index - 1) : ((page * 3) + index)];
-        pack.transform.Find("PackName").GetComponent<TextMeshProUGUI>().SetText(packJson.DisplayName);
-        var link = pack.transform.Find("RepoButton");
+        var go = Instantiate(PackTemplate, PackTemplate.transform.parent);
+        go.name = packJson.Name;
+        go.transform.Find("PackName").GetComponent<TextMeshProUGUI>().SetText(packJson.DisplayName);
+        var link = go.transform.Find("RepoButton");
         link.GetComponent<Button>().onClick.AddListener(() => Application.OpenURL(packJson.Link()));
-        link.gameObject.EnsureComponent<TooltipTrigger>().NonLocalizedString = "Open Link";
-        var button = pack.transform.Find("Download");
+        link.AddComponent<TooltipTrigger>().NonLocalizedString = "Open Link";
+        var button = go.transform.Find("Download");
         button.GetComponent<Button>().onClick.AddListener(() => DownloadIcons(packJson.Name));
-        button.gameObject.EnsureComponent<TooltipTrigger>().NonLocalizedString = $"Download {packJson.Name}";
+        button.gameObject.AddComponent<TooltipTrigger>().NonLocalizedString = $"Download {packJson.DisplayName}";
+        go.SetActive(true);
+        PackGOs.Add(go);
 
         if (!StringUtils.IsNullEmptyOrWhiteSpace(packJson.Credits))
-            pack.EnsureComponent<TooltipTrigger>().NonLocalizedString = packJson.Credits;
+            go.AddComponent<TooltipTrigger>().NonLocalizedString = packJson.Credits;
     }
 
     private void GenerateLinkAndAddToPackCount()
@@ -173,14 +120,14 @@ public class FancyMenu : UIController
         var packJson = new PackJson()
         {
             Name = name,
-            RepoName = RepoName.GetComponent<TMP_InputField>().text ?? "RoleIconRecolors",
-            RepoOwner = RepoOwner.GetComponent<TMP_InputField>().text ?? "AlchlcDvl",
-            Branch = BranchName.GetComponent<TMP_InputField>().text ?? "main",
-            JsonName = JsonName.GetComponent<TMP_InputField>().text ?? name,
+            RepoName = RepoName.GetComponent<TMP_InputField>().text,
+            RepoOwner = RepoOwner.GetComponent<TMP_InputField>().text,
+            Branch = BranchName.GetComponent<TMP_InputField>().text,
+            JsonName = JsonName.GetComponent<TMP_InputField>().text,
         };
         packJson.SetDefaults();
         Packs.Add(packJson);
-        SetPage();
+        SetUpPack(packJson);
     }
 
     public static void HandlePackData() => ApplicationController.ApplicationContext.StartCoroutine(CoHandlePackData());
@@ -233,7 +180,7 @@ public class FancyMenu : UIController
 
         ApplicationController.ApplicationContext.EnableTransitionOverlay(true, true, $"Downloading {packName}");
         Running[packName] = true;
-        var pack = Path.Combine(AssetManager.ModPath, "IconPacks", packName);
+        var pack = Path.Combine(AssetManager.IPPath, packName);
 
         if (!Directory.Exists(pack))
             Directory.CreateDirectory(pack);
@@ -261,11 +208,15 @@ public class FancyMenu : UIController
         }
 
         var json = JsonConvert.DeserializeObject<JsonItem>(www.downloadHandler.text);
+        LoadingUI.Begin(Instance.gameObject, packName, json.Count());
 
         if (json.Assets != null)
         {
             foreach (var asset in json.Assets)
             {
+                if (Instance.Abort)
+                    break;
+
                 asset.FileType ??= "png";
 
                 var www2 = UnityWebRequest.Get($"{packJson.RawLink()}/{asset.FileName()}");
@@ -297,6 +248,8 @@ public class FancyMenu : UIController
 
                     yield return new WaitForEndOfFrame();
                 }
+
+                LoadingUI.Instance.UpdateProgress();
             }
         }
 
@@ -304,10 +257,16 @@ public class FancyMenu : UIController
         {
             foreach (var mod in json.ModAssets)
             {
+                if (Instance.Abort)
+                    break;
+
                 if (mod.Assets != null)
                 {
                     foreach (var asset in mod.Assets)
                     {
+                        if (Instance.Abort)
+                            break;
+
                         asset.FileType ??= "png";
 
                         var www2 = UnityWebRequest.Get($"{packJson.RawLink()}/{mod.Name}/{asset.FileName()}");
@@ -339,6 +298,8 @@ public class FancyMenu : UIController
 
                             yield return new WaitForEndOfFrame();
                         }
+
+                        LoadingUI.Instance.UpdateProgress();
                     }
                 }
 
@@ -346,11 +307,17 @@ public class FancyMenu : UIController
                 {
                     foreach (var folder in mod.Folders)
                     {
+                        if (Instance.Abort)
+                            break;
+
                         if (folder.Assets == null)
                             continue;
 
                         foreach (var asset in folder.Assets)
                         {
+                            if (Instance.Abort)
+                                break;
+
                             asset.FileType ??= "png";
 
                             var www2 = UnityWebRequest.Get($"{packJson.RawLink()}/{mod.Name}/{folder.Name}/{asset.FileName()}");
@@ -382,6 +349,8 @@ public class FancyMenu : UIController
 
                                 yield return new WaitForEndOfFrame();
                             }
+
+                            LoadingUI.Instance.UpdateProgress();
                         }
                     }
                 }
@@ -393,6 +362,7 @@ public class FancyMenu : UIController
         OpenDirectory();
         Running[packName] = false;
         ApplicationController.ApplicationContext.EnableTransitionOverlay(false, false, "");
+        LoadingUI.Instance.Finish();
         yield break;
     }
 

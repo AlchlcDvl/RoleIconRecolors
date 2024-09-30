@@ -13,3 +13,10 @@ public enum PackType
     IconPacks,
     SilhouetteSets
 }
+
+public enum ColorType
+{
+    Wood,
+    Metal,
+    Paper
+}

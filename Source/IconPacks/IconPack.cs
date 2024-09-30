@@ -97,11 +97,13 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                             {
                                 foreach (var file in Directory.GetFiles(baseFolder, $"*.{type1}"))
                                 {
-                                    var filePath = Path.Combine(baseFolder, $"{file.SanitisePath()}.{type1}");
-                                    var sprite = AssetManager.LoadDiskSprite(filePath.SanitisePath(), baseName, mod, Name, type1);
+                                    var name = file.SanitisePath();
+                                    var filePath = Path.Combine(baseFolder, $"{name}.{type1}");
+                                    var sprite = AssetManager.LoadDiskSprite(name, filePath);
+                                    name = name.SanitisePath(true);
 
                                     if (sprite.IsValid())
-                                        assets.BaseIcons[name1][filePath.SanitisePath(true)] = sprite;
+                                        assets.BaseIcons[name1][name] = sprite;
                                 }
                             }
                         }
@@ -120,21 +122,22 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                             {
                                 foreach (var file in Directory.GetFiles(eeFolder, $"*.{type1}"))
                                 {
-                                    var filePath = Path.Combine(eeFolder, $"{file.SanitisePath()}.{type1}");
-                                    var sprite = AssetManager.LoadDiskSprite(filePath.SanitisePath(), eeName, mod, Name, type1);
-                                    filePath = filePath.SanitisePath(true);
+                                    var name = file.SanitisePath();
+                                    var filePath = Path.Combine(eeFolder, $"{name}.{type1}");
+                                    var sprite = AssetManager.LoadDiskSprite(name, filePath);
+                                    name = name.SanitisePath(true);
 
                                     if (!sprite.IsValid())
                                         continue;
 
-                                    if (!assets.EasterEggs[name1].ContainsKey(filePath))
-                                        assets.EasterEggs[name1][filePath] = [];
+                                    if (!assets.EasterEggs[name1].ContainsKey(name))
+                                        assets.EasterEggs[name1][name] = [];
 
-                                    if (!AssetManager.GlobalEasterEggs[name1].ContainsKey(filePath))
-                                        AssetManager.GlobalEasterEggs[name1][filePath] = [];
+                                    if (!AssetManager.GlobalEasterEggs[name1].ContainsKey(name))
+                                        AssetManager.GlobalEasterEggs[name1][name] = [];
 
-                                    assets.EasterEggs[name1][filePath].Add(sprite);
-                                    AssetManager.GlobalEasterEggs[name1][filePath].Add(sprite);
+                                    assets.EasterEggs[name1][name].Add(sprite);
+                                    AssetManager.GlobalEasterEggs[name1][name].Add(sprite);
                                 }
                             }
                         }
@@ -161,11 +164,12 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                         {
                             foreach (var file in Directory.GetFiles(folder, $"*.{type1}"))
                             {
-                                var filePath = Path.Combine(folder, $"{file.SanitisePath()}.{type1}");
-                                var sprite = AssetManager.LoadDiskSprite(filePath.SanitisePath(), "Custom", mod, Name, type1);
+                                var name = file.SanitisePath();
+                                var filePath = Path.Combine(folder, $"{name}.{type1}");
+                                var sprite = AssetManager.LoadDiskSprite(name, filePath);
 
                                 if (sprite.IsValid())
-                                    assets.BaseIcons["Custom"][filePath.SanitisePath(true)] = sprite;
+                                    assets.BaseIcons["Custom"][name.SanitisePath(true)] = sprite;
                             }
                         }
                     }
@@ -181,11 +185,12 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                     {
                         foreach (var file in Directory.GetFiles(modPath, $"*.{type1}"))
                         {
-                            var filePath = Path.Combine(modPath, $"{file.SanitisePath()}.{type1}");
-                            var sprite = AssetManager.LoadDiskSprite(filePath.SanitisePath(), "PlayerNumbers", Name, type1);
+                            var name = file.SanitisePath();
+                            var filePath = Path.Combine(modPath, $"{name}.{type1}");
+                            var sprite = AssetManager.LoadDiskSprite(name, filePath);
 
                             if (sprite.IsValid())
-                                NumberSprites[filePath.SanitisePath(true)] = sprite;
+                                NumberSprites[name.SanitisePath(true)] = sprite;
                         }
                     }
                 }

@@ -34,6 +34,8 @@ public static class AssetManager
     public static SilhouetteAnimation Loading { get; private set; }
 
     public static string ModPath => Path.Combine(Path.GetDirectoryName(Application.dataPath), "SalemModLoader", "ModFolders", "FancyUI");
+    public static string IPPath => Path.Combine(ModPath, "IconPacks");
+    public static string SSPath => Path.Combine(ModPath, "SilhouetteSets");
 
     private static readonly string[] Avoid = [ "Necronomicon", "Recruit", "Doused", "ExeTarget", "Hexed", "Knighted", "Bread", "Revealed", "Disconnected", "Connecting", "Plagued", "Revealed",
         "Trapped", "Hangover", "Silenced", "Dreamwoven", "Insane", "Bugged", "Tracked", "Sickness", "Reaped", "Deafened", "Audited", "Enchanted", "Accompanied", "Banned", "WarlockCursed" ];
@@ -119,22 +121,23 @@ public static class AssetManager
         if (!Directory.Exists(ModPath))
             Directory.CreateDirectory(ModPath);
 
-        var iconpacks = Path.Combine(ModPath, "IconPacks");
+        if (!Directory.Exists(IPPath))
+            Directory.CreateDirectory(IPPath);
 
-        if (!Directory.Exists(iconpacks))
-            Directory.CreateDirectory(iconpacks);
+        var json = Path.Combine(IPPath, "OtherPacks.json");
 
-        var vanilla = Path.Combine(iconpacks, "Vanilla");
+        if (!File.Exists(json))
+            File.CreateText(json).Close();
+
+        var vanilla = Path.Combine(IPPath, "Vanilla");
 
         if (!Directory.Exists(vanilla))
             Directory.CreateDirectory(vanilla);
 
-        var silsets = Path.Combine(ModPath, "SilhouetteSets");
+        if (!Directory.Exists(SSPath))
+            Directory.CreateDirectory(SSPath);
 
-        if (!Directory.Exists(silsets))
-            Directory.CreateDirectory(silsets);
-
-        vanilla = Path.Combine(silsets, "Vanilla");
+        vanilla = Path.Combine(SSPath, "Vanilla");
 
         if (!Directory.Exists(vanilla))
             Directory.CreateDirectory(vanilla);
@@ -177,6 +180,7 @@ public static class AssetManager
         Bundle.LoadAllAssets<Sprite>().ForEach(x => Assets[x.name] = x);
         Bundle.LoadAllAssets<GameObject>().ForEach(x => AssetGOs[x.name] = x);
 
+        // Putting the bundled assets to the mod's bundle broke the shader somehow
         WoodBundle = FromAssetBundle.GetAssetBundleFromResources($"{Resources}WoodMaterials", Core);
         Grayscale = WoodBundle.LoadAsset<Material>("GrayscaleM");
 
@@ -200,12 +204,12 @@ public static class AssetManager
         if (!BTOS2Compatibility.BTOS2Patched)
             return;
 
-        var btos = Path.Combine(ModPath, "IconPacks", "BTOS2");
+        var btos = Path.Combine(IPPath, "BTOS2");
 
         if (!Directory.Exists(btos))
             Directory.CreateDirectory(btos);
 
-        btos = Path.Combine(ModPath, "SilhouetteSets", "BTOS2");
+        btos = Path.Combine(SSPath, "BTOS2");
 
         if (!Directory.Exists(btos))
             Directory.CreateDirectory(btos);
@@ -221,7 +225,7 @@ public static class AssetManager
             };
         }
 
-        Utils.DumpSprite(BTOS2_1.spriteSheet as Texture2D, "BTOSRoleIcons", Path.Combine(ModPath, "IconPacks", "BTOS2"), true);
+        Utils.DumpSprite(BTOS2_1.spriteSheet as Texture2D, "BTOSRoleIcons", Path.Combine(IPPath, "BTOS2"), true);
         LoadBTOS2SpriteSheet();
     }
 
@@ -265,12 +269,6 @@ public static class AssetManager
             return null;
         }
     }
-
-    public static Sprite LoadDiskSprite(string fileName, string subfolder, string folder, string superfolder, string filetype) => LoadDiskSprite(fileName, Path.Combine(ModPath, "IconPacks", superfolder,
-        folder, subfolder, $"{fileName.SanitisePath()}.{filetype}"));
-
-    public static Sprite LoadDiskSprite(string fileName, string subfolder, string folder, string filetype) => LoadDiskSprite(fileName, Path.Combine(ModPath, "IconPacks", folder, subfolder,
-        $"{fileName.SanitisePath()}.{filetype}"));
 
     public static Sprite LoadDiskSprite(string fileName, string path)
     {
@@ -499,7 +497,7 @@ public static class AssetManager
             }
 
             Vanilla1 = BuildGlyphs([..sprites], "RoleIcons", index);
-            Utils.DumpSprite(Vanilla1.spriteSheet as Texture2D, "RoleIcons_Modified", Path.Combine(ModPath, "IconPacks", "Vanilla"));
+            Utils.DumpSprite(Vanilla1.spriteSheet as Texture2D, "RoleIcons_Modified", Path.Combine(IPPath, "Vanilla"));
         }
         catch (Exception e)
         {
@@ -528,7 +526,7 @@ public static class AssetManager
             }
 
             Vanilla2 = BuildGlyphs([..sprites], "PlayerNumbers", dict.ToDictionary(x => x, x => (x, 0)), false);
-            Utils.DumpSprite(Vanilla2.spriteSheet as Texture2D, "PlayerNumbers_Modified", Path.Combine(ModPath, "IconPacks", "Vanilla"));
+            Utils.DumpSprite(Vanilla2.spriteSheet as Texture2D, "PlayerNumbers_Modified", Path.Combine(IPPath, "Vanilla"));
         }
         catch (Exception e)
         {
@@ -561,7 +559,7 @@ public static class AssetManager
             }
 
             BTOS2_2 = BuildGlyphs([..sprites], "BTOSRoleIcons", index);
-            Utils.DumpSprite(BTOS2_2.spriteSheet as Texture2D, "BTOS2RoleIcons_Modified", Path.Combine(ModPath, "IconPacks", "BTOS2"));
+            Utils.DumpSprite(BTOS2_2.spriteSheet as Texture2D, "BTOS2RoleIcons_Modified", Path.Combine(IPPath, "BTOS2"));
         }
         catch (Exception e)
         {

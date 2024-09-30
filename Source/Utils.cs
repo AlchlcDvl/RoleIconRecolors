@@ -1,5 +1,3 @@
-using System.Globalization;
-
 namespace FancyUI;
 
 public static class Utils
@@ -643,30 +641,15 @@ public static class Utils
         return FactionType.NONE;
     }
 
-    public static T EnsureComponent<T>(this Component component) where T : Component => component.gameObject.EnsureComponent<T>();
-
-    public static T EnsureComponent<T>(this GameObject gameObject) where T : Component => gameObject.GetComponent<T>() ?? gameObject.AddComponent<T>();
-
-    public static Color32 ParseHex(string hex)
+    public static void SetImageColor(this Image img, ColorType type)
     {
-        hex = hex.Replace("#", "");
-        Color32 color;
-
-        if (hex.Length is not 6 or 8)
-            color = Color.white;
-        else
+        img.material = AssetManager.Grayscale;
+        img.color = type switch
         {
-            var r = byte.Parse(hex.Substring(0, 2), NumberStyles.HexNumber);
-            var g = byte.Parse(hex.Substring(2, 2), NumberStyles.HexNumber);
-            var b = byte.Parse(hex.Substring(4, 2), NumberStyles.HexNumber);
-            var a = byte.MaxValue;
-
-            if (hex.Length == 8)
-                a = byte.Parse(hex.Substring(6, 2), NumberStyles.HexNumber);
-
-            color = new(r, g, b, a);
-        }
-
-        return color;
+            ColorType.Metal => Constants.GetMainUIThemeMetalColor(),
+            ColorType.Wood => Constants.GetMainUIThemeWoodColor(),
+            ColorType.Paper => Constants.GetMainUIThemePaperColor(),
+            _ => Constants.GetMainUIThemeWoodColor()
+        };
     }
 }

@@ -31,10 +31,10 @@ public class Fancy
 
     public static void OpenMenu()
     {
-        var go = UObject.Instantiate(AssetManager.AssetGOs["DownloaderUI"], CacheHomeSceneController.Controller.SafeArea.transform, false);
+        var go = UObject.Instantiate(AssetManager.AssetGOs["FancyUI"], CacheHomeSceneController.Controller.SafeArea.transform, false);
         go.transform.localPosition = new(0, 0, 0);
-        go.transform.localScale = new(2.25f, 2.25f, 2.25f);
-        go.AddComponent<FancyMenu>();
+        go.transform.localScale = Vector3.one * 2f;
+        go.AddComponent<FancyUI>();
     }
 
     public ModSettings.DropdownSetting SelectedIconPack => new()
@@ -128,9 +128,23 @@ public class Fancy
         Options = [ "Default", "Custom Input" ],
     };
 
-    public ModSettings.ColorPickerSetting MainUIThemeInput => new()
+    public ModSettings.ColorPickerSetting MainUIThemeWoodInput => new()
     {
-        Name = "Main UI Theme Color",
+        Name = "Main UI Theme Wood Color",
+        Description = "Dictates how the wood of the main UI loooks like",
+        Available = Constants.GetMainUIThemeType() == "Custom Input"
+    };
+
+    public ModSettings.ColorPickerSetting MainUIThemeMetalInput => new()
+    {
+        Name = "Main UI Theme Metal Color",
+        Description = "Dictates how the wood of the main UI loooks like",
+        Available = Constants.GetMainUIThemeType() == "Custom Input"
+    };
+
+    public ModSettings.ColorPickerSetting MainUIThemePaperInput => new()
+    {
+        Name = "Main UI Theme Paper Color",
         Description = "Dictates how the wood of the main UI loooks like",
         Available = Constants.GetMainUIThemeType() == "Custom Input"
     };

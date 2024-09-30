@@ -378,7 +378,7 @@ public static class CacheDefaults
                 Numbers = asset;
 
             if (key is "RoleIcons" or "PlayerNumbers")
-                Utils.DumpSprite(asset.spriteSheet as Texture2D, key, Path.Combine(AssetManager.ModPath, "IconPacks", "Vanilla"), true);
+                Utils.DumpSprite(asset.spriteSheet as Texture2D, key, Path.Combine(AssetManager.IPPath, "Vanilla"), true);
             else
                 MaterialReferenceManager.AddSpriteAsset(asset);
         });
@@ -686,7 +686,7 @@ public static class RemoveTextIconFromPlayerPopupBecauseWhyIsItThere
 [HarmonyPatch(typeof(LoginSceneController), nameof(LoginSceneController.Start))]
 public static class HandlePacks
 {
-    public static void Prefix() => FancyMenu.HandlePackData();
+    public static void Prefix() => IconPacksUI.HandlePackData();
 }
 
 [HarmonyPatch(typeof(HomeSceneController), nameof(HomeSceneController.Start))]
