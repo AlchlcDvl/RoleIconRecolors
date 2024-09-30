@@ -22,4 +22,7 @@ global using TMPro;
 
 global using Witchcraft.Utils;
 
-global using FancyUI.IconPacks;
+global using FancyUI.UI;
+global using FancyUI.Assets;
+global using FancyUI.Patches;
+global using FancyUI.Compatibility;

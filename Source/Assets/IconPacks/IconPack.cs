@@ -1,4 +1,4 @@
-namespace FancyUI.IconPacks;
+namespace FancyUI.Assets.IconPacks;
 
 public class IconPack(string name) : Pack(name, PackType.IconPacks)
 {
@@ -329,6 +329,14 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
             }
 
             if (!sprite.IsValid() && style != "Regular" && Assets[ModType.Common].BaseIcons.TryGetValue("Regular", out icons2))
+            {
+                sprite = icons2.TryGetValue(name2 + $"_{mod}", out sprite1) ? sprite1 : AssetManager.Blank;
+
+                if (!sprite.IsValid())
+                    sprite = icons2.TryGetValue(name2, out sprite1) ? sprite1 : AssetManager.Blank;
+            }
+
+            if (!sprite.IsValid() && style != "Factionless" && Assets[ModType.Common].BaseIcons.TryGetValue("Factionless", out icons2))
             {
                 sprite = icons2.TryGetValue(name2 + $"_{mod}", out sprite1) ? sprite1 : AssetManager.Blank;
 

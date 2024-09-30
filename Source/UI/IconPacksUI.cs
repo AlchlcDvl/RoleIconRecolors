@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using Home.Shared;
 using System.Diagnostics;
 
-namespace FancyUI.IconPacks;
+namespace FancyUI.UI;
 
 public class IconPacksUI : UIController
 {
@@ -35,8 +35,8 @@ public class IconPacksUI : UIController
         Instance = this;
 
         Back = transform.Find("Buttons/Back").gameObject;
-		OpenDir = transform.Find("Buttons/Directory").gameObject;
-		Confirm = transform.Find("Inputs/Confirm").gameObject;
+        OpenDir = transform.Find("Buttons/Directory").gameObject;
+        Confirm = transform.Find("Inputs/Confirm").gameObject;
         NoPacks = transform.Find("ScrollView/NoPacks").gameObject;
         PackName = transform.Find("Inputs/PackName").gameObject;
         RepoName = transform.Find("Inputs/RepoName").gameObject;

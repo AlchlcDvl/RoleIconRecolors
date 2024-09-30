@@ -1,7 +1,8 @@
-using FancyUI.SilhouetteSwapper;
+using FancyUI.Assets.SilhouetteSwapper;
+using FancyUI.Assets.IconPacks;
 using Witchcraft.Gifs;
 
-namespace FancyUI;
+namespace FancyUI.Assets;
 
 public static class AssetManager
 {

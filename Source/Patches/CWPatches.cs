@@ -1,6 +1,6 @@
 using Game.Achievements;
 
-namespace FancyUI.ColouredWood;
+namespace FancyUI.Patches;
 
 [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.Start))]
 public static class RoleCardPanelPatch

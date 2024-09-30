@@ -1,7 +1,7 @@
 using System.Xml;
 using Home.Services;
 
-namespace FancyUI;
+namespace FancyUI.Patches;
 
 [HarmonyPatch(typeof(HomeLocalizationService), nameof(HomeLocalizationService.RebuildStringTables))]
 public static class DumpStringTables

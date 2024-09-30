@@ -1,6 +1,6 @@
 using Home.Shared;
 
-namespace FancyUI;
+namespace FancyUI.UI;
 
 public class FancyUI : UIController
 {

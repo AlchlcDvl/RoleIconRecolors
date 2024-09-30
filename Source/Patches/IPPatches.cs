@@ -10,7 +10,7 @@ using Home.Shared;
 using Home.LoginScene;
 using Home.HomeScene;
 
-namespace FancyUI.IconPacks;
+namespace FancyUI.Patches;
 
 [HarmonyPatch(typeof(RoleCardListItem), nameof(RoleCardListItem.SetData))]
 public static class PatchRoleDeckBuilder

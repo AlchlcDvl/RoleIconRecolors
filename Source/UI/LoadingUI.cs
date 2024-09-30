@@ -1,4 +1,4 @@
-namespace FancyUI;
+namespace FancyUI.UI;
 
 public class LoadingUI : UIController
 {

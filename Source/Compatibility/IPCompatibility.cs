@@ -1,4 +1,4 @@
-namespace FancyUI.IconPacks;
+namespace FancyUI.Compatibility;
 
 public static class BTOS2IPCompatibility
 {

@@ -34,7 +34,7 @@ public class Fancy
         var go = UObject.Instantiate(AssetManager.AssetGOs["FancyUI"], CacheHomeSceneController.Controller.SafeArea.transform, false);
         go.transform.localPosition = new(0, 0, 0);
         go.transform.localScale = Vector3.one * 2f;
-        go.AddComponent<FancyUI>();
+        go.AddComponent<UI.FancyUI>();
     }
 
     public ModSettings.DropdownSetting SelectedIconPack => new()

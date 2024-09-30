@@ -1,4 +1,4 @@
-namespace FancyUI;
+namespace FancyUI.Assets;
 
 public abstract class Pack(string name, PackType type)
 {

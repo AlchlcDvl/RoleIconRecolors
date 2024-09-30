@@ -1,4 +1,4 @@
-namespace FancyUI.IconPacks;
+namespace FancyUI.Assets.IconPacks;
 
 public class IconAssets(string name)
 {

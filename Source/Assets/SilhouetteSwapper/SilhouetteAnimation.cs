@@ -1,4 +1,4 @@
-namespace FancyUI.SilhouetteSwapper;
+namespace FancyUI.Assets.SilhouetteSwapper;
 
 public class SilhouetteAnimation(string name)
 {
