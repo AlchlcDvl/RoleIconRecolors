@@ -1,8 +1,8 @@
 [
     {
-        "name": "CommunityRecolors",
         "credits": "MysticMismagius, Haapsalu, faketier, splarg, Det, Wevit, Nova, moiler, NexusOfChaos, Loonie and Nidoskull",
-        "repoOwner": "Nidoskull"
+        "repoOwner": "Nidoskull",
+        "repoName": "CommunityRecolors"
     },
     {
         "name": "Vanilla",
