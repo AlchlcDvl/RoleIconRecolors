@@ -15,7 +15,7 @@ public class FancyUI : UIController
 
     public static FancyUI Instance { get; private set; }
 
-    public void Start()
+    public void Awake()
     {
         Instance = this;
 
@@ -48,7 +48,7 @@ public class FancyUI : UIController
         // ColoredWoodButton.GetComponent<Button>().onClick.AddListener(OpenCW);
         ColoredWoodButton.AddComponent<TooltipTrigger>().NonLocalizedString = "Open Recoloured UI Menu";
 
-        // SilhouetteSwapper.GetComponent<Button>().onClick.AddListener(OpenSS);
+        SilhouetteSwapper.GetComponent<Button>().onClick.AddListener(OpenSS);
         SilhouetteSwapper.AddComponent<TooltipTrigger>().NonLocalizedString = "Open Silhouette Swapper Menu";
 
         // Settings.GetComponent<Button>().onClick.AddListener(OpenSettings);
@@ -80,6 +80,23 @@ public class FancyUI : UIController
         go.transform.localPosition = new(0, 0, 0);
         go.transform.localScale = Vector3.one * 1.5f;
         go.AddComponent<IconPacksUI>();
+        SetupFonts(go.transform);
+        gameObject.SetActive(false);
+    }
+
+    private void OpenSS()
+    {
+        if (SilhouetteSwapperUI.Instance)
+        {
+            SilhouetteSwapperUI.Instance.gameObject.SetActive(true);
+            gameObject.SetActive(false);
+            return;
+        }
+
+        var go = Instantiate(AssetManager.AssetGOs["SilhouetteSwapperUI"], transform.parent, false);
+        go.transform.localPosition = new(0, 0, 0);
+        go.transform.localScale = Vector3.one * 1.5f;
+        go.AddComponent<SilhouetteSwapperUI>();
         SetupFonts(go.transform);
         gameObject.SetActive(false);
     }

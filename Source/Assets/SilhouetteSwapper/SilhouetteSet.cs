@@ -8,7 +8,19 @@ public class SilhouetteSet(string name) : Pack(name, PackType.SilhouetteSets)
 
     public override void Debug()
     {
+        Logging.LogMessage($"Debugging {Name}");
 
+        var count = 0;
+
+        foreach (var assets in Assets.Values)
+        {
+            assets.Debug();
+            count += assets.Count;
+        }
+
+        Logging.LogMessage($"{Name} {Assets.Count} asset sets loaded!");
+        Logging.LogMessage($"{Name} {count} total assets exist!");
+        Logging.LogMessage($"{Name} Debugged!");
     }
 
     public override void Load()

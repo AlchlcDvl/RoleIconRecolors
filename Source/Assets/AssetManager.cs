@@ -138,6 +138,11 @@ public static class AssetManager
         if (!Directory.Exists(SSPath))
             Directory.CreateDirectory(SSPath);
 
+        json = Path.Combine(SSPath, "OtherSets.json");
+
+        if (!File.Exists(json))
+            File.CreateText(json).Close();
+
         vanilla = Path.Combine(SSPath, "Vanilla");
 
         if (!Directory.Exists(vanilla))

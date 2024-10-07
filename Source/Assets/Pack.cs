@@ -35,4 +35,16 @@ public abstract class Pack(string name, PackType type)
     public abstract void Delete();
 
     public abstract void Reload();
+
+    public static implicit operator bool(Pack exists) => exists != null;
+
+    public static ModType GetModKey(string folder)
+    {
+        var key = ModsToFolders.ToList().Find(x => x.Value.Contains(folder)).Key ?? null;
+
+        if (StringUtils.IsNullEmptyOrWhiteSpace(key))
+            key = "Common";
+
+        return Enum.Parse<ModType>(key);
+    }
 }

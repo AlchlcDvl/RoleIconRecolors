@@ -1,3 +1,5 @@
+using FancyUI.Assets.SilhouetteSwapper;
+
 namespace FancyUI;
 
 public static class Utils
@@ -647,9 +649,10 @@ public static class Utils
         img.color = type switch
         {
             ColorType.Metal => Constants.GetMainUIThemeMetalColor(),
-            ColorType.Wood => Constants.GetMainUIThemeWoodColor(),
             ColorType.Paper => Constants.GetMainUIThemePaperColor(),
             _ => Constants.GetMainUIThemeWoodColor()
         };
     }
+
+    public static bool IsValid(this SilhouetteAnimation anim) => anim != null && anim != AssetManager.Loading;
 }

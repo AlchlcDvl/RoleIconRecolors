@@ -4,7 +4,7 @@
 // {
 //     public RoleCardPanel RoleCard { get; set; }
 
-//     public void Start()
+//     public void Awake()
 //     {
 //         RoleCard = gameObject.GetComponent<RoleCardPanel>();
 //     }

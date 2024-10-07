@@ -396,15 +396,41 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
         return sprite ?? AssetManager.Blank;
     }
 
-    public static implicit operator bool(IconPack exists) => exists != null;
-
-    public static ModType GetModKey(string folder)
+    public static void PopulateDirectory(string path)
     {
-        var key = ModsToFolders.ToList().Find(x => x.Value.Contains(folder)).Key ?? null;
+        if (path.EndsWith("Vanilla") || path.EndsWith("BTOS2"))
+            return;
 
-        if (StringUtils.IsNullEmptyOrWhiteSpace(key))
-            key = "Common";
+        foreach (var mod in MainFolders)
+        {
+            if (mod == "BTOS2" && !Constants.BTOS2Exists())
+                continue;
 
-        return Enum.Parse<ModType>(key);
+            var modPath = Path.Combine(path, mod);
+
+            if (!Directory.Exists(modPath))
+                Directory.CreateDirectory(modPath);
+
+            if (mod == "PlayerNumbers")
+                continue;
+
+            foreach (var name1 in ModsToFolders[mod])
+            {
+                var baseFolder = Path.Combine(modPath, name1 + "Base");
+
+                if (!Directory.Exists(baseFolder))
+                    Directory.CreateDirectory(baseFolder);
+
+                var eeFolder = Path.Combine(modPath, name1 + "EasterEggs");
+
+                if (!Directory.Exists(eeFolder))
+                    Directory.CreateDirectory(eeFolder);
+            }
+
+            var customPath = Path.Combine(modPath, "Custom");
+
+            if (!Directory.Exists(customPath))
+                Directory.CreateDirectory(customPath);
+        }
     }
 }

@@ -3,18 +3,18 @@ namespace FancyUI.UI;
 public class LoadingUI : UIController
 {
     private Transform Cog;
+
     private GameObject Caller;
     private GameObject CancelButton;
+
     private TextMeshProUGUI Title;
-    private TextMeshProUGUI LoadingProgress;
+    public TextMeshProUGUI LoadingProgress;
 
     private bool Started;
-    private int Max;
-    private int Current;
 
     public static LoadingUI Instance { get; private set; }
 
-    public void Start()
+    public void Awake()
     {
         Instance = this;
 
@@ -24,7 +24,6 @@ public class LoadingUI : UIController
         LoadingProgress = transform.Find("Progress").GetComponent<TextMeshProUGUI>();
 
         Started = false;
-        Max = Current = 0;
 
         SetupMenu();
     }
@@ -39,39 +38,35 @@ public class LoadingUI : UIController
 
     private void Cancel()
     {
+        SilhouetteSwapperUI.Instance.Abort = true;
         IconPacksUI.Instance.Abort = true;
     }
 
     public void Update()
     {
         if (Started)
-            return;
-
-        Cog.Rotate(Vector3.forward * 10 * Time.fixedDeltaTime);
-        LoadingProgress.SetText($"Progress: {Current * 100 / Max}%");
+            Cog.Rotate(Vector3.forward * -10 * Time.fixedDeltaTime);
     }
 
-    public void UpdateProgress() => Current++;
-
-    public void SetCurrent(int current) => Current = current;
-
-    public void BeginLoading(GameObject caller, string title, int max)
+    public void BeginLoading(GameObject caller, string title)
     {
+        Instance.gameObject.SetActive(true);
         Title.SetText($"Downloading {title}");
-        Max = max;
         Caller = caller;
         Caller.SetActive(false);
+        Started = true;
     }
 
     public void Finish()
     {
-        Max = Current = 0;
         Caller.SetActive(true);
         Caller = null;
         IconPacksUI.Instance.Abort = false;
+        Instance.gameObject.SetActive(false);
+        Started = false;
     }
 
-    public static void Begin(GameObject caller, string title, int max)
+    public static void Begin(GameObject caller, string title)
     {
         if (!Instance)
         {
@@ -82,6 +77,6 @@ public class LoadingUI : UIController
             FancyUI.SetupFonts(go.transform);
         }
 
-        Instance.BeginLoading(caller, title, max);
+        Instance.BeginLoading(caller, title);
     }
 }
