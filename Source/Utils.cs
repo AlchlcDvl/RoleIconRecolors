@@ -156,7 +156,7 @@ public static class Utils
         BTOS2Role.Immovable => "Immovable",
         BTOS2Role.CompliantKillers => "CompliantKillers",
         BTOS2Role.PoandorasBox => "PandorasBox",
-        // BTOS2Role.BallotVoting => "BallotVoting",
+        BTOS2Role.BallotVoting => "BallotVoting",
         BTOS2Role.Individuality => "Individuality",
         BTOS2Role.Snitch => "Snitch",
         BTOS2Role.CovenVIP => "CovenVIP",

@@ -25,8 +25,9 @@ public class FancyUI : UIController
         CloseButton = transform.Find("CloseButton").gameObject;
         Settings = transform.Find("Settings").gameObject;
 
-        GameFont = ApplicationController.ApplicationContext.FontControllerSource.fonts[0].tmp_FontAsset;
-        GameFontMaterial = ApplicationController.ApplicationContext.FontControllerSource.fonts[0].standardFontMaterial;
+        var font = ApplicationController.ApplicationContext.FontControllerSource.fonts[0];
+        GameFont = font.tmp_FontAsset;
+        GameFontMaterial = font.standardFontMaterial;
 
         SetupFonts(transform);
 
@@ -36,8 +37,8 @@ public class FancyUI : UIController
     public void OnDestroy()
     {
         Instance = null;
-        LoadingUI.Instance.gameObject.Destroy();
-        IconPacksUI.Instance.gameObject.Destroy();
+        LoadingUI.Instance?.gameObject?.Destroy();
+        IconPacksUI.Instance?.gameObject?.Destroy();
     }
 
     private void SetupMenu()
@@ -76,12 +77,7 @@ public class FancyUI : UIController
             return;
         }
 
-        var go = Instantiate(AssetManager.AssetGOs["IconPacksUI"], transform.parent, false);
-        go.transform.localPosition = new(0, 0, 0);
-        go.transform.localScale = Vector3.one * 1.5f;
-        go.AddComponent<IconPacksUI>();
-        SetupFonts(go.transform);
-        gameObject.SetActive(false);
+        OpenMenu<IconPacksUI>();
     }
 
     private void OpenSS()
@@ -93,10 +89,15 @@ public class FancyUI : UIController
             return;
         }
 
-        var go = Instantiate(AssetManager.AssetGOs["SilhouetteSwapperUI"], transform.parent, false);
+        OpenMenu<SilhouetteSwapperUI>();
+    }
+
+    private void OpenMenu<T>() where T : BaseUI
+    {
+        var go = Instantiate(AssetManager.AssetGOs["DownloaderUI"], transform.parent, false);
         go.transform.localPosition = new(0, 0, 0);
         go.transform.localScale = Vector3.one * 1.5f;
-        go.AddComponent<SilhouetteSwapperUI>();
+        go.AddComponent<T>();
         SetupFonts(go.transform);
         gameObject.SetActive(false);
     }

@@ -32,6 +32,7 @@ public class IconPacksUI : BaseUI
     public override void SetupMenu()
     {
         base.SetupMenu();
+        Test.GetComponent<Image>().sprite = AssetManager.Assets["IconPack"];
         Packs.ForEach(SetUpPack);
         PackTemplate.SetActive(false);
         NoPacks.SetActive(Packs.Count == 0);
@@ -61,6 +62,10 @@ public class IconPacksUI : BaseUI
         var json = GenerateLinkAndAddToPackCount();
         Packs.Add(json);
         SetUpPack(json);
+    }
+
+    public override void OpenTestingUI()
+    {
     }
 
     public static void HandlePackData() => ApplicationController.ApplicationContext.StartCoroutine(CoHandlePackData());
@@ -98,7 +103,7 @@ public class IconPacksUI : BaseUI
         yield break;
     }
 
-    public static void DownloadIcons(string packName) => ApplicationController.ApplicationContext.StartCoroutine(CoDownloadIcons(packName));
+    public static void DownloadIcons(string packName) => Instance.StartCoroutine(CoDownloadIcons(packName));
 
     private static IEnumerator CoDownloadIcons(string packName)
     {
@@ -130,7 +135,7 @@ public class IconPacksUI : BaseUI
         if (!Directory.Exists(pack))
             Directory.CreateDirectory(pack);
         else
-            Directory.EnumerateFiles(pack, "*.*", SearchOption.AllDirectories).ForEach(File.Delete);
+            Directory.EnumerateFiles(pack, "*.png", SearchOption.AllDirectories).ForEach(File.Delete);
 
         IconPack.PopulateDirectory(pack);
         LoadingUI.Instance.LoadingProgress.SetText("Retrieving GitHub Data");
@@ -146,8 +151,8 @@ public class IconPacksUI : BaseUI
                 break;
             }
 
-            progress += op.progress;
-            LoadingUI.Instance.LoadingProgress.SetText($"Downloading Pack: {Mathf.RoundToInt(progress / 1.5f)}%");
+            progress += op.progress / 1.5f;
+            LoadingUI.Instance.LoadingProgress.SetText(progress <= 100 ? $"Downloading Pack: {Mathf.RoundToInt(Mathf.Clamp(progress, 0, 100))}%" : "Unity is shitting itself, please wait...");
             yield return new WaitForEndOfFrame();
         }
 
@@ -178,25 +183,20 @@ public class IconPacksUI : BaseUI
         ZipFile.ExtractToDirectory(filePath, Instance.Path, true);
 
         var dir = Directory.EnumerateDirectories(Instance.Path, $"{packJson.RepoOwner}-{packJson.RepoName}*").FirstOrDefault();
+        var time = 0f;
 
-        if (dir != null)
+        foreach (var file in Directory.EnumerateFiles(dir, $"*.png", SearchOption.AllDirectories).Where(x => x.Contains(packName) || x.Contains(packJson.RepoName)))
         {
-            var time = 0f;
+            if (Instance.Abort)
+                break;
 
-            foreach (var file in Directory.EnumerateFiles(dir, "*.png", SearchOption.AllDirectories))
+            File.Move(file, file.Replace(dir, Instance.Path));
+            time += Time.deltaTime;
+
+            if (time > 0.1f)
             {
-                if (Instance.Abort)
-                    break;
-
-                var newPath = file.Replace(dir, Instance.Path);
-                File.Move(file, newPath);
-                time += Time.deltaTime;
-
-                if (time > 0.1f)
-                {
-                    time -= 0.1f;
-                    yield return new WaitForEndOfFrame();
-                }
+                time -= 0.1f;
+                yield return new WaitForEndOfFrame();
             }
         }
 

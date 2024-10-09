@@ -11,6 +11,7 @@ public abstract class BaseUI : UIController
     private GameObject Back;
     private GameObject OpenDir;
     private GameObject Confirm;
+    public GameObject Test;
     private TMP_InputField PackName;
     private TMP_InputField RepoName;
     private TMP_InputField RepoOwner;
@@ -29,6 +30,7 @@ public abstract class BaseUI : UIController
     {
         Back = transform.Find("Buttons/Back").gameObject;
         OpenDir = transform.Find("Buttons/Directory").gameObject;
+        Test = transform.Find("Buttons/Test").gameObject;
         Confirm = transform.Find("Inputs/Confirm").gameObject;
         PackName = transform.Find("Inputs/PackName").gameObject.GetComponent<TMP_InputField>();
         RepoName = transform.Find("Inputs/RepoName").gameObject.GetComponent<TMP_InputField>();
@@ -36,15 +38,20 @@ public abstract class BaseUI : UIController
         BranchName = transform.Find("Inputs/BranchName").gameObject.GetComponent<TMP_InputField>();
         NoPacks = transform.Find("ScrollView/NoPacks").gameObject;
         PackTemplate = transform.Find("ScrollView/Viewport/Content/PackTemplate").gameObject;
+
+        transform.Find("Title").GetComponent<TextMeshProUGUI>().SetText($"{Type}s");
     }
 
     public virtual void SetupMenu()
     {
         Back.GetComponent<Button>().onClick.AddListener(GoBack);
-        Back.AddComponent<TooltipTrigger>().NonLocalizedString = "Close Packs Menu";
+        Back.AddComponent<TooltipTrigger>().NonLocalizedString = $"Close {Type} Menu";
 
         OpenDir.GetComponent<Button>().onClick.AddListener(OpenDirectory);
-        OpenDir.AddComponent<TooltipTrigger>().NonLocalizedString = "Open Icons Folder";
+        OpenDir.AddComponent<TooltipTrigger>().NonLocalizedString = $"Open {Type} Folder";
+
+        Test.GetComponent<Button>().onClick.AddListener(OpenTestingUI);
+        Test.AddComponent<TooltipTrigger>().NonLocalizedString = $"Open {Type} Testing Menu";
 
         var dirButton = OpenDir.AddComponent<HoverEffect>();
         dirButton.OnMouseOver.AddListener(() => OpenDir.GetComponent<Image>().sprite = AssetManager.Assets["OpenChest"]);
@@ -96,4 +103,6 @@ public abstract class BaseUI : UIController
         else
             Application.OpenURL($"file://{Path}");
     }
+
+    public abstract void OpenTestingUI();
 }

@@ -19,6 +19,7 @@ public class SilhouetteSwapperUI : BaseUI
     public override void SetupMenu()
     {
         base.SetupMenu();
+        Test.GetComponent<Image>().sprite = AssetManager.Assets["SilSwapper"];
         Packs.ForEach(SetUpPack);
         PackTemplate.SetActive(false);
         NoPacks.SetActive(Packs.Count == 0);
@@ -45,5 +46,22 @@ public class SilhouetteSwapperUI : BaseUI
 
     public override void AfterGenerating()
     {
+    }
+
+    public override void OpenTestingUI()
+    {
+        if (SilhouetteSetTestingUI.Instance)
+        {
+            SilhouetteSetTestingUI.Instance.gameObject.SetActive(true);
+            gameObject.SetActive(false);
+            return;
+        }
+
+        var go = Instantiate(AssetManager.AssetGOs["SilhouetteSetTestingUI"], transform.parent);
+        go.transform.localPosition = new(0, 0, 0);
+        go.transform.localScale = Vector3.one * 1.5f;
+        go.AddComponent<SilhouetteSetTestingUI>();
+        FancyUI.SetupFonts(go.transform);
+        gameObject.SetActive(false);
     }
 }

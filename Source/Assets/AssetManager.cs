@@ -172,13 +172,13 @@ public static class AssetManager
             else if (x.EndsWith(".gif"))
             {
                 var sprites = GifLoader.LoadGifFromResources(x);
-                sprites.ForEach(y => y.hideFlags |= HideFlags.DontUnloadUnusedAsset);
-                sprites.ForEach(y => y.name = y.texture.name = $"{x.SanitisePath()}{sprites.IndexOf(y)}");
+                sprites.Frames.ForEach(y => y.hideFlags |= HideFlags.DontUnloadUnusedAsset);
+                sprites.Frames.ForEach(y => y.name = y.texture.name = $"{x.SanitisePath()}{sprites.Frames.IndexOf(y)}");
 
                 if (x.Contains("Loading"))
-                    Loading = new("Loading") { Frames = sprites };
+                    Loading = new("Loading") { Frames = sprites.Frames };
 
-                Assets2[x.SanitisePath()] = sprites;
+                Assets2[x.SanitisePath()] = sprites.Frames;
             }
         });
 
