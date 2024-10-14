@@ -8,7 +8,7 @@ public class SilhouetteSet(string name) : Pack(name, PackType.SilhouetteSets)
 
     public override void Debug()
     {
-        Logging.LogMessage($"Debugging {Name}");
+        Fancy.Instance.Message($"Debugging {Name}");
 
         var count = 0;
 
@@ -18,9 +18,9 @@ public class SilhouetteSet(string name) : Pack(name, PackType.SilhouetteSets)
             count += assets.Count;
         }
 
-        Logging.LogMessage($"{Name} {Assets.Count} asset sets loaded!");
-        Logging.LogMessage($"{Name} {count} total assets exist!");
-        Logging.LogMessage($"{Name} Debugged!");
+        Fancy.Instance.Message($"{Name} {Assets.Count} asset sets loaded!");
+        Fancy.Instance.Message($"{Name} {count} total assets exist!");
+        Fancy.Instance.Message($"{Name} Debugged!");
     }
 
     public override void Load()
@@ -31,7 +31,7 @@ public class SilhouetteSet(string name) : Pack(name, PackType.SilhouetteSets)
             return;
         }
 
-        Logging.LogMessage($"Loading {Name} Silhouette Set", true);
+        Fancy.Instance.Message($"Loading {Name} Silhouette Set", true);
         Deleted = false;
 
         try
@@ -46,7 +46,7 @@ public class SilhouetteSet(string name) : Pack(name, PackType.SilhouetteSets)
                 if (!Directory.Exists(modPath))
                 {
                     Directory.CreateDirectory(modPath);
-                    Logging.LogWarning($"{Name} {mod} folder doesn't exist");
+                    Fancy.Instance.Warning($"{Name} {mod} folder doesn't exist");
                     continue;
                 }
 
@@ -67,17 +67,17 @@ public class SilhouetteSet(string name) : Pack(name, PackType.SilhouetteSets)
                             // {
                             //     foreach (var file in Directory.GetFiles(folder, $"*.{type1}"))
                             //     {
-                            //         var filePath = Path.Combine(baseFolder, $"{file.SanitisePath()}.{type1}");
-                            //         var sprite = AssetManager.LoadDiskSprite(filePath.SanitisePath(), baseName, mod, Name, type1);
+                            //         var filePath = Path.Combine(baseFolder, $"{file.FancySanitisePath()}.{type1}");
+                            //         var sprite = AssetManager.LoadDiskSprite(filePath.FancySanitisePath(), baseName, mod, Name, type1);
 
                             //         if (sprite.IsValid())
-                            //             assets.BaseIcons[name1][filePath.SanitisePath(true)] = sprite;
+                            //             assets.BaseIcons[name1][filePath.FancySanitisePath(true)] = sprite;
                             //     }
                             // }
                         }
                         else
                         {
-                            Logging.LogWarning($"{Name} {mod} {folder} folder doesn't exist");
+                            Fancy.Instance.Warning($"{Name} {mod} {folder} folder doesn't exist");
                             Directory.CreateDirectory(folder);
                         }
                     }
@@ -86,7 +86,7 @@ public class SilhouetteSet(string name) : Pack(name, PackType.SilhouetteSets)
         }
         catch (Exception e)
         {
-            Logging.LogError($"Unable to load sprites for {Name} because:\n{e}");
+            Fancy.Instance.Error($"Unable to load sprites for {Name} because:\n{e}");
         }
     }
 

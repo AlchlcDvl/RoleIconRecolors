@@ -21,8 +21,11 @@ global using Home.Common;
 global using TMPro;
 
 global using Witchcraft.Utils;
+global using Witchcraft.Modules;
+global using Witchcraft.Managers;
 
 global using FancyUI.UI;
 global using FancyUI.Assets;
 global using FancyUI.Patches;
 global using FancyUI.Compatibility;
+global using static FancyUI.Assets.FancyAssetManager;

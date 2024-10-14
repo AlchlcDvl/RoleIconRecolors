@@ -7,7 +7,7 @@ public abstract class Pack(string name, PackType type)
 
     public bool Deleted { get; set; }
 
-    public string PackPath => Path.Combine(AssetManager.ModPath, $"{Type}", Name);
+    public string PackPath => Path.Combine(Fancy.Instance.ModPath, $"{Type}", Name);
 
     public static readonly string[] Roles = [ "Admirer", "Amnesiac", "Bodyguard", "Cleric", "Coroner", "Crusader", "Deputy", "Investigator", "Jailor", "Lookout", "Amnesiac", "Amnesiac", "War",
         "Amnesiac", "Amnesiac", "Amnesiac", "Amnesiac", "Amnesiac", "Mayor", "Monarch", "Prosecutor", "Psychic", "Retributionist", "Seer", "Sheriff", "Spy", "TavernKeeper", "Tracker", "Death",

@@ -3,24 +3,76 @@ namespace FancyUI;
 [SalemMod]
 [SalemMenuItem]
 [DynamicSettings]
+[WitchcraftMod(typeof(Fancy), "Fancy UI", ["Assets", "WoodMaterials"], HasFolder = true)]
 public class Fancy
 {
+    public static WitchcraftModAttribute Instance { get; private set; }
+    public static AssetManager Assets { get; private set; }
+
     public void Start()
     {
-        Logging.InitVoid();
-        Logging.LogMessage("Fancifying...", true);
+        Instance = ModSingleton<Fancy>.Instance;
+
+        Instance.Message("Fancifying...", true);
+
+        Assets = Instance.Assets;
+
+        if (!Directory.Exists(IPPath))
+            Directory.CreateDirectory(IPPath);
+
+        var json = Path.Combine(IPPath, "OtherPacks.json");
+
+        if (!File.Exists(json))
+            File.WriteAllText(json, "");
+
+        var vanilla = Path.Combine(IPPath, "Vanilla");
+
+        if (!Directory.Exists(vanilla))
+            Directory.CreateDirectory(vanilla);
+
+        if (!Directory.Exists(SSPath))
+            Directory.CreateDirectory(SSPath);
+
+        json = Path.Combine(SSPath, "OtherSets.json");
+
+        if (!File.Exists(json))
+            File.WriteAllText(json, "");
+
+        vanilla = Path.Combine(SSPath, "Vanilla");
+
+        if (!Directory.Exists(vanilla))
+            Directory.CreateDirectory(vanilla);
 
         try
         {
-            AssetManager.LoadAssets();
-            FancyMenu.Icon = AssetManager.Thumbnail;
-        }
-        catch (Exception e)
-        {
-            Logging.LogError($"Something failed because this happened D:\n{e}");
-        }
+            LoadBTOS();
+        } catch {}
 
-        Logging.LogMessage("Fancy!", true);
+        Instance.Message("Fancy!", true);
+    }
+
+    [UponAssetsLoaded]
+    public static void UponLoad()
+    {
+        Blank = Assets.GetSprite("Blank");
+        Thumbnail = Assets.GetSprite("Thumbnail");
+        FancyAssetManager.Attack = Assets.GetSprite("Attack");
+        FancyAssetManager.Defense = Assets.GetSprite("Defense");
+        Ethereal = Assets.GetSprite("Ethereal");
+
+        Grayscale = Assets.GetMaterial("GrayscaleM");
+
+        Loading = new("Loading") { Frames = Assets.GetGif("Loading").Frames };
+
+        TryLoadingSprites(Constants.CurrentPack(), PackType.IconPacks);
+        LoadVanillaSpriteSheets();
+
+        try
+        {
+            LoadBTOS2SpriteSheet();
+        } catch {}
+
+        FancyMenu.Icon = Thumbnail;
     }
 
     public static readonly SalemMenuButton FancyMenu = new()
@@ -31,7 +83,7 @@ public class Fancy
 
     public static void OpenMenu()
     {
-        var go = UObject.Instantiate(AssetManager.AssetGOs["FancyUI"], CacheHomeSceneController.Controller.SafeArea.transform, false);
+        var go = UObject.Instantiate(Assets.GetGameObject("FancyUI"), CacheHomeSceneController.Controller.SafeArea.transform, false);
         go.transform.localPosition = new(0, 0, 0);
         go.transform.localScale = Vector3.one * 2f;
         go.AddComponent<UI.FancyUI>();
@@ -42,7 +94,7 @@ public class Fancy
         Name = "Selected Icon Pack",
         Description = "The selected icon will start replacing the visible icons with the images you put in. If it can't find the valid image or pack, it will be replaced by the mod's default files. May require a game restart for the in-text icons to change.\nVanilla - No pack selected.",
         Options = GetPackNames(PackType.IconPacks),
-        OnChanged = x => AssetManager.TryLoadingSprites(x, PackType.IconPacks)
+        OnChanged = x => TryLoadingSprites(x, PackType.IconPacks)
     };
 
     public ModSettings.DropdownSetting ChoiceMentions1 => new()
@@ -101,7 +153,7 @@ public class Fancy
         Description = "Toggles whether all of the previously selected icon pack's easter eggs will be used, or only the selected icon pack's.",
         DefaultValue = false,
         AvailableInGame = true,
-        Available = AssetManager.GlobalEasterEggs.Count > 0
+        Available = GlobalEasterEggs.Count > 0
     };
 
     public ModSettings.CheckboxSetting PlayerPanelEasterEggs => new()
@@ -118,7 +170,7 @@ public class Fancy
         Name = "Selected Silhouette Set",
         Description = "The selected set will start replacing the current silhouettes with ones created from the images you put in. If it can't find the valid image or set, it will be replaced by the mod's default files.\nVanilla - No set selected.",
         Options = GetPackNames(PackType.SilhouetteSets),
-        OnChanged = x => AssetManager.TryLoadingSprites(x, PackType.SilhouetteSets)
+        OnChanged = x => TryLoadingSprites(x, PackType.SilhouetteSets)
     };
 
     public ModSettings.DropdownSetting MainUITheme => new()
@@ -138,14 +190,21 @@ public class Fancy
     public ModSettings.ColorPickerSetting MainUIThemeMetalInput => new()
     {
         Name = "Main UI Theme Metal Color",
-        Description = "Dictates how the wood of the main UI loooks like",
+        Description = "Dictates how the metal of the main UI loooks like",
         Available = Constants.GetMainUIThemeType() == "Custom Input"
     };
 
     public ModSettings.ColorPickerSetting MainUIThemePaperInput => new()
     {
         Name = "Main UI Theme Paper Color",
-        Description = "Dictates how the wood of the main UI loooks like",
+        Description = "Dictates how the paper of the main UI loooks like",
+        Available = Constants.GetMainUIThemeType() == "Custom Input"
+    };
+
+    public ModSettings.ColorPickerSetting MainUIThemeLeatherInput => new()
+    {
+        Name = "Main UI Theme Leather Color",
+        Description = "Dictates how the leather of the main UI loooks like",
         Available = Constants.GetMainUIThemeType() == "Custom Input"
     };
 
@@ -155,10 +214,10 @@ public class Fancy
         {
             var result = new List<string>() { "Vanilla" };
 
-            foreach (var dir in Directory.EnumerateDirectories(Path.Combine(AssetManager.ModPath, type.ToString())))
+            foreach (var dir in Directory.EnumerateDirectories(Path.Combine(Instance.ModPath, type.ToString())))
             {
                 if (!dir.Contains("Vanilla") && !dir.Contains("BTOS2"))
-                    result.Add(dir.SanitisePath());
+                    result.Add(dir.FancySanitisePath());
             }
 
             return result;
@@ -169,17 +228,17 @@ public class Fancy
         }
     }
 
-    private static List<string> GetOptions(ModType mod, bool mentionStyle)
+    private static List<string> GetOptions(FancyUI.ModType mod, bool mentionStyle)
     {
         try
         {
             var result = new List<string>();
 
-            if (AssetManager.IconPacks.TryGetValue(Constants.CurrentPack(), out var pack))
+            if (IconPacks.TryGetValue(Constants.CurrentPack(), out var pack))
             {
                 result.Add(mentionStyle ? "Regular" : "None");
 
-                if (pack.Assets.TryGetValue(ModType.Common, out var assets))
+                if (pack.Assets.TryGetValue(FancyUI.ModType.Common, out var assets))
                 {
                     foreach (var (folder, icons) in assets.BaseIcons)
                     {
@@ -215,7 +274,7 @@ public class Fancy
         }
     }
 
-    // private static void AttemptCreateSpriteSheet(ModType mod, string name)
+    // private static void AttemptCreateSpriteSheet(FancyUI.ModType mod, string name)
     // {
     //     if (AssetManager.IconPacks.TryGetValue(Constants.CurrentPack(), out var pack))
     //     {

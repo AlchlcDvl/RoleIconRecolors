@@ -14,7 +14,7 @@ public class IconPacksUI : BaseUI
     public static IconPacksUI Instance { get; private set; }
 
     public override string Type => "Icon Pack";
-    public override string Path => AssetManager.IPPath;
+    public override string Path => IPPath;
 
     public override void Awake()
     {
@@ -32,36 +32,17 @@ public class IconPacksUI : BaseUI
     public override void SetupMenu()
     {
         base.SetupMenu();
-        Test.GetComponent<Image>().sprite = AssetManager.Assets["IconPack"];
-        Packs.ForEach(SetUpPack);
+        Test.GetComponent<Image>().sprite = Fancy.Instance.Assets.GetSprite("IconPack");
+        Packs.ForEach(x => SetUpPack(x, () => DownloadIcons(x.Name)));
         PackTemplate.SetActive(false);
         NoPacks.SetActive(Packs.Count == 0);
-    }
-
-    // Why the hell am I not allowed to make extension methods in instance classes smhh
-    private void SetUpPack(PackJson packJson)
-    {
-        var go = Instantiate(PackTemplate, PackTemplate.transform.parent);
-        go.name = packJson.Name;
-        go.transform.Find("PackName").GetComponent<TextMeshProUGUI>().SetText(packJson.Name);
-        var link = go.transform.Find("RepoButton");
-        link.GetComponent<Button>().onClick.AddListener(() => Application.OpenURL(packJson.Link()));
-        link.AddComponent<TooltipTrigger>().NonLocalizedString = "Open Link";
-        var button = go.transform.Find("Download");
-        button.GetComponent<Button>().onClick.AddListener(() => DownloadIcons(packJson.Name));
-        button.gameObject.AddComponent<TooltipTrigger>().NonLocalizedString = $"Download {packJson.Name}";
-        go.SetActive(true);
-        PackGOs.Add(go);
-
-        if (!StringUtils.IsNullEmptyOrWhiteSpace(packJson.Credits))
-            go.AddComponent<TooltipTrigger>().NonLocalizedString = packJson.Credits;
     }
 
     public override void AfterGenerating()
     {
         var json = GenerateLinkAndAddToPackCount();
         Packs.Add(json);
-        SetUpPack(json);
+        SetUpPack(json, () => DownloadIcons(json.Name));
     }
 
     public override void OpenTestingUI()
@@ -84,7 +65,7 @@ public class IconPacksUI : BaseUI
 
         if (www.result != UnityWebRequest.Result.Success)
         {
-            Logging.LogError(www.error);
+            Fancy.Instance.Error(www.error);
             HandlerRunning = false;
             yield break;
         }
@@ -93,7 +74,7 @@ public class IconPacksUI : BaseUI
         Packs.AddRange(JsonConvert.DeserializeObject<PackJson[]>(www.downloadHandler.text));
         Packs.ForEach(x => x.FromMainRepo = true);
 
-        var others = GeneralUtils.ReadText("OtherPacks.json", AssetManager.IPPath);
+        var others = GeneralUtils.ReadText("OtherPacks.json", IPPath);
 
         if (!StringUtils.IsNullEmptyOrWhiteSpace(others))
             Packs.AddRange(JsonConvert.DeserializeObject<PackJson[]>(others));
@@ -111,7 +92,7 @@ public class IconPacksUI : BaseUI
 
         if (Running.TryGetValue(packName, out var running) && running)
         {
-            Logging.LogError($"{packName} download is still running");
+            Fancy.Instance.Error($"{packName} download is still running");
             LoadingUI.Instance.Finish();
             yield break;
         }
@@ -123,14 +104,14 @@ public class IconPacksUI : BaseUI
 
         if (packJson == null)
         {
-            Logging.LogError($"{packName} somehow doesn't exist");
+            Fancy.Instance.Error($"{packName} somehow doesn't exist");
             Running[packName] = false;
             LoadingUI.Instance.Finish();
             yield break;
         }
 
         LoadingUI.Instance.LoadingProgress.SetText("Clearing Old Files/Creating Folders");
-        var pack = System.IO.Path.Combine(AssetManager.IPPath, packName);
+        var pack = System.IO.Path.Combine(IPPath, packName);
 
         if (!Directory.Exists(pack))
             Directory.CreateDirectory(pack);
@@ -158,21 +139,21 @@ public class IconPacksUI : BaseUI
 
         if (www.result != UnityWebRequest.Result.Success || Instance.Abort)
         {
-            Logging.LogError(www.error);
+            Fancy.Instance.Error(www.error);
             Running[packName] = false;
             LoadingUI.Instance.Finish();
             yield break;
         }
 
         LoadingUI.Instance.LoadingProgress.SetText("Fetching Pack Data");
-        var filePath = System.IO.Path.Combine(AssetManager.IPPath, $"{packName}.zip");
+        var filePath = System.IO.Path.Combine(IPPath, $"{packName}.zip");
         using var task = File.WriteAllBytesAsync(filePath, www.downloadHandler.GetData());
 
         while (!task.IsCompleted)
         {
             if (task.Exception != null)
             {
-                Logging.LogError(task.Exception);
+                Fancy.Instance.Error(task.Exception);
                 break;
             }
 
@@ -205,11 +186,11 @@ public class IconPacksUI : BaseUI
         Directory.Delete(dir, true);
 
         if (Instance.Abort)
-            Logging.LogWarning("Process was aborted");
+            Fancy.Instance.Warning("Process was aborted");
 
         LoadingUI.Instance.LoadingProgress.SetText("Loading Icon Pack");
         ModSettings.SetString("Selected Icon Pack", packName, "alchlcsystm.fancy.ui");
-        AssetManager.TryLoadingSprites(packName, PackType.IconPacks);
+        TryLoadingSprites(packName, PackType.IconPacks);
         Instance.OpenDirectory();
         Running[packName] = false;
         LoadingUI.Instance.LoadingProgress.SetText("Loaded!");

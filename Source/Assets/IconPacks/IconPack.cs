@@ -9,7 +9,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
 
     public override void Debug()
     {
-        Logging.LogMessage($"Debugging {Name}");
+        Fancy.Instance.Message($"Debugging {Name}");
 
         var count = 0;
 
@@ -21,13 +21,13 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
 
         if (PlayerNumbers)
         {
-            Logging.LogMessage($"{Name} has a PlayerNumbers sprite sheet!");
+            Fancy.Instance.Message($"{Name} has a PlayerNumbers sprite sheet!");
             count++;
         }
 
-        Logging.LogMessage($"{Name} {Assets.Count} asset sets loaded!");
-        Logging.LogMessage($"{Name} {count} total assets exist!");
-        Logging.LogMessage($"{Name} Debugged!");
+        Fancy.Instance.Message($"{Name} {Assets.Count} asset sets loaded!");
+        Fancy.Instance.Message($"{Name} {count} total assets exist!");
+        Fancy.Instance.Message($"{Name} Debugged!");
     }
 
     public override void Delete()
@@ -35,19 +35,19 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
         if (Deleted)
             return;
 
-        Logging.LogMessage($"Deleteing {Name}", true);
+        Fancy.Instance.Message($"Deleteing {Name}", true);
         Assets.Values.ForEach(x => x.Delete());
-        Logging.LogMessage($"{Name} Deleted!", true);
+        Fancy.Instance.Message($"{Name} Deleted!", true);
     }
 
     public override void Reload()
     {
-        Logging.LogMessage($"Reloading {Name}", true);
+        Fancy.Instance.Message($"Reloading {Name}", true);
         Delete();
         Load();
-        AssetManager.SetScrollSprites();
+        SetScrollSprites();
         Debug();
-        Logging.LogMessage($"{Name} Reloaded!", true);
+        Fancy.Instance.Message($"{Name} Reloaded!", true);
     }
 
     public override void Load()
@@ -58,7 +58,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
             return;
         }
 
-        Logging.LogMessage($"Loading {Name} Icon Pack", true);
+        Fancy.Instance.Message($"Loading {Name} Icon Pack", true);
         Deleted = false;
 
         try
@@ -70,7 +70,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                 if (!Directory.Exists(modPath))
                 {
                     Directory.CreateDirectory(modPath);
-                    Logging.LogWarning($"{Name} {mod} folder doesn't exist");
+                    Fancy.Instance.Warning($"{Name} {mod} folder doesn't exist");
                     continue;
                 }
 
@@ -83,8 +83,8 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
 
                     foreach (var name1 in ModsToFolders[mod])
                     {
-                        if (!AssetManager.GlobalEasterEggs.ContainsKey(name1))
-                            AssetManager.GlobalEasterEggs[name1] = [];
+                        if (!GlobalEasterEggs.ContainsKey(name1))
+                            GlobalEasterEggs[name1] = [];
 
                         assets.BaseIcons[name1] = [];
                         assets.EasterEggs[name1] = [];
@@ -97,19 +97,16 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                             {
                                 foreach (var file in Directory.GetFiles(baseFolder, $"*.{type1}"))
                                 {
-                                    var name = file.SanitisePath();
-                                    var filePath = Path.Combine(baseFolder, $"{name}.{type1}");
-                                    var sprite = AssetManager.LoadDiskSprite(name, filePath);
-                                    name = name.SanitisePath(true);
+                                    var sprite = AssetManager.LoadSpriteFromDisk(file);
 
                                     if (sprite.IsValid())
-                                        assets.BaseIcons[name1][name] = sprite;
+                                        assets.BaseIcons[name1][file.FancySanitisePath(true)] = sprite;
                                 }
                             }
                         }
                         else
                         {
-                            Logging.LogWarning($"{Name} {mod} {baseName} folder doesn't exist");
+                            Fancy.Instance.Warning($"{Name} {mod} {baseName} folder doesn't exist");
                             Directory.CreateDirectory(baseFolder);
                         }
 
@@ -122,10 +119,8 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                             {
                                 foreach (var file in Directory.GetFiles(eeFolder, $"*.{type1}"))
                                 {
-                                    var name = file.SanitisePath();
-                                    var filePath = Path.Combine(eeFolder, $"{name}.{type1}");
-                                    var sprite = AssetManager.LoadDiskSprite(name, filePath);
-                                    name = name.SanitisePath(true);
+                                    var sprite = AssetManager.LoadSpriteFromDisk(file);
+                                    var name = file.FancySanitisePath(true);
 
                                     if (!sprite.IsValid())
                                         continue;
@@ -133,17 +128,17 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                                     if (!assets.EasterEggs[name1].ContainsKey(name))
                                         assets.EasterEggs[name1][name] = [];
 
-                                    if (!AssetManager.GlobalEasterEggs[name1].ContainsKey(name))
-                                        AssetManager.GlobalEasterEggs[name1][name] = [];
+                                    if (!GlobalEasterEggs[name1].ContainsKey(name))
+                                        GlobalEasterEggs[name1][name] = [];
 
                                     assets.EasterEggs[name1][name].Add(sprite);
-                                    AssetManager.GlobalEasterEggs[name1][name].Add(sprite);
+                                    GlobalEasterEggs[name1][name].Add(sprite);
                                 }
                             }
                         }
                         else
                         {
-                            Logging.LogWarning($"{Name} {mod} {eeName} folder doesn't exist");
+                            Fancy.Instance.Warning($"{Name} {mod} {eeName} folder doesn't exist");
                             Directory.CreateDirectory(eeFolder);
                         }
                     }
@@ -151,8 +146,8 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                     if (type != ModType.Common)
                         continue;
 
-                    if (!AssetManager.GlobalEasterEggs.ContainsKey("Custom"))
-                        AssetManager.GlobalEasterEggs["Custom"] = [];
+                    if (!GlobalEasterEggs.ContainsKey("Custom"))
+                        GlobalEasterEggs["Custom"] = [];
 
                     assets.BaseIcons["Custom"] = [];
                     assets.EasterEggs["Custom"] = [];
@@ -164,18 +159,16 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                         {
                             foreach (var file in Directory.GetFiles(folder, $"*.{type1}"))
                             {
-                                var name = file.SanitisePath();
-                                var filePath = Path.Combine(folder, $"{name}.{type1}");
-                                var sprite = AssetManager.LoadDiskSprite(name, filePath);
+                                var sprite = AssetManager.LoadSpriteFromDisk(file);
 
                                 if (sprite.IsValid())
-                                    assets.BaseIcons["Custom"][name.SanitisePath(true)] = sprite;
+                                    assets.BaseIcons["Custom"][file.FancySanitisePath(true)] = sprite;
                             }
                         }
                     }
                     else
                     {
-                        Logging.LogWarning($"{Name} {mod} Custom folder doesn't exist");
+                        Fancy.Instance.Warning($"{Name} {mod} Custom folder doesn't exist");
                         Directory.CreateDirectory(folder);
                     }
                 }
@@ -185,12 +178,10 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                     {
                         foreach (var file in Directory.GetFiles(modPath, $"*.{type1}"))
                         {
-                            var name = file.SanitisePath();
-                            var filePath = Path.Combine(modPath, $"{name}.{type1}");
-                            var sprite = AssetManager.LoadDiskSprite(name, filePath);
+                            var sprite = AssetManager.LoadSpriteFromDisk(file);
 
                             if (sprite.IsValid())
-                                NumberSprites[name.SanitisePath(true)] = sprite;
+                                NumberSprites[file.FancySanitisePath(true)] = sprite;
                         }
                     }
                 }
@@ -198,10 +189,10 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
         }
         catch (Exception e)
         {
-            Logging.LogError($"Unable to load sprites for {Name} because:\n{e}");
+            Fancy.Instance.Error($"Unable to load sprites for {Name} because:\n{e}");
         }
 
-        Logging.LogMessage($"Loaded {Name} sprites");
+        Fancy.Instance.Message($"Loaded {Name} sprites");
 
         // love ya pat
         var numbers = new List<string>();
@@ -215,7 +206,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                 for (var i = 0; i < 16; i++)
                 {
                     if (!NumberSprites.TryGetValue($"{i}", out var sprite))
-                        sprite = AssetManager.Assets.TryGetValue($"{i}", out var sprite1) ? sprite1 : AssetManager.Blank;
+                        sprite = Fancy.Assets.GetSprite($"{i}") ?? Blank;
 
                     if (sprite.IsValid())
                     {
@@ -223,17 +214,17 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                         sprites.Add(sprite);
                     }
                     else
-                        Logging.LogWarning($"NO NUMBER ICON FOR {i}?!");
+                        Fancy.Instance.Warning($"NO NUMBER ICON FOR {i}?!");
 
                     numbers.Add($"PlayerNumbers_{i}");
                 }
 
-                PlayerNumbers = AssetManager.BuildGlyphs([..sprites], $"PlayerNumbers ({Name})", numbers.ToDictionary(x => x, x => (x, 0)), false);
+                PlayerNumbers = BuildGlyphs([..sprites], $"PlayerNumbers ({Name})", numbers.ToDictionary(x => x, x => (x, 0)), false);
                 Utils.DumpSprite(PlayerNumbers.spriteSheet as Texture2D, "PlayerNumbers", Path.Combine(PackPath, "PlayerNumbers"));
             }
             catch (Exception e)
             {
-                Logging.LogError($"Unable to create custom player numbers for {Name} because:\n{e}");
+                Fancy.Instance.Error($"Unable to create custom player numbers for {Name} because:\n{e}");
                 PlayerNumbers = null;
             }
         }
@@ -259,7 +250,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                 }
                 catch (Exception e)
                 {
-                    Logging.LogError($"Unable to create custom role icons for {Name} {style} because:\n{e}");
+                    Fancy.Instance.Error($"Unable to create custom role icons for {Name} {style} because:\n{e}");
                     assets.MentionStyles[style] = null;
                 }
             }
@@ -284,13 +275,13 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                 }
                 catch (Exception e)
                 {
-                    Logging.LogError($"Unable to create custom role icons for {Name} {style} because:\n{e}");
+                    Fancy.Instance.Error($"Unable to create custom role icons for {Name} {style} because:\n{e}");
                     Assets[ModType.Vanilla].MentionStyles[style] = Assets[ModType.BTOS2].MentionStyles[style] = null;
                 }
             }
         }
 
-        Logging.LogMessage($"{Name} Loaded!", true);
+        Fancy.Instance.Message($"{Name} Loaded!", true);
     }
 
     public TMP_SpriteAsset BuildSpriteSheet(ModType type, string mod, string style, Dictionary<string, Sprite> icons)
@@ -307,48 +298,48 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
             var name2 = Utils.RoleName(roleEnum, type);
             var factionEnum = roleEnum.GetFactionType(type);
             var name3 = Utils.FactionName(factionEnum, type);
-            var sprite = icons.TryGetValue(name2 + $"_{mod}", out var sprite1) ? sprite1 : AssetManager.Blank;
+            var sprite = icons.TryGetValue(name2 + $"_{mod}", out var sprite1) ? sprite1 : Blank;
 
             if (!sprite.IsValid())
-                sprite = icons.TryGetValue(name2, out sprite1) ? sprite1 : AssetManager.Blank;
+                sprite = icons.TryGetValue(name2, out sprite1) ? sprite1 : Blank;
 
             if (!sprite.IsValid() && name3 != style && Assets[type].BaseIcons.TryGetValue(name3, out var icons2))
             {
-                sprite = icons2.TryGetValue(name2 + $"_{mod}", out sprite1) ? sprite1 : AssetManager.Blank;
+                sprite = icons2.TryGetValue(name2 + $"_{mod}", out sprite1) ? sprite1 : Blank;
 
                 if (!sprite.IsValid())
-                    sprite = icons2.TryGetValue(name2, out sprite1) ? sprite1 : AssetManager.Blank;
+                    sprite = icons2.TryGetValue(name2, out sprite1) ? sprite1 : Blank;
             }
 
             if (!sprite.IsValid() && name3 != style && Assets[ModType.Common].BaseIcons.TryGetValue(name3, out icons2))
             {
-                sprite = icons2.TryGetValue(name2 + $"_{mod}", out sprite1) ? sprite1 : AssetManager.Blank;
+                sprite = icons2.TryGetValue(name2 + $"_{mod}", out sprite1) ? sprite1 : Blank;
 
                 if (!sprite.IsValid())
-                    sprite = icons2.TryGetValue(name2, out sprite1) ? sprite1 : AssetManager.Blank;
+                    sprite = icons2.TryGetValue(name2, out sprite1) ? sprite1 : Blank;
             }
 
             if (!sprite.IsValid() && style != "Regular" && Assets[ModType.Common].BaseIcons.TryGetValue("Regular", out icons2))
             {
-                sprite = icons2.TryGetValue(name2 + $"_{mod}", out sprite1) ? sprite1 : AssetManager.Blank;
+                sprite = icons2.TryGetValue(name2 + $"_{mod}", out sprite1) ? sprite1 : Blank;
 
                 if (!sprite.IsValid())
-                    sprite = icons2.TryGetValue(name2, out sprite1) ? sprite1 : AssetManager.Blank;
+                    sprite = icons2.TryGetValue(name2, out sprite1) ? sprite1 : Blank;
             }
 
             if (!sprite.IsValid() && style != "Factionless" && Assets[ModType.Common].BaseIcons.TryGetValue("Factionless", out icons2))
             {
-                sprite = icons2.TryGetValue(name2 + $"_{mod}", out sprite1) ? sprite1 : AssetManager.Blank;
+                sprite = icons2.TryGetValue(name2 + $"_{mod}", out sprite1) ? sprite1 : Blank;
 
                 if (!sprite.IsValid())
-                    sprite = icons2.TryGetValue(name2, out sprite1) ? sprite1 : AssetManager.Blank;
+                    sprite = icons2.TryGetValue(name2, out sprite1) ? sprite1 : Blank;
             }
 
             if (!sprite.IsValid())
-                sprite = AssetManager.Assets.TryGetValue(name2 + $"_{mod}", out sprite1) ? sprite1 : AssetManager.Blank;
+                sprite = Fancy.Assets.GetSprite(name2 + $"_{mod}") ?? Blank;
 
             if (!sprite.IsValid())
-                sprite = AssetManager.Assets.TryGetValue(name2, out sprite1) ? sprite1 : AssetManager.Blank;
+                sprite = Fancy.Assets.GetSprite(name2) ??  Blank;
 
             if (sprite.IsValid())
             {
@@ -356,16 +347,16 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                 sprites.Add(sprite);
             }
             else
-                Logging.LogWarning($"NO {mod.ToUpper()} ICON FOR {name2}?!");
+                Fancy.Instance.Warning($"NO {mod.ToUpper()} ICON FOR {name2}?!");
         }
 
-        return AssetManager.BuildGlyphs([..sprites], $"{mod}RoleIcons ({Name}, {style})", index);
+        return BuildGlyphs([..sprites], $"{mod}RoleIcons ({Name}, {style})", index);
     }
 
     public Sprite GetSprite(string iconName, bool allowEE, string type)
     {
         if (!Assets.TryGetValue(GetModKey(type), out var assets))
-            return AssetManager.Blank;
+            return Blank;
 
         assets.BaseIcons.TryGetValue(type, out var icons);
         icons ??= [];
@@ -377,7 +368,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
 
             if (Constants.AllEasterEggs())
             {
-                AssetManager.GlobalEasterEggs[type].TryGetValue(iconName, out sprites);
+                GlobalEasterEggs[type].TryGetValue(iconName, out sprites);
                 sprites ??= [];
             }
 
@@ -393,7 +384,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                 return sprites.Random();
         }
 
-        return sprite ?? AssetManager.Blank;
+        return sprite ?? Blank;
     }
 
     public static void PopulateDirectory(string path)

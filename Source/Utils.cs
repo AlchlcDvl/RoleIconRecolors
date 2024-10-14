@@ -428,7 +428,7 @@ public static class Utils
         if (!Constants.DumpSheets() && !skipSetting)
             return;
 
-        path ??= AssetManager.ModPath;
+        path ??= Fancy.Instance.ModPath;
         fileName ??= texture.name;
         var assetPath = Path.Combine(path, $"{fileName}.png");
 
@@ -458,7 +458,7 @@ public static class Utils
 
     private static bool IsTransformedApocVanilla(this Role role) => role is Role.DEATH or Role.FAMINE or Role.WAR or Role.PESTILENCE;
 
-    public static bool IsValid(this Sprite sprite) => sprite && sprite != AssetManager.Blank;
+    public static bool IsValid(this Sprite sprite) => sprite && sprite != Blank;
 
     public static string EffectName(EffectType effect) => effect switch
     {
@@ -645,14 +645,15 @@ public static class Utils
 
     public static void SetImageColor(this Image img, ColorType type)
     {
-        img.material = AssetManager.Grayscale;
+        img.material = Grayscale;
         img.color = type switch
         {
             ColorType.Metal => Constants.GetMainUIThemeMetalColor(),
             ColorType.Paper => Constants.GetMainUIThemePaperColor(),
+            ColorType.Leather => Constants.GetMainUIThemePaperColor(),
             _ => Constants.GetMainUIThemeWoodColor()
         };
     }
 
-    public static bool IsValid(this SilhouetteAnimation anim) => anim != null && anim != AssetManager.Loading;
+    public static bool IsValid(this SilhouetteAnimation anim) => anim != null && anim != Loading;
 }

@@ -45,12 +45,12 @@ public static class BTOS2IPCompatibility
             BTOS2PatchesHarmony.Patch(setDataMethod1, null, new(AccessTools.Method(compatType, nameof(ItemPostfix1))));
             BTOS2PatchesHarmony.Patch(refreshDataMethod, null, new(AccessTools.Method(compatType, nameof(ItemPostfix2))));
             BTOS2PatchesHarmony.Patch(setDataMethod2, null, new(AccessTools.Method(compatType, nameof(ItemPostfix3))));
-            Logging.LogMessage("BTOS2 compatibility was successful");
+            Fancy.Instance.Message("BTOS2 compatibility was successful");
             return true;
         }
         catch (Exception ex)
         {
-            Logging.LogError($"BTOS2 compatbility patch loading failed because:\n{ex}");
+            Fancy.Instance.Error($"BTOS2 compatbility patch loading failed because:\n{ex}");
             return false;
         }
     }
@@ -67,7 +67,7 @@ public static class BTOS2IPCompatibility
 
         if (isBan)
         {
-            var sprite2 = AssetManager.GetSprite("Banned");
+            var sprite2 = GetSprite("Banned");
 
             if (sprite2.IsValid())
                 roleIcon.sprite = sprite2;
@@ -78,10 +78,10 @@ public static class BTOS2IPCompatibility
         var ogfaction = a_role.GetFactionType(ModType.BTOS2);
         var reg = ogfaction != faction;
         var name = Utils.RoleName(a_role);
-        var sprite = AssetManager.GetSprite(reg, name, Utils.FactionName(faction));
+        var sprite = GetSprite(reg, name, Utils.FactionName(faction));
 
         if (!sprite.IsValid() && reg)
-            sprite = AssetManager.GetSprite(name, Utils.FactionName(ogfaction));
+            sprite = GetSprite(name, Utils.FactionName(ogfaction));
 
         if (sprite.IsValid())
             roleIcon.sprite = sprite;
@@ -98,7 +98,7 @@ public static class BTOS2IPCompatibility
             return;
 
         var role = (Role)AccessTools.Field(MenuRoleType, "role").GetValue(__instance);
-        var sprite = AssetManager.GetSprite(Utils.RoleName(role), Utils.FactionName(role.GetFactionType()));
+        var sprite = GetSprite(Utils.RoleName(role), Utils.FactionName(role.GetFactionType()));
 
         if (sprite.IsValid())
             roleIcon.sprite = sprite;
@@ -109,7 +109,7 @@ public static class BTOS2IPCompatibility
             return;
 
         var bannedIcon = banned.GetComponent<Image>();
-        var bannedSprite = AssetManager.GetSprite("Banned");
+        var bannedSprite = GetSprite("Banned");
 
         if (bannedIcon && bannedSprite.IsValid())
             bannedIcon.sprite = bannedSprite;
@@ -126,7 +126,7 @@ public static class BTOS2IPCompatibility
             return;
 
         var role = (Role)AccessTools.Field(OracleMenuControllerListItemType, "role").GetValue(__instance);
-        var sprite = AssetManager.GetSprite(Utils.RoleName(role), Utils.FactionName(role.GetFactionType()));
+        var sprite = GetSprite(Utils.RoleName(role), Utils.FactionName(role.GetFactionType()));
 
         if (sprite.IsValid())
             roleIcon.sprite = sprite;

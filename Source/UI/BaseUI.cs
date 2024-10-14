@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using UnityEngine.Events;
 
 namespace FancyUI.UI;
 
@@ -54,8 +55,8 @@ public abstract class BaseUI : UIController
         Test.AddComponent<TooltipTrigger>().NonLocalizedString = $"Open {Type} Testing Menu";
 
         var dirButton = OpenDir.AddComponent<HoverEffect>();
-        dirButton.OnMouseOver.AddListener(() => OpenDir.GetComponent<Image>().sprite = AssetManager.Assets["OpenChest"]);
-        dirButton.OnMouseOut.AddListener(() => OpenDir.GetComponent<Image>().sprite = AssetManager.Assets["ClosedChest"]);
+        dirButton.OnMouseOver.AddListener(() => OpenDir.GetComponent<Image>().sprite = Fancy.Instance.Assets.GetSprite("OpenChest"));
+        dirButton.OnMouseOut.AddListener(() => OpenDir.GetComponent<Image>().sprite = Fancy.Instance.Assets.GetSprite("ClosedChest"));
 
         Confirm.GetComponent<Button>().onClick.AddListener(AfterGenerating);
         Confirm.AddComponent<TooltipTrigger>().NonLocalizedString = "Confirm Link Parameters And Generate Link";
@@ -80,7 +81,7 @@ public abstract class BaseUI : UIController
 
         if (StringUtils.IsNullEmptyOrWhiteSpace(name))
         {
-            Logging.LogError("Tried to generate pack link with no pack name");
+            Fancy.Instance.Error("Tried to generate pack link with no pack name");
             return null;
         }
 
@@ -105,4 +106,23 @@ public abstract class BaseUI : UIController
     }
 
     public abstract void OpenTestingUI();
+
+    // Why the hell am I not allowed to make extension methods in instance classes smhh
+    public void SetUpPack(PackJson packJson, UnityAction download)
+    {
+        var go = Instantiate(PackTemplate, PackTemplate.transform.parent);
+        go.name = packJson.Name;
+        go.transform.Find("PackName").GetComponent<TextMeshProUGUI>().SetText(packJson.Name);
+        var link = go.transform.Find("RepoButton");
+        link.GetComponent<Button>().onClick.AddListener(() => Application.OpenURL(packJson.Link()));
+        link.AddComponent<TooltipTrigger>().NonLocalizedString = "Open Link";
+        var button = go.transform.Find("Download");
+        button.GetComponent<Button>().onClick.AddListener(download);
+        button.gameObject.AddComponent<TooltipTrigger>().NonLocalizedString = $"Download {packJson.Name}";
+        go.SetActive(true);
+        PackGOs.Add(go);
+
+        if (!StringUtils.IsNullEmptyOrWhiteSpace(packJson.Credits))
+            go.AddComponent<TooltipTrigger>().NonLocalizedString = packJson.Credits;
+    }
 }

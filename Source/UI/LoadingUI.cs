@@ -70,7 +70,7 @@ public class LoadingUI : UIController
     {
         if (!Instance)
         {
-            var go = Instantiate(AssetManager.AssetGOs["LoadingUI"], FancyUI.Instance.transform.parent, false);
+            var go = Instantiate(Fancy.Instance.Assets.GetGameObject("LoadingUI"), FancyUI.Instance.transform.parent, false);
             go.transform.localPosition = new(0, 0, 0);
             go.transform.localScale = Vector3.one * 1.5f;
             go.AddComponent<LoadingUI>();

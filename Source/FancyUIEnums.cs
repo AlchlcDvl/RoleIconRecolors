@@ -18,5 +18,6 @@ public enum ColorType
 {
     Wood,
     Metal,
-    Paper
+    Paper,
+    Leather
 }

@@ -1,10 +1,9 @@
 using FancyUI.Assets.SilhouetteSwapper;
 using FancyUI.Assets.IconPacks;
-using Witchcraft.Gifs;
 
 namespace FancyUI.Assets;
 
-public static class AssetManager
+public static class FancyAssetManager
 {
     public const string Resources = "FancyUI.Resources.";
 
@@ -12,36 +11,27 @@ public static class AssetManager
     public static readonly Dictionary<string, IconPack> IconPacks = [];
     public static readonly Dictionary<int, Sprite> CacheScrollSprites = [];
 
-    public static Sprite Blank { get; private set; }
-    public static Sprite Thumbnail { get; private set; }
-    public static Sprite Attack { get; private set; }
-    public static Sprite Defense { get; private set; }
-    public static Sprite Ethereal { get; private set; }
+    public static Sprite Blank { get; set; }
+    public static Sprite Thumbnail { get; set; }
+    public static Sprite Attack { get; set; }
+    public static Sprite Defense { get; set; }
+    public static Sprite Ethereal { get; set; }
 
-    public static TMP_SpriteAsset Vanilla1 { get; private set; }
-    public static TMP_SpriteAsset Vanilla2 { get; private set; }
-    public static TMP_SpriteAsset BTOS2_1 { get; private set; }
-    public static TMP_SpriteAsset BTOS2_2 { get; private set; }
+    public static TMP_SpriteAsset Vanilla1 { get; set; }
+    public static TMP_SpriteAsset Vanilla2 { get; set; }
+    public static TMP_SpriteAsset BTOS2_1 { get; set; }
+    public static TMP_SpriteAsset BTOS2_2 { get; set; }
 
-    public static AssetBundle Bundle { get; set; }
-    public static readonly Dictionary<string, Sprite> Assets = [];
-    public static readonly Dictionary<string, GameObject> AssetGOs = [];
-    public static readonly Dictionary<string, List<Sprite>> Assets2 = [];
-
-    public static AssetBundle WoodBundle { get; set; }
-    public static Material Grayscale { get; private set; }
+    public static Material Grayscale { get; set; }
     public static Material DefaultWood { get; set; }
 
-    public static SilhouetteAnimation Loading { get; private set; }
+    public static SilhouetteAnimation Loading { get; set; }
 
-    public static string ModPath => Path.Combine(Path.GetDirectoryName(Application.dataPath), "SalemModLoader", "ModFolders", "FancyUI");
-    public static string IPPath => Path.Combine(ModPath, "IconPacks");
-    public static string SSPath => Path.Combine(ModPath, "SilhouetteSets");
+    public static string IPPath => Path.Combine(Fancy.Instance.ModPath, "IconPacks");
+    public static string SSPath => Path.Combine(Fancy.Instance.ModPath, "SilhouetteSets");
 
     private static readonly string[] Avoid = [ "Necronomicon", "Recruit", "Doused", "ExeTarget", "Hexed", "Knighted", "Bread", "Revealed", "Disconnected", "Connecting", "Plagued", "Revealed",
         "Trapped", "Hangover", "Silenced", "Dreamwoven", "Insane", "Bugged", "Tracked", "Sickness", "Reaped", "Deafened", "Audited", "Enchanted", "Accompanied", "Banned", "WarlockCursed" ];
-
-    private static readonly string[] ToRemove = [ ".png", ".jpg" ];
 
     private static Assembly Core => typeof(Fancy).Assembly;
 
@@ -60,7 +50,7 @@ public static class AssetManager
 
         if (!IconPacks.TryGetValue(packName, out var pack))
         {
-            Logging.LogError($"Error finding {packName} in loaded packs");
+            Fancy.Instance.Error($"Error finding {packName} in loaded packs");
             ModSettings.SetString("Selected Icon Pack", "Vanilla", "alchlcsystm.fancy.ui");
             return Blank;
         }
@@ -112,99 +102,17 @@ public static class AssetManager
         }
         catch (Exception e)
         {
-            Logging.LogError($"Error finding {name}'s sprite from {packName} {faction} during a {mod} game\n{e}");
+            Fancy.Instance.Error($"Error finding {name}'s sprite from {packName} {faction} during a {mod} game\n{e}");
             return Blank;
         }
     }
 
-    public static void LoadAssets()
-    {
-        if (!Directory.Exists(ModPath))
-            Directory.CreateDirectory(ModPath);
-
-        if (!Directory.Exists(IPPath))
-            Directory.CreateDirectory(IPPath);
-
-        var json = Path.Combine(IPPath, "OtherPacks.json");
-
-        if (!File.Exists(json))
-            File.CreateText(json).Close();
-
-        var vanilla = Path.Combine(IPPath, "Vanilla");
-
-        if (!Directory.Exists(vanilla))
-            Directory.CreateDirectory(vanilla);
-
-        if (!Directory.Exists(SSPath))
-            Directory.CreateDirectory(SSPath);
-
-        json = Path.Combine(SSPath, "OtherSets.json");
-
-        if (!File.Exists(json))
-            File.CreateText(json).Close();
-
-        vanilla = Path.Combine(SSPath, "Vanilla");
-
-        if (!Directory.Exists(vanilla))
-            Directory.CreateDirectory(vanilla);
-
-        Core.GetManifestResourceNames().ForEach(x =>
-        {
-            if (x.EndsWith(".png"))
-            {
-                var sprite = FromResources.LoadSprite(x).DontDestroy();
-                sprite.hideFlags |= HideFlags.DontUnloadUnusedAsset;
-                sprite.name = sprite.texture.name = x.SanitisePath();
-
-                if (x.Contains("Blank"))
-                    Blank = sprite;
-                else if (x.Contains("Thumbnail"))
-                    Thumbnail = sprite;
-                else if (x.Contains("Attack"))
-                    Attack = sprite;
-                else if (x.Contains("Defense"))
-                    Defense = sprite;
-                else if (x.Contains("Ethereal"))
-                    Ethereal = sprite;
-
-                Assets[sprite.name] = sprite;
-            }
-            else if (x.EndsWith(".gif"))
-            {
-                var sprites = GifLoader.LoadGifFromResources(x);
-                sprites.Frames.ForEach(y => y.hideFlags |= HideFlags.DontUnloadUnusedAsset);
-                sprites.Frames.ForEach(y => y.name = y.texture.name = $"{x.SanitisePath()}{sprites.Frames.IndexOf(y)}");
-
-                if (x.Contains("Loading"))
-                    Loading = new("Loading") { Frames = sprites.Frames };
-
-                Assets2[x.SanitisePath()] = sprites.Frames;
-            }
-        });
-
-        Bundle = FromAssetBundle.GetAssetBundleFromResources($"{Resources}Assets", Core);
-        Bundle.LoadAllAssets<Sprite>().ForEach(x => Assets[x.name] = x);
-        Bundle.LoadAllAssets<GameObject>().ForEach(x => AssetGOs[x.name] = x);
-
-        // Putting the bundled assets to the mod's bundle broke the shader somehow
-        WoodBundle = FromAssetBundle.GetAssetBundleFromResources($"{Resources}WoodMaterials", Core);
-        Grayscale = WoodBundle.LoadAsset<Material>("GrayscaleM");
-
-        TryLoadingSprites(Constants.CurrentPack(), PackType.IconPacks);
-        LoadVanillaSpriteSheets();
-
-        try
-        {
-            LoadBTOS();
-        } catch {}
-    }
-
-    private static void LoadBTOS()
+    public static void LoadBTOS()
     {
         if (!Constants.BTOS2Exists())
             return;
 
-        Logging.LogMessage("BTOS2 Detected; Initiating Compatibility...");
+        Fancy.Instance.Message("BTOS2 Detected; Initiating Compatibility...");
         BTOS2Compatibility.BTOS2Patched = BTOS2Compatibility.Init();
 
         if (!BTOS2Compatibility.BTOS2Patched)
@@ -232,87 +140,15 @@ public static class AssetManager
         }
 
         Utils.DumpSprite(BTOS2_1.spriteSheet as Texture2D, "BTOSRoleIcons", Path.Combine(IPPath, "BTOS2"), true);
-        LoadBTOS2SpriteSheet();
+
+        Fancy.Instance.Assets.Bundles[BetterTOS2.BTOSInfo.assetBundle.name] = BetterTOS2.BTOSInfo.assetBundle;
+        BetterTOS2.BTOSInfo.assetBundle.GetAllAssetNames().ForEach(x => Fancy.Instance.Assets.ObjectToBundle[AssetManager.ConvertToBaseName(x)] = BetterTOS2.BTOSInfo.assetBundle.name);
     }
 
-    private static Texture2D EmptyTexture() => new(2, 2, TextureFormat.ARGB32, true);
-
-    private static Texture2D LoadDiskTexture(string fileName, string path)
+    public static string FancySanitisePath(this string path, bool removeIcon = false)
     {
-        try
-        {
-            fileName = fileName.SanitisePath();
-            var texture = EmptyTexture();
-            texture.LoadImage(File.ReadAllBytes(path), false);
-            texture.name = fileName;
-            return texture.DontUnload().DontDestroy();
-        }
-        catch (Exception e)
-        {
-            Logging.LogError($"Error loading {path}\n{e}");
-            return null;
-        }
-    }
-
-    private static Sprite LoadSprite(Texture2D texture, string path = null)
-    {
-        try
-        {
-            var sprite = Sprite.Create(texture, new(0, 0, texture.width, texture.height), new(0.5f, 0.5f), 100);
-
-            if (sprite == null)
-            {
-                Logging.LogError($"Uh oh sprite loading error at {path}");
-                return null;
-            }
-
-            sprite.name = texture.name;
-            return sprite.DontUnload().DontDestroy();
-        }
-        catch (Exception e)
-        {
-            Logging.LogError($"Error loading {path}\n{e}");
-            return null;
-        }
-    }
-
-    public static Sprite LoadDiskSprite(string fileName, string path)
-    {
-        try
-        {
-            fileName = fileName.SanitisePath();
-
-            if (!File.Exists(path))
-            {
-                Logging.LogError($"Path {path} was missing");
-                return null;
-            }
-
-            var texture = LoadDiskTexture(fileName, path);
-
-            if (texture == null)
-            {
-                Logging.LogError($"Uh oh texture loading error at {path}");
-                return null;
-            }
-
-            return LoadSprite(texture, path);
-        }
-        catch (Exception e)
-        {
-            Logging.LogError($"Unable to set sprite for {path} because:\n{e}");
-            return null;
-        }
-    }
-
-    public static string SanitisePath(this string path, bool removeIcon = false)
-    {
-        path = path.Split('/').Last();
-        path = path.Split('\\').Last();
-        ToRemove.ForEach(x => path = path.Replace(x, ""));
-        path = path.Replace(Resources, "");
+        path = path.SanitisePath();
         path = path.Replace("Marshall", "Marshal");
-        path = path.Split('.').Last();
 
         if (removeIcon)
         {
@@ -332,11 +168,11 @@ public static class AssetManager
 
     public static void TryLoadingSprites(string packName, PackType type)
     {
-        var folder = Path.Combine(ModPath, $"{type}", packName);
+        var folder = Path.Combine(Fancy.Instance.ModPath, $"{type}", packName);
 
         if (!Directory.Exists(folder))
         {
-            Logging.LogError($"{packName} was missing");
+            Fancy.Instance.Error($"{packName} was missing");
             ModSettings.SetString("Selected Icon Pack", "Vanilla", "alchlcsystm.fancy.ui");
             return;
         }
@@ -364,7 +200,7 @@ public static class AssetManager
         }
         catch (Exception e)
         {
-            Logging.LogError($"Unable to load icon pack {packName} because:\n{e}");
+            Fancy.Instance.Error($"Unable to load icon pack {packName} because:\n{e}");
         }
     }
 
@@ -414,7 +250,7 @@ public static class AssetManager
             diagnostic += "\nLoaded Mention Style Was Null";
 
         diagnostic += $"\nError: {e}";
-        Logging.LogError(diagnostic);
+        Fancy.Instance.Error(diagnostic);
     }
 
     public static void SetScrollSprites()
@@ -449,7 +285,7 @@ public static class AssetManager
         }
         catch (Exception e)
         {
-            Logging.LogError($"Unable to set scroll sprites because:\n{e}");
+            Fancy.Instance.Error($"Unable to set scroll sprites because:\n{e}");
         }
     }
 
@@ -472,7 +308,7 @@ public static class AssetManager
         }
         catch (Exception e)
         {
-            Logging.LogError($"Unable to decompress {source.name} because:\n{e}");
+            Fancy.Instance.Error($"Unable to decompress {source.name} because:\n{e}");
             return source;
         }
     }
@@ -488,10 +324,10 @@ public static class AssetManager
             foreach (var (role, (_, roleInt)) in index)
             {
                 var name = Utils.RoleName((Role)roleInt, ModType.Vanilla);
-                var sprite = Assets.TryGetValue(name + "_Vanilla", out var sprite1) ? sprite1 : Blank;
+                var sprite = Fancy.Instance.Assets.GetSprite(name + "_Vanilla") ?? Blank;
 
                 if (!sprite.IsValid())
-                    sprite = Assets.TryGetValue(name, out sprite1) ? sprite1 : Blank;
+                    sprite = Fancy.Instance.Assets.GetSprite(name) ?? Blank;
 
                 if (sprite.IsValid())
                 {
@@ -499,7 +335,7 @@ public static class AssetManager
                     sprites.Add(sprite);
                 }
                 else
-                    Logging.LogWarning($"NO VANILLA ICON FOR {name}?!");
+                    Fancy.Instance.Warning($"NO VANILLA ICON FOR {name}?!");
             }
 
             Vanilla1 = BuildGlyphs([..sprites], "RoleIcons", index);
@@ -507,7 +343,7 @@ public static class AssetManager
         }
         catch (Exception e)
         {
-            Logging.LogError($"Unable to create modified vanilla role icons sheet because:\n{e}");
+            Fancy.Instance.Error($"Unable to create modified vanilla role icons sheet because:\n{e}");
             Vanilla1 = null;
         }
 
@@ -518,7 +354,7 @@ public static class AssetManager
 
             for (var i = 0; i < 16; i++)
             {
-                var sprite = Assets.TryGetValue($"{i}", out var sprite1) ? sprite1 : Blank;
+                var sprite = Fancy.Instance.Assets.GetSprite($"{i}") ?? Blank;
 
                 if (sprite.IsValid())
                 {
@@ -526,7 +362,7 @@ public static class AssetManager
                     sprites.Add(sprite);
                 }
                 else
-                    Logging.LogWarning($"NO NUMBER ICON FOR {i}?!");
+                    Fancy.Instance.Warning($"NO NUMBER ICON FOR {i}?!");
 
                 dict.Add($"PlayerNumbers_{i}");
             }
@@ -536,12 +372,15 @@ public static class AssetManager
         }
         catch (Exception e)
         {
-            Logging.LogError($"Unable to create modified player numbers sheet because:\n{e}");
+            Fancy.Instance.Error($"Unable to create modified player numbers sheet because:\n{e}");
             Vanilla2 = null;
         }
     }
     public static void LoadBTOS2SpriteSheet()
     {
+        if (!Constants.BTOS2Exists())
+            return;
+
         try
         {
             var index = Utils.Filtered(ModType.BTOS2);
@@ -550,10 +389,10 @@ public static class AssetManager
             foreach (var (role, (_, roleInt)) in index)
             {
                 var name = Utils.RoleName((Role)roleInt, ModType.BTOS2);
-                var sprite = Assets.TryGetValue(name + "_BTOS2", out var sprite1) ? sprite1 : Blank;
+                var sprite = Fancy.Instance.Assets.GetSprite(name + "_BTOS2") ?? Blank;
 
                 if (!sprite.IsValid())
-                    sprite = Assets.TryGetValue(name, out sprite1) ? sprite1 : Blank;
+                    sprite = Fancy.Instance.Assets.GetSprite(name) ?? Blank;
 
                 if (sprite.IsValid())
                 {
@@ -561,7 +400,7 @@ public static class AssetManager
                     sprites.Add(sprite);
                 }
                 else
-                    Logging.LogWarning($"NO BTOS2 ICON FOR {name}?!");
+                    Fancy.Instance.Warning($"NO BTOS2 ICON FOR {name}?!");
             }
 
             BTOS2_2 = BuildGlyphs([..sprites], "BTOSRoleIcons", index);
@@ -569,7 +408,7 @@ public static class AssetManager
         }
         catch (Exception e)
         {
-            Logging.LogError($"Unable to create modified btos role icons sheet because:\n{e}");
+            Fancy.Instance.Error($"Unable to create modified btos role icons sheet because:\n{e}");
             BTOS2_2 = null;
         }
     }
@@ -622,9 +461,4 @@ public static class AssetManager
         asset.UpdateLookupTables();
         return asset.DontUnload().DontDestroy();
     }
-
-    // public static void EncodeFramesToGif(string fileName, Sprite[] frames, string path = null)
-    // {
-
-    // }
 }

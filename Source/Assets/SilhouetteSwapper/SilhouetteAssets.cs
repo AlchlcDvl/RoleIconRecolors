@@ -9,18 +9,18 @@ public class SilhouetteAssets(string name)
 
     public void Debug()
     {
-        Logging.LogMessage($"Debugging {Name}");
+        Fancy.Instance.Message($"Debugging {Name}");
         Count = 0;
 
         foreach (var (name1, animation) in Animations)
         {
             if (animation.IsValid())
             {
-                Logging.LogMessage($"{name1} has an animation!");
+                Fancy.Instance.Message($"{name1} has an animation!");
                 Count++;
             }
         }
 
-        Logging.LogMessage($"{Animations.Count} assets loaded!");
+        Fancy.Instance.Message($"{Animations.Count} assets loaded!");
     }
 }

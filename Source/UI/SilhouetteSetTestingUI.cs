@@ -1,5 +1,3 @@
-using Witchcraft.Gifs;
-
 namespace FancyUI.UI;
 
 public class SilhouetteSetTestingUI : MonoBehaviour
@@ -19,7 +17,7 @@ public class SilhouetteSetTestingUI : MonoBehaviour
 
     private void SetupMenu()
     {
-        Animator.SetAnim(AssetManager.Loading.Frames, Constants.AnimationDuration());
+        Animator.SetAnim(Loading.Frames, Constants.AnimationDuration());
         Animator.AddComponent<TooltipTrigger>().NonLocalizedString = "This Is Your Animator";
     }
 }

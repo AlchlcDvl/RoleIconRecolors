@@ -28,10 +28,6 @@ public static class Constants
 
     public static bool EnableSwaps() => CurrentSet() != "Vanilla";
 
-    public static bool BTOS2Exists() => ModStates.IsEnabled("curtis.tuba.better.tos2");
-
-    public static bool ColorSwapperPlusExists() => ModStates.IsEnabled("det.rolecustomizationmod");
-
     public static string GetMainUIThemeType() => ModSettings.GetString("Main UI Theme", "alchlcsystm.fancy.ui");
 
     public static Color GetMainUIThemeWoodColor() => ModSettings.GetColor("Main UI Theme Wood Color", "alchlcsystm.fancy.ui");
@@ -40,7 +36,13 @@ public static class Constants
 
     public static Color GetMainUIThemePaperColor() => ModSettings.GetColor("Main UI Theme Paper Color", "alchlcsystm.fancy.ui");
 
+    public static Color GetMainUIThemeLeatherColor() => ModSettings.GetColor("Main UI Theme Leather Color", "alchlcsystm.fancy.ui");
+
     public static bool CustomMainUIEnabled() => GetMainUIThemeType() != "Default";
+
+    public static bool BTOS2Exists() => ModStates.IsEnabled("curtis.tuba.better.tos2");
+
+    public static bool MiscRoleExists() => ModStates.IsEnabled("det.rolecustomizationmod");
 
     public static bool IsBTOS2()
     {
