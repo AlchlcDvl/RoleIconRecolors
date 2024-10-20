@@ -3,10 +3,10 @@ namespace FancyUI;
 [SalemMod]
 [SalemMenuItem]
 [DynamicSettings]
-[WitchcraftMod(typeof(Fancy), "Fancy UI", ["Assets", "WoodMaterials"], HasFolder = true)]
+[WitchcraftMod(typeof(Fancy), "Fancy UI", ["Assets", "WoodMaterials"], true)]
 public class Fancy
 {
-    public static WitchcraftModAttribute Instance { get; private set; }
+    public static WitchcraftMod Instance { get; private set; }
     public static AssetManager Assets { get; private set; }
 
     public void Start()

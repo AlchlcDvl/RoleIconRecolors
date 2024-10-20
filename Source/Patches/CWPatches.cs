@@ -74,7 +74,7 @@ public static class PooledChatViewSwitcherPatch
         parts.GetChild(1).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
         parts.GetChild(2).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
         parts.GetChild(5).GetComponent<Image>().SetImageColor(ColorType.Metal);
-        
+        parts.GetChild(5).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
     }
 }
 

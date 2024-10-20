@@ -6,9 +6,11 @@ using Game.Characters;
 using Game.Chat.Decoders;
 using Server.Shared.Messages;
 using Server.Shared.State.Chat;
-using Home.Shared;
 using Home.LoginScene;
 using Home.HomeScene;
+using Mentions;
+using Server.Shared.Extensions;
+using Home.Shared;
 
 namespace FancyUI.Patches;
 
@@ -72,7 +74,17 @@ public static class PatchRoleCards
         if (Constants.EnableIcons())
         {
             var panel = __instance.GetComponentInParent<RoleCardPanel>();
-            ChangeRoleCard(panel?.roleIcon, panel?.specialAbilityPanel?.useButton?.abilityIcon, panel?.roleInfoButtons, role, Pepper.GetMyFaction());
+            ChangeRoleCard(panel?.roleIcon, panel?.specialAbilityPanel?.useButton?.abilityIcon, panel?.roleInfoButtons, role, __instance.currentFaction);
+        }
+    }
+
+    [HarmonyPatch(typeof(RoleCardPanelBackground), nameof(RoleCardPanelBackground.SetFaction))]
+    public static void Postfix(RoleCardPanelBackground __instance, ref FactionType factionType)
+    {
+        if (Constants.EnableIcons())
+        {
+            var panel = __instance.GetComponentInParent<RoleCardPanel>();
+            ChangeRoleCard(panel?.roleIcon, panel?.specialAbilityPanel?.useButton?.abilityIcon, panel?.roleInfoButtons, __instance.currentRole, factionType);
         }
     }
 
@@ -83,11 +95,11 @@ public static class PatchRoleCards
             ChangeRoleCard(__instance?.roleIcon, __instance?.specialAbilityPanel?.useButton?.abilityIcon, __instance?.roleInfoButtons, playerIdentityData.role, playerIdentityData.faction);
     }
 
-    [HarmonyPatch(typeof(RoleCardPopupPanel), nameof(RoleCardPopupPanel.SetRole))]
-    public static void Postfix(RoleCardPopupPanel __instance, ref Role role)
+    [HarmonyPatch(typeof(RoleCardPopupPanel), nameof(RoleCardPopupPanel.SetRoleAndFaction))]
+    public static void Postfix(RoleCardPopupPanel __instance, ref Role role, ref FactionType faction)
     {
         if (Constants.EnableIcons())
-            ChangeRoleCard(__instance?.roleIcon, __instance?.specialAbilityPanel?.useButton?.abilityIcon, __instance?.roleInfoButtons, role, role.GetFactionType(), true);
+            ChangeRoleCard(__instance?.roleIcon, __instance?.specialAbilityPanel?.useButton?.abilityIcon, __instance?.roleInfoButtons, role, faction, true);
     }
 
     private static void ChangeRoleCard(Image roleIcon, Image specialAbilityPanel, List<BaseAbilityButton> roleInfoButtons, Role role, FactionType factionType, bool isGuide = false)
@@ -478,7 +490,7 @@ public static class InitialiseRolePanel
 
         var ogfaction = __instance.m_role.GetFactionType();
 
-        if (!Service.Game.Sim.simulation.knownRolesAndFactions.Data.TryGetValue(__instance.m_discussionPlayerState.position, out var tuple))
+        if (!Utils.GetRoleAndFaction(__instance.m_discussionPlayerState.position, out var tuple))
             tuple = new(__instance.m_role, ogfaction);
 
         if (__instance.m_discussionPlayerState.position == Pepper.GetMyPosition())
@@ -582,15 +594,10 @@ public static class GetVIPRoleIconAndNameInlineStringPatch
 [HarmonyPatch(typeof(TosCharacterNametag), nameof(TosCharacterNametag.ColouredName))]
 public static class TosCharacterNametagPatch
 {
-    public static void Postfix(TosCharacterNametag __instance, ref FactionType factionType, ref string __result)
+    public static void Postfix(ref FactionType factionType, ref string __result)
     {
-        if (!Constants.EnableIcons())
-            return;
-
-        if (__instance.tosCharacter.position == Pepper.GetMyPosition())
-            factionType = Pepper.GetMyFaction();
-
-        __result = __result.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(factionType, false)})\"");
+        if (Constants.EnableIcons())
+            __result = __result.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(factionType, false)})\"");
     }
 }
 
@@ -604,7 +611,7 @@ public static class FixDecodingAndEncoding
         {
             var faction = "Regular";
 
-            if (Service.Game.Sim.simulation.knownRolesAndFactions.Data.TryGetValue(entry.speakerId, out var tuple))
+            if (Utils.GetRoleAndFaction(entry.speakerId, out var tuple))
                 faction = Utils.FactionName(tuple.Item2, false);
 
             var myFact = Pepper.GetMyFaction();
@@ -619,8 +626,7 @@ public static class FixDecodingAndEncoding
     }
 }
 
-[HarmonyPatch(typeof(SpecialAbilityPopupPotionMaster), nameof(SpecialAbilityPopupPotionMaster.Start))]
-[HarmonyPriority(Priority.Low)]
+[HarmonyPatch(typeof(SpecialAbilityPopupPotionMaster), nameof(SpecialAbilityPopupPotionMaster.Start)), HarmonyPriority(Priority.Low)]
 public static class PMBakerMenuPatch
 {
     public static void Postfix(SpecialAbilityPopupPotionMaster __instance)
@@ -662,27 +668,6 @@ public static class PMBakerMenuPatch
     }
 }
 
-[HarmonyPatch(typeof(PlayerPopupController), nameof(PlayerPopupController.SetRoleName))]
-[HarmonyPriority(Priority.Low)]
-public static class RemoveTextIconFromPlayerPopupBecauseWhyIsItThere
-{
-    public static void Postfix(PlayerPopupController __instance)
-    {
-        var killRecord = Service.Game.Sim.simulation.killRecords.Data.Find(k => k.playerId == __instance.m_discussionPlayerState.position);
-        var text = __instance.m_role.ToColorizedDisplayString() ?? "";
-
-        if (killRecord != null)
-        {
-            text = Service.Game.Sim.simulation.GetRoleNameLinkString(killRecord.playerRole, killRecord.playerFaction) ?? "";
-
-            if ((int)__instance.m_hiddenRole is not (241 or 0))
-                text = __instance.m_hiddenRole.ToColorizedDisplayString() + " (" + text + ")";
-        }
-
-        __instance.RoleLabel.SetText(text);
-    }
-}
-
 [HarmonyPatch(typeof(LoginSceneController), nameof(LoginSceneController.Start))]
 public static class HandlePacks
 {
@@ -697,8 +682,7 @@ public static class CacheHomeSceneController
     public static void Prefix(HomeSceneController __instance) => Controller = __instance;
 }
 
-[HarmonyPatch(typeof(DownloadContributorTags), nameof(DownloadContributorTags.AddTMPSprites))]
-[HarmonyPriority(Priority.VeryLow)]
+[HarmonyPatch(typeof(DownloadContributorTags), nameof(DownloadContributorTags.AddTMPSprites)), HarmonyPriority(Priority.VeryLow)]
 public static class ReplaceTMPSpritesPatch
 {
     public static void Postfix()
@@ -746,7 +730,7 @@ public static class ReplaceTMPSpritesPatch
                 var deconstructed = Constants.CurrentStyle();
 
                 if (str.Contains("(") && !str.Contains("Blank"))
-                    deconstructed = str.Replace("RoleIcons (", "").Replace(")", "").Replace("BTOS", "");
+                    deconstructed = str.Replace("RoleIcons (", "").Replace(")", "").Replace("BTOS", "").Replace(" name=", "");
 
                 if (!pack.Assets.TryGetValue(mod, out var assets))
                     Fancy.Instance.Warning($"Unable to find {Constants.CurrentPack()} assets for {mod}");
@@ -761,8 +745,11 @@ public static class ReplaceTMPSpritesPatch
                             Fancy.Instance.Warning($"{Constants.CurrentPack()} {mod} Mention Style Regular was null or missing");
                     }
 
-                    if (!asset && assets.BaseIcons[deconstructed].Count > 0)
-                        assets.MentionStyles[deconstructed] = asset = pack.BuildSpriteSheet(mod, mod.ToString(), deconstructed, assets.BaseIcons[deconstructed]);
+                    if (!asset && deconstructed != "Factionless")
+                    {
+                        if (!assets.MentionStyles.TryGetValue("Factionless", out asset) || !asset)
+                            Fancy.Instance.Warning($"{Constants.CurrentPack()} {mod} Mention Style Factionless was null or missing");
+                    }
                 }
 
                 asset ??= mod switch
@@ -790,8 +777,7 @@ public static class ReplaceTMPSpritesPatch
     }
 }
 
-[HarmonyPatch(typeof(GameModifierPopupController), nameof(GameModifierPopupController.Show))]
-[HarmonyPriority(Priority.VeryLow)]
+[HarmonyPatch(typeof(GameModifierPopupController), nameof(GameModifierPopupController.Show)), HarmonyPriority(Priority.VeryLow)]
 public static class ChangeGameModifierPopup
 {
     public static void Postfix(GameModifierPopupController __instance)
@@ -806,8 +792,7 @@ public static class ChangeGameModifierPopup
 [HarmonyPatch(typeof(NecroPassingVoteEntry))]
 public static class NecroPassPatches
 {
-    [HarmonyPatch(nameof(NecroPassingVoteEntry.RefreshData))]
-    [HarmonyPostfix]
+    [HarmonyPatch(nameof(NecroPassingVoteEntry.RefreshData)), HarmonyPostfix]
     public static void RefreshDataPatch(NecroPassingVoteEntry __instance)
     {
         if (!Constants.EnableIcons())
@@ -818,7 +803,7 @@ public static class NecroPassPatches
         if (__instance.BookIcon && nommy.IsValid())
             __instance.BookIcon.sprite = nommy;
 
-        if (!Service.Game.Sim.simulation.knownRolesAndFactions.Data.TryGetValue(__instance.Position, out var tuple))
+        if (!Utils.GetRoleAndFaction(__instance.Position, out var tuple))
             return;
 
         if (Pepper.GetMyPosition() == __instance.Position)
@@ -836,8 +821,7 @@ public static class NecroPassPatches
             __instance.RoleIcon.sprite = sprite;
     }
 
-    [HarmonyPatch(nameof(NecroPassingVoteEntry.UpdateVoteState))]
-    [HarmonyPostfix]
+    [HarmonyPatch(nameof(NecroPassingVoteEntry.UpdateVoteState)), HarmonyPostfix]
     public static void UpdateVoteStatePatch(NecroPassingVoteEntry __instance)
     {
         if (!Constants.EnableIcons())
@@ -847,7 +831,7 @@ public static class NecroPassPatches
         {
             var id = __instance.m_votes[i];
 
-            if (!Service.Game.Sim.simulation.knownRolesAndFactions.Data.TryGetValue(id, out var tuple))
+            if (!Utils.GetRoleAndFaction(id, out var tuple))
                 continue;
 
             if (Pepper.GetMyPosition() == id)
@@ -865,5 +849,58 @@ public static class NecroPassPatches
             if (sprite.IsValid() && bust)
                 bust.sprite = sprite;
         }
+    }
+}
+
+[HarmonyPatch(typeof(MentionsProvider), nameof(MentionsProvider.ProcessSpeakerName)), HarmonyPriority(Priority.VeryLow)]
+public static class FixSpeakerIcons
+{
+    public static void Postfix(int position, ref string __result)
+    {
+        if (Utils.GetRoleAndFaction(position, out var tuple))
+            __result = __result.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(tuple.Item2)})\"");
+        else if (position is 69 or 70 or 71)
+            __result = __result.Replace("RoleIcons\"", "RoleIcons (Regular)\"");
+    }
+}
+
+[HarmonyPatch(typeof(MentionsProvider), nameof(MentionsProvider.ProcessEncodedText), typeof(string), typeof(List<string>))]
+public static class OverwriteDecodedText
+{
+    public static bool Prefix(MentionsProvider __instance, ref string encodedText, ref List<string> mentions, ref string __result)
+    {
+        foreach (var mention in mentions)
+        {
+            var mentionInfo = __instance.MentionInfos.FirstOrDefault(m => m.encodedText == mention);
+
+            if (mentionInfo != null)
+                encodedText = encodedText.Replace(mention, mentionInfo.richText);
+            else
+            {
+                var match = MentionsProvider.RoleRegex.Match(mention);
+
+                if (match.Success)
+                {
+                    var role = (Role)int.Parse(match.Groups["R"].Value);
+
+                    if (!role.IsModifierCard() && role != Role.NONE)
+                    {
+                        var factionType = (FactionType)int.Parse(match.Groups["F"].Value);
+                        var text = __instance._useColors ? role.ToColorizedDisplayString(factionType) :
+                            ((role.GetFaction() == factionType) ? role.ToDisplayString() :
+                            (role.ToDisplayString() + " (" + factionType.ToDisplayString() + ")"));
+                        var text2 = __instance._roleEffects ? $"<sprite=\"RoleIcons ({Utils.FactionName(factionType)})\" name=\"Role{(int)role}\">" : string.Empty;
+                        var text3 = $"{__instance.styleTagOpen}{__instance.styleTagFont}<link=\"r{(int)role},{(int)factionType}\">{text2}<b>{text}</b></link>{__instance.styleTagClose}";
+                        encodedText = encodedText.Replace(mention, text3);
+                    }
+                }
+            }
+        }
+
+        if (Constants.IsBTOS2())
+            encodedText = encodedText.Replace("RoleIcons", "BTOSRoleIcons");
+
+        __result = encodedText;
+        return false;
     }
 }

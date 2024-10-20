@@ -522,7 +522,7 @@ public static class Utils
         }
     }
 
-    private static bool FindCasualQueueBypass() => BetterTOS2.BTOSInfo.CasualModeController;
+    private static bool FindCasualQueueBypass() => Constants.BTOS2Exists() && BetterTOS2.BTOSInfo.CasualModeController;
 
     public static bool IsEthereal(this UIRoleData.UIRoleDataInstance ui)
     {
@@ -656,4 +656,6 @@ public static class Utils
     }
 
     public static bool IsValid(this SilhouetteAnimation anim) => anim != null && anim != Loading;
+
+    public static bool GetRoleAndFaction(int pos, out Tuple<Role, FactionType> tuple) => Service.Game.Sim.simulation.knownRolesAndFactions.Data.TryGetValue(pos, out tuple);
 }
