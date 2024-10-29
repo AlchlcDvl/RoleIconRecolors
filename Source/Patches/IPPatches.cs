@@ -728,6 +728,11 @@ public static class ReplaceTMPSpritesPatch
                     mod = ModType.BTOS2;
 
                 var deconstructed = Constants.CurrentStyle();
+                var defaultSprite = mod switch
+                {
+                    ModType.BTOS2 => BTOS2_2 ?? BTOS2_1,
+                    _ => Vanilla1 ?? CacheDefaults.RoleIcons
+                };
 
                 if (str.Contains("(") && !str.Contains("Blank"))
                     deconstructed = str.Replace("RoleIcons (", "").Replace(")", "").Replace("BTOS", "").Replace(" name=", "");
@@ -736,27 +741,28 @@ public static class ReplaceTMPSpritesPatch
                     Fancy.Instance.Warning($"Unable to find {Constants.CurrentPack()} assets for {mod}");
                 else
                 {
-                    if (!assets.MentionStyles.TryGetValue(deconstructed, out asset) || !asset)
-                        Fancy.Instance.Warning($"{Constants.CurrentPack()} {mod} Mention Style {deconstructed} was null or missing");
-
-                    if (!asset && deconstructed != "Regular")
+                    if (deconstructed == "Vanilla")
+                        asset = defaultSprite;
+                    else
                     {
-                        if (!assets.MentionStyles.TryGetValue("Regular", out asset) || !asset)
-                            Fancy.Instance.Warning($"{Constants.CurrentPack()} {mod} Mention Style Regular was null or missing");
-                    }
+                        if (!assets.MentionStyles.TryGetValue(deconstructed, out asset) || !asset)
+                            Fancy.Instance.Warning($"{Constants.CurrentPack()} {mod} Mention Style {deconstructed} was null or missing");
 
-                    if (!asset && deconstructed != "Factionless")
-                    {
-                        if (!assets.MentionStyles.TryGetValue("Factionless", out asset) || !asset)
-                            Fancy.Instance.Warning($"{Constants.CurrentPack()} {mod} Mention Style Factionless was null or missing");
+                        if (!asset && deconstructed != "Regular")
+                        {
+                            if (!assets.MentionStyles.TryGetValue("Regular", out asset) || !asset)
+                                Fancy.Instance.Warning($"{Constants.CurrentPack()} {mod} Mention Style Regular was null or missing");
+                        }
+
+                        if (!asset && deconstructed != "Factionless")
+                        {
+                            if (!assets.MentionStyles.TryGetValue("Factionless", out asset) || !asset)
+                                Fancy.Instance.Warning($"{Constants.CurrentPack()} {mod} Mention Style Factionless was null or missing");
+                        }
                     }
                 }
 
-                asset ??= mod switch
-                {
-                    ModType.BTOS2 => BTOS2_2 ?? BTOS2_1,
-                    _ => Vanilla1 ?? CacheDefaults.RoleIcons
-                };
+                asset ??= defaultSprite;
             }
             else if (str == "PlayerNumbers")
             {
@@ -782,6 +788,9 @@ public static class ChangeGameModifierPopup
 {
     public static void Postfix(GameModifierPopupController __instance)
     {
+        if (!Constants.EnableIcons())
+            return;
+
         var sprite = GetSprite(Utils.RoleName(__instance.CurrentRole));
 
         if (sprite.IsValid() && __instance.roleIcon)
@@ -857,6 +866,9 @@ public static class FixSpeakerIcons
 {
     public static void Postfix(int position, ref string __result)
     {
+        if (!Constants.EnableIcons())
+            return;
+
         if (Utils.GetRoleAndFaction(position, out var tuple))
             __result = __result.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(tuple.Item2)})\"");
         else if (position is 69 or 70 or 71)
@@ -869,11 +881,12 @@ public static class OverwriteDecodedText
 {
     public static bool Prefix(MentionsProvider __instance, ref string encodedText, ref List<string> mentions, ref string __result)
     {
+        if (!Constants.EnableIcons())
+            return true;
+
         foreach (var mention in mentions)
         {
-            var mentionInfo = __instance.MentionInfos.FirstOrDefault(m => m.encodedText == mention);
-
-            if (mentionInfo != null)
+            if (__instance.MentionInfos.TryFinding(m => m.encodedText == mention, out var mentionInfo))
                 encodedText = encodedText.Replace(mention, mentionInfo.richText);
             else
             {
@@ -886,10 +899,8 @@ public static class OverwriteDecodedText
                     if (!role.IsModifierCard() && role != Role.NONE)
                     {
                         var factionType = (FactionType)int.Parse(match.Groups["F"].Value);
-                        var text = __instance._useColors ? role.ToColorizedDisplayString(factionType) :
-                            ((role.GetFaction() == factionType) ? role.ToDisplayString() :
-                            (role.ToDisplayString() + " (" + factionType.ToDisplayString() + ")"));
-                        var text2 = __instance._roleEffects ? $"<sprite=\"RoleIcons ({Utils.FactionName(factionType)})\" name=\"Role{(int)role}\">" : string.Empty;
+                        var text = __instance._useColors ? role.ToColorizedDisplayString(factionType) : role.ToFactionString(factionType);
+                        var text2 = __instance._roleEffects ? $"<sprite=\"RoleIcons ({Utils.FactionName(factionType)})\" name=\"Role{(int)role}\">" : "";
                         var text3 = $"{__instance.styleTagOpen}{__instance.styleTagFont}<link=\"r{(int)role},{(int)factionType}\">{text2}<b>{text}</b></link>{__instance.styleTagClose}";
                         encodedText = encodedText.Replace(mention, text3);
                     }
@@ -901,6 +912,80 @@ public static class OverwriteDecodedText
             encodedText = encodedText.Replace("RoleIcons", "BTOSRoleIcons");
 
         __result = encodedText;
+        return false;
+    }
+}
+
+[HarmonyPatch(typeof(WhoDiedAndHowPanel), nameof(WhoDiedAndHowPanel.HandleSubphaseRole))]
+public static class MakeProperFactionChecksInWDAH1
+{
+    public static bool Prefix(WhoDiedAndHowPanel __instance)
+    {
+        if (!Constants.EnableIcons())
+            return true;
+
+        Debug.Log("WhoDiedAndHowPanel:: HandleSubphaseRole");
+        __instance.deathNotePanel.canvasGroup.DisableRenderingAndInteraction();
+        var killRecord = Service.Game.Sim.simulation.killRecords.Data.Find(k => k.playerId == __instance.currentPlayerNumber);
+
+        if (killRecord == null || killRecord.killedByReasons.Count < 1)
+            return false;
+
+        var text = __instance.l10n(killRecord.playerRole switch
+        {
+            Role.STONED => "GUI_GAME_WHO_DIED_VICTIM_ROLE_STONED",
+            Role.HIDDEN => "GUI_GAME_WHO_DIED_VICTIM_ROLE_HIDDEN",
+            Role.NONE or Role.UNKNOWN => "GUI_GAME_WHO_DIED_VICTIM_ROLE_UNKNOWN",
+            _ => "GUI_GAME_WHO_DIED_VICTIM_ROLE_KNOWN"
+        }).Replace("%role%", killRecord.playerRole.GetTMPSprite() + killRecord.playerRole.ToColorizedDisplayString(killRecord.playerFaction))
+            .Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(killRecord.playerFaction)})\"");
+        __instance.AddLine(text, 1f);
+        return false;
+    }
+}
+
+[HarmonyPatch(typeof(WhoDiedAndHowPanel), nameof(WhoDiedAndHowPanel.HandleSubphaseWhoDied))]
+public static class MakeProperFactionChecksInWDAH2
+{
+    public static bool Prefix(WhoDiedAndHowPanel __instance, float phaseTime)
+    {
+        if (!Constants.EnableIcons())
+            return true;
+
+        Debug.Log("HandleSubphaseWhoDied phaseTime = " + phaseTime.ToString());
+
+        if (__instance.tombstonePanel != null)
+            __instance.tombstonePanel.Clear();
+        else
+            Debug.LogWarning("WhoDiedAndHowPanel.HandleSubphaseWhoDiedAndHow: tombstonePanel was null.");
+
+        if (__instance.lines != null)
+            __instance.lines.Clear();
+        else
+            Debug.LogWarning("WhoDiedAndHowPanel.HandleSubphaseWhoDiedAndHow: lines list was null.");
+
+        var playerName = Service.Game.Cast.GetPlayerName(__instance.currentPlayerNumber, false);
+        var text = __instance.l10n("GUI_GAME_WHO_DIED_AND_HOW_START").Replace("%name%", playerName);
+        var killRecord = Service.Game.Sim.simulation.killRecords.Data.Find(k => k.playerId == __instance.currentPlayerNumber);
+
+        if (killRecord != null && killRecord.killedByReasons.First().IsDaytimeKillReason())
+            text = __instance.l10n("GUI_GAME_WHO_DIED_AND_HOW_DAYKILL_START").Replace("%name%", playerName);
+
+        __instance.AddLine(text, Tuning.REVEAL_TIME_PER_ADDL_KILLED_BY_REASON);
+
+        if (killRecord == null || killRecord.killedByReasons.Count < 1)
+            __instance.AddLine(__instance.l10n("GUI_GAME_KILLED_BY_REASON_0"), Tuning.REVEAL_TIME_PER_ADDL_KILLED_BY_REASON);
+        else
+        {
+            for (var i = 0; i < killRecord.killedByReasons.Count; i++)
+            {
+                var killedByReason = killRecord.killedByReasons[i];
+                __instance.AddLine((i == 0 ? __instance.l10n($"GUI_GAME_KILLED_BY_REASON_{(int)killedByReason}") : __instance.l10n($"GUI_GAME_ALSO_KILLED_BY_REASON_{(int)killedByReason}"))
+                    .Replace("RoleIcons\"", "RoleIcons (Regular)\""), Tuning.REVEAL_TIME_PER_ADDL_KILLED_BY_REASON);
+            }
+        }
+
+        Debug.Log("WhoDiedAndHowPanel:: HandleSubphaseWhoDied");
         return false;
     }
 }

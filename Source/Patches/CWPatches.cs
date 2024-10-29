@@ -39,16 +39,6 @@ public static class AchievementItemPatch
     }
 }
 
-[HarmonyPatch(typeof(PartyLobbyPanel), nameof(PartyLobbyPanel.Start))]
-public static class PartyLobbyPanelPatch
-{
-    public static void Postfix(PartyLobbyPanel __instance)
-    {
-        if (Constants.CustomMainUIEnabled())
-            __instance.transform.GetChild(0).GetChild(1).GetChild(0).GetChild(0).GetChild(12).GetComponent<Image>().SetImageColor(ColorType.Wood);
-    }
-}
-
 [HarmonyPatch(typeof(HudDockPanel), nameof(HudDockPanel.OnGameInfoChanged))]
 public static class HudDockPanelPatch
 {
@@ -58,6 +48,8 @@ public static class HudDockPanelPatch
             __instance.GetComponent<Image>().SetImageColor(ColorType.Wood);
     }
 }
+
+// HudRoleListPanel - Roles = 3, Bans = 4
 
 [HarmonyPatch(typeof(PooledChatViewSwitcher), nameof(PooledChatViewSwitcher.Start))]
 public static class PooledChatViewSwitcherPatch

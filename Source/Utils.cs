@@ -1,4 +1,6 @@
 using FancyUI.Assets.SilhouetteSwapper;
+using Home.Shared;
+using Server.Shared.Extensions;
 
 namespace FancyUI;
 
@@ -650,7 +652,7 @@ public static class Utils
         {
             ColorType.Metal => Constants.GetMainUIThemeMetalColor(),
             ColorType.Paper => Constants.GetMainUIThemePaperColor(),
-            ColorType.Leather => Constants.GetMainUIThemePaperColor(),
+            ColorType.Leather => Constants.GetMainUIThemeLeatherColor(),
             _ => Constants.GetMainUIThemeWoodColor()
         };
     }
@@ -658,4 +660,25 @@ public static class Utils
     public static bool IsValid(this SilhouetteAnimation anim) => anim != null && anim != Loading;
 
     public static bool GetRoleAndFaction(int pos, out Tuple<Role, FactionType> tuple) => Service.Game.Sim.simulation.knownRolesAndFactions.Data.TryGetValue(pos, out tuple);
+
+    public static string ToFactionString(this Role role, FactionType faction)
+    {
+        if (Constants.MiscRoleExists())
+        {
+            try
+            {
+                return role.MrcDisplayString(faction);
+            } catch {}
+        }
+
+        var result = role.ToDisplayString();
+
+        if (role.GetFaction() != faction)
+            result += $" ({faction.ToDisplayString()})";
+
+        return result;
+    }
+
+    private static string MrcDisplayString(this Role role, FactionType faction) => ModSettings.GetBool("Faction-Specific Role Names", "det.rolecustomizationmod") ?
+        MiscRoleCustomisation.Utils.ToRoleFactionDisplayString(role, faction) : role.ToDisplayString();
 }
