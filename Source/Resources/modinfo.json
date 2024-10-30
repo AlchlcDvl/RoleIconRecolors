@@ -17,6 +17,13 @@
         "Description": "Toggles whether game sprite sheets are dumped so pack debugging is possible.",
         "DefaultValue": false,
         "AvailableInGame": true
+      },
+      {
+        "Name": "Debug Pack Loading",
+        "SettingID": "recolors.debugdump",
+        "Description": "Toggles whether the mod dumps info on loaded packs.",
+        "DefaultValue": false,
+        "AvailableInGame": true
       }
     ],
     "SliderSettings":

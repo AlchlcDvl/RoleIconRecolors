@@ -18,6 +18,8 @@ public static class Constants
 
     public static bool DumpSheets() => ModSettings.GetBool("Dump Sprite Sheets", "alchlcsystm.fancy.ui");
 
+    public static bool PackDebug() => ModSettings.GetBool("Debug Pack Loading", "alchlcsystm.fancy.ui");
+
     public static string CurrentSet() => ModSettings.GetString("Selected Silhouette Set", "alchlcsystm.fancy.ui");
 
     public static float AnimationDuration() => ModSettings.GetFloat("Silhouette Animation Duration", "alchlcsystm.fancy.ui");

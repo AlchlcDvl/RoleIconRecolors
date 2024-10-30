@@ -19,5 +19,6 @@ public enum ColorType
     Wood,
     Metal,
     Paper,
-    Leather
+    Leather,
+    Custom
 }

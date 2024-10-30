@@ -1,6 +1,6 @@
 // namespace FancyUI.UI;
 
-// public class GradientController : MonoBehaviour
+// public class GradientController : 
 // {
 //     public RoleCardPanel RoleCard { get; set; }
 

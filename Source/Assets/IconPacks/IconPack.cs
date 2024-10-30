@@ -9,6 +9,9 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
 
     public override void Debug()
     {
+        if (!Constants.PackDebug())
+            return;
+
         Fancy.Instance.Message($"Debugging {Name}");
 
         var count = 0;

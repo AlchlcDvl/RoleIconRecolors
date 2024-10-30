@@ -7,7 +7,6 @@ using Game.Chat.Decoders;
 using Server.Shared.Messages;
 using Server.Shared.State.Chat;
 using Home.LoginScene;
-using Home.HomeScene;
 using Mentions;
 using Server.Shared.Extensions;
 using Home.Shared;
@@ -674,14 +673,6 @@ public static class HandlePacks
     public static void Prefix() => IconPacksUI.HandlePackData();
 }
 
-[HarmonyPatch(typeof(HomeSceneController), nameof(HomeSceneController.Start))]
-public static class CacheHomeSceneController
-{
-    public static HomeSceneController Controller { get; private set; }
-
-    public static void Prefix(HomeSceneController __instance) => Controller = __instance;
-}
-
 [HarmonyPatch(typeof(DownloadContributorTags), nameof(DownloadContributorTags.AddTMPSprites)), HarmonyPriority(Priority.VeryLow)]
 public static class ReplaceTMPSpritesPatch
 {
@@ -986,6 +977,27 @@ public static class MakeProperFactionChecksInWDAH2
         }
 
         Debug.Log("WhoDiedAndHowPanel:: HandleSubphaseWhoDied");
+        return false;
+    }
+}
+
+[HarmonyPatch(typeof(PlayerPopupController), nameof(PlayerPopupController.SetRoleName)), HarmonyPriority(Priority.Low)]
+public static class RemoveTextIconFromPlayerPopupBecauseWhyIsItThere
+{
+    public static bool Prefix(PlayerPopupController __instance)
+    {
+        var killRecord = Service.Game.Sim.simulation.killRecords.Data.Find(k => k.playerId == __instance.m_discussionPlayerState.position);
+        var text = __instance.m_role.ToColorizedDisplayString() ?? "";
+
+        if (killRecord != null)
+        {
+            text = Service.Game.Sim.simulation.GetRoleNameLinkString(killRecord.playerRole, killRecord.playerFaction) ?? "";
+
+            if ((int)__instance.m_hiddenRole is not (241 or 0))
+                text = __instance.m_hiddenRole.ToColorizedDisplayString() + " (" + text + ")";
+        }
+
+        __instance.RoleLabel.SetText(text);
         return false;
     }
 }

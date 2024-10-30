@@ -15,6 +15,26 @@ public static class RoleCardPanelPatch
     }
 }
 
+[HarmonyPatch(typeof(SpecialAbilityPanel), nameof(SpecialAbilityPanel.Start))]
+public static class SpecialAbilityPanelPatch1
+{
+    public static void Postfix(SpecialAbilityPanel __instance)
+    {
+        if (!Constants.CustomMainUIEnabled())
+            return;
+
+        var og = __instance.transform.GetChild(1).GetComponent<Image>();
+        var copy = UObject.Instantiate(og, og.transform.parent);
+
+        og.sprite = Fancy.Assets.GetSprite("RoleCard_Ability_Main_W");
+        copy.sprite = Fancy.Assets.GetSprite("RoleCard_Ability_Main_M");
+
+        og.SetImageColor(ColorType.Wood); // Main wood container
+        copy.SetImageColor(ColorType.Metal); // The metal support
+        copy.transform.SetSiblingIndex(2);
+    }
+}
+
 [HarmonyPatch(typeof(RoleCardPopupPanel), nameof(RoleCardPopupPanel.Start))]
 public static class RoleCardPopupControllerPatch
 {
@@ -49,8 +69,6 @@ public static class HudDockPanelPatch
     }
 }
 
-// HudRoleListPanel - Roles = 3, Bans = 4
-
 [HarmonyPatch(typeof(PooledChatViewSwitcher), nameof(PooledChatViewSwitcher.Start))]
 public static class PooledChatViewSwitcherPatch
 {
@@ -65,8 +83,10 @@ public static class PooledChatViewSwitcherPatch
         parts.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
         parts.GetChild(1).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
         parts.GetChild(2).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
-        parts.GetChild(5).GetComponent<Image>().SetImageColor(ColorType.Metal);
-        parts.GetChild(5).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
+        var parts2 = parts.GetChild(5).GetChild(0);
+        parts2.parent.GetComponent<Image>().SetImageColor(ColorType.Metal);
+        parts2.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
+        parts2.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
     }
 }
 
@@ -87,5 +107,71 @@ public static class LobbyInfoClassicPanelPatch
     {
         if (Constants.CustomMainUIEnabled())
             __instance.GetComponent<Image>().SetImageColor(ColorType.Wood);
+    }
+}
+
+// HudRoleListPanel - Roles = 3, Bans = 4
+
+[HarmonyPatch(typeof(LobbyTimer), nameof(LobbyTimer.HandleOnLobbyDataChanged))]
+public static class LobbyTimerPatch
+{
+    public static void Postfix(LobbyTimer __instance)
+    {
+        if (Constants.CustomMainUIEnabled())
+            __instance.GetComponent<Image>().SetImageColor(ColorType.Wood);
+    }
+}
+
+// [HarmonyPatch(typeof(HudGraveyardPanel), nameof(HudGraveyardPanel.Start))]
+// public static class HudRoleListPanelPatch
+// {
+//     public static void Postfix(HudGraveyardPanel __instance)
+//     {
+//         if (!Constants.CustomMainUIEnabled())
+//             return;
+
+//     }
+// }
+
+[HarmonyPatch(typeof(HudTimeChangePanel), nameof(HudTimeChangePanel.OnDaytimeChanged))]
+public static class HudTimeChangePanelPatch
+{
+    public static void Postfix(HudTimeChangePanel __instance)
+    {
+        if (!Constants.CustomMainUIEnabled())
+            return;
+
+        __instance.transform.GetChild(0).GetChild(3).GetComponent<Image>().SetImageColor(ColorType.Wood);
+        __instance.transform.GetChild(1).GetChild(3).GetComponent<Image>().SetImageColor(ColorType.Wood);
+    }
+}
+
+[HarmonyPatch(typeof(LobbyGameModeChoicePanel), nameof(LobbyGameModeChoicePanel.Start))]
+public static class LobbyGameModeChoicePanelPatch
+{
+    public static void Postfix(LobbyGameModeChoicePanel __instance)
+    {
+        if (!Constants.CustomMainUIEnabled())
+            return;
+
+        __instance.transform.GetChild(0).GetChild(1).GetChild(0).GetChild(0).GetChild(12).GetComponent<Image>().SetImageColor(ColorType.Wood);
+        __instance.transform.GetChild(0).GetChild(1).GetChild(0).GetChild(2).GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wood);
+        __instance.transform.GetChild(0).GetChild(2).GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wood);
+        __instance.transform.GetChild(0).GetChild(2).GetChild(1).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
+        __instance.transform.GetChild(0).GetChild(2).GetChild(1).GetChild(0).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
+    }
+}
+
+[HarmonyPatch(typeof(SafeAreaController), nameof(SafeAreaController.OnEnable))]
+public static class SafeAreaController_OnEnable
+{
+    public static void Postfix(SafeAreaController __instance)
+    {
+        if (!Constants.CustomMainUIEnabled() || !Pepper.IsLobbyOrGamePhase())
+            return;
+
+        var parts = __instance.transform.GetChild(12);
+        parts.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood); // Wood frame at the back
+        parts.GetChild(13).GetComponent<Image>().SetImageColor(ColorType.Wood); // Wood frame in the front
     }
 }

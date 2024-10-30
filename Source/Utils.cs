@@ -645,15 +645,18 @@ public static class Utils
         return FactionType.NONE;
     }
 
-    public static void SetImageColor(this Image img, ColorType type)
+    public static void SetImageColor(this Image img, ColorType type, Color? color = null)
     {
+        // var rend = img.EnsureComponent<MeshRenderer>();
+        // rend.materials = [ .. rend.materials, Grayscale, img.material];
         img.material = Grayscale;
         img.color = type switch
         {
             ColorType.Metal => Constants.GetMainUIThemeMetalColor(),
             ColorType.Paper => Constants.GetMainUIThemePaperColor(),
             ColorType.Leather => Constants.GetMainUIThemeLeatherColor(),
-            _ => Constants.GetMainUIThemeWoodColor()
+            ColorType.Wood => Constants.GetMainUIThemeWoodColor(),
+            _ => color ?? Color.white
         };
     }
 
