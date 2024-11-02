@@ -27,12 +27,13 @@ public class IconPacksUI : BaseUI
     {
         Instance = null;
         GeneralUtils.SaveText("OtherPacks.json", JsonConvert.SerializeObject(Packs.Where(x => !x.FromMainRepo).ToArray(), typeof(PackJson[]), Formatting.Indented, new()), path: Path);
+        IconPackTestingUI.Instance?.gameObject?.Destroy();
     }
 
     public override void SetupMenu()
     {
         base.SetupMenu();
-        Test.GetComponent<Image>().sprite = Fancy.Instance.Assets.GetSprite("IconPack");
+        Test.GetComponent<Image>().sprite = Fancy.Assets.GetSprite("IconPack");
         Packs.ForEach(x => SetUpPack(x, () => DownloadIcons(x.Name)));
         PackTemplate.SetActive(false);
         NoPacks.SetActive(Packs.Count == 0);
@@ -47,6 +48,19 @@ public class IconPacksUI : BaseUI
 
     public override void OpenTestingUI()
     {
+        if (IconPackTestingUI.Instance)
+        {
+            IconPackTestingUI.Instance.gameObject.SetActive(true);
+            gameObject.SetActive(false);
+            return;
+        }
+
+        var go = Instantiate(Fancy.Assets.GetGameObject("IconPackTestingUI"), transform.parent);
+        go.transform.localPosition = new(0, 0, 0);
+        go.transform.localScale = Vector3.one * 1.5f;
+        go.AddComponent<IconPackTestingUI>();
+        FancyUI.SetupFonts(go.transform);
+        gameObject.SetActive(false);
     }
 
     public static void HandlePackData() => ApplicationController.ApplicationContext.StartCoroutine(CoHandlePackData());

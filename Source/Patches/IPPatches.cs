@@ -870,15 +870,19 @@ public static class FixSpeakerIcons
 [HarmonyPatch(typeof(MentionsProvider), nameof(MentionsProvider.ProcessEncodedText), typeof(string), typeof(List<string>))]
 public static class OverwriteDecodedText
 {
-    public static bool Prefix(MentionsProvider __instance, ref string encodedText, ref List<string> mentions, ref string __result)
+    private static string EncodedText { get; set; }
+
+    public static void Prefix(ref string encodedText) => EncodedText = encodedText;
+
+    public static void Postfix(MentionsProvider __instance, ref List<string> mentions, ref string __result)
     {
         if (!Constants.EnableIcons())
-            return true;
+            return;
 
         foreach (var mention in mentions)
         {
             if (__instance.MentionInfos.TryFinding(m => m.encodedText == mention, out var mentionInfo))
-                encodedText = encodedText.Replace(mention, mentionInfo.richText);
+                EncodedText = EncodedText.Replace(mention, mentionInfo.richText).Replace("RoleIcons\"", "RoleIcons (Regular)\"");
             else
             {
                 var match = MentionsProvider.RoleRegex.Match(mention);
@@ -893,17 +897,16 @@ public static class OverwriteDecodedText
                         var text = __instance._useColors ? role.ToColorizedDisplayString(factionType) : role.ToFactionString(factionType);
                         var text2 = __instance._roleEffects ? $"<sprite=\"RoleIcons ({Utils.FactionName(factionType)})\" name=\"Role{(int)role}\">" : "";
                         var text3 = $"{__instance.styleTagOpen}{__instance.styleTagFont}<link=\"r{(int)role},{(int)factionType}\">{text2}<b>{text}</b></link>{__instance.styleTagClose}";
-                        encodedText = encodedText.Replace(mention, text3);
+                        EncodedText = EncodedText.Replace(mention, text3);
                     }
                 }
             }
         }
 
         if (Constants.IsBTOS2())
-            encodedText = encodedText.Replace("RoleIcons", "BTOSRoleIcons");
+            __result = __result.Replace("\"RoleIcons", "\"BTOSRoleIcons");
 
-        __result = encodedText;
-        return false;
+        __result = EncodedText;
     }
 }
 
@@ -977,27 +980,6 @@ public static class MakeProperFactionChecksInWDAH2
         }
 
         Debug.Log("WhoDiedAndHowPanel:: HandleSubphaseWhoDied");
-        return false;
-    }
-}
-
-[HarmonyPatch(typeof(PlayerPopupController), nameof(PlayerPopupController.SetRoleName)), HarmonyPriority(Priority.Low)]
-public static class RemoveTextIconFromPlayerPopupBecauseWhyIsItThere
-{
-    public static bool Prefix(PlayerPopupController __instance)
-    {
-        var killRecord = Service.Game.Sim.simulation.killRecords.Data.Find(k => k.playerId == __instance.m_discussionPlayerState.position);
-        var text = __instance.m_role.ToColorizedDisplayString() ?? "";
-
-        if (killRecord != null)
-        {
-            text = Service.Game.Sim.simulation.GetRoleNameLinkString(killRecord.playerRole, killRecord.playerFaction) ?? "";
-
-            if ((int)__instance.m_hiddenRole is not (241 or 0))
-                text = __instance.m_hiddenRole.ToColorizedDisplayString() + " (" + text + ")";
-        }
-
-        __instance.RoleLabel.SetText(text);
         return false;
     }
 }

@@ -7,18 +7,18 @@ public abstract class BaseUI : UIController
 {
     public const string REPO = "https://raw.githubusercontent.com/AlchlcDvl/RoleIconRecolors/main";
     public static readonly Dictionary<string, bool> Running = [];
-    public static bool HandlerRunning;
+    public static bool HandlerRunning  { get; set; }
 
-    private GameObject Back;
-    private GameObject OpenDir;
-    private GameObject Confirm;
-    public GameObject Test;
-    private TMP_InputField PackName;
-    private TMP_InputField RepoName;
-    private TMP_InputField RepoOwner;
-    private TMP_InputField BranchName;
-    public GameObject NoPacks;
-    public GameObject PackTemplate;
+    private GameObject Back { get; set; }
+    private GameObject OpenDir { get; set; }
+    private GameObject Confirm { get; set; }
+    public GameObject Test { get; set; }
+    private TMP_InputField PackName { get; set; }
+    private TMP_InputField RepoName { get; set; }
+    private TMP_InputField RepoOwner { get; set; }
+    private TMP_InputField BranchName { get; set; }
+    public GameObject NoPacks { get; set; }
+    public GameObject PackTemplate { get; set; }
 
     public bool Abort { get; set; }
 
@@ -33,10 +33,10 @@ public abstract class BaseUI : UIController
         OpenDir = transform.Find("Buttons/Directory").gameObject;
         Test = transform.Find("Buttons/Test").gameObject;
         Confirm = transform.Find("Inputs/Confirm").gameObject;
-        PackName = transform.Find("Inputs/PackName").gameObject.GetComponent<TMP_InputField>();
-        RepoName = transform.Find("Inputs/RepoName").gameObject.GetComponent<TMP_InputField>();
-        RepoOwner = transform.Find("Inputs/RepoOwner").gameObject.GetComponent<TMP_InputField>();
-        BranchName = transform.Find("Inputs/BranchName").gameObject.GetComponent<TMP_InputField>();
+        PackName = transform.Find("Inputs/PackName").GetComponent<TMP_InputField>();
+        RepoName = transform.Find("Inputs/RepoName").GetComponent<TMP_InputField>();
+        RepoOwner = transform.Find("Inputs/RepoOwner").GetComponent<TMP_InputField>();
+        BranchName = transform.Find("Inputs/BranchName").GetComponent<TMP_InputField>();
         NoPacks = transform.Find("ScrollView/NoPacks").gameObject;
         PackTemplate = transform.Find("ScrollView/Viewport/Content/PackTemplate").gameObject;
 
@@ -55,8 +55,8 @@ public abstract class BaseUI : UIController
         Test.AddComponent<TooltipTrigger>().NonLocalizedString = $"Open {Type} Testing Menu";
 
         var dirButton = OpenDir.AddComponent<HoverEffect>();
-        dirButton.OnMouseOver.AddListener(() => OpenDir.GetComponent<Image>().sprite = Fancy.Instance.Assets.GetSprite("OpenChest"));
-        dirButton.OnMouseOut.AddListener(() => OpenDir.GetComponent<Image>().sprite = Fancy.Instance.Assets.GetSprite("ClosedChest"));
+        dirButton.OnMouseOver.AddListener(() => OpenDir.GetComponent<Image>().sprite = Fancy.Assets.GetSprite("OpenChest"));
+        dirButton.OnMouseOut.AddListener(() => OpenDir.GetComponent<Image>().sprite = Fancy.Assets.GetSprite("ClosedChest"));
 
         Confirm.GetComponent<Button>().onClick.AddListener(AfterGenerating);
         Confirm.AddComponent<TooltipTrigger>().NonLocalizedString = "Confirm Link Parameters And Generate Link";

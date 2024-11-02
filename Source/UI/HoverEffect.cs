@@ -5,8 +5,8 @@ namespace FancyUI.UI;
 
 public class HoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IEventSystemHandler
 {
-    public Button.ButtonClickedEvent OnMouseOver;
-    public Button.ButtonClickedEvent OnMouseOut;
+    public Button.ButtonClickedEvent OnMouseOver { get; set; }
+    public Button.ButtonClickedEvent OnMouseOut { get; set; }
 
     public void Awake()
     {

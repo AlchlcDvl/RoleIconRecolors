@@ -2,15 +2,15 @@ namespace FancyUI.UI;
 
 public class LoadingUI : UIController
 {
-    private Transform Cog;
+    private Transform Cog { get; set; }
 
-    private GameObject Caller;
-    private GameObject CancelButton;
+    private GameObject Caller { get; set; }
+    private GameObject CancelButton { get; set; }
 
-    private TextMeshProUGUI Title;
-    public TextMeshProUGUI LoadingProgress;
+    private TextMeshProUGUI Title { get; set; }
+    public TextMeshProUGUI LoadingProgress { get; set; }
 
-    private bool Started;
+    private bool Started { get; set; }
 
     public static LoadingUI Instance { get; private set; }
 
@@ -70,7 +70,7 @@ public class LoadingUI : UIController
     {
         if (!Instance)
         {
-            var go = Instantiate(Fancy.Instance.Assets.GetGameObject("LoadingUI"), FancyUI.Instance.transform.parent, false);
+            var go = Instantiate(Fancy.Assets.GetGameObject("LoadingUI"), FancyUI.Instance.transform.parent, false);
             go.transform.localPosition = new(0, 0, 0);
             go.transform.localScale = Vector3.one * 1.5f;
             go.AddComponent<LoadingUI>();

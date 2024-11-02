@@ -4,9 +4,9 @@ public class SilhouetteSetTestingUI : UIController
 {
     public static SilhouetteSetTestingUI Instance { get; private set; }
 
-    private CustomAnimator Animator;
+    private CustomAnimator Animator { get; set; }
 
-    private GameObject Back;
+    private GameObject Back { get; set; }
 
     public void Awake()
     {

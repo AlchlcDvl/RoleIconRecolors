@@ -141,8 +141,8 @@ public static class FancyAssetManager
 
         Utils.DumpSprite(BTOS2_1.spriteSheet as Texture2D, "BTOSRoleIcons", Path.Combine(IPPath, "BTOS2"), true);
 
-        Fancy.Instance.Assets.Bundles[BetterTOS2.BTOSInfo.assetBundle.name] = BetterTOS2.BTOSInfo.assetBundle;
-        BetterTOS2.BTOSInfo.assetBundle.GetAllAssetNames().ForEach(x => Fancy.Instance.Assets.ObjectToBundle[AssetManager.ConvertToBaseName(x)] = BetterTOS2.BTOSInfo.assetBundle.name);
+        Fancy.Assets.Bundles[BetterTOS2.BTOSInfo.assetBundle.name] = BetterTOS2.BTOSInfo.assetBundle;
+        BetterTOS2.BTOSInfo.assetBundle.GetAllAssetNames().ForEach(x => Fancy.Assets.ObjectToBundle[AssetManager.ConvertToBaseName(x)] = BetterTOS2.BTOSInfo.assetBundle.name);
     }
 
     public static string FancySanitisePath(this string path, bool removeIcon = false)
@@ -324,10 +324,10 @@ public static class FancyAssetManager
             foreach (var (role, (_, roleInt)) in index)
             {
                 var name = Utils.RoleName((Role)roleInt, ModType.Vanilla);
-                var sprite = Fancy.Instance.Assets.GetSprite(name + "_Vanilla") ?? Blank;
+                var sprite = Fancy.Assets.GetSprite(name + "_Vanilla") ?? Blank;
 
                 if (!sprite.IsValid())
-                    sprite = Fancy.Instance.Assets.GetSprite(name) ?? Blank;
+                    sprite = Fancy.Assets.GetSprite(name) ?? Blank;
 
                 if (sprite.IsValid())
                 {
@@ -354,7 +354,7 @@ public static class FancyAssetManager
 
             for (var i = 0; i < 16; i++)
             {
-                var sprite = Fancy.Instance.Assets.GetSprite($"{i}") ?? Blank;
+                var sprite = Fancy.Assets.GetSprite($"{i}") ?? Blank;
 
                 if (sprite.IsValid())
                 {
@@ -389,10 +389,10 @@ public static class FancyAssetManager
             foreach (var (role, (_, roleInt)) in index)
             {
                 var name = Utils.RoleName((Role)roleInt, ModType.BTOS2);
-                var sprite = Fancy.Instance.Assets.GetSprite(name + "_BTOS2") ?? Blank;
+                var sprite = Fancy.Assets.GetSprite(name + "_BTOS2") ?? Blank;
 
                 if (!sprite.IsValid())
-                    sprite = Fancy.Instance.Assets.GetSprite(name) ?? Blank;
+                    sprite = Fancy.Assets.GetSprite(name) ?? Blank;
 
                 if (sprite.IsValid())
                 {

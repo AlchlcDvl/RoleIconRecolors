@@ -19,10 +19,16 @@ public class SilhouetteSwapperUI : BaseUI
     public override void SetupMenu()
     {
         base.SetupMenu();
-        Test.GetComponent<Image>().sprite = Fancy.Instance.Assets.GetSprite("SilSwapper");
+        Test.GetComponent<Image>().sprite = Fancy.Assets.GetSprite("SilSwapper");
         Packs.ForEach(x => SetUpPack(x, () => {}));
         PackTemplate.SetActive(false);
         NoPacks.SetActive(Packs.Count == 0);
+    }
+
+    public void OnDestroy()
+    {
+        Instance = null;
+        SilhouetteSetTestingUI.Instance?.gameObject?.Destroy();
     }
 
     public override void AfterGenerating()
@@ -38,7 +44,7 @@ public class SilhouetteSwapperUI : BaseUI
             return;
         }
 
-        var go = Instantiate(Fancy.Instance.Assets.GetGameObject("SilhouetteSetTestingUI"), transform.parent);
+        var go = Instantiate(Fancy.Assets.GetGameObject("SilhouetteSetTestingUI"), transform.parent);
         go.transform.localPosition = new(0, 0, 0);
         go.transform.localScale = Vector3.one * 1.5f;
         go.AddComponent<SilhouetteSetTestingUI>();

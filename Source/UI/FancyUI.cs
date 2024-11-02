@@ -4,14 +4,14 @@ namespace FancyUI.UI;
 
 public class FancyUI : UIController
 {
-    private static TMP_FontAsset GameFont;
-    private static Material GameFontMaterial;
+    private static TMP_FontAsset GameFont { get; set; }
+    private static Material GameFontMaterial { get; set; }
 
-    private GameObject ColoredWoodButton;
-    private GameObject IconPacksButton;
-    private GameObject SilhouetteSwapper;
-    private GameObject CloseButton;
-    private GameObject Settings;
+    private GameObject ColoredWoodButton { get; set; }
+    private GameObject IconPacksButton { get; set; }
+    private GameObject SilhouetteSwapper { get; set; }
+    private GameObject CloseButton { get; set; }
+    private GameObject Settings { get; set; }
 
     public static FancyUI Instance { get; private set; }
 
@@ -94,7 +94,7 @@ public class FancyUI : UIController
 
     private void OpenMenu<T>() where T : BaseUI
     {
-        var go = Instantiate(Fancy.Instance.Assets.GetGameObject("DownloaderUI"), transform.parent, false);
+        var go = Instantiate(Fancy.Assets.GetGameObject("DownloaderUI"), transform.parent, false);
         go.transform.localPosition = new(0, 0, 0);
         go.transform.localScale = Vector3.one * 1.5f;
         go.AddComponent<T>();

@@ -12,6 +12,7 @@ public static class RoleCardPanelPatch
 
         __instance.transform.GetChild(5).GetComponent<Image>().SetImageColor(ColorType.Wood);
         __instance.transform.GetChild(10).GetComponent<Image>().SetImageColor(ColorType.Wood);
+        __instance.GetComponentsInChildren<BaseAbilityButton>().ForEach(x => x.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal)); // Rings at the back
     }
 }
 
@@ -31,7 +32,27 @@ public static class SpecialAbilityPanelPatch1
 
         og.SetImageColor(ColorType.Wood); // Main wood container
         copy.SetImageColor(ColorType.Metal); // The metal support
-        copy.transform.SetSiblingIndex(2);
+        copy.transform.SetSiblingIndex(1);
+    }
+}
+
+[HarmonyPatch(typeof(SpecialAbilityPopupPanel), nameof(SpecialAbilityPopupPanel.Start))]
+public static class SpecialAbilityPopupPanelPatch
+{
+    public static void Postfix(SpecialAbilityPopupPanel __instance)
+    {
+        if (!Constants.CustomMainUIEnabled())
+            return;
+
+        var og = __instance.transform.GetChild(0).GetComponent<Image>();
+        var copy = UObject.Instantiate(og, og.transform.parent);
+
+        og.sprite = Fancy.Assets.GetSprite("RoleCard_Ability_Main_W");
+        copy.sprite = Fancy.Assets.GetSprite("RoleCard_Ability_Main_M");
+
+        og.SetImageColor(ColorType.Wood); // Main wood container
+        copy.SetImageColor(ColorType.Metal); // The metal support
+        copy.transform.SetSiblingIndex(0);
     }
 }
 
@@ -43,9 +64,14 @@ public static class RoleCardPopupControllerPatch
         if (!Constants.CustomMainUIEnabled())
             return;
 
-        __instance.transform.GetChild(4).GetComponent<Image>().SetImageColor(ColorType.Wood);
-        __instance.transform.GetChild(10).GetComponent<Image>().SetImageColor(ColorType.Wood);
-        __instance.transform.GetChild(13).GetComponent<Image>().SetImageColor(ColorType.Wood);
+        __instance.transform.GetChild(4).GetComponent<Image>().SetImageColor(ColorType.Wood); // Frame
+        __instance.transform.GetChild(10).GetComponent<Image>().SetImageColor(ColorType.Wood); // Slot count for display
+        __instance.transform.GetChild(13).GetComponent<Image>().SetImageColor(ColorType.Wood); // Slot count prefab 1
+        __instance.transform.GetChild(14).GetComponent<Image>().SetImageColor(ColorType.Wood); // Slot count prefab 2
+        __instance.transform.GetChild(15).GetComponent<Image>().SetImageColor(ColorType.Wood); // Slot count prefab 3
+        __instance.transform.GetChild(16).GetComponent<Image>().SetImageColor(ColorType.Wood); // Slot count prefab 4
+        __instance.transform.GetChild(17).GetComponent<Image>().SetImageColor(ColorType.Metal); // Closing screw
+        __instance.GetComponentsInChildren<BaseAbilityButton>().ForEach(x => x.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal)); // Rings at the back
     }
 }
 
@@ -167,7 +193,7 @@ public static class SafeAreaController_OnEnable
 {
     public static void Postfix(SafeAreaController __instance)
     {
-        if (!Constants.CustomMainUIEnabled() || !Pepper.IsLobbyOrGamePhase())
+        if (!Constants.CustomMainUIEnabled() || Pepper.IsLobbyOrGamePhase())
             return;
 
         var parts = __instance.transform.GetChild(12);
