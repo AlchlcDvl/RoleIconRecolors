@@ -120,8 +120,11 @@ public class IconPackTestingUI : UIController
         input = PlayerNumber.text;
         var playerNumber = StringUtils.IsNullEmptyOrWhiteSpace(input) ? DefaultNum : input;
         var mod = IsBTOS2 ? "BTOS" : DefaultMod;
-        var roleInt = DefaultRoleInt;
+        var role = Utils.NameToRole(roleName);
+        var roleInt = $"{(int)role}";
 
         RoleText.SetText(ToReplace.Replace("%num%", playerNumber).Replace("%mod%", mod).Replace("%type%", factionName).Replace("%roleInt%", roleInt).Replace("%roleName%", roleName));
+        var modType = IsBTOS2 ? ModType.BTOS2 : ModType.Vanilla;
+        var trueRoleName = Utils.RoleName(role, modType);
     }
 }

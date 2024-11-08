@@ -437,7 +437,7 @@ public static class Utils
         if (File.Exists(assetPath))
             File.Delete(assetPath);
 
-        File.WriteAllBytes(assetPath, decompress ? texture.Decompress().EncodeToPNG() : texture.EncodeToPNG());
+        File.WriteAllBytes(assetPath, (decompress ? AssetManager.Decompress(texture) : texture).EncodeToPNG());
     }
 
     public static bool IsTransformedApoc(this Role role, ModType mod = ModType.None)
@@ -787,7 +787,7 @@ public static class Utils
         "anonvoting" => Role.ANONYMOUS_VOTES,
         "secretkillers" => Role.KILLER_ROLES_HIDDEN,
         "hiddenroles" => Role.ROLES_ON_DEATH_HIDDEN,
-        "ontrial" => Role.ONE_TRIAL_PER_DAY,
+        "onetrial" => Role.ONE_TRIAL_PER_DAY,
         "commoncoven" => Role.COMMON_COVEN,
         "commontown" => Role.COMMON_TOWN,
         "hidden" => Role.HIDDEN,
@@ -880,7 +880,7 @@ public static class Utils
         "anonvoting" => Role.ANONYMOUS_VOTES,
         "secretkillers" => Role.KILLER_ROLES_HIDDEN,
         "hiddenroles" => Role.ROLES_ON_DEATH_HIDDEN,
-        "ontrial" => Role.ONE_TRIAL_PER_DAY,
+        "onetrial" => Role.ONE_TRIAL_PER_DAY,
         "commoncoven" => Role.COMMON_COVEN,
         "commontown" => Role.COMMON_TOWN,
         "hidden" => Role.HIDDEN,

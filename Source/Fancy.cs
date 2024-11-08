@@ -62,7 +62,8 @@ public class Fancy
 
         Grayscale = Assets.GetMaterial("GrayscaleM");
 
-        Loading = new("Loading") { Frames = Assets.GetGif("Loading").Frames };
+        LoadingGif = Assets.GetGif("Placeholder");
+        Loading = new("Loading") { Frames = LoadingGif.Frames };
 
         TryLoadingSprites(Constants.CurrentPack(), PackType.IconPacks);
         LoadVanillaSpriteSheets();
@@ -228,7 +229,7 @@ public class Fancy
         }
     }
 
-    private static List<string> GetOptions(FancyUI.ModType mod, bool mentionStyle)
+    private static List<string> GetOptions(ModType mod, bool mentionStyle)
     {
         try
         {
@@ -238,7 +239,7 @@ public class Fancy
             {
                 result.Add(mentionStyle ? "Regular" : "None");
 
-                if (pack.Assets.TryGetValue(FancyUI.ModType.Common, out var assets))
+                if (pack.Assets.TryGetValue(ModType.Common, out var assets))
                 {
                     foreach (var (folder, icons) in assets.BaseIcons)
                     {

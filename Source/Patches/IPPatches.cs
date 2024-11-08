@@ -725,8 +725,11 @@ public static class ReplaceTMPSpritesPatch
                     _ => Vanilla1 ?? CacheDefaults.RoleIcons
                 };
 
-                if (str.Contains("(") && !str.Contains("Blank"))
-                    deconstructed = str.Replace("RoleIcons (", "").Replace(")", "").Replace("BTOS", "").Replace(" name=", "");
+                if (str.Contains("("))
+                    deconstructed = str.Split(['(', ')'], StringSplitOptions.RemoveEmptyEntries)[^1];
+
+                if (deconstructed is "None" or "Blank" || StringUtils.IsNullEmptyOrWhiteSpace(deconstructed))
+                    deconstructed = "Regular";
 
                 if (!pack.Assets.TryGetValue(mod, out var assets))
                     Fancy.Instance.Warning($"Unable to find {Constants.CurrentPack()} assets for {mod}");
@@ -882,7 +885,7 @@ public static class OverwriteDecodedText
         foreach (var mention in mentions)
         {
             if (__instance.MentionInfos.TryFinding(m => m.encodedText == mention, out var mentionInfo))
-                EncodedText = EncodedText.Replace(mention, mentionInfo.richText).Replace("RoleIcons\"", "RoleIcons (Regular)\"");
+                EncodedText = EncodedText.Replace(mention, mentionInfo.richText);
             else
             {
                 var match = MentionsProvider.RoleRegex.Match(mention);
@@ -904,7 +907,7 @@ public static class OverwriteDecodedText
         }
 
         if (Constants.IsBTOS2())
-            __result = __result.Replace("\"RoleIcons", "\"BTOSRoleIcons");
+            EncodedText = EncodedText.Replace("\"RoleIcons", "\"BTOSRoleIcons");
 
         __result = EncodedText;
     }

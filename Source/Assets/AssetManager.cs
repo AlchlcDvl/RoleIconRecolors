@@ -1,5 +1,6 @@
 using FancyUI.Assets.SilhouetteSwapper;
 using FancyUI.Assets.IconPacks;
+using Witchcraft.Gifs;
 
 namespace FancyUI.Assets;
 
@@ -25,6 +26,7 @@ public static class FancyAssetManager
     public static Material Grayscale { get; set; }
     public static Material DefaultWood { get; set; }
 
+    public static Gif LoadingGif { get; set; }
     public static SilhouetteAnimation Loading { get; set; }
 
     public static string IPPath => Path.Combine(Fancy.Instance.ModPath, "IconPacks");
@@ -289,30 +291,6 @@ public static class FancyAssetManager
         }
     }
 
-    // thanks stackoverflow and pat
-    // https://stackoverflow.com/questions/51315918/how-to-encodetopng-compressed-textures-in-unity
-    public static Texture2D Decompress(this Texture2D source)
-    {
-        try
-        {
-            var renderTex = RenderTexture.GetTemporary(source.width, source.height, 0, RenderTextureFormat.Default, RenderTextureReadWrite.Linear);
-            Graphics.Blit(source, renderTex);
-            var previous = RenderTexture.active;
-            RenderTexture.active = renderTex;
-            var readableText = new Texture2D(source.width, source.height);
-            readableText.ReadPixels(new(0, 0, renderTex.width, renderTex.height), 0, 0);
-            readableText.Apply();
-            RenderTexture.active = previous;
-            RenderTexture.ReleaseTemporary(renderTex);
-            return readableText.DontUnload().DontDestroy();
-        }
-        catch (Exception e)
-        {
-            Fancy.Instance.Error($"Unable to decompress {source.name} because:\n{e}");
-            return source;
-        }
-    }
-
     // love ya pat
     public static void LoadVanillaSpriteSheets()
     {
@@ -338,7 +316,7 @@ public static class FancyAssetManager
                     Fancy.Instance.Warning($"NO VANILLA ICON FOR {name}?!");
             }
 
-            Vanilla1 = BuildGlyphs([..sprites], "RoleIcons", index);
+            Vanilla1 = AssetManager.BuildGlyphs(sprites, "RoleIcons", index);
             Utils.DumpSprite(Vanilla1.spriteSheet as Texture2D, "RoleIcons_Modified", Path.Combine(IPPath, "Vanilla"));
         }
         catch (Exception e)
@@ -367,7 +345,7 @@ public static class FancyAssetManager
                 dict.Add($"PlayerNumbers_{i}");
             }
 
-            Vanilla2 = BuildGlyphs([..sprites], "PlayerNumbers", dict.ToDictionary(x => x, x => (x, 0)), false);
+            Vanilla2 = AssetManager.BuildGlyphs(sprites, "PlayerNumbers", dict.ToDictionary(x => x, x => (x, 0)), false);
             Utils.DumpSprite(Vanilla2.spriteSheet as Texture2D, "PlayerNumbers_Modified", Path.Combine(IPPath, "Vanilla"));
         }
         catch (Exception e)
@@ -376,6 +354,7 @@ public static class FancyAssetManager
             Vanilla2 = null;
         }
     }
+
     public static void LoadBTOS2SpriteSheet()
     {
         if (!Constants.BTOS2Exists())
@@ -403,7 +382,7 @@ public static class FancyAssetManager
                     Fancy.Instance.Warning($"NO BTOS2 ICON FOR {name}?!");
             }
 
-            BTOS2_2 = BuildGlyphs([..sprites], "BTOSRoleIcons", index);
+            BTOS2_2 = AssetManager.BuildGlyphs(sprites, "BTOSRoleIcons", index);
             Utils.DumpSprite(BTOS2_2.spriteSheet as Texture2D, "BTOS2RoleIcons_Modified", Path.Combine(IPPath, "BTOS2"));
         }
         catch (Exception e)
@@ -411,54 +390,5 @@ public static class FancyAssetManager
             Fancy.Instance.Error($"Unable to create modified btos role icons sheet because:\n{e}");
             BTOS2_2 = null;
         }
-    }
-
-    // courtesy of pat, love ya mate
-    public static TMP_SpriteAsset BuildGlyphs(Sprite[] sprites, string spriteAssetName, Dictionary<string, (string, int)> index, bool shouldLower = true)
-    {
-        var textures = sprites.Select(x => x.texture).ToArray();
-        var asset = ScriptableObject.CreateInstance<TMP_SpriteAsset>();
-        var image = new Texture2D(2048, 2048) { name = spriteAssetName };
-        var rects = image.PackTextures(textures, 2);
-
-        for (var i = 0; i < rects.Length; i++)
-        {
-            var glyph = new TMP_SpriteGlyph()
-            {
-                glyphRect = new()
-                {
-                    x = (int)(rects[i].x * image.width),
-                    y = (int)(rects[i].y * image.height),
-                    width = (int)(rects[i].width * image.width),
-                    height = (int)(rects[i].height * image.height),
-                },
-                metrics = new()
-                {
-                    width = textures[i].width,
-                    height = textures[i].height,
-                    horizontalBearingY = textures[i].width * 0.75f,
-                    horizontalBearingX = 0,
-                    horizontalAdvance = textures[i].width
-                },
-                index = (uint)i,
-                sprite = sprites[i],
-            };
-
-            var character = new TMP_SpriteCharacter(0, asset, glyph)
-            {
-                name = index[shouldLower ? glyph.sprite.name.ToLower() : glyph.sprite.name].Item1,
-                glyphIndex = (uint)i,
-            };
-
-            asset.spriteGlyphTable.Add(glyph);
-            asset.spriteCharacterTable.Add(character);
-        }
-
-        asset.name = spriteAssetName;
-        asset.material = new(Shader.Find("TextMeshPro/Sprite"));
-        AccessTools.Property(asset.GetType(), "version").SetValue(asset, "1.1.0");
-        asset.material.mainTexture = asset.spriteSheet = image;
-        asset.UpdateLookupTables();
-        return asset.DontUnload().DontDestroy();
     }
 }

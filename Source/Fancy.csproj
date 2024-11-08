@@ -24,7 +24,7 @@
         <EmbeddedResource Include="Resources\*" />
         <PackageReference Include="HarmonyX" Version="2.10.1" />
         <PackageReference Include="UnityEngine.Modules" Version="2021.3.1" IncludeAssets="compile" />
-        <Reference Include="Libs\*.dll" Publicize="true"><HintPath>Libs\%(FileName).dll</HintPath></Reference>
+        <Reference Include="Libs\*.dll" />
     </ItemGroup>
 
     <Target Name="Copy" AfterTargets="Build" Condition="'$(TOS)' != ''">

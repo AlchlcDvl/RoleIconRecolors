@@ -222,7 +222,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                     numbers.Add($"PlayerNumbers_{i}");
                 }
 
-                PlayerNumbers = BuildGlyphs([..sprites], $"PlayerNumbers ({Name})", numbers.ToDictionary(x => x, x => (x, 0)), false);
+                PlayerNumbers = AssetManager.BuildGlyphs(sprites, $"PlayerNumbers ({Name})", numbers.ToDictionary(x => x, x => (x, 0)), false);
                 Utils.DumpSprite(PlayerNumbers.spriteSheet as Texture2D, "PlayerNumbers", Path.Combine(PackPath, "PlayerNumbers"));
             }
             catch (Exception e)
@@ -353,7 +353,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                 Fancy.Instance.Warning($"NO {mod.ToUpper()} ICON FOR {name2}?!");
         }
 
-        return BuildGlyphs([..sprites], $"{mod}RoleIcons ({Name}, {style})", index);
+        return AssetManager.BuildGlyphs(sprites, $"{mod}RoleIcons ({Name}, {style})", index);
     }
 
     public Sprite GetSprite(string iconName, bool allowEE, string type)
