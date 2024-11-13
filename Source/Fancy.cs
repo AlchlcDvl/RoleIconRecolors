@@ -87,6 +87,7 @@ public class Fancy
         var go = UObject.Instantiate(Assets.GetGameObject("FancyUI"), CacheHomeSceneController.Controller.SafeArea.transform, false);
         go.transform.localPosition = new(0, 0, 0);
         go.transform.localScale = Vector3.one * 2f;
+        go.transform.SetAsLastSibling();
         go.AddComponent<UI.FancyUI>();
     }
 

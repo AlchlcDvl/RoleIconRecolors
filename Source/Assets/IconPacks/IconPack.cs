@@ -198,13 +198,12 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
         Fancy.Instance.Message($"Loaded {Name} sprites");
 
         // love ya pat
-        var numbers = new List<string>();
-
         if (NumberSprites.Count > 0)
         {
             try
             {
                 var sprites = new List<Sprite>();
+                var dict = new Dictionary<string, string>();
 
                 for (var i = 0; i < 16; i++)
                 {
@@ -219,10 +218,10 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                     else
                         Fancy.Instance.Warning($"NO NUMBER ICON FOR {i}?!");
 
-                    numbers.Add($"PlayerNumbers_{i}");
+                    dict.Add($"PlayerNumbers_{i}", $"PlayerNumbers_{i}");
                 }
 
-                PlayerNumbers = AssetManager.BuildGlyphs(sprites, $"PlayerNumbers ({Name})", numbers.ToDictionary(x => x, x => (x, 0)), false);
+                PlayerNumbers = AssetManager.BuildGlyphs(sprites, $"PlayerNumbers ({Name})", dict);
                 Utils.DumpSprite(PlayerNumbers.spriteSheet as Texture2D, "PlayerNumbers", Path.Combine(PackPath, "PlayerNumbers"));
             }
             catch (Exception e)
@@ -295,7 +294,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
         var index = Utils.Filtered(type);
         var sprites = new List<Sprite>();
 
-        foreach (var (role, (_, roleInt)) in index)
+        foreach (var (role, roleInt) in index.Item2)
         {
             var roleEnum = (Role)roleInt;
             var name2 = Utils.RoleName(roleEnum, type);
@@ -353,7 +352,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                 Fancy.Instance.Warning($"NO {mod.ToUpper()} ICON FOR {name2}?!");
         }
 
-        return AssetManager.BuildGlyphs(sprites, $"{mod}RoleIcons ({Name}, {style})", index);
+        return AssetManager.BuildGlyphs(sprites, $"{mod}RoleIcons ({Name}, {style})", index.Item1);
     }
 
     public Sprite GetSprite(string iconName, bool allowEE, string type)

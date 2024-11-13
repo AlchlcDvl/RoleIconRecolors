@@ -58,6 +58,7 @@ public class IconPacksUI : BaseUI
         var go = Instantiate(Fancy.Assets.GetGameObject("IconPackTestingUI"), transform.parent);
         go.transform.localPosition = new(0, 0, 0);
         go.transform.localScale = Vector3.one * 1.5f;
+        go.transform.SetAsLastSibling();
         go.AddComponent<IconPackTestingUI>();
         FancyUI.SetupFonts(go.transform);
         gameObject.SetActive(false);

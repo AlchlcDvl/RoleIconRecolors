@@ -97,6 +97,7 @@ public class FancyUI : UIController
         var go = Instantiate(Fancy.Assets.GetGameObject("DownloaderUI"), transform.parent, false);
         go.transform.localPosition = new(0, 0, 0);
         go.transform.localScale = Vector3.one * 1.5f;
+        go.transform.SetAsLastSibling();
         go.AddComponent<T>();
         SetupFonts(go.transform);
         gameObject.SetActive(false);

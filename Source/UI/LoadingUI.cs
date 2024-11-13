@@ -73,6 +73,7 @@ public class LoadingUI : UIController
             var go = Instantiate(Fancy.Assets.GetGameObject("LoadingUI"), FancyUI.Instance.transform.parent, false);
             go.transform.localPosition = new(0, 0, 0);
             go.transform.localScale = Vector3.one * 1.5f;
+            go.transform.SetAsLastSibling();
             go.AddComponent<LoadingUI>();
             FancyUI.SetupFonts(go.transform);
         }

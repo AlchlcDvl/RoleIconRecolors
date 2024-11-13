@@ -189,24 +189,27 @@ public static class PatchRoleCards
         }
 
         var attributename = "Attributes_";
-        var attribute = GetSprite(reg, attributename + name, faction);
+        var attribute = GetSprite(reg, attributename + name + "_Role", faction);
+
+        if (!attribute.IsValid())
+            attribute = GetSprite(reg, attributename + name, faction);
 
         if (!attribute.IsValid())
             attribute = GetSprite(reg, attributename + (role.IsTransformedApoc() ? "Horsemen" : faction), faction);
 
         if (!attribute.IsValid() && reg)
+            attribute = GetSprite(attributename + name + "_Role", ogfaction);
+
+        if (!attribute.IsValid() && reg)
             attribute = GetSprite(attributename + name, ogfaction);
 
         if (!attribute.IsValid() && reg)
-            attribute = GetSprite(attributename + (role.IsTransformedApoc() ? "Horsemen" : faction), ogfaction);
+            attribute = GetSprite(attributename + (role.IsTransformedApoc() ? "Horsemen" : ogfaction), ogfaction);
 
         if (attribute.IsValid() && roleInfoButtons.IsValid(index))
-        {
             roleInfoButtons[index].abilityIcon.sprite = attribute;
-            index++;
-        }
-        else if (Utils.Skippable(attributename))
-            index++;
+
+        index++;
 
         if (ogfaction != "Coven")
             return;
@@ -715,7 +718,7 @@ public static class ReplaceTMPSpritesPatch
             {
                 var mod = ModType.Vanilla;
 
-                if (str.Contains("BTOS"))
+                if (str.Contains("BTOS") || Constants.IsBTOS2() || Utils.FindCasualQueue())
                     mod = ModType.BTOS2;
 
                 var deconstructed = Constants.CurrentStyle();
@@ -936,6 +939,10 @@ public static class MakeProperFactionChecksInWDAH1
             _ => "GUI_GAME_WHO_DIED_VICTIM_ROLE_KNOWN"
         }).Replace("%role%", killRecord.playerRole.GetTMPSprite() + killRecord.playerRole.ToColorizedDisplayString(killRecord.playerFaction))
             .Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(killRecord.playerFaction)})\"");
+
+        if (Constants.IsBTOS2())
+            text = text.Replace("\"RoleIcons", "\"BTOSRoleIcons");
+
         __instance.AddLine(text, 1f);
         return false;
     }
@@ -977,8 +984,12 @@ public static class MakeProperFactionChecksInWDAH2
             for (var i = 0; i < killRecord.killedByReasons.Count; i++)
             {
                 var killedByReason = killRecord.killedByReasons[i];
-                __instance.AddLine((i == 0 ? __instance.l10n($"GUI_GAME_KILLED_BY_REASON_{(int)killedByReason}") : __instance.l10n($"GUI_GAME_ALSO_KILLED_BY_REASON_{(int)killedByReason}"))
-                    .Replace("RoleIcons\"", "RoleIcons (Regular)\""), Tuning.REVEAL_TIME_PER_ADDL_KILLED_BY_REASON);
+                var text2 = __instance.l10n($"GUI_GAME{(i == 0 ? "" : "_ALSO")}_KILLED_BY_REASON_{(int)killedByReason}").Replace("RoleIcons\"", "RoleIcons (Regular)\"");
+
+                if (Constants.IsBTOS2())
+                    text2 = text2.Replace("\"RoleIcons", "\"BTOSRoleIcons").Replace("106\"", "109\"");
+
+                __instance.AddLine(text2, Tuning.REVEAL_TIME_PER_ADDL_KILLED_BY_REASON);
             }
         }
 

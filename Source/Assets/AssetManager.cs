@@ -299,7 +299,7 @@ public static class FancyAssetManager
             var index = Utils.Filtered(ModType.Vanilla);
             var sprites = new List<Sprite>();
 
-            foreach (var (role, (_, roleInt)) in index)
+            foreach (var (role, roleInt) in index.Item2)
             {
                 var name = Utils.RoleName((Role)roleInt, ModType.Vanilla);
                 var sprite = Fancy.Assets.GetSprite(name + "_Vanilla") ?? Blank;
@@ -316,7 +316,7 @@ public static class FancyAssetManager
                     Fancy.Instance.Warning($"NO VANILLA ICON FOR {name}?!");
             }
 
-            Vanilla1 = AssetManager.BuildGlyphs(sprites, "RoleIcons", index);
+            Vanilla1 = AssetManager.BuildGlyphs(sprites, "RoleIcons", index.Item1);
             Utils.DumpSprite(Vanilla1.spriteSheet as Texture2D, "RoleIcons_Modified", Path.Combine(IPPath, "Vanilla"));
         }
         catch (Exception e)
@@ -327,7 +327,7 @@ public static class FancyAssetManager
 
         try
         {
-            var dict = new List<string>();
+            var dict = new Dictionary<string, string>();
             var sprites = new List<Sprite>();
 
             for (var i = 0; i < 16; i++)
@@ -342,10 +342,10 @@ public static class FancyAssetManager
                 else
                     Fancy.Instance.Warning($"NO NUMBER ICON FOR {i}?!");
 
-                dict.Add($"PlayerNumbers_{i}");
+                dict.Add($"PlayerNumbers_{i}", $"PlayerNumbers_{i}");
             }
 
-            Vanilla2 = AssetManager.BuildGlyphs(sprites, "PlayerNumbers", dict.ToDictionary(x => x, x => (x, 0)), false);
+            Vanilla2 = AssetManager.BuildGlyphs(sprites, "PlayerNumbers", dict);
             Utils.DumpSprite(Vanilla2.spriteSheet as Texture2D, "PlayerNumbers_Modified", Path.Combine(IPPath, "Vanilla"));
         }
         catch (Exception e)
@@ -365,7 +365,7 @@ public static class FancyAssetManager
             var index = Utils.Filtered(ModType.BTOS2);
             var sprites = new List<Sprite>();
 
-            foreach (var (role, (_, roleInt)) in index)
+            foreach (var (role, roleInt) in index.Item2)
             {
                 var name = Utils.RoleName((Role)roleInt, ModType.BTOS2);
                 var sprite = Fancy.Assets.GetSprite(name + "_BTOS2") ?? Blank;
@@ -382,7 +382,7 @@ public static class FancyAssetManager
                     Fancy.Instance.Warning($"NO BTOS2 ICON FOR {name}?!");
             }
 
-            BTOS2_2 = AssetManager.BuildGlyphs(sprites, "BTOSRoleIcons", index);
+            BTOS2_2 = AssetManager.BuildGlyphs(sprites, "BTOSRoleIcons", index.Item1);
             Utils.DumpSprite(BTOS2_2.spriteSheet as Texture2D, "BTOS2RoleIcons_Modified", Path.Combine(IPPath, "BTOS2"));
         }
         catch (Exception e)

@@ -15,7 +15,7 @@ public static class Utils
         "Necromancer_Ability_2", "Pestilence_Ability", "Plaguebearer_Ability", "Poisoner_Ability", "PotionMaster_Ability_1", "PotionMaster_Ability_2", "Psychic_Ability", "War_Ability_1",
         "Retributionist_Ability_1", "Retributionist_Ability_2", "Seer_Ability_1", "Seer_Ability_2", "SerialKiller_Ability", "Sheriff_Ability", "Shroud_Ability", "SoulCollector_Ability",
         "Spy_Ability", "TavernKeeper_Ability", "Tracker_Ability", "Trapper_Ability", "Trickster_Ability", "Vampire_Ability", "Vigilante_Ability", "VoodooMaster_Ability", "War_Ability_2",
-        "Werewolf_Ability_1", "Werewolf_Ability_2", "Wildling_Ability", "Witch_Ability_1", "Witch_Ability_2" ];
+        "Werewolf_Ability_1", "Werewolf_Ability_2", "Wildling_Ability", "Witch_Ability_1", "Witch_Ability_2", "Attributes_Pandora" ];
     private static readonly string[] VanillaSkippableSpecials = [ "Admirer_Special" ];
     private static readonly string[] BTOS2SkippableSpecials = [ "Baker_Special", "Starspawn_Special", "Judge_Special", "Auditor_Special", "Inquisitor_Special", "Illusionist_Special" ];
     private static readonly string[] CommonSkippableSpecials = [ "Pirate_Special", "Trickster_Special", "Marshal_Special", "Shroud_Special", "Oracle_Special", "Jailor_Special",
@@ -27,7 +27,7 @@ public static class Utils
         Role.ADMIRER, Role.ARSONIST, Role.MARSHAL, Role.SOCIALITE, Role.POISONER, Role.COVENLEADER, Role.CORONER, Role.SERIALKILLER, Role.SHROUD, /*Role.ROLE_COUNT, (Role)57, (Role)58,
         (Role)59, (Role)60, (Role)61, Role.BAKER*/ ];
 
-    public static readonly Dictionary<ModType, Dictionary<string, (string, int)>> RoleStuff = [];
+    public static readonly Dictionary<ModType, (Dictionary<string, string>, Dictionary<string, int>)> RoleStuff = [];
 
     public static string RoleName(Role role, ModType? mod = null)
     {
@@ -406,7 +406,7 @@ public static class Utils
         return false;
     }
 
-    public static Dictionary<string, (string, int)> Filtered(ModType mod = ModType.Vanilla)
+    public static (Dictionary<string, string>, Dictionary<string, int>) Filtered(ModType mod = ModType.Vanilla)
     {
         if (RoleStuff.TryGetValue(mod, out var result))
             return result;
@@ -418,11 +418,10 @@ public static class Utils
                 .Where(fi => fi.IsLiteral && !fi.IsInitOnly && fi.FieldType == typeof(Role))
                 .Select(x => (Role)x.GetRawConstantValue())
                 .Where(x => x is not (BTOS2Role.None or BTOS2Role.Hangman or BTOS2Role.Unknown or BTOS2Role.RoleCount)),
-            _ => ((Role[])Enum.GetValues(typeof(Role))).Where(x => x is not (Role.NONE or Role.ROLE_COUNT or Role.UNKNOWN or Role.HANGMAN))
+            _ => Enum.GetValues(typeof(Role)).Cast<Role>().Where(x => x is not (Role.NONE or Role.ROLE_COUNT or Role.UNKNOWN or Role.HANGMAN))
         };
 
-        var rolesWithIndex = roles.ToDictionary(role => role.ToString().ToLower(), role => ($"Role{(int)role}", (int)role));
-        return RoleStuff[mod] = rolesWithIndex;
+        return RoleStuff[mod] = (roles.ToDictionary(x => x.ToString(), x => $"Role{(int)x}"), roles.ToDictionary(x => x.ToString(), x => (int)x));
     }
 
     public static void DumpSprite(Texture2D texture, string fileName = null, string path = null, bool decompress = false, bool skipSetting = false)
