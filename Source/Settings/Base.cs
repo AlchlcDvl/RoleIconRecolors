@@ -70,7 +70,6 @@ public interface IDropdown
                 result.Add(option);
         }
 
-        XMLGameLanguage x = null;
         return result;
     }
 }
