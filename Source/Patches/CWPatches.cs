@@ -12,7 +12,6 @@ public static class RoleCardPanelPatch
 
         __instance.transform.GetChild(5).GetComponent<Image>().SetImageColor(ColorType.Wood);
         __instance.transform.GetChild(10).GetComponent<Image>().SetImageColor(ColorType.Wood);
-        __instance.GetComponentsInChildren<BaseAbilityButton>().ForEach(x => x.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal)); // Rings at the back
     }
 }
 
@@ -59,7 +58,7 @@ public static class SpecialAbilityPopupPanelPatch
 [HarmonyPatch(typeof(RoleCardPopupPanel), nameof(RoleCardPopupPanel.Start))]
 public static class RoleCardPopupControllerPatch
 {
-    public static void Postfix(RoleCardPopupController __instance)
+    public static void Postfix(RoleCardPopupPanel __instance)
     {
         if (!Constants.CustomMainUIEnabled())
             return;
@@ -71,7 +70,6 @@ public static class RoleCardPopupControllerPatch
         __instance.transform.GetChild(15).GetComponent<Image>().SetImageColor(ColorType.Wood); // Slot count prefab 3
         __instance.transform.GetChild(16).GetComponent<Image>().SetImageColor(ColorType.Wood); // Slot count prefab 4
         __instance.transform.GetChild(17).GetComponent<Image>().SetImageColor(ColorType.Metal); // Closing screw
-        __instance.GetComponentsInChildren<BaseAbilityButton>().ForEach(x => x.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal)); // Rings at the back
     }
 }
 
@@ -136,8 +134,6 @@ public static class LobbyInfoClassicPanelPatch
     }
 }
 
-// HudRoleListPanel - Roles = 3, Bans = 4
-
 [HarmonyPatch(typeof(LobbyTimer), nameof(LobbyTimer.HandleOnLobbyDataChanged))]
 public static class LobbyTimerPatch
 {
@@ -147,17 +143,6 @@ public static class LobbyTimerPatch
             __instance.GetComponent<Image>().SetImageColor(ColorType.Wood);
     }
 }
-
-// [HarmonyPatch(typeof(HudGraveyardPanel), nameof(HudGraveyardPanel.Start))]
-// public static class HudRoleListPanelPatch
-// {
-//     public static void Postfix(HudGraveyardPanel __instance)
-//     {
-//         if (!Constants.CustomMainUIEnabled())
-//             return;
-
-//     }
-// }
 
 [HarmonyPatch(typeof(HudTimeChangePanel), nameof(HudTimeChangePanel.OnDaytimeChanged))]
 public static class HudTimeChangePanelPatch
@@ -188,16 +173,29 @@ public static class LobbyGameModeChoicePanelPatch
     }
 }
 
-[HarmonyPatch(typeof(SafeAreaController), nameof(SafeAreaController.OnEnable))]
-public static class SafeAreaController_OnEnable
-{
-    public static void Postfix(SafeAreaController __instance)
-    {
-        if (!Constants.CustomMainUIEnabled() || Pepper.IsLobbyOrGamePhase())
-            return;
+// [HarmonyPatch(typeof(SafeAreaController), nameof(SafeAreaController.OnEnable))]
+// public static class SafeAreaController_OnEnable
+// {
+//     public static void Postfix(SafeAreaController __instance)
+//     {
+//         if (!Constants.CustomMainUIEnabled() || Pepper.IsLobbyOrGamePhase())
+//             return;
 
-        var parts = __instance.transform.GetChild(12);
-        parts.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood); // Wood frame at the back
-        parts.GetChild(13).GetComponent<Image>().SetImageColor(ColorType.Wood); // Wood frame in the front
-    }
-}
+//         var parts = __instance.transform.GetChild(12);
+//         parts.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood); // Wood frame at the back
+//         parts.GetChild(13).GetComponent<Image>().SetImageColor(ColorType.Wood); // Wood frame in the front
+//     }
+// }
+
+// HudRoleListPanel - Roles = 3, Bans = 4
+
+// [HarmonyPatch(typeof(HudGraveyardPanel), nameof(HudGraveyardPanel.Start))]
+// public static class HudRoleListPanelPatch
+// {
+//     public static void Postfix(HudGraveyardPanel __instance)
+//     {
+//         if (!Constants.CustomMainUIEnabled())
+//             return;
+
+//     }
+// }

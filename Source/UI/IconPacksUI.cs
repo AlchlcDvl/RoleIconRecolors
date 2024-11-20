@@ -115,9 +115,8 @@ public class IconPacksUI : BaseUI
         LoadingUI.Begin(Instance.gameObject, packName);
         LoadingUI.Instance.LoadingProgress.SetText("Starting Download");
         Running[packName] = true;
-        var packJson = Packs.Find(x => x.Name == packName);
 
-        if (packJson == null)
+        if (!Packs.TryFinding(x => x.Name == packName, out var packJson))
         {
             Fancy.Instance.Error($"{packName} somehow doesn't exist");
             Running[packName] = false;

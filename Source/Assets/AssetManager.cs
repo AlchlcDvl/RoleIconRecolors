@@ -13,7 +13,6 @@ public static class FancyAssetManager
     public static readonly Dictionary<int, Sprite> CacheScrollSprites = [];
 
     public static Sprite Blank { get; set; }
-    public static Sprite Thumbnail { get; set; }
     public static Sprite Attack { get; set; }
     public static Sprite Defense { get; set; }
     public static Sprite Ethereal { get; set; }

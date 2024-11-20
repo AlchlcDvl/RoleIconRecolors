@@ -2,16 +2,9 @@ namespace FancyUI.Compatibility;
 
 public static class BTOS2IPCompatibility
 {
-    private static Harmony BTOS2PatchesHarmony { get; set; }
-    private static Type[] BTOS2Types { get; set; }
-    private static Assembly BTOS2Assembly { get; set; }
-
-    private static Type RoleDeckPlusPanelControllerType { get; set; }
-    private static Type DeckItemType { get; set; }
-
-    private static Type MenuRoleType { get; set; }
-
-    private static Type OracleMenuControllerListItemType { get; set; }
+    private static Type DeckItemType;
+    private static Type MenuRoleType;
+    private static Type OracleMenuControllerListItemType;
 
     public static bool BTOS2IPPatched { get; set; }
 
@@ -19,22 +12,21 @@ public static class BTOS2IPCompatibility
     {
         try
         {
-            var btos2Mod = ModStates.EnabledMods.Find(x => x.HarmonyId == "curtis.tuba.better.tos2");
+            if (!ModStates.EnabledMods.TryFinding(x => x.HarmonyId == "curtis.tuba.better.tos2", out var btos2Mod))
+                return false;
 
-            BTOS2Assembly = Assembly.LoadFile(btos2Mod.AssemblyPath);
+            var bTOS2Assembly = Assembly.LoadFile(btos2Mod.AssemblyPath);
 
-            BTOS2PatchesHarmony = new("alchlcsystm.fancy.ui.icon.packs.btos2patches");
+            var bTOS2Types = AccessTools.GetTypesFromAssembly(bTOS2Assembly);
 
-            BTOS2Types = AccessTools.GetTypesFromAssembly(BTOS2Assembly);
+            var roleDeckPlusPanelControllerType = bTOS2Types.FirstOrDefault(x => x.Name == "RoleDeckPlusPanelController");
+            DeckItemType = bTOS2Types.FirstOrDefault(x => x.Name.Contains("DeckItem") && !x.IsEnum);
 
-            RoleDeckPlusPanelControllerType = BTOS2Types.FirstOrDefault(x => x.Name == "RoleDeckPlusPanelController");
-            DeckItemType = BTOS2Types.FirstOrDefault(x => x.Name.Contains("DeckItem") && !x.IsEnum);
+            MenuRoleType = bTOS2Types.FirstOrDefault(x => x.Name.Contains("MenuRole"));
 
-            MenuRoleType = BTOS2Types.FirstOrDefault(x => x.Name.Contains("MenuRole"));
+            OracleMenuControllerListItemType = bTOS2Types.FirstOrDefault(x => x.Name.Contains("OracleMenuControllerListItem"));
 
-            OracleMenuControllerListItemType = BTOS2Types.FirstOrDefault(x => x.Name.Contains("OracleMenuControllerListItem"));
-
-            var setDataMethod1 = AccessTools.Method(DeckItemType, "SetData", [ typeof(Role), typeof(FactionType), typeof(bool), RoleDeckPlusPanelControllerType ]);
+            var setDataMethod1 = AccessTools.Method(DeckItemType, "SetData", [ typeof(Role), typeof(FactionType), typeof(bool), roleDeckPlusPanelControllerType ]);
 
             var refreshDataMethod = AccessTools.Method(MenuRoleType, "RefreshData");
 
@@ -42,9 +34,9 @@ public static class BTOS2IPCompatibility
 
             var compatType = typeof(BTOS2IPCompatibility);
 
-            BTOS2PatchesHarmony.Patch(setDataMethod1, null, new(AccessTools.Method(compatType, nameof(ItemPostfix1))));
-            BTOS2PatchesHarmony.Patch(refreshDataMethod, null, new(AccessTools.Method(compatType, nameof(ItemPostfix2))));
-            BTOS2PatchesHarmony.Patch(setDataMethod2, null, new(AccessTools.Method(compatType, nameof(ItemPostfix3))));
+            BTOS2Compatibility.BTOS2PatchesHarmony.Patch(setDataMethod1, null, new(AccessTools.Method(compatType, nameof(ItemPostfix1))));
+            BTOS2Compatibility.BTOS2PatchesHarmony.Patch(refreshDataMethod, null, new(AccessTools.Method(compatType, nameof(ItemPostfix2))));
+            BTOS2Compatibility.BTOS2PatchesHarmony.Patch(setDataMethod2, null, new(AccessTools.Method(compatType, nameof(ItemPostfix3))));
             Fancy.Instance.Message("BTOS2 compatibility was successful");
             return true;
         }

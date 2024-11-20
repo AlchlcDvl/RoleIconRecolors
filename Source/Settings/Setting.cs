@@ -12,5 +12,10 @@ public abstract class Setting : MonoBehaviour
 
 public class ToggleSetting : Setting
 {
-    public ToggleOption Option{ get; set; }
+    public ToggleOption Option { get; set; }
+}
+
+public class DropdownSetting : Setting
+{
+    public IDropdown Option { get; set; }
 }

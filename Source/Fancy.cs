@@ -1,3 +1,5 @@
+using FancyUI.Settings;
+
 namespace FancyUI;
 
 [SalemMod]
@@ -8,6 +10,8 @@ public class Fancy
 {
     public static WitchcraftMod Instance { get; private set; }
     public static AssetManager Assets { get; private set; }
+
+    public static ToggleOption CustomNumbersTest;
 
     public void Start()
     {
@@ -48,6 +52,11 @@ public class Fancy
             LoadBTOS();
         } catch {}
 
+        json = Path.Combine(Instance.ModPath, "Settings.json");
+
+        if (!File.Exists(json))
+            File.WriteAllText(json, "");
+
         Instance.Message("Fancy!", true);
     }
 
@@ -55,7 +64,6 @@ public class Fancy
     public static void UponLoad()
     {
         Blank = Assets.GetSprite("Blank");
-        Thumbnail = Assets.GetSprite("Thumbnail");
         FancyAssetManager.Attack = Assets.GetSprite("Attack");
         FancyAssetManager.Defense = Assets.GetSprite("Defense");
         Ethereal = Assets.GetSprite("Ethereal");
@@ -73,7 +81,7 @@ public class Fancy
             LoadBTOS2SpriteSheet();
         } catch {}
 
-        FancyMenu.Icon = Thumbnail;
+        FancyMenu.Icon = Assets.GetSprite("Thumbnail");
     }
 
     public static readonly SalemMenuButton FancyMenu = new()

@@ -75,6 +75,13 @@ public static class PatchRoleCards
             var panel = __instance.GetComponentInParent<RoleCardPanel>();
             ChangeRoleCard(panel?.roleIcon, panel?.specialAbilityPanel?.useButton?.abilityIcon, panel?.roleInfoButtons, role, __instance.currentFaction);
         }
+
+        // Merged a CW patch here for optimisation purposes
+        if (Constants.CustomMainUIEnabled())
+        {
+            foreach (var button in __instance.GetComponentInParent<RoleCardPanel>().roleInfoButtons)
+                button.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal); // Rings at the back
+        }
     }
 
     [HarmonyPatch(typeof(RoleCardPanelBackground), nameof(RoleCardPanelBackground.SetFaction))]
@@ -85,6 +92,13 @@ public static class PatchRoleCards
             var panel = __instance.GetComponentInParent<RoleCardPanel>();
             ChangeRoleCard(panel?.roleIcon, panel?.specialAbilityPanel?.useButton?.abilityIcon, panel?.roleInfoButtons, __instance.currentRole, factionType);
         }
+
+        // Merged a CW patch here for optimisation purposes
+        if (Constants.CustomMainUIEnabled())
+        {
+            foreach (var button in __instance.GetComponentInParent<RoleCardPanel>().roleInfoButtons)
+                button.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal); // Rings at the back
+        }
     }
 
     [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.HandleOnMyIdentityChanged))]
@@ -92,6 +106,13 @@ public static class PatchRoleCards
     {
         if (Constants.EnableIcons())
             ChangeRoleCard(__instance?.roleIcon, __instance?.specialAbilityPanel?.useButton?.abilityIcon, __instance?.roleInfoButtons, playerIdentityData.role, playerIdentityData.faction);
+
+        // Merged a CW patch here for optimisation purposes
+        if (Constants.CustomMainUIEnabled())
+        {
+            foreach (var button in __instance.roleInfoButtons)
+                button.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal); // Rings at the back
+        }
     }
 
     [HarmonyPatch(typeof(RoleCardPopupPanel), nameof(RoleCardPopupPanel.SetRoleAndFaction))]
@@ -99,6 +120,13 @@ public static class PatchRoleCards
     {
         if (Constants.EnableIcons())
             ChangeRoleCard(__instance?.roleIcon, __instance?.specialAbilityPanel?.useButton?.abilityIcon, __instance?.roleInfoButtons, role, faction, true);
+
+        // Merged a CW patch here for optimisation purposes
+        if (Constants.CustomMainUIEnabled())
+        {
+            foreach (var button in __instance.roleInfoButtons)
+                button.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal); // Rings at the back
+        }
     }
 
     private static void ChangeRoleCard(Image roleIcon, Image specialAbilityPanel, List<BaseAbilityButton> roleInfoButtons, Role role, FactionType factionType, bool isGuide = false)
@@ -188,32 +216,35 @@ public static class PatchRoleCards
             isModifiedByTos1UI = false;
         }
 
-        var attributename = "Attributes_";
-        var attribute = GetSprite(reg, attributename + name + "_Role", faction);
+        var attribute = GetSprite(reg, $"Attributes_{name}_Role", faction);
+
+        if (!attribute.IsValid() && name == ogfaction)
+            attribute = GetSprite(reg, $"Attributes_{name}_Faction", faction);
 
         if (!attribute.IsValid())
-            attribute = GetSprite(reg, attributename + name, faction);
+            attribute = GetSprite(reg, $"Attributes_{(role.IsTransformedApoc() ? "Horsemen" : faction)}", faction);
 
-        if (!attribute.IsValid())
-            attribute = GetSprite(reg, attributename + (role.IsTransformedApoc() ? "Horsemen" : faction), faction);
+        if (!attribute.IsValid() && name == ogfaction)
+            attribute = GetSprite(reg, $"Attributes_{name}_Faction", faction);
 
-        if (!attribute.IsValid() && reg)
-            attribute = GetSprite(attributename + name + "_Role", ogfaction);
+        if (reg && !attribute.IsValid())
+        {
+            attribute = GetSprite($"Attributes_{name}_Role", ogfaction);
 
-        if (!attribute.IsValid() && reg)
-            attribute = GetSprite(attributename + name, ogfaction);
+            if (!attribute.IsValid())
+                attribute = GetSprite($"Attributes_{ogfaction}", ogfaction);
 
-        if (!attribute.IsValid() && reg)
-            attribute = GetSprite(attributename + (role.IsTransformedApoc() ? "Horsemen" : ogfaction), ogfaction);
+            if (!attribute.IsValid() && name == ogfaction)
+                attribute = GetSprite($"Attributes_{name}_Faction", ogfaction);
+        }
 
         if (attribute.IsValid() && roleInfoButtons.IsValid(index))
             roleInfoButtons[index].abilityIcon.sprite = attribute;
 
-        index++;
-
         if (ogfaction != "Coven")
             return;
 
+        index++;
         var nommy = GetSprite("Necronomicon");
 
         if (nommy.IsValid() && (Constants.IsNecroActive() || isGuide) && roleInfoButtons.IsValid(index))
@@ -239,6 +270,7 @@ public static class PatchAbilityPanel
         switch (overrideType)
         {
             case TosAbilityPanelListItem.OverrideAbilityType.NECRO_ATTACK:
+            {
                 var nommy = GetSprite("Necronomicon", Constants.PlayerPanelEasterEggs());
 
                 if (nommy.IsValid() && __instance.choice1Sprite && role != Role.ILLUSIONIST)
@@ -267,9 +299,10 @@ public static class PatchAbilityPanel
                 }
 
                 break;
-
+            }
             case TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_ATTACK or TosAbilityPanelListItem.OverrideAbilityType.POISONER_POISON or
                 TosAbilityPanelListItem.OverrideAbilityType.SHROUD or TosAbilityPanelListItem.OverrideAbilityType.INVESTIGATOR:
+            {
                 var special = GetSprite(reg, $"{name}_Special", faction, Constants.PlayerPanelEasterEggs());
 
                 if (!special.IsValid() && reg)
@@ -279,8 +312,9 @@ public static class PatchAbilityPanel
                     __instance.choice1Sprite.sprite = special;
 
                 break;
-
+            }
             case TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_HEAL:
+            {
                 var ab1 = GetSprite(reg, $"{name}_Ability_1", faction, Constants.PlayerPanelEasterEggs());
 
                 if (!ab1.IsValid() && reg)
@@ -290,8 +324,9 @@ public static class PatchAbilityPanel
                     __instance.choice1Sprite.sprite = ab1;
 
                 break;
-
+            }
             case TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_REVEAL or TosAbilityPanelListItem.OverrideAbilityType.WEREWOLF_NON_FULL_MOON:
+            {
                 var ab2 = GetSprite(reg, $"{name}_Ability_2", faction, Constants.PlayerPanelEasterEggs());
 
                 if (!ab2.IsValid() && reg)
@@ -301,8 +336,9 @@ public static class PatchAbilityPanel
                     __instance.choice1Sprite.sprite = ab2;
 
                 break;
-
+            }
             default:
+            {
                 var abilityName = $"{name}_Ability";
                 var ability1 = GetSprite(reg, abilityName, faction, Constants.PlayerPanelEasterEggs());
 
@@ -327,6 +363,7 @@ public static class PatchAbilityPanel
                     __instance.choice2Sprite.sprite = ability2;
 
                 break;
+            }
         }
     }
 }
@@ -455,12 +492,7 @@ public static class PlayerPopupControllerPatch
 {
     public static void Postfix(PlayerPopupController __instance)
     {
-        if (!Constants.EnableIcons())
-            return;
-
-        var killRecord = Service.Game.Sim.simulation.killRecords.Data.Find(k => k.playerId == __instance.m_discussionPlayerState.position);
-
-        if (killRecord == null)
+        if (!Constants.EnableIcons() || !Service.Game.Sim.simulation.killRecords.Data.TryFinding(k => k.playerId == __instance.m_discussionPlayerState.position, out var killRecord))
             return;
 
         var ogfaction = __instance.m_role.GetFactionType();
@@ -482,12 +514,7 @@ public static class InitialiseRolePanel
 {
     public static void Postfix(PlayerPopupController __instance)
     {
-        if (!Constants.EnableIcons() || !Pepper.IsGamePhasePlay())
-            return;
-
-        var killRecord = Service.Game.Sim.simulation.killRecords.Data.Find(k => k.playerId == __instance.m_discussionPlayerState.position);
-
-        if (killRecord != null)
+        if (!Constants.EnableIcons() || !Pepper.IsGamePhasePlay() || !Service.Game.Sim.simulation.killRecords.Data.Any(k => k.playerId == __instance.m_discussionPlayerState.position))
             return;
 
         var ogfaction = __instance.m_role.GetFactionType();
@@ -926,9 +953,8 @@ public static class MakeProperFactionChecksInWDAH1
 
         Debug.Log("WhoDiedAndHowPanel:: HandleSubphaseRole");
         __instance.deathNotePanel.canvasGroup.DisableRenderingAndInteraction();
-        var killRecord = Service.Game.Sim.simulation.killRecords.Data.Find(k => k.playerId == __instance.currentPlayerNumber);
 
-        if (killRecord == null || killRecord.killedByReasons.Count < 1)
+        if (!Service.Game.Sim.simulation.killRecords.Data.TryFinding(k => k.playerId == __instance.currentPlayerNumber, out var killRecord) || killRecord.killedByReasons.Count < 1)
             return false;
 
         var text = __instance.l10n(killRecord.playerRole switch
@@ -970,10 +996,12 @@ public static class MakeProperFactionChecksInWDAH2
 
         var playerName = Service.Game.Cast.GetPlayerName(__instance.currentPlayerNumber, false);
         var text = __instance.l10n("GUI_GAME_WHO_DIED_AND_HOW_START").Replace("%name%", playerName);
-        var killRecord = Service.Game.Sim.simulation.killRecords.Data.Find(k => k.playerId == __instance.currentPlayerNumber);
 
-        if (killRecord != null && killRecord.killedByReasons.First().IsDaytimeKillReason())
+        if (Service.Game.Sim.simulation.killRecords.Data.TryFinding(k => k.playerId == __instance.currentPlayerNumber, out var killRecord) && killRecord.killedByReasons.First()
+            .IsDaytimeKillReason())
+        {
             text = __instance.l10n("GUI_GAME_WHO_DIED_AND_HOW_DAYKILL_START").Replace("%name%", playerName);
+        }
 
         __instance.AddLine(text, Tuning.REVEAL_TIME_PER_ADDL_KILLED_BY_REASON);
 
