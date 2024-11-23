@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 
 namespace FancyUI.UI;
 
-public class HoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IEventSystemHandler
+public class HoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public Button.ButtonClickedEvent OnMouseOver { get; set; }
     public Button.ButtonClickedEvent OnMouseOut { get; set; }

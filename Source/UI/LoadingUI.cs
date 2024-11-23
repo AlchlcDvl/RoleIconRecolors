@@ -20,8 +20,8 @@ public class LoadingUI : UIController
 
         Cog = transform.Find("Cog");
         CancelButton = transform.Find("Cancel").gameObject;
-        Title = transform.Find("Title").GetComponent<TextMeshProUGUI>();
-        LoadingProgress = transform.Find("Progress").GetComponent<TextMeshProUGUI>();
+        Title = transform.GetComponent<TextMeshProUGUI>("Title");
+        LoadingProgress = transform.GetComponent<TextMeshProUGUI>("Progress");
 
         Started = false;
 

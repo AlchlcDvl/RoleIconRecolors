@@ -5,37 +5,5 @@
   "Description": "THE customisation mod for TOS2! Credits to MysticMismagius and Harry James Potter for the assets and mod ideas and Pat for coding help!",
   "Version": "2.0.0",
   "Discord": "https://discord.gg/2EvCNcxx4c",
-  "RequiredMods": [ "alchlcsystm.witchcraft", "JAN.modpagelib" ],
-  "Settings":
-  {
-    "CheckboxSettings":
-    [
-      {
-        "Name": "Dump Sprite Sheets",
-        "SettingID": "recolors.spritesheets",
-        "Description": "Toggles whether game sprite sheets are dumped so pack debugging is possible.",
-        "DefaultValue": false,
-        "AvailableInGame": true
-      },
-      {
-        "Name": "Debug Pack Loading",
-        "SettingID": "recolors.debugdump",
-        "Description": "Toggles whether the mod dumps info on loaded packs.",
-        "DefaultValue": false,
-        "AvailableInGame": true
-      }
-    ],
-    "SliderSettings":
-    [
-      {
-        "Name": "Silhouette Animation Duration",
-        "SettingID": "recolors.animduration",
-        "Description": "Dictates how long should one iteration of an animation last for.",
-        "DefaultValue": 2,
-        "MinValue": 0.5,
-        "MaxValue": 10,
-        "AvailableInGame": true
-      }
-    ]
-  }
+  "RequiredMods": [ "alchlcsystm.witchcraft", "JAN.modpagelib" ]
 }

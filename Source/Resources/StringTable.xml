@@ -1,3 +1,11 @@
 <StringTable>
-    <Entry key="FANCYUI_SOMETHING">Something</Entry>
+    <Entry key="FANCY_SOMETHING">Something</Entry>
+
+    <Entry key="FANCY_CUSTOM_NUMBERS_NAME">Use Custom Numbers</Entry>
+    <Entry key="FANCY_CUSTOM_NUMBERS_DESC">Select whether you want to use the icon pack's rendition of player numbers or the game's.</Entry>
+
+    <Entry key="FANCY_SELECTED_ICON_PACK_NAME">Selected Icon Pack</Entry>
+    <Entry key="FANCY_SELECTED_ICON_PACK_DESC">The selected icon will start replacing the visible icons with the images you put in. If it can't find the valid image or pack, it will be replaced by the mod's default files. May require a game restart for the in-text icons to change.\nVanilla - No pack selected.</Entry>
+
+    <Entry key="FANCY_">Something</Entry>
 </StringTable>

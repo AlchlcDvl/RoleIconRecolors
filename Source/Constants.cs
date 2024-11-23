@@ -2,27 +2,27 @@ namespace FancyUI;
 
 public static class Constants
 {
-    public static bool PlayerPanelEasterEggs() => ModSettings.GetBool("Enable Easter Eggs In Player Panel", "alchlcsystm.fancy.ui");
+    public static bool PlayerPanelEasterEggs() => false; // ModSettings.GetBool("Enable Easter Eggs In Player Panel", "alchlcsystm.fancy.ui");
 
-    public static bool AllEasterEggs() => ModSettings.GetBool("All Easter Eggs Are Active", "alchlcsystm.fancy.ui");
+    public static bool AllEasterEggs() => false; // ModSettings.GetBool("All Easter Eggs Are Active", "alchlcsystm.fancy.ui");
 
-    public static int EasterEggChance() => ModSettings.GetInt("Easter Egg Icon Chance", "alchlcsystm.fancy.ui");
+    public static int EasterEggChance() => 0; // ModSettings.GetInt("Easter Egg Icon Chance", "alchlcsystm.fancy.ui");
 
-    public static string CurrentPack() => ModSettings.GetString("Selected Icon Pack", "alchlcsystm.fancy.ui");
+    public static string CurrentPack() => Fancy.SelectedIconPack.Get(); // ModSettings.GetString("Selected Icon Pack", "alchlcsystm.fancy.ui");
 
-    public static string CurrentStyle(ModType? mod = null) => ModSettings.GetString($"Selected {mod ?? Utils.GetGameType()} Mention Style", "alchlcsystm.fancy.ui");
+    public static string CurrentStyle(ModType? mod = null) => "Regular"; // ModSettings.GetString($"Selected {mod ?? Utils.GetGameType()} Mention Style", "alchlcsystm.fancy.ui");
 
-    public static string FactionOverride(ModType? mod = null) => ModSettings.GetString($"Override {mod ?? Utils.GetGameType()} Faction", "alchlcsystm.fancy.ui");
+    public static string FactionOverride(ModType? mod = null) => "None"; // ModSettings.GetString($"Override {mod ?? Utils.GetGameType()} Faction", "alchlcsystm.fancy.ui");
 
-    public static bool CustomNumbers() => ModSettings.GetBool("Use Custom Numbers", "alchlcsystm.fancy.ui");
+    public static bool CustomNumbers() => Fancy.CustomNumbers.Get(); // ModSettings.GetBool("Use Custom Numbers", "alchlcsystm.fancy.ui");
 
-    public static bool DumpSheets() => ModSettings.GetBool("Dump Sprite Sheets", "alchlcsystm.fancy.ui");
+    public static bool DumpSheets() => false; // ModSettings.GetBool("Dump Sprite Sheets", "alchlcsystm.fancy.ui");
 
-    public static bool PackDebug() => ModSettings.GetBool("Debug Pack Loading", "alchlcsystm.fancy.ui");
+    public static bool PackDebug() => false; // ModSettings.GetBool("Debug Pack Loading", "alchlcsystm.fancy.ui");
 
-    public static string CurrentSet() => ModSettings.GetString("Selected Silhouette Set", "alchlcsystm.fancy.ui");
+    public static string CurrentSet() => "Regular"; // ModSettings.GetString("Selected Silhouette Set", "alchlcsystm.fancy.ui");
 
-    public static float AnimationDuration() => ModSettings.GetFloat("Silhouette Animation Duration", "alchlcsystm.fancy.ui");
+    public static float AnimationDuration() => 2f; // ModSettings.GetFloat("Silhouette Animation Duration", "alchlcsystm.fancy.ui");
 
     public static bool FactionOverridden() => FactionOverride() != "None";
 
@@ -30,7 +30,7 @@ public static class Constants
 
     public static bool EnableSwaps() => CurrentSet() != "Vanilla";
 
-    public static string GetMainUIThemeType() => ModSettings.GetString("Main UI Theme", "alchlcsystm.fancy.ui");
+    public static string GetMainUIThemeType() => "Default"; // ModSettings.GetString("Main UI Theme", "alchlcsystm.fancy.ui");
 
     public static Color GetMainUIThemeWoodColor() => ModSettings.GetColor("Main UI Theme Wood Color", "alchlcsystm.fancy.ui");
 

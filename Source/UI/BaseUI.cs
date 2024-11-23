@@ -12,7 +12,6 @@ public abstract class BaseUI : UIController
     private GameObject Back { get; set; }
     private GameObject OpenDir { get; set; }
     private GameObject Confirm { get; set; }
-    public GameObject Test { get; set; }
     private TMP_InputField PackName { get; set; }
     private TMP_InputField RepoName { get; set; }
     private TMP_InputField RepoOwner { get; set; }
@@ -29,16 +28,15 @@ public abstract class BaseUI : UIController
 
     public virtual void Awake()
     {
-        Back = transform.Find("Buttons/Back").gameObject;
-        OpenDir = transform.Find("Buttons/Directory").gameObject;
-        Test = transform.Find("Buttons/Test").gameObject;
-        Confirm = transform.Find("Inputs/Confirm").gameObject;
-        PackName = transform.Find("Inputs/PackName").GetComponent<TMP_InputField>();
-        RepoName = transform.Find("Inputs/RepoName").GetComponent<TMP_InputField>();
-        RepoOwner = transform.Find("Inputs/RepoOwner").GetComponent<TMP_InputField>();
-        BranchName = transform.Find("Inputs/BranchName").GetComponent<TMP_InputField>();
-        NoPacks = transform.Find("ScrollView/NoPacks").gameObject;
-        PackTemplate = transform.Find("ScrollView/Viewport/Content/PackTemplate").gameObject;
+        Back = transform.FindRecursive("Back").gameObject;
+        OpenDir = transform.FindRecursive("Directory").gameObject;
+        Confirm = transform.FindRecursive("Confirm").gameObject;
+        PackName = transform.GetComponent<TMP_InputField>("PackName");
+        RepoName = transform.GetComponent<TMP_InputField>("RepoName");
+        RepoOwner = transform.GetComponent<TMP_InputField>("RepoOwner");
+        BranchName = transform.GetComponent<TMP_InputField>("BranchName");
+        NoPacks = transform.FindRecursive("NoPacks").gameObject;
+        PackTemplate = transform.FindRecursive("PackTemplate").gameObject;
 
         transform.Find("Title").GetComponent<TextMeshProUGUI>().SetText($"{Type}s");
     }
@@ -51,12 +49,10 @@ public abstract class BaseUI : UIController
         OpenDir.GetComponent<Button>().onClick.AddListener(OpenDirectory);
         OpenDir.AddComponent<TooltipTrigger>().NonLocalizedString = $"Open {Type} Folder";
 
-        Test.GetComponent<Button>().onClick.AddListener(OpenTestingUI);
-        Test.AddComponent<TooltipTrigger>().NonLocalizedString = $"Open {Type} Testing Menu";
-
         var dirButton = OpenDir.AddComponent<HoverEffect>();
-        dirButton.OnMouseOver.AddListener(() => OpenDir.GetComponent<Image>().sprite = Fancy.Assets.GetSprite("OpenChest"));
-        dirButton.OnMouseOut.AddListener(() => OpenDir.GetComponent<Image>().sprite = Fancy.Assets.GetSprite("ClosedChest"));
+        var rend = OpenDir.GetComponent<Image>();
+        dirButton.OnMouseOver.AddListener(() => rend.sprite = Fancy.Assets.GetSprite("OpenChest"));
+        dirButton.OnMouseOut.AddListener(() => rend.sprite = Fancy.Assets.GetSprite("ClosedChest"));
 
         Confirm.GetComponent<Button>().onClick.AddListener(AfterGenerating);
         Confirm.AddComponent<TooltipTrigger>().NonLocalizedString = "Confirm Link Parameters And Generate Link";
@@ -104,8 +100,6 @@ public abstract class BaseUI : UIController
         else
             Application.OpenURL($"file://{Path}");
     }
-
-    public abstract void OpenTestingUI();
 
     // Why the hell am I not allowed to make extension methods in instance classes smhh
     public void SetUpPack(PackJson packJson, UnityAction download)

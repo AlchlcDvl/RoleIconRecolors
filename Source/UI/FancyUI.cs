@@ -7,7 +7,6 @@ public class FancyUI : UIController
     private static TMP_FontAsset GameFont { get; set; }
     private static Material GameFontMaterial { get; set; }
 
-    private GameObject ColoredWoodButton { get; set; }
     private GameObject IconPacksButton { get; set; }
     private GameObject SilhouetteSwapper { get; set; }
     private GameObject CloseButton { get; set; }
@@ -19,7 +18,6 @@ public class FancyUI : UIController
     {
         Instance = this;
 
-        ColoredWoodButton = transform.Find("ColoredWood").gameObject;
         IconPacksButton = transform.Find("IconPacks").gameObject;
         SilhouetteSwapper = transform.Find("SilhouetteSwapper").gameObject;
         CloseButton = transform.Find("CloseButton").gameObject;
@@ -46,13 +44,10 @@ public class FancyUI : UIController
         IconPacksButton.GetComponent<Button>().onClick.AddListener(OpenIP);
         IconPacksButton.AddComponent<TooltipTrigger>().NonLocalizedString = "Open Icon Packs Menu";
 
-        // ColoredWoodButton.GetComponent<Button>().onClick.AddListener(OpenCW);
-        ColoredWoodButton.AddComponent<TooltipTrigger>().NonLocalizedString = "Open Recoloured UI Menu";
-
         SilhouetteSwapper.GetComponent<Button>().onClick.AddListener(OpenSS);
         SilhouetteSwapper.AddComponent<TooltipTrigger>().NonLocalizedString = "Open Silhouette Swapper Menu";
 
-        // Settings.GetComponent<Button>().onClick.AddListener(OpenSettings);
+        Settings.GetComponent<Button>().onClick.AddListener(OpenSettings);
         Settings.AddComponent<TooltipTrigger>().NonLocalizedString = "Open Settings Menu";
 
         CloseButton.GetComponent<Button>().onClick.AddListener(gameObject.Destroy);
@@ -90,6 +85,24 @@ public class FancyUI : UIController
         }
 
         OpenMenu<SilhouetteSwapperUI>();
+    }
+
+    private void OpenSettings()
+    {
+        if (SettingsAndTestingUI.Instance)
+        {
+            SettingsAndTestingUI.Instance.gameObject.SetActive(true);
+            gameObject.SetActive(false);
+            return;
+        }
+
+        var go = Instantiate(Fancy.Assets.GetGameObject("SettingsAndTestingUI"), transform.parent, false);
+        go.transform.localPosition = new(0, 0, 0);
+        go.transform.localScale = Vector3.one * 1.5f;
+        go.transform.SetAsLastSibling();
+        go.AddComponent<SettingsAndTestingUI>();
+        SetupFonts(go.transform);
+        gameObject.SetActive(false);
     }
 
     private void OpenMenu<T>() where T : BaseUI

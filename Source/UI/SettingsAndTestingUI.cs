@@ -1,8 +1,10 @@
 namespace FancyUI.UI;
 
-public class IconPackTestingUI : UIController
+public class SettingsAndTestingUI : UIController
 {
-    public static IconPackTestingUI Instance { get; private set; }
+    public static SettingsAndTestingUI Instance { get; private set; }
+
+    private CustomAnimator Animator { get; set; }
 
     private GameObject Back { get; set; }
     private GameObject Confirm { get; set; }
@@ -55,28 +57,30 @@ public class IconPackTestingUI : UIController
     {
         Instance = this;
 
-        Back = transform.Find("Back").gameObject;
-        Confirm = transform.Find("Inputs/Confirm").gameObject;
-        Toggle = transform.Find("Toggle").gameObject;
-        RoleCard = transform.Find("RoleCard").gameObject;
+        Animator = transform.EnsureComponent<CustomAnimator>("Animator");
+        Back = transform.FindRecursive("Back").gameObject;
 
-        RoleName = transform.Find("Inputs/RoleName").GetComponent<TMP_InputField>();
-        FactionName = transform.Find("Inputs/FactionName").GetComponent<TMP_InputField>();
-        EffectName = transform.Find("Inputs/Effect").GetComponent<TMP_InputField>();
-        PlayerNumber = transform.Find("Inputs/PlayerNumber").GetComponent<TMP_InputField>();
+        Confirm = transform.FindRecursive("Confirm").gameObject;
+        Toggle = transform.FindRecursive("Toggle").gameObject;
+        RoleCard = transform.FindRecursive("RoleCard").gameObject;
 
-        Special = RoleCard.transform.Find("Special").gameObject;
-        Effect = RoleCard.transform.Find("Effect").gameObject;
-        ButtonTemplate = RoleCard.transform.Find("ButtonTemplate").gameObject;
+        RoleName = transform.GetComponent<TMP_InputField>("RoleName");
+        FactionName = transform.GetComponent<TMP_InputField>("FactionName");
+        EffectName = transform.GetComponent<TMP_InputField>("Effect");
+        PlayerNumber = transform.GetComponent<TMP_InputField>("PlayerNumber");
 
-        RoleText = RoleCard.transform.Find("RoleText").GetComponent<TextMeshProUGUI>();
+        Special = RoleCard.transform.FindRecursive("Special").gameObject;
+        Effect = RoleCard.transform.FindRecursive("Effect").gameObject;
+        ButtonTemplate = RoleCard.transform.FindRecursive("ButtonTemplate").gameObject;
 
-        SlotCounter = RoleCard.transform.Find("SlotCounter").GetComponent<Image>();
-        RoleIcon = RoleCard.transform.Find("RoleIcon").GetComponent<Image>();
-        Attack = RoleCard.transform.Find("Attack").GetComponent<Image>();
-        Defense = RoleCard.transform.Find("Defense").GetComponent<Image>();
+        RoleText = RoleCard.transform.GetComponent<TextMeshProUGUI>("RoleText");
 
-        ButtonText = Toggle.transform.Find("Text").GetComponent<TextMeshProUGUI>();
+        SlotCounter = RoleCard.transform.GetComponent<Image>("SlotCounter");
+        RoleIcon = RoleCard.transform.GetComponent<Image>("RoleIcon");
+        Attack = RoleCard.transform.GetComponent<Image>("Attack");
+        Defense = RoleCard.transform.GetComponent<Image>("Defense");
+
+        ButtonText = Toggle.transform.GetComponent<TextMeshProUGUI>("Text");
 
         ToggleImage = Toggle.GetComponent<Image>();
 
@@ -87,6 +91,9 @@ public class IconPackTestingUI : UIController
     {
         Back.GetComponent<Button>().onClick.AddListener(GoBack);
         Back.AddComponent<TooltipTrigger>().NonLocalizedString = "Close Testing Menu";
+
+        Animator.SetAnim(Loading.Frames, Constants.AnimationDuration());
+        Animator.AddComponent<TooltipTrigger>().NonLocalizedString = "This Is Your Animator";
 
         Confirm.GetComponent<Button>().onClick.AddListener(SetIcons);
         Confirm.AddComponent<TooltipTrigger>().NonLocalizedString = "Confirm";
@@ -99,7 +106,7 @@ public class IconPackTestingUI : UIController
     public void GoBack()
     {
         gameObject.SetActive(false);
-        IconPacksUI.Instance.gameObject.SetActive(true);
+        FancyUI.Instance.gameObject.SetActive(true);
     }
 
     public void ToggleVersion()

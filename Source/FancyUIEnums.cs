@@ -22,3 +22,13 @@ public enum ColorType
     Leather,
     Custom
 }
+
+public enum OptionType
+{
+    Color,
+    Number,
+    Toggle,
+    Slider,
+    StringDropdown,
+    EnumDropdown
+}
