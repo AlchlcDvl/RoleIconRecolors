@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
-using Home.Shared;
 using FancyUI.Assets.IconPacks;
 using System.IO.Compression;
 
@@ -45,7 +44,7 @@ public class IconPacksUI : BaseUI
         SetUpPack(json, () => DownloadIcons(json.Name));
     }
 
-    public static void HandlePackData() => ApplicationController.ApplicationContext.StartCoroutine(CoHandlePackData());
+    public static void HandlePackData() => Coroutines.Start(CoHandlePackData());
 
     private static IEnumerator CoHandlePackData()
     {

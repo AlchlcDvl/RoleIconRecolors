@@ -10,6 +10,9 @@ public abstract class Setting : MonoBehaviour
         TitleText = transform.Find("SettingName").GetComponent<TextMeshProUGUI>();
         Background = transform.Find("Background").gameObject;
     }
+
+    public virtual void Start()
+    {}
 }
 
 public class ToggleSetting : Setting
@@ -17,24 +20,19 @@ public class ToggleSetting : Setting
     public ToggleOption Option { get; set; }
 }
 
-public class DropdownSetting : Setting
-{
-    public IDropdown Option { get; set; }
-}
+public abstract class UserInputSetting : Setting;
 
-public class SliderSetting : Setting
+public class ColorSetting : UserInputSetting
 {
 
 }
 
-public abstract class InputSetting : Setting;
-
-public class ColorSetting : InputSetting
+public class NumberSetting : UserInputSetting
 {
 
 }
 
-public class NumberSetting : InputSetting
+public class InputSetting : UserInputSetting
 {
 
 }

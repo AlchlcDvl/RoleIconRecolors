@@ -37,6 +37,8 @@ public class FancyUI : UIController
         Instance = null;
         LoadingUI.Instance?.gameObject?.Destroy();
         IconPacksUI.Instance?.gameObject?.Destroy();
+        SilhouetteSwapperUI.Instance?.gameObject?.Destroy();
+        SettingsAndTestingUI.Instance?.gameObject?.Destroy();
     }
 
     private void SetupMenu()
@@ -48,7 +50,7 @@ public class FancyUI : UIController
         SilhouetteSwapper.AddComponent<TooltipTrigger>().NonLocalizedString = "Open Silhouette Swapper Menu";
 
         Settings.GetComponent<Button>().onClick.AddListener(OpenSettings);
-        Settings.AddComponent<TooltipTrigger>().NonLocalizedString = "Open Settings Menu";
+        Settings.AddComponent<TooltipTrigger>().NonLocalizedString = "Open Settings And Setting Menu";
 
         CloseButton.GetComponent<Button>().onClick.AddListener(gameObject.Destroy);
         CloseButton.AddComponent<TooltipTrigger>().NonLocalizedString = "Close Menu";

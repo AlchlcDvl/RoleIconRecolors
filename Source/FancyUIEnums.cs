@@ -30,5 +30,6 @@ public enum OptionType
     Toggle,
     Slider,
     StringDropdown,
-    EnumDropdown
+    EnumDropdown,
+    Input
 }

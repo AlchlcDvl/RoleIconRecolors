@@ -4,9 +4,4 @@ public class StringOption(string id, string defaultValue, Func<IEnumerable<strin
     onChanged = null) : DropdownOption<string>(id, defaultValue, OptionType.StringDropdown, options, setActive, mapping, onChanged)
 {
     public override void SetString(string value) => Set(value);
-
-    public override void ModifySetting()
-    {
-        throw new NotImplementedException();
-    }
 }

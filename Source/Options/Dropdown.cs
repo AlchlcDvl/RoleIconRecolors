@@ -7,4 +7,8 @@ public abstract class DropdownOption<T>(string id, T defaultValue, OptionType ty
     public Dictionary<string, string> Mapping { get; } = mapping ?? [];
 
     public abstract void SetString(string value);
+
+    void IDropdown.OnChanged() => OnChanged(Get());
+
+    bool IDropdown.SetActive() => SetActive(Get());
 }

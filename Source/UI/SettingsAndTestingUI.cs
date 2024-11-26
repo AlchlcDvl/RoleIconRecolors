@@ -1,3 +1,5 @@
+using System.Text.RegularExpressions;
+
 namespace FancyUI.UI;
 
 public class SettingsAndTestingUI : UIController
@@ -101,6 +103,19 @@ public class SettingsAndTestingUI : UIController
         Toggle.GetComponent<Button>().onClick.AddListener(ToggleVersion);
         Toggle.AddComponent<TooltipTrigger>().NonLocalizedString = "Toggle To Choose Icons From BTOS2";
         Toggle.SetActive(Constants.BTOS2Exists());
+
+        RoleName.onValidateInput = RegexChecker;
+        FactionName.onValidateInput = RegexChecker;
+        EffectName.onValidateInput = RegexChecker;
+        PlayerNumber.onValidateInput = RegexChecker;
+    }
+
+    private char RegexChecker(string _, int __, char character)
+    {
+        if (new Regex("^[a-zA-Z]+$").IsMatch(character.ToString()))
+            return character;
+
+        return default;
     }
 
     public void GoBack()

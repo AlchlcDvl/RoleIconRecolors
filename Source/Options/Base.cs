@@ -7,15 +7,18 @@ public abstract class Option
     public string Value { get; set; }
     public OptionType Type { get; }
 
-    protected Option(string id, OptionType type)
+    protected Option(string id, OptionType type, string value)
     {
         ID = id;
         Type = type;
+        Value = value;
         All.Add(this);
     }
 
     public void SetBase(string value)
     {
+        Value = value;
+
         if (this is ToggleOption toggle)
             toggle.Set(bool.Parse(value));
         else if (this is IDropdown dropdown)
