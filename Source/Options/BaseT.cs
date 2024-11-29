@@ -6,6 +6,7 @@ public abstract class Option<TValue, TSetting>(string id, TValue defaultValue, O
     public Config<TValue> Entry { get; } = Fancy.Instance.Configs.Bind(id, defaultValue);
     public Func<TValue, bool> SetActive { get; } = setActive ?? (_ => true);
     public Action<TValue> OnChanged { get; } = onChanged ?? (_ => {});
+    public TValue DefaultValue { get; } = defaultValue;
     public TSetting Setting { get; set; }
 
     public TValue Get() => Entry.Value;

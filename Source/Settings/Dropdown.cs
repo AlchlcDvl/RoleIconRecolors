@@ -8,23 +8,27 @@ public class DropdownSetting : Setting
     public override void Awake()
     {
         base.Awake();
-
         Dropdown = transform.GetComponent<Dropdown>("Dropdown");
     }
 
-    public override void Start()
-    {
-        base.Start();
 
-        Dropdown.AddOptions(Option.DisplayOptions());
+    public void Start()
+    {
+        if (Option == null)
+            return;
+
+        Option.OptionCreated();
+
+        Dropdown.AddOptions(Option.DisplayOptions().ToList());
         Dropdown.value = Option.GetInt();
         Dropdown.onValueChanged.AddListener(OnValueChanged);
     }
 
-    private void OnValueChanged(int index)
+    public void OnValueChanged(int index)
     {
-        var value = Option.Options().ElementAtOrDefault(index);
-        Option.SetString(value);
+        var options = Option.Options();
+        Option.SetString(options.ElementAtOrDefault(index) ?? options.FirstOrDefault() ?? "Error");
+        Option.OnChanged();
         gameObject.SetActive(Option.SetActive());
     }
 }

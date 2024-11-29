@@ -76,20 +76,42 @@ public class Fancy
         FancyMenu.Icon = Assets.GetSprite("Thumbnail");
     }
 
-    public static StringOption SelectedIconPack;
-    public static StringOption MentionStyle1;
-    public static StringOption MentionStyle2;
-    public static StringOption FactionOverride1;
-    public static StringOption FactionOverride2;
+    public static StringDropdownOption SelectedIconPack;
+    public static StringDropdownOption SelectedSilhouetteSet;
+
+    public static EnumDropdownOption<UITheme> SelectedUITheme;
+
+    public static EnumDropdownOption<Role> CurrentRoleVanilla;
+    public static EnumDropdownOption<FactionType> CurrentFactionVanilla;
+
+    public static EnumDropdownOption<Role> CurrentRoleBTOS;
+    public static EnumDropdownOption<FactionType> CurrentFactionBTOS;
+
+    public static StringDropdownOption MentionStyle1;
+    public static StringDropdownOption MentionStyle2;
+    public static StringDropdownOption FactionOverride1;
+    public static StringDropdownOption FactionOverride2;
+
+    public static ColorOption MainUIThemeWood;
+    public static ColorOption MainUIThemePaper;
+    public static ColorOption MainUIThemeLeather;
+    public static ColorOption MainUIThemeMetal;
+    public static ColorOption MainUIThemeFire;
 
     public static SliderOption EasterEggChance;
+    public static SliderOption AnimationDuration;
 
     public static ToggleOption CustomNumbers;
+    public static ToggleOption AllEasterEggs;
+    public static ToggleOption PlayerPanelEasterEggs;
+    public static ToggleOption DumpSpriteSheets;
+    public static ToggleOption DebugPackLoading;
 
     [LoadConfigs]
     public static void LoadConfigs()
     {
         SelectedIconPack = new("SELECTED_ICON_PACK", "Vanilla", () => GetPackNames(PackType.IconPacks), onChanged: x => TryLoadingSprites(x, PackType.IconPacks));
+
         CustomNumbers = new("CUSTOM_NUMBERS", false, _ => Constants.EnableIcons());
     }
 
@@ -227,7 +249,7 @@ public class Fancy
     //     Available = Constants.GetMainUIThemeType() == "Custom Input"
     // };
 
-    private static List<string> GetPackNames(PackType type)
+    private static IEnumerable<string> GetPackNames(PackType type)
     {
         try
         {
@@ -247,7 +269,7 @@ public class Fancy
         }
     }
 
-    private static List<string> GetOptions(ModType mod, bool mentionStyle)
+    private static IEnumerable<string> GetOptions(ModType mod, bool mentionStyle)
     {
         try
         {

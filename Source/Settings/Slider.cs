@@ -10,26 +10,31 @@ public class SliderSetting : Setting
     public override void Awake()
     {
         base.Awake();
-
         Slider = transform.GetComponent<Slider>("Slider");
         ValueText = Slider.transform.GetComponent<TextMeshProUGUI>("ValueText");
     }
 
-    public override void Start()
+    public void Start()
     {
-        base.Start();
+        if (Option == null)
+            return;
+
+        Option.OptionCreated();
 
         Slider.minValue = Option.Min;
         Slider.maxValue = Option.Max;
         Slider.wholeNumbers = Option.UseWhole;
         Slider.value = Option.Get();
         Slider.onValueChanged.AddListener(OnValueChanged);
+
+        ValueText.SetText($"{Slider.value:0.##}");
     }
 
     public void OnValueChanged(float value)
     {
         Option.Set(value);
-        ValueText.text = $"{value:0.##}";
+        Option.OnChanged(value);
+        ValueText.SetText($"{value:0.##}");
         gameObject.SetActive(Option.SetActive(value));
     }
 }

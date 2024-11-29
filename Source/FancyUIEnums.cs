@@ -25,11 +25,19 @@ public enum ColorType
 
 public enum OptionType
 {
-    Color,
-    Number,
     Toggle,
     Slider,
     StringDropdown,
     EnumDropdown,
-    Input
+    StringInput,
+    ColorInput
+}
+
+public enum UITheme
+{
+    Default,
+    Role,
+    Faction,
+    RoleAndFaction,
+    Custom
 }
