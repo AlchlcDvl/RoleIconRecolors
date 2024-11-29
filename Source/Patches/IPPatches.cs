@@ -77,7 +77,7 @@ public static class PatchRoleCards
         }
 
         // Merged a CW patch here for optimisation purposes
-        if (Constants.CustomMainUIEnabled())
+        if (Constants.EnableCustomUI())
         {
             foreach (var button in __instance.GetComponentInParent<RoleCardPanel>().roleInfoButtons)
                 button.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal); // Rings at the back
@@ -94,7 +94,7 @@ public static class PatchRoleCards
         }
 
         // Merged a CW patch here for optimisation purposes
-        if (Constants.CustomMainUIEnabled())
+        if (Constants.EnableCustomUI())
         {
             foreach (var button in __instance.GetComponentInParent<RoleCardPanel>().roleInfoButtons)
                 button.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal); // Rings at the back
@@ -108,7 +108,7 @@ public static class PatchRoleCards
             ChangeRoleCard(__instance?.roleIcon, __instance?.specialAbilityPanel?.useButton?.abilityIcon, __instance?.roleInfoButtons, playerIdentityData.role, playerIdentityData.faction);
 
         // Merged a CW patch here for optimisation purposes
-        if (Constants.CustomMainUIEnabled())
+        if (Constants.EnableCustomUI())
         {
             foreach (var button in __instance.roleInfoButtons)
                 button.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal); // Rings at the back
@@ -122,7 +122,7 @@ public static class PatchRoleCards
             ChangeRoleCard(__instance?.roleIcon, __instance?.specialAbilityPanel?.useButton?.abilityIcon, __instance?.roleInfoButtons, role, faction, true);
 
         // Merged a CW patch here for optimisation purposes
-        if (Constants.CustomMainUIEnabled())
+        if (Constants.EnableCustomUI())
         {
             foreach (var button in __instance.roleInfoButtons)
                 button.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal); // Rings at the back

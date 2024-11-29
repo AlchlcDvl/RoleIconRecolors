@@ -34,8 +34,6 @@ public static class FancyAssetManager
     private static readonly string[] Avoid = [ "Necronomicon", "Recruit", "Doused", "ExeTarget", "Hexed", "Knighted", "Bread", "Revealed", "Disconnected", "Connecting", "Plagued", "Revealed",
         "Trapped", "Hangover", "Silenced", "Dreamwoven", "Insane", "Bugged", "Tracked", "Sickness", "Reaped", "Deafened", "Audited", "Enchanted", "Accompanied", "Banned", "WarlockCursed" ];
 
-    private static Assembly Core => typeof(Fancy).Assembly;
-
     public static Sprite GetSprite(bool skipFactionless, string name, string faction, bool allowEE = false, string packName = null) => GetSprite(name, allowEE, faction, packName,
         skipFactionless);
 
@@ -174,34 +172,37 @@ public static class FancyAssetManager
         if (!Directory.Exists(folder))
         {
             Fancy.Instance.Error($"{packName} was missing");
-            ModSettings.SetString("Selected Icon Pack", "Vanilla", "alchlcsystm.fancy.ui");
+            // ModSettings.SetString("Selected Icon Pack", "Vanilla", "alchlcsystm.fancy.ui");
             return;
         }
 
-        try
+        if (type == PackType.IconPacks)
         {
-            if (IconPacks.TryGetValue(packName, out var exists) && exists)
-                exists.Reload();
-            else
+            try
             {
-                exists = IconPacks[packName] = new(packName);
-                exists.Load();
+                if (IconPacks.TryGetValue(packName, out var exists) && exists)
+                    exists.Reload();
+                else
+                {
+                    exists = IconPacks[packName] = new(packName);
+                    exists.Load();
 
-                if (CacheDefaults.ServiceExists)
-                    SetScrollSprites();
+                    if (CacheDefaults.ServiceExists)
+                        SetScrollSprites();
 
-                exists.Debug();
+                    exists.Debug();
+                }
+
+                foreach (var (pack, ip) in IconPacks)
+                {
+                    if (pack != packName)
+                        ip.Delete();
+                }
             }
-
-            foreach (var (pack, ip) in IconPacks)
+            catch (Exception e)
             {
-                if (pack != packName)
-                    ip.Delete();
+                Fancy.Instance.Error($"Unable to load icon pack {packName} because:\n{e}");
             }
-        }
-        catch (Exception e)
-        {
-            Fancy.Instance.Error($"Unable to load icon pack {packName} because:\n{e}");
         }
     }
 

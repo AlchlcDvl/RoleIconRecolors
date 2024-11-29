@@ -5,6 +5,7 @@ public interface IDropdown
     public Func<IEnumerable<string>> Options { get; }
     public Func<string, string> Mapping { get; }
     public string Value { get; set; }
+    public DropdownSetting Setting { get; set; }
 
     public void OnChanged();
 

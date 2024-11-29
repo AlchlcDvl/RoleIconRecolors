@@ -2,10 +2,65 @@
     <Entry key="FANCY_SOMETHING">Something</Entry>
 
     <Entry key="FANCY_CUSTOM_NUMBERS_NAME">Use Custom Numbers</Entry>
-    <Entry key="FANCY_CUSTOM_NUMBERS_DESC">Select whether you want to use the icon pack's rendition of player numbers or the game's.</Entry>
+    <Entry key="FANCY_CUSTOM_NUMBERS_DESC">Select whether you want to use the icon pack's rendition of player numbers or the game's. May require a game restart.</Entry>
 
     <Entry key="FANCY_SELECTED_ICON_PACK_NAME">Selected Icon Pack</Entry>
     <Entry key="FANCY_SELECTED_ICON_PACK_DESC">The selected icon will start replacing the visible icons with the images you put in. If it can't find the valid image or pack, it will be replaced by the mod's default files. May require a game restart for the in-text icons to change.\nVanilla - No pack selected.</Entry>
 
-    <Entry key="FANCY_">Something</Entry>
+    <Entry key="FANCY_SELECTED_SIL_SET_NAME">Selected Silhouette Set</Entry>
+    <Entry key="FANCY_SELECTED_SIL_SET_DESC">The selected set will start replacing the current silhouettes with ones created from the images you put in. If it can't find the valid image or set, it will be replaced by the mod's default files.\nVanilla - No set selected.</Entry>
+
+    <Entry key="FANCY_SELECTED_UI_THEME_NAME">Selected UI Theme</Entry>
+    <Entry key="FANCY_SELECTED_UI_THEME_DESC">Dictates how the the main UI looks like.</Entry>
+
+    <Entry key="FANCY_MENTION_STYLE_1_NAME">Selected Vanilla Mention Style</Entry>
+    <Entry key="FANCY_MENTION_STYLE_1_DESC">The selected mention style will dictate which icons are used for the icons in text. May require a game restart.</Entry>
+
+    <Entry key="FANCY_MENTION_STYLE_2_NAME">Selected BTOS2 Mention Style</Entry>
+    <Entry key="FANCY_MENTION_STYLE_2_DESC">The selected mention style will dictate which icons are used for the icons in text. May require a game restart.</Entry>
+
+    <Entry key="FANCY_FACTION_OVERRIDE_1_NAME">Override Vanilla Faction</Entry>
+    <Entry key="FANCY_FACTION_OVERRIDE_1_DESC">Only icons from the selected faction will appear in vanilla games.</Entry>
+
+    <Entry key="FANCY_FACTION_OVERRIDE_2_NAME">Override BTOS2 Faction</Entry>
+    <Entry key="FANCY_FACTION_OVERRIDE_2_DESC">Only icons from the selected faction will appear in btos2 games.</Entry>
+
+    <Entry key="FANCY_EE_CHANCE_NAME">Easter Egg Icon Chance</Entry>
+    <Entry key="FANCY_EE_CHANCE_DESC">The chance of a different than normal icon appearing for roles.</Entry>
+
+    <Entry key="FANCY_ALL_EE_NAME">All Easter Eggs Are Active</Entry>
+    <Entry key="FANCY_ALL_EE_DESC">Toggles whether all of the previously selected icon pack's easter eggs will be used, or only the selected icon pack's.</Entry>
+
+    <Entry key="FANCY_PLAYER_PANEL_EE_NAME">Enable Easter Eggs In Player Panel</Entry>
+    <Entry key="FANCY_PLAYER_PANEL_EE_DESC">Toggles whether easter egg icons appear or not in the ability panel.</Entry>
+
+    <Entry key="FANCY_ANIM_DURATION_NAME">Silhouette Animation Duration</Entry>
+    <Entry key="FANCY_ANIM_DURATION_DESC">Dictates how long should one iteration of an animation last for.</Entry>
+
+    <Entry key="FANCY_UI_FIRE_NAME">Custom UI Theme Fire Color</Entry>
+    <Entry key="FANCY_UI_FIRE_DESC">Dictates how the fire of the main UI loooks like.</Entry>
+
+    <Entry key="FANCY_UI_PAPER_NAME">Custom UI Theme Paper Color</Entry>
+    <Entry key="FANCY_UI_PAPER_DESC">Dictates how the paper of the main UI loooks like.</Entry>
+
+    <Entry key="FANCY_UI_METAL_NAME">Custom UI Theme Metal Color</Entry>
+    <Entry key="FANCY_UI_METAL_DESC">Dictates how the metal of the main UI loooks like.</Entry>
+
+    <Entry key="FANCY_UI_LEATHER_NAME">Custom UI Theme Leather Color</Entry>
+    <Entry key="FANCY_UI_LEATHER_DESC">Dictates how the leather of the main UI loooks like.</Entry>
+
+    <Entry key="FANCY_UI_WAX_NAME">Custom UI Theme Wax Color</Entry>
+    <Entry key="FANCY_UI_WAX_DESC">Dictates how the wax of the main UI loooks like.</Entry>
+
+    <Entry key="FANCY_UI_WOOD_NAME">Custom UI Theme Wood Color</Entry>
+    <Entry key="FANCY_UI_WOOD_DESC">Dictates how the wood of the main UI loooks like.</Entry>
+
+    <Entry key="FANCY_DUMP_SHEETS_NAME">Dump Sprite Sheets</Entry>
+    <Entry key="FANCY_DUMP_SHEETS_DESC">Toggles whether game sprite sheets are dumped so pack debugging is possible.</Entry>
+
+    <Entry key="FANCY_DEBUG_LOADING_NAME">Debug Pack Loading</Entry>
+    <Entry key="FANCY_DEBUG_LOADING_DESC">Toggles whether the mod dumps info on loaded packs.</Entry>
+
+    <Entry key="FANCY_PLAYER_NUMBER_NAME">Test Player Number</Entry>
+    <Entry key="FANCY_PLAYER_NUMBER_DESC">Changing this value changes the name text below to appear when mentioning the same number.</Entry>
 </StringTable>

@@ -15,6 +15,8 @@
         <EnableDynamicLoading>true</EnableDynamicLoading>
         <Authors>AlchlcSystm</Authors>
         <RepositoryType>git</RepositoryType>
+        <DebugType>embedded</DebugType>
+        <DebugSymbols>true</DebugSymbols>
         <RepositoryUrl>https://github.com/AlchlcDvl/RoleIconRecolors.git</RepositoryUrl>
         <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
         <TOS>C:\Program Files (x86)\Steam\steamapps\common\Town of Salem 2</TOS>

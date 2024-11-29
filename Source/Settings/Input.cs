@@ -11,16 +11,17 @@ public class StringInputSetting : BaseInputSetting
         if (Option == null)
             return;
 
-        Input.text = Option.Get();
-        Input.onValueChanged.AddListener(OnValueChanged);
+        Input.SetTextWithoutNotify(Option.Get());
         Input.restoreOriginalTextOnEscape = true;
+        Input.onValueChanged.AddListener(OnValueChanged);
+        Input.onValueChanged.AddListener(_ => SettingsAndTestingUI.Instance.RefreshOptions());
     }
 
     public void OnValueChanged(string value)
     {
         var cache = value;
 
-        if (Regex.IsMatch(value.Replace("#", ""), Option.Regex))
+        if (Regex.IsMatch(value, Option.Regex))
             value = Option.DefaultValue;
 
         if (cache != value)
@@ -28,6 +29,7 @@ public class StringInputSetting : BaseInputSetting
 
         Option.Set(value);
         Option.OnChanged(value);
-        gameObject.SetActive(Option.SetActive(value));
     }
+
+    public override bool SetActive() => Option.SetActive(Option.Get());
 }

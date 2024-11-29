@@ -82,13 +82,16 @@ public class Fancy
     public static EnumDropdownOption<UITheme> SelectedUITheme;
 
     public static EnumDropdownOption<Role> CurrentRoleVanilla;
-    public static EnumDropdownOption<FactionType> CurrentFactionVanilla;
-
     public static EnumDropdownOption<Role> CurrentRoleBTOS;
+
+    public static EnumDropdownOption<FactionType> CurrentFactionVanilla;
     public static EnumDropdownOption<FactionType> CurrentFactionBTOS;
+
+    public static StringDropdownOption PlayerNumber;
 
     public static StringDropdownOption MentionStyle1;
     public static StringDropdownOption MentionStyle2;
+
     public static StringDropdownOption FactionOverride1;
     public static StringDropdownOption FactionOverride2;
 
@@ -97,6 +100,7 @@ public class Fancy
     public static ColorOption MainUIThemeLeather;
     public static ColorOption MainUIThemeMetal;
     public static ColorOption MainUIThemeFire;
+    public static ColorOption MainUIThemeWax;
 
     public static SliderOption EasterEggChance;
     public static SliderOption AnimationDuration;
@@ -111,8 +115,33 @@ public class Fancy
     public static void LoadConfigs()
     {
         SelectedIconPack = new("SELECTED_ICON_PACK", "Vanilla", () => GetPackNames(PackType.IconPacks), onChanged: x => TryLoadingSprites(x, PackType.IconPacks));
+        SelectedSilhouetteSet = new("SELECTED_SIL_SET", "Vanilla", () => GetPackNames(PackType.SilhouetteSets), onChanged: x => TryLoadingSprites(x, PackType.SilhouetteSets));
+
+        SelectedUITheme = new("SELECTED_UI_THEME", UITheme.Default);
+
+        MentionStyle1 = new("MENTION_STYLE_1", "Regular", () => GetOptions(ModType.Vanilla, true), _ => Constants.EnableIcons());
+        MentionStyle2 = new("MENTION_STYLE_2", "Regular", () => GetOptions(ModType.BTOS2, true), _ => Constants.BTOS2Exists() && Constants.EnableIcons());
+
+        FactionOverride1 = new("FACTION_OVERRIDE_1", "None", () => GetOptions(ModType.Vanilla, false), _ => Constants.EnableIcons());
+        FactionOverride2 = new("FACTION_OVERRIDE_2", "None", () => GetOptions(ModType.BTOS2, false), _ => Constants.BTOS2Exists() && Constants.EnableIcons());
+
+        MainUIThemeFire = new("UI_FIRE", "#FFFFFF", _ => Constants.EnableCustomUI());
+        MainUIThemePaper = new("UI_PAPER", "#FFFFFF", _ => Constants.EnableCustomUI());
+        MainUIThemeMetal = new("UI_METAL", "#FFFFFF", _ => Constants.EnableCustomUI());
+        MainUIThemeLeather = new("UI_LEATHER", "#FFFFFF", _ => Constants.EnableCustomUI());
+        MainUIThemeWood = new("UI_WOOD", "#FFFFFF", _ => Constants.EnableCustomUI());
+        MainUIThemeWax = new("UI_WAX", "#FFFFFF", _ => Constants.EnableCustomUI());
+
+        PlayerNumber = new("PLAYER_NUMBER", "?", () => [ "?", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15" ]);
+
+        EasterEggChance = new("EE_CHANCE", 5, 0, 100, true, _ => Constants.EnableIcons());
+        AnimationDuration = new("ANIM_DURATION", 2, 0.5f, 10, setActive: _ => Constants.EnableSwaps());
 
         CustomNumbers = new("CUSTOM_NUMBERS", false, _ => Constants.EnableIcons());
+        AllEasterEggs = new("ALL_EE", false, _ => Constants.EnableIcons());
+        PlayerPanelEasterEggs = new("PLAYER_PANEL_EE", false, _ => Constants.EnableIcons());
+        DumpSpriteSheets = new("DUMP_SHEETS", false);
+        DebugPackLoading = new("DEBUG_LOADING", false);
     }
 
     public static readonly SalemMenuButton FancyMenu = new()

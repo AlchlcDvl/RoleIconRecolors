@@ -653,6 +653,8 @@ public static class Utils
             ColorType.Paper => Constants.GetMainUIThemePaperColor(),
             ColorType.Leather => Constants.GetMainUIThemeLeatherColor(),
             ColorType.Wood => Constants.GetMainUIThemeWoodColor(),
+            ColorType.Flame => Constants.GetMainUIThemeFireColor(),
+            ColorType.Wax => Constants.GetMainUIThemeWaxColor(),
             _ => color ?? Color.white
         };
     }
@@ -885,4 +887,6 @@ public static class Utils
         "hidden" => Role.HIDDEN,
         _ => Role.NONE
     };
+
+    public static Color ToColor(this string html) => ColorUtility.DoTryParseHtmlColor(html, out var color) ? color : Color.white;
 }

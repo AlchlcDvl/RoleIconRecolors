@@ -2,26 +2,25 @@ namespace FancyUI.Settings;
 
 public class DropdownSetting : Setting
 {
-    public Dropdown Dropdown { get; set; }
+    public TMP_Dropdown Dropdown { get; set; }
     public IDropdown Option { get; set; }
 
     public override void Awake()
     {
         base.Awake();
-        Dropdown = transform.GetComponent<Dropdown>("Dropdown");
+        Dropdown = transform.GetComponent<TMP_Dropdown>("Dropdown");
     }
-
 
     public void Start()
     {
         if (Option == null)
             return;
 
-        Option.OptionCreated();
-
-        Dropdown.AddOptions(Option.DisplayOptions().ToList());
+        Dropdown.ClearOptions();
+        Dropdown.AddOptions(Option.DisplayOptions().Select(x => l10n(x)).ToList());
         Dropdown.value = Option.GetInt();
         Dropdown.onValueChanged.AddListener(OnValueChanged);
+        Dropdown.onValueChanged.AddListener(_ => SettingsAndTestingUI.Instance.RefreshOptions());
     }
 
     public void OnValueChanged(int index)
@@ -29,6 +28,7 @@ public class DropdownSetting : Setting
         var options = Option.Options();
         Option.SetString(options.ElementAtOrDefault(index) ?? options.FirstOrDefault() ?? "Error");
         Option.OnChanged();
-        gameObject.SetActive(Option.SetActive());
     }
+
+    public override bool SetActive() => Option.SetActive();
 }

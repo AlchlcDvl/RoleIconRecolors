@@ -1,6 +1,6 @@
 namespace FancyUI;
 
-public enum ModType
+public enum ModType : byte
 {
     Common,
     Vanilla,
@@ -8,22 +8,26 @@ public enum ModType
     None
 }
 
-public enum PackType
+public enum PackType : byte
 {
+    None,
     IconPacks,
-    SilhouetteSets
+    RecoloredUI,
+    SilhouetteSets,
+    MiscRoleCustomisation
 }
 
-public enum ColorType
+public enum ColorType : byte
 {
     Wood,
     Metal,
     Paper,
     Leather,
-    Custom
+    Flame,
+    Wax
 }
 
-public enum OptionType
+public enum OptionType : byte
 {
     Toggle,
     Slider,
@@ -33,11 +37,10 @@ public enum OptionType
     ColorInput
 }
 
-public enum UITheme
+public enum UITheme : byte
 {
     Default,
     Role,
     Faction,
-    RoleAndFaction,
     Custom
 }

@@ -7,7 +7,7 @@ public static class RoleCardPanelPatch
 {
     public static void Postfix(RoleCardPanel __instance)
     {
-        if (!Constants.CustomMainUIEnabled())
+        if (!Constants.EnableCustomUI())
             return;
 
         __instance.transform.GetChild(5).GetComponent<Image>().SetImageColor(ColorType.Wood);
@@ -20,7 +20,7 @@ public static class SpecialAbilityPanelPatch1
 {
     public static void Postfix(SpecialAbilityPanel __instance)
     {
-        if (!Constants.CustomMainUIEnabled())
+        if (!Constants.EnableCustomUI())
             return;
 
         var og = __instance.transform.GetChild(1).GetComponent<Image>();
@@ -40,7 +40,7 @@ public static class SpecialAbilityPopupPanelPatch
 {
     public static void Postfix(SpecialAbilityPopupPanel __instance)
     {
-        if (!Constants.CustomMainUIEnabled())
+        if (!Constants.EnableCustomUI())
             return;
 
         var og = __instance.transform.GetChild(0).GetComponent<Image>();
@@ -60,7 +60,7 @@ public static class RoleCardPopupControllerPatch
 {
     public static void Postfix(RoleCardPopupPanel __instance)
     {
-        if (!Constants.CustomMainUIEnabled())
+        if (!Constants.EnableCustomUI())
             return;
 
         __instance.transform.GetChild(4).GetComponent<Image>().SetImageColor(ColorType.Wood); // Frame
@@ -78,7 +78,7 @@ public static class AchievementItemPatch
 {
     public static void Postfix(AchievementItem __instance)
     {
-        if (Constants.CustomMainUIEnabled())
+        if (Constants.EnableCustomUI())
             __instance.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
     }
 }
@@ -88,7 +88,7 @@ public static class HudDockPanelPatch
 {
     public static void Postfix(HudDockPanel __instance)
     {
-        if (Constants.CustomMainUIEnabled())
+        if (Constants.EnableCustomUI())
             __instance.GetComponent<Image>().SetImageColor(ColorType.Wood);
     }
 }
@@ -98,7 +98,7 @@ public static class PooledChatViewSwitcherPatch
 {
     public static void Postfix(PooledChatViewSwitcher __instance)
     {
-        if (!Constants.CustomMainUIEnabled())
+        if (!Constants.EnableCustomUI())
             return;
 
         __instance.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
@@ -119,7 +119,7 @@ public static class ChatInputControllerPatch
 {
     public static void Postfix(ChatInputController __instance)
     {
-        if (Constants.CustomMainUIEnabled())
+        if (Constants.EnableCustomUI())
             __instance.parchmentBackgroundImage.SetImageColor(ColorType.Paper);
     }
 }
@@ -129,7 +129,7 @@ public static class LobbyInfoClassicPanelPatch
 {
     public static void Postfix(LobbyInfoClassicPanel __instance)
     {
-        if (Constants.CustomMainUIEnabled())
+        if (Constants.EnableCustomUI())
             __instance.GetComponent<Image>().SetImageColor(ColorType.Wood);
     }
 }
@@ -139,7 +139,7 @@ public static class LobbyTimerPatch
 {
     public static void Postfix(LobbyTimer __instance)
     {
-        if (Constants.CustomMainUIEnabled())
+        if (Constants.EnableCustomUI())
             __instance.GetComponent<Image>().SetImageColor(ColorType.Wood);
     }
 }
@@ -149,7 +149,7 @@ public static class HudTimeChangePanelPatch
 {
     public static void Postfix(HudTimeChangePanel __instance)
     {
-        if (!Constants.CustomMainUIEnabled())
+        if (!Constants.EnableCustomUI())
             return;
 
         __instance.transform.GetChild(0).GetChild(3).GetComponent<Image>().SetImageColor(ColorType.Wood);
@@ -162,7 +162,7 @@ public static class LobbyGameModeChoicePanelPatch
 {
     public static void Postfix(LobbyGameModeChoicePanel __instance)
     {
-        if (!Constants.CustomMainUIEnabled())
+        if (!Constants.EnableCustomUI())
             return;
 
         __instance.transform.GetChild(0).GetChild(1).GetChild(0).GetChild(0).GetChild(12).GetComponent<Image>().SetImageColor(ColorType.Wood);
@@ -178,7 +178,7 @@ public static class LobbyGameModeChoicePanelPatch
 // {
 //     public static void Postfix(SafeAreaController __instance)
 //     {
-//         if (!Constants.CustomMainUIEnabled() || Pepper.IsLobbyOrGamePhase())
+//         if (!Constants.EnableCustomUI() || Pepper.IsLobbyOrGamePhase())
 //             return;
 
 //         var parts = __instance.transform.GetChild(12);
@@ -194,7 +194,7 @@ public static class LobbyGameModeChoicePanelPatch
 // {
 //     public static void Postfix(HudGraveyardPanel __instance)
 //     {
-//         if (!Constants.CustomMainUIEnabled())
+//         if (!Constants.EnableCustomUI())
 //             return;
 
 //     }

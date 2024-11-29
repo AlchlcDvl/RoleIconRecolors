@@ -7,7 +7,17 @@ public abstract class Option<TValue, TSetting>(string id, TValue defaultValue, O
     public Func<TValue, bool> SetActive { get; } = setActive ?? (_ => true);
     public Action<TValue> OnChanged { get; } = onChanged ?? (_ => {});
     public TValue DefaultValue { get; } = defaultValue;
-    public TSetting Setting { get; set; }
+
+    private TSetting _setting;
+    public TSetting Setting
+    {
+        get => _setting;
+        set
+        {
+            _setting = value;
+            OptionCreated();
+        }
+    }
 
     public TValue Get() => Entry.Value;
 
@@ -16,7 +26,7 @@ public abstract class Option<TValue, TSetting>(string id, TValue defaultValue, O
     public virtual void OptionCreated()
     {
         Setting.name = ID;
-        Setting.TitleText.text = UI.FancyUI.Instance.l10n($"FANCY_{ID}_NAME");
+        Setting.TitleText.text = SettingsAndTestingUI.Instance.l10n($"FANCY_{ID}_NAME");
         Setting.Background.EnsureComponent<TooltipTrigger>().LookupKey = $"FANCY_{ID}_DESC";
     }
 }
