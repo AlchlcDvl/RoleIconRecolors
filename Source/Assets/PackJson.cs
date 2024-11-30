@@ -19,6 +19,9 @@ public class PackJson
     [JsonProperty("credits")]
     public string Credits { get; set; }
 
+    [JsonProperty("type")]
+    public string Type { get; set; }
+
     [JsonIgnore]
     public bool FromMainRepo { get; set; }
 
@@ -33,5 +36,6 @@ public class PackJson
         RepoName ??= "RoleIconRecolors";
         Name ??= RepoName;
         Credits ??= "";
+        Type ??= "IconPacks";
     }
 }

@@ -36,11 +36,7 @@ public class LoadingUI : UIController
         CancelButton.GetComponent<Button>().onClick.AddListener(Cancel);
     }
 
-    private void Cancel()
-    {
-        SilhouetteSwapperUI.Instance.Abort = true;
-        IconPacksUI.Instance.Abort = true;
-    }
+    private void Cancel() => DownloaderUI.Instance.Abort = true;
 
     public void Update()
     {
@@ -61,7 +57,7 @@ public class LoadingUI : UIController
     {
         Caller.SetActive(true);
         Caller = null;
-        IconPacksUI.Instance.Abort = false;
+        DownloaderUI.Instance.Abort = true;
         Instance.gameObject.SetActive(false);
         Started = false;
     }

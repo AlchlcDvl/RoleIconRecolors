@@ -50,7 +50,7 @@ public static class FancyAssetManager
         if (!IconPacks.TryGetValue(packName, out var pack))
         {
             Fancy.Instance.Error($"Error finding {packName} in loaded packs");
-            ModSettings.SetString("Selected Icon Pack", "Vanilla", "alchlcsystm.fancy.ui");
+            // ModSettings.SetString("Selected Icon Pack", "Vanilla", "alchlcsystm.fancy.ui");
             return Blank;
         }
 

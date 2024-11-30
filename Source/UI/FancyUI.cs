@@ -12,6 +12,8 @@ public class FancyUI : UIController
     private GameObject CloseButton { get; set; }
     private GameObject Settings { get; set; }
 
+    public PackType Page { get; set; }
+
     public static FancyUI Instance { get; private set; }
 
     public void Awake()
@@ -36,8 +38,7 @@ public class FancyUI : UIController
     {
         Instance = null;
         LoadingUI.Instance?.gameObject?.Destroy();
-        IconPacksUI.Instance?.gameObject?.Destroy();
-        SilhouetteSwapperUI.Instance?.gameObject?.Destroy();
+        DownloaderUI.Instance?.gameObject?.Destroy();
         SettingsAndTestingUI.Instance?.gameObject?.Destroy();
     }
 
@@ -67,30 +68,36 @@ public class FancyUI : UIController
 
     private void OpenIP()
     {
-        if (IconPacksUI.Instance)
+        Page = PackType.IconPacks;
+
+        if (DownloaderUI.Instance)
         {
-            IconPacksUI.Instance.gameObject.SetActive(true);
+            DownloaderUI.Instance.gameObject.SetActive(true);
             gameObject.SetActive(false);
             return;
         }
 
-        OpenMenu<IconPacksUI>();
+        OpenMenu();
     }
 
     private void OpenSS()
     {
-        if (SilhouetteSwapperUI.Instance)
+        Page = PackType.SilhouetteSets;
+
+        if (DownloaderUI.Instance)
         {
-            SilhouetteSwapperUI.Instance.gameObject.SetActive(true);
+            DownloaderUI.Instance.gameObject.SetActive(true);
             gameObject.SetActive(false);
             return;
         }
 
-        OpenMenu<SilhouetteSwapperUI>();
+        OpenMenu();
     }
 
     private void OpenSettings()
     {
+        Page = PackType.Settings;
+
         if (SettingsAndTestingUI.Instance)
         {
             SettingsAndTestingUI.Instance.gameObject.SetActive(true);
@@ -107,13 +114,13 @@ public class FancyUI : UIController
         gameObject.SetActive(false);
     }
 
-    private void OpenMenu<T>() where T : BaseUI
+    private void OpenMenu()
     {
         var go = Instantiate(Fancy.Assets.GetGameObject("DownloaderUI"), transform.parent, false);
         go.transform.localPosition = new(0, 0, 0);
         go.transform.localScale = Vector3.one * 1.5f;
         go.transform.SetAsLastSibling();
-        go.AddComponent<T>();
+        go.AddComponent<DownloaderUI>();
         SetupFonts(go.transform);
         gameObject.SetActive(false);
     }

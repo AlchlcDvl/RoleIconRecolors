@@ -6,7 +6,6 @@ using Game.Characters;
 using Game.Chat.Decoders;
 using Server.Shared.Messages;
 using Server.Shared.State.Chat;
-using Home.LoginScene;
 using Mentions;
 using Server.Shared.Extensions;
 using Home.Shared;
@@ -695,12 +694,6 @@ public static class PMBakerMenuPatch
         if (sprite3.IsValid() && image3)
             image3.sprite = sprite3;
     }
-}
-
-[HarmonyPatch(typeof(LoginSceneController), nameof(LoginSceneController.Start))]
-public static class HandlePacks
-{
-    public static void Prefix() => IconPacksUI.HandlePackData();
 }
 
 [HarmonyPatch(typeof(DownloadContributorTags), nameof(DownloadContributorTags.AddTMPSprites)), HarmonyPriority(Priority.VeryLow)]

@@ -14,7 +14,8 @@ public enum PackType : byte
     IconPacks,
     RecoloredUI,
     SilhouetteSets,
-    MiscRoleCustomisation
+    MiscRoleCustomisation,
+    Settings
 }
 
 public enum ColorType : byte
