@@ -26,7 +26,7 @@ public abstract class Option<TValue, TSetting>(string id, TValue defaultValue, O
     public virtual void OptionCreated()
     {
         Setting.name = ID;
-        Setting.TitleText.text = SettingsAndTestingUI.Instance.l10n($"FANCY_{ID}_NAME");
+        Setting.TitleText.SetText(SettingsAndTestingUI.Instance.l10n($"FANCY_{ID}_NAME"));
         Setting.Background.EnsureComponent<TooltipTrigger>().LookupKey = $"FANCY_{ID}_DESC";
     }
 }

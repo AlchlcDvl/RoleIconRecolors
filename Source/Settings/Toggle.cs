@@ -3,7 +3,8 @@ namespace FancyUI.Settings;
 public class ToggleSetting : Setting
 {
     public Toggle Toggle { get; set; }
-    public Image Button { get; set; }
+    public Image OnBG { get; set; }
+    public Image OffBG { get; set; }
     public TextMeshProUGUI ValueText { get; set; }
 
     public ToggleOption Option { get; set; }
@@ -12,7 +13,8 @@ public class ToggleSetting : Setting
     {
         base.Awake();
         Toggle = transform.GetComponent<Toggle>("Toggle");
-        Button = Toggle.transform.GetComponent<Image>("Checkmark");
+        OnBG = Toggle.transform.GetComponent<Image>("OnBG");
+        OffBG = Toggle.transform.GetComponent<Image>("OffBG");
         ValueText = Toggle.transform.GetComponent<TextMeshProUGUI>("Text");
     }
 
@@ -26,7 +28,10 @@ public class ToggleSetting : Setting
         Toggle.onValueChanged.AddListener(_ => SettingsAndTestingUI.Instance.RefreshOptions());
 
         ValueText.SetText(Toggle.isOn ? "On" : "Off");
-        Button.sprite = Fancy.Assets.GetSprite($"Button{(Toggle.isOn ? "Green" : "Red")}");
+
+        OnBG.gameObject.SetActive(Toggle.isOn);
+        OffBG.gameObject.SetActive(!Toggle.isOn);
+        Toggle.targetGraphic = Toggle.isOn ? OnBG : OffBG;
     }
 
     public void OnValueChanged(bool value)
@@ -34,7 +39,9 @@ public class ToggleSetting : Setting
         Option.Set(value);
         Option.OnChanged(value);
         ValueText.SetText(value ? "On" : "Off");
-        Button.sprite = Fancy.Assets.GetSprite($"Button{(value ? "Green" : "Red")}");
+        OnBG.gameObject.SetActive(value);
+        OffBG.gameObject.SetActive(!value);
+        Toggle.targetGraphic = value ? OnBG : OffBG;
     }
 
     public override bool SetActive() => Option.SetActive(Option.Get());

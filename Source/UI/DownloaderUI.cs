@@ -13,15 +13,17 @@ public class DownloaderUI : UIController
     public static readonly Dictionary<string, bool> Running = [];
     public static bool HandlerRunning  { get; set; }
 
-    private GameObject Back { get; set; }
-    private GameObject OpenDir { get; set; }
-    private GameObject Confirm { get; set; }
+    private Transform Back { get; set; }
+    private Transform OpenDir { get; set; }
+    private Transform Confirm { get; set; }
+
+    private GameObject NoPacks { get; set; }
+    private GameObject PackTemplate { get; set; }
+
     private TMP_InputField PackName { get; set; }
     private TMP_InputField RepoName { get; set; }
     private TMP_InputField RepoOwner { get; set; }
     private TMP_InputField BranchName { get; set; }
-    private GameObject NoPacks { get; set; }
-    private GameObject PackTemplate { get; set; }
 
     public bool Abort { get; set; }
 
@@ -37,9 +39,9 @@ public class DownloaderUI : UIController
     {
         Instance = this;
 
-        Back = transform.FindRecursive("Back").gameObject;
-        OpenDir = transform.FindRecursive("Directory").gameObject;
-        Confirm = transform.FindRecursive("Confirm").gameObject;
+        Back = transform.FindRecursive("Back");
+        OpenDir = transform.FindRecursive("Directory");
+        Confirm = transform.FindRecursive("Confirm");
         PackName = transform.GetComponent<TMP_InputField>("PackName");
         RepoName = transform.GetComponent<TMP_InputField>("RepoName");
         RepoOwner = transform.GetComponent<TMP_InputField>("RepoOwner");
@@ -47,7 +49,7 @@ public class DownloaderUI : UIController
         NoPacks = transform.FindRecursive("NoPacks").gameObject;
         PackTemplate = transform.FindRecursive("PackTemplate").gameObject;
 
-        transform.Find("Title").GetComponent<TextMeshProUGUI>().SetText($"{Type}s");
+        transform.GetComponent<TextMeshProUGUI>("Title").SetText($"{Type}s");
 
         Back.GetComponent<Button>().onClick.AddListener(GoBack);
 
@@ -99,6 +101,7 @@ public class DownloaderUI : UIController
     public void GoBack()
     {
         gameObject.SetActive(false);
+        FancyUI.Instance.Page = PackType.None;
         FancyUI.Instance.gameObject.SetActive(true);
     }
 
@@ -135,13 +138,13 @@ public class DownloaderUI : UIController
         {
             go = Instantiate(PackTemplate, PackTemplate.transform.parent);
             go.name = packJson.Name;
-            go.transform.Find("PackName").GetComponent<TextMeshProUGUI>().SetText(packJson.Name);
+            go.transform.GetComponent<TextMeshProUGUI>("PackName").SetText(packJson.Name);
             var link = go.transform.Find("RepoButton");
             link.GetComponent<Button>().onClick.AddListener(() => Application.OpenURL(packJson.Link()));
             link.AddComponent<TooltipTrigger>().NonLocalizedString = "Open Link";
             var button = go.transform.Find("Download");
             button.GetComponent<Button>().onClick.AddListener(download);
-            button.gameObject.AddComponent<TooltipTrigger>().NonLocalizedString = $"Download {packJson.Name}";
+            button.AddComponent<TooltipTrigger>().NonLocalizedString = $"Download {packJson.Name}";
 
             if (!StringUtils.IsNullEmptyOrWhiteSpace(packJson.Credits))
                 go.AddComponent<TooltipTrigger>().NonLocalizedString = packJson.Credits;
@@ -191,7 +194,7 @@ public class DownloaderUI : UIController
         if (!StringUtils.IsNullEmptyOrWhiteSpace(others2))
         {
             var array = JsonConvert.DeserializeObject<PackJson[]>(others2);
-            array.ForEach(x => x.Type = "IconPacks");
+            array.ForEach(x => x.Type = "SilhouetteSets");
             Packs.AddRange(array);
         }
 
@@ -304,7 +307,7 @@ public class DownloaderUI : UIController
             Fancy.Instance.Warning("Process was aborted");
 
         LoadingUI.Instance.LoadingProgress.SetText("Loading Icon Pack");
-        // ModSettings.SetString("Selected Icon Pack", packName, "alchlcsystm.fancy.ui");
+        Fancy.SelectedIconPack.Set(packName);
         TryLoadingSprites(packName, FancyUI.Instance.Page);
         Instance.OpenDirectory();
         Running[packName] = false;

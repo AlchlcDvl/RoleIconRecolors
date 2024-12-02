@@ -102,7 +102,6 @@ public static class PooledChatViewSwitcherPatch
             return;
 
         __instance.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
-        __instance.transform.GetChild(3).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
         var parts = __instance.transform.GetChild(1).GetChild(1);
         parts.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
         parts.GetChild(1).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
@@ -111,6 +110,18 @@ public static class PooledChatViewSwitcherPatch
         parts2.parent.GetComponent<Image>().SetImageColor(ColorType.Metal);
         parts2.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
         parts2.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
+        var nameplate = __instance.transform.GetChild(3).GetChild(0);
+        nameplate.GetComponent<Image>().SetImageColor(ColorType.Metal);
+
+        var name = nameplate.Find("Name");
+
+        if (name)
+            name.SetParent(nameplate.parent);
+
+        var cutout = nameplate.Find("Cutout");
+
+        if (cutout)
+            cutout.SetParent(nameplate.parent);
     }
 }
 

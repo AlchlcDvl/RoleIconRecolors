@@ -50,7 +50,7 @@ public static class FancyAssetManager
         if (!IconPacks.TryGetValue(packName, out var pack))
         {
             Fancy.Instance.Error($"Error finding {packName} in loaded packs");
-            // ModSettings.SetString("Selected Icon Pack", "Vanilla", "alchlcsystm.fancy.ui");
+            Fancy.SelectedIconPack.Set(packName);
             return Blank;
         }
 
@@ -172,7 +172,7 @@ public static class FancyAssetManager
         if (!Directory.Exists(folder))
         {
             Fancy.Instance.Error($"{packName} was missing");
-            // ModSettings.SetString("Selected Icon Pack", "Vanilla", "alchlcsystm.fancy.ui");
+            Fancy.SelectedIconPack.Set(packName);
             return;
         }
 

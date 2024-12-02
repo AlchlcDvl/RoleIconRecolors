@@ -418,9 +418,8 @@ public static class Utils
                 .Where(fi => fi.IsLiteral && !fi.IsInitOnly && fi.FieldType == typeof(Role))
                 .Select(x => (Role)x.GetRawConstantValue())
                 .Where(x => x is not (BTOS2Role.None or BTOS2Role.Hangman or BTOS2Role.Unknown or BTOS2Role.RoleCount)),
-            _ => Enum.GetValues(typeof(Role)).Cast<Role>().Where(x => x is not (Role.NONE or Role.ROLE_COUNT or Role.UNKNOWN or Role.HANGMAN))
+            _ => GeneralUtils.GetEnumValues<Role>().Where(x => x is not (Role.NONE or Role.ROLE_COUNT or Role.UNKNOWN or Role.HANGMAN))
         };
-
         return RoleStuff[mod] = (roles.ToDictionary(x => x.ToString(), x => $"Role{(int)x}"), roles.ToDictionary(x => x.ToString(), x => (int)x));
     }
 
@@ -888,5 +887,5 @@ public static class Utils
         _ => Role.NONE
     };
 
-    public static Color ToColor(this string html) => ColorUtility.DoTryParseHtmlColor(html, out var color) ? color : Color.white;
+    public static Color ToColor(this string html) => ColorUtility.TryParseHtmlString(html.StartsWith("#") ? html : $"#{html}", out var color) ? color : Color.white;
 }
