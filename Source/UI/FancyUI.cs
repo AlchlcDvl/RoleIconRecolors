@@ -29,21 +29,6 @@ public class FancyUI : UIController
         GameFont = font.tmp_FontAsset;
         GameFontMaterial = font.standardFontMaterial;
 
-        SetupFonts(transform);
-
-        SetupMenu();
-    }
-
-    public void OnDestroy()
-    {
-        Instance = null;
-        LoadingUI.Instance?.gameObject?.Destroy();
-        DownloaderUI.Instance?.gameObject?.Destroy();
-        SettingsAndTestingUI.Instance?.gameObject?.Destroy();
-    }
-
-    private void SetupMenu()
-    {
         IconPacksButton.GetComponent<Button>().onClick.AddListener(OpenIP);
         IconPacksButton.AddComponent<TooltipTrigger>().NonLocalizedString = "Open Icon Packs Menu";
 
@@ -55,11 +40,21 @@ public class FancyUI : UIController
 
         CloseButton.GetComponent<Button>().onClick.AddListener(gameObject.Destroy);
         CloseButton.AddComponent<TooltipTrigger>().NonLocalizedString = "Close Menu";
+
+        SetupFonts(transform);
+    }
+
+    public void OnDestroy()
+    {
+        Instance = null;
+        LoadingUI.Instance?.gameObject?.Destroy();
+        DownloaderUI.Instance?.gameObject?.Destroy();
+        SettingsAndTestingUI.Instance?.gameObject?.Destroy();
     }
 
     public static void SetupFonts(Transform trans)
     {
-        foreach (var tmp in trans.GetComponentsInChildren<TextMeshProUGUI>())
+        foreach (var tmp in trans.GetComponentsInChildren<TextMeshProUGUI>(true))
         {
             tmp.font = GameFont;
             tmp.fontMaterial = GameFontMaterial;
@@ -110,7 +105,6 @@ public class FancyUI : UIController
         go.transform.localScale = Vector3.one * 1.5f;
         go.transform.SetAsLastSibling();
         go.AddComponent<SettingsAndTestingUI>();
-        SetupFonts(go.transform);
         gameObject.SetActive(false);
     }
 
@@ -121,7 +115,6 @@ public class FancyUI : UIController
         go.transform.localScale = Vector3.one * 1.5f;
         go.transform.SetAsLastSibling();
         go.AddComponent<DownloaderUI>();
-        SetupFonts(go.transform);
         gameObject.SetActive(false);
     }
 }

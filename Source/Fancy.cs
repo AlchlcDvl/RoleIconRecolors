@@ -114,34 +114,35 @@ public class Fancy
     [LoadConfigs]
     public static void LoadConfigs()
     {
-        SelectedIconPack = new("SELECTED_ICON_PACK", "Vanilla", () => GetPackNames(PackType.IconPacks), onChanged: x => TryLoadingSprites(x, PackType.IconPacks));
-        SelectedSilhouetteSet = new("SELECTED_SIL_SET", "Vanilla", () => GetPackNames(PackType.SilhouetteSets), onChanged: x => TryLoadingSprites(x, PackType.SilhouetteSets));
+        SelectedIconPack = new("SELECTED_ICON_PACK", "Vanilla", PackType.IconPacks, () => GetPackNames(PackType.IconPacks), onChanged: x => TryLoadingSprites(x, PackType.IconPacks));
+        SelectedSilhouetteSet = new("SELECTED_SIL_SET", "Vanilla", PackType.SilhouetteSets, () => GetPackNames(PackType.SilhouetteSets), onChanged: x => TryLoadingSprites(x,
+            PackType.SilhouetteSets));
 
-        SelectedUITheme = new("SELECTED_UI_THEME", UITheme.Default);
+        SelectedUITheme = new("SELECTED_UI_THEME", UITheme.Default, PackType.RecoloredUI);
 
-        MentionStyle1 = new("MENTION_STYLE_1", "Regular", () => GetOptions(ModType.Vanilla, true), _ => Constants.EnableIcons());
-        MentionStyle2 = new("MENTION_STYLE_2", "Regular", () => GetOptions(ModType.BTOS2, true), _ => Constants.BTOS2Exists() && Constants.EnableIcons());
+        MentionStyle1 = new("MENTION_STYLE_1", "Regular", PackType.IconPacks, () => GetOptions(ModType.Vanilla, true), _ => Constants.EnableIcons());
+        MentionStyle2 = new("MENTION_STYLE_2", "Regular", PackType.IconPacks, () => GetOptions(ModType.BTOS2, true), _ => Constants.BTOS2Exists() && Constants.EnableIcons());
 
-        FactionOverride1 = new("FACTION_OVERRIDE_1", "None", () => GetOptions(ModType.Vanilla, false), _ => Constants.EnableIcons());
-        FactionOverride2 = new("FACTION_OVERRIDE_2", "None", () => GetOptions(ModType.BTOS2, false), _ => Constants.BTOS2Exists() && Constants.EnableIcons());
+        FactionOverride1 = new("FACTION_OVERRIDE_1", "None", PackType.IconPacks, () => GetOptions(ModType.Vanilla, false), _ => Constants.EnableIcons());
+        FactionOverride2 = new("FACTION_OVERRIDE_2", "None", PackType.IconPacks, () => GetOptions(ModType.BTOS2, false), _ => Constants.BTOS2Exists() && Constants.EnableIcons());
 
-        MainUIThemeFire = new("UI_FIRE", "#FFFFFF", _ => Constants.EnableCustomUI());
-        MainUIThemePaper = new("UI_PAPER", "#FFFFFF", _ => Constants.EnableCustomUI());
-        MainUIThemeMetal = new("UI_METAL", "#FFFFFF", _ => Constants.EnableCustomUI());
-        MainUIThemeLeather = new("UI_LEATHER", "#FFFFFF", _ => Constants.EnableCustomUI());
-        MainUIThemeWood = new("UI_WOOD", "#FFFFFF", _ => Constants.EnableCustomUI());
-        MainUIThemeWax = new("UI_WAX", "#FFFFFF", _ => Constants.EnableCustomUI());
+        MainUIThemeFire = new("UI_FIRE", "#FFFFFF", PackType.RecoloredUI, _ => Constants.EnableCustomUI());
+        MainUIThemePaper = new("UI_PAPER", "#FFFFFF", PackType.RecoloredUI, _ => Constants.EnableCustomUI());
+        MainUIThemeMetal = new("UI_METAL", "#FFFFFF", PackType.RecoloredUI, _ => Constants.EnableCustomUI());
+        MainUIThemeLeather = new("UI_LEATHER", "#FFFFFF", PackType.RecoloredUI, _ => Constants.EnableCustomUI());
+        MainUIThemeWood = new("UI_WOOD", "#FFFFFF", PackType.RecoloredUI, _ => Constants.EnableCustomUI());
+        MainUIThemeWax = new("UI_WAX", "#FFFFFF", PackType.RecoloredUI, _ => Constants.EnableCustomUI());
 
-        PlayerNumber = new("PLAYER_NUMBER", "?", () => [ "?", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15" ]);
+        PlayerNumber = new("PLAYER_NUMBER", "?", PackType.IconPacks, () => [ "?", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15" ]);
 
-        EasterEggChance = new("EE_CHANCE", 5, 0, 100, true, _ => Constants.EnableIcons());
-        AnimationDuration = new("ANIM_DURATION", 2, 0.5f, 10, setActive: _ => Constants.EnableSwaps());
+        EasterEggChance = new("EE_CHANCE", 5, PackType.IconPacks, 0, 100, true, _ => Constants.EnableIcons());
+        AnimationDuration = new("ANIM_DURATION", 2, PackType.IconPacks, 0.5f, 10, setActive: _ => Constants.EnableSwaps());
 
-        CustomNumbers = new("CUSTOM_NUMBERS", false, _ => Constants.EnableIcons());
-        AllEasterEggs = new("ALL_EE", false, _ => Constants.EnableIcons());
-        PlayerPanelEasterEggs = new("PLAYER_PANEL_EE", false, _ => Constants.EnableIcons());
-        DumpSpriteSheets = new("DUMP_SHEETS", false);
-        DebugPackLoading = new("DEBUG_LOADING", false);
+        CustomNumbers = new("CUSTOM_NUMBERS", false, PackType.IconPacks, _ => Constants.EnableIcons());
+        AllEasterEggs = new("ALL_EE", false, PackType.IconPacks, _ => Constants.EnableIcons());
+        PlayerPanelEasterEggs = new("PLAYER_PANEL_EE", false, PackType.IconPacks, _ => Constants.EnableIcons());
+        DumpSpriteSheets = new("DUMP_SHEETS", false, PackType.None);
+        DebugPackLoading = new("DEBUG_LOADING", false, PackType.None);
     }
 
     public static readonly SalemMenuButton FancyMenu = new()
@@ -167,7 +168,7 @@ public class Fancy
 
             foreach (var dir in Directory.EnumerateDirectories(Path.Combine(Instance.ModPath, type.ToString())))
             {
-                if (!dir.Contains("Vanilla") && !dir.Contains("BTOS2"))
+                if (!dir.ContainsAny("Vanilla", "BTOS2"))
                     result.Add(dir.FancySanitisePath());
             }
 

@@ -6,12 +6,14 @@ public abstract class Option
     public string ID { get; }
     public string Value { get; set; }
     public OptionType Type { get; }
+    public PackType Page { get; }
 
-    protected Option(string id, OptionType type, string value)
+    protected Option(string id, OptionType type, string value, PackType page)
     {
         ID = id;
         Type = type;
         Value = value;
+        Page = page;
         All.Add(this);
     }
 

@@ -34,6 +34,8 @@ public class SettingsAndTestingUI : UIController
 
     private bool IsBTOS2 { get; set; }
 
+    public PackType Page { get; set; }
+
     private readonly List<GameObject> ButtonGOs = [];
     private readonly List<Image> ButtonImages = [];
     private readonly List<Sprite> ButtonSprites = [];
@@ -88,11 +90,6 @@ public class SettingsAndTestingUI : UIController
         ToggleTemplate = transform.EnsureComponent<ToggleSetting>("ToggleTemplate");
         InputTemplate = transform.EnsureComponent<StringInputSetting>("InputTemplate");
 
-        SetupMenu();
-    }
-
-    private void SetupMenu()
-    {
         Back.GetComponent<Button>().onClick.AddListener(GoBack);
         Back.AddComponent<TooltipTrigger>().NonLocalizedString = "Close Testing Menu";
 
@@ -105,6 +102,8 @@ public class SettingsAndTestingUI : UIController
         // Toggle.GetComponent<Button>().onClick.AddListener(ToggleVersion);
         // Toggle.AddComponent<TooltipTrigger>().NonLocalizedString = "Toggle To Choose Icons From BTOS2";
         // Toggle.SetActive(Constants.BTOS2Exists());
+
+        FancyUI.SetupFonts(transform);
 
         foreach (var opt in Option.All)
         {
@@ -141,8 +140,14 @@ public class SettingsAndTestingUI : UIController
         InputTemplate.gameObject.SetActive(false);
         ToggleTemplate.gameObject.SetActive(false);
 
+        Page = PackType.RecoloredUI;
+
         RefreshOptions();
     }
+
+    public void OnEnable() => RefreshOptions();
+
+    public void OnDestroy() => Instance = null;
 
     public void GoBack()
     {
@@ -157,5 +162,9 @@ public class SettingsAndTestingUI : UIController
     //     Toggle.EnsureComponent<TooltipTrigger>().NonLocalizedString = $"Toggle To Choose Icons From {(IsBTOS2 ? "Vanilla" : "BTOS2")}";
     // }
 
-    public void RefreshOptions() => Settings.ForEach(x => x.SetActive());
+    public void RefreshOptions()
+    {
+        Settings.ForEach(x => x.gameObject.SetActive(x.SetActive()));
+        Animator.SetDuration(Constants.AnimationDuration());
+    }
 }

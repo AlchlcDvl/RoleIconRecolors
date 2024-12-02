@@ -1,7 +1,7 @@
 namespace FancyUI.Options;
 
-public abstract class Option<TValue, TSetting>(string id, TValue defaultValue, OptionType type, Func<TValue, bool> setActive = null, Action<TValue> onChanged = null) : Option(id, type,
-    defaultValue.ToString()) where TSetting : Setting
+public abstract class Option<TValue, TSetting>(string id, TValue defaultValue, OptionType type, PackType page, Func<TValue, bool> setActive = null, Action<TValue> onChanged = null) :
+    Option(id, type, defaultValue.ToString(), page) where TSetting : Setting
 {
     public Config<TValue> Entry { get; } = Fancy.Instance.Configs.Bind(id, defaultValue);
     public Func<TValue, bool> SetActive { get; } = setActive ?? (_ => true);

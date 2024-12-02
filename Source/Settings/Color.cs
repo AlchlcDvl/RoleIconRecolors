@@ -47,5 +47,5 @@ public class ColorSetting : BaseInputSetting
         Option.OnChanged(value);
     }
 
-    public override bool SetActive() => Option.SetActive(Option.Get());
+    public override bool SetActive() => Option.SetActive(Option.Get()) && Option.Page == SettingsAndTestingUI.Instance.Page;
 }

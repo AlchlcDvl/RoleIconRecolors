@@ -35,5 +35,5 @@ public class SliderSetting : Setting
         ValueText.SetText($"{value:0.##}");
     }
 
-    public override bool SetActive() => Option.SetActive(Option.Get());
+    public override bool SetActive() => Option.SetActive(Option.Get()) && Option.Page == SettingsAndTestingUI.Instance.Page;
 }

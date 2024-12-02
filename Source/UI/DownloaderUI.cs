@@ -63,9 +63,11 @@ public class DownloaderUI : UIController
         Confirm.GetComponent<Button>().onClick.AddListener(AfterGenerating);
 
         PackTemplate.SetActive(false);
+
+        FancyUI.SetupFonts(transform);
     }
 
-    public void Start()
+    public void OnEnable()
     {
         Back.EnsureComponent<TooltipTrigger>().NonLocalizedString = $"Close {Type} Menu";
         OpenDir.EnsureComponent<TooltipTrigger>().NonLocalizedString = $"Open {Type} Folder";

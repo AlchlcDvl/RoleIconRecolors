@@ -44,5 +44,5 @@ public class ToggleSetting : Setting
         Toggle.targetGraphic = value ? OnBG : OffBG;
     }
 
-    public override bool SetActive() => Option.SetActive(Option.Get());
+    public override bool SetActive() => Option.SetActive(Option.Get()) && Option.Page == SettingsAndTestingUI.Instance.Page;
 }

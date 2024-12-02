@@ -30,5 +30,5 @@ public class DropdownSetting : Setting
         Option.OnChanged();
     }
 
-    public override bool SetActive() => Option.SetActive();
+    public override bool SetActive() => Option.SetActive() && Option.Page == SettingsAndTestingUI.Instance.Page;
 }

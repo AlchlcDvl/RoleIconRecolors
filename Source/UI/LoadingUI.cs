@@ -25,16 +25,13 @@ public class LoadingUI : UIController
 
         Started = false;
 
-        SetupMenu();
+        CancelButton.AddComponent<TooltipTrigger>().NonLocalizedString = "Cancel The Current Process";
+        CancelButton.GetComponent<Button>().onClick.AddListener(Cancel);
+
+        FancyUI.SetupFonts(transform);
     }
 
     public void OnDestroy() => Instance = null;
-
-    private void SetupMenu()
-    {
-        CancelButton.AddComponent<TooltipTrigger>().NonLocalizedString = "Cancel The Current Process";
-        CancelButton.GetComponent<Button>().onClick.AddListener(Cancel);
-    }
 
     private void Cancel() => DownloaderUI.Instance.Abort = true;
 
@@ -71,7 +68,6 @@ public class LoadingUI : UIController
             go.transform.localScale = Vector3.one * 1.5f;
             go.transform.SetAsLastSibling();
             go.AddComponent<LoadingUI>();
-            FancyUI.SetupFonts(go.transform);
         }
 
         Instance.BeginLoading(caller, title);

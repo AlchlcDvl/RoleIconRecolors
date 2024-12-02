@@ -33,8 +33,7 @@ public static class Utils
     {
         try
         {
-            mod ??= GetGameType();
-            return mod switch
+            return (mod ?? GetGameType()) switch
             {
                 ModType.BTOS2 => BTOSRoleName(role),
                 _ => VanillaRoleName(role)
@@ -271,8 +270,7 @@ public static class Utils
 
         try
         {
-            mod ??= GetGameType();
-            return mod switch
+            return (mod ?? GetGameType()) switch
             {
                 ModType.BTOS2 => BTOSFactionName(faction),
                 _ => VanillaFactionName(faction)
@@ -358,8 +356,7 @@ public static class Utils
     {
         try
         {
-            mod ??= GetGameType();
-            return mod switch
+            return (mod ?? GetGameType()) switch
             {
                 ModType.BTOS2 => IsApocBTOS2(role),
                 _ => IsApocVanilla(role),
@@ -414,7 +411,7 @@ public static class Utils
         var roles = mod switch
         {
             ModType.BTOS2 => typeof(BTOS2Role)
-                .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)
+                .GetFields(BindingFlags.Public | BindingFlags.Static)
                 .Where(fi => fi.IsLiteral && !fi.IsInitOnly && fi.FieldType == typeof(Role))
                 .Select(x => (Role)x.GetRawConstantValue())
                 .Where(x => x is not (BTOS2Role.None or BTOS2Role.Hangman or BTOS2Role.Unknown or BTOS2Role.RoleCount)),
@@ -438,11 +435,11 @@ public static class Utils
         File.WriteAllBytes(assetPath, (decompress ? AssetManager.Decompress(texture) : texture).EncodeToPNG());
     }
 
-    public static bool IsTransformedApoc(this Role role, ModType mod = ModType.None)
+    public static bool IsTransformedApoc(this Role role, ModType? mod = null)
     {
         try
         {
-            return mod switch
+            return (mod ?? GetGameType()) switch
             {
                 ModType.BTOS2 => IsTransformedApocBTOS(role),
                 _ => IsTransformedApocVanilla(role),
@@ -682,210 +679,6 @@ public static class Utils
 
     private static string MrcDisplayString(this Role role, FactionType faction) => ModSettings.GetBool("Faction-Specific Role Names", "det.rolecustomizationmod") ?
         MiscRoleCustomisation.Utils.ToRoleFactionDisplayString(role, faction) : role.ToDisplayString();
-
-    public static Role NameToRole(string name, ModType mod = ModType.None)
-    {
-        name = name.Replace(" ", "").ToLower();
-
-        try
-        {
-            return mod switch
-            {
-                ModType.BTOS2 => BTOSNameToRole(name),
-                _ => VanillaNameToRole(name),
-            };
-        }
-        catch
-        {
-            return VanillaNameToRole(name);
-        }
-    }
-
-    public static Role VanillaNameToRole(string name) => name switch
-    {
-        "admirer" => Role.ADMIRER,
-        "amnesiac" => Role.AMNESIAC,
-        "bodyguard" => Role.BODYGUARD,
-        "cleric" => Role.CLERIC,
-        "coroner" => Role.CORONER,
-        "crusader" => Role.CRUSADER,
-        "deputy" => Role.DEPUTY,
-        "investigator" => Role.INVESTIGATOR,
-        "jailor" => Role.JAILOR,
-        "lookout" => Role.LOOKOUT,
-        "marshal" or "marshall" => Role.MARSHAL,
-        "mayor" => Role.MAYOR,
-        "monarch" => Role.MONARCH,
-        "prosecutor" => Role.PROSECUTOR,
-        "psychic" => Role.PSYCHIC,
-        "retributionist" => Role.RETRIBUTIONIST,
-        "sser" => Role.SEER,
-        "socialite" => Role.SOCIALITE,
-        "spy" => Role.SPY,
-        "tavernkeeper" => Role.TAVERNKEEPER,
-        "tracker" => Role.TRACKER,
-        "trapper" => Role.TRAPPER,
-        "trickster" => Role.TRICKSTER,
-        "veteran" => Role.VETERAN,
-        "vigilante" => Role.VIGILANTE,
-        "conjurer" => Role.CONJURER,
-        "covenleader" => Role.COVENLEADER,
-        "dreamweaver" => Role.DREAMWEAVER,
-        "enchanter" => Role.ENCHANTER,
-        "hexmaster" => Role.HEXMASTER,
-        "illusionist" => Role.ILLUSIONIST,
-        "jinx" => Role.JINX,
-        "medusa" => Role.MEDUSA,
-        "nercomancer" => Role.NECROMANCER,
-        "poisoner" => Role.POISONER,
-        "potionmaster" => Role.POTIONMASTER,
-        "ritualist" => Role.RITUALIST,
-        "voodoomaster" => Role.VOODOOMASTER,
-        "wildling" => Role.WILDLING,
-        "witch" => Role.WITCH,
-        "arsonist" => Role.ARSONIST,
-        "baker" => Role.BAKER,
-        "berserker" => Role.BERSERKER,
-        "doomsayer" => Role.DOOMSAYER,
-        "executioner" => Role.EXECUTIONER,
-        "jester" => Role.JESTER,
-        "pirate" => Role.PIRATE,
-        "plaguebearer" => Role.PLAGUEBEARER,
-        "serialkiller" => Role.SERIALKILLER,
-        "shroud" => Role.SHROUD,
-        "soulcollector" => Role.SOULCOLLECTOR,
-        "werewolf" => Role.WEREWOLF,
-        "famine" => Role.FAMINE,
-        "war" => Role.WAR,
-        "pestilence" => Role.PESTILENCE,
-        "death" => Role.DEATH,
-        "cursedsoul" => Role.CURSED_SOUL,
-        "vampire" => Role.VAMPIRE,
-        "stoned" => Role.STONED,
-        "randomtown" => Role.RANDOM_TOWN,
-        "randomcoven" => Role.RANDOM_COVEN,
-        "randomneutral" => Role.RANDOM_NEUTRAL,
-        "towninvestigative" => Role.TOWN_INVESTIGATIVE,
-        "townprotective" => Role.TOWN_PROTECTIVE,
-        "townkilling" => Role.TOWN_KILLING,
-        "townsupport" => Role.TOWN_SUPPORT,
-        "townpower" => Role.TOWN_POWER,
-        "covenkilling" => Role.COVEN_KILLING,
-        "covenutility" => Role.COVEN_UTILITY,
-        "covendeception" => Role.COVEN_DECEPTION,
-        "covenpower" => Role.COVEN_POWER,
-        "neutralkilling" => Role.NEUTRAL_KILLING,
-        "neutralevil" => Role.NEUTRAL_EVIL,
-        "neutralapocalypse" => Role.NEUTRAL_APOCALYPSE,
-        "any" => Role.ANY,
-        "towntraitor" => Role.TOWN_TRAITOR,
-        "perfecttown" => Role.NO_TOWN_HANGED,
-        "ghosttown" => Role.GHOST_TOWN,
-        "vip" => Role.VIP,
-        "slowmode" => Role.SLOW_MODE,
-        "fastmode" => Role.FAST_MODE,
-        "anonvoting" => Role.ANONYMOUS_VOTES,
-        "secretkillers" => Role.KILLER_ROLES_HIDDEN,
-        "hiddenroles" => Role.ROLES_ON_DEATH_HIDDEN,
-        "onetrial" => Role.ONE_TRIAL_PER_DAY,
-        "commoncoven" => Role.COMMON_COVEN,
-        "commontown" => Role.COMMON_TOWN,
-        "hidden" => Role.HIDDEN,
-        _ => Role.NONE
-    };
-
-    public static Role BTOSNameToRole(string name) => name switch // Det don't touch this method, it's a WIP
-    {
-        "admirer" => Role.ADMIRER,
-        "amnesiac" => Role.AMNESIAC,
-        "bodyguard" => Role.BODYGUARD,
-        "cleric" => Role.CLERIC,
-        "coroner" => Role.CORONER,
-        "crusader" => Role.CRUSADER,
-        "deputy" => Role.DEPUTY,
-        "investigator" => Role.INVESTIGATOR,
-        "jailor" => Role.JAILOR,
-        "lookout" => Role.LOOKOUT,
-        "marshal" or "marshall" => Role.MARSHAL,
-        "mayor" => Role.MAYOR,
-        "monarch" => Role.MONARCH,
-        "prosecutor" => Role.PROSECUTOR,
-        "psychic" => Role.PSYCHIC,
-        "retributionist" => Role.RETRIBUTIONIST,
-        "sser" => Role.SEER,
-        "socialite" => Role.SOCIALITE,
-        "spy" => Role.SPY,
-        "tavernkeeper" => Role.TAVERNKEEPER,
-        "tracker" => Role.TRACKER,
-        "trapper" => Role.TRAPPER,
-        "trickster" => Role.TRICKSTER,
-        "veteran" => Role.VETERAN,
-        "vigilante" => Role.VIGILANTE,
-        "conjurer" => Role.CONJURER,
-        "covenleader" => Role.COVENLEADER,
-        "dreamweaver" => Role.DREAMWEAVER,
-        "enchanter" => Role.ENCHANTER,
-        "hexmaster" => Role.HEXMASTER,
-        "illusionist" => Role.ILLUSIONIST,
-        "jinx" => Role.JINX,
-        "medusa" => Role.MEDUSA,
-        "nercomancer" => Role.NECROMANCER,
-        "poisoner" => Role.POISONER,
-        "potionmaster" => Role.POTIONMASTER,
-        "ritualist" => Role.RITUALIST,
-        "voodoomaster" => Role.VOODOOMASTER,
-        "wildling" => Role.WILDLING,
-        "witch" => Role.WITCH,
-        "arsonist" => Role.ARSONIST,
-        "baker" => Role.BAKER,
-        "berserker" => Role.BERSERKER,
-        "doomsayer" => Role.DOOMSAYER,
-        "executioner" => Role.EXECUTIONER,
-        "jester" => Role.JESTER,
-        "pirate" => Role.PIRATE,
-        "plaguebearer" => Role.PLAGUEBEARER,
-        "serialkiller" => Role.SERIALKILLER,
-        "shroud" => Role.SHROUD,
-        "soulcollector" => Role.SOULCOLLECTOR,
-        "werewolf" => Role.WEREWOLF,
-        "famine" => Role.FAMINE,
-        "war" => Role.WAR,
-        "pestilence" => Role.PESTILENCE,
-        "death" => Role.DEATH,
-        "cursedsoul" => Role.CURSED_SOUL,
-        "vampire" => Role.VAMPIRE,
-        "stoned" => Role.STONED,
-        "randomtown" => Role.RANDOM_TOWN,
-        "randomcoven" => Role.RANDOM_COVEN,
-        "randomneutral" => Role.RANDOM_NEUTRAL,
-        "towninvestigative" => Role.TOWN_INVESTIGATIVE,
-        "townprotective" => Role.TOWN_PROTECTIVE,
-        "townkilling" => Role.TOWN_KILLING,
-        "townsupport" => Role.TOWN_SUPPORT,
-        "townpower" => Role.TOWN_POWER,
-        "covenkilling" => Role.COVEN_KILLING,
-        "covenutility" => Role.COVEN_UTILITY,
-        "covendeception" => Role.COVEN_DECEPTION,
-        "covenpower" => Role.COVEN_POWER,
-        "neutralkilling" => Role.NEUTRAL_KILLING,
-        "neutralevil" => Role.NEUTRAL_EVIL,
-        "neutralapocalypse" => Role.NEUTRAL_APOCALYPSE,
-        "any" => Role.ANY,
-        "towntraitor" => Role.TOWN_TRAITOR,
-        "perfecttown" => Role.NO_TOWN_HANGED,
-        "ghosttown" => Role.GHOST_TOWN,
-        "vip" => Role.VIP,
-        "slowmode" => Role.SLOW_MODE,
-        "fastmode" => Role.FAST_MODE,
-        "anonvoting" => Role.ANONYMOUS_VOTES,
-        "secretkillers" => Role.KILLER_ROLES_HIDDEN,
-        "hiddenroles" => Role.ROLES_ON_DEATH_HIDDEN,
-        "onetrial" => Role.ONE_TRIAL_PER_DAY,
-        "commoncoven" => Role.COMMON_COVEN,
-        "commontown" => Role.COMMON_TOWN,
-        "hidden" => Role.HIDDEN,
-        _ => Role.NONE
-    };
 
     public static Color ToColor(this string html) => ColorUtility.TryParseHtmlString(html.StartsWith("#") ? html : $"#{html}", out var color) ? color : Color.white;
 }
