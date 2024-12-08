@@ -13,17 +13,23 @@ public class DownloaderUI : UIController
     public static readonly Dictionary<string, bool> Running = [];
     public static bool HandlerRunning  { get; set; }
 
-    private Transform Back { get; set; }
-    private Transform OpenDir { get; set; }
-    private Transform Confirm { get; set; }
+    private HoverEffect Back { get; set; }
+    private HoverEffect OpenDir { get; set; }
 
     private GameObject NoPacks { get; set; }
     private GameObject PackTemplate { get; set; }
+
+    private TextMeshProUGUI Title { get; set; }
 
     private TMP_InputField PackName { get; set; }
     private TMP_InputField RepoName { get; set; }
     private TMP_InputField RepoOwner { get; set; }
     private TMP_InputField BranchName { get; set; }
+
+    private HoverEffect PackNameHover { get; set; }
+    private HoverEffect RepoNameHover { get; set; }
+    private HoverEffect RepoOwnerHover { get; set; }
+    private HoverEffect BranchNameHover { get; set; }
 
     public bool Abort { get; set; }
 
@@ -39,28 +45,43 @@ public class DownloaderUI : UIController
     {
         Instance = this;
 
-        Back = transform.FindRecursive("Back");
-        OpenDir = transform.FindRecursive("Directory");
-        Confirm = transform.FindRecursive("Confirm");
         PackName = transform.GetComponent<TMP_InputField>("PackName");
         RepoName = transform.GetComponent<TMP_InputField>("RepoName");
         RepoOwner = transform.GetComponent<TMP_InputField>("RepoOwner");
         BranchName = transform.GetComponent<TMP_InputField>("BranchName");
+
+        PackNameHover = PackName.EnsureComponent<HoverEffect>();
+        PackNameHover.LookupKey = "FANCY_PACK_NAME";
+
+        RepoNameHover = RepoName.EnsureComponent<HoverEffect>();
+        RepoNameHover.LookupKey = "FANCY_REPO_NAME";
+
+        RepoOwnerHover = RepoOwner.EnsureComponent<HoverEffect>();
+        RepoOwnerHover.LookupKey = "FANCY_REPO_OWNER";
+
+        BranchNameHover = BranchName.EnsureComponent<HoverEffect>();
+        BranchNameHover.LookupKey = "FANCY_BRANCH_NAME";
+
         NoPacks = transform.FindRecursive("NoPacks").gameObject;
         PackTemplate = transform.FindRecursive("PackTemplate").gameObject;
 
-        transform.GetComponent<TextMeshProUGUI>("Title").SetText($"{Type}s");
+        Title = transform.GetComponent<TextMeshProUGUI>("Title");
 
+        Back = transform.EnsureComponent<HoverEffect>("Back");
         Back.GetComponent<Button>().onClick.AddListener(GoBack);
+        Back.LookupKey = "FANCY_CLOSE_MENU";
 
+        OpenDir = transform.EnsureComponent<HoverEffect>("Directory");
+        OpenDir.LookupKey = "FANCY_OPEN_MENU";
         OpenDir.GetComponent<Button>().onClick.AddListener(OpenDirectory);
 
-        var dirButton = OpenDir.EnsureComponent<HoverEffect>();
         var rend = OpenDir.GetComponent<Image>();
-        dirButton.OnMouseOver.AddListener(() => rend.sprite = Fancy.Assets.GetSprite("OpenChest"));
-        dirButton.OnMouseOut.AddListener(() => rend.sprite = Fancy.Assets.GetSprite("ClosedChest"));
+        OpenDir.AddOnOverListener(() => rend.sprite = Fancy.Assets.GetSprite("OpenChest"));
+        OpenDir.AddOnOutListener(() => rend.sprite = Fancy.Assets.GetSprite("ClosedChest"));
 
-        Confirm.GetComponent<Button>().onClick.AddListener(AfterGenerating);
+        var confirm = transform.FindRecursive("Confirm");
+        confirm.GetComponent<Button>().onClick.AddListener(AfterGenerating);
+        confirm.EnsureComponent<HoverEffect>().LookupKey = "FANCY_CONFIRM_INPUT";
 
         PackTemplate.SetActive(false);
 
@@ -69,13 +90,9 @@ public class DownloaderUI : UIController
 
     public void OnEnable()
     {
-        Back.EnsureComponent<TooltipTrigger>().NonLocalizedString = $"Close {Type} Menu";
-        OpenDir.EnsureComponent<TooltipTrigger>().NonLocalizedString = $"Open {Type} Folder";
-        Confirm.EnsureComponent<TooltipTrigger>().NonLocalizedString = "Confirm Link Parameters And Generate Link";
-        PackName.EnsureComponent<TooltipTrigger>().NonLocalizedString = $"Name Of The {Type} (REQUIRED)";
-        RepoName.EnsureComponent<TooltipTrigger>().NonLocalizedString = $"Name Of The {Type} GitHub Repository (Defaults To: RoleIconRecolors)";
-        RepoOwner.EnsureComponent<TooltipTrigger>().NonLocalizedString = $"Name Of The {Type} GitHub Repository Owner (Defaults To: AlchlcDvl)";
-        BranchName.EnsureComponent<TooltipTrigger>().NonLocalizedString = $"Name Of The {Type} GitHub Repository Branch It Is In (Defaults To: main)";
+        Title.SetText(l10n("FANCY_DOWNLOADER_TITLE").Replace("%type%", Type));
+
+        OpenDir.FillInKeys = Back.FillInKeys = PackNameHover.FillInKeys = RepoNameHover.FillInKeys = RepoOwnerHover.FillInKeys = BranchNameHover.FillInKeys = [ ( "%type%", Type ) ];
 
         Packs.ForEach(x => SetUpPack(x, () => DownloadIcons(x.Name)));
 
@@ -143,13 +160,15 @@ public class DownloaderUI : UIController
             go.transform.GetComponent<TextMeshProUGUI>("PackName").SetText(packJson.Name);
             var link = go.transform.Find("RepoButton");
             link.GetComponent<Button>().onClick.AddListener(() => Application.OpenURL(packJson.Link()));
-            link.AddComponent<TooltipTrigger>().NonLocalizedString = "Open Link";
+            link.EnsureComponent<HoverEffect>().LookupKey = "FANCY_OPEN_LINK";
             var button = go.transform.Find("Download");
             button.GetComponent<Button>().onClick.AddListener(download);
-            button.AddComponent<TooltipTrigger>().NonLocalizedString = $"Download {packJson.Name}";
+            var hover = button.EnsureComponent<HoverEffect>();
+            hover.LookupKey = "FANCY_DOWNLOAD_PACK";
+            hover.FillInKeys = [ ( "%pack%", packJson.Name ) ];
 
             if (!StringUtils.IsNullEmptyOrWhiteSpace(packJson.Credits))
-                go.AddComponent<TooltipTrigger>().NonLocalizedString = packJson.Credits;
+                go.EnsureComponent<HoverEffect>().NonLocalizedString = packJson.Credits;
 
             PackGOs.Add(go);
         }

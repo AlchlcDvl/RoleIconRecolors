@@ -110,7 +110,7 @@ public static class PooledChatViewSwitcherPatch
         parts2.parent.GetComponent<Image>().SetImageColor(ColorType.Metal);
         parts2.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
         parts2.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
-        var nameplate = __instance.transform.GetChild(3).GetChild(0);
+        var nameplate = __instance.transform.GetChild(3).GetChild(0); // Nameplate
         nameplate.GetComponent<Image>().SetImageColor(ColorType.Metal);
 
         var name = nameplate.Find("Name");

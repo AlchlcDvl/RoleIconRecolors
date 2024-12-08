@@ -17,7 +17,7 @@ public class DropdownSetting : Setting
             return;
 
         Dropdown.ClearOptions();
-        Dropdown.AddOptions(Option.DisplayOptions().Select(x => l10n(x)).ToList());
+        Dropdown.AddOptions(Option.DisplayOptions().Select(x => Option.UseTranslations ? l10n($"FANCY_{x.ToUpper()}") : x).ToList());
         Dropdown.value = Option.GetInt();
         Dropdown.onValueChanged.AddListener(OnValueChanged);
         Dropdown.onValueChanged.AddListener(_ => SettingsAndTestingUI.Instance.RefreshOptions());

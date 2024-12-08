@@ -217,11 +217,11 @@ public static class PatchRoleCards
 
         var attribute = GetSprite(reg, $"Attributes_{name}_Role", faction);
 
-        if (!attribute.IsValid() && name == ogfaction)
-            attribute = GetSprite(reg, $"Attributes_{name}_Faction", faction);
-
         if (!attribute.IsValid())
             attribute = GetSprite(reg, $"Attributes_{(role.IsTransformedApoc() ? "Horsemen" : faction)}", faction);
+
+        if (!attribute.IsValid())
+            attribute = GetSprite(reg, $"Attributes_{faction}_Faction", faction);
 
         if (!attribute.IsValid() && name == ogfaction)
             attribute = GetSprite(reg, $"Attributes_{name}_Faction", faction);
@@ -232,6 +232,9 @@ public static class PatchRoleCards
 
             if (!attribute.IsValid())
                 attribute = GetSprite($"Attributes_{ogfaction}", ogfaction);
+
+            if (!attribute.IsValid())
+                attribute = GetSprite($"Attributes_{ogfaction}_Faction", ogfaction);
 
             if (!attribute.IsValid() && name == ogfaction)
                 attribute = GetSprite($"Attributes_{name}_Faction", ogfaction);

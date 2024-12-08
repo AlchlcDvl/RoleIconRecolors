@@ -72,7 +72,7 @@ public class SettingsAndTestingUI : UIController
 
         Special = RoleCard.FindRecursive("Special").gameObject;
         Effect = RoleCard.FindRecursive("Effect").gameObject;
-        ButtonTemplate = RoleCard.FindRecursive("ButtonTemplate").gameObject; // CommunityRecolors
+        ButtonTemplate = RoleCard.FindRecursive("ButtonTemplate").gameObject;
 
         RoleText = RoleCard.GetComponent<TextMeshProUGUI>("Role");
         NameText = transform.GetComponent<TextMeshProUGUI>("NameText");
@@ -91,16 +91,16 @@ public class SettingsAndTestingUI : UIController
         InputTemplate = transform.EnsureComponent<StringInputSetting>("InputTemplate");
 
         Back.GetComponent<Button>().onClick.AddListener(GoBack);
-        Back.AddComponent<TooltipTrigger>().NonLocalizedString = "Close Testing Menu";
+        Back.AddComponent<HoverEffect>().NonLocalizedString = "Close Testing Menu";
 
         Animator.SetAnim(Loading.Frames, Constants.AnimationDuration());
-        Animator.AddComponent<TooltipTrigger>().NonLocalizedString = "This Is Your Animator";
+        Animator.AddComponent<HoverEffect>().NonLocalizedString = "This Is Your Animator";
 
         // Confirm.GetComponent<Button>().onClick.AddListener(SetIcons);
-        // Confirm.AddComponent<TooltipTrigger>().NonLocalizedString = "Confirm";
+        // Confirm.AddComponent<HoverEffect>().NonLocalizedString = "Confirm";
 
         // Toggle.GetComponent<Button>().onClick.AddListener(ToggleVersion);
-        // Toggle.AddComponent<TooltipTrigger>().NonLocalizedString = "Toggle To Choose Icons From BTOS2";
+        // Toggle.AddComponent<HoverEffect>().NonLocalizedString = "Toggle To Choose Icons From BTOS2";
         // Toggle.SetActive(Constants.BTOS2Exists());
 
         FancyUI.SetupFonts(transform);
@@ -159,7 +159,7 @@ public class SettingsAndTestingUI : UIController
     // {
     //     IsBTOS2 = !IsBTOS2;
     //     ToggleImage.sprite = Fancy.Assets.GetSprite($"{(IsBTOS2 ? "B" : "")}ToS2Icon");
-    //     Toggle.EnsureComponent<TooltipTrigger>().NonLocalizedString = $"Toggle To Choose Icons From {(IsBTOS2 ? "Vanilla" : "BTOS2")}";
+    //     Toggle.EnsureComponent<HoverEffect>().NonLocalizedString = $"Toggle To Choose Icons From {(IsBTOS2 ? "Vanilla" : "BTOS2")}";
     // }
 
     public void RefreshOptions()

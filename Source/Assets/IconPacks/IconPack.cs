@@ -283,6 +283,11 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
             }
         }
 
+        var cursor = GetSprite("Cursor", false, null);
+
+        if (cursor.IsValid())
+            Cursor.SetCursor(cursor.texture, CursorMode.Auto);
+
         Fancy.Instance.Message($"{Name} Loaded!", true);
     }
 
@@ -357,6 +362,9 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
 
     public Sprite GetSprite(string iconName, bool allowEE, string type)
     {
+        if (StringUtils.IsNullEmptyOrWhiteSpace(type))
+            type = "Regular";
+
         if (!Assets.TryGetValue(GetModKey(type), out var assets))
             return Blank;
 

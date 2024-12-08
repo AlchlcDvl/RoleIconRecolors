@@ -4,23 +4,19 @@ public abstract class Option
 {
     public static readonly List<Option> All = [];
     public string ID { get; }
-    public string Value { get; set; }
     public OptionType Type { get; }
     public PackType Page { get; }
 
-    protected Option(string id, OptionType type, string value, PackType page)
+    protected Option(string id, OptionType type, PackType page)
     {
         ID = id;
         Type = type;
-        Value = value;
         Page = page;
         All.Add(this);
     }
 
     public void SetBase(string value)
     {
-        Value = value;
-
         if (this is ToggleOption toggle)
             toggle.Set(bool.Parse(value));
         else if (this is IDropdown dropdown)

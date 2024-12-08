@@ -1,6 +1,5 @@
 using FancyUI.Assets.SilhouetteSwapper;
 using Home.Shared;
-using Server.Shared.Extensions;
 
 namespace FancyUI;
 
@@ -412,7 +411,6 @@ public static class Utils
         {
             ModType.BTOS2 => typeof(BTOS2Role)
                 .GetFields(BindingFlags.Public | BindingFlags.Static)
-                .Where(fi => fi.IsLiteral && !fi.IsInitOnly && fi.FieldType == typeof(Role))
                 .Select(x => (Role)x.GetRawConstantValue())
                 .Where(x => x is not (BTOS2Role.None or BTOS2Role.Hangman or BTOS2Role.Unknown or BTOS2Role.RoleCount)),
             _ => GeneralUtils.GetEnumValues<Role>().Where(x => x is not (Role.NONE or Role.ROLE_COUNT or Role.UNKNOWN or Role.HANGMAN))
@@ -671,7 +669,7 @@ public static class Utils
 
         var result = role.ToDisplayString();
 
-        if (role.GetFaction() != faction)
+        if (role.GetFactionType() != faction)
             result += $" ({faction.ToDisplayString()})";
 
         return result;
@@ -681,4 +679,19 @@ public static class Utils
         MiscRoleCustomisation.Utils.ToRoleFactionDisplayString(role, faction) : role.ToDisplayString();
 
     public static Color ToColor(this string html) => ColorUtility.TryParseHtmlString(html.StartsWith("#") ? html : $"#{html}", out var color) ? color : Color.white;
+
+    // public static void DebugSingleTransform(this Transform transform)
+    // {
+    //     var debug = $"[{transform.parent?.name ?? "None"} -> {transform.name}] = {{ ";
+    //     transform.GetComponents(typeof(Component)).ForEach(x => debug += $"{x.GetType().Name}, ");
+    //     Fancy.Instance.Fatal(debug + "}");
+    // }
+
+    // public static void DebugTransformRecursive(this Transform transform)
+    // {
+    //     transform.DebugSingleTransform();
+
+    //     for (var i = 0; i < transform.childCount; i++)
+    //         transform.GetChild(i).DebugTransformRecursive();
+    // }
 }

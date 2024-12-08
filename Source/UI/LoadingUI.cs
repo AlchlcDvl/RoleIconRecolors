@@ -5,7 +5,6 @@ public class LoadingUI : UIController
     private Transform Cog { get; set; }
 
     private GameObject Caller { get; set; }
-    private GameObject CancelButton { get; set; }
 
     private TextMeshProUGUI Title { get; set; }
     public TextMeshProUGUI LoadingProgress { get; set; }
@@ -19,14 +18,14 @@ public class LoadingUI : UIController
         Instance = this;
 
         Cog = transform.Find("Cog");
-        CancelButton = transform.Find("Cancel").gameObject;
         Title = transform.GetComponent<TextMeshProUGUI>("Title");
         LoadingProgress = transform.GetComponent<TextMeshProUGUI>("Progress");
 
         Started = false;
 
-        CancelButton.AddComponent<TooltipTrigger>().NonLocalizedString = "Cancel The Current Process";
-        CancelButton.GetComponent<Button>().onClick.AddListener(Cancel);
+        var cancel = transform.Find("Cancel");
+        cancel.AddComponent<HoverEffect>().LookupKey = "FANCY_CANCEL_CURRENT";
+        cancel.GetComponent<Button>().onClick.AddListener(Cancel);
 
         FancyUI.SetupFonts(transform);
     }
@@ -66,7 +65,6 @@ public class LoadingUI : UIController
             var go = Instantiate(Fancy.Assets.GetGameObject("LoadingUI"), FancyUI.Instance.transform.parent, false);
             go.transform.localPosition = new(0, 0, 0);
             go.transform.localScale = Vector3.one * 1.5f;
-            go.transform.SetAsLastSibling();
             go.AddComponent<LoadingUI>();
         }
 

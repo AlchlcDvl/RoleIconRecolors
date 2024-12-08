@@ -1,4 +1,5 @@
 <StringTable>
+    <Entry key="FANCY_">Something</Entry>
     <Entry key="FANCY_SOMETHING">Something</Entry>
 
     <Entry key="FANCY_CUSTOM_NUMBERS_NAME">Use Custom Numbers</Entry>
@@ -63,4 +64,32 @@
 
     <Entry key="FANCY_PLAYER_NUMBER_NAME">Test Player Number</Entry>
     <Entry key="FANCY_PLAYER_NUMBER_DESC">Changing this value changes the name text below to appear when mentioning the same number.</Entry>
+
+    <Entry key="FANCY_DEFAULT">Default</Entry>
+    <Entry key="FANCY_ROLE">Role</Entry>
+    <Entry key="FANCY_FACTION">Faction</Entry>
+    <Entry key="FANCY_CUSTOM">Custom</Entry>
+
+    <Entry key="FANCY_CLOSE_FANCY">Close Menu</Entry>
+
+    <Entry key="FANCY_DOWNLOADER_TITLE">%type%s</Entry>
+    <Entry key="FANCY_CLOSE_MENU">Close %type% Menu</Entry>
+    <Entry key="FANCY_OPEN_MENU">Open %type% Folder</Entry>
+    <Entry key="FANCY_PACK_NAME">Name Of The %type% (REQUIRED)</Entry>
+    <Entry key="FANCY_REPO_NAME">Name Of The %type% GitHub Repository (Defaults To: RoleIconRecolors)</Entry>
+    <Entry key="FANCY_REPO_OWNER">Name Of The %type% GitHub Repository Owner (Defaults To: AlchlcDvl)</Entry>
+    <Entry key="FANCY_BRANCH_NAME">Name Of The %type% GitHub Repository Branch It Is In (Defaults To: main)</Entry>
+
+    <Entry key="FANCY_OPEN_ICONPACKS">Open Icon Packs Menu</Entry>
+
+    <Entry key="FANCY_OPEN_SILHOUETTESETS">Open Silhouette Swapper Menu</Entry>
+
+    <Entry key="FANCY_OPEN_SETTINGS">Open Settings And Testing Menu</Entry>
+    <Entry key="FANCY_CLOSE_SETTINGS">Close Settings And Testing Menu</Entry>
+
+    <Entry key="FANCY_CANCEL_CURRENT">Cancel The Current Process</Entry>
+    <Entry key="FANCY_CONFIRM_INPUT">Confirm Link Parameters And Generate Link</Entry>
+
+    <Entry key="FANCY_OPEN_LINK">Open Link</Entry>
+    <Entry key="FANCY_DOWNLOAD_PACK">Download %pack%</Entry>
 </StringTable>

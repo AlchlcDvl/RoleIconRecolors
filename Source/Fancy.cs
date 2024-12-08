@@ -118,7 +118,7 @@ public class Fancy
         SelectedSilhouetteSet = new("SELECTED_SIL_SET", "Vanilla", PackType.SilhouetteSets, () => GetPackNames(PackType.SilhouetteSets), onChanged: x => TryLoadingSprites(x,
             PackType.SilhouetteSets));
 
-        SelectedUITheme = new("SELECTED_UI_THEME", UITheme.Default, PackType.RecoloredUI);
+        SelectedUITheme = new("SELECTED_UI_THEME", UITheme.Default, PackType.RecoloredUI, useTranslations: true);
 
         MentionStyle1 = new("MENTION_STYLE_1", "Regular", PackType.IconPacks, () => GetOptions(ModType.Vanilla, true), _ => Constants.EnableIcons());
         MentionStyle2 = new("MENTION_STYLE_2", "Regular", PackType.IconPacks, () => GetOptions(ModType.BTOS2, true), _ => Constants.BTOS2Exists() && Constants.EnableIcons());
@@ -136,13 +136,13 @@ public class Fancy
         PlayerNumber = new("PLAYER_NUMBER", "?", PackType.IconPacks, () => [ "?", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15" ]);
 
         EasterEggChance = new("EE_CHANCE", 5, PackType.IconPacks, 0, 100, true, _ => Constants.EnableIcons());
-        AnimationDuration = new("ANIM_DURATION", 2, PackType.IconPacks, 0.5f, 10, setActive: _ => Constants.EnableSwaps());
+        AnimationDuration = new("ANIM_DURATION", 2, PackType.SilhouetteSets, 0.5f, 10, setActive: _ => Constants.EnableSwaps());
 
         CustomNumbers = new("CUSTOM_NUMBERS", false, PackType.IconPacks, _ => Constants.EnableIcons());
         AllEasterEggs = new("ALL_EE", false, PackType.IconPacks, _ => Constants.EnableIcons());
         PlayerPanelEasterEggs = new("PLAYER_PANEL_EE", false, PackType.IconPacks, _ => Constants.EnableIcons());
-        DumpSpriteSheets = new("DUMP_SHEETS", false, PackType.None);
-        DebugPackLoading = new("DEBUG_LOADING", false, PackType.None);
+        DumpSpriteSheets = new("DUMP_SHEETS", false, PackType.Settings);
+        DebugPackLoading = new("DEBUG_LOADING", false, PackType.Settings);
     }
 
     public static readonly SalemMenuButton FancyMenu = new()
@@ -156,7 +156,6 @@ public class Fancy
         var go = UObject.Instantiate(Assets.GetGameObject("FancyUI"), CacheHomeSceneController.Controller.SafeArea.transform, false);
         go.transform.localPosition = new(0, 0, 0);
         go.transform.localScale = Vector3.one * 2f;
-        go.transform.SetAsLastSibling();
         go.AddComponent<UI.FancyUI>();
     }
 
