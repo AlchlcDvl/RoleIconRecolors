@@ -15,7 +15,7 @@ namespace FancyUI.Patches;
 [HarmonyPatch(typeof(RoleCardListItem), nameof(RoleCardListItem.SetData))]
 public static class PatchRoleDeckBuilder
 {
-    public static void Postfix(RoleCardListItem __instance, ref Role role)
+    public static void Postfix(RoleCardListItem __instance, Role role)
     {
         if (!Constants.EnableIcons())
             return;
@@ -36,7 +36,7 @@ public static class PatchRoleDeckBuilder
 [HarmonyPatch(typeof(RoleDeckListItem), nameof(RoleDeckListItem.SetData))]
 public static class PatchRoleListPanel
 {
-    public static void Postfix(RoleDeckListItem __instance, ref Role a_role, ref bool a_isBan)
+    public static void Postfix(RoleDeckListItem __instance, Role a_role, bool a_isBan)
     {
         if (!Constants.EnableIcons())
             return;
@@ -51,7 +51,7 @@ public static class PatchRoleListPanel
 [HarmonyPatch(typeof(GameBrowserRoleDeckListItem), nameof(GameBrowserRoleDeckListItem.SetData))]
 public static class PatchBrowserRoleListPanel
 {
-    public static void Postfix(GameBrowserRoleDeckListItem __instance, ref Role a_role, ref bool a_isBan)
+    public static void Postfix(GameBrowserRoleDeckListItem __instance, Role a_role, bool a_isBan)
     {
         if (!Constants.EnableIcons())
             return;
@@ -67,7 +67,7 @@ public static class PatchBrowserRoleListPanel
 public static class PatchRoleCards
 {
     [HarmonyPatch(typeof(RoleCardPanelBackground), nameof(RoleCardPanelBackground.SetRole))]
-    public static void Postfix(RoleCardPanelBackground __instance, ref Role role)
+    public static void Postfix(RoleCardPanelBackground __instance, Role role)
     {
         if (Constants.EnableIcons())
         {
@@ -84,7 +84,7 @@ public static class PatchRoleCards
     }
 
     [HarmonyPatch(typeof(RoleCardPanelBackground), nameof(RoleCardPanelBackground.SetFaction))]
-    public static void Postfix(RoleCardPanelBackground __instance, ref FactionType factionType)
+    public static void Postfix(RoleCardPanelBackground __instance, FactionType factionType)
     {
         if (Constants.EnableIcons())
         {
@@ -101,7 +101,7 @@ public static class PatchRoleCards
     }
 
     [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.HandleOnMyIdentityChanged))]
-    public static void Postfix(RoleCardPanel __instance, ref PlayerIdentityData playerIdentityData)
+    public static void Postfix(RoleCardPanel __instance, PlayerIdentityData playerIdentityData)
     {
         if (Constants.EnableIcons())
             ChangeRoleCard(__instance?.roleIcon, __instance?.specialAbilityPanel?.useButton?.abilityIcon, __instance?.roleInfoButtons, playerIdentityData.role, playerIdentityData.faction);
@@ -115,7 +115,7 @@ public static class PatchRoleCards
     }
 
     [HarmonyPatch(typeof(RoleCardPopupPanel), nameof(RoleCardPopupPanel.SetRoleAndFaction))]
-    public static void Postfix(RoleCardPopupPanel __instance, ref Role role, ref FactionType faction)
+    public static void Postfix(RoleCardPopupPanel __instance, Role role, FactionType faction)
     {
         if (Constants.EnableIcons())
             ChangeRoleCard(__instance?.roleIcon, __instance?.specialAbilityPanel?.useButton?.abilityIcon, __instance?.roleInfoButtons, role, faction, true);
@@ -257,7 +257,7 @@ public static class PatchRoleCards
 [HarmonyPatch(typeof(TosAbilityPanelListItem), nameof(TosAbilityPanelListItem.OverrideIconAndText))]
 public static class PatchAbilityPanel
 {
-    public static void Postfix(TosAbilityPanelListItem __instance, ref TosAbilityPanelListItem.OverrideAbilityType overrideType)
+    public static void Postfix(TosAbilityPanelListItem __instance, TosAbilityPanelListItem.OverrideAbilityType overrideType)
     {
         if (!Constants.EnableIcons() || overrideType == TosAbilityPanelListItem.OverrideAbilityType.VOTING)
             return;
@@ -396,7 +396,7 @@ public static class SpecialAbilityPanelPatch
 [HarmonyPatch(typeof(SpecialAbilityPopupRadialIcon), nameof(SpecialAbilityPopupRadialIcon.SetData))]
 public static class PatchRitualistGuessMenu
 {
-    public static void Postfix(SpecialAbilityPopupRadialIcon __instance, ref Role a_role)
+    public static void Postfix(SpecialAbilityPopupRadialIcon __instance, Role a_role)
     {
         if (!Constants.EnableIcons())
             return;
@@ -446,7 +446,7 @@ public static class CacheDefaults
 [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.ShowAttackAndDefense))]
 public static class PatchAttackDefense
 {
-    public static void Postfix(RoleCardPanel __instance, ref RoleCardData data)
+    public static void Postfix(RoleCardPanel __instance, RoleCardData data)
     {
         if (!Constants.EnableIcons())
             return;
@@ -469,7 +469,7 @@ public static class PatchAttackDefense
 [HarmonyPatch(typeof(RoleCardPopupPanel), nameof(RoleCardPopupPanel.ShowAttackAndDefense))]
 public static class PatchAttackDefensePopup
 {
-    public static void Postfix(RoleCardPopupPanel __instance, ref RoleCardData data)
+    public static void Postfix(RoleCardPopupPanel __instance, RoleCardData data)
     {
         if (!Constants.EnableIcons())
             return;
@@ -568,7 +568,7 @@ public static class PlayerEffectsServicePatch
 {
     private static readonly Dictionary<EffectType, Sprite> EffectSprites = [];
 
-    public static void Postfix(ref EffectType effectType, ref PlayerEffectInfo __result)
+    public static void Postfix(EffectType effectType, PlayerEffectInfo __result)
     {
         if (!EffectSprites.ContainsKey(effectType))
             EffectSprites[effectType] = __result.sprite;
@@ -592,7 +592,7 @@ public static class PlayerEffectsServicePatch
 [HarmonyPatch(typeof(GameSimulation), nameof(GameSimulation.GetRoleIconAndNameInlineString))]
 public static class GetRoleIconAndNameInlineStringPatch
 {
-    public static void Postfix(ref Role role, ref FactionType factionType, ref string __result)
+    public static void Postfix(Role role, FactionType factionType, ref string __result)
     {
         if (Constants.EnableIcons())
         {
@@ -625,7 +625,7 @@ public static class GetVIPRoleIconAndNameInlineStringPatch
 [HarmonyPatch(typeof(TosCharacterNametag), nameof(TosCharacterNametag.ColouredName))]
 public static class TosCharacterNametagPatch
 {
-    public static void Postfix(ref FactionType factionType, ref string __result)
+    public static void Postfix(FactionType factionType, ref string __result)
     {
         if (Constants.EnableIcons())
             __result = __result.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(factionType, false)})\"");
@@ -636,7 +636,7 @@ public static class TosCharacterNametagPatch
 [HarmonyPatch(typeof(BaseDecoder), nameof(BaseDecoder.Encode))]
 public static class FixDecodingAndEncoding
 {
-    public static void Postfix(ref ChatLogMessage chatLogMessage, ref string __result)
+    public static void Postfix(ChatLogMessage chatLogMessage, ref string __result)
     {
         if (Constants.EnableIcons() && chatLogMessage.chatLogEntry is ChatLogChatMessageEntry entry)
         {
@@ -811,7 +811,7 @@ public static class ChangeGameModifierPopup
         if (!Constants.EnableIcons())
             return;
 
-        var sprite = GetSprite(Utils.RoleName(__instance.CurrentRole));
+        var sprite = GetSprite(Utils.RoleName(__instance.CurrentRole), Utils.FactionName(__instance.CurrentRole.GetFactionType()));
 
         if (sprite.IsValid() && __instance.roleIcon)
             __instance.roleIcon.sprite = sprite;
@@ -901,9 +901,9 @@ public static class OverwriteDecodedText
 {
     private static string EncodedText { get; set; }
 
-    public static void Prefix(ref string encodedText) => EncodedText = encodedText;
+    public static void Prefix(string encodedText) => EncodedText = encodedText;
 
-    public static void Postfix(MentionsProvider __instance, ref List<string> mentions, ref string __result)
+    public static void Postfix(MentionsProvider __instance, List<string> mentions, ref string __result)
     {
         if (!Constants.EnableIcons())
             return;
@@ -1019,5 +1019,60 @@ public static class MakeProperFactionChecksInWDAH2
 
         Debug.Log("WhoDiedAndHowPanel:: HandleSubphaseWhoDied");
         return false;
+    }
+}
+
+[HarmonyPatch(typeof(SpecialAbilityPopupOracleListItem), nameof(SpecialAbilityPopupOracleListItem.SetData))]
+public static class PatchOracleMenu
+{
+    public static void Postfix(SpecialAbilityPopupOracleListItem __instance, Role a_role)
+    {
+        if (!Constants.EnableIcons())
+            return;
+
+        var sprite = GetSprite(Utils.RoleName(a_role), Utils.FactionName(a_role.GetFactionType()));
+
+        if (sprite.IsValid() && __instance.roleIcon)
+            __instance.roleIcon.sprite = sprite;
+    }
+}
+
+[HarmonyPatch(typeof(SpecialAbilityPopupNecromancerRetributionist), nameof(SpecialAbilityPopupNecromancerRetributionist.Start))]
+public static class PatchNecroRetMenu
+{
+    public static void Postfix(SpecialAbilityPopupNecromancerRetributionist __instance)
+    {
+        if (!Constants.EnableIcons())
+            return;
+
+        var sprite = GetSprite(Utils.RoleName(Pepper.GetMyRole()), Utils.FactionName(Pepper.GetMyFaction()));
+
+        if (sprite.IsValid() && __instance.roleIcon)
+            __instance.roleIcon.sprite = sprite;
+    }
+}
+
+[HarmonyPatch(typeof(SpecialAbilityPopupNecromancerRetributionistListItem), nameof(SpecialAbilityPopupNecromancerRetributionistListItem.SetData))]
+public static class PatchNecroRetMenuItem
+{
+    public static void Postfix(SpecialAbilityPopupNecromancerRetributionistListItem __instance, int position)
+    {
+        if (!Constants.EnableIcons() || !Utils.GetRoleAndFaction(position, out var tuple))
+            return;
+
+        var role = Utils.RoleName(tuple.Item1);
+        var faction = Utils.FactionName(tuple.Item2);
+        var sprite = GetSprite(role, faction);
+
+        if (sprite.IsValid() && __instance.choiceSprite)
+            __instance.choiceSprite.sprite = sprite;
+
+        sprite = GetSprite($"{role}_{(role is "Deputy" or "Conjurer" ? "Special" : "Ability")}", faction, false);
+
+        if (!sprite.IsValid())
+            sprite = GetSprite($"{role}_Ability_1", faction, false);
+
+        if (sprite.IsValid() && __instance.choice2Sprite)
+            __instance.choice2Sprite.sprite = sprite;
     }
 }

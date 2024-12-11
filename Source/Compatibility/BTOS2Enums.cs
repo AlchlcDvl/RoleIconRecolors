@@ -68,8 +68,8 @@ public static class BTOS2Role
     // Modded
     public const Role Banshee = Role.SOCIALITE;
     public const Role Jackal = Role.MARSHAL;
-    public const Role Marshal = Role.ROLE_COUNT;
-    public const Role Judge = (Role)57;
+    public const Role Marshal = Role.ORACLE;
+    public const Role Judge = Role.ROLE_COUNT;
     public const Role Auditor = (Role)58;
     public const Role Inquisitor = (Role)59;
     public const Role Starspawn = (Role)60;
@@ -171,4 +171,5 @@ public static class BTOS2Faction
     public const FactionType Egotist = (FactionType)42;
     public const FactionType Pandora = (FactionType)43;
     public const FactionType Compliance = (FactionType)44;
+    public const FactionType Lovers = (FactionType)250;
 }

@@ -1,5 +1,3 @@
-using System.Text.RegularExpressions;
-
 namespace FancyUI.Settings;
 
 public class ColorSetting : BaseInputSetting
@@ -33,16 +31,12 @@ public class ColorSetting : BaseInputSetting
         if (!value.StartsWith("#"))
             value = "#" + value;
 
-        if (!ColorUtility.TryParseHtmlString(value, out var color) || Regex.IsMatch(value, Option.Regex))
-        {
-            value = Option.DefaultValue;
-            color = value.ToColor();
-        }
+        if (ColorUtility.TryParseHtmlString(value, out var color) && value.Length is 7 or 9)
+            ValueBG.color = color;
 
         if (cache != value)
-            Input.SetTextWithoutNotify(Option.Get());
+            Input.SetTextWithoutNotify(value);
 
-        ValueBG.color = color;
         Option.Set(value);
         Option.OnChanged(value);
     }

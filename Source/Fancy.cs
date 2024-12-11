@@ -81,12 +81,6 @@ public class Fancy
 
     public static EnumDropdownOption<UITheme> SelectedUITheme;
 
-    public static EnumDropdownOption<Role> CurrentRoleVanilla;
-    public static EnumDropdownOption<Role> CurrentRoleBTOS;
-
-    public static EnumDropdownOption<FactionType> CurrentFactionVanilla;
-    public static EnumDropdownOption<FactionType> CurrentFactionBTOS;
-
     public static StringDropdownOption PlayerNumber;
 
     public static StringDropdownOption MentionStyle1;

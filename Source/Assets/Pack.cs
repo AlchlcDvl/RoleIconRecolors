@@ -17,7 +17,7 @@ public abstract class Pack(string name, PackType type)
     public static readonly string[] CommonFolders = [ "Regular", "Town", "Coven", "SerialKiller", "Arsonist", "Werewolf", "Shroud", "Apocalypse", "VIP", "Jester", "Pirate", "Doomsayer",
         "Vampire", "CursedSoul", "Executioner", "Necronomicon", "Factionless" ];
     public static readonly string[] VanillaFolders = [];
-    public static readonly string[] BTOS2Folders = [ "Judge", "Auditor", "Starspawn", "Inquisitor", "Jackal", "Lions", "Frogs", "Hawks", "Pandora", "Egotist", "Compliance" ];
+    public static readonly string[] BTOS2Folders = [ "Judge", "Auditor", "Starspawn", "Inquisitor", "Jackal", "Lions", "Frogs", "Hawks", "Pandora", "Egotist", "Compliance", "Lovers" ];
     public static readonly string[] MainFolders = [ "Common", "Vanilla", "BTOS2", "PlayerNumbers" ];
     public static readonly string[] Mods = [ "Vanilla", "BTOS2" ];
     public static readonly Dictionary<string, string[]> ModsToFolders = new()

@@ -181,6 +181,7 @@ public static class Utils
         Role.MARSHAL => "Marshal",
         Role.MAYOR => "Mayor",
         Role.MONARCH => "Monarch",
+        Role.ORACLE => "Oracle",
         Role.PROSECUTOR => "Prosecutor",
         Role.PSYCHIC => "Psychic",
         Role.RETRIBUTIONIST => "Retributionist",
@@ -256,6 +257,8 @@ public static class Utils
         Role.ONE_TRIAL_PER_DAY => "OneTrial",
         Role.COMMON_COVEN => "CommonCoven",
         Role.COMMON_TOWN => "CommonTown",
+        Role.FOUR_HORSEMEN => "4Horsemen",
+        Role.ANON_PLAYERS => "AnonPlayers",
         Role.HIDDEN => "Hidden",
         _ => "Blank"
     };
@@ -307,6 +310,7 @@ public static class Utils
         BTOS2Faction.Egotist => "Egotist",
         BTOS2Faction.Pandora => "Pandora",
         BTOS2Faction.Compliance => "Compliance",
+        BTOS2Faction.Lovers => "Lovers",
         _ => "Factionless"
     };
 
@@ -480,6 +484,8 @@ public static class Utils
         EffectType.PESTILENCE => "Sickness",
         EffectType.REVEALED_MARSHAL => "RevealedMarshal",
         EffectType.SOCIALITE_GUEST => "Guest",
+        EffectType.REAPED or (EffectType)109 => "Reaped",
+        EffectType.REVEALED_BY_PMWITCH => "Guest",
 
         // BTOS2
         (EffectType)100 => "Recruit",
@@ -491,7 +497,6 @@ public static class Utils
         (EffectType)106 => "Accompanied",
         (EffectType)107 => "PandoraTownTraitor",
         (EffectType)108 => "Egotist",
-        (EffectType)109 => "Reaped",
         (EffectType)110 => "WarlockCursed",
         (EffectType)111 => "SecretObjective",
         _ => "Blank"
@@ -542,7 +547,7 @@ public static class Utils
                 {
                     BTOS2Role.Baker => BTOS2Role.Famine,
                     BTOS2Role.Berserker => BTOS2Role.War,
-                    BTOS2Role.SoulCollector => BTOS2Role.Death,
+                    BTOS2Role.SoulCollector or BTOS2Role.Warlock => BTOS2Role.Death,
                     BTOS2Role.Plaguebearer => BTOS2Role.Pestilence,
                     _ => role
                 },
@@ -631,7 +636,7 @@ public static class Utils
         }
         else if (mod == ModType.Vanilla)
         {
-            if ((int)role is 54 or 55)
+            if ((int)role is > 53 and < 57)
                 return FactionType.TOWN;
         }
 

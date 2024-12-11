@@ -112,11 +112,6 @@ public static class FancyAssetManager
             return;
 
         Fancy.Instance.Message("BTOS2 Detected; Initiating Compatibility...");
-        BTOS2Compatibility.BTOS2Patched = BTOS2Compatibility.Init();
-
-        if (!BTOS2Compatibility.BTOS2Patched)
-            return;
-
         var btos = Path.Combine(IPPath, "BTOS2");
 
         if (!Directory.Exists(btos))
@@ -129,9 +124,9 @@ public static class FancyAssetManager
 
         BTOS2_1 = BetterTOS2.BTOSInfo.assetBundle.LoadAsset<TMP_SpriteAsset>("Roles");
 
-        for (var i = 0; i < BTOS2_1.spriteCharacterTable.Count; i++)
+        foreach (var character in BTOS2_1.spriteGlyphTable)
         {
-            BTOS2_1.spriteGlyphTable[i].metrics = new()
+            character.metrics = new()
             {
                 horizontalBearingX = 0f,
                 horizontalBearingY = 224f

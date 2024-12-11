@@ -62,7 +62,7 @@ public static class Constants
     {
         try
         {
-            return BTOS2IPCompatibility.BTOS2IPPatched && IsBTOS2Bypass();
+            return /*BTOS2Compatibility.BTOS2Patched && */IsBTOS2Bypass();
         }
         catch
         {

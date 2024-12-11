@@ -51,10 +51,7 @@ public class SettingsAndTestingUI : UIController
         [ new(-72f, -180f, 0f), new(-24f, -190f, 0f), new(-24f, -190f, 0f), new(72f, -180f, 0f) ]
     ];
 
-    private const string ToReplace = "<sprite=\"PlayerNumbers\" name=\"PlayerNumbers_%num%\"><b>Giles Corey</b>\'s role is <sprite=\"%mod%RoleIcons (%type%)\" name=\"Role%roleInt%\"><b>" +
-        "%roleName%</b>!";
-    private const string DefaultNum = "0";
-    private const string DefaultMod = "";
+    private const string ToReplace = "<sprite=\"%mod%RoleIcons (%type%)\" name=\"Role%roleInt%\"><b>%roleName%</b>";
     private const string DefaultType = "Regular";
     private const string DefaultRoleInt = "241";
     private const string DefaultRoleName = "Hidden";
