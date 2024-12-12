@@ -7,11 +7,9 @@ public abstract class BaseDropdownOption<T>(string id, T defaultValue, OptionTyp
     public Func<string, string> Mapping { get; set; } = mapping ?? (x => x);
     public bool UseTranslations { get; } = useTranslations;
 
-    public string Value => Entry.Value.ToString();
+    public string ValueString => Entry.Value.ToString();
 
     public abstract void SetString(string value);
 
-    void IDropdown.OnChanged() => OnChanged(Get());
-
-    bool IDropdown.SetActive() => SetActive(Get());
+    bool IDropdown.SetActive() => SetActive(Value);
 }

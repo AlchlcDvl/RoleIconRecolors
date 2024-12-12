@@ -18,7 +18,7 @@ public class DropdownSetting : Setting
 
         Dropdown.ClearOptions();
         Dropdown.AddOptions(Option.DisplayOptions().Select(x => Option.UseTranslations ? l10n($"FANCY_{x.ToUpper()}") : x).ToList());
-        Dropdown.value = Option.GetInt();
+        Dropdown.SetValueWithoutNotify(Option.GetInt());
         Dropdown.onValueChanged.AddListener(OnValueChanged);
         Dropdown.onValueChanged.AddListener(_ => SettingsAndTestingUI.Instance.RefreshOptions());
     }
@@ -27,7 +27,6 @@ public class DropdownSetting : Setting
     {
         var options = Option.Options();
         Option.SetString(options.ElementAtOrDefault(index) ?? options.FirstOrDefault() ?? "Error");
-        Option.OnChanged();
     }
 
     public override bool SetActive() => Option.SetActive() && Option.Page == SettingsAndTestingUI.Instance.Page;

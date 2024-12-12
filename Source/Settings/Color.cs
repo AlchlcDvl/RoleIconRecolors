@@ -16,12 +16,12 @@ public class ColorSetting : BaseInputSetting
         if (Option == null)
             return;
 
-        Input.SetTextWithoutNotify(Option.Get());
+        Input.SetTextWithoutNotify(Option.Value);
         Input.restoreOriginalTextOnEscape = true;
         Input.onValueChanged.AddListener(OnValueChanged);
         Input.onValueChanged.AddListener(_ => SettingsAndTestingUI.Instance.RefreshOptions());
 
-        ValueBG.color = Option.Get().ToColor();
+        ValueBG.color = Option.Value.ToColor();
     }
 
     public void OnValueChanged(string value)
@@ -37,9 +37,8 @@ public class ColorSetting : BaseInputSetting
         if (cache != value)
             Input.SetTextWithoutNotify(value);
 
-        Option.Set(value);
-        Option.OnChanged(value);
+        Option.Value = value;
     }
 
-    public override bool SetActive() => Option.SetActive(Option.Get()) && Option.Page == SettingsAndTestingUI.Instance.Page;
+    public override bool SetActive() => Option.SetActive(Option.Value) && Option.Page == SettingsAndTestingUI.Instance.Page;
 }

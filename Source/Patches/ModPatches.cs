@@ -1,5 +1,6 @@
 using Home.HomeScene;
 using Home.LoginScene;
+using SalemModLoaderUI;
 
 namespace FancyUI.Patches;
 
@@ -15,4 +16,11 @@ public static class CacheHomeSceneController
 public static class HandlePacks
 {
     public static void Prefix() => DownloaderUI.HandlePackData();
+}
+
+[HarmonyPatch(typeof(SalemModLoaderMainMenuController), "Start")]
+public static class AllowClosingFancyUI
+{
+    public static void Postfix(SalemModLoaderMainMenuController __instance) => __instance.transform.GetComponent<Button>("Button").onClick.AddListener(() =>
+        UI.FancyUI.Instance?.gameObject?.Destroy());
 }

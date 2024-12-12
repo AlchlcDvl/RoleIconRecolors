@@ -25,7 +25,7 @@
     <ItemGroup>
         <EmbeddedResource Include="Resources\*" />
         <PackageReference Include="HarmonyX" Version="2.10.1" />
-        <PackageReference Include="UnityEngine.Modules" Version="2021.3.1" IncludeAssets="compile" />
+        <PackageReference Include="UnityEngine.Modules" Version="2021.3.44" IncludeAssets="compile" />
         <Reference Include="Libs\*.dll" />
     </ItemGroup>
 

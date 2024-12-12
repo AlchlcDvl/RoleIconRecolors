@@ -130,6 +130,8 @@ public static class BTOS2Role
     public const Role Snitch = (Role)225;
     public const Role CovenVIP = (Role)226;
     public const Role SecretWhispers = (Role)227;
+    public const Role Lovers = (Role)228;
+    public const Role VC = (Role)229;
 
     // Special part 2
     public const Role Hangman = Role.HANGMAN;

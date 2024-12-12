@@ -2,49 +2,51 @@ namespace FancyUI;
 
 public static class Constants
 {
-    public static bool PlayerPanelEasterEggs() => Fancy.PlayerPanelEasterEggs.Get();
+    public static bool PlayerPanelEasterEggs() => Fancy.PlayerPanelEasterEggs.Value;
 
-    public static bool AllEasterEggs() => Fancy.AllEasterEggs.Get();
+    public static bool AllEasterEggs() => Fancy.AllEasterEggs.Value;
 
-    public static int EasterEggChance() => (int)Fancy.EasterEggChance.Get();
+    public static int EasterEggChance() => (int)Fancy.EasterEggChance.Value;
 
-    public static string CurrentPack() => Fancy.SelectedIconPack.Get();
+    public static string CurrentPack() => Fancy.SelectedIconPack.Value;
 
     public static string CurrentStyle(ModType? mod = null) => (mod ?? Utils.GetGameType()) switch
     {
-        ModType.BTOS2 => Fancy.MentionStyle2.Get(),
-        _ => Fancy.MentionStyle1.Get()
+        ModType.BTOS2 => Fancy.MentionStyle2.Value,
+        _ => Fancy.MentionStyle1.Value
     };
 
     public static string FactionOverride(ModType? mod = null) => (mod ?? Utils.GetGameType()) switch
     {
-        ModType.BTOS2 => Fancy.FactionOverride2.Get(),
-        _ => Fancy.FactionOverride1.Get()
+        ModType.BTOS2 => Fancy.FactionOverride2.Value,
+        _ => Fancy.FactionOverride1.Value
     };
 
-    public static bool CustomNumbers() => Fancy.CustomNumbers.Get();
+    public static bool CustomNumbers() => Fancy.CustomNumbers.Value;
 
-    public static bool DumpSheets() => Fancy.DumpSpriteSheets.Get();
+    public static bool DumpSheets() => Fancy.DumpSpriteSheets.Value;
 
-    public static bool PackDebug() => Fancy.DebugPackLoading.Get();
+    public static bool PackDebug() => Fancy.DebugPackLoading.Value;
 
-    public static string CurrentSet() => Fancy.SelectedSilhouetteSet.Get();
+    public static string CurrentSet() => Fancy.SelectedSilhouetteSet.Value;
 
-    public static float AnimationDuration() => Fancy.AnimationDuration.Get();
+    public static float AnimationDuration() => Fancy.AnimationDuration.Value;
 
-    public static UITheme GetMainUIThemeType() => Fancy.SelectedUITheme.Get();
+    public static UITheme GetMainUIThemeType() => Fancy.SelectedUITheme.Value;
 
-    public static Color GetMainUIThemeWoodColor() => Fancy.MainUIThemeWood.Get().ToColor();
+    public static Color GetMainUIThemeWoodColor() => Fancy.MainUIThemeWood.Value.ToColor();
 
-    public static Color GetMainUIThemeMetalColor() => Fancy.MainUIThemeMetal.Get().ToColor();
+    public static Color GetMainUIThemeMetalColor() => Fancy.MainUIThemeMetal.Value.ToColor();
 
-    public static Color GetMainUIThemePaperColor() => Fancy.MainUIThemePaper.Get().ToColor();
+    public static Color GetMainUIThemePaperColor() => Fancy.MainUIThemePaper.Value.ToColor();
 
-    public static Color GetMainUIThemeLeatherColor() => Fancy.MainUIThemeLeather.Get().ToColor();
+    public static Color GetMainUIThemeLeatherColor() => Fancy.MainUIThemeLeather.Value.ToColor();
 
-    public static Color GetMainUIThemeFireColor() => Fancy.MainUIThemeFire.Get().ToColor();
+    public static Color GetMainUIThemeFireColor() => Fancy.MainUIThemeFire.Value.ToColor();
 
-    public static Color GetMainUIThemeWaxColor() => Fancy.MainUIThemeWax.Get().ToColor();
+    public static Color GetMainUIThemeWaxColor() => Fancy.MainUIThemeWax.Value.ToColor();
+
+    public static int PlayerNumber() => (int)Fancy.PlayerNumber.Value;
 
     public static bool FactionOverridden() => FactionOverride() != "None";
 
@@ -62,7 +64,7 @@ public static class Constants
     {
         try
         {
-            return /*BTOS2Compatibility.BTOS2Patched && */IsBTOS2Bypass();
+            return IsBTOS2Bypass();
         }
         catch
         {

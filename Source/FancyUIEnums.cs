@@ -10,7 +10,6 @@ public enum ModType : byte
 
 public enum PackType : byte
 {
-    None,
     IconPacks,
     RecoloredUI,
     SilhouetteSets,

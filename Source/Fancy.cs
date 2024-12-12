@@ -63,7 +63,11 @@ public class Fancy
         Grayscale = Assets.GetMaterial("GrayscaleM");
 
         LoadingGif = Assets.GetGif("Placeholder");
-        Loading = new("Loading") { Frames = LoadingGif.Frames };
+        LoadingGif.RenderAllFrames();
+        Loading = new("Loading") { Frames = [ .. LoadingGif.Frames.Select(x => x.RenderedSprite) ] };
+
+        Flame = Assets.GetGif("Flame");
+        Flame.RenderAllFrames();
 
         TryLoadingSprites(Constants.CurrentPack(), PackType.IconPacks);
         LoadVanillaSpriteSheets();
@@ -81,8 +85,6 @@ public class Fancy
 
     public static EnumDropdownOption<UITheme> SelectedUITheme;
 
-    public static StringDropdownOption PlayerNumber;
-
     public static StringDropdownOption MentionStyle1;
     public static StringDropdownOption MentionStyle2;
 
@@ -98,6 +100,8 @@ public class Fancy
 
     public static SliderOption EasterEggChance;
     public static SliderOption AnimationDuration;
+
+    public static SliderOption PlayerNumber;
 
     public static ToggleOption CustomNumbers;
     public static ToggleOption AllEasterEggs;
@@ -127,7 +131,7 @@ public class Fancy
         MainUIThemeWood = new("UI_WOOD", "#FFFFFF", PackType.RecoloredUI, _ => Constants.EnableCustomUI());
         MainUIThemeWax = new("UI_WAX", "#FFFFFF", PackType.RecoloredUI, _ => Constants.EnableCustomUI());
 
-        PlayerNumber = new("PLAYER_NUMBER", "?", PackType.IconPacks, () => [ "?", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15" ]);
+        PlayerNumber = new("PLAYER_NUMBER", 0, PackType.IconPacks, 0, 15, true, _ => Constants.CustomNumbers());
 
         EasterEggChance = new("EE_CHANCE", 5, PackType.IconPacks, 0, 100, true, _ => Constants.EnableIcons());
         AnimationDuration = new("ANIM_DURATION", 2, PackType.SilhouetteSets, 0.5f, 10, setActive: _ => Constants.EnableSwaps());

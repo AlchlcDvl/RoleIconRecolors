@@ -3,14 +3,14 @@ namespace FancyUI.Settings;
 public class SliderSetting : Setting
 {
     public Slider Slider { get; set; }
-    public TextMeshProUGUI ValueText { get; set; }
+    public TMP_InputField Input { get; set; }
     public SliderOption Option { get; set; }
 
     public override void Awake()
     {
         base.Awake();
         Slider = transform.GetComponent<Slider>("Slider");
-        ValueText = transform.GetComponent<TextMeshProUGUI>("ValueText");
+        Input = transform.GetComponent<TMP_InputField>("Input");
     }
 
     public void Start()
@@ -21,19 +21,26 @@ public class SliderSetting : Setting
         Slider.minValue = Option.Min;
         Slider.maxValue = Option.Max;
         Slider.wholeNumbers = Option.UseWhole;
-        Slider.value = Option.Get();
+        Slider.SetValueWithoutNotify(Option.Value);
         Slider.onValueChanged.AddListener(OnValueChanged);
         Slider.onValueChanged.AddListener(_ => SettingsAndTestingUI.Instance.RefreshOptions());
 
-        ValueText.SetText($"{Slider.value:0.##}");
+        Input.SetTextWithoutNotify($"{Slider.value:0.##}");
+        Input.onValueChanged.AddListener(OnTextValueChanged);
+        Input.onValueChanged.AddListener(_ => SettingsAndTestingUI.Instance.RefreshOptions());
     }
 
     public void OnValueChanged(float value)
     {
-        Option.Set(value);
-        Option.OnChanged(value);
-        ValueText.SetText($"{value:0.##}");
+        Option.Value = value;
+        Input.SetTextWithoutNotify($"{value:0.##}");
     }
 
-    public override bool SetActive() => Option.SetActive(Option.Get()) && Option.Page == SettingsAndTestingUI.Instance.Page;
+    public void OnTextValueChanged(string value)
+    {
+        if (float.TryParse(value, out var value2) && value2.IsInRange(Option.Min, Option.Max, true, true))
+            Slider.value = value2;
+    }
+
+    public override bool SetActive() => Option.SetActive(Option.Value) && Option.Page == SettingsAndTestingUI.Instance.Page;
 }

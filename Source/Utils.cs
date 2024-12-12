@@ -163,6 +163,8 @@ public static class Utils
         BTOS2Role.SecretWhispers => "SecretWhispers",
         BTOS2Role.Hidden => "Hidden",
         BTOS2Role.CommonNeutral => "CommonNeutral",
+        BTOS2Role.VC => "VC",
+        BTOS2Role.Lovers => "Lovers",
         _ => "Blank"
     };
 
@@ -643,10 +645,10 @@ public static class Utils
         return FactionType.NONE;
     }
 
-    public static void SetImageColor(this Image img, ColorType type, Color? color = null)
+    public static void SetImageColor(this Image img, ColorType type, Color? color = null, float a = 1f)
     {
         img.material = Grayscale;
-        img.color = type switch
+        var color2 = type switch
         {
             ColorType.Metal => Constants.GetMainUIThemeMetalColor(),
             ColorType.Paper => Constants.GetMainUIThemePaperColor(),
@@ -656,6 +658,8 @@ public static class Utils
             ColorType.Wax => Constants.GetMainUIThemeWaxColor(),
             _ => color ?? Color.white
         };
+        color2.a = a;
+        img.color = color2;
     }
 
     public static bool IsValid(this SilhouetteAnimation anim) => anim != null && anim != Loading;

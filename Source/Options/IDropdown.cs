@@ -2,22 +2,20 @@ namespace FancyUI.Options;
 
 public interface IDropdown
 {
-    public Func<IEnumerable<string>> Options { get; }
-    public Func<string, string> Mapping { get; }
-    public PackType Page { get; }
-    public string Value { get; }
-    public bool UseTranslations { get; }
-    public DropdownSetting Setting { get; set; }
+    Func<IEnumerable<string>> Options { get; }
+    Func<string, string> Mapping { get; }
+    PackType Page { get; }
+    string ValueString { get; }
+    bool UseTranslations { get; }
+    DropdownSetting Setting { get; set; }
 
-    public void OnChanged();
+    bool SetActive();
 
-    public bool SetActive();
+    void SetString(string value);
 
-    public void SetString(string value);
+    void OptionCreated();
 
-    public void OptionCreated();
+    int GetInt() => Options().IndexOf(x => x == ValueString);
 
-    public int GetInt() => Options().IndexOf(x => x == Value);
-
-    public IEnumerable<string> DisplayOptions() => Options().Select(Mapping);
+    IEnumerable<string> DisplayOptions() => Options().Select(Mapping);
 }

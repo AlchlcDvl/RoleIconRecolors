@@ -1,6 +1,5 @@
 using FancyUI.Assets.SilhouetteSwapper;
 using FancyUI.Assets.IconPacks;
-using Witchcraft.Gifs;
 
 namespace FancyUI.Assets;
 
@@ -26,6 +25,7 @@ public static class FancyAssetManager
     public static Material DefaultWood { get; set; }
 
     public static Gif LoadingGif { get; set; }
+    public static Gif Flame { get; set; }
     public static SilhouetteAnimation Loading { get; set; }
 
     public static string IPPath => Path.Combine(Fancy.Instance.ModPath, "IconPacks");
@@ -50,7 +50,7 @@ public static class FancyAssetManager
         if (!IconPacks.TryGetValue(packName, out var pack))
         {
             Fancy.Instance.Error($"Error finding {packName} in loaded packs");
-            Fancy.SelectedIconPack.Set(packName);
+            Fancy.SelectedIconPack.Value = packName;
             return Blank;
         }
 
@@ -167,7 +167,7 @@ public static class FancyAssetManager
         if (!Directory.Exists(folder))
         {
             Fancy.Instance.Error($"{packName} was missing");
-            Fancy.SelectedIconPack.Set(packName);
+            Fancy.SelectedIconPack.Value = packName;
             return;
         }
 

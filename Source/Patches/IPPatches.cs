@@ -303,7 +303,7 @@ public static class PatchAbilityPanel
                 break;
             }
             case TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_ATTACK or TosAbilityPanelListItem.OverrideAbilityType.POISONER_POISON or
-                TosAbilityPanelListItem.OverrideAbilityType.SHROUD or TosAbilityPanelListItem.OverrideAbilityType.INVESTIGATOR:
+                TosAbilityPanelListItem.OverrideAbilityType.SHROUD or TosAbilityPanelListItem.OverrideAbilityType.INVESTIGATOR or TosAbilityPanelListItem.OverrideAbilityType.PIRATE:
             {
                 var special = GetSprite(reg, $"{name}_Special", faction, Constants.PlayerPanelEasterEggs());
 
@@ -356,10 +356,10 @@ public static class PatchAbilityPanel
                 if (ability1.IsValid() && __instance.choice1Sprite)
                     __instance.choice1Sprite.sprite = ability1;
 
-                var ability2 = GetSprite(reg, $"{name}_Ability_2", faction, Constants.PlayerPanelEasterEggs());
+                var ability2 = GetSprite(reg, abilityName + "_2", faction, Constants.PlayerPanelEasterEggs());
 
                 if (!ability1.IsValid() && reg)
-                    ability1 = GetSprite($"{name}_Ability_2", ogfaction, Constants.PlayerPanelEasterEggs());
+                    ability1 = GetSprite(abilityName + "_2", ogfaction, Constants.PlayerPanelEasterEggs());
 
                 if (ability2.IsValid() && __instance.choice2Sprite)
                     __instance.choice2Sprite.sprite = ability2;

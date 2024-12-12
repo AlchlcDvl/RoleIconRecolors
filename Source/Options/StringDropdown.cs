@@ -4,5 +4,5 @@ public class StringDropdownOption(string id, string defaultValue, PackType page,
     Action<string> onChanged = null, bool useTranslations = false) : BaseDropdownOption<string>(id, defaultValue, OptionType.StringDropdown, page, options, setActive, mapping, onChanged,
     useTranslations)
 {
-    public override void SetString(string value) => Set(value);
+    public override void SetString(string value) => Value = value;
 }

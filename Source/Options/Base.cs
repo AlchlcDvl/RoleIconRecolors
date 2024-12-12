@@ -18,12 +18,12 @@ public abstract class Option
     public void SetBase(string value)
     {
         if (this is ToggleOption toggle)
-            toggle.Set(bool.Parse(value));
+            toggle.Value = bool.TryParse(value, out var val) && val;
         else if (this is IDropdown dropdown)
             dropdown.SetString(value);
         else if (this is SliderOption slider)
-            slider.Set(float.Parse(value));
+            slider.Value = float.TryParse(value, out var val2) ? val2 : slider.Value;
         else if (this is ColorOption color)
-            color.Set(value);
+            color.Value = value;
     }
 }

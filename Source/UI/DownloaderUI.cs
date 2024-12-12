@@ -120,7 +120,7 @@ public class DownloaderUI : UIController
     public void GoBack()
     {
         gameObject.SetActive(false);
-        FancyUI.Instance.Page = PackType.None;
+        FancyUI.Instance.Page = PackType.Settings;
         FancyUI.Instance.gameObject.SetActive(true);
     }
 
@@ -328,7 +328,7 @@ public class DownloaderUI : UIController
             Fancy.Instance.Warning("Process was aborted");
 
         LoadingUI.Instance.LoadingProgress.SetText("Loading Icon Pack");
-        Fancy.SelectedIconPack.Set(packName);
+        Fancy.SelectedIconPack.Value = packName;
         TryLoadingSprites(packName, FancyUI.Instance.Page);
         Instance.OpenDirectory();
         Running[packName] = false;

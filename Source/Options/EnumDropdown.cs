@@ -12,5 +12,5 @@ public class EnumDropdownOption<T> : BaseDropdownOption<T> where T : struct, Enu
         Mapping = mapping ?? (x => x);
     }
 
-    public override void SetString(string value) => Set(Enum.Parse<T>(value));
+    public override void SetString(string value) => Value = Enum.Parse<T>(value);
 }
