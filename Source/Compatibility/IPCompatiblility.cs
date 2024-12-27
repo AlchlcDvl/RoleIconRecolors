@@ -19,11 +19,9 @@ public static class BTOS2IPCompatibility
             OracleMenuControllerListItemType = bTOS2Types.FirstOrDefault(x => x.Name.Contains("OracleMenuControllerListItem"));
             var setDataMethod1 = AccessTools.Method(DeckItemType, "SetData", [ typeof(Role), typeof(FactionType), typeof(bool), roleDeckPlusPanelControllerType ]);
             var refreshDataMethod = AccessTools.Method(MenuRoleType, "RefreshData");
-            var setDataMethod2 = AccessTools.Method(OracleMenuControllerListItemType, "SetData");
             var compatType = typeof(BTOS2IPCompatibility);
             BTOS2Compatibility.BTOS2PatchesHarmony.Patch(setDataMethod1, null, new(AccessTools.Method(compatType, nameof(ItemPostfix1))));
             BTOS2Compatibility.BTOS2PatchesHarmony.Patch(refreshDataMethod, null, new(AccessTools.Method(compatType, nameof(ItemPostfix2))));
-            BTOS2Compatibility.BTOS2PatchesHarmony.Patch(setDataMethod2, null, new(AccessTools.Method(compatType, nameof(ItemPostfix3))));
             Fancy.Instance.Message("BTOS2 compatibility was successful");
             return true;
         }
