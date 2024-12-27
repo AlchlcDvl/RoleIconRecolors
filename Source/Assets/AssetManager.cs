@@ -112,6 +112,10 @@ public static class FancyAssetManager
             return;
 
         Fancy.Instance.Message("BTOS2 Detected; Initiating Compatibility...");
+        BTOS2Compatibility.BTOS2Patched = BTOS2Compatibility.Init();
+        if (!BTOS2Compatibility.BTOS2Patched)
+            return;
+            
         var btos = Path.Combine(IPPath, "BTOS2");
 
         if (!Directory.Exists(btos))
