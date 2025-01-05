@@ -487,7 +487,7 @@ public static class Utils
         EffectType.REVEALED_MARSHAL => "RevealedMarshal",
         EffectType.SOCIALITE_GUEST => "Guest",
         EffectType.REAPED or (EffectType)109 => "Reaped",
-        EffectType.REVEALED_BY_PMWITCH => "Guest",
+        EffectType.REVEALED_BY_PMWITCH => "Illuminated",
 
         // BTOS2
         (EffectType)100 => "Recruit",
@@ -500,7 +500,8 @@ public static class Utils
         (EffectType)107 => "PandoraTownTraitor",
         (EffectType)108 => "Egotist",
         (EffectType)110 => "WarlockCursed",
-        (EffectType)111 => "SecretObjective",
+        (EffectType)111 => "Bestowed",
+        (EffectType)112 => "Sensed",
         _ => "Blank"
     };
 
