@@ -7,7 +7,7 @@ public class SettingsAndTestingUI : UIController
     private CustomAnimator Animator { get; set; }
     private CustomAnimator Flame { get; set; }
 
-    private GameObject ButtonTemplate { get; set; }
+    private RoleCardIcon ButtonTemplate { get; set; }
 
     private SliderSetting SliderTemplate { get; set; }
     private ColorSetting ColorTemplate { get; set; }
@@ -68,7 +68,7 @@ public class SettingsAndTestingUI : UIController
 
         RoleCard = transform.FindRecursive("RoleCard");
 
-        ButtonTemplate = RoleCard.FindRecursive("ButtonTemplate").gameObject;
+        ButtonTemplate = RoleCard.EnsureComponent<RoleCardIcon>("ButtonTemplate");
 
         SpecialMetal = RoleCard.GetComponent<Image>("Special");
         EffectMetal = RoleCard.GetComponent<Image>("Effect");
@@ -171,7 +171,7 @@ public class SettingsAndTestingUI : UIController
         EffectWood.SetImageColor(ColorType.Wood);
         SlotCounter.SetImageColor(ColorType.Wood);
         Frame.SetImageColor(ColorType.Wood);
-        Flame.Renderer.SetImageColor(ColorType.Flame);
+        Flame.Renderer.SetImageColor(ColorType.Flame, a: 0.75f);
     }
 
     private void OpenRecoloredUI()

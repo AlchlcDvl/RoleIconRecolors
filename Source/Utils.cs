@@ -5,26 +5,16 @@ namespace FancyUI;
 
 public static class Utils
 {
-    private static readonly string[] VanillaSkippableNames = [ "Baker_Ability", "Executioner_Ability" ];
-    private static readonly string[] BTOS2SkippableNames = [ "Baker_Ability_1", "Baker_Ability_2", "Jackal_Ability", "Auditor_Ability", "Inquisitor_Ability", "Banshee_Ability",
-        "Deputy_Ability", "Warlock_Ability", "Starspawn_Ability", "Judge_Ability" ];
+    private static readonly string[] VanillaSkippableNames = [ "Baker_Ability", "Pirate_Ability" ];
+    private static readonly string[] BTOS2SkippableNames = [ "Baker_Ability_1", "Baker_Ability_2", "Jackal_Ability", "Auditor_Ability", "Inquisitor_Ability", "Banshee_Ability", "Judge_Ability",
+        "Warlock_Ability", "Starspawn_Ability" ];
     private static readonly string[] CommonSkippableNames = [ "Admirer_Ability", "Amnesiac_Ability", "Arsonist_Ability", "Attributes_Coven", "Berserker_Ability", "Bodyguard_Ability",
         "Cleric_Ability", "Coroner_Ability", "Crusader_Ability", "CursedSoul_Ability", "Death_Ability", "Dreamweaver_Ability", "Enchanter_Ability", "Famine_Ability", "HexMaster_Ability",
-        "Illusionist_Ability", "Investigator_Ability", "Jailor_Ability", "Jester_Ability", "Jinx_Ability", "Lookout_Ability", "Medusa_Ability", "Monarch_Ability", "Necromancer_Ability_1",
-        "Necromancer_Ability_2", "Pestilence_Ability", "Plaguebearer_Ability", "Poisoner_Ability", "PotionMaster_Ability_1", "PotionMaster_Ability_2", "Psychic_Ability", "War_Ability_1",
-        "Retributionist_Ability_1", "Retributionist_Ability_2", "Seer_Ability_1", "Seer_Ability_2", "SerialKiller_Ability", "Sheriff_Ability", "Shroud_Ability", "SoulCollector_Ability",
-        "Spy_Ability", "TavernKeeper_Ability", "Tracker_Ability", "Trapper_Ability", "Trickster_Ability", "Vampire_Ability", "Vigilante_Ability", "VoodooMaster_Ability", "War_Ability_2",
-        "Werewolf_Ability_1", "Werewolf_Ability_2", "Wildling_Ability", "Witch_Ability_1", "Witch_Ability_2", "Attributes_Pandora" ];
-    private static readonly string[] VanillaSkippableSpecials = [ "Admirer_Special" ];
-    private static readonly string[] BTOS2SkippableSpecials = [ "Baker_Special", "Starspawn_Special", "Judge_Special", "Auditor_Special", "Inquisitor_Special", "Illusionist_Special" ];
-    private static readonly string[] CommonSkippableSpecials = [ "Pirate_Special", "Trickster_Special", "Marshal_Special", "Shroud_Special", "Oracle_Special", "Jailor_Special",
-        "Cleric_Special", "Mayor_Special", "Jester_Special", "Bodyguard_Special", "Veteran_Special", "Trapper_Special", "Arsonist_Special", "Poisoner_Special", "CovenLeader_Special",
-        "Coroner_Special", "SerialKiller_Special" ];
-
-    // List of roles modified by Dum's mod
-    private static readonly Role[] ChangedByToS1UI = [ Role.JAILOR, Role.CLERIC, Role.MAYOR, Role.JESTER, Role.EXECUTIONER, Role.BODYGUARD, Role.VETERAN, Role.TRAPPER, Role.PIRATE,
-        Role.ADMIRER, Role.ARSONIST, Role.MARSHAL, Role.SOCIALITE, Role.POISONER, Role.COVENLEADER, Role.CORONER, Role.SERIALKILLER, Role.SHROUD, /*Role.ROLE_COUNT, (Role)57, (Role)58,
-        (Role)59, (Role)60, (Role)61, Role.BAKER*/ ];
+        "Illusionist_Ability", "Investigator_Ability", "Jailor_Ability", "Jester_Ability", "Jinx_Ability", "Lookout_Ability", "Medusa_Ability", "Monarch_Ability", "Necromancer_Ability",
+        "Pestilence_Ability", "Plaguebearer_Ability", "Poisoner_Ability", "PotionMaster_Ability_1", "PotionMaster_Ability_2", "Psychic_Ability", "War_Ability_1", "Seer_Ability_1",
+        "Seer_Ability_2", "SerialKiller_Ability", "Sheriff_Ability", "Shroud_Ability", "SoulCollector_Ability", "Trickster_Ability_1", "Trickster_Ability_2", "Spy_Ability", "Wildling_Ability",
+        "TavernKeeper_Ability", "Tracker_Ability", "Trapper_Ability", "Vampire_Ability", "Vigilante_Ability", "VoodooMaster_Ability", "War_Ability_2", "Witch_Ability_1", "Witch_Ability_2",
+        "Werewolf_Ability_1", "Werewolf_Ability_2", "Attributes_Pandora" ];
 
     public static readonly Dictionary<ModType, (Dictionary<string, string>, Dictionary<string, int>)> RoleStuff = [];
 
@@ -334,8 +324,6 @@ public static class Utils
         _ => "Factionless"
     };
 
-    public static bool ModifiedByToS1UI(Role role) => ChangedByToS1UI.Contains(role);
-
     public static bool IsValid(this List<BaseAbilityButton> list, int index)
     {
         try
@@ -384,28 +372,11 @@ public static class Utils
         if (CommonSkippableNames.Contains(name))
             return true;
 
-        var result = GetGameType() switch
+        return GetGameType() switch
         {
             ModType.BTOS2 => BTOS2SkippableNames.Contains(name),
             _ => VanillaSkippableNames.Contains(name)
-        };
-
-        if (result)
-            return true;
-
-        if (ModStates.IsLoaded("dum.oldui"))
-        {
-            if (CommonSkippableSpecials.Contains(name))
-                return true;
-
-            return GetGameType() switch
-            {
-                ModType.BTOS2 => BTOS2SkippableSpecials.Contains(name),
-                _ => VanillaSkippableSpecials.Contains(name)
-            };
-        }
-
-        return false;
+        };;
     }
 
     public static (Dictionary<string, string>, Dictionary<string, int>) Filtered(ModType mod = ModType.Vanilla)

@@ -26,6 +26,10 @@ public static class Constants
 
     public static bool DumpSheets() => Fancy.DumpSpriteSheets.Value;
 
+    public static bool ShowOverlayWhenJailed() => Fancy.ShowOverlayWhenJailed.Value;
+
+    public static bool ShowOverlayAsJailor() => Fancy.ShowOverlayAsJailor.Value;
+
     public static bool PackDebug() => Fancy.DebugPackLoading.Value;
 
     public static string CurrentSet() => Fancy.SelectedSilhouetteSet.Value;
@@ -64,7 +68,7 @@ public static class Constants
     {
         try
         {
-            return IsBTOS2Bypass();
+            return BTOS2Compatibility.BTOS2Patched && IsBTOS2Bypass();
         }
         catch
         {

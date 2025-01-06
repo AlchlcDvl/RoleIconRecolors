@@ -26,7 +26,7 @@ public static class PatchRoleDeckBuilder
             __instance.roleImage.sprite = icon;
 
         var banned = __instance.bannedImageGO.GetComponent<Image>();
-        var sprite = Fancy.Assets.GetSprite("Banned");
+        var sprite = GetSprite("Banned");
 
         if (sprite.IsValid() && banned)
             banned.sprite = sprite;
@@ -41,7 +41,7 @@ public static class PatchRoleListPanel
         if (!Constants.EnableIcons())
             return;
 
-        var icon = a_isBan ? Fancy.Assets.GetSprite("Banned") : GetSprite(Utils.RoleName(a_role), Utils.FactionName(a_role.GetFactionType()), false);
+        var icon = a_isBan ? GetSprite("Banned") : GetSprite(Utils.RoleName(a_role), Utils.FactionName(a_role.GetFactionType()), false);
 
         if (__instance.roleImage && icon.IsValid())
             __instance.roleImage.sprite = icon;
@@ -56,7 +56,7 @@ public static class PatchBrowserRoleListPanel
         if (!Constants.EnableIcons())
             return;
 
-        var icon = a_isBan ? Fancy.Assets.GetSprite("Banned") : GetSprite(Utils.RoleName(a_role), Utils.FactionName(a_role.GetFactionType()), false);
+        var icon = a_isBan ? GetSprite("Banned") : GetSprite(Utils.RoleName(a_role), Utils.FactionName(a_role.GetFactionType()), false);
 
         if (__instance.roleImage && icon.IsValid())
             __instance.roleImage.sprite = icon;
@@ -132,9 +132,6 @@ public static class PatchRoleCards
     {
         roleInfoButtons ??= [];
         role = Constants.IsTransformed() ? Utils.GetTransformedVersion(role) : role;
-
-        // this determines if the role in question is changed by dum's mod
-        var isModifiedByTos1UI = Utils.ModifiedByToS1UI(role) && ModStates.IsLoaded("dum.oldui");
         var index = 0;
         var name = Utils.RoleName(role);
         var faction = Utils.FactionName(factionType);
@@ -176,18 +173,6 @@ public static class PatchRoleCards
         }
         else if (Utils.Skippable(abilityname) || Utils.Skippable(abilityname + "_1"))
             index++;
-        else if (isModifiedByTos1UI)
-        {
-            if (special.IsValid() && roleInfoButtons.IsValid(index))
-            {
-                roleInfoButtons[index].abilityIcon.sprite = special;
-                index++;
-            }
-            else if (Utils.Skippable(specialName))
-                index++;
-
-            isModifiedByTos1UI = false;
-        }
 
         var abilityname2 = $"{name}_Ability_2";
         var ability2 = GetSprite(reg, abilityname2, faction);
@@ -202,18 +187,6 @@ public static class PatchRoleCards
         }
         else if (Utils.Skippable(abilityname2))
             index++;
-        else if (isModifiedByTos1UI)
-        {
-            if (special.IsValid() && roleInfoButtons.IsValid(index))
-            {
-                roleInfoButtons[index].abilityIcon.sprite = special;
-                index++;
-            }
-            else if (Utils.Skippable(specialName))
-                index++;
-
-            isModifiedByTos1UI = false;
-        }
 
         var attribute = GetSprite(reg, $"Attributes_{name}_Role", faction);
 
@@ -632,10 +605,11 @@ public static class TosCharacterNametagPatch
     }
 }
 
-[HarmonyPatch(typeof(BaseDecoder), nameof(BaseDecoder.Decode))]
-[HarmonyPatch(typeof(BaseDecoder), nameof(BaseDecoder.Encode))]
+[HarmonyPatch(typeof(BaseDecoder))]
 public static class FixDecodingAndEncoding
 {
+    [HarmonyPatch(nameof(BaseDecoder.Decode))]
+    [HarmonyPatch(nameof(BaseDecoder.Encode))]
     public static void Postfix(ChatLogMessage chatLogMessage, ref string __result)
     {
         if (Constants.EnableIcons() && chatLogMessage.chatLogEntry is ChatLogChatMessageEntry entry)

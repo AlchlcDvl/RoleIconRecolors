@@ -171,7 +171,7 @@ public static class FancyAssetManager
         if (!Directory.Exists(folder))
         {
             Fancy.Instance.Error($"{packName} was missing");
-            Fancy.SelectedIconPack.Value = packName;
+            Fancy.SelectedIconPack.Value = "Vanilla";
             return;
         }
 

@@ -108,6 +108,8 @@ public class Fancy
     public static ToggleOption PlayerPanelEasterEggs;
     public static ToggleOption DumpSpriteSheets;
     public static ToggleOption DebugPackLoading;
+    public static ToggleOption ShowOverlayWhenJailed;
+    public static ToggleOption ShowOverlayAsJailor;
 
     [LoadConfigs]
     public static void LoadConfigs()
@@ -141,6 +143,8 @@ public class Fancy
         PlayerPanelEasterEggs = new("PLAYER_PANEL_EE", false, PackType.IconPacks, _ => Constants.EnableIcons());
         DumpSpriteSheets = new("DUMP_SHEETS", false, PackType.Settings);
         DebugPackLoading = new("DEBUG_LOADING", false, PackType.Settings);
+        ShowOverlayWhenJailed = new("SHOW_TO_JAILED", true, PackType.Settings);
+        ShowOverlayAsJailor = new("SHOW_TO_JAILOR", false, PackType.Settings);
     }
 
     public static readonly SalemMenuButton FancyMenu = new()
