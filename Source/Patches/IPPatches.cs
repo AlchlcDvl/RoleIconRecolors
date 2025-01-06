@@ -1050,3 +1050,34 @@ public static class PatchNecroRetMenuItem
             __instance.choice2Sprite.sprite = sprite;
     }
 }
+
+[HarmonyPatch(typeof(PirateProgressLevelElement), nameof(PirateProgressLevelElement.SetData), typeof(Role), typeof(Role), typeof(Role), typeof(bool), typeof(bool), typeof(bool))]
+public static class PatchPirateMenu
+{
+    public static void Postfix(PirateProgressLevelElement __instance, Role role1, Role role2, Role role3)
+    {
+        if (!Constants.EnableIcons())
+            return;
+
+        var role = Utils.RoleName(role1);
+        var faction = Utils.FactionName(role1.GetFactionType());
+        var sprite = GetSprite(role, faction);
+
+        if (sprite.IsValid() && __instance.Role1)
+            __instance.Role1.sprite = sprite;
+
+        role = Utils.RoleName(role2);
+        faction = Utils.FactionName(role2.GetFactionType());
+        sprite = GetSprite(role, faction);
+
+        if (sprite.IsValid() && __instance.Role2)
+            __instance.Role2.sprite = sprite;
+
+        role = Utils.RoleName(role3);
+        faction = Utils.FactionName(role3.GetFactionType());
+        sprite = GetSprite(role, faction);
+
+        if (sprite.IsValid() && __instance.Role3)
+            __instance.Role3.sprite = sprite;
+    }
+}

@@ -21,7 +21,7 @@ public static class HandlePacks
 [HarmonyPatch(typeof(SalemModLoaderMainMenuController), "ClickMainButton")]
 public static class AllowClosingFancyUI
 {
-    public static void Postfix() => UI.FancyUI.Instance?.gameObject?.Destroy();
+    public static void Prefix() => UI.FancyUI.Instance?.gameObject?.Destroy();
 }
 
 // Next two patches were provided by Synapsium to re-add the Jailor overlay, thanks man!
