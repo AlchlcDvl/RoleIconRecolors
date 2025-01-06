@@ -647,7 +647,7 @@ public static class PMBakerMenuPatch
 
         var sprite1 = GetSprite(reg, $"{name}_Ability_1", faction);
         var sprite2 = GetSprite(reg, $"{name}_Ability_2", faction);
-        var sprite3 = GetSprite(reg, $"{name}_Special", faction);
+        var sprite3 = GetSprite(reg, $"{name}_Ability_3", faction);
 
         if (!sprite1.IsValid() && reg)
             sprite1 = GetSprite($"{name}_Ability_1", ogfaction);
@@ -656,7 +656,7 @@ public static class PMBakerMenuPatch
             sprite2 = GetSprite($"{name}_Ability_2", ogfaction);
 
         if (!sprite3.IsValid() && reg)
-            sprite3 = GetSprite($"{name}_Special", ogfaction);
+            sprite3 = GetSprite($"{name}_Ability_3", ogfaction);
 
         var image1 = __instance.transform.Find("Background/ShieldPotion").GetComponentInChildren<Image>();
         var image2 = __instance.transform.Find("Background/RevealPotion").GetComponentInChildren<Image>();
