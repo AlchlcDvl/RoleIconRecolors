@@ -65,6 +65,12 @@
     <Entry key="FANCY_PLAYER_NUMBER_NAME">Test Player Number</Entry>
     <Entry key="FANCY_PLAYER_NUMBER_DESC">Changing this value changes the name text below to appear when mentioning the same number.</Entry>
 
+    <Entry key="FANCY_SHOW_TO_JAILED_NAME">Show Jail Overlay When Jailed</Entry>
+    <Entry key="FANCY_SHOW_TO_JAILED_DESC">When you are jailed by the Jailor, this option makes the old jailor overlay appear on your screen.</Entry>
+
+    <Entry key="FANCY_SHOW_TO_JAILOR_NAME">Show Jail Overlay When Jailing</Entry>
+    <Entry key="FANCY_SHOW_TO_JAILOR_DESC">When you are jailing someone as the Jailor, this option makes the old jailor overlay appear on your screen.</Entry>
+
     <Entry key="FANCY_DEFAULT">Default</Entry>
     <Entry key="FANCY_ROLE">Role</Entry>
     <Entry key="FANCY_FACTION">Faction</Entry>

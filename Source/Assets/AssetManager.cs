@@ -31,8 +31,8 @@ public static class FancyAssetManager
     public static string IPPath => Path.Combine(Fancy.Instance.ModPath, "IconPacks");
     public static string SSPath => Path.Combine(Fancy.Instance.ModPath, "SilhouetteSets");
 
-    private static readonly string[] Avoid = [ "Necronomicon", "Recruit", "Doused", "ExeTarget", "Hexed", "Knighted", "Bread", "Revealed", "Disconnected", "Connecting", "Plagued", "Revealed",
-        "Trapped", "Hangover", "Silenced", "Dreamwoven", "Insane", "Bugged", "Tracked", "Sickness", "Reaped", "Deafened", "Audited", "Enchanted", "Accompanied", "Banned", "WarlockCursed" ];
+    private static readonly string[] Avoid = [ "Recruit", "Doused", "ExeTarget", "Hexed", "Knighted", "Bread", "Revealed", "Disconnected", "Connecting", "Plagued", "Revealed", "Trapped",
+        "Hangover", "Silenced", "Dreamwoven", "Insane", "Bugged", "Tracked", "Sickness", "Reaped", "Deafened", "Audited", "Enchanted", "Accompanied", "Banned", "WarlockCursed" ];
 
     public static Sprite GetSprite(bool skipFactionless, string name, string faction, bool allowEE = false, string packName = null) => GetSprite(name, allowEE, faction, packName,
         skipFactionless);
@@ -115,7 +115,7 @@ public static class FancyAssetManager
         BTOS2Compatibility.BTOS2Patched = BTOS2Compatibility.Init();
         if (!BTOS2Compatibility.BTOS2Patched)
             return;
-            
+
         var btos = Path.Combine(IPPath, "BTOS2");
 
         if (!Directory.Exists(btos))

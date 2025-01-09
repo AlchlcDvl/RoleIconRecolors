@@ -204,27 +204,21 @@ public static class PatchRoleCards
 
         var attribute = GetSprite(reg, $"Attributes_{name}_Role", faction);
 
-        if (!attribute.IsValid())
-            attribute = GetSprite(reg, $"Attributes_{(role.IsTransformedApoc() ? "Horsemen" : faction)}", faction);
+        if (!attribute.IsValid() && role.IsTransformedApoc())
+            attribute = GetSprite(reg, "Attributes_Horsemen", faction);
 
         if (!attribute.IsValid())
-            attribute = GetSprite(reg, $"Attributes_{faction}_Faction", faction);
-
-        if (!attribute.IsValid() && name == ogfaction)
-            attribute = GetSprite(reg, $"Attributes_{name}_Faction", faction);
+            attribute = GetSprite(reg, "Attributes", faction);
 
         if (reg && !attribute.IsValid())
         {
-            attribute = GetSprite($"Attributes_{name}_Role", ogfaction);
+            attribute = GetSprite($"Attributes_{name}", ogfaction);
+
+            if (!attribute.IsValid() && role.IsTransformedApoc())
+                attribute = GetSprite($"Attributes_Horsemen", ogfaction);
 
             if (!attribute.IsValid())
-                attribute = GetSprite($"Attributes_{ogfaction}", ogfaction);
-
-            if (!attribute.IsValid())
-                attribute = GetSprite($"Attributes_{ogfaction}_Faction", ogfaction);
-
-            if (!attribute.IsValid() && name == ogfaction)
-                attribute = GetSprite($"Attributes_{name}_Faction", ogfaction);
+                attribute = GetSprite("Attributes", ogfaction);
         }
 
         if (attribute.IsValid() && roleInfoButtons.IsValid(index))
@@ -234,18 +228,21 @@ public static class PatchRoleCards
             return;
 
         index++;
-        var nommy = GetSprite($"Necronomicon_{faction}");
+        var nommy = GetSprite(reg, $"Necronomicon_{name}", faction);
 
         if (!nommy.IsValid())
+            nommy = GetSprite(reg, "Necronomicon", faction);
+
+        if (reg && !nommy.IsValid())
         {
-            nommy = GetSprite("Necronomicon");
+            nommy = GetSprite($"Necronomicon_{name}", ogfaction);
+
+            if (!nommy.IsValid())
+                nommy = GetSprite("Necronomicon", ogfaction);
         }
 
         if (nommy.IsValid() && (Constants.IsNecroActive() || isGuide) && roleInfoButtons.IsValid(index))
-        {
             roleInfoButtons[index].abilityIcon.sprite = nommy;
-        }
-
     }
 }
 
@@ -672,13 +669,13 @@ public static class PMBakerMenuPatch
         var sprite3 = GetSprite(reg, $"{name}_Ability_3", faction);
 
         if (!sprite1.IsValid() && reg)
-            sprite1 = GetSprite($"{name}_Ability_1", faction);
+            sprite1 = GetSprite($"{name}_Ability_1", ogfaction);
 
         if (!sprite2.IsValid() && reg)
-            sprite2 = GetSprite($"{name}_Ability_2", faction);
+            sprite2 = GetSprite($"{name}_Ability_2", ogfaction);
 
         if (!sprite3.IsValid() && reg)
-            sprite3 = GetSprite($"{name}_Ability_3", faction);
+            sprite3 = GetSprite($"{name}_Ability_3", ogfaction);
 
         var image1 = __instance.transform.Find("Background/ShieldPotion").GetComponentInChildren<Image>();
         var image2 = __instance.transform.Find("Background/RevealPotion").GetComponentInChildren<Image>();
