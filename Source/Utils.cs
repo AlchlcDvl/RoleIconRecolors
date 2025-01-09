@@ -444,7 +444,7 @@ public static class Utils
         EffectType.LOVER => "Lover",
         EffectType.DOUSED => "Doused",
         EffectType.PLAGUED => "Plagued",
-        EffectType.NECRONOMICON => "Necronomicon",
+        EffectType.NECRONOMICON => "NecroHolder",
         EffectType.TRAPPED => "Trapped",
         EffectType.BREAD => "Bread",
         EffectType.HANGOVER => "Hangover",

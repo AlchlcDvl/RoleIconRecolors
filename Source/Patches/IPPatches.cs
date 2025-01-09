@@ -188,6 +188,20 @@ public static class PatchRoleCards
         else if (Utils.Skippable(abilityname2))
             index++;
 
+        var abilityname3 = $"{name}_Ability_3";
+        var ability3 = GetSprite(reg, abilityname3, faction);
+
+        if (!ability3.IsValid() && reg)
+            ability3 = GetSprite(abilityname3, ogfaction);
+
+        if (ability3.IsValid() && roleInfoButtons.IsValid(index))
+        {
+            roleInfoButtons[index].abilityIcon.sprite = ability3;
+            index++;
+        }
+        else if (Utils.Skippable(abilityname3))
+            index++;
+
         var attribute = GetSprite(reg, $"Attributes_{name}_Role", faction);
 
         if (!attribute.IsValid())
@@ -220,10 +234,18 @@ public static class PatchRoleCards
             return;
 
         index++;
-        var nommy = GetSprite("Necronomicon");
+        var nommy = GetSprite($"Necronomicon_{faction}");
+
+        if (!nommy.IsValid())
+        {
+            nommy = GetSprite("Necronomicon");
+        }
 
         if (nommy.IsValid() && (Constants.IsNecroActive() || isGuide) && roleInfoButtons.IsValid(index))
+        {
             roleInfoButtons[index].abilityIcon.sprite = nommy;
+        }
+
     }
 }
 
@@ -647,16 +669,16 @@ public static class PMBakerMenuPatch
 
         var sprite1 = GetSprite(reg, $"{name}_Ability_1", faction);
         var sprite2 = GetSprite(reg, $"{name}_Ability_2", faction);
-        var sprite3 = GetSprite(reg, $"{name}_Special", faction);
+        var sprite3 = GetSprite(reg, $"{name}_Ability_3", faction);
 
         if (!sprite1.IsValid() && reg)
-            sprite1 = GetSprite($"{name}_Ability_1", ogfaction);
+            sprite1 = GetSprite($"{name}_Ability_1", faction);
 
         if (!sprite2.IsValid() && reg)
-            sprite2 = GetSprite($"{name}_Ability_2", ogfaction);
+            sprite2 = GetSprite($"{name}_Ability_2", faction);
 
         if (!sprite3.IsValid() && reg)
-            sprite3 = GetSprite($"{name}_Special", ogfaction);
+            sprite3 = GetSprite($"{name}_Ability_3", faction);
 
         var image1 = __instance.transform.Find("Background/ShieldPotion").GetComponentInChildren<Image>();
         var image2 = __instance.transform.Find("Background/RevealPotion").GetComponentInChildren<Image>();
