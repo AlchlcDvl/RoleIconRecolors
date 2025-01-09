@@ -234,10 +234,18 @@ public static class PatchRoleCards
             return;
 
         index++;
-        var nommy = GetSprite("Necronomicon");
+        var nommy = GetSprite($"Necronomicon_{faction}");
+
+        if (!nommy.IsValid())
+        {
+            nommy = GetSprite("Necronomicon");
+        }
 
         if (nommy.IsValid() && (Constants.IsNecroActive() || isGuide) && roleInfoButtons.IsValid(index))
+        {
             roleInfoButtons[index].abilityIcon.sprite = nommy;
+        }
+
     }
 }
 
