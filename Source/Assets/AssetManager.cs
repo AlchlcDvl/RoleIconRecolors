@@ -113,6 +113,7 @@ public static class FancyAssetManager
 
         Fancy.Instance.Message("BTOS2 Detected; Initiating Compatibility...");
         BTOS2Compatibility.BTOS2Patched = BTOS2Compatibility.Init();
+
         if (!BTOS2Compatibility.BTOS2Patched)
             return;
 

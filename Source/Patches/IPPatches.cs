@@ -233,7 +233,7 @@ public static class PatchRoleCards
         if (!nommy.IsValid())
             nommy = GetSprite(reg, "Necronomicon", faction);
 
-        if (reg && !nommy.IsValid())
+        if (!nommy.IsValid() && reg)
         {
             nommy = GetSprite($"Necronomicon_{name}", ogfaction);
 
