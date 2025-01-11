@@ -188,20 +188,6 @@ public static class PatchRoleCards
         else if (Utils.Skippable(abilityname2))
             index++;
 
-        var abilityname3 = $"{name}_Ability_3";
-        var ability3 = GetSprite(reg, abilityname3, faction);
-
-        if (!ability3.IsValid() && reg)
-            ability3 = GetSprite(abilityname3, ogfaction);
-
-        if (ability3.IsValid() && roleInfoButtons.IsValid(index))
-        {
-            roleInfoButtons[index].abilityIcon.sprite = ability3;
-            index++;
-        }
-        else if (Utils.Skippable(abilityname3))
-            index++;
-
         var attribute = GetSprite(reg, $"Attributes_{name}_Role", faction);
 
         if (!attribute.IsValid() && role.IsTransformedApoc())
