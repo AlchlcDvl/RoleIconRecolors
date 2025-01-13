@@ -113,6 +113,7 @@ public static class PooledChatViewSwitcherPatch
         var nameplate = __instance.transform.GetChild(3).GetChild(0); // Nameplate
         nameplate.GetComponent<Image>().SetImageColor(ColorType.Metal);
 
+        // This is me fixing an issue in the weirdest way possible
         var name = nameplate.Find("Name");
 
         if (name)

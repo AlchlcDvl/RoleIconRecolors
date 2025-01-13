@@ -9,6 +9,8 @@ using Server.Shared.State.Chat;
 using Mentions;
 using Server.Shared.Extensions;
 using Home.Shared;
+using System.Text.RegularExpressions;
+using AbilityType = Game.Interface.TosAbilityPanelListItem.OverrideAbilityType;
 
 namespace FancyUI.Patches;
 
@@ -196,7 +198,7 @@ public static class PatchRoleCards
         if (!attribute.IsValid())
             attribute = GetSprite(reg, "Attributes", faction);
 
-        if (reg && !attribute.IsValid())
+        if (!attribute.IsValid() && reg)
         {
             attribute = GetSprite($"Attributes_{name}", ogfaction);
 
@@ -235,9 +237,9 @@ public static class PatchRoleCards
 [HarmonyPatch(typeof(TosAbilityPanelListItem), nameof(TosAbilityPanelListItem.OverrideIconAndText))]
 public static class PatchAbilityPanel
 {
-    public static void Postfix(TosAbilityPanelListItem __instance, TosAbilityPanelListItem.OverrideAbilityType overrideType)
+    public static void Postfix(TosAbilityPanelListItem __instance, AbilityType overrideType)
     {
-        if (!Constants.EnableIcons() || overrideType == TosAbilityPanelListItem.OverrideAbilityType.VOTING)
+        if (!Constants.EnableIcons() || overrideType == AbilityType.VOTING)
             return;
 
         var role = Pepper.GetMyRole();
@@ -249,7 +251,7 @@ public static class PatchAbilityPanel
 
         switch (overrideType)
         {
-            case TosAbilityPanelListItem.OverrideAbilityType.NECRO_ATTACK:
+            case AbilityType.NECRO_ATTACK:
             {
                 var nommy = GetSprite("Necronomicon", Constants.PlayerPanelEasterEggs());
 
@@ -280,8 +282,7 @@ public static class PatchAbilityPanel
 
                 break;
             }
-            case TosAbilityPanelListItem.OverrideAbilityType.POISONER_POISON or
-                TosAbilityPanelListItem.OverrideAbilityType.SHROUD or TosAbilityPanelListItem.OverrideAbilityType.INVESTIGATOR or TosAbilityPanelListItem.OverrideAbilityType.PIRATE:
+            case AbilityType.POISONER_POISON or AbilityType.SHROUD or AbilityType.INVESTIGATOR or AbilityType.PIRATE:
             {
                 var special = GetSprite(reg, $"{name}_Special", faction, Constants.PlayerPanelEasterEggs());
 
@@ -293,7 +294,7 @@ public static class PatchAbilityPanel
 
                 break;
             }
-            case TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_ATTACK:
+            case AbilityType.POTIONMASTER_ATTACK:
             {
                 var special = GetSprite(reg, $"{name}_Ability_3", faction, Constants.PlayerPanelEasterEggs());
 
@@ -305,7 +306,7 @@ public static class PatchAbilityPanel
 
                 break;
             }
-            case TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_HEAL:
+            case AbilityType.POTIONMASTER_HEAL:
             {
                 var ab1 = GetSprite(reg, $"{name}_Ability_1", faction, Constants.PlayerPanelEasterEggs());
 
@@ -317,7 +318,7 @@ public static class PatchAbilityPanel
 
                 break;
             }
-            case TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_REVEAL or TosAbilityPanelListItem.OverrideAbilityType.WEREWOLF_NON_FULL_MOON:
+            case AbilityType.POTIONMASTER_REVEAL or AbilityType.WEREWOLF_NON_FULL_MOON:
             {
                 var ab2 = GetSprite(reg, $"{name}_Ability_2", faction, Constants.PlayerPanelEasterEggs());
 
@@ -887,46 +888,50 @@ public static class FixSpeakerIcons
     }
 }
 
-[HarmonyPatch(typeof(MentionsProvider), nameof(MentionsProvider.ProcessEncodedText), typeof(string), typeof(List<string>))]
+[HarmonyPatch(typeof(MentionsProvider), nameof(MentionsProvider.ProcessAdvancedRoleMention)), HarmonyPriority(Priority.Low)]
 public static class OverwriteDecodedText
 {
-    private static string EncodedText { get; set; }
-
-    public static void Prefix(string encodedText) => EncodedText = encodedText;
-
-    public static void Postfix(MentionsProvider __instance, List<string> mentions, ref string __result)
+    public static bool Prefix(MentionsProvider __instance, Match roleMatch, ref string encodedText, ref string mention, ref string __result)
     {
         if (!Constants.EnableIcons())
-            return;
+            return true;
 
-        foreach (var mention in mentions)
+        if (!int.TryParse(roleMatch.Groups["R"].Value, out var result))
         {
-            if (__instance.MentionInfos.TryFinding(m => m.encodedText == mention, out var mentionInfo))
-                EncodedText = EncodedText.Replace(mention, mentionInfo.richText);
-            else
-            {
-                var match = MentionsProvider.RoleRegex.Match(mention);
-
-                if (match.Success)
-                {
-                    var role = (Role)int.Parse(match.Groups["R"].Value);
-
-                    if (!role.IsModifierCard() && role != Role.NONE)
-                    {
-                        var factionType = (FactionType)int.Parse(match.Groups["F"].Value);
-                        var text = __instance._useColors ? role.ToColorizedDisplayString(factionType) : role.ToFactionString(factionType);
-                        var text2 = __instance._roleEffects ? $"<sprite=\"RoleIcons ({Utils.FactionName(factionType)})\" name=\"Role{(int)role}\">" : "";
-                        var text3 = $"{__instance.styleTagOpen}{__instance.styleTagFont}<link=\"r{(int)role},{(int)factionType}\">{text2}<b>{text}</b></link>{__instance.styleTagClose}";
-                        EncodedText = EncodedText.Replace(mention, text3);
-                    }
-                }
-            }
+            __result = encodedText;
+            return false;
         }
 
-        if (Constants.IsBTOS2())
-            EncodedText = EncodedText.Replace("\"RoleIcons", "\"BTOSRoleIcons");
+        if (!int.TryParse(roleMatch.Groups["F"].Value, out var result2))
+        {
+            __result = encodedText;
+            return false;
+        }
 
-        __result = EncodedText;
+        var role = (Role)result;
+        var factionType = (FactionType)result2;
+        var text = __instance._useColors ? role.ToColorizedDisplayString(factionType) : role.ToFactionString(factionType);
+        var text2 = __instance._roleEffects ? $"<sprite=\"RoleIcons ({Utils.FactionName(factionType)})\" name=\"Role{(int)role}\">" : "";
+        var text3 = $"{__instance.styleTagOpen}{__instance.styleTagFont}<link=\"r{(int)role},{(int)factionType}\">{text2}<b>{text}</b></link>{__instance.styleTagClose}";
+        var item = new MentionInfo()
+        {
+            encodedText = mention,
+            richText = text3,
+            mentionInfoType = MentionInfo.MentionInfoType.ROLE,
+            hashCode = text3.ToLower().GetHashCode()
+        };
+
+        if (!__instance._textualMentionInfos.Contains(item))
+            __instance._textualMentionInfos.Add(item);
+
+        if (!__instance.MentionInfos.Contains(item))
+            __instance.MentionInfos.Add(item);
+
+        if (Constants.IsBTOS2())
+            encodedText = encodedText.Replace("\"RoleIcons", "\"BTOSRoleIcons");
+
+        __result = encodedText.Replace(mention, text3);
+        return false;
     }
 }
 
@@ -950,8 +955,9 @@ public static class MakeProperFactionChecksInWDAH1
             Role.HIDDEN => "GUI_GAME_WHO_DIED_VICTIM_ROLE_HIDDEN",
             Role.NONE or Role.UNKNOWN => "GUI_GAME_WHO_DIED_VICTIM_ROLE_UNKNOWN",
             _ => "GUI_GAME_WHO_DIED_VICTIM_ROLE_KNOWN"
-        }).Replace("%role%", killRecord.playerRole.GetTMPSprite() + killRecord.playerRole.ToColorizedDisplayString(killRecord.playerFaction))
-            .Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(killRecord.playerFaction)})\"");
+        })
+        .Replace("%role%", $"<sprite=\"RoleIcons ({Utils.FactionName(killRecord.playerFaction)})\" name=\"Role{(int)killRecord.playerRole}\">" +
+            killRecord.playerRole.ToColorizedDisplayString(killRecord.playerFaction));
 
         if (Constants.IsBTOS2())
             text = text.Replace("\"RoleIcons", "\"BTOSRoleIcons");
