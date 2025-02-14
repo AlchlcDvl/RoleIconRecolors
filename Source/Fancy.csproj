@@ -26,6 +26,9 @@
         <EmbeddedResource Include="Resources\*" />
         <PackageReference Include="HarmonyX" Version="2.10.1" />
         <PackageReference Include="UnityEngine.Modules" Version="2021.3.44" IncludeAssets="compile" />
+        <PackageReference Include="Roslynator.Analyzers" Version="4.12.11" PrivateAssets="all" />
+        <PackageReference Include="Roslynator.CodeAnalysis.Analyzers" Version="4.12.11" PrivateAssets="all" />
+        <PackageReference Include="Roslynator.Formatting.Analyzers" Version="4.12.11" PrivateAssets="all" />
         <Reference Include="Libs\*.dll" />
     </ItemGroup>
 

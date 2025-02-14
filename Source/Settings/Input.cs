@@ -22,7 +22,7 @@ public class StringInputSetting : BaseInputSetting
         var cache = value;
 
         if (Regex.IsMatch(value, Option.Regex))
-            value = Option.DefaultValue;
+            value = Regex.Replace(value, Option.Regex, "");
 
         if (cache != value)
             Input.SetTextWithoutNotify(Option.Value);

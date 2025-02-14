@@ -190,7 +190,7 @@ public static class PatchRoleCards
         else if (Utils.Skippable(abilityname2))
             index++;
 
-        var attribute = GetSprite(reg, $"Attributes_{name}_Role", faction);
+        var attribute = GetSprite(reg, $"Attributes_{name}", faction);
 
         if (!attribute.IsValid() && role.IsTransformedApoc())
             attribute = GetSprite(reg, "Attributes_Horsemen", faction);
@@ -198,12 +198,12 @@ public static class PatchRoleCards
         if (!attribute.IsValid())
             attribute = GetSprite(reg, "Attributes", faction);
 
-        if (!attribute.IsValid() && reg)
+        if (reg && !attribute.IsValid())
         {
             attribute = GetSprite($"Attributes_{name}", ogfaction);
 
             if (!attribute.IsValid() && role.IsTransformedApoc())
-                attribute = GetSprite($"Attributes_Horsemen", ogfaction);
+                attribute = GetSprite("Attributes_Horsemen", ogfaction);
 
             if (!attribute.IsValid())
                 attribute = GetSprite("Attributes", ogfaction);
@@ -221,7 +221,7 @@ public static class PatchRoleCards
         if (!nommy.IsValid())
             nommy = GetSprite(reg, "Necronomicon", faction);
 
-        if (!nommy.IsValid() && reg)
+        if (reg && !nommy.IsValid())
         {
             nommy = GetSprite($"Necronomicon_{name}", ogfaction);
 

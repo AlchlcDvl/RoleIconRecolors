@@ -305,7 +305,7 @@ public class DownloaderUI : UIController
         var dir = Directory.EnumerateDirectories(FolderPath, $"{packJson.RepoOwner}-{packJson.RepoName}*").FirstOrDefault();
         var time = 0f;
 
-        foreach (var file in Directory.EnumerateFiles(dir, $"*.png", SearchOption.AllDirectories).Where(x => x.Contains(packName) || x.Contains(packJson.RepoName)))
+        foreach (var file in Directory.EnumerateFiles(dir, $"*.png", SearchOption.AllDirectories).Where(x => x.ContainsAny(packName, packJson.RepoName)))
         {
             if (Instance.Abort)
                 break;

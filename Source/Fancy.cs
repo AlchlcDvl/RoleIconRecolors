@@ -3,7 +3,7 @@ namespace FancyUI;
 [SalemMod]
 [SalemMenuItem]
 [DynamicSettings]
-[WitchcraftMod(typeof(Fancy), "Fancy UI", ["Assets", "WoodMaterials"], true)]
+[WitchcraftMod(typeof(Fancy), "Fancy UI", [ "Assets", "WoodMaterials" ], true)]
 public class Fancy
 {
     public static WitchcraftMod Instance { get; private set; }
@@ -98,10 +98,10 @@ public class Fancy
     public static ColorOption MainUIThemeFire;
     public static ColorOption MainUIThemeWax;
 
-    public static SliderOption EasterEggChance;
-    public static SliderOption AnimationDuration;
+    public static Options.SliderOption EasterEggChance;
+    public static Options.SliderOption AnimationDuration;
 
-    public static SliderOption PlayerNumber;
+    public static Options.SliderOption PlayerNumber;
 
     public static ToggleOption CustomNumbers;
     public static ToggleOption AllEasterEggs;

@@ -31,7 +31,7 @@ public class ColorSetting : BaseInputSetting
         if (!value.StartsWith("#"))
             value = "#" + value;
 
-        if (ColorUtility.TryParseHtmlString(value, out var color) && value.Length is 7 or 9)
+        if (ColorUtility.TryParseHtmlString(value, out var color))
             ValueBG.color = color;
 
         if (cache != value)

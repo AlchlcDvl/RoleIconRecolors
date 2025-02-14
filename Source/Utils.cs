@@ -7,14 +7,14 @@ public static class Utils
 {
     private static readonly string[] VanillaSkippableNames = [ "Baker_Ability", "Pirate_Ability" ];
     private static readonly string[] BTOS2SkippableNames = [ "Baker_Ability_1", "Baker_Ability_2", "Jackal_Ability", "Auditor_Ability", "Inquisitor_Ability", "Banshee_Ability", "Judge_Ability",
-        "Warlock_Ability", "Wildling_Ability_2", "Starspawn_Ability" ];
+        "Warlock_Ability", "Wildling_Ability_2", "Starspawn_Ability", "Attributes_Pandora" ];
     private static readonly string[] CommonSkippableNames = [ "Admirer_Ability", "Amnesiac_Ability", "Arsonist_Ability", "Attributes_Coven", "Berserker_Ability", "Bodyguard_Ability",
         "Cleric_Ability", "Coroner_Ability", "Crusader_Ability", "CursedSoul_Ability", "Death_Ability", "Dreamweaver_Ability", "Enchanter_Ability", "Famine_Ability", "HexMaster_Ability",
-        "Illusionist_Ability", "Investigator_Ability", "Jailor_Ability", "Jester_Ability", "Jinx_Ability", "Lookout_Ability", "Medusa_Ability", "Monarch_Ability",
-        "Pestilence_Ability", "Plaguebearer_Ability", "Poisoner_Ability", "PotionMaster_Ability_1", "PotionMaster_Ability_2", "Psychic_Ability", "War_Ability_1", "Seer_Ability_1",
+        "Illusionist_Ability", "Investigator_Ability", "Jailor_Ability", "Jester_Ability", "Jinx_Ability", "Lookout_Ability", "Medusa_Ability", "Monarch_Ability", "Seer_Ability_1",
+        "Pestilence_Ability", "Plaguebearer_Ability", "Poisoner_Ability", "PotionMaster_Ability_1", "PotionMaster_Ability_2", "Psychic_Ability", "War_Ability_1", "Werewolf_Ability_2",
         "Seer_Ability_2", "SerialKiller_Ability", "Sheriff_Ability", "Shroud_Ability", "SoulCollector_Ability", "Trickster_Ability_1", "Trickster_Ability_2", "Spy_Ability", "Wildling_Ability",
         "TavernKeeper_Ability", "Tracker_Ability", "Trapper_Ability", "Vampire_Ability", "Vigilante_Ability", "VoodooMaster_Ability", "War_Ability_2", "Witch_Ability_1", "Witch_Ability_2",
-        "Werewolf_Ability_1", "Werewolf_Ability_2", "Attributes_Pandora" ];
+        "Werewolf_Ability_1" ];
 
     public static readonly Dictionary<ModType, (Dictionary<string, string>, Dictionary<string, int>)> RoleStuff = [];
 
@@ -631,7 +631,7 @@ public static class Utils
             _ => color ?? Color.white
         };
         color2.a = a;
-        img.color = color2;
+        img.material.SetColor("_Color", color2);
     }
 
     public static bool IsValid(this SilhouetteAnimation anim) => anim != null && anim != Loading;
