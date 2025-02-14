@@ -631,7 +631,7 @@ public static class Utils
             _ => color ?? Color.white
         };
         color2.a = a;
-        img.material.SetColor("_Color", color2);
+        img.color = color2;
     }
 
     public static bool IsValid(this SilhouetteAnimation anim) => anim != null && anim != Loading;
