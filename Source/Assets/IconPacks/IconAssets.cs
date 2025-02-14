@@ -2,13 +2,13 @@ namespace FancyUI.Assets.IconPacks;
 
 public class IconAssets(string name)
 {
-    public string Name { get; } = name;
+    private string Name { get; } = name;
 
-    public Dictionary<string, Dictionary<string, Sprite>> BaseIcons { get; set; } = [];
-    public Dictionary<string, Dictionary<string, List<Sprite>>> EasterEggs { get; set; } = [];
-    public Dictionary<string, TMP_SpriteAsset> MentionStyles { get; set; } = [];
+    public Dictionary<string, Dictionary<string, Sprite>> BaseIcons { get; } = [];
+    public Dictionary<string, Dictionary<string, List<Sprite>>> EasterEggs { get; } = [];
+    public Dictionary<string, TMP_SpriteAsset> MentionStyles { get; } = [];
 
-    public int Count { get; set; }
+    public int Count { get; private set; }
 
     public void Debug()
     {
@@ -19,11 +19,11 @@ public class IconAssets(string name)
         {
             foreach (var (name2, icon) in icons)
             {
-                if (icon.IsValid())
-                {
-                    Fancy.Instance.Message($"{name2} has a(n) {name1} sprite!");
-                    Count++;
-                }
+                if (!icon.IsValid())
+                    continue;
+
+                Fancy.Instance.Message($"{name2} has a(n) {name1} sprite!");
+                Count++;
             }
         }
 
@@ -35,11 +35,11 @@ public class IconAssets(string name)
             {
                 var count = icon.Count(x => x.IsValid());
 
-                if (count > 0)
-                {
-                    Fancy.Instance.Message($"{name2} has {count} {name1} easter egg sprite(s)!");
-                    Count += count;
-                }
+                if (count <= 0)
+                    continue;
+
+                Fancy.Instance.Message($"{name2} has {count} {name1} easter egg sprite(s)!");
+                Count += count;
             }
         }
 
@@ -48,11 +48,11 @@ public class IconAssets(string name)
 
         foreach (var (name2, sheet) in MentionStyles)
         {
-            if (sheet)
-            {
-                Fancy.Instance.Message($"{name2} mention style exists!");
-                Count++;
-            }
+            if (!sheet)
+                continue;
+
+            Fancy.Instance.Message($"{name2} mention style exists!");
+            Count++;
         }
 
         Fancy.Instance.Message($"{MentionStyles.Count} mention styles exist!");

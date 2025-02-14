@@ -9,9 +9,9 @@ namespace FancyUI.UI;
 
 public class DownloaderUI : UIController
 {
-    public const string REPO = "https://raw.githubusercontent.com/AlchlcDvl/RoleIconRecolors/main";
-    public static readonly Dictionary<string, bool> Running = [];
-    public static bool HandlerRunning  { get; set; }
+    private const string Repo = "https://raw.githubusercontent.com/AlchlcDvl/RoleIconRecolors/main";
+    private static readonly Dictionary<string, bool> Running = [];
+    private static bool HandlerRunning  { get; set; }
 
     private HoverEffect Back { get; set; }
     private HoverEffect OpenDir { get; set; }
@@ -45,21 +45,21 @@ public class DownloaderUI : UIController
     {
         Instance = this;
 
-        PackName = transform.GetComponent<TMP_InputField>("PackName");
-        RepoName = transform.GetComponent<TMP_InputField>("RepoName");
-        RepoOwner = transform.GetComponent<TMP_InputField>("RepoOwner");
-        BranchName = transform.GetComponent<TMP_InputField>("BranchName");
+        PackName = transform.GetComponent<TMP_InputField>("PackName")!;
+        RepoName = transform.GetComponent<TMP_InputField>("RepoName")!;
+        RepoOwner = transform.GetComponent<TMP_InputField>("RepoOwner")!;
+        BranchName = transform.GetComponent<TMP_InputField>("BranchName")!;
 
-        PackNameHover = PackName.EnsureComponent<HoverEffect>();
+        PackNameHover = PackName.EnsureComponent<HoverEffect>()!;
         PackNameHover.LookupKey = "FANCY_PACK_NAME";
 
-        RepoNameHover = RepoName.EnsureComponent<HoverEffect>();
+        RepoNameHover = RepoName.EnsureComponent<HoverEffect>()!;
         RepoNameHover.LookupKey = "FANCY_REPO_NAME";
 
-        RepoOwnerHover = RepoOwner.EnsureComponent<HoverEffect>();
+        RepoOwnerHover = RepoOwner.EnsureComponent<HoverEffect>()!;
         RepoOwnerHover.LookupKey = "FANCY_REPO_OWNER";
 
-        BranchNameHover = BranchName.EnsureComponent<HoverEffect>();
+        BranchNameHover = BranchName.EnsureComponent<HoverEffect>()!;
         BranchNameHover.LookupKey = "FANCY_BRANCH_NAME";
 
         NoPacks = transform.FindRecursive("NoPacks").gameObject;
@@ -67,11 +67,11 @@ public class DownloaderUI : UIController
 
         Title = transform.GetComponent<TextMeshProUGUI>("Title");
 
-        Back = transform.EnsureComponent<HoverEffect>("Back");
+        Back = transform.EnsureComponent<HoverEffect>("Back")!;
         Back.GetComponent<Button>().onClick.AddListener(GoBack);
         Back.LookupKey = "FANCY_CLOSE_MENU";
 
-        OpenDir = transform.EnsureComponent<HoverEffect>("Directory");
+        OpenDir = transform.EnsureComponent<HoverEffect>("Directory")!;
         OpenDir.LookupKey = "FANCY_OPEN_MENU";
         OpenDir.GetComponent<Button>().onClick.AddListener(OpenDirectory);
 
@@ -81,7 +81,7 @@ public class DownloaderUI : UIController
 
         var confirm = transform.FindRecursive("Confirm");
         confirm.GetComponent<Button>().onClick.AddListener(AfterGenerating);
-        confirm.EnsureComponent<HoverEffect>().LookupKey = "FANCY_CONFIRM_INPUT";
+        confirm.EnsureComponent<HoverEffect>()!.LookupKey = "FANCY_CONFIRM_INPUT";
 
         PackTemplate.SetActive(false);
 
@@ -124,11 +124,11 @@ public class DownloaderUI : UIController
         FancyUI.Instance.gameObject.SetActive(true);
     }
 
-    public PackJson GenerateLinkAndAddToPackCount()
+    private PackJson GenerateLinkAndAddToPackCount()
     {
-        var name = PackName.text;
+        var packNameText = PackName.text;
 
-        if (StringUtils.IsNullEmptyOrWhiteSpace(name))
+        if (StringUtils.IsNullEmptyOrWhiteSpace(packNameText))
         {
             Fancy.Instance.Error("Tried to generate pack link with no pack name");
             return null;
@@ -136,7 +136,7 @@ public class DownloaderUI : UIController
 
         var packJson = new PackJson()
         {
-            Name = name,
+            Name = packNameText,
             RepoName = RepoName.text,
             RepoOwner = RepoOwner.text,
             Branch = BranchName.text,
@@ -147,7 +147,7 @@ public class DownloaderUI : UIController
 
     public void OpenDirectory() => GeneralUtils.OpenDirectory(FolderPath);
 
-    // Why the hell am I not allowed to make extension methods in instance classes smhh
+    // Why the hell am I not allowed to make extension methods in instance classes smh
     public void SetUpPack(PackJson packJson, UnityAction download)
     {
         if (!Packs.Contains(packJson))
@@ -157,23 +157,23 @@ public class DownloaderUI : UIController
         {
             go = Instantiate(PackTemplate, PackTemplate.transform.parent);
             go.name = packJson.Name;
-            go.transform.GetComponent<TextMeshProUGUI>("PackName").SetText(packJson.Name);
+            go.transform.GetComponent<TextMeshProUGUI>("PackName")!.SetText(packJson.Name);
             var link = go.transform.Find("RepoButton");
             link.GetComponent<Button>().onClick.AddListener(() => Application.OpenURL(packJson.Link()));
-            link.EnsureComponent<HoverEffect>().LookupKey = "FANCY_OPEN_LINK";
+            link.EnsureComponent<HoverEffect>()!.LookupKey = "FANCY_OPEN_LINK";
             var button = go.transform.Find("Download");
             button.GetComponent<Button>().onClick.AddListener(download);
-            var hover = button.EnsureComponent<HoverEffect>();
+            var hover = button.EnsureComponent<HoverEffect>()!;
             hover.LookupKey = "FANCY_DOWNLOAD_PACK";
             hover.FillInKeys = [ ( "%pack%", packJson.Name ) ];
 
             if (!StringUtils.IsNullEmptyOrWhiteSpace(packJson.Credits))
-                go.EnsureComponent<HoverEffect>().NonLocalizedString = packJson.Credits;
+                go.EnsureComponent<HoverEffect>()!.NonLocalizedString = packJson.Credits;
 
             PackGOs.Add(go);
         }
 
-        go.SetActive(packJson.Type == FancyUI.Instance.Page.ToString());
+        go!.SetActive(packJson.Type == FancyUI.Instance.Page.ToString());
     }
 
     public static void HandlePackData() => Coroutines.Start(CoHandlePackData());
@@ -184,7 +184,7 @@ public class DownloaderUI : UIController
             yield break;
 
         HandlerRunning = true;
-        using var www = UnityWebRequest.Get($"{REPO}/Packs.json");
+        using var www = UnityWebRequest.Get($"{Repo}/Packs.json");
         yield return www.SendWebRequest();
 
         while (!www.isDone)
@@ -221,10 +221,9 @@ public class DownloaderUI : UIController
 
         Packs.ForEach(x => x.SetDefaults());
         HandlerRunning = false;
-        yield break;
     }
 
-    public static void DownloadIcons(string packName) => Instance.StartCoroutine(CoDownloadIcons(packName));
+    private static void DownloadIcons(string packName) => Instance.StartCoroutine(CoDownloadIcons(packName));
 
     private static IEnumerator CoDownloadIcons(string packName)
     {
@@ -259,7 +258,7 @@ public class DownloaderUI : UIController
 
         IconPack.PopulateDirectory(pack);
         LoadingUI.Instance.LoadingProgress.SetText("Retrieving GitHub Data");
-        using var www = UnityWebRequest.Get(packJson.ApiLink());
+        using var www = UnityWebRequest.Get(packJson!.ApiLink());
         var op = www.SendWebRequest();
         var progress = 0f;
 
@@ -305,7 +304,7 @@ public class DownloaderUI : UIController
         var dir = Directory.EnumerateDirectories(FolderPath, $"{packJson.RepoOwner}-{packJson.RepoName}*").FirstOrDefault();
         var time = 0f;
 
-        foreach (var file in Directory.EnumerateFiles(dir, $"*.png", SearchOption.AllDirectories).Where(x => x.ContainsAny(packName, packJson.RepoName)))
+        foreach (var file in Directory.EnumerateFiles(dir!, $"*.png", SearchOption.AllDirectories).Where(x => x.ContainsAny(packName, packJson.RepoName)))
         {
             if (Instance.Abort)
                 break;
@@ -336,6 +335,5 @@ public class DownloaderUI : UIController
         yield return new WaitForSeconds(1f);
 
         LoadingUI.Instance.Finish();
-        yield break;
     }
 }

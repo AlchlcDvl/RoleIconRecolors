@@ -24,9 +24,9 @@ public static class AllowClosingFancyUI
     public static void Prefix() => UI.FancyUI.Instance?.gameObject?.Destroy();
 }
 
-// Next two patches were provided by Synapsium to re-add the Jailor overlay, thanks man!
+// The next two patches were provided by Synapsium to re-add the Jailor overlay, thanks man!
 [HarmonyPatch(typeof(JailorElementsController), nameof(JailorElementsController.HandleRoleAlteringEffects))]
-public static class ReaddJailorOverlay
+public static class ReAddJailorOverlay
 {
     public static BaseJailorOverlayController JailorOverlayPrefab { get; private set; }
 
@@ -48,18 +48,18 @@ public static class RemoveJailorOverlay
 {
     public static void Postfix()
     {
-        if (ReaddJailorOverlay.JailorOverlayPrefab && ReaddJailorOverlay.JailorOverlayPrefab.IsShowing())
-        {
-            ReaddJailorOverlay.JailorOverlayPrefab.Close();
+        if (!ReAddJailorOverlay.JailorOverlayPrefab || !ReAddJailorOverlay.JailorOverlayPrefab.IsShowing())
+            return;
 
-            try
-            {
-                Service.Home.AudioService.PlaySound("Audio/Sfx/JailOpenSound.wav");
-            }
-            catch (Exception exception)
-            {
-                Fancy.Instance.Error(exception);
-            }
+        ReAddJailorOverlay.JailorOverlayPrefab.Close();
+
+        try
+        {
+            Service.Home.AudioService.PlaySound("Audio/Sfx/JailOpenSound.wav");
+        }
+        catch (Exception exception)
+        {
+            Fancy.Instance.Error(exception);
         }
     }
 }

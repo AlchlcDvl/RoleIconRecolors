@@ -5,25 +5,23 @@ namespace FancyUI.Assets;
 
 public static class FancyAssetManager
 {
-    public const string Resources = "FancyUI.Resources.";
-
     public static readonly Dictionary<string, Dictionary<string, List<Sprite>>> GlobalEasterEggs = [];
     public static readonly Dictionary<string, IconPack> IconPacks = [];
-    public static readonly Dictionary<int, Sprite> CacheScrollSprites = [];
+    private static readonly Dictionary<int, Sprite> CacheScrollSprites = [];
 
     public static Sprite Blank { get; set; }
     public static Sprite Attack { get; set; }
     public static Sprite Defense { get; set; }
     public static Sprite Ethereal { get; set; }
 
-    public static TMP_SpriteAsset Vanilla1 { get; set; }
-    public static TMP_SpriteAsset Vanilla2 { get; set; }
-    public static TMP_SpriteAsset Vanilla3 { get; set; }
-    public static TMP_SpriteAsset BTOS2_1 { get; set; }
-    public static TMP_SpriteAsset BTOS2_2 { get; set; }
+    public static TMP_SpriteAsset Vanilla1 { get; private set; }
+    public static TMP_SpriteAsset Vanilla2 { get; private set; }
+    public static TMP_SpriteAsset Vanilla3 { get; private set; }
+    public static TMP_SpriteAsset BTOS21 { get; private set; }
+    public static TMP_SpriteAsset BTOS22 { get; private set; }
 
     public static Material Grayscale { get; set; }
-    public static Material DefaultWood { get; set; }
+    // public static Material DefaultWood { get; set; }
 
     public static Gif LoadingGif { get; set; }
     public static Gif Flame { get; set; }
@@ -35,13 +33,13 @@ public static class FancyAssetManager
     private static readonly string[] Avoid = [ "Recruit", "Doused", "ExeTarget", "Hexed", "Knighted", "Bread", "Revealed", "Disconnected", "Connecting", "Plagued", "Revealed", "Trapped",
         "Hangover", "Silenced", "Dreamwoven", "Insane", "Bugged", "Tracked", "Sickness", "Reaped", "Deafened", "Audited", "Enchanted", "Accompanied", "Banned", "WarlockCursed" ];
 
-    public static Sprite GetSprite(bool skipFactionless, string name, string faction, bool allowEE = false, string packName = null) => GetSprite(name, allowEE, faction, packName,
+    public static Sprite GetSprite(bool skipFactionless, string name, string faction, bool allowEe = false, string packName = null) => GetSprite(name, allowEe, faction, packName,
         skipFactionless);
 
-    public static Sprite GetSprite(string name, string faction, bool allowEE = true, string packName = null, bool skipFactionless = false) => GetSprite(name, allowEE, faction, packName,
+    public static Sprite GetSprite(string name, string faction, bool allowEe = true, string packName = null, bool skipFactionless = false) => GetSprite(name, allowEe, faction, packName,
         skipFactionless);
 
-    public static Sprite GetSprite(string name, bool allowEE = true, string faction = null, string packName = null, bool skipFactionless = false)
+    public static Sprite GetSprite(string name, bool allowEe = true, string faction = null, string packName = null, bool skipFactionless = false)
     {
         if (name.Contains("Blank") || !Constants.EnableIcons() || IconPacks.Count == 0)
             return Blank;
@@ -62,40 +60,40 @@ public static class FancyAssetManager
 
         if (Constants.IsNecroActive())
             faction = "Necronomicon";
-        else if (Constants.IsLocalVIP())
+        else if (Constants.IsLocalVip())
             faction = "VIP";
 
         var mod = Utils.GetGameType();
 
         try
         {
-            var sprite = pack.GetSprite($"{name}_{mod}", allowEE, faction);
+            var sprite = pack.GetSprite($"{name}_{mod}", allowEe, faction);
 
             if (!sprite.IsValid())
-                sprite = pack.GetSprite(name, allowEE, faction);
+                sprite = pack.GetSprite(name, allowEe, faction);
 
             if (!sprite.IsValid() && og != faction)
             {
-                sprite = pack.GetSprite($"{name}_{mod}", allowEE, og);
+                sprite = pack.GetSprite($"{name}_{mod}", allowEe, og);
 
                 if (!sprite.IsValid())
-                    sprite = pack.GetSprite(name, allowEE, og);
+                    sprite = pack.GetSprite(name, allowEe, og);
             }
 
             if (faction != "Regular" && !sprite.IsValid())
             {
-                sprite = pack.GetSprite($"{name}_{mod}", allowEE, "Regular");
+                sprite = pack.GetSprite($"{name}_{mod}", allowEe, "Regular");
 
                 if (faction != "Regular" && !sprite.IsValid())
-                    sprite = pack.GetSprite(name, allowEE, "Regular");
+                    sprite = pack.GetSprite(name, allowEe, "Regular");
             }
 
             if (!sprite.IsValid() && faction != "Factionless" && !skipFactionless)
             {
-                sprite = pack.GetSprite($"{name}_{mod}", allowEE, "Factionless");
+                sprite = pack.GetSprite($"{name}_{mod}", allowEe, "Factionless");
 
                 if (!sprite.IsValid())
-                    sprite = pack.GetSprite(name, allowEE, "Factionless");
+                    sprite = pack.GetSprite(name, allowEe, "Factionless");
             }
 
             return sprite ?? Blank;
@@ -107,15 +105,15 @@ public static class FancyAssetManager
         }
     }
 
-    public static void LoadBTOS()
+    public static void LoadBtos()
     {
         if (!Constants.BTOS2Exists())
             return;
 
         Fancy.Instance.Message("BTOS2 Detected; Initiating Compatibility...");
-        BTOS2Compatibility.BTOS2Patched = BTOS2Compatibility.Init();
+        Btos2Compatibility.Btos2Patched = Btos2Compatibility.Init();
 
-        if (!BTOS2Compatibility.BTOS2Patched)
+        if (!Btos2Compatibility.Btos2Patched)
             return;
 
         var btos = Path.Combine(IPPath, "BTOS2");
@@ -128,9 +126,9 @@ public static class FancyAssetManager
         if (!Directory.Exists(btos))
             Directory.CreateDirectory(btos);
 
-        BTOS2_1 = BetterTOS2.BTOSInfo.assetBundle.LoadAsset<TMP_SpriteAsset>("Roles");
+        BTOS21 = BetterTOS2.BTOSInfo.assetBundle.LoadAsset<TMP_SpriteAsset>("Roles");
 
-        foreach (var character in BTOS2_1.spriteGlyphTable)
+        foreach (var character in BTOS21.spriteGlyphTable)
         {
             character.metrics = new()
             {
@@ -139,7 +137,7 @@ public static class FancyAssetManager
             };
         }
 
-        Utils.DumpSprite(BTOS2_1.spriteSheet as Texture2D, "BTOSRoleIcons", Path.Combine(IPPath, "BTOS2"), true);
+        Utils.DumpSprite(BTOS21.spriteSheet as Texture2D, "BTOSRoleIcons", Path.Combine(IPPath, "BTOS2"), true);
 
         Fancy.Assets.Bundles[BetterTOS2.BTOSInfo.assetBundle.name] = BetterTOS2.BTOSInfo.assetBundle;
         BetterTOS2.BTOSInfo.assetBundle.GetAllAssetNames().ForEach(x => Fancy.Assets.ObjectToBundle[AssetManager.ConvertToBaseName(x)] = BetterTOS2.BTOSInfo.assetBundle.name);
@@ -210,8 +208,6 @@ public static class FancyAssetManager
     public static void RunDiagnostics(Exception e)
     {
         IconPack pack = null;
-        TMP_SpriteAsset asset = null;
-        IconAssets assets = null;
         var game = Utils.GetGameType();
         var diagnostic = $"Uh oh, something happened here\nPack Name: {Constants.CurrentPack()}\nStyle Name: {Constants.CurrentStyle()}\nFaction Override: {Constants.FactionOverride()}\n" +
             $"Custom Numbers: {Constants.CustomNumbers()}";
@@ -230,10 +226,10 @@ public static class FancyAssetManager
 
         if (Constants.BTOS2Exists())
         {
-            if (!BTOS2_1)
+            if (!BTOS21)
                 diagnostic += "\nBTOS2 Sheet Does Not Exist";
 
-            if (!BTOS2_2)
+            if (!BTOS22)
                 diagnostic += "\nModified BTOS2 Sheet Does Not Exist";
         }
 
@@ -251,9 +247,9 @@ public static class FancyAssetManager
             if (!pack.Emojis)
                 diagnostic += "\nLoaded Emojis Was Null";
 
-            if (!pack.Assets.TryGetValue(game, out assets))
+            if (!pack.Assets.TryGetValue(game, out var assets))
                 diagnostic += "\nInvalid Game Type Was Detected";
-            else if (!assets.MentionStyles.TryGetValue(Constants.CurrentStyle(), out asset))
+            else if (!assets.MentionStyles.TryGetValue(Constants.CurrentStyle(), out var asset))
                 diagnostic += "\nLoaded Icon Pack Does Not Have A Valid Mention Style";
             else if (!asset)
                 diagnostic += "\nLoaded Mention Style Was Null";
@@ -304,7 +300,7 @@ public static class FancyAssetManager
     {
         try
         {
-            var index = Utils.Filtered(ModType.Vanilla);
+            var index = Utils.Filtered();
             var sprites = new List<Sprite>();
 
             foreach (var (role, roleInt) in index.Item2)
@@ -392,7 +388,7 @@ public static class FancyAssetManager
         }
     }
 
-    public static void LoadBTOS2SpriteSheet()
+    public static void LoadBtos2SpriteSheet()
     {
         if (!Constants.BTOS2Exists())
             return;
@@ -419,13 +415,13 @@ public static class FancyAssetManager
                     Fancy.Instance.Warning($"NO BTOS2 ICON FOR {name}?!");
             }
 
-            BTOS2_2 = AssetManager.BuildGlyphs(sprites, "BTOSRoleIcons", index.Item1);
-            Utils.DumpSprite(BTOS2_2.spriteSheet as Texture2D, "BTOS2RoleIcons_Modified", Path.Combine(IPPath, "BTOS2"));
+            BTOS22 = AssetManager.BuildGlyphs(sprites, "BTOSRoleIcons", index.Item1);
+            Utils.DumpSprite(BTOS22.spriteSheet as Texture2D, "BTOS2RoleIcons_Modified", Path.Combine(IPPath, "BTOS2"));
         }
         catch (Exception e)
         {
             Fancy.Instance.Error($"Unable to create modified btos role icons sheet because:\n{e}");
-            BTOS2_2 = null;
+            BTOS22 = null;
         }
     }
 }

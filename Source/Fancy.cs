@@ -10,7 +10,7 @@ public class Fancy
 
     public void Start()
     {
-        Instance = ModSingleton<Fancy>.Instance;
+        Instance = ModSingleton<Fancy>.Instance!;
 
         Instance.Message("Fancifying...", true);
 
@@ -44,7 +44,7 @@ public class Fancy
 
         try
         {
-            LoadBTOS();
+            LoadBtos();
         } catch {}
 
         Instance.Message("Fancy!", true);
@@ -62,11 +62,11 @@ public class Fancy
 
         Grayscale = Assets.GetMaterial("GrayscaleM");
 
-        LoadingGif = Assets.GetGif("Placeholder");
+        LoadingGif = Assets.GetGif("Placeholder")!;
         LoadingGif.RenderAllFrames();
         Loading = new("Loading") { Frames = [ .. LoadingGif.Frames.Select(x => x.RenderedSprite) ] };
 
-        Flame = Assets.GetGif("Flame");
+        Flame = Assets.GetGif("Flame")!;
         Flame.RenderAllFrames();
 
         TryLoadingSprites(Constants.CurrentPack(), PackType.IconPacks);
@@ -74,7 +74,7 @@ public class Fancy
 
         try
         {
-            LoadBTOS2SpriteSheet();
+            LoadBtos2SpriteSheet();
         } catch {}
 
         FancyMenu.Icon = Assets.GetSprite("Thumbnail");
@@ -147,13 +147,13 @@ public class Fancy
         ShowOverlayAsJailor = new("SHOW_TO_JAILOR", false, PackType.Settings);
     }
 
-    public static readonly SalemMenuButton FancyMenu = new()
+    private static readonly SalemMenuButton FancyMenu = new()
     {
         Label = "Fancy UI",
         OnClick = OpenMenu
     };
 
-    public static void OpenMenu()
+    private static void OpenMenu()
     {
         var go = UObject.Instantiate(Assets.GetGameObject("FancyUI"), CacheHomeSceneController.Controller.SafeArea.transform, false);
         go.transform.localPosition = new(0, 0, 0);

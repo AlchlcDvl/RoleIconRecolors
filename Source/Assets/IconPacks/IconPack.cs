@@ -2,12 +2,12 @@ namespace FancyUI.Assets.IconPacks;
 
 public class IconPack(string name) : Pack(name, PackType.IconPacks)
 {
-    public Dictionary<ModType, IconAssets> Assets { get; set; } = [];
-    public Dictionary<string, Sprite> NumberSprites { get; set; } = [];
-    public Dictionary<string, Sprite> EmojiSprites { get; set; } = [];
-    public Dictionary<string, bool> SpriteSheetCanExist { get; set; } = [];
-    public TMP_SpriteAsset PlayerNumbers { get; set; }
-    public TMP_SpriteAsset Emojis { get; set; }
+    public Dictionary<ModType, IconAssets> Assets { get; } = [];
+    private Dictionary<string, Sprite> NumberSprites { get; } = [];
+    private Dictionary<string, Sprite> EmojiSprites { get; } = [];
+    // public Dictionary<string, bool> SpriteSheetCanExist { get; } = [];
+    public TMP_SpriteAsset PlayerNumbers { get; private set; }
+    public TMP_SpriteAsset Emojis { get; private set; }
 
     public override void Debug()
     {
@@ -40,7 +40,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
         if (Deleted)
             return;
 
-        Fancy.Instance.Message($"Deleteing {Name}", true);
+        Fancy.Instance.Message($"Deleting {Name}", true);
         Assets.Values.ForEach(x => x.Delete());
         Fancy.Instance.Message($"{Name} Deleted!", true);
     }
@@ -261,12 +261,12 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                     dict.Add($"Emoji_{i}", $"Emoji_{i}");
                 }
 
-                PlayerNumbers = AssetManager.BuildGlyphs(sprites, $"Emojis ({Name})", dict);
+                Emojis = AssetManager.BuildGlyphs(sprites, $"Emojis ({Name})", dict);
                 Utils.DumpSprite(PlayerNumbers.spriteSheet as Texture2D, "Emojis", Path.Combine(PackPath, "Emoji"));
             }
             catch (Exception e)
             {
-                Fancy.Instance.Error($"Unable to create custom player numbers for {Name} because:\n{e}");
+                Fancy.Instance.Error($"Unable to create custom emojis for {Name} because:\n{e}");
                 PlayerNumbers = null;
             }
         }
@@ -285,7 +285,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                 {
                     var asset = BuildSpriteSheet(mod, mod.ToString(), style, icons);
                     assets.MentionStyles[style] = asset;
-                    SpriteSheetCanExist[style] = true;
+                    // SpriteSheetCanExist[style] = true;
 
                     if (asset)
                         Utils.DumpSprite(asset.spriteSheet as Texture2D, $"{style}{mod}RoleIcons", Path.Combine(PackPath, $"{mod}"));
@@ -310,7 +310,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                     var type = Enum.Parse<ModType>(mod);
                     var asset = BuildSpriteSheet(type, mod, style, icons);
                     Assets[type].MentionStyles[style] = asset;
-                    SpriteSheetCanExist[style] = true;
+                    // SpriteSheetCanExist[style] = true;
 
                     if (asset)
                         Utils.DumpSprite(asset.spriteSheet as Texture2D, $"{style}{mod}RoleIcons", Path.Combine(PackPath, mod));
@@ -331,7 +331,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
         Fancy.Instance.Message($"{Name} Loaded!", true);
     }
 
-    public TMP_SpriteAsset BuildSpriteSheet(ModType type, string mod, string style, Dictionary<string, Sprite> icons)
+    private TMP_SpriteAsset BuildSpriteSheet(ModType type, string mod, string style, Dictionary<string, Sprite> icons)
     {
         if (type == ModType.BTOS2 && !Constants.BTOS2Exists())
             return null;
@@ -400,7 +400,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
         return AssetManager.BuildGlyphs(sprites, $"{mod}RoleIcons ({Name}, {style})", index.Item1);
     }
 
-    public Sprite GetSprite(string iconName, bool allowEE, string type)
+    public Sprite GetSprite(string iconName, bool allowEe, string type)
     {
         if (StringUtils.IsNullEmptyOrWhiteSpace(type))
             type = "Regular";
@@ -412,27 +412,27 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
         icons ??= [];
         icons.TryGetValue(iconName, out var sprite);
 
-        if ((allowEE || !sprite.IsValid()) && URandom.RandomRangeInt(1, 101) <= Constants.EasterEggChance())
+        if ((!allowEe && sprite.IsValid()) || URandom.RandomRangeInt(1, 101) > Constants.EasterEggChance())
+            return sprite ?? Blank;
+
+        var sprites = new List<Sprite>();
+
+        if (Constants.AllEasterEggs())
         {
-            var sprites = new List<Sprite>();
-
-            if (Constants.AllEasterEggs())
-            {
-                GlobalEasterEggs[type].TryGetValue(iconName, out sprites);
-                sprites ??= [];
-            }
-
-            if (sprites.Count == 0)
-            {
-                assets.EasterEggs.TryGetValue(type, out var icons3);
-                icons3 ??= [];
-                icons3.TryGetValue(iconName, out sprites);
-                sprites ??= [];
-            }
-
-            if (sprites.Count > 0)
-                return sprites.Random() ?? Blank;
+            GlobalEasterEggs[type].TryGetValue(iconName, out sprites);
+            sprites ??= [];
         }
+
+        if (sprites.Count == 0)
+        {
+            assets.EasterEggs.TryGetValue(type, out var icons3);
+            icons3 ??= [];
+            icons3.TryGetValue(iconName, out sprites);
+            sprites ??= [];
+        }
+
+        if (sprites.Count > 0)
+            return sprites.Random() ?? Blank;
 
         return sprite ?? Blank;
     }

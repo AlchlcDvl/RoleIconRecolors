@@ -21,19 +21,19 @@ public class FancyUI : UIController
 
         var ipButton = transform.Find("IconPacks");
         ipButton.GetComponent<Button>().onClick.AddListener(OpenIP);
-        ipButton.AddComponent<HoverEffect>().LookupKey = "FANCY_OPEN_ICONPACKS";
+        ipButton.AddComponent<HoverEffect>()!.LookupKey = "FANCY_OPEN_ICONPACKS";
 
         var ssButton = transform.Find("SilhouetteSwapper");
         ssButton.GetComponent<Button>().onClick.AddListener(OpenSS);
-        ssButton.AddComponent<HoverEffect>().LookupKey = "FANCY_OPEN_SILHOUETTESETS";
+        ssButton.AddComponent<HoverEffect>()!.LookupKey = "FANCY_OPEN_SILHOUETTESETS";
 
         var settingsButton = transform.Find("Settings");
         settingsButton.GetComponent<Button>().onClick.AddListener(OpenSettings);
-        settingsButton.AddComponent<HoverEffect>().LookupKey = "FANCY_OPEN_SETTINGS";
+        settingsButton.AddComponent<HoverEffect>()!.LookupKey = "FANCY_OPEN_SETTINGS";
 
         var close = transform.Find("CloseButton");
         close.GetComponent<Button>().onClick.AddListener(gameObject.Destroy);
-        close.AddComponent<HoverEffect>().LookupKey = "FANCY_CLOSE_FANCY";
+        close.AddComponent<HoverEffect>()!.LookupKey = "FANCY_CLOSE_FANCY";
 
         SetupFonts(transform);
     }

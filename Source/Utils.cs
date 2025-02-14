@@ -16,7 +16,7 @@ public static class Utils
         "TavernKeeper_Ability", "Tracker_Ability", "Trapper_Ability", "Vampire_Ability", "Vigilante_Ability", "VoodooMaster_Ability", "War_Ability_2", "Witch_Ability_1", "Witch_Ability_2",
         "Werewolf_Ability_1" ];
 
-    public static readonly Dictionary<ModType, (Dictionary<string, string>, Dictionary<string, int>)> RoleStuff = [];
+    private static readonly Dictionary<ModType, (Dictionary<string, string>, Dictionary<string, int>)> RoleStuff = [];
 
     public static string RoleName(Role role, ModType? mod = null)
     {
@@ -36,125 +36,125 @@ public static class Utils
 
     private static string BTOSRoleName(Role role) => role switch
     {
-        BTOS2Role.Admirer => "Admirer",
-        BTOS2Role.Amnesiac => "Amnesiac",
-        BTOS2Role.Bodyguard => "Bodyguard",
-        BTOS2Role.Cleric => "Cleric",
-        BTOS2Role.Coroner => "Coroner",
-        BTOS2Role.Crusader => "Crusader",
-        BTOS2Role.Deputy => "Deputy",
-        BTOS2Role.Investigator => "Investigator",
-        BTOS2Role.Jailor => "Jailor",
-        BTOS2Role.Lookout => "Lookout",
-        BTOS2Role.Mayor => "Mayor",
-        BTOS2Role.Monarch => "Monarch",
-        BTOS2Role.Prosecutor => "Prosecutor",
-        BTOS2Role.Psychic => "Psychic",
-        BTOS2Role.Retributionist => "Retributionist",
-        BTOS2Role.Seer => "Seer",
-        BTOS2Role.Sheriff => "Sheriff",
-        BTOS2Role.Spy => "Spy",
-        BTOS2Role.TavernKeeper => "TavernKeeper",
-        BTOS2Role.Tracker => "Tracker",
-        BTOS2Role.Trapper => "Trapper",
-        BTOS2Role.Trickster => "Trickster",
-        BTOS2Role.Veteran => "Veteran",
-        BTOS2Role.Vigilante => "Vigilante",
-        BTOS2Role.Conjurer => "Conjurer",
-        BTOS2Role.CovenLeader => "CovenLeader",
-        BTOS2Role.Dreamweaver => "Dreamweaver",
-        BTOS2Role.Enchanter => "Enchanter",
-        BTOS2Role.HexMaster => "HexMaster",
-        BTOS2Role.Illusionist => "Illusionist",
-        BTOS2Role.Jinx => "Jinx",
-        BTOS2Role.Medusa => "Medusa",
-        BTOS2Role.Necromancer => "Necromancer",
-        BTOS2Role.Poisoner => "Poisoner",
-        BTOS2Role.PotionMaster => "PotionMaster",
-        BTOS2Role.Ritualist => "Ritualist",
-        BTOS2Role.VoodooMaster => "VoodooMaster",
-        BTOS2Role.Wildling => "Wildling",
-        BTOS2Role.Witch => "Witch",
-        BTOS2Role.Arsonist => "Arsonist",
-        BTOS2Role.Baker => "Baker",
-        BTOS2Role.Berserker => "Berserker",
-        BTOS2Role.Doomsayer => "Doomsayer",
-        BTOS2Role.Executioner => "Executioner",
-        BTOS2Role.Jester => "Jester",
-        BTOS2Role.Pirate => "Pirate",
-        BTOS2Role.Plaguebearer => "Plaguebearer",
-        BTOS2Role.SerialKiller => "SerialKiller",
-        BTOS2Role.Shroud => "Shroud",
-        BTOS2Role.SoulCollector => "SoulCollector",
-        BTOS2Role.Werewolf => "Werewolf",
-        BTOS2Role.Famine => "Famine",
-        BTOS2Role.War => "War",
-        BTOS2Role.Pestilence => "Pestilence",
-        BTOS2Role.Death => "Death",
-        BTOS2Role.CursedSoul => "CursedSoul",
-        BTOS2Role.Banshee => "Banshee",
-        BTOS2Role.Jackal => "Jackal",
-        BTOS2Role.Marshal => "Marshal",
-        BTOS2Role.Judge => "Judge",
-        BTOS2Role.Auditor => "Auditor",
-        BTOS2Role.Inquisitor => "Inquisitor",
-        BTOS2Role.Starspawn => "Starspawn",
-        BTOS2Role.Oracle => "Oracle",
-        BTOS2Role.Warlock => "Warlock",
-        BTOS2Role.Vampire => "Vampire",
-        BTOS2Role.Stoned => "Stoned",
-        BTOS2Role.RandomTown => "Town",
-        BTOS2Role.RandomCoven => "Coven",
-        BTOS2Role.RandomNeutral => "Neutral",
-        BTOS2Role.TownInvestigative => "TownInvestigative",
-        BTOS2Role.TownProtective => "TownProtective",
-        BTOS2Role.TownKilling => "TownKilling",
-        BTOS2Role.TownSupport => "TownSupport",
-        BTOS2Role.TownPower => "TownPower",
-        BTOS2Role.CovenKilling => "CovenKilling",
-        BTOS2Role.CovenUtility => "CovenUtility",
-        BTOS2Role.CovenDeception => "CovenDeception",
-        BTOS2Role.CovenPower => "CovenPower",
-        BTOS2Role.NeutralKilling => "NeutralKilling",
-        BTOS2Role.NeutralEvil => "NeutralEvil",
-        BTOS2Role.TrueAny => "TrueAny",
-        BTOS2Role.CommonCoven => "CommonCoven",
-        BTOS2Role.CommonTown => "CommonTown",
-        BTOS2Role.RandomApocalypse => "RandomApocalypse",
-        BTOS2Role.NeutralPariah => "NeutralPariah",
-        BTOS2Role.NeutralSpecial => "NeutralSpecial",
-        BTOS2Role.Any => "Any",
-        BTOS2Role.CovenTownTraitor => "CovenTownTraitor",
-        BTOS2Role.ApocTownTraitor => "ApocTownTraitor",
-        BTOS2Role.PerfectTown => "PerfectTown",
-        BTOS2Role.GhostTown => "GhostTown",
-        BTOS2Role.VIP => "VIP",
-        BTOS2Role.SlowMode => "SlowMode",
-        BTOS2Role.FastMode => "FastMode",
-        BTOS2Role.AnonVoting => "AnonVoting",
-        BTOS2Role.SecretKillers => "SecretKillers",
-        BTOS2Role.HiddenRoles => "HiddenRoles",
-        BTOS2Role.OneTrial => "OneTrial",
-        BTOS2Role.NecroPass => "NecroPass",
-        BTOS2Role.Teams => "Teams",
-        BTOS2Role.AnonNames => "AnonNames",
-        BTOS2Role.WalkingDead => "WalkingDead",
-        BTOS2Role.Egotist => "Egotist",
-        BTOS2Role.SpeakingSpirits => "SpeakingSpirits",
-        BTOS2Role.SecretObjectives => "SecretObjectives",
-        BTOS2Role.NoLastWills => "NoLastWills",
-        BTOS2Role.Immovable => "Immovable",
-        BTOS2Role.CompliantKillers => "CompliantKillers",
-        BTOS2Role.PandorasBox => "PandorasBox",
-        BTOS2Role.BallotVoting => "BallotVoting",
-        BTOS2Role.Individuality => "Individuality",
-        BTOS2Role.Snitch => "Snitch",
-        BTOS2Role.CovenVIP => "CovenVIP",
-        BTOS2Role.SecretWhispers => "SecretWhispers",
-        BTOS2Role.Hidden => "Hidden",
-        BTOS2Role.CommonNeutral => "CommonNeutral",
-        BTOS2Role.VC => "VC",
-        BTOS2Role.Lovers => "Lovers",
+        Btos2Role.Admirer => "Admirer",
+        Btos2Role.Amnesiac => "Amnesiac",
+        Btos2Role.Bodyguard => "Bodyguard",
+        Btos2Role.Cleric => "Cleric",
+        Btos2Role.Coroner => "Coroner",
+        Btos2Role.Crusader => "Crusader",
+        Btos2Role.Deputy => "Deputy",
+        Btos2Role.Investigator => "Investigator",
+        Btos2Role.Jailor => "Jailor",
+        Btos2Role.Lookout => "Lookout",
+        Btos2Role.Mayor => "Mayor",
+        Btos2Role.Monarch => "Monarch",
+        Btos2Role.Prosecutor => "Prosecutor",
+        Btos2Role.Psychic => "Psychic",
+        Btos2Role.Retributionist => "Retributionist",
+        Btos2Role.Seer => "Seer",
+        Btos2Role.Sheriff => "Sheriff",
+        Btos2Role.Spy => "Spy",
+        Btos2Role.TavernKeeper => "TavernKeeper",
+        Btos2Role.Tracker => "Tracker",
+        Btos2Role.Trapper => "Trapper",
+        Btos2Role.Trickster => "Trickster",
+        Btos2Role.Veteran => "Veteran",
+        Btos2Role.Vigilante => "Vigilante",
+        Btos2Role.Conjurer => "Conjurer",
+        Btos2Role.CovenLeader => "CovenLeader",
+        Btos2Role.Dreamweaver => "Dreamweaver",
+        Btos2Role.Enchanter => "Enchanter",
+        Btos2Role.HexMaster => "HexMaster",
+        Btos2Role.Illusionist => "Illusionist",
+        Btos2Role.Jinx => "Jinx",
+        Btos2Role.Medusa => "Medusa",
+        Btos2Role.Necromancer => "Necromancer",
+        Btos2Role.Poisoner => "Poisoner",
+        Btos2Role.PotionMaster => "PotionMaster",
+        Btos2Role.Ritualist => "Ritualist",
+        Btos2Role.VoodooMaster => "VoodooMaster",
+        Btos2Role.Wildling => "Wildling",
+        Btos2Role.Witch => "Witch",
+        Btos2Role.Arsonist => "Arsonist",
+        Btos2Role.Baker => "Baker",
+        Btos2Role.Berserker => "Berserker",
+        Btos2Role.Doomsayer => "Doomsayer",
+        Btos2Role.Executioner => "Executioner",
+        Btos2Role.Jester => "Jester",
+        Btos2Role.Pirate => "Pirate",
+        Btos2Role.Plaguebearer => "Plaguebearer",
+        Btos2Role.SerialKiller => "SerialKiller",
+        Btos2Role.Shroud => "Shroud",
+        Btos2Role.SoulCollector => "SoulCollector",
+        Btos2Role.Werewolf => "Werewolf",
+        Btos2Role.Famine => "Famine",
+        Btos2Role.War => "War",
+        Btos2Role.Pestilence => "Pestilence",
+        Btos2Role.Death => "Death",
+        Btos2Role.CursedSoul => "CursedSoul",
+        Btos2Role.Banshee => "Banshee",
+        Btos2Role.Jackal => "Jackal",
+        Btos2Role.Marshal => "Marshal",
+        Btos2Role.Judge => "Judge",
+        Btos2Role.Auditor => "Auditor",
+        Btos2Role.Inquisitor => "Inquisitor",
+        Btos2Role.Starspawn => "Starspawn",
+        Btos2Role.Oracle => "Oracle",
+        Btos2Role.Warlock => "Warlock",
+        Btos2Role.Vampire => "Vampire",
+        Btos2Role.Stoned => "Stoned",
+        Btos2Role.RandomTown => "Town",
+        Btos2Role.RandomCoven => "Coven",
+        Btos2Role.RandomNeutral => "Neutral",
+        Btos2Role.TownInvestigative => "TownInvestigative",
+        Btos2Role.TownProtective => "TownProtective",
+        Btos2Role.TownKilling => "TownKilling",
+        Btos2Role.TownSupport => "TownSupport",
+        Btos2Role.TownPower => "TownPower",
+        Btos2Role.CovenKilling => "CovenKilling",
+        Btos2Role.CovenUtility => "CovenUtility",
+        Btos2Role.CovenDeception => "CovenDeception",
+        Btos2Role.CovenPower => "CovenPower",
+        Btos2Role.NeutralKilling => "NeutralKilling",
+        Btos2Role.NeutralEvil => "NeutralEvil",
+        Btos2Role.TrueAny => "TrueAny",
+        Btos2Role.CommonCoven => "CommonCoven",
+        Btos2Role.CommonTown => "CommonTown",
+        Btos2Role.RandomApocalypse => "RandomApocalypse",
+        Btos2Role.NeutralPariah => "NeutralPariah",
+        Btos2Role.NeutralSpecial => "NeutralSpecial",
+        Btos2Role.Any => "Any",
+        Btos2Role.CovenTownTraitor => "CovenTownTraitor",
+        Btos2Role.ApocTownTraitor => "ApocTownTraitor",
+        Btos2Role.PerfectTown => "PerfectTown",
+        Btos2Role.GhostTown => "GhostTown",
+        Btos2Role.Vip => "VIP",
+        Btos2Role.SlowMode => "SlowMode",
+        Btos2Role.FastMode => "FastMode",
+        Btos2Role.AnonVoting => "AnonVoting",
+        Btos2Role.SecretKillers => "SecretKillers",
+        Btos2Role.HiddenRoles => "HiddenRoles",
+        Btos2Role.OneTrial => "OneTrial",
+        Btos2Role.NecroPass => "NecroPass",
+        Btos2Role.Teams => "Teams",
+        Btos2Role.AnonNames => "AnonNames",
+        Btos2Role.WalkingDead => "WalkingDead",
+        Btos2Role.Egotist => "Egotist",
+        Btos2Role.SpeakingSpirits => "SpeakingSpirits",
+        Btos2Role.SecretObjectives => "SecretObjectives",
+        Btos2Role.NoLastWills => "NoLastWills",
+        Btos2Role.Immovable => "Immovable",
+        Btos2Role.CompliantKillers => "CompliantKillers",
+        Btos2Role.PandorasBox => "PandorasBox",
+        Btos2Role.BallotVoting => "BallotVoting",
+        Btos2Role.Individuality => "Individuality",
+        Btos2Role.Snitch => "Snitch",
+        Btos2Role.CovenVip => "CovenVIP",
+        Btos2Role.SecretWhispers => "SecretWhispers",
+        Btos2Role.Hidden => "Hidden",
+        Btos2Role.CommonNeutral => "CommonNeutral",
+        Btos2Role.Vc => "VC",
+        Btos2Role.Lovers => "Lovers",
         _ => "Blank"
     };
 
@@ -255,11 +255,11 @@ public static class Utils
         _ => "Blank"
     };
 
-    public static string FactionName(FactionType faction, bool allowOverides, ModType? mod = null) => FactionName(faction, mod, allowOverides);
+    public static string FactionName(FactionType faction, bool allowOverrides, ModType? mod = null) => FactionName(faction, mod, allowOverrides);
 
-    public static string FactionName(FactionType faction, ModType? mod = null, bool allowOverides = true)
+    public static string FactionName(FactionType faction, ModType? mod = null, bool allowOverrides = true)
     {
-        if (Constants.FactionOverridden() && allowOverides)
+        if (Constants.FactionOverridden() && allowOverrides)
             return Constants.FactionOverride();
 
         try
@@ -278,31 +278,31 @@ public static class Utils
 
     private static string BTOSFactionName(FactionType faction) => faction switch
     {
-        BTOS2Faction.Town => "Town",
-        BTOS2Faction.Coven => "Coven",
-        BTOS2Faction.SerialKiller => "SerialKiller",
-        BTOS2Faction.Arsonist => "Arsonist",
-        BTOS2Faction.Werewolf => "Werewolf",
-        BTOS2Faction.Shroud => "Shroud",
-        BTOS2Faction.Apocalypse => "Apocalypse",
-        BTOS2Faction.Executioner => "Executioner",
-        BTOS2Faction.Jester => "Jester",
-        BTOS2Faction.Pirate => "Pirate",
-        BTOS2Faction.Doomsayer => "Doomsayer",
-        BTOS2Faction.Vampire => "Vampire",
-        BTOS2Faction.CursedSoul => "CursedSoul",
-        BTOS2Faction.Jackal => "Jackal",
-        BTOS2Faction.Frogs => "Frogs",
-        BTOS2Faction.Lions => "Lions",
-        BTOS2Faction.Hawks => "Hawks",
-        BTOS2Faction.Judge => "Judge",
-        BTOS2Faction.Auditor => "Auditor",
-        BTOS2Faction.Starspawn => "Starspawn",
-        BTOS2Faction.Inquisitor => "Inquisitor",
-        BTOS2Faction.Egotist => "Egotist",
-        BTOS2Faction.Pandora => "Pandora",
-        BTOS2Faction.Compliance => "Compliance",
-        BTOS2Faction.Lovers => "Lovers",
+        Btos2Faction.Town => "Town",
+        Btos2Faction.Coven => "Coven",
+        Btos2Faction.SerialKiller => "SerialKiller",
+        Btos2Faction.Arsonist => "Arsonist",
+        Btos2Faction.Werewolf => "Werewolf",
+        Btos2Faction.Shroud => "Shroud",
+        Btos2Faction.Apocalypse => "Apocalypse",
+        Btos2Faction.Executioner => "Executioner",
+        Btos2Faction.Jester => "Jester",
+        Btos2Faction.Pirate => "Pirate",
+        Btos2Faction.Doomsayer => "Doomsayer",
+        Btos2Faction.Vampire => "Vampire",
+        Btos2Faction.CursedSoul => "CursedSoul",
+        Btos2Faction.Jackal => "Jackal",
+        Btos2Faction.Frogs => "Frogs",
+        Btos2Faction.Lions => "Lions",
+        Btos2Faction.Hawks => "Hawks",
+        Btos2Faction.Judge => "Judge",
+        Btos2Faction.Auditor => "Auditor",
+        Btos2Faction.Starspawn => "Starspawn",
+        Btos2Faction.Inquisitor => "Inquisitor",
+        Btos2Faction.Egotist => "Egotist",
+        Btos2Faction.Pandora => "Pandora",
+        Btos2Faction.Compliance => "Compliance",
+        Btos2Faction.Lovers => "Lovers",
         _ => "Factionless"
     };
 
@@ -345,28 +345,6 @@ public static class Utils
         _ => "None"
     };
 
-    public static bool IsApoc(this Role role, ModType? mod = null)
-    {
-        try
-        {
-            return (mod ?? GetGameType()) switch
-            {
-                ModType.BTOS2 => IsApocBTOS2(role),
-                _ => IsApocVanilla(role),
-            };
-        }
-        catch
-        {
-            return IsApocVanilla(role);
-        }
-    }
-
-    public static bool IsApocVanilla(this Role role) => role is Role.BERSERKER or Role.WAR or Role.BAKER or Role.FAMINE or Role.SOULCOLLECTOR or Role.DEATH or Role.PLAGUEBEARER or
-        Role.PESTILENCE;
-
-    public static bool IsApocBTOS2(this Role role) => role is BTOS2Role.Berserker or BTOS2Role.War or BTOS2Role.Baker or BTOS2Role.Famine or BTOS2Role.SoulCollector or BTOS2Role.Death or
-        BTOS2Role.Plaguebearer or BTOS2Role.Pestilence;
-
     public static bool Skippable(string name)
     {
         if (CommonSkippableNames.Contains(name))
@@ -376,7 +354,7 @@ public static class Utils
         {
             ModType.BTOS2 => BTOS2SkippableNames.Contains(name),
             _ => VanillaSkippableNames.Contains(name)
-        };;
+        };
     }
 
     public static (Dictionary<string, string>, Dictionary<string, int>) Filtered(ModType mod = ModType.Vanilla)
@@ -386,11 +364,11 @@ public static class Utils
 
         var roles = mod switch
         {
-            ModType.BTOS2 => typeof(BTOS2Role)
+            ModType.BTOS2 => typeof(Btos2Role)
                 .GetFields(BindingFlags.Public | BindingFlags.Static)
                 .Select(x => (Role)x.GetRawConstantValue())
-                .Where(x => x is not (BTOS2Role.None or BTOS2Role.Hangman or BTOS2Role.Unknown or BTOS2Role.RoleCount)),
-            _ => GeneralUtils.GetEnumValues<Role>().Where(x => x is not (Role.NONE or Role.ROLE_COUNT or Role.UNKNOWN or Role.HANGMAN))
+                .Where(x => x is not (Btos2Role.None or Btos2Role.Hangman or Btos2Role.Unknown or Btos2Role.RoleCount)),
+            _ => GeneralUtils.GetEnumValues<Role>()!.Where(x => x is not (Role.NONE or Role.ROLE_COUNT or Role.UNKNOWN or Role.HANGMAN))
         };
         return RoleStuff[mod] = (roles.ToDictionary(x => x.ToString(), x => $"Role{(int)x}"), roles.ToDictionary(x => x.ToString(), x => (int)x));
     }
@@ -426,7 +404,7 @@ public static class Utils
         }
     }
 
-    private static bool IsTransformedApocBTOS(this Role role) => role is BTOS2Role.Death or BTOS2Role.Famine or BTOS2Role.War or BTOS2Role.Pestilence;
+    private static bool IsTransformedApocBTOS(this Role role) => role is Btos2Role.Death or Btos2Role.Famine or Btos2Role.War or Btos2Role.Pestilence;
 
     private static bool IsTransformedApocVanilla(this Role role) => role is Role.DEATH or Role.FAMINE or Role.WAR or Role.PESTILENCE;
 
@@ -480,8 +458,8 @@ public static class Utils
     {
         if (Constants.IsBTOS2() || FindCasualQueue())
             return ModType.BTOS2;
-        else
-            return ModType.Vanilla;
+
+        return ModType.Vanilla;
     }
 
     public static bool FindCasualQueue()
@@ -502,7 +480,7 @@ public static class Utils
     {
         try
         {
-            return Constants.IsBTOS2() && ui.role is BTOS2Role.Judge or BTOS2Role.Auditor or BTOS2Role.Starspawn;
+            return Constants.IsBTOS2() && ui.role is Btos2Role.Judge or Btos2Role.Auditor or Btos2Role.Starspawn;
         }
         catch
         {
@@ -519,10 +497,10 @@ public static class Utils
             {
                 ModType.BTOS2 => role switch
                 {
-                    BTOS2Role.Baker => BTOS2Role.Famine,
-                    BTOS2Role.Berserker => BTOS2Role.War,
-                    BTOS2Role.SoulCollector or BTOS2Role.Warlock => BTOS2Role.Death,
-                    BTOS2Role.Plaguebearer => BTOS2Role.Pestilence,
+                    Btos2Role.Baker => Btos2Role.Famine,
+                    Btos2Role.Berserker => Btos2Role.War,
+                    Btos2Role.SoulCollector or Btos2Role.Warlock => Btos2Role.Death,
+                    Btos2Role.Plaguebearer => Btos2Role.Pestilence,
                     _ => role
                 },
                 _ => role switch
@@ -555,7 +533,7 @@ public static class Utils
             mod ??= GetGameType();
             return mod switch
             {
-                ModType.BTOS2 => BTOS2Role.War,
+                ModType.BTOS2 => Btos2Role.War,
                 _ => Role.WAR,
             };
         }
@@ -567,54 +545,52 @@ public static class Utils
 
     public static FactionType GetFactionType(this Role role, ModType? mod = null)
     {
-        if ((int)role is > 0 and < 25)
-            return FactionType.TOWN;
-        else if ((int)role is > 24 and < 40)
-            return FactionType.COVEN;
-        else if ((int)role is 41 or 42 or 47 or 50 or 250 or 251 or 252 or 253)
-            return FactionType.APOCALYPSE;
-        else if ((int)role is (not (41 or 42 or 47 or 50)) and < 54)
+        switch ((int)role)
         {
-            return role switch
+            case > 0 and < 25:
+                return FactionType.TOWN;
+            case > 24 and < 40:
+                return FactionType.COVEN;
+            case 41 or 42 or 47 or 50 or 250 or 251 or 252 or 253:
+                return FactionType.APOCALYPSE;
+            case < 54:
             {
-                Role.ARSONIST => FactionType.ARSONIST,
-                Role.DOOMSAYER => FactionType.DOOMSAYER,
-                Role.EXECUTIONER => FactionType.EXECUTIONER,
-                Role.JESTER => FactionType.JESTER,
-                Role.PIRATE => FactionType.PIRATE,
-                Role.SERIALKILLER => FactionType.SERIALKILLER,
-                Role.SHROUD => FactionType.SHROUD,
-                Role.WEREWOLF => FactionType.WEREWOLF,
-                Role.VAMPIRE => FactionType.VAMPIRE,
-                Role.CURSED_SOUL => FactionType.CURSED_SOUL,
-                _ => FactionType.NONE
-            };
+                return role switch
+                {
+                    Role.ARSONIST => FactionType.ARSONIST,
+                    Role.DOOMSAYER => FactionType.DOOMSAYER,
+                    Role.EXECUTIONER => FactionType.EXECUTIONER,
+                    Role.JESTER => FactionType.JESTER,
+                    Role.PIRATE => FactionType.PIRATE,
+                    Role.SERIALKILLER => FactionType.SERIALKILLER,
+                    Role.SHROUD => FactionType.SHROUD,
+                    Role.WEREWOLF => FactionType.WEREWOLF,
+                    Role.VAMPIRE => FactionType.VAMPIRE,
+                    Role.CURSED_SOUL => FactionType.CURSED_SOUL,
+                    _ => FactionType.NONE
+                };
+            }
         }
 
         mod ??= GetGameType();
 
-        if (mod == ModType.BTOS2)
+        return mod switch
         {
-            return role switch
+            ModType.BTOS2 => role switch
             {
-                BTOS2Role.Banshee => BTOS2Faction.Coven,
-                BTOS2Role.Marshal or BTOS2Role.Oracle => BTOS2Faction.Town,
-                BTOS2Role.Jackal => BTOS2Faction.Jackal,
-                BTOS2Role.Judge => BTOS2Faction.Judge,
-                BTOS2Role.Auditor => BTOS2Faction.Auditor,
-                BTOS2Role.Inquisitor => BTOS2Faction.Inquisitor,
-                BTOS2Role.Starspawn => BTOS2Faction.Starspawn,
-                BTOS2Role.Warlock => BTOS2Faction.Apocalypse,
-                _ => BTOS2Faction.None
-            };
-        }
-        else if (mod == ModType.Vanilla)
-        {
-            if ((int)role is > 53 and < 57)
-                return FactionType.TOWN;
-        }
-
-        return FactionType.NONE;
+                Btos2Role.Banshee => Btos2Faction.Coven,
+                Btos2Role.Marshal or Btos2Role.Oracle => Btos2Faction.Town,
+                Btos2Role.Jackal => Btos2Faction.Jackal,
+                Btos2Role.Judge => Btos2Faction.Judge,
+                Btos2Role.Auditor => Btos2Faction.Auditor,
+                Btos2Role.Inquisitor => Btos2Faction.Inquisitor,
+                Btos2Role.Starspawn => Btos2Faction.Starspawn,
+                Btos2Role.Warlock => Btos2Faction.Apocalypse,
+                _ => Btos2Faction.None
+            },
+            ModType.Vanilla when (int)role is > 53 and < 57 => FactionType.TOWN,
+            _ => FactionType.NONE
+        };
     }
 
     public static void SetImageColor(this Image img, ColorType type, Color? color = null, float a = 1f)

@@ -24,7 +24,7 @@ public class LoadingUI : UIController
         Started = false;
 
         var cancel = transform.Find("Cancel");
-        cancel.AddComponent<HoverEffect>().LookupKey = "FANCY_CANCEL_CURRENT";
+        cancel.AddComponent<HoverEffect>()!.LookupKey = "FANCY_CANCEL_CURRENT";
         cancel.GetComponent<Button>().onClick.AddListener(Cancel);
 
         FancyUI.SetupFonts(transform);
@@ -37,7 +37,7 @@ public class LoadingUI : UIController
     public void Update()
     {
         if (Started)
-            Cog.Rotate(Vector3.forward * -10 * Time.fixedDeltaTime);
+            Cog.Rotate(Vector3.forward * (-10 * Time.fixedDeltaTime));
     }
 
     public void BeginLoading(GameObject caller, string title)

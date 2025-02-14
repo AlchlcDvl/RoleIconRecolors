@@ -1,6 +1,6 @@
 namespace FancyUI.Compatibility;
 
-public static class BTOS2Role
+public static class Btos2Role
 {
     public const Role None = Role.NONE;
 
@@ -103,7 +103,7 @@ public static class BTOS2Role
     public const Role CommonNeutral = (Role)121;
 
     // Modifiers
-    public const Role VIP = Role.VIP;
+    public const Role Vip = Role.VIP;
     public const Role CovenTownTraitor = Role.TOWN_TRAITOR;
     public const Role GhostTown = Role.GHOST_TOWN;
     public const Role PerfectTown = Role.NO_TOWN_HANGED;
@@ -128,10 +128,10 @@ public static class BTOS2Role
     public const Role BallotVoting = (Role)223;
     public const Role Individuality = (Role)224;
     public const Role Snitch = (Role)225;
-    public const Role CovenVIP = (Role)226;
+    public const Role CovenVip = (Role)226;
     public const Role SecretWhispers = (Role)227;
     public const Role Lovers = (Role)228;
-    public const Role VC = (Role)229;
+    public const Role Vc = (Role)229;
 
     // Special part 2
     public const Role Hangman = Role.HANGMAN;
@@ -145,7 +145,7 @@ public static class BTOS2Role
     public const Role Unknown = Role.UNKNOWN;
 }
 
-public static class BTOS2Faction
+public static class Btos2Faction
 {
     public const FactionType None = FactionType.NONE;
     public const FactionType Town = FactionType.TOWN;

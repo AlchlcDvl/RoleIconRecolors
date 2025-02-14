@@ -109,11 +109,11 @@ public static class PatchRoleCards
             ChangeRoleCard(__instance?.roleIcon, __instance?.specialAbilityPanel?.useButton?.abilityIcon, __instance?.roleInfoButtons, playerIdentityData.role, playerIdentityData.faction);
 
         // Merged a CW patch here for optimisation purposes
-        if (Constants.EnableCustomUI())
-        {
-            foreach (var button in __instance.roleInfoButtons)
-                button.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal); // Rings at the back
-        }
+        if (!Constants.EnableCustomUI())
+            return;
+
+        foreach (var button in __instance.roleInfoButtons)
+            button.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal); // Rings at the back
     }
 
     [HarmonyPatch(typeof(RoleCardPopupPanel), nameof(RoleCardPopupPanel.SetRoleAndFaction))]
@@ -123,11 +123,11 @@ public static class PatchRoleCards
             ChangeRoleCard(__instance?.roleIcon, __instance?.specialAbilityPanel?.useButton?.abilityIcon, __instance?.roleInfoButtons, role, faction, true);
 
         // Merged a CW patch here for optimisation purposes
-        if (Constants.EnableCustomUI())
-        {
-            foreach (var button in __instance.roleInfoButtons)
-                button.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal); // Rings at the back
-        }
+        if (!Constants.EnableCustomUI())
+            return;
+
+        foreach (var button in __instance.roleInfoButtons)
+            button.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal); // Rings at the back
     }
 
     private static void ChangeRoleCard(Image roleIcon, Image specialAbilityPanel, List<BaseAbilityButton> roleInfoButtons, Role role, FactionType factionType, bool isGuide = false)
@@ -258,26 +258,33 @@ public static class PatchAbilityPanel
                 if (nommy.IsValid() && __instance.choice1Sprite && role != Role.ILLUSIONIST)
                     __instance.choice1Sprite.sprite = nommy;
 
-                if (role == Role.ILLUSIONIST && __instance.choice2Sprite)
+                switch (role)
                 {
-                    __instance.choice2Sprite.sprite = nommy;
-                    var illu = GetSprite(reg, "Illusionist_Ability", faction, Constants.PlayerPanelEasterEggs());
+                    case Role.ILLUSIONIST when __instance.choice2Sprite:
+                    {
+                        __instance.choice2Sprite.sprite = nommy;
+                        var illu = GetSprite(reg, "Illusionist_Ability", faction, Constants.PlayerPanelEasterEggs());
 
-                    if (!illu.IsValid() && reg)
-                        illu = GetSprite("Illusionist_Ability", ogfaction, Constants.PlayerPanelEasterEggs());
+                        if (!illu.IsValid() && reg)
+                            illu = GetSprite("Illusionist_Ability", ogfaction, Constants.PlayerPanelEasterEggs());
 
-                    if (illu.IsValid() && __instance.choice1Sprite)
-                        __instance.choice1Sprite.sprite = illu;
-                }
-                else if (role == Role.WITCH)
-                {
-                    var target = GetSprite(reg, "Witch_Ability_2", faction, Constants.PlayerPanelEasterEggs());
+                        if (illu.IsValid() && __instance.choice1Sprite)
+                            __instance.choice1Sprite.sprite = illu;
 
-                    if (!target.IsValid() && reg)
-                        target = GetSprite("Witch_Ability_2", ogfaction, Constants.PlayerPanelEasterEggs());
+                        break;
+                    }
+                    case Role.WITCH:
+                    {
+                        var target = GetSprite(reg, "Witch_Ability_2", faction, Constants.PlayerPanelEasterEggs());
 
-                    if (target.IsValid() && __instance.choice2Sprite)
-                        __instance.choice2Sprite.sprite = target;
+                        if (!target.IsValid() && reg)
+                            target = GetSprite("Witch_Ability_2", ogfaction, Constants.PlayerPanelEasterEggs());
+
+                        if (target.IsValid() && __instance.choice2Sprite)
+                            __instance.choice2Sprite.sprite = target;
+
+                        break;
+                    }
                 }
 
                 break;
@@ -349,8 +356,8 @@ public static class PatchAbilityPanel
 
                 var ability2 = GetSprite(reg, abilityName + "_2", faction, Constants.PlayerPanelEasterEggs());
 
-                if (!ability1.IsValid() && reg)
-                    ability1 = GetSprite(abilityName + "_2", ogfaction, Constants.PlayerPanelEasterEggs());
+                if (!ability2.IsValid() && reg)
+                    ability2 = GetSprite(abilityName + "_2", ogfaction, Constants.PlayerPanelEasterEggs());
 
                 if (ability2.IsValid() && __instance.choice2Sprite)
                     __instance.choice2Sprite.sprite = ability2;
@@ -417,12 +424,24 @@ public static class CacheDefaults
             Debug.Log($"HomeInterfaceService:: Add Sprite Asset {key}");
             var asset = __instance.LoadResource<TMP_SpriteAsset>($"TmpSpriteAssets/{key}.asset");
 
-            if (key == "RoleIcons")
-                RoleIcons = asset;
-            else if (key == "PlayerNumbers")
-                Numbers = asset;
-            else if (key == "Emojis")
-                Emojis = asset;
+            switch (key)
+            {
+                case "RoleIcons":
+                {
+                    RoleIcons = asset;
+                    break;
+                }
+                case "PlayerNumbers":
+                {
+                    Numbers = asset;
+                    break;
+                }
+                case "Emojis":
+                {
+                    Emojis = asset;
+                    break;
+                }
+            }
 
             if (key is "RoleIcons" or "PlayerNumbers" or "Emojis")
                 Utils.DumpSprite(asset.spriteSheet as Texture2D, key, Path.Combine(IPPath, "Vanilla"), true);
@@ -492,7 +511,7 @@ public static class PlayerPopupControllerPatch
             return;
 
         var ogfaction = __instance.m_role.GetFactionType();
-        var faction = killRecord.playerFaction;
+        var faction = killRecord!.playerFaction;
         var reg = ogfaction != faction;
         var name = Utils.RoleName(__instance.m_role);
         var sprite = GetSprite(reg, name, Utils.FactionName(faction));
@@ -546,14 +565,14 @@ public static class RoleMenuPopupControllerPatch
 
         var sprite = GetSprite(Utils.RoleName(__instance.m_role), Utils.FactionName(__instance.m_role.GetFactionType()));
 
-        if (sprite.IsValid())
-        {
-            if (__instance.RoleIconImage)
-                __instance.RoleIconImage.sprite = sprite;
+        if (!sprite.IsValid())
+            return;
 
-            if (__instance.HeaderRoleIconImage)
-                __instance.HeaderRoleIconImage.sprite = sprite;
-        }
+        if (__instance.RoleIconImage)
+            __instance.RoleIconImage.sprite = sprite;
+
+        if (__instance.HeaderRoleIconImage)
+            __instance.HeaderRoleIconImage.sprite = sprite;
     }
 }
 
@@ -607,7 +626,7 @@ public static class GetTownTraitorRoleIconAndNameInlineStringPatch
 }
 
 [HarmonyPatch(typeof(GameSimulation), nameof(GameSimulation.GetVIPRoleIconAndNameInlineString))]
-public static class GetVIPRoleIconAndNameInlineStringPatch
+public static class GetVipRoleIconAndNameInlineStringPatch
 {
     public static void Postfix(ref string __result)
     {
@@ -653,7 +672,7 @@ public static class FixDecodingAndEncoding
 }
 
 [HarmonyPatch(typeof(SpecialAbilityPopupPotionMaster), nameof(SpecialAbilityPopupPotionMaster.Start)), HarmonyPriority(Priority.Low)]
-public static class PMBakerMenuPatch
+public static class PmBakerMenuPatch
 {
     public static void Postfix(SpecialAbilityPopupPotionMaster __instance)
     {
@@ -713,15 +732,17 @@ public static class ReplaceTMPSpritesPatch
             }
 
             if (str.Contains("BTOSRoleIcons"))
-                return BTOS2_2 ?? BTOS2_1;
-            else if (str.Contains("RoleIcons"))
+                return BTOS22 ?? BTOS21;
+
+            if (str.Contains("RoleIcons"))
                 return Vanilla1 ?? CacheDefaults.RoleIcons;
-            else if (str == "PlayerNumbers")
-                return Vanilla2 ?? CacheDefaults.Numbers;
-            else if (str == "Emojis")
-                return Vanilla3 ?? CacheDefaults.Emojis;
-            else
-                return oldSpriteAssetRequest(index, str);
+
+            return str switch
+            {
+                "PlayerNumbers" => Vanilla2 ?? CacheDefaults.Numbers,
+                "Emojis" => Vanilla3 ?? CacheDefaults.Emojis,
+                _ => oldSpriteAssetRequest(index, str)
+            };
         };
     }
 
@@ -744,12 +765,12 @@ public static class ReplaceTMPSpritesPatch
                 var deconstructed = Constants.CurrentStyle();
                 var defaultSprite = mod switch
                 {
-                    ModType.BTOS2 => BTOS2_2 ?? BTOS2_1,
+                    ModType.BTOS2 => BTOS22 ?? BTOS21,
                     _ => Vanilla1 ?? CacheDefaults.RoleIcons
                 };
 
                 if (str.Contains("("))
-                    deconstructed = str.Split(['(', ')'], StringSplitOptions.RemoveEmptyEntries)[^1];
+                    deconstructed = str.Split(['(', ')'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.RemoveEmptyEntries)[^1];
 
                 if (deconstructed is "None" or "Blank" || StringUtils.IsNullEmptyOrWhiteSpace(deconstructed))
                     deconstructed = "Regular";
@@ -800,11 +821,9 @@ public static class ReplaceTMPSpritesPatch
 
             return (str.Contains("RoleIcons") || str is "PlayerNumbers" or "Emojis") && asset;
         }
-        else
-        {
-            Fancy.Instance.Warning($"{Constants.CurrentPack()} doesn't have an icon pack");
-            return false;
-        }
+
+        Fancy.Instance.Warning($"{Constants.CurrentPack()} doesn't have an icon pack");
+        return false;
     }
 }
 
@@ -949,7 +968,7 @@ public static class OverwriteDecodedText
 }
 
 [HarmonyPatch(typeof(WhoDiedAndHowPanel), nameof(WhoDiedAndHowPanel.HandleSubphaseRole))]
-public static class MakeProperFactionChecksInWDAH1
+public static class MakeProperFactionChecksInWdah1
 {
     public static bool Prefix(WhoDiedAndHowPanel __instance)
     {
@@ -959,7 +978,7 @@ public static class MakeProperFactionChecksInWDAH1
         Debug.Log("WhoDiedAndHowPanel:: HandleSubphaseRole");
         __instance.deathNotePanel.canvasGroup.DisableRenderingAndInteraction();
 
-        if (!Service.Game.Sim.simulation.killRecords.Data.TryFinding(k => k.playerId == __instance.currentPlayerNumber, out var killRecord) || killRecord.killedByReasons.Count < 1)
+        if (!Service.Game.Sim.simulation.killRecords.Data.TryFinding(k => k.playerId == __instance.currentPlayerNumber, out var killRecord) || killRecord!.killedByReasons.Count < 1)
             return false;
 
         var text = __instance.l10n(killRecord.playerRole switch
@@ -981,14 +1000,14 @@ public static class MakeProperFactionChecksInWDAH1
 }
 
 [HarmonyPatch(typeof(WhoDiedAndHowPanel), nameof(WhoDiedAndHowPanel.HandleSubphaseWhoDied))]
-public static class MakeProperFactionChecksInWDAH2
+public static class MakeProperFactionChecksInWdah2
 {
     public static bool Prefix(WhoDiedAndHowPanel __instance, float phaseTime)
     {
         if (!Constants.EnableIcons())
             return true;
 
-        Debug.Log("HandleSubphaseWhoDied phaseTime = " + phaseTime.ToString());
+        Debug.Log("HandleSubphaseWhoDied phaseTime = " + phaseTime);
 
         if (__instance.tombstonePanel != null)
             __instance.tombstonePanel.Clear();
@@ -1000,10 +1019,10 @@ public static class MakeProperFactionChecksInWDAH2
         else
             Debug.LogWarning("WhoDiedAndHowPanel.HandleSubphaseWhoDiedAndHow: lines list was null.");
 
-        var playerName = Service.Game.Cast.GetPlayerName(__instance.currentPlayerNumber, false);
+        var playerName = Service.Game.Cast.GetPlayerName(__instance.currentPlayerNumber);
         var text = __instance.l10n("GUI_GAME_WHO_DIED_AND_HOW_START").Replace("%name%", playerName);
 
-        if (Service.Game.Sim.simulation.killRecords.Data.TryFinding(k => k.playerId == __instance.currentPlayerNumber, out var killRecord) && killRecord.killedByReasons.First()
+        if (Service.Game.Sim.simulation.killRecords.Data.TryFinding(k => k.playerId == __instance.currentPlayerNumber, out var killRecord) && killRecord!.killedByReasons.First()
             .IsDaytimeKillReason())
         {
             text = __instance.l10n("GUI_GAME_WHO_DIED_AND_HOW_DAYKILL_START").Replace("%name%", playerName);

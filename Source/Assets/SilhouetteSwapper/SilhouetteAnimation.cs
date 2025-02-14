@@ -2,7 +2,7 @@ namespace FancyUI.Assets.SilhouetteSwapper;
 
 public class SilhouetteAnimation(string name)
 {
-    public string Name { get; } = name;
+    private string Name { get; } = name;
 
     public List<Sprite> Frames { get; set; } = [];
 
@@ -19,6 +19,7 @@ public class SilhouetteAnimation(string name)
 
     public static bool operator !=(SilhouetteAnimation a, SilhouetteAnimation b) => !(a == b);
 
+    // ReSharper disable once NonReadonlyMemberInGetHashCode
     public override int GetHashCode() => HashCode.Combine(Name, Frames.Count);
 
     public override bool Equals(object obj)

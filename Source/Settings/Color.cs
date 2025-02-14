@@ -2,13 +2,13 @@ namespace FancyUI.Settings;
 
 public class ColorSetting : BaseInputSetting
 {
-    public Image ValueBG { get; set; }
+    public Image ValueBg { get; set; }
     public ColorOption Option { get; set; }
 
     public override void Awake()
     {
         base.Awake();
-        ValueBG = Input.transform.GetComponent<Image>();
+        ValueBg = Input.transform.GetComponent<Image>();
     }
 
     public void Start()
@@ -21,7 +21,7 @@ public class ColorSetting : BaseInputSetting
         Input.onValueChanged.AddListener(OnValueChanged);
         Input.onValueChanged.AddListener(_ => SettingsAndTestingUI.Instance.RefreshOptions());
 
-        ValueBG.color = Option.Value.ToColor();
+        ValueBg.color = Option.Value.ToColor();
     }
 
     public void OnValueChanged(string value)
@@ -32,7 +32,7 @@ public class ColorSetting : BaseInputSetting
             value = "#" + value;
 
         if (ColorUtility.TryParseHtmlString(value, out var color))
-            ValueBG.color = color;
+            ValueBg.color = color;
 
         if (cache != value)
             Input.SetTextWithoutNotify(value);

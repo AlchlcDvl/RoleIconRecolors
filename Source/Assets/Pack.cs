@@ -2,31 +2,31 @@ namespace FancyUI.Assets;
 
 public abstract class Pack(string name, PackType type)
 {
-    public string Name { get; } = name;
-    public PackType Type { get; } = type;
+    protected string Name { get; } = name;
+    private PackType Type { get; } = type;
 
-    public bool Deleted { get; set; }
+    protected bool Deleted { get; set; }
 
-    public string PackPath => Path.Combine(Fancy.Instance.ModPath, $"{Type}", Name);
+    protected string PackPath => Path.Combine(Fancy.Instance.ModPath, $"{Type}", Name);
 
-    public static readonly string[] Roles = [ "Admirer", "Amnesiac", "Bodyguard", "Cleric", "Coroner", "Crusader", "Deputy", "Investigator", "Jailor", "Lookout", "Amnesiac", "Amnesiac", "War",
-        "Amnesiac", "Amnesiac", "Amnesiac", "Amnesiac", "Amnesiac", "Mayor", "Monarch", "Prosecutor", "Psychic", "Retributionist", "Seer", "Sheriff", "Spy", "TavernKeeper", "Tracker", "Death",
-        "Trapper", "Trickster", "Veteran", "Vigilante", "Conjurer", "CovenLeader", "Dreamweaver", "Enchanter", "HexMaster", "Illusionist", "Jinx", "Medusa", "Necromancer", "Poisoner", "Judge",
-        "PotionMaster", "Ritualist", "VoodooMaster", "Wildling", "Witch", "Arsonist", "Baker", "Berserker", "Doomsayer", "Executioner", "Jester", "Pirate", "Plaguebearer", "SerialKiller",
-        "Shroud", "SoulCollector", "Werewolf", "Vampire", "CursedSoul", "Banshee", "Jackal", "Marshal", "Auditor", "Inquisitor", "Starspawn", "Oracle", "Warlock", "Famine", "Pestilence" ];
-    public static readonly string[] CommonFolders = [ "Regular", "Town", "Coven", "SerialKiller", "Arsonist", "Werewolf", "Shroud", "Apocalypse", "VIP", "Jester", "Pirate", "Doomsayer",
+    // public static readonly string[] Roles = [ "Admirer", "Amnesiac", "Bodyguard", "Cleric", "Coroner", "Crusader", "Deputy", "Investigator", "Jailor", "Lookout", "Amnesiac", "Amnesiac", "War",
+    //     "Amnesiac", "Amnesiac", "Amnesiac", "Amnesiac", "Amnesiac", "Mayor", "Monarch", "Prosecutor", "Psychic", "Retributionist", "Seer", "Sheriff", "Spy", "TavernKeeper", "Tracker", "Death",
+    //     "Trapper", "Trickster", "Veteran", "Vigilante", "Conjurer", "CovenLeader", "Dreamweaver", "Enchanter", "HexMaster", "Illusionist", "Jinx", "Medusa", "Necromancer", "Poisoner", "Judge",
+    //     "PotionMaster", "Ritualist", "VoodooMaster", "Wildling", "Witch", "Arsonist", "Baker", "Berserker", "Doomsayer", "Executioner", "Jester", "Pirate", "Plaguebearer", "SerialKiller",
+    //     "Shroud", "SoulCollector", "Werewolf", "Vampire", "CursedSoul", "Banshee", "Jackal", "Marshal", "Auditor", "Inquisitor", "Starspawn", "Oracle", "Warlock", "Famine", "Pestilence" ];
+    private static readonly string[] CommonFolders = [ "Regular", "Town", "Coven", "SerialKiller", "Arsonist", "Werewolf", "Shroud", "Apocalypse", "VIP", "Jester", "Pirate", "Doomsayer",
         "Vampire", "CursedSoul", "Executioner", "Necronomicon", "Factionless" ];
-    public static readonly string[] VanillaFolders = [];
-    public static readonly string[] BTOS2Folders = [ "Judge", "Auditor", "Starspawn", "Inquisitor", "Jackal", "Lions", "Frogs", "Hawks", "Pandora", "Egotist", "Compliance", "Lovers" ];
-    public static readonly string[] MainFolders = [ "Common", "Vanilla", "BTOS2", "PlayerNumbers", "Emojis" ];
-    public static readonly string[] Mods = [ "Vanilla", "BTOS2" ];
-    public static readonly Dictionary<string, string[]> ModsToFolders = new()
+    private static readonly string[] VanillaFolders = [];
+    private static readonly string[] Btos2Folders = [ "Judge", "Auditor", "Starspawn", "Inquisitor", "Jackal", "Lions", "Frogs", "Hawks", "Pandora", "Egotist", "Compliance", "Lovers" ];
+    protected static readonly string[] MainFolders = [ "Common", "Vanilla", "BTOS2", "PlayerNumbers", "Emojis" ];
+    protected static readonly string[] Mods = [ "Vanilla", "BTOS2" ];
+    protected static readonly Dictionary<string, string[]> ModsToFolders = new()
     {
         { "Common", CommonFolders },
         { "Vanilla", VanillaFolders },
-        { "BTOS2", BTOS2Folders }
+        { "BTOS2", Btos2Folders }
     };
-    public static readonly string[] FileTypes = [ "png", "jpg" ];
+    protected static readonly string[] FileTypes = [ "png", "jpg" ];
 
     public abstract void Debug();
 
@@ -38,9 +38,9 @@ public abstract class Pack(string name, PackType type)
 
     public static implicit operator bool(Pack exists) => exists != null;
 
-    public static ModType GetModKey(string folder)
+    protected static ModType GetModKey(string folder)
     {
-        var key = ModsToFolders.ToList().Find(x => x.Value.Contains(folder)).Key ?? null;
+        var key = ModsToFolders.Find(x => x.Value.Contains(folder)).Key;
 
         if (StringUtils.IsNullEmptyOrWhiteSpace(key))
             key = "Common";

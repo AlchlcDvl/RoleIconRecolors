@@ -1,14 +1,12 @@
 namespace FancyUI.Compatibility;
 
-public static class BTOS2IPCompatibility
+public static class Btos2IPCompatibility
 {
     private static FieldInfo RoleIconField;
 
     private static FieldInfo RoleField;
     private static FieldInfo IconField;
     private static FieldInfo BannedField;
-
-    public static bool BTOS2IPPatched { get; set; }
 
     public static bool Init()
     {
@@ -17,11 +15,11 @@ public static class BTOS2IPCompatibility
             if (!ModStates.EnabledMods.TryFinding(x => x.HarmonyId == "curtis.tuba.better.tos2", out var btos2Mod))
                 return false;
 
-            var bTOS2Assembly = Assembly.LoadFile(btos2Mod.AssemblyPath);
-            var bTOS2Types = AccessTools.GetTypesFromAssembly(bTOS2Assembly);
-            var roleDeckPlusPanelControllerType = bTOS2Types.FirstOrDefault(x => x.Name == "RoleDeckPlusPanelController");
-            var deckItemType = bTOS2Types.FirstOrDefault(x => x.Name.Contains("DeckItem") && !x.IsEnum);
-            var menuRoleType = bTOS2Types.FirstOrDefault(x => x.Name.Contains("MenuRole"));
+            var btos2Assembly = Assembly.LoadFile(btos2Mod!.AssemblyPath);
+            var btos2Types = AccessTools.GetTypesFromAssembly(btos2Assembly);
+            var roleDeckPlusPanelControllerType = btos2Types.FirstOrDefault(x => x.Name == "RoleDeckPlusPanelController");
+            var deckItemType = btos2Types.FirstOrDefault(x => x.Name.Contains("DeckItem") && !x.IsEnum);
+            var menuRoleType = btos2Types.FirstOrDefault(x => x.Name.Contains("MenuRole"));
 
             RoleIconField = AccessTools.Field(deckItemType, "roleIcon");
 
@@ -31,16 +29,16 @@ public static class BTOS2IPCompatibility
 
             var setDataMethod1 = AccessTools.Method(deckItemType, "SetData", [ typeof(Role), typeof(FactionType), typeof(bool), roleDeckPlusPanelControllerType ]);
             var refreshDataMethod = AccessTools.Method(menuRoleType, "RefreshData");
-            var compatType = typeof(BTOS2IPCompatibility);
+            var compatType = typeof(Btos2IPCompatibility);
 
-            BTOS2Compatibility.BTOS2PatchesHarmony.Patch(setDataMethod1, null, new(AccessTools.Method(compatType, nameof(ItemPostfix1))));
-            BTOS2Compatibility.BTOS2PatchesHarmony.Patch(refreshDataMethod, null, new(AccessTools.Method(compatType, nameof(ItemPostfix2))));
+            Btos2Compatibility.Btos2PatchesHarmony.Patch(setDataMethod1, null, new(AccessTools.Method(compatType, nameof(ItemPostfix1))));
+            Btos2Compatibility.Btos2PatchesHarmony.Patch(refreshDataMethod, null, new(AccessTools.Method(compatType, nameof(ItemPostfix2))));
             Fancy.Instance.Message("BTOS2 compatibility was successful");
             return true;
         }
         catch (Exception ex)
         {
-            Fancy.Instance.Error($"BTOS2 compatbility patch loading failed because:\n{ex}");
+            Fancy.Instance.Error($"BTOS2 compatibility patch loading failed because:\n{ex}");
             return false;
         }
     }

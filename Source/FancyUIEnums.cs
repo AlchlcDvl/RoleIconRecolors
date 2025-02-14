@@ -27,16 +27,6 @@ public enum ColorType : byte
     Wax
 }
 
-public enum OptionType : byte
-{
-    Toggle,
-    Slider,
-    StringDropdown,
-    EnumDropdown,
-    StringInput,
-    ColorInput
-}
-
 public enum UITheme : byte
 {
     Default,

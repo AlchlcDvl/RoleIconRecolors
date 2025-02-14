@@ -32,11 +32,11 @@ public static class Constants
 
     public static bool PackDebug() => Fancy.DebugPackLoading.Value;
 
-    public static string CurrentSet() => Fancy.SelectedSilhouetteSet.Value;
+    private static string CurrentSet() => Fancy.SelectedSilhouetteSet.Value;
 
     public static float AnimationDuration() => Fancy.AnimationDuration.Value;
 
-    public static UITheme GetMainUIThemeType() => Fancy.SelectedUITheme.Value;
+    private static UITheme GetMainUIThemeType() => Fancy.SelectedUITheme.Value;
 
     public static Color GetMainUIThemeWoodColor() => Fancy.MainUIThemeWood.Value.ToColor();
 
@@ -68,7 +68,7 @@ public static class Constants
     {
         try
         {
-            return BTOS2Compatibility.BTOS2Patched && IsBTOS2Bypass();
+            return Btos2Compatibility.Btos2Patched && IsBTOS2Bypass();
         }
         catch
         {
@@ -102,7 +102,7 @@ public static class Constants
         }
     }
 
-    public static bool IsLocalVIP()
+    public static bool IsLocalVip()
     {
         try
         {
