@@ -407,7 +407,7 @@ public static class CacheDefaults
     public static TMP_SpriteAsset RoleIcons { get; private set; }
     public static TMP_SpriteAsset Numbers { get; private set; }
 
-    private static readonly List<string> Assets = [ "Cast", "LobbyIcons", "MiscIcons", "PlayerNumbers", "RoleIcons", "SalemTmpIcons", "TrialReportIcons" ];
+    private static readonly List<string> Assets = [ "Cast", "LobbyIcons", "MiscIcons", "PlayerNumbers", "RoleIcons", "SalemTmpIcons", "TrialReportIcons", "Emojis" ];
 
     public static bool Prefix(HomeInterfaceService __instance)
     {
