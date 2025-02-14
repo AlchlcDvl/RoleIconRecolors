@@ -186,7 +186,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                             var sprite = AssetManager.LoadSpriteFromDisk(file);
 
                             if (!sprite.IsValid())
-                            continue;
+                                continue;
 
                             if (file.Contains("PlayerNumbers"))
                                 NumberSprites[file.FancySanitisePath(true)] = sprite;
@@ -452,10 +452,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
             if (!Directory.Exists(modPath))
                 Directory.CreateDirectory(modPath);
 
-            if (mod == "PlayerNumbers")
-                continue;
-
-            if (mod == "Emojis")
+            if (mod is "PlayerNumbers" or "Emojis")
                 continue;
 
             foreach (var name1 in ModsToFolders[mod])
