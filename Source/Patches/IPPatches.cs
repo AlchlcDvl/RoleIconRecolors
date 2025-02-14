@@ -798,7 +798,7 @@ public static class ReplaceTMPSpritesPatch
                 return asset;
             }
 
-            return (str.Contains("RoleIcons") || str == "PlayerNumbers" || str == "Emojis") && asset;
+            return (str.Contains("RoleIcons") || str is "PlayerNumbers" or "Emojis") && asset;
         }
         else
         {
