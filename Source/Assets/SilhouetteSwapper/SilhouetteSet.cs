@@ -41,6 +41,9 @@ public class SilhouetteSet(string name) : Pack(name, PackType.SilhouetteSets)
                 if (mod == "PlayerNumbers")
                     continue;
 
+                if (mod == "Emojis")
+                    continue;
+
                 var modPath = Path.Combine(PackPath, mod);
 
                 if (!Directory.Exists(modPath))

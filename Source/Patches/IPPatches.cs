@@ -406,6 +406,7 @@ public static class CacheDefaults
 
     public static TMP_SpriteAsset RoleIcons { get; private set; }
     public static TMP_SpriteAsset Numbers { get; private set; }
+    public static TMP_SpriteAsset Emojis { get; private set; }
 
     private static readonly List<string> Assets = [ "Cast", "LobbyIcons", "MiscIcons", "PlayerNumbers", "RoleIcons", "SalemTmpIcons", "TrialReportIcons", "Emojis" ];
 
@@ -420,8 +421,10 @@ public static class CacheDefaults
                 RoleIcons = asset;
             else if (key == "PlayerNumbers")
                 Numbers = asset;
+            else if (key == "Emojis")
+                Emojis = asset;
 
-            if (key is "RoleIcons" or "PlayerNumbers")
+            if (key is "RoleIcons" or "PlayerNumbers" or "Emojis")
                 Utils.DumpSprite(asset.spriteSheet as Texture2D, key, Path.Combine(IPPath, "Vanilla"), true);
             else
                 MaterialReferenceManager.AddSpriteAsset(asset);
@@ -715,6 +718,8 @@ public static class ReplaceTMPSpritesPatch
                 return Vanilla1 ?? CacheDefaults.RoleIcons;
             else if (str == "PlayerNumbers")
                 return Vanilla2 ?? CacheDefaults.Numbers;
+            else if (str == "Emojis")
+                return Vanilla3 ?? CacheDefaults.Emojis;
             else
                 return oldSpriteAssetRequest(index, str);
         };
@@ -784,8 +789,15 @@ public static class ReplaceTMPSpritesPatch
                 asset = pack.PlayerNumbers ?? Vanilla2 ?? CacheDefaults.Numbers;
                 return Constants.CustomNumbers() && asset;
             }
+            else if (str == "Emojis")
+            {
+                Fancy.Instance.Warning($"{Constants.CurrentPack()} Emoji was null");
 
-            return (str.Contains("RoleIcons") || str == "PlayerNumbers") && asset;
+                asset = pack.Emojis ?? Vanilla3 ?? CacheDefaults.Emojis;
+                return asset;
+            }
+
+            return (str.Contains("RoleIcons") || str == "PlayerNumbers" || str == "Emojis") && asset;
         }
         else
         {

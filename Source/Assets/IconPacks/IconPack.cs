@@ -4,8 +4,10 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
 {
     public Dictionary<ModType, IconAssets> Assets { get; set; } = [];
     public Dictionary<string, Sprite> NumberSprites { get; set; } = [];
+    public Dictionary<string, Sprite> EmojiSprites { get; set; } = [];
     public Dictionary<string, bool> SpriteSheetCanExist { get; set; } = [];
     public TMP_SpriteAsset PlayerNumbers { get; set; }
+    public TMP_SpriteAsset Emojis { get; set; }
 
     public override void Debug()
     {
@@ -184,7 +186,10 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                             var sprite = AssetManager.LoadSpriteFromDisk(file);
 
                             if (sprite.IsValid())
+                            {
                                 NumberSprites[file.FancySanitisePath(true)] = sprite;
+                                EmojiSprites[file.FancySanitisePath(true)] = sprite;
+                            }
                         }
                     }
                 }
@@ -223,6 +228,39 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
 
                 PlayerNumbers = AssetManager.BuildGlyphs(sprites, $"PlayerNumbers ({Name})", dict);
                 Utils.DumpSprite(PlayerNumbers.spriteSheet as Texture2D, "PlayerNumbers", Path.Combine(PackPath, "PlayerNumbers"));
+            }
+            catch (Exception e)
+            {
+                Fancy.Instance.Error($"Unable to create custom player numbers for {Name} because:\n{e}");
+                PlayerNumbers = null;
+            }
+        }
+
+        if (EmojiSprites.Count > 0)
+        {
+            try
+            {
+                var sprites = new List<Sprite>();
+                var dict = new Dictionary<string, string>();
+
+                for (var i = 0; i < 16; i++)
+                {
+                    if (!EmojiSprites.TryGetValue($"{i}", out var sprite))
+                        sprite = Fancy.Assets.GetSprite($"{i}") ?? Blank;
+
+                    if (sprite.IsValid())
+                    {
+                        sprite.name = sprite.texture.name = $"Emoji_{i}";
+                        sprites.Add(sprite);
+                    }
+                    else
+                        Fancy.Instance.Warning($"NO EMOJI FOR {i}?!");
+
+                    dict.Add($"Emoji_{i}", $"Emoji_{i}");
+                }
+
+                PlayerNumbers = AssetManager.BuildGlyphs(sprites, $"PlayerNumbers ({Name})", dict);
+                Utils.DumpSprite(PlayerNumbers.spriteSheet as Texture2D, "Emojis", Path.Combine(PackPath, "Emoji"));
             }
             catch (Exception e)
             {
@@ -413,6 +451,9 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                 Directory.CreateDirectory(modPath);
 
             if (mod == "PlayerNumbers")
+                continue;
+
+            if (mod == "Emojis")
                 continue;
 
             foreach (var name1 in ModsToFolders[mod])
