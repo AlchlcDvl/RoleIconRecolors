@@ -112,7 +112,7 @@ public static class PatchRoleCards
         if (!Constants.EnableCustomUI())
             return;
 
-        foreach (var button in __instance.roleInfoButtons)
+        foreach (var button in __instance!.roleInfoButtons)
             button.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal); // Rings at the back
     }
 
@@ -126,7 +126,7 @@ public static class PatchRoleCards
         if (!Constants.EnableCustomUI())
             return;
 
-        foreach (var button in __instance.roleInfoButtons)
+        foreach (var button in __instance!.roleInfoButtons)
             button.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal); // Rings at the back
     }
 

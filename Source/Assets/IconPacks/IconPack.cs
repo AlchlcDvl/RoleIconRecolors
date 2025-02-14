@@ -245,24 +245,24 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                 var sprites = new List<Sprite>();
                 var dict = new Dictionary<string, string>();
 
-                for (var i = 0; i < 16; i++)
+                for (var i = 1; i < 6; i++)
                 {
                     if (!EmojiSprites.TryGetValue($"{i}", out var sprite))
                         sprite = Fancy.Assets.GetSprite($"{i}") ?? Blank;
 
                     if (sprite.IsValid())
                     {
-                        sprite.name = sprite.texture.name = $"Emoji_{i}";
+                        sprite.name = sprite.texture.name = $"Emoji{i}";
                         sprites.Add(sprite);
                     }
                     else
                         Fancy.Instance.Warning($"NO EMOJI FOR {i}?!");
 
-                    dict.Add($"Emoji_{i}", $"Emoji_{i}");
+                    dict.Add($"Emoji{i}", $"Emoji{i}");
                 }
 
                 Emojis = AssetManager.BuildGlyphs(sprites, $"Emojis ({Name})", dict);
-                Utils.DumpSprite(PlayerNumbers.spriteSheet as Texture2D, "Emojis", Path.Combine(PackPath, "Emoji"));
+                Utils.DumpSprite(PlayerNumbers.spriteSheet as Texture2D, "Emojis", Path.Combine(PackPath, "Emojis"));
             }
             catch (Exception e)
             {
@@ -286,9 +286,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                     var asset = BuildSpriteSheet(mod, mod.ToString(), style, icons);
                     assets.MentionStyles[style] = asset;
                     // SpriteSheetCanExist[style] = true;
-
-                    if (asset)
-                        Utils.DumpSprite(asset.spriteSheet as Texture2D, $"{style}{mod}RoleIcons", Path.Combine(PackPath, $"{mod}"));
+                    Utils.DumpSprite(asset?.spriteSheet as Texture2D, $"{style}{mod}RoleIcons", Path.Combine(PackPath, $"{mod}"));
                 }
                 catch (Exception e)
                 {
@@ -311,9 +309,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                     var asset = BuildSpriteSheet(type, mod, style, icons);
                     Assets[type].MentionStyles[style] = asset;
                     // SpriteSheetCanExist[style] = true;
-
-                    if (asset)
-                        Utils.DumpSprite(asset.spriteSheet as Texture2D, $"{style}{mod}RoleIcons", Path.Combine(PackPath, mod));
+                    Utils.DumpSprite(asset?.spriteSheet as Texture2D, $"{style}{mod}RoleIcons", Path.Combine(PackPath, mod));
                 }
                 catch (Exception e)
                 {

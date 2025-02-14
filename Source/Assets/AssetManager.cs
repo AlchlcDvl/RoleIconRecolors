@@ -150,15 +150,8 @@ public static class FancyAssetManager
 
         if (removeIcon)
         {
-            var i = 0;
-
-            while (i >= 0 && path.Contains("_Icon"))
-            {
-                if (path.Contains($"_Icon{i}"))
-                    path = path.Replace($"_Icon{i}", "");
-
-                i++;
-            }
+            for (var i = 0; i >= 0 && path.Contains("_Icon"); i++)
+                path = path.Replace($"_Icon{i}", "");
         }
 
         return path;
@@ -365,17 +358,17 @@ public static class FancyAssetManager
 
             for (var i = 1; i < 6; i++)
             {
-                var sprite = Fancy.Assets.GetSprite($"Emoji_{i}") ?? Blank;
+                var sprite = Fancy.Assets.GetSprite($"Emoji{i}") ?? Blank;
 
                 if (sprite.IsValid())
                 {
-                    sprite.name = sprite.texture.name = $"Emoji_{i}";
+                    sprite.name = sprite.texture.name = $"Emoji{i}";
                     sprites.Add(sprite);
                 }
                 else
                     Fancy.Instance.Warning($"NO EMOJI FOR {i}?!");
 
-                dict.Add($"Emoji_{i}", $"Emoji_{i}");
+                dict.Add($"Emoji{i}", $"Emoji{i}");
             }
 
             Vanilla3 = AssetManager.BuildGlyphs(sprites, "Emoji", dict);

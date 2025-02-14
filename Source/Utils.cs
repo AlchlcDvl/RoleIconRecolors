@@ -364,8 +364,7 @@ public static class Utils
 
         var roles = mod switch
         {
-            ModType.BTOS2 => typeof(Btos2Role)
-                .GetFields(BindingFlags.Public | BindingFlags.Static)
+            ModType.BTOS2 => AccessTools.GetDeclaredFields(typeof(Btos2Role))
                 .Select(x => (Role)x.GetRawConstantValue())
                 .Where(x => x is not (Btos2Role.None or Btos2Role.Hangman or Btos2Role.Unknown or Btos2Role.RoleCount)),
             _ => GeneralUtils.GetEnumValues<Role>()!.Where(x => x is not (Role.NONE or Role.ROLE_COUNT or Role.UNKNOWN or Role.HANGMAN))
@@ -375,7 +374,7 @@ public static class Utils
 
     public static void DumpSprite(Texture2D texture, string fileName = null, string path = null, bool decompress = false, bool skipSetting = false)
     {
-        if (!Constants.DumpSheets() && !skipSetting)
+        if (!texture || (!Constants.DumpSheets() && !skipSetting))
             return;
 
         path ??= Fancy.Instance.ModPath;
