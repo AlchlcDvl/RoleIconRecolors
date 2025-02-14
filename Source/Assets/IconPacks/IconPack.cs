@@ -261,7 +261,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                     dict.Add($"Emoji_{i}", $"Emoji_{i}");
                 }
 
-                PlayerNumbers = AssetManager.BuildGlyphs(sprites, $"PlayerNumbers ({Name})", dict);
+                PlayerNumbers = AssetManager.BuildGlyphs(sprites, $"Emojis ({Name})", dict);
                 Utils.DumpSprite(PlayerNumbers.spriteSheet as Texture2D, "Emojis", Path.Combine(PackPath, "Emoji"));
             }
             catch (Exception e)
