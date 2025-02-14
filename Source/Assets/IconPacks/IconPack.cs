@@ -185,11 +185,13 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                         {
                             var sprite = AssetManager.LoadSpriteFromDisk(file);
 
-                            if (sprite.IsValid())
-                            {
+                            if (!sprite.IsValid())
+                            continue;
+
+                            if (file.Contains("PlayerNumbers"))
                                 NumberSprites[file.FancySanitisePath(true)] = sprite;
+                            else
                                 EmojiSprites[file.FancySanitisePath(true)] = sprite;
-                            }
                         }
                     }
                 }

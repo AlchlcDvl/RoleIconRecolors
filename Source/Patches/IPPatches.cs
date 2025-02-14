@@ -791,7 +791,8 @@ public static class ReplaceTMPSpritesPatch
             }
             else if (str == "Emojis")
             {
-                Fancy.Instance.Warning($"{Constants.CurrentPack()} Emoji was null");
+                if (!pack.Emojis)
+                    Fancy.Instance.Warning($"{Constants.CurrentPack()} Emoji was null");
 
                 asset = pack.Emojis ?? Vanilla3 ?? CacheDefaults.Emojis;
                 return asset;
