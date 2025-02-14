@@ -18,6 +18,7 @@ public static class FancyAssetManager
 
     public static TMP_SpriteAsset Vanilla1 { get; set; }
     public static TMP_SpriteAsset Vanilla2 { get; set; }
+    public static TMP_SpriteAsset Vanilla3 { get; set; }
     public static TMP_SpriteAsset BTOS2_1 { get; set; }
     public static TMP_SpriteAsset BTOS2_2 { get; set; }
 
@@ -353,6 +354,36 @@ public static class FancyAssetManager
             Fancy.Instance.Error($"Unable to create modified player numbers sheet because:\n{e}");
             Vanilla2 = null;
         }
+
+        try
+        {
+            var dict = new Dictionary<string, string>();
+            var sprites = new List<Sprite>();
+
+            for (var i = 0; i < 16; i++)
+            {
+                var sprite = Fancy.Assets.GetSprite($"Emoji_{i}") ?? Blank;
+
+                if (sprite.IsValid())
+                {
+                    sprite.name = sprite.texture.name = $"Emoji_{i}";
+                    sprites.Add(sprite);
+                }
+                else
+                    Fancy.Instance.Warning($"NO EMOJI FOR {i}?!");
+
+                dict.Add($"PlayerNumbers_{i}", $"Emoji_{i}");
+            }
+
+            Vanilla3 = AssetManager.BuildGlyphs(sprites, "Emoji", dict);
+            Utils.DumpSprite(Vanilla3.spriteSheet as Texture2D, "Emoji_Modified", Path.Combine(IPPath, "Vanilla"));
+        }
+        catch (Exception e)
+        {
+            Fancy.Instance.Error($"Unable to create modified emoji sheet because:\n{e}");
+            Vanilla3 = null;
+        }
+
     }
 
     public static void LoadBTOS2SpriteSheet()

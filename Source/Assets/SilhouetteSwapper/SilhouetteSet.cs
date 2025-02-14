@@ -38,7 +38,7 @@ public class SilhouetteSet(string name) : Pack(name, PackType.SilhouetteSets)
         {
             foreach (var mod in MainFolders)
             {
-                if (mod == "PlayerNumbers")
+                if (mod is "PlayerNumbers" or "Emojis")
                     continue;
 
                 var modPath = Path.Combine(PackPath, mod);
