@@ -21,7 +21,7 @@ public abstract class Option
             toggle.Value = bool.TryParse(value, out var val) && val;
         else if (this is IDropdown dropdown)
             dropdown.SetString(value);
-        else if (this is SliderOption slider)
+        else if (this is FloatOption slider)
             slider.Value = float.TryParse(value, out var val2) ? val2 : slider.Value;
         else if (this is ColorOption color)
             color.Value = value;

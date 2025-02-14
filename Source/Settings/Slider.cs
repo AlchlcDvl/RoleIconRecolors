@@ -4,7 +4,7 @@ public class SliderSetting : Setting
 {
     public Slider Slider { get; set; }
     public TMP_InputField Input { get; set; }
-    public SliderOption Option { get; set; }
+    public FloatOption Option { get; set; }
 
     public override void Awake()
     {

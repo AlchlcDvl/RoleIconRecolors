@@ -112,7 +112,7 @@ public class SettingsAndTestingUI : UIController
 
         foreach (var opt in Option.All)
         {
-            if (opt is SliderOption slider)
+            if (opt is FloatOption slider)
             {
                 slider.Setting = Instantiate(SliderTemplate, SliderTemplate.transform.parent);
                 slider.Setting.Option = slider;

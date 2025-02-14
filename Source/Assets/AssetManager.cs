@@ -243,14 +243,21 @@ public static class FancyAssetManager
             diagnostic += "\nNo Loaded Icon Pack";
         else if (pack == null)
             diagnostic += "\nLoaded Icon Pack Was Null";
-        else if (!pack.PlayerNumbers)
-            diagnostic += "\nLoaded Player Numbers Was Null";
-        else if (!pack.Assets.TryGetValue(game, out assets))
-            diagnostic += "\nInvalid Game Type Was Detected";
-        else if (!assets.MentionStyles.TryGetValue(Constants.CurrentStyle(), out asset))
-            diagnostic += "\nLoaded Icon Pack Does Not Have A Valid Mention Style";
-        else if (!asset)
-            diagnostic += "\nLoaded Mention Style Was Null";
+        else
+        {
+            if (!pack.PlayerNumbers)
+                diagnostic += "\nLoaded Player Numbers Was Null";
+
+            if (!pack.Emojis)
+                diagnostic += "\nLoaded Emojis Was Null";
+
+            if (!pack.Assets.TryGetValue(game, out assets))
+                diagnostic += "\nInvalid Game Type Was Detected";
+            else if (!assets.MentionStyles.TryGetValue(Constants.CurrentStyle(), out asset))
+                diagnostic += "\nLoaded Icon Pack Does Not Have A Valid Mention Style";
+            else if (!asset)
+                diagnostic += "\nLoaded Mention Style Was Null";
+        }
 
         diagnostic += $"\nError: {e}";
         Fancy.Instance.Error(diagnostic);
@@ -360,7 +367,7 @@ public static class FancyAssetManager
             var dict = new Dictionary<string, string>();
             var sprites = new List<Sprite>();
 
-            for (var i = 0; i < 16; i++)
+            for (var i = 1; i < 6; i++)
             {
                 var sprite = Fancy.Assets.GetSprite($"Emoji_{i}") ?? Blank;
 
@@ -372,7 +379,7 @@ public static class FancyAssetManager
                 else
                     Fancy.Instance.Warning($"NO EMOJI FOR {i}?!");
 
-                dict.Add($"PlayerNumbers_{i}", $"Emoji_{i}");
+                dict.Add($"Emoji_{i}", $"Emoji_{i}");
             }
 
             Vanilla3 = AssetManager.BuildGlyphs(sprites, "Emoji", dict);
@@ -383,7 +390,6 @@ public static class FancyAssetManager
             Fancy.Instance.Error($"Unable to create modified emoji sheet because:\n{e}");
             Vanilla3 = null;
         }
-
     }
 
     public static void LoadBTOS2SpriteSheet()

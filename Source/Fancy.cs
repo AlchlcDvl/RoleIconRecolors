@@ -98,10 +98,10 @@ public class Fancy
     public static ColorOption MainUIThemeFire;
     public static ColorOption MainUIThemeWax;
 
-    public static Options.SliderOption EasterEggChance;
-    public static Options.SliderOption AnimationDuration;
+    public static FloatOption EasterEggChance;
+    public static FloatOption AnimationDuration;
 
-    public static Options.SliderOption PlayerNumber;
+    public static FloatOption PlayerNumber;
 
     public static ToggleOption CustomNumbers;
     public static ToggleOption AllEasterEggs;
