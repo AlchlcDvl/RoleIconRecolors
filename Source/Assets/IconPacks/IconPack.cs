@@ -30,6 +30,12 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
             count++;
         }
 
+        if (Emojis)
+        {
+            Fancy.Instance.Message($"{Name} has an Emoji sprite sheet!");
+            count++;
+        }
+
         Fancy.Instance.Message($"{Name} {Assets.Count} asset sets loaded!");
         Fancy.Instance.Message($"{Name} {count} total assets exist!");
         Fancy.Instance.Message($"{Name} Debugged!");
