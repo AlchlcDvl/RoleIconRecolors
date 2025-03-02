@@ -98,7 +98,4 @@
 
     <Entry key="FANCY_OPEN_LINK">Open Link</Entry>
     <Entry key="FANCY_DOWNLOAD_PACK">Download %pack%</Entry>
-
-    <Entry key="FANCY_GAME_KILLED_BY_REASON_75_PANDORA">They were killed by <![CDATA[<sprite="BTOSRoleIcons" name="Role222"><color=#b545ff>P</color><color=#bb3eee>a</color><color=#c238de>n</color><color=#c932ce>d</color><color=#cf2bbe>o</color><color=#d625ae>r</color><color=#dd1f9e>a'</color><color=#e4198e>s</color> <color=#ea127e>B</color><color=#f10c6e>o</color><color=#f8065e>x</color>]]>.</Entry>
-    <Entry key="FANCY_GAME_ALSO_KILLED_BY_REASON_75_PANDORA">They were also killed by <![CDATA[<sprite="BTOSRoleIcons" name="Role222"><color=#b545ff>P</color><color=#bb3eee>a</color><color=#c238de>n</color><color=#c932ce>d</color><color=#cf2bbe>o</color><color=#d625ae>r</color><color=#dd1f9e>a'</color><color=#e4198e>s</color> <color=#ea127e>B</color><color=#f10c6e>o</color><color=#f8065e>x</color>]]>.</Entry>
 </StringTable>
