@@ -82,7 +82,6 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                 {
                     Directory.CreateDirectory(modPath);
                     Fancy.Instance.Warning($"{Name} {mod} folder doesn't exist");
-                    continue;
                 }
 
                 if (Enum.TryParse<ModType>(mod, out var type))
@@ -94,11 +93,11 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
 
                     foreach (var name1 in ModsToFolders[mod])
                     {
-                        if (!GlobalEasterEggs.ContainsKey(name1))
-                            GlobalEasterEggs[name1] = [];
+                        if (!GlobalEasterEggs.TryGetValue(name1, out var globalEasterEggs))
+                            GlobalEasterEggs[name1] = globalEasterEggs = [];
 
-                        assets.BaseIcons[name1] = [];
-                        assets.EasterEggs[name1] = [];
+                        var baseIcons = assets.BaseIcons[name1] = [];
+                        var easterEggs = assets.EasterEggs[name1] = [];
                         var baseName = name1 + "Base";
                         var baseFolder = Path.Combine(modPath, baseName);
 
@@ -111,7 +110,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                                     var sprite = AssetManager.LoadSpriteFromDisk(file);
 
                                     if (sprite.IsValid())
-                                        assets.BaseIcons[name1][file.FancySanitisePath(true)] = sprite;
+                                        baseIcons[file.FancySanitisePath(true)] = sprite;
                                 }
                             }
                         }
@@ -136,14 +135,14 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                                     if (!sprite.IsValid())
                                         continue;
 
-                                    if (!assets.EasterEggs[name1].ContainsKey(name))
-                                        assets.EasterEggs[name1][name] = [];
+                                    if (!easterEggs.TryGetValue(name, out var icons))
+                                        easterEggs[name] = icons = [];
 
-                                    if (!GlobalEasterEggs[name1].ContainsKey(name))
-                                        GlobalEasterEggs[name1][name] = [];
+                                    if (!globalEasterEggs.TryGetValue(name, out var icons2))
+                                        globalEasterEggs[name] = icons2 = [];
 
-                                    assets.EasterEggs[name1][name].Add(sprite);
-                                    GlobalEasterEggs[name1][name].Add(sprite);
+                                    icons.Add(sprite);
+                                    icons2.Add(sprite);
                                 }
                             }
                         }
@@ -157,11 +156,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                     if (type != ModType.Common)
                         continue;
 
-                    if (!GlobalEasterEggs.ContainsKey("Custom"))
-                        GlobalEasterEggs["Custom"] = [];
-
-                    assets.BaseIcons["Custom"] = [];
-                    assets.EasterEggs["Custom"] = [];
+                    var icons3 = assets.BaseIcons["Custom"] = [];
                     var folder = Path.Combine(modPath, "Custom");
 
                     if (Directory.Exists(folder))
@@ -173,7 +168,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                                 var sprite = AssetManager.LoadSpriteFromDisk(file);
 
                                 if (sprite.IsValid())
-                                    assets.BaseIcons["Custom"][file.FancySanitisePath(true)] = sprite;
+                                    icons3[file.FancySanitisePath(true)] = sprite;
                             }
                         }
                     }
