@@ -185,19 +185,16 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                 }
                 else
                 {
+                    var dict = mod.Contains("PlayerNumbers") ? NumberSprites : EmojiSprites;
+
                     foreach (var type1 in FileTypes)
                     {
                         foreach (var file in Directory.GetFiles(modPath, $"*.{type1}"))
                         {
                             var sprite = AssetManager.LoadSpriteFromDisk(file);
 
-                            if (!sprite.IsValid())
-                                continue;
-
-                            if (file.Contains("PlayerNumbers"))
-                                NumberSprites[file.FancySanitisePath(true)] = sprite;
-                            else
-                                EmojiSprites[file.FancySanitisePath(true)] = sprite;
+                            if (sprite.IsValid())
+                                dict[file.FancySanitisePath(true)] = sprite;
                         }
                     }
                 }
