@@ -530,16 +530,22 @@ public static class InitialiseRolePanel
 {
     public static void Postfix(PlayerPopupController __instance)
     {
-        if (!Constants.EnableIcons() || !Pepper.IsGamePhasePlay() || !Service.Game.Sim.simulation.killRecords.Data.Any(k => k.playerId == __instance.m_discussionPlayerState.position))
+        if (!Constants.EnableIcons() || !Pepper.IsGamePhasePlay())
             return;
 
+        var tuple = default(Tuple<Role, FactionType>);
         var ogfaction = __instance.m_role.GetFactionType();
 
-        if (!Utils.GetRoleAndFaction(__instance.m_discussionPlayerState.position, out var tuple))
+        if (Service.Game.Sim.simulation.killRecords.Data.TryFinding(k => k.playerId == __instance.m_discussionPlayerState.position, out var killRecord))
+            tuple = new(killRecord.playerRole, killRecord.playerFaction);
+        else if (!Utils.GetRoleAndFaction(__instance.m_discussionPlayerState.position, out tuple))
             tuple = new(__instance.m_role, ogfaction);
 
         if (__instance.m_discussionPlayerState.position == Pepper.GetMyPosition())
             tuple = new(Pepper.GetMyRole(), Pepper.GetMyFaction());
+
+        if (tuple.Item2 == FactionType.NONE)
+            tuple = new(tuple.Item1, ogfaction);
 
         var faction = tuple.Item2;
         var reg = ogfaction != faction;
