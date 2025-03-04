@@ -968,6 +968,7 @@ public static class OverwriteDecodedText
     }
 }
 
+// This whole class is a mess but DO NOT TOUCH
 [HarmonyPatch(typeof(HeaderAnnouncements), nameof(HeaderAnnouncements.ShowHeaderMessage))]
 public static class MakeProperFactionChecksInHeaderAnnouncement
 {
@@ -984,6 +985,8 @@ public static class MakeProperFactionChecksInHeaderAnnouncement
 
     private static IEnumerator FixMessage(HeaderAnnouncements __instance, TrialData trialData)
     {
+        __instance.Clear();
+
         if (!Service.Game.Sim.simulation.killRecords.Data.TryFinding(k => k.playerId == trialData.defendantPosition, out var killRecord) || killRecord == null ||
             killRecord.killedByReasons.Count < 1)
         {
