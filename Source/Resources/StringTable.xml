@@ -71,6 +71,10 @@
     <Entry key="FANCY_SHOW_TO_JAILOR_NAME">Show Jail Overlay When Jailing</Entry>
     <Entry key="FANCY_SHOW_TO_JAILOR_DESC">When you are jailing someone as the Jailor, this option makes the old jailor overlay appear on your screen.</Entry>
 
+    <Entry key="FANCY_ROLE_REVEAL_ICONS_NAME">Icons In Role Reveal Cinematic</Entry>
+    <Entry key="FANCY_ROLE_REVEAL_ICONS_DESC">Shows the character headshot and role icon at their respective locations during the role reveal cinematic.</Entry>
+
+
     <Entry key="FANCY_DEFAULT">Default</Entry>
     <Entry key="FANCY_ROLE">Role</Entry>
     <Entry key="FANCY_FACTION">Faction</Entry>
@@ -98,4 +102,5 @@
 
     <Entry key="FANCY_OPEN_LINK">Open Link</Entry>
     <Entry key="FANCY_DOWNLOAD_PACK">Download %pack%</Entry>
+
 </StringTable>
