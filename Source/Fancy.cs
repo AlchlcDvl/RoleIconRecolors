@@ -110,6 +110,7 @@ public class Fancy
     public static ToggleOption DebugPackLoading;
     public static ToggleOption ShowOverlayWhenJailed;
     public static ToggleOption ShowOverlayAsJailor;
+    public static ToggleOption IconsInRoleReveal;
 
     [LoadConfigs]
     public static void LoadConfigs()
@@ -145,6 +146,7 @@ public class Fancy
         DebugPackLoading = new("DEBUG_LOADING", false, PackType.Settings);
         ShowOverlayWhenJailed = new("SHOW_TO_JAILED", true, PackType.Settings);
         ShowOverlayAsJailor = new("SHOW_TO_JAILOR", false, PackType.Settings);
+        IconsInRoleReveal = new("ROLE_REVEAL_ICONS", true, PackType.Settings);
     }
 
     private static readonly SalemMenuButton FancyMenu = new()

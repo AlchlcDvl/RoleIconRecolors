@@ -12,6 +12,7 @@ using Home.Shared;
 using System.Text.RegularExpressions;
 using AbilityType = Game.Interface.TosAbilityPanelListItem.OverrideAbilityType;
 
+
 namespace FancyUI.Patches;
 
 [HarmonyPatch(typeof(RoleCardListItem), nameof(RoleCardListItem.SetData))]
@@ -967,6 +968,39 @@ public static class OverwriteDecodedText
     }
 }
 
+
+/*[HarmonyPatch(typeof(HeaderAnnouncements), nameof(HeaderAnnouncements.ShowHeaderMessage))]
+public static class MakeProperFactionChecksInHeaderAnnouncement
+{
+    
+    public static void Prefix(HeaderAnnouncements __instance, TrialData trialData)
+    {
+        if (!Constants.EnableIcons())
+            return;
+
+        Debug.Log("HeaderAnnouncements :: ShowHeaderMessage");
+
+        if (!Service.Game.Sim.simulation.killRecords.Data.TryFinding(k => k.playerId == trialData.defendantPosition, out var killRecord) || 
+            killRecord == null || killRecord.killedByReasons.Count < 1)
+            return;
+
+        if (trialData.trialPhase != TrialPhase.EXECUTION_REVEAL && 
+            trialData.trialPhase != TrialPhase.HANGMAN_EXECUTION_REVEAL)
+            return;
+
+        var text = __instance.l10n("GUI_GAME_WHO_DIED_AND_HOW_1_2")
+            .Replace("%role%", $"<sprite=\"RoleIcons ({Utils.FactionName(killRecord.playerFaction)})\" name=\"Role{(int)killRecord.playerRole}\">" +
+                killRecord.playerRole.ToColorizedDisplayString(killRecord.playerFaction))
+            .Replace("%name%", Service.Game.Sim.simulation.GetDisplayName(trialData.defendantPosition).ToWhiteNameString());
+
+        if (Constants.IsBTOS2())
+            text = text.Replace("\"RoleIcons", "\"BTOSRoleIcons");
+
+        __instance.AddLine(text);
+    }
+}*/
+
+
 [HarmonyPatch(typeof(WhoDiedAndHowPanel), nameof(WhoDiedAndHowPanel.HandleSubphaseRole))]
 public static class MakeProperFactionChecksInWdah1
 {
@@ -1134,5 +1168,42 @@ public static class PatchPirateMenu
 
         if (sprite.IsValid() && __instance.Role3)
             __instance.Role3.sprite = sprite;
+    }
+}
+
+[HarmonyPatch(typeof(Cinematics.Players.RoleRevealCinematicPlayer), "SetRole")]
+public static class RoleRevealCinematicPlayerPatch
+{
+    [HarmonyPrefix]
+    public static bool Prefix(Cinematics.Players.RoleRevealCinematicPlayer __instance, ref Role role)
+    {
+        if (!Constants.IconsInRoleReveal())
+        {
+            return true;
+        }
+
+        if (role == Role.NONE)
+        {
+            return true;
+        }
+
+        string newValue = string.Format("<sprite=\"Cast\" name=\"Skin{0}\">", __instance.roleRevealCinematic.skinId) + Service.Game.Cast.GetSkinName(__instance.roleRevealCinematic.skinId);
+        string text = __instance.l10n("CINE_ROLE_REVEAL_SKIN").Replace("%skin%", newValue);
+        __instance.skinTextPlayer.ShowText(text);
+        
+        __instance.totalDuration = Tuning.ROLE_REVEAL_TIME;
+        __instance.silhouetteWrapper.gameObject.SetActive(true);
+        __instance.silhouetteWrapper.SwapWithSilhouette((int)role, true);
+        
+        string newValue2 = role.GetTMPSprite() + role.ToColorizedDisplayString();
+        string text2 = __instance.l10n("CINE_ROLE_REVEAL_ROLE").Replace("%role%", newValue2);
+        __instance.roleTextPlayer.ShowText(text2);
+
+        if (Pepper.GetCurrentGameType() == GameType.Ranked)
+        {
+            __instance.playableDirector.Resume();
+        }
+
+        return false;
     }
 }
