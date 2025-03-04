@@ -11,7 +11,7 @@ using Server.Shared.Extensions;
 using Home.Shared;
 using System.Text.RegularExpressions;
 using AbilityType = Game.Interface.TosAbilityPanelListItem.OverrideAbilityType;
-
+using Cinematics.Players;
 
 namespace FancyUI.Patches;
 
@@ -968,25 +968,27 @@ public static class OverwriteDecodedText
     }
 }
 
-
-/*[HarmonyPatch(typeof(HeaderAnnouncements), nameof(HeaderAnnouncements.ShowHeaderMessage))]
+[HarmonyPatch(typeof(HeaderAnnouncements), nameof(HeaderAnnouncements.ShowHeaderMessage))]
 public static class MakeProperFactionChecksInHeaderAnnouncement
 {
-    
-    public static void Prefix(HeaderAnnouncements __instance, TrialData trialData)
+    public static bool Prefix(HeaderAnnouncements __instance, TrialData trialData, ref IEnumerator __result)
     {
         if (!Constants.EnableIcons())
-            return;
+            return true;
 
-        Debug.Log("HeaderAnnouncements :: ShowHeaderMessage");
+        __result = trialData.trialPhase is TrialPhase.EXECUTION_REVEAL or TrialPhase.HANGMAN_EXECUTION_REVEAL
+            ? FixMessage(__instance, trialData)
+            : ShowHeaderMessageOriginal(__instance, trialData);
+        return false;
+    }
 
-        if (!Service.Game.Sim.simulation.killRecords.Data.TryFinding(k => k.playerId == trialData.defendantPosition, out var killRecord) || 
-            killRecord == null || killRecord.killedByReasons.Count < 1)
-            return;
-
-        if (trialData.trialPhase != TrialPhase.EXECUTION_REVEAL && 
-            trialData.trialPhase != TrialPhase.HANGMAN_EXECUTION_REVEAL)
-            return;
+    private static IEnumerator FixMessage(HeaderAnnouncements __instance, TrialData trialData)
+    {
+        if (!Service.Game.Sim.simulation.killRecords.Data.TryFinding(k => k.playerId == trialData.defendantPosition, out var killRecord) || killRecord == null ||
+            killRecord.killedByReasons.Count < 1)
+        {
+            yield break;
+        }
 
         var text = __instance.l10n("GUI_GAME_WHO_DIED_AND_HOW_1_2")
             .Replace("%role%", $"<sprite=\"RoleIcons ({Utils.FactionName(killRecord.playerFaction)})\" name=\"Role{(int)killRecord.playerRole}\">" +
@@ -998,8 +1000,10 @@ public static class MakeProperFactionChecksInHeaderAnnouncement
 
         __instance.AddLine(text);
     }
-}*/
 
+    [HarmonyReversePatch]
+    private static IEnumerator ShowHeaderMessageOriginal(HeaderAnnouncements instance, TrialData trialData) => throw new NotImplementedException();
+}
 
 [HarmonyPatch(typeof(WhoDiedAndHowPanel), nameof(WhoDiedAndHowPanel.HandleSubphaseRole))]
 public static class MakeProperFactionChecksInWdah1
@@ -1171,38 +1175,28 @@ public static class PatchPirateMenu
     }
 }
 
-[HarmonyPatch(typeof(Cinematics.Players.RoleRevealCinematicPlayer), "SetRole")]
+[HarmonyPatch(typeof(RoleRevealCinematicPlayer), nameof(RoleRevealCinematicPlayer.SetRole))]
 public static class RoleRevealCinematicPlayerPatch
 {
-    [HarmonyPrefix]
-    public static bool Prefix(Cinematics.Players.RoleRevealCinematicPlayer __instance, ref Role role)
+    public static bool Prefix(RoleRevealCinematicPlayer __instance, ref Role role)
     {
-        if (!Constants.IconsInRoleReveal())
-        {
+        if (!Constants.IconsInRoleReveal() || role == Role.NONE)
             return true;
-        }
 
-        if (role == Role.NONE)
-        {
-            return true;
-        }
-
-        string newValue = string.Format("<sprite=\"Cast\" name=\"Skin{0}\">", __instance.roleRevealCinematic.skinId) + Service.Game.Cast.GetSkinName(__instance.roleRevealCinematic.skinId);
-        string text = __instance.l10n("CINE_ROLE_REVEAL_SKIN").Replace("%skin%", newValue);
+        var newValue = $"<sprite=\"Cast\" name=\"Skin{__instance.roleRevealCinematic.skinId}\">{Service.Game.Cast.GetSkinName(__instance.roleRevealCinematic.skinId)}";
+        var text = __instance.l10n("CINE_ROLE_REVEAL_SKIN").Replace("%skin%", newValue);
         __instance.skinTextPlayer.ShowText(text);
-        
+
         __instance.totalDuration = Tuning.ROLE_REVEAL_TIME;
         __instance.silhouetteWrapper.gameObject.SetActive(true);
         __instance.silhouetteWrapper.SwapWithSilhouette((int)role, true);
-        
-        string newValue2 = role.GetTMPSprite() + role.ToColorizedDisplayString();
-        string text2 = __instance.l10n("CINE_ROLE_REVEAL_ROLE").Replace("%role%", newValue2);
+
+        var newValue2 = role.GetTMPSprite() + role.ToColorizedDisplayString();
+        var text2 = __instance.l10n("CINE_ROLE_REVEAL_ROLE").Replace("%role%", newValue2);
         __instance.roleTextPlayer.ShowText(text2);
 
         if (Pepper.GetCurrentGameType() == GameType.Ranked)
-        {
             __instance.playableDirector.Resume();
-        }
 
         return false;
     }

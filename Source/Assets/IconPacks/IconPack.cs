@@ -93,11 +93,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
 
                     foreach (var name1 in ModsToFolders[mod])
                     {
-                        if (!GlobalEasterEggs.TryGetValue(name1, out var globalEasterEggs))
-                            GlobalEasterEggs[name1] = globalEasterEggs = [];
-
                         var baseIcons = assets.BaseIcons[name1] = [];
-                        var easterEggs = assets.EasterEggs[name1] = [];
                         var baseName = name1 + "Base";
                         var baseFolder = Path.Combine(modPath, baseName);
 
@@ -120,6 +116,10 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                             Directory.CreateDirectory(baseFolder);
                         }
 
+                        if (!GlobalEasterEggs.TryGetValue(name1, out var globalEasterEggs))
+                            GlobalEasterEggs[name1] = globalEasterEggs = [];
+
+                        var easterEggs = assets.EasterEggs[name1] = [];
                         var eeName = name1 + "EasterEggs";
                         var eeFolder = Path.Combine(modPath, eeName);
 
