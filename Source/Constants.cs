@@ -29,6 +29,7 @@ public static class Constants
     public static bool ShowOverlayWhenJailed() => Fancy.ShowOverlayWhenJailed.Value;
 
     public static bool ShowOverlayAsJailor() => Fancy.ShowOverlayAsJailor.Value;
+    
     public static bool IconsInRoleReveal() => Fancy.IconsInRoleReveal.Value;
 
     public static bool PackDebug() => Fancy.DebugPackLoading.Value;
