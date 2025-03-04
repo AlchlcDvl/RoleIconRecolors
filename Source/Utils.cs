@@ -542,55 +542,41 @@ public static class Utils
         }
     }
 
-    public static FactionType GetFactionType(this Role role, ModType? mod = null)
+    public static FactionType GetFactionType(this Role role, ModType? mod = null) => ((int)role, role, mod ?? GetGameType()) switch
     {
-        switch ((int)role)
-        {
-            case > 0 and < 25:
-                return FactionType.TOWN;
-            case > 24 and < 40:
-                return FactionType.COVEN;
-            case 41 or 42 or 47 or 50 or 250 or 251 or 252 or 253:
-                return FactionType.APOCALYPSE;
-            case < 54:
-            {
-                return role switch
-                {
-                    Role.ARSONIST => FactionType.ARSONIST,
-                    Role.DOOMSAYER => FactionType.DOOMSAYER,
-                    Role.EXECUTIONER => FactionType.EXECUTIONER,
-                    Role.JESTER => FactionType.JESTER,
-                    Role.PIRATE => FactionType.PIRATE,
-                    Role.SERIALKILLER => FactionType.SERIALKILLER,
-                    Role.SHROUD => FactionType.SHROUD,
-                    Role.WEREWOLF => FactionType.WEREWOLF,
-                    Role.VAMPIRE => FactionType.VAMPIRE,
-                    Role.CURSED_SOUL => FactionType.CURSED_SOUL,
-                    _ => FactionType.NONE
-                };
-            }
-        }
+        // Basic faction checks based on role ID ranges
+        (> 0 and < 25, _, _) => FactionType.TOWN,
+        (> 24 and < 40, _, _) => FactionType.COVEN,
+        (41 or 42 or 47 or 50 or 250 or 251 or 252 or 253, _, _) => FactionType.APOCALYPSE,
 
-        mod ??= GetGameType();
+        // Individual role checks for IDs < 54
+        (< 54, Role.ARSONIST, _) => FactionType.ARSONIST,
+        (< 54, Role.DOOMSAYER, _) => FactionType.DOOMSAYER,
+        (< 54, Role.EXECUTIONER, _) => FactionType.EXECUTIONER,
+        (< 54, Role.JESTER, _) => FactionType.JESTER,
+        (< 54, Role.PIRATE, _) => FactionType.PIRATE,
+        (< 54, Role.SERIALKILLER, _) => FactionType.SERIALKILLER,
+        (< 54, Role.SHROUD, _) => FactionType.SHROUD,
+        (< 54, Role.WEREWOLF, _) => FactionType.WEREWOLF,
+        (< 54, Role.VAMPIRE, _) => FactionType.VAMPIRE,
+        (< 54, Role.CURSED_SOUL, _) => FactionType.CURSED_SOUL,
 
-        return mod switch
-        {
-            ModType.BTOS2 => role switch
-            {
-                Btos2Role.Banshee => Btos2Faction.Coven,
-                Btos2Role.Marshal or Btos2Role.Oracle => Btos2Faction.Town,
-                Btos2Role.Jackal => Btos2Faction.Jackal,
-                Btos2Role.Judge => Btos2Faction.Judge,
-                Btos2Role.Auditor => Btos2Faction.Auditor,
-                Btos2Role.Inquisitor => Btos2Faction.Inquisitor,
-                Btos2Role.Starspawn => Btos2Faction.Starspawn,
-                Btos2Role.Warlock => Btos2Faction.Apocalypse,
-                _ => Btos2Faction.None
-            },
-            ModType.Vanilla when (int)role is > 53 and < 57 => FactionType.TOWN,
-            _ => FactionType.NONE
-        };
-    }
+        // BTOS2 specific role checks
+        (_, Btos2Role.Banshee, ModType.BTOS2) => Btos2Faction.Coven,
+        (_, Btos2Role.Marshal or Btos2Role.Oracle, ModType.BTOS2) => Btos2Faction.Town,
+        (_, Btos2Role.Jackal, ModType.BTOS2) => Btos2Faction.Jackal,
+        (_, Btos2Role.Judge, ModType.BTOS2) => Btos2Faction.Judge,
+        (_, Btos2Role.Auditor, ModType.BTOS2) => Btos2Faction.Auditor,
+        (_, Btos2Role.Inquisitor, ModType.BTOS2) => Btos2Faction.Inquisitor,
+        (_, Btos2Role.Starspawn, ModType.BTOS2) => Btos2Faction.Starspawn,
+        (_, Btos2Role.Warlock, ModType.BTOS2) => Btos2Faction.Apocalypse,
+
+        // Vanilla specific role checks
+        (> 53 and < 57, _, ModType.Vanilla) => FactionType.TOWN,
+
+        // Default case
+        _ => FactionType.NONE
+    };
 
     public static void SetImageColor(this Image img, ColorType type, Color? color = null, float a = 1f)
     {
