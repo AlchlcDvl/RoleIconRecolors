@@ -754,7 +754,9 @@ public static class ReplaceTMPSpritesPatch
         if (!Constants.EnableIcons())
             return false;
 
-        if (IconPacks.TryGetValue(Constants.CurrentPack(), out var pack))
+        var packName = Constants.CurrentPack();
+
+        if (IconPacks.TryGetValue(packName, out var pack))
         {
             if (str.Contains("RoleIcons"))
             {
@@ -771,33 +773,30 @@ public static class ReplaceTMPSpritesPatch
                 };
 
                 if (str.Contains("("))
-                    deconstructed = str.Split(['(', ')'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.RemoveEmptyEntries)[^1];
+                    deconstructed = str.Split('(', ')').Select(x => x.Trim()).Last(x => !StringUtils.IsNullEmptyOrWhiteSpace(x));
 
                 if (deconstructed is "None" or "Blank" || StringUtils.IsNullEmptyOrWhiteSpace(deconstructed))
                     deconstructed = "Regular";
 
                 if (!pack.Assets.TryGetValue(mod, out var assets))
-                    Fancy.Instance.Warning($"Unable to find {Constants.CurrentPack()} assets for {mod}");
+                    Fancy.Instance.Warning($"Unable to find {packName} assets for {mod}");
+                else if (deconstructed == "Vanilla")
+                    asset = defaultSprite;
                 else
                 {
-                    if (deconstructed == "Vanilla")
-                        asset = defaultSprite;
-                    else
+                    if (!assets.MentionStyles.TryGetValue(deconstructed, out asset) || !asset)
+                        Fancy.Instance.Warning($"{packName} {mod} Mention Style {deconstructed} was null or missing");
+
+                    if (!asset && deconstructed != "Regular")
                     {
-                        if (!assets.MentionStyles.TryGetValue(deconstructed, out asset) || !asset)
-                            Fancy.Instance.Warning($"{Constants.CurrentPack()} {mod} Mention Style {deconstructed} was null or missing");
+                        if (!assets.MentionStyles.TryGetValue("Regular", out asset) || !asset)
+                            Fancy.Instance.Warning($"{packName} {mod} Mention Style Regular was null or missing");
+                    }
 
-                        if (!asset && deconstructed != "Regular")
-                        {
-                            if (!assets.MentionStyles.TryGetValue("Regular", out asset) || !asset)
-                                Fancy.Instance.Warning($"{Constants.CurrentPack()} {mod} Mention Style Regular was null or missing");
-                        }
-
-                        if (!asset && deconstructed != "Factionless")
-                        {
-                            if (!assets.MentionStyles.TryGetValue("Factionless", out asset) || !asset)
-                                Fancy.Instance.Warning($"{Constants.CurrentPack()} {mod} Mention Style Factionless was null or missing");
-                        }
+                    if (!asset && deconstructed != "Factionless")
+                    {
+                        if (!assets.MentionStyles.TryGetValue("Factionless", out asset) || !asset)
+                            Fancy.Instance.Warning($"{packName} {mod} Mention Style Factionless was null or missing");
                     }
                 }
 
@@ -806,7 +805,7 @@ public static class ReplaceTMPSpritesPatch
             else if (str == "PlayerNumbers")
             {
                 if (!pack.PlayerNumbers && Constants.CustomNumbers())
-                    Fancy.Instance.Warning($"{Constants.CurrentPack()} PlayerNumber was null");
+                    Fancy.Instance.Warning($"{packName} PlayerNumber was null");
 
                 asset = pack.PlayerNumbers ?? Vanilla2 ?? CacheDefaults.Numbers;
                 return Constants.CustomNumbers() && asset;
@@ -814,7 +813,7 @@ public static class ReplaceTMPSpritesPatch
             else if (str == "Emojis")
             {
                 if (!pack.Emojis)
-                    Fancy.Instance.Warning($"{Constants.CurrentPack()} Emoji was null");
+                    Fancy.Instance.Warning($"{packName} Emoji was null");
 
                 asset = pack.Emojis ?? Vanilla3 ?? CacheDefaults.Emojis;
                 return asset;
@@ -823,7 +822,7 @@ public static class ReplaceTMPSpritesPatch
             return (str.Contains("RoleIcons") || str is "PlayerNumbers" or "Emojis") && asset;
         }
 
-        Fancy.Instance.Warning($"{Constants.CurrentPack()} doesn't have an icon pack");
+        Fancy.Instance.Warning($"{packName} doesn't have an icon pack");
         return false;
     }
 }

@@ -1,9 +1,6 @@
 namespace FancyUI;
 
-[SalemMod]
-[SalemMenuItem]
-[DynamicSettings]
-[WitchcraftMod(typeof(Fancy), "Fancy UI", [ "Assets", "WoodMaterials" ], true)]
+[SalemMod, WitchcraftMod(typeof(Fancy), "Fancy UI", [ "Assets", "WoodMaterials" ], true)]
 public class Fancy
 {
     public static WitchcraftMod Instance { get; private set; }
@@ -77,7 +74,7 @@ public class Fancy
             LoadBtos2SpriteSheet();
         } catch {}
 
-        FancyMenu.Icon = Assets.GetSprite("Thumbnail");
+        MenuButton.FancyMenu.Icon = Assets.GetSprite("Thumbnail");
     }
 
     public static StringDropdownOption SelectedIconPack;
@@ -149,37 +146,14 @@ public class Fancy
         IconsInRoleReveal = new("ROLE_REVEAL_ICONS", true, PackType.Settings);
     }
 
-    private static readonly SalemMenuButton FancyMenu = new()
-    {
-        Label = "Fancy UI",
-        OnClick = OpenMenu
-    };
-
-    private static void OpenMenu()
-    {
-        var go = UObject.Instantiate(Assets.GetGameObject("FancyUI"), CacheHomeSceneController.Controller.SafeArea.transform, false);
-        go.transform.localPosition = new(0, 0, 0);
-        go.transform.localScale = Vector3.one * 2f;
-        go.AddComponent<UI.FancyUI>();
-    }
-
     private static IEnumerable<string> GetPackNames(PackType type)
     {
-        try
-        {
-            var result = new List<string>() { "Vanilla" };
+        yield return "Vanilla";
 
-            foreach (var dir in Directory.EnumerateDirectories(Path.Combine(Instance.ModPath, type.ToString())))
-            {
-                if (!dir.ContainsAny("Vanilla", "BTOS2"))
-                    result.Add(dir.FancySanitisePath());
-            }
-
-            return result;
-        }
-        catch
+        foreach (var dir in Directory.EnumerateDirectories(Path.Combine(Instance.ModPath, type.ToString())))
         {
-            return [ "Vanilla" ];
+            if (!dir.ContainsAny("Vanilla", "BTOS2"))
+                yield return dir.FancySanitisePath();
         }
     }
 
@@ -245,4 +219,22 @@ public class Fancy
     //         }
     //     }
     // }
+}
+
+[SalemMenuItem]
+public static class MenuButton
+{
+    public static readonly SalemMenuButton FancyMenu = new()
+    {
+        Label = "Fancy UI",
+        OnClick = OpenMenu
+    };
+
+    private static void OpenMenu()
+    {
+        var go = UObject.Instantiate(Fancy.Assets.GetGameObject("FancyUI"), CacheHomeSceneController.Controller.SafeArea.transform, false);
+        go.transform.localPosition = new(0, 0, 0);
+        go.transform.localScale = Vector3.one * 2f;
+        go.AddComponent<UI.FancyUI>();
+    }
 }
