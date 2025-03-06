@@ -32,7 +32,7 @@ public class LoadingUI : UIController
 
     public void OnDestroy() => Instance = null;
 
-    private void Cancel() => DownloaderUI.Instance.Abort = true;
+    private static void Cancel() => DownloaderUI.Instance.Abort = true;
 
     public void Update()
     {

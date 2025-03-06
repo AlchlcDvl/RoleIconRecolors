@@ -157,38 +157,38 @@ public static class PatchRoleCards
         if (special.IsValid() && specialAbilityPanel)
             specialAbilityPanel.sprite = special;
 
-        var abilityname = $"{name}_Ability";
-        var ability1 = GetSprite(reg, abilityname, faction);
+        var abilityName = $"{name}_Ability";
+        var ability1 = GetSprite(reg, abilityName, faction);
 
         if (!ability1.IsValid())
-            ability1 = GetSprite(reg, abilityname + "_1", faction);
+            ability1 = GetSprite(reg, abilityName + "_1", faction);
 
         if (!ability1.IsValid() && reg)
-            ability1 = GetSprite(abilityname, ogfaction);
+            ability1 = GetSprite(abilityName, ogfaction);
 
         if (!ability1.IsValid() && reg)
-            ability1 = GetSprite(abilityname + "_1", ogfaction);
+            ability1 = GetSprite(abilityName + "_1", ogfaction);
 
         if (ability1.IsValid() && roleInfoButtons.IsValid(index))
         {
             roleInfoButtons[index].abilityIcon.sprite = ability1;
             index++;
         }
-        else if (Utils.Skippable(abilityname) || Utils.Skippable(abilityname + "_1"))
+        else if (Utils.Skippable(abilityName) || Utils.Skippable(abilityName + "_1"))
             index++;
 
-        var abilityname2 = $"{name}_Ability_2";
-        var ability2 = GetSprite(reg, abilityname2, faction);
+        var abilityName2 = $"{name}_Ability_2";
+        var ability2 = GetSprite(reg, abilityName2, faction);
 
         if (!ability2.IsValid() && reg)
-            ability2 = GetSprite(abilityname2, ogfaction);
+            ability2 = GetSprite(abilityName2, ogfaction);
 
         if (ability2.IsValid() && roleInfoButtons.IsValid(index) && !(role == Utils.GetWar() && !isGuide))
         {
             roleInfoButtons[index].abilityIcon.sprite = ability2;
             index++;
         }
-        else if (Utils.Skippable(abilityname2))
+        else if (Utils.Skippable(abilityName2))
             index++;
 
         var attribute = GetSprite(reg, $"Attributes_{name}", faction);
@@ -533,11 +533,11 @@ public static class InitialiseRolePanel
         if (!Constants.EnableIcons() || !Pepper.IsGamePhasePlay())
             return;
 
-        var tuple = default(Tuple<Role, FactionType>);
+        Tuple<Role, FactionType> tuple;
         var ogfaction = __instance.m_role.GetFactionType();
 
         if (Service.Game.Sim.simulation.killRecords.Data.TryFinding(k => k.playerId == __instance.m_discussionPlayerState.position, out var killRecord))
-            tuple = new(killRecord.playerRole, killRecord.playerFaction);
+            tuple = new(killRecord!.playerRole, killRecord.playerFaction);
         else if (!Utils.GetRoleAndFaction(__instance.m_discussionPlayerState.position, out tuple))
             tuple = new(__instance.m_role, ogfaction);
 
@@ -1142,13 +1142,13 @@ public static class PatchNecroRetMenuItem
         if (sprite.IsValid() && __instance.choiceSprite)
             __instance.choiceSprite.sprite = sprite;
 
-        sprite = GetSprite($"{role}_{(role is "Deputy" or "Conjurer" ? "Special" : "Ability")}", faction, false);
+        var sprite2 = GetSprite($"{role}_{(role is "Deputy" or "Conjurer" ? "Special" : "Ability")}", faction, false);
 
-        if (!sprite.IsValid())
-            sprite = GetSprite($"{role}_Ability_1", faction, false);
+        if (!sprite2.IsValid())
+            sprite2 = GetSprite($"{role}_Ability_1", faction, false);
 
-        if (sprite.IsValid() && __instance.choice2Sprite)
-            __instance.choice2Sprite.sprite = sprite;
+        if (sprite2.IsValid() && __instance.choice2Sprite)
+            __instance.choice2Sprite.sprite = sprite2;
     }
 }
 
@@ -1197,7 +1197,7 @@ public static class RoleRevealCinematicPlayerPatch
 
         __instance.totalDuration = Tuning.ROLE_REVEAL_TIME;
         __instance.silhouetteWrapper.gameObject.SetActive(true);
-        __instance.silhouetteWrapper.SwapWithSilhouette((int)role, true);
+        __instance.silhouetteWrapper.SwapWithSilhouette((int)role);
 
         var newValue2 = role.GetTMPSprite() + role.ToColorizedDisplayString();
         var text2 = __instance.l10n("CINE_ROLE_REVEAL_ROLE").Replace("%role%", newValue2);

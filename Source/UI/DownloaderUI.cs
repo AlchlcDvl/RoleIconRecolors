@@ -1,5 +1,4 @@
 using UnityEngine.Events;
-using System.Collections;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
 using FancyUI.Assets.IconPacks;
@@ -312,11 +311,11 @@ public class DownloaderUI : UIController
             File.Move(file, file.Replace(dir, FolderPath));
             time += Time.deltaTime;
 
-            if (time > 0.1f)
-            {
-                time -= 0.1f;
-                yield return new WaitForEndOfFrame();
-            }
+            if (time < 0.1f)
+                continue;
+
+            time -= 0.1f;
+            yield return new WaitForEndOfFrame();
         }
 
         LoadingUI.Instance.LoadingProgress.SetText("Cleaning Up");

@@ -62,20 +62,20 @@ public class SettingsAndTestingUI : UIController
     {
         Instance = this;
 
-        Animator = transform.EnsureComponent<CustomAnimator>("Animator");
+        Animator = transform.EnsureComponent<CustomAnimator>("Animator")!;
         Animator.SetAnim(Loading.Frames, Constants.AnimationDuration());
-        Animator.AddComponent<HoverEffect>().NonLocalizedString = "This Is Your Animator";
+        Animator.AddComponent<HoverEffect>()!.NonLocalizedString = "This Is Your Animator";
 
         RoleCard = transform.FindRecursive("RoleCard");
 
         ButtonTemplate = RoleCard.EnsureComponent<RoleCardIcon>("ButtonTemplate");
 
-        SpecialMetal = RoleCard.GetComponent<Image>("Special");
-        EffectMetal = RoleCard.GetComponent<Image>("Effect");
+        SpecialMetal = RoleCard.GetComponent<Image>("Special")!;
+        EffectMetal = RoleCard.GetComponent<Image>("Effect")!;
         SpecialWood = SpecialMetal.transform.GetComponent<Image>("Wood");
         EffectWood = EffectMetal.transform.GetComponent<Image>("Wood");
 
-        Flame = SpecialMetal.transform.EnsureComponent<CustomAnimator>("Fire");
+        Flame = SpecialMetal.transform.EnsureComponent<CustomAnimator>("Fire")!;
         Flame.SetAnim([ .. FancyAssetManager.Flame.Frames.Select(x => x.RenderedSprite) ], 1f);
 
         RoleText = RoleCard.GetComponent<TextMeshProUGUI>("Role");
@@ -101,12 +101,12 @@ public class SettingsAndTestingUI : UIController
 
         ToggleImage = transform.GetComponent<Image>("Toggle");
 
-        transform.GetComponent<Button>("RecolouredUI").onClick.AddListener(OpenRecoloredUI);
-        transform.GetComponent<Button>("IconPacks").onClick.AddListener(OpenIconPacks);
-        transform.GetComponent<Button>("SilSwapper").onClick.AddListener(OpenSilSwapper);
-        transform.GetComponent<Button>("MRC").onClick.AddListener(OpenMRC);
-        transform.GetComponent<Button>("Toggle").onClick.AddListener(OpenTesting);
-        transform.GetComponent<Button>("Testing").onClick.AddListener(DoTheToggle);
+        transform.GetComponent<Button>("RecolouredUI")!.onClick.AddListener(OpenRecoloredUI);
+        transform.GetComponent<Button>("IconPacks")!.onClick.AddListener(OpenIconPacks);
+        transform.GetComponent<Button>("SilSwapper")!.onClick.AddListener(OpenSilSwapper);
+        transform.GetComponent<Button>("MRC")!.onClick.AddListener(OpenMrc);
+        transform.GetComponent<Button>("Toggle")!.onClick.AddListener(OpenTesting);
+        transform.GetComponent<Button>("Testing")!.onClick.AddListener(DoTheToggle);
 
         FancyUI.SetupFonts(transform);
 
@@ -198,7 +198,7 @@ public class SettingsAndTestingUI : UIController
         RefreshOptions();
     }
 
-    private void OpenMRC()
+    private void OpenMrc()
     {
         Page = PackType.MiscRoleCustomisation;
         RefreshOptions();

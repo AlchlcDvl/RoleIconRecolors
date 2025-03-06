@@ -192,7 +192,7 @@ public static class LobbyGameModeChoicePanelPatch
 //     {
 //         if (!Constants.EnableCustomUI() || Pepper.IsLobbyOrGamePhase())
 //             return;
-
+//
 //         var parts = __instance.transform.GetChild(12);
 //         parts.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood); // Wood frame at the back
 //         parts.GetChild(13).GetComponent<Image>().SetImageColor(ColorType.Wood); // Wood frame in the front
@@ -208,6 +208,6 @@ public static class LobbyGameModeChoicePanelPatch
 //     {
 //         if (!Constants.EnableCustomUI())
 //             return;
-
+//
 //     }
 // }
