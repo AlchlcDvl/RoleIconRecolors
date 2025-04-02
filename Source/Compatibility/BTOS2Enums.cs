@@ -132,6 +132,7 @@ public static class Btos2Role
     public const Role SecretWhispers = (Role)227;
     public const Role Lovers = (Role)228;
     public const Role Vc = (Role)229;
+    public const Role FeelinLucky = (Role)230;
 
     // Special part 2
     public const Role Hangman = Role.HANGMAN;
