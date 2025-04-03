@@ -653,7 +653,7 @@ public static class Utils
     public static string ApplyGradient(string text, params Color32[] colors)
     {
         var gradient = new Gradient();
-        gradient.SetKeys([.. colors.Select((i, color) => new GradientColorKey(color, colors.Length / (float)i))],
+        gradient.SetKeys([.. colors.Select((i, color) => new GradientColorKey(color, (float)i / (colors.Length - 1)))],
         [
             new(1f, 0f),
             new(1f, 1f)
