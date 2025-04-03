@@ -155,6 +155,7 @@ public static class Utils
         Btos2Role.CommonNeutral => "CommonNeutral",
         Btos2Role.Vc => "VC",
         Btos2Role.Lovers => "Lovers",
+        Btos2Role.FeelinLucky => "FeelinLucky",
         _ => "Blank"
     };
 
@@ -251,6 +252,7 @@ public static class Utils
         Role.COMMON_TOWN => "CommonTown",
         Role.FOUR_HORSEMEN => "4Horsemen",
         Role.ANON_PLAYERS => "AnonPlayers",
+        Role.FEELIN_LUCKY => "FeelinLucky",
         Role.HIDDEN => "Hidden",
         _ => "Blank"
     };
