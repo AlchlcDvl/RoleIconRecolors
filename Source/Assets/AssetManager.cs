@@ -138,9 +138,7 @@ public static class FancyAssetManager
         }
 
         Utils.DumpSprite(BTOS21.spriteSheet as Texture2D, "BTOSRoleIcons", Path.Combine(IPPath, "BTOS2"), true);
-
-        Fancy.Assets.Bundles[BetterTOS2.BTOSInfo.assetBundle.name] = BetterTOS2.BTOSInfo.assetBundle;
-        BetterTOS2.BTOSInfo.assetBundle.GetAllAssetNames().ForEach(x => Fancy.Assets.ObjectToBundle[AssetManager.ConvertToBaseName(x)] = BetterTOS2.BTOSInfo.assetBundle.name);
+        Fancy.Assets.RegisterBundle(BetterTOS2.BTOSInfo.assetBundle);
     }
 
     public static string FancySanitisePath(this string path, bool removeIcon = false)

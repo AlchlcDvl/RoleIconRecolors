@@ -638,4 +638,36 @@ public static class Utils
     //     for (var i = 0; i < transform.childCount; i++)
     //         transform.GetChild(i).DebugTransformRecursive();
     // }
+
+    public static IEnumerable<T2> Select<T1, T2>(this IEnumerable<T1> source, Func<int, T1, T2> selector)
+    {
+        var i = 0;
+
+        foreach (var item in source)
+        {
+            yield return selector(i, item);
+            i++;
+        }
+    }
+
+    public static string ApplyGradient(string text, params Color32[] colors)
+    {
+        var gradient = new Gradient();
+        gradient.SetKeys([.. colors.Select((i, color) => new GradientColorKey(color, colors.Length / (float)i))],
+        [
+            new(1f, 0f),
+            new(1f, 1f)
+        ]);
+        return ApplyGradient(text, gradient);
+    }
+
+    public static string ApplyGradient(string text, Gradient gradient)
+    {
+        var text2 = "";
+
+        for (var i = 0; i < text.Length; i++)
+            text2 += $"<{gradient.Evaluate((float)i / text.Length).ToHtmlStringRGBA()}>{text[i]}</color>";
+
+        return text2;
+    }
 }

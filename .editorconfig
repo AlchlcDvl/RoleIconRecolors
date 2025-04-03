@@ -146,3 +146,6 @@ csharp_space_between_square_brackets = false
 csharp_prefer_braces = false:silent
 csharp_preserve_single_line_blocks = true
 csharp_preserve_single_line_statements = true
+
+# RCS1003: Add braces to if-else (when expression spans over multiple lines)
+dotnet_diagnostic.RCS1003.severity = none
