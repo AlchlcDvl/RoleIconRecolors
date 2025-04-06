@@ -653,7 +653,7 @@ public static class Utils
     public static string ApplyGradient(string text, params Color32[] colors)
     {
         var gradient = new Gradient();
-        gradient.SetKeys([.. colors.Select((i, color) => new GradientColorKey(color, (float)i / (colors.Length - 1)))],
+        gradient.SetKeys([.. colors.Select((i, color) => new GradientColorKey(color, (float)i / (colors.Length - 1)))], // Pays to know random ass math (that may or may not be 100% accurate)
         [
             new(1f, 0f),
             new(1f, 1f)
@@ -666,7 +666,7 @@ public static class Utils
         var text2 = "";
 
         for (var i = 0; i < text.Length; i++)
-            text2 += $"<{gradient.Evaluate((float)i / text.Length).ToHtmlStringRGBA()}>{text[i]}</color>";
+            text2 += $"<#{gradient.Evaluate((float)i / text.Length).ToHtmlStringRGBA()}>{text[i]}</color>";
 
         return text2;
     }
