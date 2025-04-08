@@ -6,6 +6,10 @@ using Server.Shared.Extensions;
 using Cinematics.Players;
 using Server.Shared.Cinematics.Data;
 using Server.Shared.Cinematics;
+using Mentions;
+using Mentions.Providers;
+using Services;
+using System.Collections.Generic;
 
 
 namespace FancyUI.Patches;
@@ -205,10 +209,85 @@ public static class RoleRevealCinematicPlayerPatch
 [HarmonyPatch(typeof(RoleRevealCinematicPlayer), nameof(RoleRevealCinematicPlayer.HandleOnMyIdentityChanged))]
 	public static class RoleRevealCinematicIdentityPatch
 	{
-		public static void Prefix(RoleRevealCinematicPlayer __instance, ref PlayerIdentityData playerIdentity)
+		public static void Prefix(ref PlayerIdentityData playerIdentity)
 		{
-			RoleRevealCinematicIdentityPatch.currentFaction = playerIdentity.faction;
+			currentFaction = playerIdentity.faction;
 		}
 
 		public static FactionType currentFaction;
 	}
+
+[HarmonyPatch(typeof(SharedMentionsProvider), nameof(SharedMentionsProvider.BuildAchievementMentions))]
+    public static class AchievementMentionsPatch
+    {
+        [HarmonyPrefix]
+        public static bool Prefix(SharedMentionsProvider __instance)
+        {
+            List<int> allAchievementIds = Service.Game.Achievement.GetAllAchievementIds();
+            int priority = 0;
+
+            foreach (int achievementId in allAchievementIds)
+            {
+                string title = __instance.l10n($"GUI_ACHIEVEMENT_TITLE_{achievementId}");
+                string match = $"~{title}";
+                string encodedText = $"[[~{achievementId}]]";
+                string highlightColor = "#FFBE00";
+
+                string styledTitle = __instance._useColors
+                    ? $"<color={highlightColor}><b>{title}</b></color>"
+                    : $"<b>{title}</b>";
+
+                string richText = $"{__instance.styleTagOpen}{__instance.styleTagFont}<link=\"~{achievementId}\">{styledTitle}</link>{__instance.styleTagClose}";
+
+                MentionInfo mentionInfo = new MentionInfo
+                {
+                    mentionInfoType = MentionInfo.MentionInfoType.ACHIEVEMENT,
+                    richText = richText,
+                    encodedText = encodedText,
+                    hashCode = richText.ToLower().GetHashCode(),
+                    humanText = $"~{title.ToLower()}"
+                };
+
+                __instance.MentionInfos.Add(mentionInfo);
+
+                __instance.MentionTokens.Add(new MentionToken
+                {
+                    mentionTokenType = MentionToken.MentionTokenType.ACHIEVEMENT,
+                    match = match,
+                    mentionInfo = mentionInfo,
+                    priority = priority
+                });
+
+                // Optional duplicate token as per original
+                __instance.MentionTokens.Add(new MentionToken
+                {
+                    mentionTokenType = MentionToken.MentionTokenType.ACHIEVEMENT,
+                    match = match,
+                    mentionInfo = mentionInfo,
+                    priority = priority
+                });
+
+                priority++;
+            }
+
+            return false; // Skip original method
+        }
+    }
+
+    [HarmonyPatch(typeof(MentionsProvider), nameof(MentionsProvider.Start))]
+    public static class AchievementMentionsTokenExpansionPatch
+    {
+        [HarmonyPrefix]
+        public static void Prefix(ref HashSet<char> ___ExpansionTokens)
+        {
+            ___ExpansionTokens = new HashSet<char>
+            {
+                '@',
+                '#',
+                ':',
+                '%',
+                '&',
+                '~'
+            };
+        }
+    }
