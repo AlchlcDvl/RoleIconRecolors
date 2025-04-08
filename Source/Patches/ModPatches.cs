@@ -6,6 +6,10 @@ using Server.Shared.Extensions;
 using Cinematics.Players;
 using Server.Shared.Cinematics.Data;
 using Server.Shared.Cinematics;
+using Mentions;
+using Mentions.Providers;
+using Services;
+using System.Collections.Generic;
 
 
 namespace FancyUI.Patches;
@@ -177,26 +181,113 @@ public static class PatchDefaultWinScreens
 [HarmonyPatch(typeof(RoleRevealCinematicPlayer), nameof(RoleRevealCinematicPlayer.SetRole))]
 public static class RoleRevealCinematicPlayerPatch
 {
-    public static bool Prefix(RoleRevealCinematicPlayer __instance, ref Role role)
-    {
-        if (!Constants.IconsInRoleReveal() || role == Role.NONE)
-            return true;
-
-        var newValue = $"<sprite=\"Cast\" name=\"Skin{__instance.roleRevealCinematic.skinId}\">{Service.Game.Cast.GetSkinName(__instance.roleRevealCinematic.skinId)}";
-        var text = __instance.l10n("CINE_ROLE_REVEAL_SKIN").Replace("%skin%", newValue);
-        __instance.skinTextPlayer.ShowText(text);
-
-        __instance.totalDuration = Tuning.ROLE_REVEAL_TIME;
-        __instance.silhouetteWrapper.gameObject.SetActive(true);
-        __instance.silhouetteWrapper.SwapWithSilhouette((int)role);
-
-        var newValue2 = role.GetTMPSprite() + role.ToColorizedDisplayString();
-        var text2 = __instance.l10n("CINE_ROLE_REVEAL_ROLE").Replace("%role%", newValue2);
-        __instance.roleTextPlayer.ShowText(text2);
-
-        if (Pepper.GetCurrentGameType() == GameType.Ranked)
-            __instance.playableDirector.Resume();
-
-        return false;
-    }
+		public static bool Prefix(RoleRevealCinematicPlayer __instance, ref Role role)
+		{
+			if (role == Role.NONE)
+			{
+				return true;
+			}
+			bool flag = Constants.IconsInRoleReveal();
+			string newValue = flag ? string.Format("<sprite=\"Cast\" name=\"Skin{0}\">{1}", __instance.roleRevealCinematic.skinId, Service.Game.Cast.GetSkinName(__instance.roleRevealCinematic.skinId)) : Service.Game.Cast.GetSkinName(__instance.roleRevealCinematic.skinId);
+			string text = __instance.l10n("CINE_ROLE_REVEAL_SKIN").Replace("%skin%", newValue);
+			__instance.skinTextPlayer.ShowText(text);
+			__instance.totalDuration = Tuning.ROLE_REVEAL_TIME;
+			__instance.silhouetteWrapper.gameObject.SetActive(true);
+			__instance.silhouetteWrapper.SwapWithSilhouette((int)role, true);
+			string newValue2 = flag ? (role.GetTMPSprite() + role.ToColorizedDisplayString(RoleRevealCinematicIdentityPatch.currentFaction)) : role.ToColorizedDisplayString(RoleRevealCinematicIdentityPatch.currentFaction);
+			newValue2 = newValue2.Replace("RoleIcons\"", "RoleIcons (" + ((role.GetFactionType(null) == RoleRevealCinematicIdentityPatch.currentFaction && Constants.CurrentStyle(null) == "Regular") ? "Regular" : Utils.FactionName(RoleRevealCinematicIdentityPatch.currentFaction, false, null)) + ")\"");
+			string text2 = __instance.l10n("CINE_ROLE_REVEAL_ROLE").Replace("%role%", newValue2);
+			__instance.roleTextPlayer.ShowText(text2);
+			if (Pepper.GetCurrentGameType() == GameType.Ranked)
+			{
+				__instance.playableDirector.Resume();
+			}
+			return false;
+		}
 }
+
+[HarmonyPatch(typeof(RoleRevealCinematicPlayer), nameof(RoleRevealCinematicPlayer.HandleOnMyIdentityChanged))]
+	public static class RoleRevealCinematicIdentityPatch
+	{
+		public static void Prefix(ref PlayerIdentityData playerIdentity)
+		{
+			currentFaction = playerIdentity.faction;
+		}
+
+		public static FactionType currentFaction;
+	}
+
+[HarmonyPatch(typeof(SharedMentionsProvider), nameof(SharedMentionsProvider.BuildAchievementMentions))]
+    public static class AchievementMentionsPatch
+    {
+        [HarmonyPrefix]
+        public static bool Prefix(SharedMentionsProvider __instance)
+        {
+            List<int> allAchievementIds = Service.Game.Achievement.GetAllAchievementIds();
+            int priority = 0;
+
+            foreach (int achievementId in allAchievementIds)
+            {
+                string title = __instance.l10n($"GUI_ACHIEVEMENT_TITLE_{achievementId}");
+                string match = $"~{title}";
+                string encodedText = $"[[~{achievementId}]]";
+                string highlightColor = "#FFBE00";
+
+                string styledTitle = __instance._useColors
+                    ? $"<color={highlightColor}><b>{title}</b></color>"
+                    : $"<b>{title}</b>";
+
+                string richText = $"{__instance.styleTagOpen}{__instance.styleTagFont}<link=\"~{achievementId}\">{styledTitle}</link>{__instance.styleTagClose}";
+
+                MentionInfo mentionInfo = new MentionInfo
+                {
+                    mentionInfoType = MentionInfo.MentionInfoType.ACHIEVEMENT,
+                    richText = richText,
+                    encodedText = encodedText,
+                    hashCode = richText.ToLower().GetHashCode(),
+                    humanText = $"~{title.ToLower()}"
+                };
+
+                __instance.MentionInfos.Add(mentionInfo);
+
+                __instance.MentionTokens.Add(new MentionToken
+                {
+                    mentionTokenType = MentionToken.MentionTokenType.ACHIEVEMENT,
+                    match = match,
+                    mentionInfo = mentionInfo,
+                    priority = priority
+                });
+
+                // Optional duplicate token as per original
+                __instance.MentionTokens.Add(new MentionToken
+                {
+                    mentionTokenType = MentionToken.MentionTokenType.ACHIEVEMENT,
+                    match = match,
+                    mentionInfo = mentionInfo,
+                    priority = priority
+                });
+
+                priority++;
+            }
+
+            return false; // Skip original method
+        }
+    }
+
+    [HarmonyPatch(typeof(MentionsProvider), nameof(MentionsProvider.Start))]
+    public static class AchievementMentionsTokenExpansionPatch
+    {
+        [HarmonyPrefix]
+        public static void Prefix(ref HashSet<char> ___ExpansionTokens)
+        {
+            ___ExpansionTokens = new HashSet<char>
+            {
+                '@',
+                '#',
+                ':',
+                '%',
+                '&',
+                '~'
+            };
+        }
+    }
