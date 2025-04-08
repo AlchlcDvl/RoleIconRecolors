@@ -177,26 +177,38 @@ public static class PatchDefaultWinScreens
 [HarmonyPatch(typeof(RoleRevealCinematicPlayer), nameof(RoleRevealCinematicPlayer.SetRole))]
 public static class RoleRevealCinematicPlayerPatch
 {
-    public static bool Prefix(RoleRevealCinematicPlayer __instance, ref Role role)
-    {
-        if (!Constants.IconsInRoleReveal() || role == Role.NONE)
-            return true;
-
-        var newValue = $"<sprite=\"Cast\" name=\"Skin{__instance.roleRevealCinematic.skinId}\">{Service.Game.Cast.GetSkinName(__instance.roleRevealCinematic.skinId)}";
-        var text = __instance.l10n("CINE_ROLE_REVEAL_SKIN").Replace("%skin%", newValue);
-        __instance.skinTextPlayer.ShowText(text);
-
-        __instance.totalDuration = Tuning.ROLE_REVEAL_TIME;
-        __instance.silhouetteWrapper.gameObject.SetActive(true);
-        __instance.silhouetteWrapper.SwapWithSilhouette((int)role);
-
-        var newValue2 = role.GetTMPSprite() + role.ToColorizedDisplayString();
-        var text2 = __instance.l10n("CINE_ROLE_REVEAL_ROLE").Replace("%role%", newValue2);
-        __instance.roleTextPlayer.ShowText(text2);
-
-        if (Pepper.GetCurrentGameType() == GameType.Ranked)
-            __instance.playableDirector.Resume();
-
-        return false;
-    }
+		public static bool Prefix(RoleRevealCinematicPlayer __instance, ref Role role)
+		{
+			if (role == Role.NONE)
+			{
+				return true;
+			}
+			bool flag = Constants.IconsInRoleReveal();
+			string newValue = flag ? string.Format("<sprite=\"Cast\" name=\"Skin{0}\">{1}", __instance.roleRevealCinematic.skinId, Service.Game.Cast.GetSkinName(__instance.roleRevealCinematic.skinId)) : Service.Game.Cast.GetSkinName(__instance.roleRevealCinematic.skinId);
+			string text = __instance.l10n("CINE_ROLE_REVEAL_SKIN").Replace("%skin%", newValue);
+			__instance.skinTextPlayer.ShowText(text);
+			__instance.totalDuration = Tuning.ROLE_REVEAL_TIME;
+			__instance.silhouetteWrapper.gameObject.SetActive(true);
+			__instance.silhouetteWrapper.SwapWithSilhouette((int)role, true);
+			string newValue2 = flag ? (role.GetTMPSprite() + role.ToColorizedDisplayString(RoleRevealCinematicIdentityPatch.currentFaction)) : role.ToColorizedDisplayString(RoleRevealCinematicIdentityPatch.currentFaction);
+			newValue2 = newValue2.Replace("RoleIcons\"", "RoleIcons (" + ((role.GetFactionType(null) == RoleRevealCinematicIdentityPatch.currentFaction && Constants.CurrentStyle(null) == "Regular") ? "Regular" : Utils.FactionName(RoleRevealCinematicIdentityPatch.currentFaction, false, null)) + ")\"");
+			string text2 = __instance.l10n("CINE_ROLE_REVEAL_ROLE").Replace("%role%", newValue2);
+			__instance.roleTextPlayer.ShowText(text2);
+			if (Pepper.GetCurrentGameType() == GameType.Ranked)
+			{
+				__instance.playableDirector.Resume();
+			}
+			return false;
+		}
 }
+
+[HarmonyPatch(typeof(RoleRevealCinematicPlayer), nameof(RoleRevealCinematicPlayer.HandleOnMyIdentityChanged))]
+	public static class RoleRevealCinematicIdentityPatch
+	{
+		public static void Prefix(RoleRevealCinematicPlayer __instance, ref PlayerIdentityData playerIdentity)
+		{
+			RoleRevealCinematicIdentityPatch.currentFaction = playerIdentity.faction;
+		}
+
+		public static FactionType currentFaction;
+	}
