@@ -194,7 +194,7 @@ public class SettingsAndTestingUI : UIController
 
     private void OpenTesting()
     {
-        Page = PackType.Settings;
+        Page = PackType.Testing;
         RefreshOptions();
     }
 

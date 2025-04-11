@@ -109,6 +109,13 @@ public class Fancy
     public static ToggleOption ShowOverlayAsJailor;
     public static ToggleOption IconsInRoleReveal;
 
+    public static FloatOption WoodShade;
+    public static FloatOption PaperShade;
+    public static FloatOption MetalShade;
+    public static FloatOption LeatherShade;
+    public static FloatOption FireShade;
+    public static FloatOption WaxShade;
+
     [LoadConfigs]
     public static void LoadConfigs()
     {
@@ -116,7 +123,7 @@ public class Fancy
         SelectedSilhouetteSet = new("SELECTED_SIL_SET", "Vanilla", PackType.SilhouetteSets, () => GetPackNames(PackType.SilhouetteSets), onChanged: x => TryLoadingSprites(x,
             PackType.SilhouetteSets));
 
-        SelectedUITheme = new("SELECTED_UI_THEME", UITheme.Default, PackType.RecoloredUI, useTranslations: true);
+        SelectedUITheme = new("SELECTED_UI_THEME", UITheme.Vanilla, PackType.RecoloredUI, useTranslations: true);
 
         MentionStyle1 = new("MENTION_STYLE_1", "Regular", PackType.IconPacks, () => GetOptions(ModType.Vanilla, true), _ => Constants.EnableIcons());
         MentionStyle2 = new("MENTION_STYLE_2", "Regular", PackType.IconPacks, () => GetOptions(ModType.BTOS2, true), _ => Constants.BTOS2Exists() && Constants.EnableIcons());
@@ -131,6 +138,13 @@ public class Fancy
         MainUIThemeWood = new("UI_WOOD", "#FFFFFF", PackType.RecoloredUI, _ => Constants.EnableCustomUI());
         MainUIThemeWax = new("UI_WAX", "#FFFFFF", PackType.RecoloredUI, _ => Constants.EnableCustomUI());
 
+        FireShade = new("FIRE_SHADE", 0, PackType.RecoloredUI, -100, 100, true, _ => Constants.EnableCustomUI());
+        PaperShade = new("PAPER_SHADE", 0, PackType.RecoloredUI, -100, 100, true, _ => Constants.EnableCustomUI());
+        MetalShade = new("METAL_SHADE", 0, PackType.RecoloredUI, -100, 100, true, _ => Constants.EnableCustomUI());
+        LeatherShade = new("LEATHER_SHADE", 0, PackType.RecoloredUI, -100, 100, true, _ => Constants.EnableCustomUI());
+        WoodShade = new("WOOD_SHADE", 0, PackType.RecoloredUI, -100, 100, true, _ => Constants.EnableCustomUI());
+        WaxShade = new("WAX_SHADE", 0, PackType.RecoloredUI, -100, 100, true, _ => Constants.EnableCustomUI());
+
         PlayerNumber = new("PLAYER_NUMBER", 0, PackType.IconPacks, 0, 15, true, _ => Constants.CustomNumbers());
 
         EasterEggChance = new("EE_CHANCE", 5, PackType.IconPacks, 0, 100, true, _ => Constants.EnableIcons());
@@ -139,11 +153,11 @@ public class Fancy
         CustomNumbers = new("CUSTOM_NUMBERS", false, PackType.IconPacks, _ => Constants.EnableIcons());
         AllEasterEggs = new("ALL_EE", false, PackType.IconPacks, _ => Constants.EnableIcons());
         PlayerPanelEasterEggs = new("PLAYER_PANEL_EE", false, PackType.IconPacks, _ => Constants.EnableIcons());
-        DumpSpriteSheets = new("DUMP_SHEETS", false, PackType.Settings);
-        DebugPackLoading = new("DEBUG_LOADING", false, PackType.Settings);
-        ShowOverlayWhenJailed = new("SHOW_TO_JAILED", true, PackType.Settings);
-        ShowOverlayAsJailor = new("SHOW_TO_JAILOR", false, PackType.Settings);
-        IconsInRoleReveal = new("ROLE_REVEAL_ICONS", true, PackType.Settings);
+        DumpSpriteSheets = new("DUMP_SHEETS", false, PackType.Testing);
+        DebugPackLoading = new("DEBUG_LOADING", false, PackType.Testing);
+        ShowOverlayWhenJailed = new("SHOW_TO_JAILED", true, PackType.Testing);
+        ShowOverlayAsJailor = new("SHOW_TO_JAILOR", false, PackType.Testing);
+        IconsInRoleReveal = new("ROLE_REVEAL_ICONS", true, PackType.Testing);
     }
 
     private static IEnumerable<string> GetPackNames(PackType type)

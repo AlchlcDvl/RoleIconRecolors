@@ -1,3 +1,5 @@
+using Home.Shared;
+
 namespace FancyUI;
 
 public static class Constants
@@ -38,19 +40,49 @@ public static class Constants
 
     public static float AnimationDuration() => Fancy.AnimationDuration.Value;
 
-    private static UITheme GetMainUIThemeType() => Fancy.SelectedUITheme.Value;
+    public static UITheme GetMainUIThemeType() => Fancy.SelectedUITheme.Value;
 
-    public static Color GetMainUIThemeWoodColor() => Fancy.MainUIThemeWood.Value.ToColor();
+   public static Color GetMainUIThemeWoodColor() => GetMainUIThemeType() switch
+    {
+        UITheme.Faction when Pepper.GetMyFaction() != FactionType.NONE
+            => Pepper.GetMyFaction().GetFactionColor().ToColor().ShadeColor((float)Fancy.WoodShade.Value / 100),
+        _ => Fancy.MainUIThemeWood.Value.ToColor(),
+    };
 
-    public static Color GetMainUIThemeMetalColor() => Fancy.MainUIThemeMetal.Value.ToColor();
+    public static Color GetMainUIThemeMetalColor() => GetMainUIThemeType() switch
+    {
+        UITheme.Faction when Pepper.GetMyFaction() != FactionType.NONE
+            => Pepper.GetMyFaction().GetFactionColor().ToColor().ShadeColor((float)Fancy.MetalShade.Value / 100),
+        _ => Fancy.MainUIThemeMetal.Value.ToColor(),
+    };
 
-    public static Color GetMainUIThemePaperColor() => Fancy.MainUIThemePaper.Value.ToColor();
+    public static Color GetMainUIThemePaperColor() => GetMainUIThemeType() switch
+    {
+        UITheme.Faction when Pepper.GetMyFaction() != FactionType.NONE
+            => Pepper.GetMyFaction().GetFactionColor().ToColor().ShadeColor((float)Fancy.PaperShade.Value / 100),
+        _ => Fancy.MainUIThemePaper.Value.ToColor(),
+    };
 
-    public static Color GetMainUIThemeLeatherColor() => Fancy.MainUIThemeLeather.Value.ToColor();
+    public static Color GetMainUIThemeLeatherColor() => GetMainUIThemeType() switch
+    {
+        UITheme.Faction when Pepper.GetMyFaction() != FactionType.NONE
+            => Pepper.GetMyFaction().GetFactionColor().ToColor().ShadeColor((float)Fancy.LeatherShade.Value / 100),
+        _ => Fancy.MainUIThemeLeather.Value.ToColor(),
+    };
 
-    public static Color GetMainUIThemeFireColor() => Fancy.MainUIThemeFire.Value.ToColor();
+    public static Color GetMainUIThemeFireColor() => GetMainUIThemeType() switch
+    {
+        UITheme.Faction when Pepper.GetMyFaction() != FactionType.NONE
+            => Pepper.GetMyFaction().GetFactionColor().ToColor().ShadeColor((float)Fancy.FireShade.Value / 100),
+        _ => Fancy.MainUIThemeFire.Value.ToColor(),
+    };
 
-    public static Color GetMainUIThemeWaxColor() => Fancy.MainUIThemeWax.Value.ToColor();
+    public static Color GetMainUIThemeWaxColor() => GetMainUIThemeType() switch
+    {
+        UITheme.Faction when Pepper.GetMyFaction() != FactionType.NONE
+            => Pepper.GetMyFaction().GetFactionColor().ToColor().ShadeColor((float)Fancy.WaxShade.Value / 100),
+        _ => Fancy.MainUIThemeWax.Value.ToColor(),
+    };
 
     public static int PlayerNumber() => (int)Fancy.PlayerNumber.Value;
 
@@ -60,7 +92,7 @@ public static class Constants
 
     public static bool EnableSwaps() => CurrentSet() != "Vanilla";
 
-    public static bool EnableCustomUI() => GetMainUIThemeType() != UITheme.Default;
+    public static bool EnableCustomUI() => GetMainUIThemeType() != UITheme.Vanilla;
 
     public static bool BTOS2Exists() => ModStates.IsEnabled("curtis.tuba.better.tos2");
 
