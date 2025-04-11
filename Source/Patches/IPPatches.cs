@@ -911,24 +911,10 @@ public static class NecroPassPatches
     }
 }
 
-[HarmonyPatch(typeof(MentionsProvider), nameof(MentionsProvider.ProcessSpeakerName)), HarmonyPriority(Priority.VeryLow)]
-public static class FixSpeakerIcons
+[HarmonyPatch(typeof(MentionsProvider))]
+public static class MentionsProviderPatches
 {
-    public static void Postfix(int position, ref string __result)
-    {
-        if (!Constants.EnableIcons())
-            return;
-
-        if (Utils.GetRoleAndFaction(position, out var tuple))
-            __result = __result.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(tuple.Item2)})\"");
-        else if (position is 69 or 70 or 71)
-            __result = __result.Replace("RoleIcons\"", "RoleIcons (Regular)\"");
-    }
-}
-
-[HarmonyPatch(typeof(MentionsProvider), nameof(MentionsProvider.ProcessAdvancedRoleMention)), HarmonyPriority(Priority.Low)]
-public static class OverwriteDecodedText
-{
+    [HarmonyPatch(nameof(MentionsProvider.ProcessAdvancedRoleMention)), HarmonyPriority(Priority.Low)]
     public static bool Prefix(MentionsProvider __instance, Match roleMatch, ref string encodedText, ref string mention, ref string __result)
     {
         if (!Constants.EnableIcons())
@@ -971,6 +957,21 @@ public static class OverwriteDecodedText
         __result = encodedText.Replace(mention, text3);
         return false;
     }
+
+    [HarmonyPatch(nameof(MentionsProvider.ProcessSpeakerName)), HarmonyPriority(Priority.VeryLow)]
+    public static void Postfix(int position, ref string __result)
+    {
+        if (!Constants.EnableIcons())
+            return;
+
+        if (Utils.GetRoleAndFaction(position, out var tuple))
+            __result = __result.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(tuple.Item2)})\"");
+        else if (position is 69 or 70 or 71)
+            __result = __result.Replace("RoleIcons\"", "RoleIcons (Regular)\"");
+    }
+
+    [HarmonyPatch(nameof(MentionsProvider.Start))] // Achievements mentions
+    public static void Prefix(ref HashSet<char> ___ExpansionTokens) => ___ExpansionTokens = [ '@', '#', ':', '%', '&', '~' ];
 }
 
 // This whole class is a mess but DO NOT TOUCH
