@@ -249,15 +249,6 @@ public static class AchievementMentionsPatch
                 mentionInfo = mentionInfo,
                 priority = i
             });
-
-            // Optional duplicate token as per original
-            __instance.MentionTokens.Add(new MentionToken
-            {
-                mentionTokenType = MentionToken.MentionTokenType.ACHIEVEMENT,
-                match = match,
-                mentionInfo = mentionInfo,
-                priority = i
-            });
         }
 
         return false; // Skip original method

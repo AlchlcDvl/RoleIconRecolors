@@ -971,7 +971,7 @@ public static class MentionsProviderPatches
     }
 
     [HarmonyPatch(nameof(MentionsProvider.Start))] // Achievements mentions
-    public static void Prefix(ref HashSet<char> ___ExpansionTokens) => ___ExpansionTokens = [ '@', '#', ':', '%', '&', '~' ];
+    public static void Prefix(ref HashSet<char> ___ExpansionTokens) => ___ExpansionTokens.Add('~');
 }
 
 // This whole class is a mess but DO NOT TOUCH
