@@ -14,7 +14,7 @@ public enum PackType : byte
     RecoloredUI,
     SilhouetteSets,
     MiscRoleCustomisation,
-    Settings
+    Testing
 }
 
 public enum ColorType : byte
@@ -29,8 +29,7 @@ public enum ColorType : byte
 
 public enum UITheme : byte
 {
-    Default,
-    Role,
+    Vanilla,
     Faction,
     Custom
 }

@@ -85,7 +85,7 @@ public class FancyUI : UIController
 
     private void OpenSettings()
     {
-        Page = PackType.Settings;
+        Page = PackType.Testing;
 
         if (SettingsAndTestingUI.Instance)
         {

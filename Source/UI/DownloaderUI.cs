@@ -119,7 +119,7 @@ public class DownloaderUI : UIController
     public void GoBack()
     {
         gameObject.SetActive(false);
-        FancyUI.Instance.Page = PackType.Settings;
+        FancyUI.Instance.Page = PackType.Testing;
         FancyUI.Instance.gameObject.SetActive(true);
     }
 
