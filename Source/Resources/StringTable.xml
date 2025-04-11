@@ -71,8 +71,8 @@
     <Entry key="FANCY_SHOW_TO_JAILOR_NAME">Show Jail Overlay When Jailing</Entry>
     <Entry key="FANCY_SHOW_TO_JAILOR_DESC">When you are jailing someone as the Jailor, this option makes the old jailor overlay appear on your screen.</Entry>
 
-    <Entry key="FANCY_ROLE_REVEAL_ICONS_NAME">Icons In Role Reveal Cinematic</Entry>
-    <Entry key="FANCY_ROLE_REVEAL_ICONS_DESC">Shows the character headshot and role icon at their respective locations during the role reveal cinematic.</Entry>
+    <Entry key="FANCY_ROLE_REVEAL_ICONS_NAME">Fancy Up Role Reveal Cinematic</Entry>
+    <Entry key="FANCY_ROLE_REVEAL_ICONS_DESC">Shows the character headshot and role icon at their respective locations during the role reveal cinematic. It will also recolor the colored role name in the cinematic with your current faction (supports Pandora, Compliance, and Teams).</Entry>
 
 
     <Entry key="FANCY_DEFAULT">Default</Entry>
