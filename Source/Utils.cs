@@ -582,7 +582,10 @@ public static class Utils
 
     public static void SetImageColor(this Image img, ColorType type, Color? color = null, float a = 1f)
     {
-        var mat = img.material = new(Grayscale);
+        if (img.material?.name != "GrayscaleMaterial")
+            img.material = new(Grayscale);
+
+        var mat = img.material;
         var color2 = type switch
         {
             ColorType.Metal => Constants.GetMainUIThemeMetalColor(),
