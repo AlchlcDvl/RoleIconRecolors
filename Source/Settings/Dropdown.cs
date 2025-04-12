@@ -16,9 +16,6 @@ public class DropdownSetting : Setting
         if (Option == null)
             return;
 
-        Dropdown.ClearOptions();
-        Dropdown.AddOptions(Option.DisplayOptions().Select(x => Option.UseTranslations ? l10n($"FANCY_{x.ToUpper()}") : x).ToList());
-        Dropdown.SetValueWithoutNotify(Option.GetInt());
         Dropdown.onValueChanged.AddListener(OnValueChanged);
         Dropdown.onValueChanged.AddListener(_ => SettingsAndTestingUI.Instance.RefreshOptions());
     }
@@ -26,8 +23,18 @@ public class DropdownSetting : Setting
     public void OnValueChanged(int index)
     {
         var options = Option.Options();
-        Option.SetString(options.ElementAtOrDefault(index) ?? options.FirstOrDefault() ?? "Error");
+        Option.SetString(options[index] ?? options.FirstOrDefault() ?? "Error");
     }
 
     public override bool SetActive() => Option.SetActive() && Option.Page == SettingsAndTestingUI.Instance.Page;
+
+    public override void Refresh()
+    {
+        if (Option == null)
+            return;
+
+        Dropdown.ClearOptions();
+        Dropdown.AddOptions(Option.DisplayOptions().Select(x => Option.UseTranslations ? l10n($"FANCY_{x.ToUpper()}") : x).ToList());
+        Dropdown.SetValueWithoutNotify(Option.GetInt());
+    }
 }

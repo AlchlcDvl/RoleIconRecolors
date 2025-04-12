@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 4015038264
+CRC: 4169620545
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 0c2dc02cfb48a5f2906e9d4d7d274670
+    Hash: 5274d7106de901d705d9cb260e36e226
   TypeTreeHash:
     serializedVersion: 2
     Hash: 89c7f6d629771a0fed8e491f2a4febe2
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 0c2dc02cfb48a5f2906e9d4d7d274670
+    Hash: 5274d7106de901d705d9cb260e36e226
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -159,16 +159,21 @@ Assets:
 - Assets/Assets/PackBackground.png
 - Assets/Assets/RoleCard_Main_2.png
 - Assets/Assets/ClosedChest.png
+- Assets/Assets/Dropdown_BG.png
+- Assets/Assets/ImageFlipperShader.shader
 - Assets/Assets/Input.png
 - Assets/Assets/AbilitySlots_2.png
+- Assets/Assets/Option_BG.png
 - Assets/Assets/OpenChest.png
 - Assets/Assets/AbilitySlots_1.png
+- Assets/Assets/ImageFlipperMaterial.mat
 - Assets/Assets/Button_VolumeHandle.png
 - Assets/Assets/ButtonBlue.png
 - Assets/Assets/RoleList_Closed_M.png
 - Assets/Assets/AbilitySlots_4.png
 - Assets/Assets/ButtonGreen.png
 - Assets/Assets/Background.png
+- Assets/Assets/OptionSelect_BG.png
 - Assets/Assets/RoleList_Closed_W.png
 - Assets/Assets/Close.png
 - Assets/Assets/Back.png

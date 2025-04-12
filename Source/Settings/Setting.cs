@@ -11,5 +11,7 @@ public abstract class Setting : UIController
         Background = transform.Find("Background");
     }
 
+    public virtual void Refresh() {}
+
     public abstract bool SetActive();
 }

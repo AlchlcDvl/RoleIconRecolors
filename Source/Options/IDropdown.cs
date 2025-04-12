@@ -2,7 +2,7 @@ namespace FancyUI.Options;
 
 public interface IDropdown
 {
-    Func<IEnumerable<string>> Options { get; }
+    Func<string[]> Options { get; }
     Func<string, string> Mapping { get; }
     PackType Page { get; }
     string ValueString { get; }

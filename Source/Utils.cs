@@ -671,14 +671,9 @@ public static class Utils
         return text2;
     }
 
-    public static Color ShadeColor(this Color color, float Darkness = 0)
+    public static Color ShadeColor(this Color color, float strength = 0)
     {
-        bool IsDarker = Darkness >= 0; 
-        if (!IsDarker) Darkness = -Darkness;
-        float Weight = IsDarker ? 0 : Darkness; 
-        float R = (color.r + Weight) / (Darkness + 1);
-        float G = (color.g + Weight) / (Darkness + 1);
-        float B = (color.b + Weight) / (Darkness + 1);
-        return new Color(R, G, B, color.a);
+        strength = Mathf.Clamp(strength, -1f, 1f);
+        return Color.Lerp(color, strength < 0 ? Color.white : Color.black, Mathf.Abs(strength));
     }
 }

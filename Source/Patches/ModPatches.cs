@@ -254,3 +254,21 @@ public static class AchievementMentionsPatch
         return false; // Skip original method
     }
 }
+
+[HarmonyPatch(typeof(Pepper), nameof(Pepper.GetMyFaction))]
+public static class FixMyFaction
+{
+    public static bool Prefix(ref FactionType __result)
+    {
+        try
+        {
+            __result = Service.Game.Sim.simulation.myIdentity.Data.faction;
+        }
+        catch
+        {
+            __result = FactionType.NONE; // Because the base game dislikes null checks
+        }
+
+        return false;
+    }
+}

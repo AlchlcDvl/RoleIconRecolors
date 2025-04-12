@@ -221,7 +221,10 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                         sprites.Add(sprite);
                     }
                     else
+                    {
                         Fancy.Instance.Warning($"NO NUMBER ICON FOR {i}?!");
+                        continue;
+                    }
 
                     dict.Add($"PlayerNumbers_{i}", $"PlayerNumbers_{i}");
                 }
@@ -254,7 +257,10 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                         sprites.Add(sprite);
                     }
                     else
+                    {
                         Fancy.Instance.Warning($"NO EMOJI FOR {i}?!");
+                        continue;
+                    }
 
                     dict.Add($"Emoji{i}", $"Emoji{i}");
                 }

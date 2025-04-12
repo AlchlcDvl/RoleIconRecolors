@@ -73,7 +73,7 @@
 
     <Entry key="FANCY_WOOD_SHADE_NAME">Faction UI Theme Wood Shading</Entry>
     <Entry key="FANCY_WOOD_SHADE_DESC">Dictates how dark or light the faction wood color will be.</Entry>
-    
+
     <Entry key="FANCY_DUMP_SHEETS_NAME">Dump Sprite Sheets</Entry>
     <Entry key="FANCY_DUMP_SHEETS_DESC">Toggles whether game sprite sheets are dumped so pack debugging is possible.</Entry>
 
@@ -90,11 +90,13 @@
     <Entry key="FANCY_SHOW_TO_JAILOR_DESC">When you are jailing someone as the Jailor, this option makes the old jailor overlay appear on your screen.</Entry>
 
     <Entry key="FANCY_ROLE_REVEAL_ICONS_NAME">Fancy Up Role Reveal Cinematic</Entry>
-    <Entry key="FANCY_ROLE_REVEAL_ICONS_DESC">Shows the character headshot and role icon at their respective locations during the role reveal cinematic. It will also recolor the colored role name in the cinematic with your current faction (supports Pandora, Compliance, and Teams).</Entry>
+    <Entry key="FANCY_ROLE_REVEAL_ICONS_DESC">Shows the character head shot and role icon at their respective locations during the role reveal cinematic. It will also recolor the colored role name in the cinematic with your current faction (supports Pandora, Compliance, and Teams).</Entry>
 
+    <Entry key="FANCY_SELECTED_TESTING_FACTION_NAME">Testing Faction</Entry>
+    <Entry key="FANCY_SELECTED_TESTING_FACTION_DESC">Modifies the testing UI as per the selected faction as if you were that faction in game.</Entry>
 
+    <Entry key="FANCY_VANILLA">Vanilla</Entry>
     <Entry key="FANCY_DEFAULT">Default</Entry>
-    <Entry key="FANCY_ROLE">Role</Entry>
     <Entry key="FANCY_FACTION">Faction</Entry>
     <Entry key="FANCY_CUSTOM">Custom</Entry>
 
@@ -120,4 +122,32 @@
 
     <Entry key="FANCY_OPEN_LINK">Open Link</Entry>
     <Entry key="FANCY_DOWNLOAD_PACK">Download %pack%</Entry>
+
+    <Entry key="FANCY_NONE">None</Entry>
+    <Entry key="FANCY_TOWN">Town</Entry>
+    <Entry key="FANCY_COVEN">Coven</Entry>
+    <Entry key="FANCY_SERIALKILLER">Serial Killer</Entry>
+    <Entry key="FANCY_ARSONIST">Arsonist</Entry>
+    <Entry key="FANCY_WEREWOLF">Werewolf</Entry>
+    <Entry key="FANCY_SHROUD">Shroud</Entry>
+    <Entry key="FANCY_APOCALYPSE">Apocalypse</Entry>
+    <Entry key="FANCY_EXECUTIONER">Executioner</Entry>
+    <Entry key="FANCY_JESTER">Jester</Entry>
+    <Entry key="FANCY_PIRATE">Pirate</Entry>
+    <Entry key="FANCY_DOOMSAYER">Doomsayer</Entry>
+    <Entry key="FANCY_VAMPIRE">Vampire</Entry>
+    <Entry key="FANCY_CURSED_SOUL">Cursed Soul</Entry>
+    <Entry key="FANCY_33">Jackal</Entry>
+    <Entry key="FANCY_34">Frogs</Entry>
+    <Entry key="FANCY_35">Lions</Entry>
+    <Entry key="FANCY_36">Hawks</Entry>
+    <Entry key="FANCY_37">Cannibal</Entry>
+    <Entry key="FANCY_38">Judge</Entry>
+    <Entry key="FANCY_39">Auditor</Entry>
+    <Entry key="FANCY_40">Inquisitor</Entry>
+    <Entry key="FANCY_41">Starspawn</Entry>
+    <Entry key="FANCY_42">Egotist</Entry>
+    <Entry key="FANCY_43">Pandora</Entry>
+    <Entry key="FANCY_44">Compliance</Entry>
+    <Entry key="FANCY_250">Lovers</Entry>
 </StringTable>

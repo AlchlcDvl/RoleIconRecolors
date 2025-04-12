@@ -9,7 +9,7 @@ public class Fancy
     {
         Instance = ModSingleton<Fancy>.Instance!;
 
-        Instance.Message("Fancifying...", true);
+        Instance.Message("Fancying...", true);
 
         Assets = Instance.Assets;
 
@@ -116,9 +116,18 @@ public class Fancy
     public static FloatOption FireShade;
     public static FloatOption WaxShade;
 
+    public static EnumDropdownOption<FactionType> SelectTestingFaction;
+    public static EnumDropdownOption<Role> SelectTestingRole; // TODO: Implement this
+
+    private static FactionType[] VanillaFactions;
+    private static FactionType[] BTOS2Factions;
+
     [LoadConfigs]
     public static void LoadConfigs()
     {
+        VanillaFactions = [.. GeneralUtils.GetEnumValues<FactionType>().Except([FactionType.UNKNOWN])];
+        BTOS2Factions = [.. AccessTools.GetDeclaredFields(typeof(Btos2Faction)).Select(x => (FactionType)x.GetRawConstantValue())];
+
         SelectedIconPack = new("SELECTED_ICON_PACK", "Vanilla", PackType.IconPacks, () => GetPackNames(PackType.IconPacks), onChanged: x => TryLoadingSprites(x, PackType.IconPacks));
         SelectedSilhouetteSet = new("SELECTED_SIL_SET", "Vanilla", PackType.SilhouetteSets, () => GetPackNames(PackType.SilhouetteSets), onChanged: x => TryLoadingSprites(x,
             PackType.SilhouetteSets));
@@ -131,21 +140,19 @@ public class Fancy
         FactionOverride1 = new("FACTION_OVERRIDE_1", "None", PackType.IconPacks, () => GetOptions(ModType.Vanilla, false), _ => Constants.EnableIcons());
         FactionOverride2 = new("FACTION_OVERRIDE_2", "None", PackType.IconPacks, () => GetOptions(ModType.BTOS2, false), _ => Constants.BTOS2Exists() && Constants.EnableIcons());
 
-        MainUIThemeFire = new("UI_FIRE", "#FFFFFF", PackType.RecoloredUI, _ => Constants.EnableCustomUI());
-        MainUIThemePaper = new("UI_PAPER", "#FFFFFF", PackType.RecoloredUI, _ => Constants.EnableCustomUI());
-        MainUIThemeMetal = new("UI_METAL", "#FFFFFF", PackType.RecoloredUI, _ => Constants.EnableCustomUI());
-        MainUIThemeLeather = new("UI_LEATHER", "#FFFFFF", PackType.RecoloredUI, _ => Constants.EnableCustomUI());
-        MainUIThemeWood = new("UI_WOOD", "#FFFFFF", PackType.RecoloredUI, _ => Constants.EnableCustomUI());
-        MainUIThemeWax = new("UI_WAX", "#FFFFFF", PackType.RecoloredUI, _ => Constants.EnableCustomUI());
+        MainUIThemeFire = new("UI_FIRE", "#FFFFFF", PackType.RecoloredUI, _ => Constants.GetMainUIThemeType() == UITheme.Custom);
+        MainUIThemePaper = new("UI_PAPER", "#FFFFFF", PackType.RecoloredUI, _ => Constants.GetMainUIThemeType() == UITheme.Custom);
+        MainUIThemeMetal = new("UI_METAL", "#FFFFFF", PackType.RecoloredUI, _ => Constants.GetMainUIThemeType() == UITheme.Custom);
+        MainUIThemeLeather = new("UI_LEATHER", "#FFFFFF", PackType.RecoloredUI, _ => Constants.GetMainUIThemeType() == UITheme.Custom);
+        MainUIThemeWood = new("UI_WOOD", "#FFFFFF", PackType.RecoloredUI, _ => Constants.GetMainUIThemeType() == UITheme.Custom);
+        MainUIThemeWax = new("UI_WAX", "#FFFFFF", PackType.RecoloredUI, _ => Constants.GetMainUIThemeType() == UITheme.Custom);
 
-        FireShade = new("FIRE_SHADE", 0, PackType.RecoloredUI, -100, 100, true, _ => Constants.EnableCustomUI());
-        PaperShade = new("PAPER_SHADE", 0, PackType.RecoloredUI, -100, 100, true, _ => Constants.EnableCustomUI());
-        MetalShade = new("METAL_SHADE", 0, PackType.RecoloredUI, -100, 100, true, _ => Constants.EnableCustomUI());
-        LeatherShade = new("LEATHER_SHADE", 0, PackType.RecoloredUI, -100, 100, true, _ => Constants.EnableCustomUI());
-        WoodShade = new("WOOD_SHADE", 0, PackType.RecoloredUI, -100, 100, true, _ => Constants.EnableCustomUI());
-        WaxShade = new("WAX_SHADE", 0, PackType.RecoloredUI, -100, 100, true, _ => Constants.EnableCustomUI());
-
-        PlayerNumber = new("PLAYER_NUMBER", 0, PackType.IconPacks, 0, 15, true, _ => Constants.CustomNumbers());
+        FireShade = new("FIRE_SHADE", 0, PackType.RecoloredUI, -100, 100, true, _ => Constants.GetMainUIThemeType() == UITheme.Faction);
+        PaperShade = new("PAPER_SHADE", 0, PackType.RecoloredUI, -100, 100, true, _ => Constants.GetMainUIThemeType() == UITheme.Faction);
+        MetalShade = new("METAL_SHADE", 0, PackType.RecoloredUI, -100, 100, true, _ => Constants.GetMainUIThemeType() == UITheme.Faction);
+        LeatherShade = new("LEATHER_SHADE", 0, PackType.RecoloredUI, -100, 100, true, _ => Constants.GetMainUIThemeType() == UITheme.Faction);
+        WoodShade = new("WOOD_SHADE", 0, PackType.RecoloredUI, -100, 100, true, _ => Constants.GetMainUIThemeType() == UITheme.Faction);
+        WaxShade = new("WAX_SHADE", 0, PackType.RecoloredUI, -100, 100, true, _ => Constants.GetMainUIThemeType() == UITheme.Faction);
 
         EasterEggChance = new("EE_CHANCE", 5, PackType.IconPacks, 0, 100, true, _ => Constants.EnableIcons());
         AnimationDuration = new("ANIM_DURATION", 2, PackType.SilhouetteSets, 0.5f, 10, setActive: _ => Constants.EnableSwaps());
@@ -153,25 +160,31 @@ public class Fancy
         CustomNumbers = new("CUSTOM_NUMBERS", false, PackType.IconPacks, _ => Constants.EnableIcons());
         AllEasterEggs = new("ALL_EE", false, PackType.IconPacks, _ => Constants.EnableIcons());
         PlayerPanelEasterEggs = new("PLAYER_PANEL_EE", false, PackType.IconPacks, _ => Constants.EnableIcons());
+
+        PlayerNumber = new("PLAYER_NUMBER", 0, PackType.Testing, 0, 15, true, _ => Constants.CustomNumbers());
         DumpSpriteSheets = new("DUMP_SHEETS", false, PackType.Testing);
         DebugPackLoading = new("DEBUG_LOADING", false, PackType.Testing);
         ShowOverlayWhenJailed = new("SHOW_TO_JAILED", true, PackType.Testing);
         ShowOverlayAsJailor = new("SHOW_TO_JAILOR", false, PackType.Testing);
         IconsInRoleReveal = new("ROLE_REVEAL_ICONS", true, PackType.Testing);
+        SelectTestingFaction = new("SELECTED_TESTING_FACTION", FactionType.NONE, PackType.Testing, useTranslations: true, values:
+            () => SettingsAndTestingUI.Instance?.IsBTOS2 == true ? BTOS2Factions : VanillaFactions);
     }
 
-    private static IEnumerable<string> GetPackNames(PackType type)
+    private static string[] GetPackNames(PackType type)
     {
-        yield return "Vanilla";
+        var result = new List<string>() { "Vanilla" };
 
         foreach (var dir in Directory.EnumerateDirectories(Path.Combine(Instance.ModPath, type.ToString())))
         {
             if (!dir.ContainsAny("Vanilla", "BTOS2"))
-                yield return dir.FancySanitisePath();
+                result.Add(dir.FancySanitisePath());
         }
+
+        return [.. result];
     }
 
-    private static IEnumerable<string> GetOptions(ModType mod, bool mentionStyle)
+    private static string[] GetOptions(ModType mod, bool mentionStyle)
     {
         try
         {
@@ -209,7 +222,7 @@ public class Fancy
             else
                 result.Remove("Regular");
 
-            return result;
+            return [.. result];
         }
         catch
         {

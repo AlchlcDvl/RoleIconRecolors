@@ -31,7 +31,7 @@ public static class Constants
     public static bool ShowOverlayWhenJailed() => Fancy.ShowOverlayWhenJailed.Value;
 
     public static bool ShowOverlayAsJailor() => Fancy.ShowOverlayAsJailor.Value;
-    
+
     public static bool IconsInRoleReveal() => Fancy.IconsInRoleReveal.Value;
 
     public static bool PackDebug() => Fancy.DebugPackLoading.Value;
@@ -42,45 +42,59 @@ public static class Constants
 
     public static UITheme GetMainUIThemeType() => Fancy.SelectedUITheme.Value;
 
-   public static Color GetMainUIThemeWoodColor() => GetMainUIThemeType() switch
+    public static FactionType GetSelectedFaction() => Fancy.SelectTestingFaction.Value;
+
+    public static Color GetMainUIThemeWoodColor() => GetMainUIThemeType() switch
     {
+        UITheme.Faction when GetSelectedFaction() != FactionType.NONE
+            => GetSelectedFaction().GetFactionColor().ToColor().ShadeColor(Fancy.WoodShade.Value / 100f),
         UITheme.Faction when Pepper.GetMyFaction() != FactionType.NONE
-            => Pepper.GetMyFaction().GetFactionColor().ToColor().ShadeColor((float)Fancy.WoodShade.Value / 100),
+            => Pepper.GetMyFaction().GetFactionColor().ToColor().ShadeColor(Fancy.WoodShade.Value / 100f),
         _ => Fancy.MainUIThemeWood.Value.ToColor(),
     };
 
     public static Color GetMainUIThemeMetalColor() => GetMainUIThemeType() switch
     {
+        UITheme.Faction when GetSelectedFaction() != FactionType.NONE
+            => GetSelectedFaction().GetFactionColor().ToColor().ShadeColor(Fancy.MetalShade.Value / 100f),
         UITheme.Faction when Pepper.GetMyFaction() != FactionType.NONE
-            => Pepper.GetMyFaction().GetFactionColor().ToColor().ShadeColor((float)Fancy.MetalShade.Value / 100),
+            => Pepper.GetMyFaction().GetFactionColor().ToColor().ShadeColor(Fancy.MetalShade.Value / 100f),
         _ => Fancy.MainUIThemeMetal.Value.ToColor(),
     };
 
     public static Color GetMainUIThemePaperColor() => GetMainUIThemeType() switch
     {
+        UITheme.Faction when GetSelectedFaction() != FactionType.NONE
+            => GetSelectedFaction().GetFactionColor().ToColor().ShadeColor(Fancy.PaperShade.Value / 100f),
         UITheme.Faction when Pepper.GetMyFaction() != FactionType.NONE
-            => Pepper.GetMyFaction().GetFactionColor().ToColor().ShadeColor((float)Fancy.PaperShade.Value / 100),
+            => Pepper.GetMyFaction().GetFactionColor().ToColor().ShadeColor(Fancy.PaperShade.Value / 100f),
         _ => Fancy.MainUIThemePaper.Value.ToColor(),
     };
 
     public static Color GetMainUIThemeLeatherColor() => GetMainUIThemeType() switch
     {
+        UITheme.Faction when GetSelectedFaction() != FactionType.NONE
+            => GetSelectedFaction().GetFactionColor().ToColor().ShadeColor(Fancy.LeatherShade.Value / 100f),
         UITheme.Faction when Pepper.GetMyFaction() != FactionType.NONE
-            => Pepper.GetMyFaction().GetFactionColor().ToColor().ShadeColor((float)Fancy.LeatherShade.Value / 100),
+            => Pepper.GetMyFaction().GetFactionColor().ToColor().ShadeColor(Fancy.LeatherShade.Value / 100f),
         _ => Fancy.MainUIThemeLeather.Value.ToColor(),
     };
 
     public static Color GetMainUIThemeFireColor() => GetMainUIThemeType() switch
     {
+        UITheme.Faction when GetSelectedFaction() != FactionType.NONE
+            => GetSelectedFaction().GetFactionColor().ToColor().ShadeColor(Fancy.FireShade.Value / 100f),
         UITheme.Faction when Pepper.GetMyFaction() != FactionType.NONE
-            => Pepper.GetMyFaction().GetFactionColor().ToColor().ShadeColor((float)Fancy.FireShade.Value / 100),
+            => Pepper.GetMyFaction().GetFactionColor().ToColor().ShadeColor(Fancy.FireShade.Value / 100f),
         _ => Fancy.MainUIThemeFire.Value.ToColor(),
     };
 
     public static Color GetMainUIThemeWaxColor() => GetMainUIThemeType() switch
     {
+        UITheme.Faction when GetSelectedFaction() != FactionType.NONE
+            => GetSelectedFaction().GetFactionColor().ToColor().ShadeColor(Fancy.WaxShade.Value / 100f),
         UITheme.Faction when Pepper.GetMyFaction() != FactionType.NONE
-            => Pepper.GetMyFaction().GetFactionColor().ToColor().ShadeColor((float)Fancy.WaxShade.Value / 100),
+            => Pepper.GetMyFaction().GetFactionColor().ToColor().ShadeColor(Fancy.WaxShade.Value / 100f),
         _ => Fancy.MainUIThemeWax.Value.ToColor(),
     };
 

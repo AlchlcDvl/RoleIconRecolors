@@ -166,7 +166,7 @@ public static class Btos2Faction
     public const FactionType Frogs = (FactionType)34;
     public const FactionType Lions = (FactionType)35;
     public const FactionType Hawks = (FactionType)36;
-    // Faction 37 is a hidden thing that I'm not making public ;)
+    public const FactionType Cannibal = (FactionType)37;
     public const FactionType Judge = (FactionType)38;
     public const FactionType Auditor = (FactionType)39;
     public const FactionType Inquisitor = (FactionType)40;

@@ -3,9 +3,7 @@
 .qodo/
 bin/
 obj/
-
 TODO.txt
-
 *.exe
 Source/Lib/Legacy.dll
 Ignore.*

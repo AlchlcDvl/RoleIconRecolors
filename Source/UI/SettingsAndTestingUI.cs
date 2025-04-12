@@ -16,6 +16,7 @@ public class SettingsAndTestingUI : UIController
     private StringInputSetting InputTemplate { get; set; }
 
     private Transform RoleCard { get; set; }
+    private Transform BookPanel { get; set; }
 
     private TextMeshProUGUI RoleText { get; set; }
     private TextMeshProUGUI NameText { get; set; }
@@ -33,9 +34,45 @@ public class SettingsAndTestingUI : UIController
     private Image EffectWood { get; set; }
     private Image EffectMetal { get; set; }
 
-    private bool IsBTOS2 { get; set; }
+    private Image BookPaper { get; set; }
+    private Image BookLeather { get; set; }
+    private Image BookCorners { get; set; }
+    private Image PlayerPanelButton { get; set; }
 
-    public PackType Page { get; set; }
+    private Image SwapIcon { get; set; }
+
+    private bool isBTOS2;
+    public bool IsBTOS2
+    {
+        get => isBTOS2;
+        set
+        {
+            isBTOS2 = value;
+            RefreshOptions();
+        }
+    }
+
+    private bool otherUI;
+    private bool OtherUI
+    {
+        get => otherUI;
+        set
+        {
+            otherUI = value;
+            RefreshOptions();
+        }
+    }
+
+    private PackType page;
+    public PackType Page
+    {
+        get => page;
+        set
+        {
+            page = value;
+            RefreshOptions();
+        }
+    }
 
     private readonly List<GameObject> ButtonGOs = [];
     private readonly List<Image> ButtonImages = [];
@@ -54,9 +91,6 @@ public class SettingsAndTestingUI : UIController
 
     private const string DefaultRoleText = "<sprite=\"%mod%RoleIcons (%type%)\" name=\"Role%roleInt%\"><b>%roleName%</b>";
     private const string DefaultNameText = "<sprite=\"PlayerNumbers\" name=\"PlayerNumbers_%num%\"><b>Giles Corey</b>";
-    private const string DefaultType = "Regular";
-    private const string DefaultRoleInt = "241";
-    private const string DefaultRoleName = "Hidden";
 
     public void Awake()
     {
@@ -67,6 +101,7 @@ public class SettingsAndTestingUI : UIController
         Animator.AddComponent<HoverEffect>()!.NonLocalizedString = "This Is Your Animator";
 
         RoleCard = transform.FindRecursive("RoleCard");
+        BookPanel = transform.FindRecursive("Book");
 
         ButtonTemplate = RoleCard.EnsureComponent<RoleCardIcon>("ButtonTemplate");
 
@@ -74,6 +109,11 @@ public class SettingsAndTestingUI : UIController
         EffectMetal = RoleCard.GetComponent<Image>("Effect")!;
         SpecialWood = SpecialMetal.transform.GetComponent<Image>("Wood");
         EffectWood = EffectMetal.transform.GetComponent<Image>("Wood");
+
+        BookLeather = BookPanel.GetComponent<Image>("Leather")!;
+        BookCorners = BookPanel.GetComponent<Image>("Corners")!;
+        PlayerPanelButton = BookPanel.GetComponent<Image>("Tab")!;
+        BookPaper = BookPanel.GetComponent<Image>()!;
 
         Flame = SpecialMetal.transform.EnsureComponent<CustomAnimator>("Fire")!;
         Flame.SetAnim([ .. FancyAssetManager.Flame.Frames.Select(x => x.RenderedSprite) ], 1f);
@@ -101,12 +141,16 @@ public class SettingsAndTestingUI : UIController
 
         ToggleImage = transform.GetComponent<Image>("Toggle");
 
-        transform.GetComponent<Button>("RecolouredUI")!.onClick.AddListener(OpenRecoloredUI);
-        transform.GetComponent<Button>("IconPacks")!.onClick.AddListener(OpenIconPacks);
-        transform.GetComponent<Button>("SilSwapper")!.onClick.AddListener(OpenSilSwapper);
-        transform.GetComponent<Button>("MRC")!.onClick.AddListener(OpenMrc);
-        transform.GetComponent<Button>("Toggle")!.onClick.AddListener(OpenTesting);
-        transform.GetComponent<Button>("Testing")!.onClick.AddListener(DoTheToggle);
+        transform.GetComponent<Button>("RecolouredUI")!.onClick.AddListener(() => Page = PackType.RecoloredUI);
+        transform.GetComponent<Button>("IconPacks")!.onClick.AddListener(() => Page = PackType.IconPacks);
+        transform.GetComponent<Button>("SilSwapper")!.onClick.AddListener(() => Page = PackType.SilhouetteSets);
+        transform.GetComponent<Button>("MRC")!.onClick.AddListener(() => Page = PackType.MiscRoleCustomisation);
+        transform.GetComponent<Button>("Testing")!.onClick.AddListener(() => Page = PackType.Testing);
+        transform.GetComponent<Button>("Toggle")!.onClick.AddListener(() => IsBTOS2 = !IsBTOS2);
+
+        var swap =  transform.GetComponent<Button>("Swap")!;
+        swap.onClick.AddListener(() => OtherUI = !OtherUI);
+        SwapIcon = swap.GetComponent<Image>();
 
         FancyUI.SetupFonts(transform);
 
@@ -162,51 +206,30 @@ public class SettingsAndTestingUI : UIController
 
     public void RefreshOptions()
     {
-        Settings.ForEach(x => x.gameObject.SetActive(x.SetActive()));
         Animator.SetDuration(Constants.AnimationDuration());
         NameText.SetText(DefaultNameText.Replace("%num%", $"{Constants.PlayerNumber()}"));
+        RoleText.SetText(DefaultRoleText.Replace("%type%", $"{Utils.FactionName(Constants.GetSelectedFaction(), IsBTOS2 ? ModType.BTOS2 : ModType.Vanilla)}").Replace("%mod%", IsBTOS2 ? "BTOS" :
+            "").Replace("%roleName%", "Admirer").Replace("%roleInt%", "1"));
         SpecialMetal.SetImageColor(ColorType.Metal);
         EffectMetal.SetImageColor(ColorType.Metal);
         SpecialWood.SetImageColor(ColorType.Wood);
         EffectWood.SetImageColor(ColorType.Wood);
         SlotCounter.SetImageColor(ColorType.Wood);
         Frame.SetImageColor(ColorType.Wood);
-        Flame.Renderer.SetImageColor(ColorType.Flame, a: 0.75f);
-    }
-
-    private void OpenRecoloredUI()
-    {
-        Page = PackType.RecoloredUI;
-        RefreshOptions();
-    }
-
-    private void OpenIconPacks()
-    {
-        Page = PackType.IconPacks;
-        RefreshOptions();
-    }
-
-    private void OpenSilSwapper()
-    {
-        Page = PackType.SilhouetteSets;
-        RefreshOptions();
-    }
-
-    private void OpenTesting()
-    {
-        Page = PackType.Testing;
-        RefreshOptions();
-    }
-
-    private void OpenMrc()
-    {
-        Page = PackType.MiscRoleCustomisation;
-        RefreshOptions();
-    }
-
-    private void DoTheToggle()
-    {
-        IsBTOS2 = !IsBTOS2;
+        BookCorners.SetImageColor(ColorType.Metal);
+        BookLeather.SetImageColor(ColorType.Leather);
+        BookPaper.SetImageColor(ColorType.Paper);
+        PlayerPanelButton.SetImageColor(ColorType.Wax);
+        Flame.Renderer.SetImageColor(ColorType.Flame, a: 0.7f);
         ToggleImage.sprite = Fancy.Assets.GetSprite($"{(IsBTOS2 ? "B" : "")}ToS2Icon");
+        SwapIcon.material.SetFloat("_FlipX", OtherUI ? 1 : 0);
+        BookPanel.gameObject.SetActive(OtherUI);
+        RoleCard.gameObject.SetActive(!OtherUI);
+
+        foreach (var setting in Settings)
+        {
+            setting.Refresh();
+            setting.gameObject.SetActive(setting.SetActive());
+        }
     }
 }
