@@ -2,71 +2,84 @@ Shader "Custom/GrayscaleShader"
 {
     Properties
     {
-        _MainTex ("Texture", 2D) = "white" {}
-        _Color ("Tint Color", Color) = (1,1,1,1)
-        _GrayscaleAmount ("Grayscale Amount", Range(0, 1)) = 1.0
-        _Brightness ("Brightness", Range(0, 5)) = 2
+        _MainTex ("Main Texture", 2D) = "white" {}
+        _Color ("Tint", Color) = (1,1,1,1)
+        [Toggle] _PixelSnap ("Pixel Snap", Float) = 0
+        _GrayscaleAmount ("Grayscale Amount", Range(0, 1)) = 1
+        _Brightness ("Brightness", Range(1, 5)) = 2
     }
+
     SubShader
     {
-        Tags { "RenderType"="Transparent" "Queue"="Transparent" }
-        LOD 200
+        Tags
+        {
+            "CanUseSpriteAtlas" = "True"
+            "IGNOREPROJECTOR" = "True"
+            "PreviewType" = "Plane"
+            "QUEUE" = "Transparent"
+            "RenderType" = "Transparent"
+        }
 
         Pass
         {
             Blend SrcAlpha OneMinusSrcAlpha
             ZWrite Off
+            Cull Off
 
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-
+            #pragma multi_compile _ PIXELSNAP_ON
             #include "UnityCG.cginc"
 
-            struct appdata
+            struct appdata_t
             {
                 float4 vertex : POSITION;
-                float2 uv : TEXCOORD0;
+                float4 color : COLOR;
+                float2 texcoord : TEXCOORD0;
             };
 
             struct v2f
             {
-                float2 uv : TEXCOORD0;
                 float4 vertex : SV_POSITION;
+                fixed4 color : COLOR;
+                float2 texcoord : TEXCOORD0;
             };
 
             sampler2D _MainTex;
-            float4 _MainTex_ST;
-            float4 _Color;
+            fixed4 _Color;
+            float _PixelSnap;
             float _GrayscaleAmount;
-            float _Brightness; // Brightness property
+            float _Brightness;
 
-            v2f vert (appdata v)
+            v2f vert(appdata_t v)
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
-                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+                o.texcoord = v.texcoord;
+                o.color = v.color;
+
+                if (_PixelSnap > 0)
+                    o.vertex = UnityPixelSnap(o.vertex);
+
                 return o;
             }
 
-            fixed4 frag (v2f i) : SV_Target
+            fixed4 frag(v2f i) : SV_Target
             {
-                // Sample the texture
-                fixed4 col = tex2D(_MainTex, i.uv);
+                fixed4 col = tex2D(_MainTex, i.texcoord) * i.color;
 
-                // Convert to grayscale
-                float grayscale = (col.r + col.g + col.b) / 3.0;
+                float luminance = Luminance(col.rgb);
+                col.rgb = lerp(col.rgb, luminance.xxx, _GrayscaleAmount);
 
-                // Brighten the grayscale value
-                grayscale *= _Brightness;
+                // Brightness adjustment
+                col.rgb *= _Brightness;
 
-                // Interpolate between original color and grayscale
-                fixed4 grayscaleCol = lerp(col, fixed4(grayscale, grayscale, grayscale, col.a), _GrayscaleAmount);
-
-                return grayscaleCol * _Color;
+                return col * _Color;
             }
             ENDCG
         }
     }
-    FallBack "Diffuse"
+
+    Fallback "Diffuse"
 }

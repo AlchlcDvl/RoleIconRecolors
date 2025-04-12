@@ -110,7 +110,7 @@ public static class PooledChatViewSwitcherPatch
         parts2.parent.GetComponent<Image>().SetImageColor(ColorType.Metal);
         parts2.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
         parts2.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
-        var nameplate = __instance.transform.GetChild(3).GetChild(0); // Nameplate
+        var nameplate = __instance.transform.GetChild(3).GetChild(0);
         nameplate.GetComponent<Image>().SetImageColor(ColorType.Metal);
 
         // This is me fixing an issue in the weirdest way possible
@@ -131,8 +131,11 @@ public static class ChatInputControllerPatch
 {
     public static void Postfix(ChatInputController __instance)
     {
-        if (Constants.EnableCustomUI())
-            __instance.parchmentBackgroundImage.SetImageColor(ColorType.Paper);
+        if (!Constants.EnableCustomUI())
+            return;
+
+        __instance.parchmentBackgroundImage.SetImageColor(ColorType.Paper);
+        __instance.parchmentBackgroundImage.transform.GetChild(2).GetChild(2).GetComponent<Image>().SetImageColor(ColorType.Wax);
     }
 }
 
@@ -177,11 +180,31 @@ public static class LobbyGameModeChoicePanelPatch
         if (!Constants.EnableCustomUI())
             return;
 
-        __instance.transform.GetChild(0).GetChild(1).GetChild(0).GetChild(0).GetChild(12).GetComponent<Image>().SetImageColor(ColorType.Wood);
-        __instance.transform.GetChild(0).GetChild(1).GetChild(0).GetChild(2).GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wood);
-        __instance.transform.GetChild(0).GetChild(2).GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wood);
-        __instance.transform.GetChild(0).GetChild(2).GetChild(1).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
-        __instance.transform.GetChild(0).GetChild(2).GetChild(1).GetChild(0).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
+        var child = __instance.transform.GetChild(0);
+        var child2 =  child.GetChild(1).GetChild(0);
+        child2.GetChild(0).GetChild(12).GetComponent<Image>().SetImageColor(ColorType.Wood);
+        child2.GetChild(2).GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wood);
+        var child3 = child.GetChild(2).GetChild(1);
+        child3.GetComponent<Image>().SetImageColor(ColorType.Wood);
+        var child4 = child.GetChild(2).GetChild(1).GetChild(0);
+        child4.GetComponent<Image>().SetImageColor(ColorType.Metal);
+        child4.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
+    }
+}
+
+[HarmonyPatch(typeof(TosAbilityPanel), nameof(TosAbilityPanel.HandlePlayPhaseChanged))]
+public static class PatchAbilityPanel
+{
+    public static void Postfix(TosAbilityPanel __instance)
+    {
+        if (!Constants.EnableCustomUI())
+            return;
+
+        foreach (var button in new[] { __instance.allFilterBtn, __instance.livingFilterBtn, __instance.targetFilterBtn, __instance.factionFilterBtn, __instance.graveyardFilterBtn })
+        {
+            button.GetComponent<Image>().SetImageColor(ColorType.Wax);
+            button.GetComponentsInChildren<Image>(true).ForEach(x => x.SetImageColor(ColorType.Wax));
+        }
     }
 }
 

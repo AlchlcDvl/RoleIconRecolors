@@ -582,7 +582,7 @@ public static class Utils
 
     public static void SetImageColor(this Image img, ColorType type, Color? color = null, float a = 1f)
     {
-        img.material = Grayscale;
+        var mat = img.material = new(Grayscale);
         var color2 = type switch
         {
             ColorType.Metal => Constants.GetMainUIThemeMetalColor(),
@@ -594,7 +594,9 @@ public static class Utils
             _ => color ?? Color.white
         };
         color2.a = a;
-        img.color = color2;
+        mat.SetColor("_Color", color2);
+        mat.SetFloat("_Brightness", Constants.GeneralBrightness());
+        mat.SetFloat("_GrayscaleAmount", Constants.GrayscaleAmount());
     }
 
     public static bool IsValid(this SilhouetteAnimation anim) => anim != null && anim != Loading;

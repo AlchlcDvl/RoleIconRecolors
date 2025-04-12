@@ -95,6 +95,12 @@
     <Entry key="FANCY_SELECTED_TESTING_FACTION_NAME">Testing Faction</Entry>
     <Entry key="FANCY_SELECTED_TESTING_FACTION_DESC">Modifies the testing UI as per the selected faction as if you were that faction in game.</Entry>
 
+    <Entry key="FANCY_GRAYSCALE_AMOUNT_NAME">Color Effectiveness</Entry>
+    <Entry key="FANCY_GRAYSCALE_AMOUNT_DESC">How effective is the custom color (0 = Custom color is additive, 100 = Custom color replaces, 50 = Mix of both 0 and 100 values).</Entry>
+
+    <Entry key="FANCY_GENERAL_BRIGHTNESS_NAME">Color Brightness</Entry>
+    <Entry key="FANCY_GENERAL_BRIGHTNESS_DESC">How bright do all forms of custom color appear on the UI.</Entry>
+
     <Entry key="FANCY_VANILLA">Vanilla</Entry>
     <Entry key="FANCY_DEFAULT">Default</Entry>
     <Entry key="FANCY_FACTION">Faction</Entry>

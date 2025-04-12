@@ -236,10 +236,19 @@ public static class PatchRoleCards
 }
 
 [HarmonyPatch(typeof(TosAbilityPanelListItem), nameof(TosAbilityPanelListItem.OverrideIconAndText))]
-public static class PatchAbilityPanel
+public static class PatchAbilityPanelListItems
 {
     public static void Postfix(TosAbilityPanelListItem __instance, AbilityType overrideType)
     {
+        if (Constants.EnableCustomUI())
+        {
+            if (__instance.choice1Sprite)
+                __instance.choice1Sprite.transform.parent.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wax);
+
+            if (__instance.choice2Sprite)
+                __instance.choice2Sprite.transform.parent.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wax);
+        }
+
         if (!Constants.EnableIcons() || overrideType == AbilityType.VOTING)
             return;
 

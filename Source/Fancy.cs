@@ -1,6 +1,6 @@
 namespace FancyUI;
 
-[SalemMod, WitchcraftMod(typeof(Fancy), "Fancy UI", [ "Assets", "WoodMaterials" ], true)]
+[SalemMod, WitchcraftMod(typeof(Fancy), "Fancy UI", [ "Assets" ], true)]
 public class Fancy
 {
     public static WitchcraftMod Instance { get; private set; }
@@ -57,7 +57,7 @@ public class Fancy
         FancyAssetManager.Defense = Assets.GetSprite("Defense");
         Ethereal = Assets.GetSprite("Ethereal");
 
-        Grayscale = Assets.GetMaterial("GrayscaleM");
+        Grayscale = Assets.GetMaterial("GrayscaleMaterial");
 
         LoadingGif = Assets.GetGif("Placeholder")!;
         LoadingGif.RenderAllFrames();
@@ -98,8 +98,6 @@ public class Fancy
     public static FloatOption EasterEggChance;
     public static FloatOption AnimationDuration;
 
-    public static FloatOption PlayerNumber;
-
     public static ToggleOption CustomNumbers;
     public static ToggleOption AllEasterEggs;
     public static ToggleOption PlayerPanelEasterEggs;
@@ -115,6 +113,11 @@ public class Fancy
     public static FloatOption LeatherShade;
     public static FloatOption FireShade;
     public static FloatOption WaxShade;
+
+    public static FloatOption GeneralBrightness;
+    public static FloatOption GrayscaleAmount;
+
+    public static FloatOption PlayerNumber;
 
     public static EnumDropdownOption<FactionType> SelectTestingFaction;
     public static EnumDropdownOption<Role> SelectTestingRole; // TODO: Implement this
@@ -153,6 +156,9 @@ public class Fancy
         LeatherShade = new("LEATHER_SHADE", 0, PackType.RecoloredUI, -100, 100, true, _ => Constants.GetMainUIThemeType() == UITheme.Faction);
         WoodShade = new("WOOD_SHADE", 0, PackType.RecoloredUI, -100, 100, true, _ => Constants.GetMainUIThemeType() == UITheme.Faction);
         WaxShade = new("WAX_SHADE", 0, PackType.RecoloredUI, -100, 100, true, _ => Constants.GetMainUIThemeType() == UITheme.Faction);
+
+        GeneralBrightness = new("GENERAL_BRIGHTNESS", 100, PackType.RecoloredUI, 0, 100, true, _ => Constants.EnableCustomUI());
+        GrayscaleAmount = new("GRAYSCALE_AMOUNT", 100, PackType.RecoloredUI, 0, 100, true, _ => Constants.EnableCustomUI());
 
         EasterEggChance = new("EE_CHANCE", 5, PackType.IconPacks, 0, 100, true, _ => Constants.EnableIcons());
         AnimationDuration = new("ANIM_DURATION", 2, PackType.SilhouetteSets, 0.5f, 10, setActive: _ => Constants.EnableSwaps());

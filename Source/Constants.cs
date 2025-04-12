@@ -98,6 +98,10 @@ public static class Constants
         _ => Fancy.MainUIThemeWax.Value.ToColor(),
     };
 
+    public static float GeneralBrightness() => Fancy.GeneralBrightness.Value * 5f / 100f;
+
+    public static float GrayscaleAmount() => Fancy.GrayscaleAmount.Value / 100f;
+
     public static int PlayerNumber() => (int)Fancy.PlayerNumber.Value;
 
     public static bool FactionOverridden() => FactionOverride() != "None";
