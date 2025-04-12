@@ -135,7 +135,21 @@ public static class ChatInputControllerPatch
             return;
 
         __instance.parchmentBackgroundImage.SetImageColor(ColorType.Paper);
-        __instance.parchmentBackgroundImage.transform.GetChild(2).GetChild(2).GetComponent<Image>().SetImageColor(ColorType.Wax);
+
+        Transform parent = __instance.parchmentBackgroundImage.transform;
+
+        if (parent.childCount > 2)
+        {
+            Transform secondChild = parent.GetChild(2);
+            if (secondChild.childCount > 2)
+            {
+                Image sendMsgButton = secondChild.GetChild(2).GetComponent<Image>();
+                if (sendMsgButton != null)
+                {
+                    sendMsgButton.SetImageColor(ColorType.Wax);
+                }
+            }
+        }
     }
 }
 
