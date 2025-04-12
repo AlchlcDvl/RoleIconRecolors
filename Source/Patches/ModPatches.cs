@@ -217,10 +217,10 @@ public static class AchievementMentionsPatch
     public static bool Prefix(SharedMentionsProvider __instance)
     {
         var allAchievementIds = Service.Game.Achievement.GetAllAchievementIds();
+        var num = 0;
 
-        for (var i = 0; i <= allAchievementIds.Count; i++)
+        foreach (var achievementId in allAchievementIds)
         {
-            var achievementId = allAchievementIds[i];
             var title = __instance.l10n($"GUI_ACHIEVEMENT_TITLE_{achievementId}");
             var match = $"~{title}";
             var encodedText = $"[[~{achievementId}]]";
@@ -247,8 +247,10 @@ public static class AchievementMentionsPatch
                 mentionTokenType = MentionToken.MentionTokenType.ACHIEVEMENT,
                 match = match,
                 mentionInfo = mentionInfo,
-                priority = i
+                priority = num
             });
+
+            num++;
         }
 
         return false; // Skip original method

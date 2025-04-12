@@ -143,12 +143,12 @@ public class Fancy
         FactionOverride1 = new("FACTION_OVERRIDE_1", "None", PackType.IconPacks, () => GetOptions(ModType.Vanilla, false), _ => Constants.EnableIcons());
         FactionOverride2 = new("FACTION_OVERRIDE_2", "None", PackType.IconPacks, () => GetOptions(ModType.BTOS2, false), _ => Constants.BTOS2Exists() && Constants.EnableIcons());
 
-        MainUIThemeFire = new("UI_FIRE", "#FFFFFF", PackType.RecoloredUI, _ => Constants.GetMainUIThemeType() == UITheme.Custom);
-        MainUIThemePaper = new("UI_PAPER", "#FFFFFF", PackType.RecoloredUI, _ => Constants.GetMainUIThemeType() == UITheme.Custom);
-        MainUIThemeMetal = new("UI_METAL", "#FFFFFF", PackType.RecoloredUI, _ => Constants.GetMainUIThemeType() == UITheme.Custom);
-        MainUIThemeLeather = new("UI_LEATHER", "#FFFFFF", PackType.RecoloredUI, _ => Constants.GetMainUIThemeType() == UITheme.Custom);
-        MainUIThemeWood = new("UI_WOOD", "#FFFFFF", PackType.RecoloredUI, _ => Constants.GetMainUIThemeType() == UITheme.Custom);
-        MainUIThemeWax = new("UI_WAX", "#FFFFFF", PackType.RecoloredUI, _ => Constants.GetMainUIThemeType() == UITheme.Custom);
+        MainUIThemeFire = new("UI_FIRE", "#FFFFFF", PackType.RecoloredUI, _ => Constants.EnableCustomUI());
+        MainUIThemePaper = new("UI_PAPER", "#FFFFFF", PackType.RecoloredUI, _ => Constants.EnableCustomUI());
+        MainUIThemeMetal = new("UI_METAL", "#FFFFFF", PackType.RecoloredUI, _ => Constants.EnableCustomUI());
+        MainUIThemeLeather = new("UI_LEATHER", "#FFFFFF", PackType.RecoloredUI, _ => Constants.EnableCustomUI());
+        MainUIThemeWood = new("UI_WOOD", "#FFFFFF", PackType.RecoloredUI, _ => Constants.EnableCustomUI());
+        MainUIThemeWax = new("UI_WAX", "#FFFFFF", PackType.RecoloredUI, _ => Constants.EnableCustomUI());
 
         FireShade = new("FIRE_SHADE", 0, PackType.RecoloredUI, -100, 100, true, _ => Constants.GetMainUIThemeType() == UITheme.Faction);
         PaperShade = new("PAPER_SHADE", 0, PackType.RecoloredUI, -100, 100, true, _ => Constants.GetMainUIThemeType() == UITheme.Faction);
