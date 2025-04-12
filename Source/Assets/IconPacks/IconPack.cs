@@ -246,7 +246,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                 var sprites = new List<Sprite>();
                 var dict = new Dictionary<string, string>();
 
-                for (var i = 1; i < 6; i++)
+                for (var i = 1; i < 7; i++)
                 {
                     if (!EmojiSprites.TryGetValue($"Emoji{i}", out var sprite))
                         sprite = Fancy.Assets.GetSprite($"Emoji{i}") ?? Blank;
