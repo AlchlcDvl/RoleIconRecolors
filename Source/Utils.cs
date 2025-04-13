@@ -641,11 +641,11 @@ public static class Utils
         if (shade == 0f)
             shade = 1f;
 
-        if (flip || ((color.r * 0.2126f * 255f) + (color.g * 0.7152f * 255f) + (color.b * 0.0722f * 255f) > 255f / 2 && shade > 0f) || ((color.r * 0.2126f * 255f) + (color.g * 0.7152f * 255f) +
-            (color.b * 0.0722f * 255f) < 255f / 2 && shade < 0f))
-        {
+        const float threshold = 255f / 2;
+        var lum = (color.r * 0.2126f * 255f) + (color.g * 0.7152f * 255f) + (color.b * 0.0722f * 255f);
+
+        if (flip || (lum > threshold && shade > 0f) || (lum < threshold && shade < 0f))
             shade = -shade;
-        }
 
         return color.ShadeColor(shade / 100f);
     }
