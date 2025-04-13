@@ -621,7 +621,7 @@ public static class Utils
             ColorType.Wax => Constants.GetMainUIThemeWaxColor(),
             _ => color ?? Color.white
         };
-        color2 = color2.ShadeColor(type, shade);
+        color2 = color2.ShadeColor(type, shade, flip: true);
         color2.a = a;
         graphic.color = color2;
     }
@@ -640,12 +640,13 @@ public static class Utils
         };
 
         if (shade == 0f)
-            shade = 1f;
+            return color;
 
-        const float threshold = 255f / 2;
-        var lum = (color.r * 0.2126f * 255f) + (color.g * 0.7152f * 255f) + (color.b * 0.0722f * 255f);
+        // const float threshold = 255f / 2;
+        // var lum = (color.r * 0.2126f * 255f) + (color.g * 0.7152f * 255f) + (color.b * 0.0722f * 255f);
 
-        if (flip || (lum > threshold && shade > 0f) || (lum < threshold && shade < 0f))
+        // if (flip || (lum > threshold && shade > 0f) || (lum < threshold && shade < 0f))
+        if (flip)
             shade = -shade;
 
         return color.ShadeColor(shade / 100f);

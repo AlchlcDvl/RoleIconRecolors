@@ -208,6 +208,7 @@ public class SettingsAndTestingUI : UIController
     {
         Animator.SetDuration(Constants.AnimationDuration());
         NameText.SetText(DefaultNameText.Replace("%num%", $"{Constants.PlayerNumber()}"));
+        NameText.SetGraphicColor(ColorType.Paper);
         RoleText.SetText(DefaultRoleText.Replace("%type%", $"{Utils.FactionName(Constants.GetSelectedFaction(), IsBTOS2 ? ModType.BTOS2 : ModType.Vanilla)}").Replace("%mod%", IsBTOS2 ? "BTOS" :
             "").Replace("%roleName%", "Admirer").Replace("%roleInt%", "1"));
         SpecialMetal.SetImageColor(ColorType.Metal);
