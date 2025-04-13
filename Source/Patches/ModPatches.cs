@@ -41,11 +41,8 @@ public static class ReAddJailorOverlay
         if (!JailorOverlayPrefab)
             JailorOverlayPrefab = GameObject.Find("Hud/JailorElementsUI(Clone)/MainPanel/JailorOverlay").GetComponent<BaseJailorOverlayController>();
 
-        if (effectsState.bIsJailed && Constants.ShowOverlayWhenJailed())
-            JailorOverlayPrefab.Show(); // Show overlay if you are being jailed and the setting is on
-
-        if (effectsState.bIsJailing && Constants.ShowOverlayAsJailor())
-            JailorOverlayPrefab.Show(); // Show overlay if you are jailing and the setting is on
+        if ((effectsState.bIsJailed && Constants.ShowOverlayWhenJailed()) || (effectsState.bIsJailing && Constants.ShowOverlayAsJailor()))
+            JailorOverlayPrefab.Show(); // Show overlay if you are jailing or being jailed while the respective setting is on
     }
 }
 

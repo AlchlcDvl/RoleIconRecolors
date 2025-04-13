@@ -2,16 +2,41 @@ using Game.Achievements;
 
 namespace FancyUI.Patches;
 
-[HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.Start))]
+[HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.HandleOnMyIdentityChanged))]
 public static class RoleCardPanelPatch
 {
     public static void Postfix(RoleCardPanel __instance)
     {
+        HandleIdentityChanged();
+
         if (!Constants.EnableCustomUI())
             return;
 
         __instance.transform.GetChild(5).GetComponent<Image>().SetImageColor(ColorType.Wood);
         __instance.transform.GetChild(10).GetComponent<Image>().SetImageColor(ColorType.Wood);
+    }
+
+    private static void HandleIdentityChanged()
+    {
+        if (Constants.GetMainUIThemeType() != UITheme.Faction)
+            return;
+
+        var pooledChat = UObject.FindObjectOfType<PooledChatViewSwitcher>();
+        var chatInput = UObject.FindObjectOfType<ChatInputController>();
+        var dayNight = UObject.FindObjectOfType<HudTimeChangePanel>();
+        var abilityPanel = UObject.FindObjectOfType<TosAbilityPanel>();
+
+        if (pooledChat)
+            PooledChatViewSwitcherPatch.Postfix(pooledChat);
+
+        if (chatInput)
+            ChatInputControllerPatch.Postfix(chatInput);
+
+        if (dayNight)
+            HudTimeChangePanelPatch.Postfix(dayNight);
+
+        if (abilityPanel)
+            PatchAbilityPanel.Postfix(abilityPanel);
     }
 }
 
@@ -55,7 +80,7 @@ public static class SpecialAbilityPopupPanelPatch
     }
 }
 
-[HarmonyPatch(typeof(RoleCardPopupPanel), nameof(RoleCardPopupPanel.Start))]
+[HarmonyPatch(typeof(RoleCardPopupPanel), nameof(RoleCardPopupPanel.SetRoleAndFaction))]
 public static class RoleCardPopupControllerPatch
 {
     public static void Postfix(RoleCardPopupPanel __instance)
@@ -112,7 +137,7 @@ public static class PooledChatViewSwitcherPatch
         parts2.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
         var nameplate = __instance.transform.GetChild(3).GetChild(0);
         nameplate.GetComponent<Image>().SetImageColor(ColorType.Metal);
-        nameplate.Find("Cutout").GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Metal);
+        nameplate.Find("Name").GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Metal);
     }
 }
 

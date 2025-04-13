@@ -44,8 +44,10 @@ public static class Constants
 
     public static FactionType GetSelectedFaction() => Fancy.SelectTestingFaction.Value;
 
-    public static Color GetMainUIThemeWoodColor() => GetMainUIThemeType() switch
+    public static Color GetMainUIThemeWoodColor(FactionType? faction = null) => GetMainUIThemeType() switch
     {
+        UITheme.Faction when faction != null && Fancy.ColorWood.Value
+            => faction.Value.GetFactionColor().ToColor(),
         UITheme.Faction when GetSelectedFaction() != FactionType.NONE && Fancy.ColorWood.Value
             => GetSelectedFaction().GetFactionColor().ToColor(),
         UITheme.Faction when Pepper.GetMyFaction() != FactionType.NONE && Fancy.ColorWood.Value
@@ -53,8 +55,10 @@ public static class Constants
         _ => Fancy.MainUIThemeWood.Value.ToColor(),
     };
 
-    public static Color GetMainUIThemeMetalColor() => GetMainUIThemeType() switch
+    public static Color GetMainUIThemeMetalColor(FactionType? faction = null) => GetMainUIThemeType() switch
     {
+        UITheme.Faction when faction != null && Fancy.ColorMetal.Value
+            => faction.Value.GetFactionColor().ToColor(),
         UITheme.Faction when GetSelectedFaction() != FactionType.NONE && Fancy.ColorMetal.Value
             => GetSelectedFaction().GetFactionColor().ToColor(),
         UITheme.Faction when Pepper.GetMyFaction() != FactionType.NONE && Fancy.ColorMetal.Value
@@ -62,8 +66,10 @@ public static class Constants
         _ => Fancy.MainUIThemeMetal.Value.ToColor(),
     };
 
-    public static Color GetMainUIThemePaperColor() => GetMainUIThemeType() switch
+    public static Color GetMainUIThemePaperColor(FactionType? faction = null) => GetMainUIThemeType() switch
     {
+        UITheme.Faction when faction != null && Fancy.ColorPaper.Value
+            => faction.Value.GetFactionColor().ToColor(),
         UITheme.Faction when GetSelectedFaction() != FactionType.NONE && Fancy.ColorPaper.Value
             => GetSelectedFaction().GetFactionColor().ToColor(),
         UITheme.Faction when Pepper.GetMyFaction() != FactionType.NONE && Fancy.ColorPaper.Value
@@ -71,8 +77,10 @@ public static class Constants
         _ => Fancy.MainUIThemePaper.Value.ToColor(),
     };
 
-    public static Color GetMainUIThemeLeatherColor() => GetMainUIThemeType() switch
+    public static Color GetMainUIThemeLeatherColor(FactionType? faction = null) => GetMainUIThemeType() switch
     {
+        UITheme.Faction when faction != null && Fancy.ColorLeather.Value
+            => faction.Value.GetFactionColor().ToColor(),
         UITheme.Faction when GetSelectedFaction() != FactionType.NONE && Fancy.ColorLeather.Value
             => GetSelectedFaction().GetFactionColor().ToColor(),
         UITheme.Faction when Pepper.GetMyFaction() != FactionType.NONE && Fancy.ColorLeather.Value
@@ -80,8 +88,10 @@ public static class Constants
         _ => Fancy.MainUIThemeLeather.Value.ToColor(),
     };
 
-    public static Color GetMainUIThemeFireColor() => GetMainUIThemeType() switch
+    public static Color GetMainUIThemeFireColor(FactionType? faction = null) => GetMainUIThemeType() switch
     {
+        UITheme.Faction when faction != null && Fancy.ColorFire.Value
+            => faction.Value.GetFactionColor().ToColor(),
         UITheme.Faction when GetSelectedFaction() != FactionType.NONE && Fancy.ColorFire.Value
             => GetSelectedFaction().GetFactionColor().ToColor(),
         UITheme.Faction when Pepper.GetMyFaction() != FactionType.NONE && Fancy.ColorFire.Value
@@ -89,8 +99,10 @@ public static class Constants
         _ => Fancy.MainUIThemeFire.Value.ToColor(),
     };
 
-    public static Color GetMainUIThemeWaxColor() => GetMainUIThemeType() switch
+    public static Color GetMainUIThemeWaxColor(FactionType? faction = null) => GetMainUIThemeType() switch
     {
+        UITheme.Faction when faction != null && Fancy.ColorWax.Value
+            => faction.Value.GetFactionColor().ToColor(),
         UITheme.Faction when GetSelectedFaction() != FactionType.NONE && Fancy.ColorWax.Value
             => GetSelectedFaction().GetFactionColor().ToColor(),
         UITheme.Faction when Pepper.GetMyFaction() != FactionType.NONE && Fancy.ColorWax.Value
