@@ -5,15 +5,22 @@ namespace FancyUI.Patches;
 [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.HandleOnMyIdentityChanged))]
 public static class RoleCardPanelPatch
 {
-    public static void Postfix(RoleCardPanel __instance)
+    public static bool Prefix(RoleCardPanel __instance, PlayerIdentityData playerIdentityData)
     {
+        __instance.CurrentRole = playerIdentityData?.role ?? Pepper.GetMyRole();
+        __instance.CurrentFaction = playerIdentityData?.faction ?? Pepper.GetMyFaction();
+        __instance.SetRole(__instance.CurrentRole);
+        __instance.ValidateSpecialAbilityPanel();
+        __instance.ValidateBackgroundColor();
+        __instance.ShowRoleDescIf0Quality();
         HandleIdentityChanged();
 
         if (!Constants.EnableCustomUI())
-            return;
+            return false;
 
         __instance.transform.GetChild(5).GetComponent<Image>().SetImageColor(ColorType.Wood);
         __instance.transform.GetChild(10).GetComponent<Image>().SetImageColor(ColorType.Wood);
+        return false;
     }
 
     private static void HandleIdentityChanged()
