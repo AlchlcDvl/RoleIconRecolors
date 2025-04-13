@@ -582,6 +582,9 @@ public static class Utils
 
     public static void SetImageColor(this Image img, ColorType type, Color? color = null, float a = 1f)
     {
+        if (!img)
+            return;
+
         if (img.material?.name != "GrayscaleMaterial")
             img.material = new(Grayscale);
 
@@ -600,6 +603,48 @@ public static class Utils
         mat.SetColor("_Color", color2);
         mat.SetFloat("_Brightness", Constants.GeneralBrightness());
         mat.SetFloat("_GrayscaleAmount", Constants.GrayscaleAmount());
+    }
+
+    public static void SetGraphicColor(this Graphic graphic, ColorType type, Color? color = null, float shade = 0f, float a = 1f)
+    {
+        if (!graphic)
+            return;
+
+        var color2 = type switch
+        {
+            ColorType.Metal => Constants.GetMainUIThemeMetalColor(),
+            ColorType.Paper => Constants.GetMainUIThemePaperColor(),
+            ColorType.Leather => Constants.GetMainUIThemeLeatherColor(),
+            ColorType.Wood => Constants.GetMainUIThemeWoodColor(),
+            ColorType.Flame => Constants.GetMainUIThemeFireColor(),
+            ColorType.Wax => Constants.GetMainUIThemeWaxColor(),
+            _ => color ?? Color.white
+        };
+        color2 = color2.ShadeColor(type, shade);
+        color2.a = a;
+        graphic.color = color2;
+    }
+
+    public static Color ShadeColor(this Color color, ColorType type, float shadeParam = 0f, bool flip = false)
+    {
+        var shade = type switch
+        {
+            ColorType.Metal => Fancy.MetalShade.Value,
+            ColorType.Paper => Fancy.PaperShade.Value,
+            ColorType.Leather => Fancy.LeatherShade.Value,
+            ColorType.Wood => Fancy.WoodShade.Value,
+            ColorType.Flame => Fancy.FireShade.Value,
+            ColorType.Wax => Fancy.WaxShade.Value,
+            _ => shadeParam
+        };
+
+        if (shade == 0f)
+            shade = 1f;
+
+        if (flip || ((color.r * 0.2126f * 255f) + (color.g * 0.7152f * 255f) + (color.b * 0.0722f * 255f) > 255f / 2 && shade > 0f))
+            shade = -shade;
+
+        return color.ShadeColor(shade / 100f);
     }
 
     public static bool IsValid(this SilhouetteAnimation anim) => anim != null && anim != Loading;

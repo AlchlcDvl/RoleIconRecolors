@@ -3,9 +3,8 @@ Shader "Custom/ImageFlipperShader"
     Properties
     {
         _MainTex ("Main Texture", 2D) = "white" {}
-        _Color ("Tint", Color) = (1,1,1,1)
-        [Toggle] _FlipX ("Flip Horizontal", Float) = 0
-        [Toggle] _FlipY ("Flip Vertical", Float) = 0
+        [MaterialToggle] _FlipX ("Flip X Axis", Float) = 0
+        [MaterialToggle] _FlipY ("Flip Y Axis", Float) = 0
     }
 
     SubShader
@@ -45,7 +44,6 @@ Shader "Custom/ImageFlipperShader"
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
-            fixed4 _Color;
             float _FlipX;
             float _FlipY;
 
@@ -59,16 +57,17 @@ Shader "Custom/ImageFlipperShader"
 
             fixed4 frag (v2f i) : SV_Target
             {
-                // Flip UV coordinates based on material properties
                 float2 uv = i.uv;
                 uv.x = lerp(uv.x, 1.0 - uv.x, _FlipX);
                 uv.y = lerp(uv.y, 1.0 - uv.y, _FlipY);
 
-                fixed4 col = tex2D(_MainTex, uv) * _Color;
-                col.rgb *= col.a; // Premultiplied alpha
+                fixed4 col = tex2D(_MainTex, uv);
+                col.rgb *= col.a;
                 return col;
             }
             ENDCG
         }
     }
+
+    Fallback "Sprites/Default"
 }

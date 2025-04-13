@@ -112,17 +112,7 @@ public static class PooledChatViewSwitcherPatch
         parts2.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
         var nameplate = __instance.transform.GetChild(3).GetChild(0);
         nameplate.GetComponent<Image>().SetImageColor(ColorType.Metal);
-
-        // This is me fixing an issue in the weirdest way possible
-        var name = nameplate.Find("Name");
-
-        if (name)
-            name.SetParent(nameplate.parent);
-
-        var cutout = nameplate.Find("Cutout");
-
-        if (cutout)
-            cutout.SetParent(nameplate.parent);
+        nameplate.Find("Cutout").GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Metal);
     }
 }
 
@@ -135,10 +125,14 @@ public static class ChatInputControllerPatch
             return;
 
         __instance.parchmentBackgroundImage.SetImageColor(ColorType.Paper);
+        __instance.chatInputText.SetGraphicColor(ColorType.Paper);
+        __instance.chatInput.textComponent.SetGraphicColor(ColorType.Paper);
+        __instance.chatInput.placeholder.SetGraphicColor(ColorType.Paper);
+
         try
         {
             __instance.parchmentBackgroundImage.transform.GetChild(2).GetChild(2).GetComponent<Image>().SetImageColor(ColorType.Wax);
-        } catch { }
+        } catch {}
     }
 }
 
@@ -162,7 +156,7 @@ public static class LobbyTimerPatch
     }
 }
 
-[HarmonyPatch(typeof(HudTimeChangePanel), nameof(HudTimeChangePanel.OnDaytimeChanged))]
+[HarmonyPatch(typeof(HudTimeChangePanel), nameof(HudTimeChangePanel.UpdateDayNightNumber))]
 public static class HudTimeChangePanelPatch
 {
     public static void Postfix(HudTimeChangePanel __instance)
@@ -180,22 +174,12 @@ public static class LobbyGameModeChoicePanelPatch
 {
     public static void Postfix(LobbyGameModeChoicePanel __instance)
     {
-        if (!Constants.EnableCustomUI())
-            return;
-
-        var child = __instance.transform.GetChild(0);
-        var child2 =  child.GetChild(1).GetChild(0);
-        child2.GetChild(0).GetChild(12).GetComponent<Image>().SetImageColor(ColorType.Wood);
-        child2.GetChild(2).GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wood);
-        var child3 = child.GetChild(2).GetChild(1);
-        child3.GetComponent<Image>().SetImageColor(ColorType.Wood);
-        var child4 = child.GetChild(2).GetChild(1).GetChild(0);
-        child4.GetComponent<Image>().SetImageColor(ColorType.Metal);
-        child4.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
+        if (Constants.EnableCustomUI())
+            __instance.transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetChild(15).GetComponent<Image>().SetImageColor(ColorType.Wood);
     }
 }
 
-[HarmonyPatch(typeof(TosAbilityPanel), nameof(TosAbilityPanel.HandlePlayPhaseChanged))]
+[HarmonyPatch(typeof(TosAbilityPanel), nameof(TosAbilityPanel.Start))]
 public static class PatchAbilityPanel
 {
     public static void Postfix(TosAbilityPanel __instance)
@@ -203,11 +187,42 @@ public static class PatchAbilityPanel
         if (!Constants.EnableCustomUI())
             return;
 
-        foreach (var button in new[] { __instance.allFilterBtn, __instance.livingFilterBtn, __instance.targetFilterBtn, __instance.factionFilterBtn, __instance.graveyardFilterBtn })
+        new[] { __instance.allFilterBtn, __instance.livingFilterBtn, __instance.targetFilterBtn, __instance.factionFilterBtn, __instance.graveyardFilterBtn }
+            .ForEach(x => x.transform.GetAllComponents<Image>()
+                .ForEach(y => y.SetImageColor(ColorType.Wax)));
+
+        var parent = __instance.transform.GetChild(0);
+        var leather = parent.Find("ListBacking").GetComponent<Image>()!;
+        var corners = parent.Find("ListCorners")?.GetComponent<Image>()!;
+        var paper = parent.Find("ListPaper")?.GetComponent<Image>()!;
+
+        if (!corners)
         {
-            button.GetComponent<Image>().SetImageColor(ColorType.Wax);
-            button.GetComponentsInChildren<Image>(true).ForEach(x => x.SetImageColor(ColorType.Wax));
+            corners = UObject.Instantiate(leather, parent);
+            corners.transform.SetSiblingIndex(1);
+            corners.name = "ListCorners";
+            corners.sprite = Fancy.Assets.GetSprite("PlayerList_Main_M");
         }
+
+        if (!paper)
+        {
+            paper = UObject.Instantiate(leather, parent);
+            paper.transform.SetSiblingIndex(2);
+            paper.name = "ListPaper";
+            paper.sprite = Fancy.Assets.GetSprite("PlayerList_Main_P");
+        }
+
+        if (!leather.GetComponent<DummyBehaviour>())
+        {
+            leather.sprite = Fancy.Assets.GetSprite("PlayerList_Main_L");
+            leather.AddComponent<DummyBehaviour>();
+        }
+
+        corners.SetImageColor(ColorType.Metal);
+        leather.SetImageColor(ColorType.Leather);
+        paper.SetImageColor(ColorType.Paper);
+
+        parent.Find("MinimizeUIButton").GetComponent<Image>().SetImageColor(ColorType.Metal);
     }
 }
 

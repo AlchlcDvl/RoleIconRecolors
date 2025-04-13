@@ -268,7 +268,7 @@ public static class FixMyFaction
         }
         catch
         {
-            __result = FactionType.NONE; // Because the base game dislikes null checks
+            __result = Constants.GetSelectedFaction(); // Because the base game dislikes null checks
         }
 
         return false;

@@ -247,6 +247,9 @@ public static class PatchAbilityPanelListItems
 
             if (__instance.choice2Sprite)
                 __instance.choice2Sprite.transform.parent.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wax);
+
+            __instance.playerName.SetGraphicColor(ColorType.Paper);
+            __instance.playerNumber.SetGraphicColor(ColorType.Paper);
         }
 
         if (!Constants.EnableIcons() || overrideType == AbilityType.VOTING)
@@ -258,12 +261,13 @@ public static class PatchAbilityPanelListItems
         var ogfaction = Utils.FactionName(role.GetFactionType(), false);
         var name = Utils.RoleName(role);
         var reg = ogfaction != faction;
+        var ee = Constants.PlayerPanelEasterEggs();
 
         switch (overrideType)
         {
             case AbilityType.NECRO_ATTACK:
             {
-                var nommy = GetSprite("Necronomicon", Constants.PlayerPanelEasterEggs());
+                var nommy = GetSprite("Necronomicon", ee);
 
                 if (nommy.IsValid() && __instance.choice1Sprite && role != Role.ILLUSIONIST)
                     __instance.choice1Sprite.sprite = nommy;
@@ -273,10 +277,10 @@ public static class PatchAbilityPanelListItems
                     case Role.ILLUSIONIST when __instance.choice2Sprite:
                     {
                         __instance.choice2Sprite.sprite = nommy;
-                        var illu = GetSprite(reg, "Illusionist_Ability", faction, Constants.PlayerPanelEasterEggs());
+                        var illu = GetSprite(reg, "Illusionist_Ability", faction, ee);
 
                         if (!illu.IsValid() && reg)
-                            illu = GetSprite("Illusionist_Ability", ogfaction, Constants.PlayerPanelEasterEggs());
+                            illu = GetSprite("Illusionist_Ability", ogfaction, ee);
 
                         if (illu.IsValid() && __instance.choice1Sprite)
                             __instance.choice1Sprite.sprite = illu;
@@ -285,10 +289,10 @@ public static class PatchAbilityPanelListItems
                     }
                     case Role.WITCH:
                     {
-                        var target = GetSprite(reg, "Witch_Ability_2", faction, Constants.PlayerPanelEasterEggs());
+                        var target = GetSprite(reg, "Witch_Ability_2", faction, ee);
 
                         if (!target.IsValid() && reg)
-                            target = GetSprite("Witch_Ability_2", ogfaction, Constants.PlayerPanelEasterEggs());
+                            target = GetSprite("Witch_Ability_2", ogfaction, ee);
 
                         if (target.IsValid() && __instance.choice2Sprite)
                             __instance.choice2Sprite.sprite = target;
@@ -301,10 +305,10 @@ public static class PatchAbilityPanelListItems
             }
             case AbilityType.POISONER_POISON or AbilityType.SHROUD or AbilityType.INVESTIGATOR or AbilityType.PIRATE:
             {
-                var special = GetSprite(reg, $"{name}_Special", faction, Constants.PlayerPanelEasterEggs());
+                var special = GetSprite(reg, $"{name}_Special", faction, ee);
 
                 if (!special.IsValid() && reg)
-                    special = GetSprite($"{name}_Special", ogfaction, Constants.PlayerPanelEasterEggs());
+                    special = GetSprite($"{name}_Special", ogfaction, ee);
 
                 if (special.IsValid() && __instance.choice1Sprite)
                     __instance.choice1Sprite.sprite = special;
@@ -313,10 +317,10 @@ public static class PatchAbilityPanelListItems
             }
             case AbilityType.POTIONMASTER_ATTACK:
             {
-                var special = GetSprite(reg, $"{name}_Ability_3", faction, Constants.PlayerPanelEasterEggs());
+                var special = GetSprite(reg, $"{name}_Ability_3", faction, ee);
 
                 if (!special.IsValid() && reg)
-                    special = GetSprite($"{name}_Ability_3", ogfaction, Constants.PlayerPanelEasterEggs());
+                    special = GetSprite($"{name}_Ability_3", ogfaction, ee);
 
                 if (special.IsValid() && __instance.choice1Sprite)
                     __instance.choice1Sprite.sprite = special;
@@ -325,10 +329,10 @@ public static class PatchAbilityPanelListItems
             }
             case AbilityType.POTIONMASTER_HEAL:
             {
-                var ab1 = GetSprite(reg, $"{name}_Ability_1", faction, Constants.PlayerPanelEasterEggs());
+                var ab1 = GetSprite(reg, $"{name}_Ability_1", faction, ee);
 
                 if (!ab1.IsValid() && reg)
-                    ab1 = GetSprite($"{name}_Ability_1", ogfaction, Constants.PlayerPanelEasterEggs());
+                    ab1 = GetSprite($"{name}_Ability_1", ogfaction, ee);
 
                 if (ab1.IsValid() && __instance.choice1Sprite)
                     __instance.choice1Sprite.sprite = ab1;
@@ -337,10 +341,10 @@ public static class PatchAbilityPanelListItems
             }
             case AbilityType.POTIONMASTER_REVEAL or AbilityType.WEREWOLF_NON_FULL_MOON:
             {
-                var ab2 = GetSprite(reg, $"{name}_Ability_2", faction, Constants.PlayerPanelEasterEggs());
+                var ab2 = GetSprite(reg, $"{name}_Ability_2", faction, ee);
 
                 if (!ab2.IsValid() && reg)
-                    ab2 = GetSprite($"{name}_Ability_2", ogfaction, Constants.PlayerPanelEasterEggs());
+                    ab2 = GetSprite($"{name}_Ability_2", ogfaction, ee);
 
                 if (ab2.IsValid() && __instance.choice1Sprite)
                     __instance.choice1Sprite.sprite = ab2;
@@ -350,24 +354,24 @@ public static class PatchAbilityPanelListItems
             default:
             {
                 var abilityName = $"{name}_Ability";
-                var ability1 = GetSprite(reg, abilityName, faction, Constants.PlayerPanelEasterEggs());
+                var ability1 = GetSprite(reg, abilityName, faction, ee);
 
                 if (!ability1.IsValid())
-                    ability1 = GetSprite(reg, abilityName + "_1", faction, Constants.PlayerPanelEasterEggs());
+                    ability1 = GetSprite(reg, abilityName + "_1", faction, ee);
 
                 if (!ability1.IsValid() && reg)
-                    ability1 = GetSprite(abilityName, ogfaction, Constants.PlayerPanelEasterEggs());
+                    ability1 = GetSprite(abilityName, ogfaction, ee);
 
                 if (!ability1.IsValid() && reg)
-                    ability1 = GetSprite(abilityName + "_1", ogfaction, Constants.PlayerPanelEasterEggs());
+                    ability1 = GetSprite(abilityName + "_1", ogfaction, ee);
 
                 if (ability1.IsValid() && __instance.choice1Sprite)
                     __instance.choice1Sprite.sprite = ability1;
 
-                var ability2 = GetSprite(reg, abilityName + "_2", faction, Constants.PlayerPanelEasterEggs());
+                var ability2 = GetSprite(reg, abilityName + "_2", faction, ee);
 
                 if (!ability2.IsValid() && reg)
-                    ability2 = GetSprite(abilityName + "_2", ogfaction, Constants.PlayerPanelEasterEggs());
+                    ability2 = GetSprite(abilityName + "_2", ogfaction, ee);
 
                 if (ability2.IsValid() && __instance.choice2Sprite)
                     __instance.choice2Sprite.sprite = ability2;
@@ -609,10 +613,11 @@ public static class PlayerEffectsServicePatch
         }
 
         var effect = Utils.EffectName(effectType);
-        var sprite = GetSprite(effect + "_Effect", Constants.PlayerPanelEasterEggs());
+        var ee = Constants.PlayerPanelEasterEggs();
+        var sprite = GetSprite(effect + "_Effect", ee);
 
         if (!sprite.IsValid())
-            sprite = GetSprite(effect, Constants.PlayerPanelEasterEggs());
+            sprite = GetSprite(effect, ee);
 
         __result.sprite = sprite.IsValid() ? sprite : EffectSprites[effectType];
     }

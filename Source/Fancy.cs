@@ -157,12 +157,12 @@ public class Fancy
         MainUIThemeWood = new("UI_WOOD", "#FFFFFF", PackType.RecoloredUI, _ => Constants.EnableCustomUI());
         MainUIThemeWax = new("UI_WAX", "#FFFFFF", PackType.RecoloredUI, _ => Constants.EnableCustomUI());
 
-        FireShade = new("FIRE_SHADE", 0, PackType.RecoloredUI, -100, 100, true, _ => Constants.GetMainUIThemeType() == UITheme.Faction);
-        PaperShade = new("PAPER_SHADE", 0, PackType.RecoloredUI, -100, 100, true, _ => Constants.GetMainUIThemeType() == UITheme.Faction);
-        MetalShade = new("METAL_SHADE", 0, PackType.RecoloredUI, -100, 100, true, _ => Constants.GetMainUIThemeType() == UITheme.Faction);
-        LeatherShade = new("LEATHER_SHADE", 0, PackType.RecoloredUI, -100, 100, true, _ => Constants.GetMainUIThemeType() == UITheme.Faction);
-        WoodShade = new("WOOD_SHADE", 0, PackType.RecoloredUI, -100, 100, true, _ => Constants.GetMainUIThemeType() == UITheme.Faction);
-        WaxShade = new("WAX_SHADE", 0, PackType.RecoloredUI, -100, 100, true, _ => Constants.GetMainUIThemeType() == UITheme.Faction);
+        FireShade = new("FIRE_SHADE", 0, PackType.RecoloredUI, -100, 100, true, _ => Constants.EnableCustomUI());
+        PaperShade = new("PAPER_SHADE", 0, PackType.RecoloredUI, -100, 100, true, _ => Constants.EnableCustomUI());
+        MetalShade = new("METAL_SHADE", 0, PackType.RecoloredUI, -100, 100, true, _ => Constants.EnableCustomUI());
+        LeatherShade = new("LEATHER_SHADE", 0, PackType.RecoloredUI, -100, 100, true, _ => Constants.EnableCustomUI());
+        WoodShade = new("WOOD_SHADE", 0, PackType.RecoloredUI, -100, 100, true, _ => Constants.EnableCustomUI());
+        WaxShade = new("WAX_SHADE", 0, PackType.RecoloredUI, -100, 100, true, _ => Constants.EnableCustomUI());
 
         ColorFire = new("COLOR_FIRE", true, PackType.RecoloredUI, _ => Constants.GetMainUIThemeType() == UITheme.Faction);
         ColorPaper = new("COLOR_PAPER", true, PackType.RecoloredUI, _ => Constants.GetMainUIThemeType() == UITheme.Faction);
