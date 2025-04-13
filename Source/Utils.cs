@@ -580,7 +580,7 @@ public static class Utils
         _ => FactionType.NONE
     };
 
-    public static void SetImageColor(this Image img, ColorType type, Color? color = null, float a = 1f)
+    public static void SetImageColor(this Image img, ColorType type, Color? color = null, float a = 1f, float shade = 0f)
     {
         if (!img)
             return;
@@ -599,6 +599,7 @@ public static class Utils
             ColorType.Wax => Constants.GetMainUIThemeWaxColor(),
             _ => color ?? Color.white
         };
+        color2 = color2.ShadeColor(type, shade);
         color2.a = a;
         mat.SetColor("_Color", color2);
         mat.SetFloat("_Brightness", Constants.GeneralBrightness());
