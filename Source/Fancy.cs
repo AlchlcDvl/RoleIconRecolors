@@ -117,6 +117,13 @@ public class Fancy
     public static FloatOption GeneralBrightness;
     public static FloatOption GrayscaleAmount;
 
+    public static ToggleOption ColorWood;
+    public static ToggleOption ColorPaper;
+    public static ToggleOption ColorMetal;
+    public static ToggleOption ColorLeather;
+    public static ToggleOption ColorFire;
+    public static ToggleOption ColorWax;
+
     public static FloatOption PlayerNumber;
 
     public static EnumDropdownOption<FactionType> SelectTestingFaction;
@@ -156,6 +163,13 @@ public class Fancy
         LeatherShade = new("LEATHER_SHADE", 0, PackType.RecoloredUI, -100, 100, true, _ => Constants.GetMainUIThemeType() == UITheme.Faction);
         WoodShade = new("WOOD_SHADE", 0, PackType.RecoloredUI, -100, 100, true, _ => Constants.GetMainUIThemeType() == UITheme.Faction);
         WaxShade = new("WAX_SHADE", 0, PackType.RecoloredUI, -100, 100, true, _ => Constants.GetMainUIThemeType() == UITheme.Faction);
+
+        ColorFire = new("COLOR_FIRE", true, PackType.RecoloredUI, _ => Constants.GetMainUIThemeType() == UITheme.Faction);
+        ColorPaper = new("COLOR_PAPER", true, PackType.RecoloredUI, _ => Constants.GetMainUIThemeType() == UITheme.Faction);
+        ColorMetal = new("COLOR_METAL", true, PackType.RecoloredUI, _ => Constants.GetMainUIThemeType() == UITheme.Faction);
+        ColorLeather = new("COLOR_LEATHER", true, PackType.RecoloredUI, _ => Constants.GetMainUIThemeType() == UITheme.Faction);
+        ColorWood = new("COLOR_WOOD", true, PackType.RecoloredUI, _ => Constants.GetMainUIThemeType() == UITheme.Faction);
+        ColorWax = new("COLOR_WAX", true, PackType.RecoloredUI, _ => Constants.GetMainUIThemeType() == UITheme.Faction);
 
         GeneralBrightness = new("GENERAL_BRIGHTNESS", 100, PackType.RecoloredUI, 0, 100, true, _ => Constants.EnableCustomUI());
         GrayscaleAmount = new("GRAYSCALE_AMOUNT", 100, PackType.RecoloredUI, 0, 100, true, _ => Constants.EnableCustomUI());

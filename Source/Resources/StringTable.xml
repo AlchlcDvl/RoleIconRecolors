@@ -74,6 +74,24 @@
     <Entry key="FANCY_WOOD_SHADE_NAME">Faction UI Theme Wood Shading</Entry>
     <Entry key="FANCY_WOOD_SHADE_DESC">Dictates how dark or light the faction wood color will be.</Entry>
 
+    <Entry key="FANCY_COLOR_FIRE_NAME">Faction UI Theme Fire</Entry>
+    <Entry key="FANCY_COLOR_FIRE_DESC">Dictates if fire should be affected by Faction UI. If disabled, fire will use the color from Custo UI.</Entry>
+
+    <Entry key="FANCY_COLOR_PAPER_NAME">Faction UI Theme Paper</Entry>
+    <Entry key="FANCY_COLOR_PAPER_DESC">Dictates if paper should be affected by Faction UI. If disabled, paper will use the color from Custom UI.</Entry>
+
+    <Entry key="FANCY_COLOR_METAL_NAME">Faction UI Theme Metal</Entry>
+    <Entry key="FANCY_COLOR_METAL_DESC">Dictates if metal should be affected by Faction UI. If disabled, metal will use the color from Custom UI.</Entry>
+
+    <Entry key="FANCY_COLOR_LEATHER_NAME">Faction UI Theme Leather</Entry>
+    <Entry key="FANCY_COLOR_LEATHER_DESC">Dictates if leather should be affected by Faction UI. If disabled, leather will use the color from Custom UI.</Entry>
+
+    <Entry key="FANCY_COLOR_WAX_NAME">Faction UI Theme Wax</Entry>
+    <Entry key="FANCY_COLOR_WAX_DESC">Dictates if wax should be affected by Faction UI. If disabled, wax will use the color from Custom UI.</Entry>
+
+    <Entry key="FANCY_COLOR_WOOD_NAME">Faction UI Theme Wood</Entry>
+    <Entry key="FANCY_COLOR_WOOD_DESC">Dictates if wood should be affected by Faction UI. If disabled, wood will use the color from Custom UI.</Entry>
+
     <Entry key="FANCY_DUMP_SHEETS_NAME">Dump Sprite Sheets</Entry>
     <Entry key="FANCY_DUMP_SHEETS_DESC">Toggles whether game sprite sheets are dumped so pack debugging is possible.</Entry>
 
