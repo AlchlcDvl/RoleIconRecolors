@@ -77,13 +77,6 @@ public static class PatchRoleCards
             var panel = __instance.GetComponentInParent<RoleCardPanel>();
             ChangeRoleCard(panel?.roleIcon, panel?.specialAbilityPanel?.useButton?.abilityIcon, panel?.roleInfoButtons, role, __instance.currentFaction);
         }
-
-        // Merged a CW patch here for optimisation purposes
-        if (Constants.EnableCustomUI())
-        {
-            foreach (var button in __instance.GetComponentInParent<RoleCardPanel>().roleInfoButtons)
-                button.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal); // Rings at the back
-        }
     }
 
     [HarmonyPatch(typeof(RoleCardPanelBackground), nameof(RoleCardPanelBackground.SetFaction))]
@@ -94,13 +87,6 @@ public static class PatchRoleCards
             var panel = __instance.GetComponentInParent<RoleCardPanel>();
             ChangeRoleCard(panel?.roleIcon, panel?.specialAbilityPanel?.useButton?.abilityIcon, panel?.roleInfoButtons, __instance.currentRole, factionType);
         }
-
-        // Merged a CW patch here for optimisation purposes
-        if (Constants.EnableCustomUI())
-        {
-            foreach (var button in __instance.GetComponentInParent<RoleCardPanel>().roleInfoButtons)
-                button.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal); // Rings at the back
-        }
     }
 
     [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.HandleOnMyIdentityChanged))]
@@ -108,13 +94,6 @@ public static class PatchRoleCards
     {
         if (Constants.EnableIcons())
             ChangeRoleCard(__instance?.roleIcon, __instance?.specialAbilityPanel?.useButton?.abilityIcon, __instance?.roleInfoButtons, playerIdentityData.role, playerIdentityData.faction);
-
-        // Merged a CW patch here for optimisation purposes
-        if (!Constants.EnableCustomUI())
-            return;
-
-        foreach (var button in __instance!.roleInfoButtons)
-            button.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal); // Rings at the back
     }
 
     [HarmonyPatch(typeof(RoleCardPopupPanel), nameof(RoleCardPopupPanel.SetRoleAndFaction))]
@@ -122,17 +101,17 @@ public static class PatchRoleCards
     {
         if (Constants.EnableIcons())
             ChangeRoleCard(__instance?.roleIcon, __instance?.specialAbilityPanel?.useButton?.abilityIcon, __instance?.roleInfoButtons, role, faction, true);
-
-        // Merged a CW patch here for optimisation purposes
-        if (!Constants.EnableCustomUI())
-            return;
-
-        foreach (var button in __instance!.roleInfoButtons)
-            button.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal); // Rings at the back
     }
 
     private static void ChangeRoleCard(Image roleIcon, Image specialAbilityPanel, List<BaseAbilityButton> roleInfoButtons, Role role, FactionType factionType, bool isGuide = false)
     {
+        // Merged a CW patch here for optimisation purposes
+        if (Constants.EnableCustomUI())
+        {
+            foreach (var button in roleInfoButtons)
+                button.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal); // Rings at the back
+        }
+
         roleInfoButtons ??= [];
         role = Constants.IsTransformed() ? Utils.GetTransformedVersion(role) : role;
         var index = 0;
