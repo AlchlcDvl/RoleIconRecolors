@@ -237,16 +237,15 @@ public static class PatchAbilityPanel
     }
 }
 
-[HarmonyPatch(typeof(PooledChatController), nameof(PooledChatController.AddMessage))]
+[HarmonyPatch(typeof(RoleCardObservation), nameof(RoleCardObservation), MethodType.Constructor)]
 public static class HandleFactionChanges
 {
-    public static void Postfix(ChatLogMessage message)
+    public static void Postfix(RoleCardObservation __instance) => __instance.OnDataChanged += HandleUiChange;
+
+    private static void HandleUiChange(RoleCardData _)
     {
-        if (Constants.GetMainUIThemeType() != UITheme.Faction || message.chatLogEntry is not ChatLogGameMessageEntry entry || !(entry.messageId == GameFeedbackMessage.CONVERTED_TO_VAMPIRE ||
-            ((int)entry.messageId == 1040 && Service.Game.Sim.info.roleDeckBuilder.Data.modifierCards.Contains(Btos2Role.Vc))))
-        {
+        if (Constants.GetMainUIThemeType() != UITheme.Faction)
             return;
-        }
 
         var pooledChat = UObject.FindObjectOfType<PooledChatViewSwitcher>();
         var chatInput = UObject.FindObjectOfType<ChatInputController>();
