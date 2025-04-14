@@ -1,4 +1,7 @@
 using Game.Achievements;
+using Game.Chat;
+using Server.Shared.Messages;
+using Server.Shared.State.Chat;
 
 namespace FancyUI.Patches;
 
@@ -13,7 +16,6 @@ public static class RoleCardPanelPatch
         __instance.ValidateSpecialAbilityPanel();
         __instance.ValidateBackgroundColor();
         __instance.ShowRoleDescIf0Quality();
-        HandleIdentityChanged();
 
         if (!Constants.EnableCustomUI())
             return false;
@@ -21,29 +23,6 @@ public static class RoleCardPanelPatch
         __instance.transform.GetChild(5).GetComponent<Image>().SetImageColor(ColorType.Wood);
         __instance.transform.GetChild(10).GetComponent<Image>().SetImageColor(ColorType.Wood);
         return false;
-    }
-
-    private static void HandleIdentityChanged()
-    {
-        if (Constants.GetMainUIThemeType() != UITheme.Faction)
-            return;
-
-        var pooledChat = UObject.FindObjectOfType<PooledChatViewSwitcher>();
-        var chatInput = UObject.FindObjectOfType<ChatInputController>();
-        var dayNight = UObject.FindObjectOfType<HudTimeChangePanel>();
-        var abilityPanel = UObject.FindObjectOfType<TosAbilityPanel>();
-
-        if (pooledChat)
-            PooledChatViewSwitcherPatch.Postfix(pooledChat);
-
-        if (chatInput)
-            ChatInputControllerPatch.Postfix(chatInput);
-
-        if (dayNight)
-            HudTimeChangePanelPatch.Postfix(dayNight);
-
-        if (abilityPanel)
-            PatchAbilityPanel.Postfix(abilityPanel);
     }
 }
 
@@ -255,6 +234,36 @@ public static class PatchAbilityPanel
         paper.SetImageColor(ColorType.Paper);
 
         parent.Find("MinimizeUIButton").GetComponent<Image>().SetImageColor(ColorType.Metal);
+    }
+}
+
+[HarmonyPatch(typeof(PooledChatController), nameof(PooledChatController.AddMessage))]
+public static class HandleFactionChanges
+{
+    public static void Postfix(ChatLogMessage message)
+    {
+        if (Constants.GetMainUIThemeType() != UITheme.Faction || message.chatLogEntry is not ChatLogGameMessageEntry entry || !(entry.messageId == GameFeedbackMessage.CONVERTED_TO_VAMPIRE ||
+            ((int)entry.messageId == 1040 && Service.Game.Sim.info.roleDeckBuilder.Data.modifierCards.Contains(Btos2Role.Vc))))
+        {
+            return;
+        }
+
+        var pooledChat = UObject.FindObjectOfType<PooledChatViewSwitcher>();
+        var chatInput = UObject.FindObjectOfType<ChatInputController>();
+        var dayNight = UObject.FindObjectOfType<HudTimeChangePanel>();
+        var abilityPanel = UObject.FindObjectOfType<TosAbilityPanel>();
+
+        if (pooledChat)
+            PooledChatViewSwitcherPatch.Postfix(pooledChat);
+
+        if (chatInput)
+            ChatInputControllerPatch.Postfix(chatInput);
+
+        if (dayNight)
+            HudTimeChangePanelPatch.Postfix(dayNight);
+
+        if (abilityPanel)
+            PatchAbilityPanel.Postfix(abilityPanel);
     }
 }
 
