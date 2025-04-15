@@ -108,19 +108,20 @@ public static class Constants
                 faction = GetSelectedFaction();
             else if (Leo.IsGameScene())
                 faction = Pepper.GetMyFaction();
-            else
+        }
+
+        if (faction is null or FactionType.NONE)
+        {
+            return (color switch
             {
-                return (color switch
-                {
-                    ColorType.Metal => Fancy.MainUIThemeMetal.Value,
-                    ColorType.Paper => Fancy.MainUIThemePaper.Value,
-                    ColorType.Leather => Fancy.MainUIThemeLeather.Value,
-                    ColorType.Wood => Fancy.MainUIThemeWood.Value,
-                    ColorType.Flame => Fancy.MainUIThemeFire.Value,
-                    ColorType.Wax => Fancy.MainUIThemeWax.Value,
-                    _ => "#00000000"
-                }).ToColor();
-            }
+                ColorType.Metal => Fancy.MainUIThemeMetal.Value,
+                ColorType.Paper => Fancy.MainUIThemePaper.Value,
+                ColorType.Leather => Fancy.MainUIThemeLeather.Value,
+                ColorType.Wood => Fancy.MainUIThemeWood.Value,
+                ColorType.Flame => Fancy.MainUIThemeFire.Value,
+                ColorType.Wax => Fancy.MainUIThemeWax.Value,
+                _ => "#00000000"
+            }).ToColor();
         }
 
         return faction.Value.GetFactionColor().ToColor();
