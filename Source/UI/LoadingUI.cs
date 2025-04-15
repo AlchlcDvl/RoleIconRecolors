@@ -53,9 +53,9 @@ public class LoadingUI : UIController
     {
         Caller.SetActive(true);
         Caller = null;
-        DownloaderUI.Instance.Abort = true;
         Instance.gameObject.SetActive(false);
         Started = false;
+        DownloaderUI.Instance.Abort = false;
     }
 
     public static void Begin(GameObject caller, string title)

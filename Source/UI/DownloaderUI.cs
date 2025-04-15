@@ -3,6 +3,7 @@ using UnityEngine.Networking;
 using Newtonsoft.Json;
 using FancyUI.Assets.IconPacks;
 using System.IO.Compression;
+using Home.Shared;
 
 namespace FancyUI.UI;
 
@@ -176,7 +177,6 @@ public class DownloaderUI : UIController
     }
 
     public static void HandlePackData() => Coroutines.Start(CoHandlePackData());
-
     private static IEnumerator CoHandlePackData()
     {
         if (HandlerRunning)
@@ -222,7 +222,7 @@ public class DownloaderUI : UIController
         HandlerRunning = false;
     }
 
-    private static void DownloadIcons(string packName) => Instance.StartCoroutine(CoDownloadIcons(packName));
+    private static void DownloadIcons(string packName) => ApplicationController.ApplicationContext.StartCoroutine(CoDownloadIcons(packName));
 
     private static IEnumerator CoDownloadIcons(string packName)
     {
@@ -259,8 +259,6 @@ public class DownloaderUI : UIController
         LoadingUI.Instance.LoadingProgress.SetText("Retrieving GitHub Data");
         using var www = UnityWebRequest.Get(packJson!.ApiLink());
         var op = www.SendWebRequest();
-        var progress = 0f;
-
         while (!op.isDone)
         {
             if (Instance.Abort)
@@ -268,9 +266,7 @@ public class DownloaderUI : UIController
                 www.Abort();
                 break;
             }
-
-            progress += op.progress / 1.5f;
-            LoadingUI.Instance.LoadingProgress.SetText(progress <= 100 ? $"Downloading Pack: {Mathf.RoundToInt(Mathf.Clamp(progress, 0, 100))}%" : "Unity is shitting itself, please wait...");
+            LoadingUI.Instance.LoadingProgress.SetText(op.progress <= 1f ? $"Downloading Pack: {Mathf.RoundToInt(Mathf.Clamp(op.progress, 0f, 1f) * 100f)}%" : "Unity is shitting itself, please wait...");
             yield return new WaitForEndOfFrame();
         }
 
@@ -298,17 +294,29 @@ public class DownloaderUI : UIController
         }
 
         LoadingUI.Instance.LoadingProgress.SetText("Extracting Icons");
-        ZipFile.ExtractToDirectory(filePath, FolderPath, true);
+        ZipFile.ExtractToDirectory(filePath, IPPath, true);
 
-        var dir = Directory.EnumerateDirectories(FolderPath, $"{packJson.RepoOwner}-{packJson.RepoName}*").FirstOrDefault();
+        var dir = Directory.EnumerateDirectories(IPPath, $"{packJson.RepoOwner}-{packJson.RepoName}*").FirstOrDefault();
         var time = 0f;
-
-        foreach (var file in Directory.EnumerateFiles(dir!, "*.png", SearchOption.AllDirectories).Where(x => x.ContainsAny(packName, packJson.RepoName)))
+        var thedir = dir;
+        var pngamount = 0;
+        foreach (var temppath in Directory.GetDirectories(dir!))
+        {
+            var templength = Directory.GetFiles(temppath, "*.png", SearchOption.AllDirectories).Length;
+            if (templength > pngamount)
+            {
+                thedir = temppath;
+                pngamount = templength;
+            }
+        }
+        foreach (var file in Directory.EnumerateFiles(thedir!, "*.png", SearchOption.AllDirectories).Where(x => x.ContainsAny(packName, packJson.RepoName)))
         {
             if (Instance.Abort)
                 break;
-
-            File.Move(file, file.Replace(dir, FolderPath));
+            try
+            {
+                File.Move(file, file.Replace(thedir, pack));
+            } catch { }
             time += Time.deltaTime;
 
             if (time < 0.1f)
@@ -334,5 +342,7 @@ public class DownloaderUI : UIController
         yield return new WaitForSeconds(1f);
 
         LoadingUI.Instance.Finish();
+
+        yield break;
     }
 }
