@@ -109,7 +109,18 @@ public static class Constants
             else if (Leo.IsGameScene())
                 faction = Pepper.GetMyFaction();
             else
-                faction = FactionType.NONE;
+            {
+                return (color switch
+                {
+                    ColorType.Metal => Fancy.MainUIThemeMetal.Value,
+                    ColorType.Paper => Fancy.MainUIThemePaper.Value,
+                    ColorType.Leather => Fancy.MainUIThemeLeather.Value,
+                    ColorType.Wood => Fancy.MainUIThemeWood.Value,
+                    ColorType.Flame => Fancy.MainUIThemeFire.Value,
+                    ColorType.Wax => Fancy.MainUIThemeWax.Value,
+                    _ => "#00000000"
+                }).ToColor();
+            }
         }
 
         return faction.Value.GetFactionColor().ToColor();
