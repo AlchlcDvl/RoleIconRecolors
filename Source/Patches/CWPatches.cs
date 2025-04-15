@@ -82,6 +82,7 @@ public static class SpecialAbilityPanelPatch1
 
         og.SetImageColor(ColorType.Wood); // Main wood container
         copy.SetImageColor(ColorType.Metal); // The metal support
+        __instance.useButton.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Flame);
     }
 
     public static SpecialAbilityPanel cachedSpecialAbilityPanel;
