@@ -46,69 +46,74 @@ public static class Constants
 
     public static Color GetMainUIThemeWoodColor(FactionType? faction = null) => GetMainUIThemeType() switch
     {
-        UITheme.Faction when faction != null && Fancy.ColorWood.Value
-            => faction.Value.GetFactionColor().ToColor(),
-        UITheme.Faction when GetSelectedFaction() != FactionType.NONE && Fancy.ColorWood.Value
-            => GetSelectedFaction().GetFactionColor().ToColor(),
-        UITheme.Faction when Pepper.GetMyFaction() != FactionType.NONE && Fancy.ColorWood.Value
-            => Pepper.GetMyFaction().GetFactionColor().ToColor(),
-        _ => Fancy.MainUIThemeWood.Value.ToColor(),
+        UITheme.Faction => GetThemeColor(ColorType.Wood, faction),
+        UITheme.Custom => Fancy.MainUIThemeWood.Value.ToColor(),
+        _ => Color.clear
     };
 
     public static Color GetMainUIThemeMetalColor(FactionType? faction = null) => GetMainUIThemeType() switch
     {
-        UITheme.Faction when faction != null && Fancy.ColorMetal.Value
-            => faction.Value.GetFactionColor().ToColor(),
-        UITheme.Faction when GetSelectedFaction() != FactionType.NONE && Fancy.ColorMetal.Value
-            => GetSelectedFaction().GetFactionColor().ToColor(),
-        UITheme.Faction when Pepper.GetMyFaction() != FactionType.NONE && Fancy.ColorMetal.Value
-            => Pepper.GetMyFaction().GetFactionColor().ToColor(),
-        _ => Fancy.MainUIThemeMetal.Value.ToColor(),
+        UITheme.Faction => GetThemeColor(ColorType.Metal, faction),
+        UITheme.Custom => Fancy.MainUIThemeMetal.Value.ToColor(),
+        _ => Color.clear
     };
 
     public static Color GetMainUIThemePaperColor(FactionType? faction = null) => GetMainUIThemeType() switch
     {
-        UITheme.Faction when faction != null && Fancy.ColorPaper.Value
-            => faction.Value.GetFactionColor().ToColor(),
-        UITheme.Faction when GetSelectedFaction() != FactionType.NONE && Fancy.ColorPaper.Value
-            => GetSelectedFaction().GetFactionColor().ToColor(),
-        UITheme.Faction when Pepper.GetMyFaction() != FactionType.NONE && Fancy.ColorPaper.Value
-            => Pepper.GetMyFaction().GetFactionColor().ToColor(),
-        _ => Fancy.MainUIThemePaper.Value.ToColor(),
+        UITheme.Faction => GetThemeColor(ColorType.Paper, faction),
+        UITheme.Custom => Fancy.MainUIThemePaper.Value.ToColor(),
+        _ => Color.clear
     };
 
     public static Color GetMainUIThemeLeatherColor(FactionType? faction = null) => GetMainUIThemeType() switch
     {
-        UITheme.Faction when faction != null && Fancy.ColorLeather.Value
-            => faction.Value.GetFactionColor().ToColor(),
-        UITheme.Faction when GetSelectedFaction() != FactionType.NONE && Fancy.ColorLeather.Value
-            => GetSelectedFaction().GetFactionColor().ToColor(),
-        UITheme.Faction when Pepper.GetMyFaction() != FactionType.NONE && Fancy.ColorLeather.Value
-            => Pepper.GetMyFaction().GetFactionColor().ToColor(),
-        _ => Fancy.MainUIThemeLeather.Value.ToColor(),
+        UITheme.Faction => GetThemeColor(ColorType.Leather, faction),
+        UITheme.Custom => Fancy.MainUIThemeLeather.Value.ToColor(),
+        _ => Color.clear
     };
 
     public static Color GetMainUIThemeFireColor(FactionType? faction = null) => GetMainUIThemeType() switch
     {
-        UITheme.Faction when faction != null && Fancy.ColorFire.Value
-            => faction.Value.GetFactionColor().ToColor(),
-        UITheme.Faction when GetSelectedFaction() != FactionType.NONE && Fancy.ColorFire.Value
-            => GetSelectedFaction().GetFactionColor().ToColor(),
-        UITheme.Faction when Pepper.GetMyFaction() != FactionType.NONE && Fancy.ColorFire.Value
-            => Pepper.GetMyFaction().GetFactionColor().ToColor(),
-        _ => Fancy.MainUIThemeFire.Value.ToColor(),
+        UITheme.Faction => GetThemeColor(ColorType.Flame, faction),
+        UITheme.Custom => Fancy.MainUIThemeFire.Value.ToColor(),
+        _ => Color.clear
     };
 
     public static Color GetMainUIThemeWaxColor(FactionType? faction = null) => GetMainUIThemeType() switch
     {
-        UITheme.Faction when faction != null && Fancy.ColorWax.Value
-            => faction.Value.GetFactionColor().ToColor(),
-        UITheme.Faction when GetSelectedFaction() != FactionType.NONE && Fancy.ColorWax.Value
-            => GetSelectedFaction().GetFactionColor().ToColor(),
-        UITheme.Faction when Pepper.GetMyFaction() != FactionType.NONE && Fancy.ColorWax.Value
-            => Pepper.GetMyFaction().GetFactionColor().ToColor(),
-        _ => Fancy.MainUIThemeWax.Value.ToColor(),
+        UITheme.Faction => GetThemeColor(ColorType.Wax, faction),
+        UITheme.Custom => Fancy.MainUIThemeWax.Value.ToColor(),
+        _ => Color.clear
     };
+
+    private static Color GetThemeColor(ColorType color, FactionType? faction = null)
+    {
+        var shade = color switch
+        {
+            ColorType.Metal => Fancy.ColorMetal.Value,
+            ColorType.Paper => Fancy.ColorPaper.Value,
+            ColorType.Leather => Fancy.ColorLeather.Value,
+            ColorType.Wood => Fancy.ColorWood.Value,
+            ColorType.Flame => Fancy.ColorFire.Value,
+            ColorType.Wax => Fancy.ColorWax.Value,
+            _ => true
+        };
+
+        if (!shade)
+            return Color.clear;
+
+        if (!faction.HasValue)
+        {
+            if (SettingsAndTestingUI.Instance)
+                faction = GetSelectedFaction();
+            else if (Leo.IsGameScene())
+                faction = Pepper.GetMyFaction();
+            else
+                faction = FactionType.NONE;
+        }
+
+        return faction.Value.GetFactionColor().ToColor();
+    }
 
     public static float GeneralBrightness() => Fancy.GeneralBrightness.Value * 5f / 100f;
 

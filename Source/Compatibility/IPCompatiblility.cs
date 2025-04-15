@@ -2,11 +2,11 @@ namespace FancyUI.Compatibility;
 
 public static class Btos2IPCompatibility
 {
-    private static FieldInfo RoleIconField;
+    private static FieldInfo RoleIcon;
 
-    private static FieldInfo RoleField;
-    private static FieldInfo IconField;
-    private static FieldInfo BannedField;
+    private static FieldInfo Role;
+    private static FieldInfo Icon;
+    private static FieldInfo Banned;
 
     public static bool Init()
     {
@@ -17,22 +17,25 @@ public static class Btos2IPCompatibility
 
             var btos2Assembly = Assembly.LoadFile(btos2Mod!.AssemblyPath);
             var btos2Types = AccessTools.GetTypesFromAssembly(btos2Assembly);
-            var roleDeckPlusPanelControllerType = btos2Types.FirstOrDefault(x => x.Name == "RoleDeckPlusPanelController");
-            var deckItemType = btos2Types.FirstOrDefault(x => x.Name.Contains("DeckItem") && !x.IsEnum);
-            var menuRoleType = btos2Types.FirstOrDefault(x => x.Name.Contains("MenuRole"));
+            var roleDeckPlusPanelController = btos2Types.FirstOrDefault(x => x.Name == "RoleDeckPlusPanelController");
+            var deckItem = roleDeckPlusPanelController.GetNestedTypes(AccessTools.all).FirstOrDefault(x => x.Name == "DeckItem");
+            var roleSelectionPlusController = btos2Types.FirstOrDefault(x => x.Name == "RoleSelectionPlusController");
+            var menuRole = roleSelectionPlusController.GetNestedTypes(AccessTools.all).FirstOrDefault(x => x.Name == "MenuRole");
 
-            RoleIconField = AccessTools.Field(deckItemType, "roleIcon");
+            RoleIcon = AccessTools.Field(deckItem, "roleIcon");
 
-            IconField = AccessTools.Field(menuRoleType, "icon");
-            RoleField = AccessTools.Field(menuRoleType, "role");
-            BannedField = AccessTools.Field(menuRoleType, "banned");
+            Icon = AccessTools.Field(menuRole, "icon");
+            Role = AccessTools.Field(menuRole, "role");
+            Banned = AccessTools.Field(menuRole, "banned");
 
-            var setDataMethod1 = AccessTools.Method(deckItemType, "SetData", [ typeof(Role), typeof(FactionType), typeof(bool), roleDeckPlusPanelControllerType ]);
-            var refreshDataMethod = AccessTools.Method(menuRoleType, "RefreshData");
-            var compatType = typeof(Btos2IPCompatibility);
+            var setData = AccessTools.Method(deckItem, "SetData", [ typeof(Role), typeof(FactionType), typeof(bool), roleDeckPlusPanelController ]);
+            var refreshData = AccessTools.Method(menuRole, "RefreshData");
+            var validateStartButtonState = AccessTools.Method(roleDeckPlusPanelController, "ValidateStartButtonState");
+            var compat = typeof(Btos2IPCompatibility);
 
-            Btos2Compatibility.Btos2PatchesHarmony.Patch(setDataMethod1, null, new(AccessTools.Method(compatType, nameof(ItemPostfix1))));
-            Btos2Compatibility.Btos2PatchesHarmony.Patch(refreshDataMethod, null, new(AccessTools.Method(compatType, nameof(ItemPostfix2))));
+            Btos2Compatibility.Btos2PatchesHarmony.Patch(setData, null, new(AccessTools.Method(compat, nameof(ItemPostfix1))));
+            Btos2Compatibility.Btos2PatchesHarmony.Patch(refreshData, null, new(AccessTools.Method(compat, nameof(ItemPostfix2))));
+            Btos2Compatibility.Btos2PatchesHarmony.Patch(validateStartButtonState, null, new(AccessTools.Method(compat, nameof(RoleDeckPostfix))));
             Fancy.Instance.Message("BTOS2 compatibility was successful");
             return true;
         }
@@ -48,7 +51,7 @@ public static class Btos2IPCompatibility
         if (!Constants.EnableIcons())
             return;
 
-        var roleIcon = (Image)RoleIconField.GetValue(__instance);
+        var roleIcon = (Image)RoleIcon.GetValue(__instance);
 
         if (!roleIcon)
             return;
@@ -80,18 +83,18 @@ public static class Btos2IPCompatibility
         if (!Constants.EnableIcons())
             return;
 
-        var roleIcon = (Image)IconField.GetValue(__instance);
+        var roleIcon = (Image)Icon.GetValue(__instance);
 
         if (!roleIcon)
             return;
 
-        var role = (Role)RoleField.GetValue(__instance);
+        var role = (Role)Role.GetValue(__instance);
         var sprite = GetSprite(Utils.RoleName(role), Utils.FactionName(role.GetFactionType(ModType.BTOS2)));
 
         if (sprite.IsValid())
             roleIcon.sprite = sprite;
 
-        var banned = (GameObject)BannedField.GetValue(__instance);
+        var banned = (GameObject)Banned.GetValue(__instance);
 
         if (!banned)
             return;
@@ -101,5 +104,11 @@ public static class Btos2IPCompatibility
 
         if (bannedIcon && bannedSprite.IsValid())
             bannedIcon.sprite = bannedSprite;
+    }
+
+    public static void RoleDeckPostfix(dynamic __instance)
+    {
+        if (Constants.EnableCustomUI())
+            ((Image)__instance.GetComponent<Image>()).SetImageColor(ColorType.Paper);
     }
 }

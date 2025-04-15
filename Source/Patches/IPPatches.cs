@@ -11,7 +11,6 @@ using Server.Shared.Extensions;
 using Home.Shared;
 using System.Text.RegularExpressions;
 using AbilityType = Game.Interface.TosAbilityPanelListItem.OverrideAbilityType;
-using Cinematics.Players;
 
 namespace FancyUI.Patches;
 
@@ -66,69 +65,78 @@ public static class PatchBrowserRoleListPanel
     }
 }
 
-[HarmonyPatch]
+[HarmonyPatch(typeof(RoleCardPanelBackground))]
+public static class RoleCardFixesAndPatches
+{
+    [HarmonyPatch(nameof(RoleCardPanelBackground.Start))]
+    public static bool Prefix(RoleCardPanelBackground __instance)
+    {
+        __instance.rolecardBackgroundInstance = UObject.Instantiate(__instance.rolecardBackgroundTemplate);
+        Debug.Log("RoleCardPanelBackground Created " + __instance.rolecardBackgroundInstance.name);
+        __instance.deadStamp.SetActive(false);
+
+        if (Service.Game.Sim.simulation != null)
+        {
+            Service.Game.Sim.simulation.myIdentity.OnChanged += __instance.HandleMyIdentityChanged;
+            Service.Game.Sim.info.roleCardObservation.OnDataChanged += __instance.HandleRoleCardChanged;
+            var myIdentity = Pepper.GetMyCurrentIdentity();
+            __instance.SetRoleAndFaction(myIdentity.role, myIdentity.faction);
+        }
+        else
+            __instance.SetRoleAndFaction(Role.TAVERNKEEPER, FactionType.TOWN);
+
+        return false;
+    }
+
+    [HarmonyPatch(nameof(RoleCardPanelBackground.SetRoleAndFaction))]
+    [HarmonyPatch(nameof(RoleCardPanelBackground.HandleMyIdentityChanged))]
+    [HarmonyPatch(nameof(RoleCardPanelBackground.HandleRoleCardChanged))]
+    public static void Postfix(RoleCardPanelBackground __instance)
+    {
+        if (Constants.EnableIcons())
+        {
+            var panel = __instance.GetComponentInParent<RoleCardPanel>();
+            PatchRoleCards.ChangeRoleCard(panel?.roleIcon, panel?.specialAbilityPanel?.useButton?.abilityIcon, panel?.roleInfoButtons, __instance.currentRole, __instance.currentFaction);
+        }
+    }
+}
+
+[HarmonyPatch(typeof(RoleCardPopupPanel), nameof(RoleCardPopupPanel.SetRoleAndFaction))]
 public static class PatchRoleCards
 {
-    [HarmonyPatch(typeof(RoleCardPanelBackground), nameof(RoleCardPanelBackground.SetRole))]
-    public static void Postfix(RoleCardPanelBackground __instance, Role role)
-    {
-        if (Constants.EnableIcons())
-        {
-            var panel = __instance.GetComponentInParent<RoleCardPanel>();
-            ChangeRoleCard(panel?.roleIcon, panel?.specialAbilityPanel?.useButton?.abilityIcon, panel?.roleInfoButtons, role, __instance.currentFaction);
-        }
-    }
-
-    [HarmonyPatch(typeof(RoleCardPanelBackground), nameof(RoleCardPanelBackground.SetFaction))]
-    public static void Postfix(RoleCardPanelBackground __instance, FactionType factionType)
-    {
-        if (Constants.EnableIcons())
-        {
-            var panel = __instance.GetComponentInParent<RoleCardPanel>();
-            ChangeRoleCard(panel?.roleIcon, panel?.specialAbilityPanel?.useButton?.abilityIcon, panel?.roleInfoButtons, __instance.currentRole, factionType);
-        }
-    }
-
-    [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.HandleOnMyIdentityChanged))]
-    public static void Postfix(RoleCardPanel __instance, PlayerIdentityData playerIdentityData)
-    {
-        if (Constants.EnableIcons())
-            ChangeRoleCard(__instance?.roleIcon, __instance?.specialAbilityPanel?.useButton?.abilityIcon, __instance?.roleInfoButtons, playerIdentityData.role, playerIdentityData.faction);
-    }
-
-    [HarmonyPatch(typeof(RoleCardPopupPanel), nameof(RoleCardPopupPanel.SetRoleAndFaction))]
     public static void Postfix(RoleCardPopupPanel __instance, Role role, FactionType faction)
     {
         if (Constants.EnableIcons())
-            ChangeRoleCard(__instance?.roleIcon, __instance?.specialAbilityPanel?.useButton?.abilityIcon, __instance?.roleInfoButtons, role, faction, true);
+            ChangeRoleCard(__instance.roleIcon, __instance.specialAbilityPanel?.useButton?.abilityIcon, __instance.roleInfoButtons, role, faction, true);
     }
 
-    private static void ChangeRoleCard(Image roleIcon, Image specialAbilityPanel, List<BaseAbilityButton> roleInfoButtons, Role role, FactionType factionType, bool isGuide = false)
+    public static void ChangeRoleCard(Image roleIcon, Image specialAbilityPanel, List<BaseAbilityButton> roleInfoButtons, Role role, FactionType faction, bool isGuide = false)
     {
+        roleInfoButtons ??= [];
+
         // Merged a CW patch here for optimisation purposes
         if (Constants.EnableCustomUI())
         {
             foreach (var button in roleInfoButtons)
-                button.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal); // Rings at the back
+                button.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal, faction: faction); // Rings at the back
         }
 
-        roleInfoButtons ??= [];
         role = Constants.IsTransformed() ? Utils.GetTransformedVersion(role) : role;
         var index = 0;
-        var name = Utils.RoleName(role);
-        var faction = Utils.FactionName(factionType);
+        var roleName = Utils.RoleName(role);
+        var factionName = Utils.FactionName(faction);
         var ogfaction = Utils.FactionName(role.GetFactionType(), false);
-        var reg = ogfaction != faction;
-        var sprite = GetSprite(reg, name, faction);
+        var reg = ogfaction != factionName;
+        var sprite = GetSprite(reg, roleName, factionName);
 
         if (!sprite.IsValid() && reg)
-            sprite = GetSprite(name, ogfaction);
+            sprite = GetSprite(roleName, ogfaction);
 
         if (sprite.IsValid() && roleIcon)
             roleIcon.sprite = sprite;
 
-        var specialName = $"{name}_Special";
-        var special = GetSprite(reg, specialName, faction);
+        var specialName = $"{roleName}_Special";
+        var special = GetSprite(reg, specialName, factionName);
 
         if (!special.IsValid() && reg)
             special = GetSprite(specialName, ogfaction);
@@ -136,11 +144,11 @@ public static class PatchRoleCards
         if (special.IsValid() && specialAbilityPanel)
             specialAbilityPanel.sprite = special;
 
-        var abilityName = $"{name}_Ability";
-        var ability1 = GetSprite(reg, abilityName, faction);
+        var abilityName = $"{roleName}_Ability";
+        var ability1 = GetSprite(reg, abilityName, factionName);
 
         if (!ability1.IsValid())
-            ability1 = GetSprite(reg, abilityName + "_1", faction);
+            ability1 = GetSprite(reg, abilityName + "_1", factionName);
 
         if (!ability1.IsValid() && reg)
             ability1 = GetSprite(abilityName, ogfaction);
@@ -156,8 +164,8 @@ public static class PatchRoleCards
         else if (Utils.Skippable(abilityName) || Utils.Skippable(abilityName + "_1"))
             index++;
 
-        var abilityName2 = $"{name}_Ability_2";
-        var ability2 = GetSprite(reg, abilityName2, faction);
+        var abilityName2 = $"{roleName}_Ability_2";
+        var ability2 = GetSprite(reg, abilityName2, factionName);
 
         if (!ability2.IsValid() && reg)
             ability2 = GetSprite(abilityName2, ogfaction);
@@ -170,17 +178,17 @@ public static class PatchRoleCards
         else if (Utils.Skippable(abilityName2))
             index++;
 
-        var attribute = GetSprite(reg, $"Attributes_{name}", faction);
+        var attribute = GetSprite(reg, $"Attributes_{roleName}", factionName);
 
         if (!attribute.IsValid() && role.IsTransformedApoc())
-            attribute = GetSprite(reg, "Attributes_Horsemen", faction);
+            attribute = GetSprite(reg, "Attributes_Horsemen", factionName);
 
         if (!attribute.IsValid())
-            attribute = GetSprite(reg, "Attributes", faction);
+            attribute = GetSprite(reg, "Attributes", factionName);
 
         if (reg && !attribute.IsValid())
         {
-            attribute = GetSprite($"Attributes_{name}", ogfaction);
+            attribute = GetSprite($"Attributes_{roleName}", ogfaction);
 
             if (!attribute.IsValid() && role.IsTransformedApoc())
                 attribute = GetSprite("Attributes_Horsemen", ogfaction);
@@ -196,14 +204,14 @@ public static class PatchRoleCards
             return;
 
         index++;
-        var nommy = GetSprite(reg, $"Necronomicon_{name}", faction);
+        var nommy = GetSprite(reg, $"Necronomicon_{roleName}", factionName);
 
         if (!nommy.IsValid())
-            nommy = GetSprite(reg, "Necronomicon", faction);
+            nommy = GetSprite(reg, "Necronomicon", factionName);
 
         if (reg && !nommy.IsValid())
         {
-            nommy = GetSprite($"Necronomicon_{name}", ogfaction);
+            nommy = GetSprite($"Necronomicon_{roleName}", ogfaction);
 
             if (!nommy.IsValid())
                 nommy = GetSprite("Necronomicon", ogfaction);

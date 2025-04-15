@@ -580,53 +580,59 @@ public static class Utils
         _ => FactionType.NONE
     };
 
-    public static void SetImageColor(this Image img, ColorType type, Color? color = null, float a = 1f, float shade = 0f)
+    public static void SetImageColor(this Image img, ColorType type, Color? color = null, float a = 1f, float shade = 0f, FactionType? faction = null)
     {
         if (!img)
             return;
 
-        // if (img.material?.name != "GrayscaleMaterial")
-            img.material = new(Grayscale);
-
-        var mat = img.material;
+        var mat = img.material = new(Grayscale);
         var color2 = type switch
         {
-            ColorType.Metal => Constants.GetMainUIThemeMetalColor(),
-            ColorType.Paper => Constants.GetMainUIThemePaperColor(),
-            ColorType.Leather => Constants.GetMainUIThemeLeatherColor(),
-            ColorType.Wood => Constants.GetMainUIThemeWoodColor(),
-            ColorType.Flame => Constants.GetMainUIThemeFireColor(),
-            ColorType.Wax => Constants.GetMainUIThemeWaxColor(),
+            ColorType.Metal => Constants.GetMainUIThemeMetalColor(faction),
+            ColorType.Paper => Constants.GetMainUIThemePaperColor(faction),
+            ColorType.Leather => Constants.GetMainUIThemeLeatherColor(faction),
+            ColorType.Wood => Constants.GetMainUIThemeWoodColor(faction),
+            ColorType.Flame => Constants.GetMainUIThemeFireColor(faction),
+            ColorType.Wax => Constants.GetMainUIThemeWaxColor(faction),
             _ => color ?? Color.white
         };
-        color2 = color2.ShadeColor(type, shade);
-        color2.a = a;
+
+        if (color2 == Color.clear)
+        {
+            img.material = new(Graphic.defaultGraphicMaterial);
+            return;
+        }
+
+        color2 = color2.ShadeColor(type, a, shade);
         mat.SetColor("_Color", color2);
         mat.SetFloat("_Brightness", Constants.GeneralBrightness());
         mat.SetFloat("_GrayscaleAmount", Constants.GrayscaleAmount());
     }
 
-    public static void SetGraphicColor(this Graphic graphic, ColorType type, Color? color = null, float shade = 0f, float a = 1f)
+    public static void SetGraphicColor(this Graphic graphic, ColorType type, Color? color = null, float shade = 0f, float a = 1f, FactionType? faction = null)
     {
         if (!graphic)
             return;
 
         var color2 = type switch
         {
-            ColorType.Metal => Constants.GetMainUIThemeMetalColor(),
-            ColorType.Paper => Constants.GetMainUIThemePaperColor(),
-            ColorType.Leather => Constants.GetMainUIThemeLeatherColor(),
-            ColorType.Wood => Constants.GetMainUIThemeWoodColor(),
-            ColorType.Flame => Constants.GetMainUIThemeFireColor(),
-            ColorType.Wax => Constants.GetMainUIThemeWaxColor(),
+            ColorType.Metal => Constants.GetMainUIThemeMetalColor(faction),
+            ColorType.Paper => Constants.GetMainUIThemePaperColor(faction),
+            ColorType.Leather => Constants.GetMainUIThemeLeatherColor(faction),
+            ColorType.Wood => Constants.GetMainUIThemeWoodColor(faction),
+            ColorType.Flame => Constants.GetMainUIThemeFireColor(faction),
+            ColorType.Wax => Constants.GetMainUIThemeWaxColor(faction),
             _ => color ?? Color.white
         };
-        color2 = color2.ShadeColor(type, shade, flip: true);
-        color2.a = a;
+
+        if (color2 == Color.clear)
+            return;
+
+        color2 = color2.ShadeColor(type, a, shade, true);
         graphic.color = color2;
     }
 
-    public static Color ShadeColor(this Color color, ColorType type, float shadeParam = 0f, bool flip = false)
+    public static Color ShadeColor(this Color color, ColorType type, float alpha = 1f, float shadeParam = 0f, bool flip = false)
     {
         var shade = type switch
         {
@@ -640,16 +646,14 @@ public static class Utils
         };
 
         if (shade == 0f)
-            return color;
+            shade = 50f;
 
-        // const float threshold = 255f / 2;
-        // var lum = (color.r * 0.2126f * 255f) + (color.g * 0.7152f * 255f) + (color.b * 0.0722f * 255f);
-
-        // if (flip || (lum > threshold && shade > 0f) || (lum < threshold && shade < 0f))
         if (flip)
             shade = -shade;
 
-        return color.ShadeColor(shade / 100f);
+        var color2 = color.ShadeColor(shade / 100f);
+        color2.a = alpha;
+        return color2;
     }
 
     public static bool IsValid(this SilhouetteAnimation anim) => anim != null && anim != Loading;
@@ -726,7 +730,7 @@ public static class Utils
         return text2;
     }
 
-    public static Color ShadeColor(this Color color, float strength = 0)
+    public static Color ShadeColor(this Color color, float strength = 0f)
     {
         strength = Mathf.Clamp(strength, -1f, 1f);
         return Color.Lerp(color, strength < 0 ? Color.white : Color.black, Mathf.Abs(strength));
