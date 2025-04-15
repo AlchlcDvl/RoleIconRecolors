@@ -585,7 +585,7 @@ public static class Utils
         if (!img)
             return;
 
-        if (img.material?.name != "GrayscaleMaterial")
+        // if (img.material?.name != "GrayscaleMaterial")
             img.material = new(Grayscale);
 
         var mat = img.material;

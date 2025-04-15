@@ -9,3 +9,4 @@ Source/Lib/Legacy.dll
 Ignore.*
 *.DotSettings.user
 .qodo
+/.vs
