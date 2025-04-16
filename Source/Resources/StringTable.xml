@@ -185,20 +185,6 @@
     <Entry key="FANCY_WOOD">Wood</Entry>
     <Entry key="FANCY_WAX">Wax</Entry>
 
-    <!-- None -->
-    <Entry key="FANCY_NONE_UI_FIRE_NAME">None Fire Color</Entry>
-    <Entry key="FANCY_NONE_UI_FIRE_DESC">Dictates how the fire of the main UI looks like when None.</Entry>
-    <Entry key="FANCY_NONE_UI_PAPER_NAME">None Paper Color</Entry>
-    <Entry key="FANCY_NONE_UI_PAPER_DESC">Dictates how the paper of the main UI looks like when None.</Entry>
-    <Entry key="FANCY_NONE_UI_METAL_NAME">None Metal Color</Entry>
-    <Entry key="FANCY_NONE_UI_METAL_DESC">Dictates how the metal of the main UI looks like when None.</Entry>
-    <Entry key="FANCY_NONE_UI_LEATHER_NAME">None Leather Color</Entry>
-    <Entry key="FANCY_NONE_UI_LEATHER_DESC">Dictates how the leather of the main UI looks like when None.</Entry>
-    <Entry key="FANCY_NONE_UI_WAX_NAME">None Wax Color</Entry>
-    <Entry key="FANCY_NONE_UI_WAX_DESC">Dictates how the wax of the main UI looks like when None.</Entry>
-    <Entry key="FANCY_NONE_UI_WOOD_NAME">None Wood Color</Entry>
-    <Entry key="FANCY_NONE_UI_WOOD_DESC">Dictates how the wood of the main UI looks like when None.</Entry>
-
     <!-- Town -->
     <Entry key="FANCY_TOWN_UI_FIRE_NAME">Town Fire Color</Entry>
     <Entry key="FANCY_TOWN_UI_FIRE_DESC">Dictates how the fire of the main UI looks like when Town.</Entry>
