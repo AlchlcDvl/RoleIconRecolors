@@ -32,7 +32,7 @@ public class LoadingUI : UIController
 
     public void OnDestroy() => Instance = null;
 
-    private static void Cancel() => DownloaderUI.Instance.Abort = true;
+    private static void Cancel() => Coroutines.Stop(DownloaderUI.Instance.InProgress);
 
     public void Update()
     {
@@ -55,7 +55,7 @@ public class LoadingUI : UIController
         Caller = null;
         Instance.gameObject.SetActive(false);
         Started = false;
-        DownloaderUI.Instance.Abort = false;
+        DownloaderUI.Instance.InProgress = null;
     }
 
     public static void Begin(GameObject caller, string title)
