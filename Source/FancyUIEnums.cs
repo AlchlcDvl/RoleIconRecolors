@@ -24,7 +24,8 @@ public enum ColorType : byte
     Paper,
     Leather,
     Fire,
-    Wax
+    Wax,
+    All
 }
 
 public enum UITheme : byte

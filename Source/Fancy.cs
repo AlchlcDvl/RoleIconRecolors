@@ -141,15 +141,16 @@ public class Fancy
 
         SelectColorFilter = new("COLOR_FILTER", ColorType.Wood, PackType.RecoloredUI, useTranslations: true);
 
-        var colors = GeneralUtils.GetEnumValues<ColorType>().ToDictionary(x => x, x => x.ToString().ToUpperInvariant());
+        var colors = GeneralUtils.GetEnumValues<ColorType>().Where(x => x != ColorType.All).ToDictionary(x => x, x => x.ToString().ToUpperInvariant());
         var factions = BTOS2Factions.Where(x => x is not (Btos2Faction.Lovers or Btos2Faction.Cannibal or Btos2Faction.None)).ToDictionary(x => x, x => Utils.FactionName(x,
             Constants.BTOS2Exists() ? ModType.BTOS2 : ModType.Vanilla).ToUpperInvariant());
 
         foreach (var (type, name) in colors)
         {
-            CustomUIColorsMap[type] = new($"UI_{name}", "#FFFFFF", PackType.RecoloredUI, _ => Constants.EnableCustomUI() && SelectColorFilter.Value == type);
-            ColorShadeToggleMap[type] = new($"COLOR_{name}", true, PackType.RecoloredUI, _ => Constants.GetMainUIThemeType() == UITheme.Faction && SelectColorFilter.Value == type);
-            ColorShadeMap[type] = new($"{name}_SHADE", 0, PackType.RecoloredUI, -100, 100, true, _ => Constants.EnableCustomUI() && SelectColorFilter.Value == type);
+            CustomUIColorsMap[type] = new($"UI_{name}", "#FFFFFF", PackType.RecoloredUI, _ => Constants.EnableCustomUI() && SelectColorFilter.Value.IsAny(type, ColorType.All));
+            ColorShadeToggleMap[type] = new($"COLOR_{name}", true, PackType.RecoloredUI, _ => Constants.GetMainUIThemeType() == UITheme.Faction && SelectColorFilter.Value.IsAny(type,
+                ColorType.All));
+            ColorShadeMap[type] = new($"{name}_SHADE", 0, PackType.RecoloredUI, -100, 100, true, _ => Constants.EnableCustomUI() && SelectColorFilter.Value.IsAny(type, ColorType.All));
 
             foreach (var (faction, factionName) in factions)
             {
@@ -208,7 +209,7 @@ public class Fancy
                 }
 
                 FactionToColorMap[faction][type] = new($"{factionName}_UI_{name}", color, PackType.RecoloredUI, _ => Constants.EnableCustomUI() && Constants.ShowFactionalSettings() &&
-                    SelectTestingFaction.Value == faction && SelectColorFilter.Value == type);
+                    SelectTestingFaction.Value == faction && SelectColorFilter.Value.IsAny(type, ColorType.All));
             }
         }
 

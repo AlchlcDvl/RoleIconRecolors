@@ -5,7 +5,7 @@ namespace FancyUI;
 
 public static class Utils
 {
-    private static readonly string[] VanillaSkippableNames = [ "Baker_Ability", "Pirate_Ability" ];
+    private static readonly string[] VanillaSkippableNames = ["Baker_Ability", "Pirate_Ability"];
     private static readonly string[] BTOS2SkippableNames = [ "Baker_Ability_1", "Baker_Ability_2", "Jackal_Ability", "Auditor_Ability", "Inquisitor_Ability", "Banshee_Ability", "Judge_Ability",
         "Warlock_Ability", "Wildling_Ability_2", "Starspawn_Ability", "Attributes_Pandora" ];
     private static readonly string[] CommonSkippableNames = [ "Admirer_Ability", "Amnesiac_Ability", "Arsonist_Ability", "Attributes_Coven", "Berserker_Ability", "Bodyguard_Ability",
@@ -547,21 +547,21 @@ public static class Utils
     public static FactionType GetFactionType(this Role role, ModType? mod = null) => ((int)role, role, mod ?? GetGameType()) switch
     {
         // Basic faction checks based on role ID ranges
-        (> 0 and < 25, _, _) => FactionType.TOWN,
-        (> 24 and < 40, _, _) => FactionType.COVEN,
+        ( > 0 and < 25, _, _) => FactionType.TOWN,
+        ( > 24 and < 40, _, _) => FactionType.COVEN,
         (41 or 42 or 47 or 50 or 250 or 251 or 252 or 253, _, _) => FactionType.APOCALYPSE,
 
         // Individual role checks for IDs < 54
-        (< 54, Role.ARSONIST, _) => FactionType.ARSONIST,
-        (< 54, Role.DOOMSAYER, _) => FactionType.DOOMSAYER,
-        (< 54, Role.EXECUTIONER, _) => FactionType.EXECUTIONER,
-        (< 54, Role.JESTER, _) => FactionType.JESTER,
-        (< 54, Role.PIRATE, _) => FactionType.PIRATE,
-        (< 54, Role.SERIALKILLER, _) => FactionType.SERIALKILLER,
-        (< 54, Role.SHROUD, _) => FactionType.SHROUD,
-        (< 54, Role.WEREWOLF, _) => FactionType.WEREWOLF,
-        (< 54, Role.VAMPIRE, _) => FactionType.VAMPIRE,
-        (< 54, Role.CURSED_SOUL, _) => FactionType.CURSED_SOUL,
+        ( < 54, Role.ARSONIST, _) => FactionType.ARSONIST,
+        ( < 54, Role.DOOMSAYER, _) => FactionType.DOOMSAYER,
+        ( < 54, Role.EXECUTIONER, _) => FactionType.EXECUTIONER,
+        ( < 54, Role.JESTER, _) => FactionType.JESTER,
+        ( < 54, Role.PIRATE, _) => FactionType.PIRATE,
+        ( < 54, Role.SERIALKILLER, _) => FactionType.SERIALKILLER,
+        ( < 54, Role.SHROUD, _) => FactionType.SHROUD,
+        ( < 54, Role.WEREWOLF, _) => FactionType.WEREWOLF,
+        ( < 54, Role.VAMPIRE, _) => FactionType.VAMPIRE,
+        ( < 54, Role.CURSED_SOUL, _) => FactionType.CURSED_SOUL,
 
         // BTOS2 specific role checks
         (_, Btos2Role.Banshee, ModType.BTOS2) => Btos2Faction.Coven,
@@ -574,7 +574,7 @@ public static class Utils
         (_, Btos2Role.Warlock, ModType.BTOS2) => Btos2Faction.Apocalypse,
 
         // Vanilla specific role checks
-        (> 53 and < 57, _, ModType.Vanilla) => FactionType.TOWN,
+        ( > 53 and < 57, _, ModType.Vanilla) => FactionType.TOWN,
 
         // Default case
         _ => FactionType.NONE
@@ -640,7 +640,8 @@ public static class Utils
             try
             {
                 return role.MrcDisplayString(faction);
-            } catch {}
+            }
+            catch { }
         }
 
         var result = role.ToDisplayString();
@@ -708,4 +709,6 @@ public static class Utils
         strength = Mathf.Clamp(strength, -1f, 1f);
         return Color.Lerp(color, strength < 0 ? Color.white : Color.black, Mathf.Abs(strength));
     }
+
+    public static bool IsAny<T>(this T item, params T[] items) => items.Contains(item);
 }
