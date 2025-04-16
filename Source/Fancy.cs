@@ -153,6 +153,9 @@ public class Fancy
 
             foreach (var (faction, factionName) in factions)
             {
+                if (faction is Btos2Faction.Lovers or Btos2Faction.Cannibal)
+                    continue;
+
                 var color = "";
 
                 if (faction is < Btos2Faction.CursedSoul or (> Btos2Faction.Jackal and < Btos2Faction.Judge) or Btos2Faction.Inquisitor || (faction == Btos2Faction.CursedSoul &&
