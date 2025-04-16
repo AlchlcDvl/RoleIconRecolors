@@ -31,7 +31,7 @@ public class DownloaderUI : UIController
     private HoverEffect RepoOwnerHover { get; set; }
     private HoverEffect BranchNameHover { get; set; }
 
-    public bool Abort { get; set; }
+    public IEnumerator InProgress { get; set; }
 
     private static string Type => FancyUI.Instance.Page == PackType.IconPacks ? "Icon Pack" : "Silhouette Set";
     private static string FolderPath => Path.Combine(Fancy.Instance.ModPath, $"{FancyUI.Instance.Page}");
@@ -103,11 +103,17 @@ public class DownloaderUI : UIController
     {
         Instance = null;
 
-        var enumerable = Packs.Where(x => !x.FromMainRepo && x.Type == "IconPacks");
-        GeneralUtils.SaveText("OtherPacks.json", JsonConvert.SerializeObject(enumerable, enumerable.GetType(), Formatting.Indented, new()), path: IPPath);
+        if (FancyUI.Instance.Page == PackType.IconPacks)
+        {
+            var enumerable = Packs.Where(x => !x.FromMainRepo && x.Type == "IconPacks");
+            GeneralUtils.SaveText("OtherPacks.json", JsonConvert.SerializeObject(enumerable, enumerable.GetType(), Formatting.Indented, new()), path: IPPath);
+        }
 
-        var enumerable2 = Packs.Where(x => !x.FromMainRepo && x.Type == "SilhouetteSets");
-        GeneralUtils.SaveText("OtherSets.json", JsonConvert.SerializeObject(enumerable2, enumerable2.GetType(), Formatting.Indented, new()), path: SSPath);
+        if (FancyUI.Instance.Page == PackType.IconPacks)
+        {
+            var enumerable = Packs.Where(x => !x.FromMainRepo && x.Type == "SilhouetteSets");
+            GeneralUtils.SaveText("OtherSets.json", JsonConvert.SerializeObject(enumerable, enumerable.GetType(), Formatting.Indented, new()), path: SSPath);
+        }
     }
 
     public void AfterGenerating()
@@ -177,6 +183,7 @@ public class DownloaderUI : UIController
     }
 
     public static void HandlePackData() => Coroutines.Start(CoHandlePackData());
+
     private static IEnumerator CoHandlePackData()
     {
         if (HandlerRunning)
@@ -185,9 +192,6 @@ public class DownloaderUI : UIController
         HandlerRunning = true;
         using var www = UnityWebRequest.Get($"{Repo}/Packs.json");
         yield return www.SendWebRequest();
-
-        while (!www.isDone)
-            yield return new WaitForEndOfFrame();
 
         if (www.result != UnityWebRequest.Result.Success)
         {
@@ -222,7 +226,11 @@ public class DownloaderUI : UIController
         HandlerRunning = false;
     }
 
-    private static void DownloadIcons(string packName) => ApplicationController.ApplicationContext.StartCoroutine(CoDownloadIcons(packName));
+    private static void DownloadIcons(string packName)
+    {
+        Instance.InProgress = CoDownloadIcons(packName);
+        Coroutines.Start(Instance.InProgress);
+    }
 
     private static IEnumerator CoDownloadIcons(string packName)
     {
@@ -248,7 +256,7 @@ public class DownloaderUI : UIController
         }
 
         LoadingUI.Instance.LoadingProgress.SetText("Clearing Old Files/Creating Folders");
-        var pack = Path.Combine(IPPath, packName);
+        var pack = Path.Combine(FolderPath, packName);
 
         if (!Directory.Exists(pack))
             Directory.CreateDirectory(pack);
@@ -259,18 +267,14 @@ public class DownloaderUI : UIController
         LoadingUI.Instance.LoadingProgress.SetText("Retrieving GitHub Data");
         using var www = UnityWebRequest.Get(packJson!.ApiLink());
         var op = www.SendWebRequest();
+
         while (!op.isDone)
         {
-            if (Instance.Abort)
-            {
-                www.Abort();
-                break;
-            }
             LoadingUI.Instance.LoadingProgress.SetText(op.progress <= 1f ? $"Downloading Pack: {Mathf.RoundToInt(Mathf.Clamp(op.progress, 0f, 1f) * 100f)}%" : "Unity is shitting itself, please wait...");
             yield return new WaitForEndOfFrame();
         }
 
-        if (www.result != UnityWebRequest.Result.Success || Instance.Abort)
+        if (www.result != UnityWebRequest.Result.Success)
         {
             Fancy.Instance.Error(www.error);
             Running[packName] = false;
@@ -279,7 +283,7 @@ public class DownloaderUI : UIController
         }
 
         LoadingUI.Instance.LoadingProgress.SetText("Fetching Pack Data");
-        var filePath = Path.Combine(IPPath, $"{packName}.zip");
+        var filePath = Path.Combine(FolderPath, $"{packName}.zip");
         using var task = File.WriteAllBytesAsync(filePath, www.downloadHandler.GetData());
 
         while (!task.IsCompleted)
@@ -294,29 +298,31 @@ public class DownloaderUI : UIController
         }
 
         LoadingUI.Instance.LoadingProgress.SetText("Extracting Icons");
-        ZipFile.ExtractToDirectory(filePath, IPPath, true);
+        ZipFile.ExtractToDirectory(filePath, FolderPath, true);
 
-        var dir = Directory.EnumerateDirectories(IPPath, $"{packJson.RepoOwner}-{packJson.RepoName}*").FirstOrDefault();
+        var dir = Directory.EnumerateDirectories(FolderPath, $"{packJson.RepoOwner}-{packJson.RepoName}*").FirstOrDefault();
         var time = 0f;
-        var thedir = dir;
-        var pngamount = 0;
-        foreach (var temppath in Directory.GetDirectories(dir!))
+        var theDir = dir;
+        var pngAmount = 0;
+
+        foreach (var tempPath in Directory.GetDirectories(dir!))
         {
-            var templength = Directory.GetFiles(temppath, "*.png", SearchOption.AllDirectories).Length;
-            if (templength > pngamount)
+            var tempLength = Directory.GetFiles(tempPath, "*.png", SearchOption.AllDirectories).Length;
+
+            if (tempLength > pngAmount)
             {
-                thedir = temppath;
-                pngamount = templength;
+                theDir = tempPath;
+                pngAmount = tempLength;
             }
         }
-        foreach (var file in Directory.EnumerateFiles(thedir!, "*.png", SearchOption.AllDirectories).Where(x => x.ContainsAny(packName, packJson.RepoName)))
+
+        foreach (var file in Directory.EnumerateFiles(theDir!, "*.png", SearchOption.AllDirectories).Where(x => x.ContainsAny(packName, packJson.RepoName)))
         {
-            if (Instance.Abort)
-                break;
             try
             {
-                File.Move(file, file.Replace(thedir, pack));
-            } catch { }
+                File.Move(file, file.Replace(theDir, pack));
+            } catch {}
+
             time += Time.deltaTime;
 
             if (time < 0.1f)
@@ -330,19 +336,14 @@ public class DownloaderUI : UIController
         File.Delete(filePath);
         Directory.Delete(dir, true);
 
-        if (Instance.Abort)
-            Fancy.Instance.Warning("Process was aborted");
-
         LoadingUI.Instance.LoadingProgress.SetText("Loading Icon Pack");
         Fancy.SelectedIconPack.Value = packName;
         TryLoadingSprites(packName, FancyUI.Instance.Page);
         Instance.OpenDirectory();
         Running[packName] = false;
         LoadingUI.Instance.LoadingProgress.SetText("Loaded!");
-        yield return new WaitForSeconds(1f);
+        yield return Coroutines.Wait(1f);
 
         LoadingUI.Instance.Finish();
-
-        yield break;
     }
 }
