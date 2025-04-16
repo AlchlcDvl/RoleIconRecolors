@@ -279,6 +279,8 @@ public static class PatchAbilityPanel
     {
         if (!Constants.EnableCustomUI())
             return;
+		
+
 
         Cache = __instance;
         new[] { __instance.allFilterBtn, __instance.livingFilterBtn, __instance.targetFilterBtn, __instance.factionFilterBtn, __instance.graveyardFilterBtn }

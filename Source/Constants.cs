@@ -43,45 +43,46 @@ public static class Constants
     public static UITheme GetMainUIThemeType() => Fancy.SelectedUITheme.Value;
 
     public static FactionType GetSelectedFaction() => Fancy.SelectTestingFaction.Value;
+    public static bool ShowFactionalWoodSettings() => GetMainUIThemeType() == UITheme.Faction;
 
     public static Color GetMainUIThemeWoodColor(FactionType? faction = null) => GetMainUIThemeType() switch
     {
-        UITheme.Faction => GetThemeColor(ColorType.Wood, faction),
+        UITheme.Faction => ThemeColors.GetWoodColor(),
         UITheme.Custom => Fancy.MainUIThemeWood.Value.ToColor(),
         _ => Color.clear
     };
 
     public static Color GetMainUIThemeMetalColor(FactionType? faction = null) => GetMainUIThemeType() switch
     {
-        UITheme.Faction => GetThemeColor(ColorType.Metal, faction),
+        UITheme.Faction => ThemeColors.GetMetalColor(),
         UITheme.Custom => Fancy.MainUIThemeMetal.Value.ToColor(),
         _ => Color.clear
     };
 
     public static Color GetMainUIThemePaperColor(FactionType? faction = null) => GetMainUIThemeType() switch
     {
-        UITheme.Faction => GetThemeColor(ColorType.Paper, faction),
+        UITheme.Faction => ThemeColors.GetPaperColor(),
         UITheme.Custom => Fancy.MainUIThemePaper.Value.ToColor(),
         _ => Color.clear
     };
 
     public static Color GetMainUIThemeLeatherColor(FactionType? faction = null) => GetMainUIThemeType() switch
     {
-        UITheme.Faction => GetThemeColor(ColorType.Leather, faction),
+        UITheme.Faction => ThemeColors.GetLeatherColor(),
         UITheme.Custom => Fancy.MainUIThemeLeather.Value.ToColor(),
         _ => Color.clear
     };
 
     public static Color GetMainUIThemeFireColor(FactionType? faction = null) => GetMainUIThemeType() switch
     {
-        UITheme.Faction => GetThemeColor(ColorType.Flame, faction),
+        UITheme.Faction => ThemeColors.GetFireColor(),
         UITheme.Custom => Fancy.MainUIThemeFire.Value.ToColor(),
         _ => Color.clear
     };
 
     public static Color GetMainUIThemeWaxColor(FactionType? faction = null) => GetMainUIThemeType() switch
     {
-        UITheme.Faction => GetThemeColor(ColorType.Wax, faction),
+        UITheme.Faction => ThemeColors.GetWaxColor(),
         UITheme.Custom => Fancy.MainUIThemeWax.Value.ToColor(),
         _ => Color.clear
     };
