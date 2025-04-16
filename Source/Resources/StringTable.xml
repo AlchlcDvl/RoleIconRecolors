@@ -108,7 +108,7 @@
     <Entry key="FANCY_SHOW_TO_JAILOR_DESC">When you are jailing someone as the Jailor, this option makes the old jailor overlay appear on your screen.</Entry>
 
     <Entry key="FANCY_ROLE_REVEAL_ICONS_NAME">Fancy Up Role Reveal Cinematic</Entry>
-    <Entry key="FANCY_ROLE_REVEAL_ICONS_DESC">Shows the character head shot and role icon at their respective locations during the role reveal cinematic. It will also recolor the colored role name in the cinematic with your current faction (supports Pandora, Compliance, and Teams).</Entry>
+    <Entry key="FANCY_ROLE_REVEAL_ICONS_DESC">Shows the character head shot and role icon at their respective locations during the role reveal cinematic.</Entry>
 
     <Entry key="FANCY_SELECTED_TESTING_FACTION_NAME">Testing Faction</Entry>
     <Entry key="FANCY_SELECTED_TESTING_FACTION_DESC">Modifies the testing UI as per the selected faction as if you were that faction in game.</Entry>
@@ -174,4 +174,344 @@
     <Entry key="FANCY_43">Pandora</Entry>
     <Entry key="FANCY_44">Compliance</Entry>
     <Entry key="FANCY_250">Lovers</Entry>
+
+
+
+        <!-- Town -->
+    <Entry key="FANCY_TOWN_UI_FIRE_NAME">Town Fire Color</Entry>
+    <Entry key="FANCY_TOWN_UI_FIRE_DESC">Dictates how the fire of the main UI looks like when Town.</Entry>
+    <Entry key="FANCY_TOWN_UI_PAPER_NAME">Town Paper Color</Entry>
+    <Entry key="FANCY_TOWN_UI_PAPER_DESC">Dictates how the paper of the main UI looks like when Town.</Entry>
+    <Entry key="FANCY_TOWN_UI_METAL_NAME">Town Metal Color</Entry>
+    <Entry key="FANCY_TOWN_UI_METAL_DESC">Dictates how the metal of the main UI looks like when Town.</Entry>
+    <Entry key="FANCY_TOWN_UI_LEATHER_NAME">Town Leather Color</Entry>
+    <Entry key="FANCY_TOWN_UI_LEATHER_DESC">Dictates how the leather of the main UI looks like when Town.</Entry>
+    <Entry key="FANCY_TOWN_UI_WAX_NAME">Town Wax Color</Entry>
+    <Entry key="FANCY_TOWN_UI_WAX_DESC">Dictates how the wax of the main UI looks like when Town.</Entry>
+    <Entry key="FANCY_TOWN_UI_WOOD_NAME">Town Wood Color</Entry>
+    <Entry key="FANCY_TOWN_UI_WOOD_DESC">Dictates how the wood of the main UI looks like when Town.</Entry>
+
+    <!-- Coven -->
+    <Entry key="FANCY_COVEN_UI_FIRE_NAME">Coven Fire Color</Entry>
+    <Entry key="FANCY_COVEN_UI_FIRE_DESC">Dictates how the fire of the main UI looks like when Coven.</Entry>
+    <Entry key="FANCY_COVEN_UI_PAPER_NAME">Coven Paper Color</Entry>
+    <Entry key="FANCY_COVEN_UI_PAPER_DESC">Dictates how the paper of the main UI looks like when Coven.</Entry>
+    <Entry key="FANCY_COVEN_UI_METAL_NAME">Coven Metal Color</Entry>
+    <Entry key="FANCY_COVEN_UI_METAL_DESC">Dictates how the metal of the main UI looks like when Coven.</Entry>
+    <Entry key="FANCY_COVEN_UI_LEATHER_NAME">Coven Leather Color</Entry>
+    <Entry key="FANCY_COVEN_UI_LEATHER_DESC">Dictates how the leather of the main UI looks like when Coven.</Entry>
+    <Entry key="FANCY_COVEN_UI_WAX_NAME">Coven Wax Color</Entry>
+    <Entry key="FANCY_COVEN_UI_WAX_DESC">Dictates how the wax of the main UI looks like when Coven.</Entry>
+    <Entry key="FANCY_COVEN_UI_WOOD_NAME">Coven Wood Color</Entry>
+    <Entry key="FANCY_COVEN_UI_WOOD_DESC">Dictates how the wood of the main UI looks like when Coven.</Entry>
+
+    <!-- Serial Killer -->
+    <Entry key="FANCY_SERIALKILLER_UI_FIRE_NAME">Serial Killer Fire Color</Entry>
+    <Entry key="FANCY_SERIALKILLER_UI_FIRE_DESC">Dictates how the fire of the main UI looks like when Serial Killer.</Entry>
+    <Entry key="FANCY_SERIALKILLER_UI_PAPER_NAME">Serial Killer Paper Color</Entry>
+    <Entry key="FANCY_SERIALKILLER_UI_PAPER_DESC">Dictates how the paper of the main UI looks like when Serial Killer.</Entry>
+    <Entry key="FANCY_SERIALKILLER_UI_METAL_NAME">Serial Killer Metal Color</Entry>
+    <Entry key="FANCY_SERIALKILLER_UI_METAL_DESC">Dictates how the metal of the main UI looks like when Serial Killer.</Entry>
+    <Entry key="FANCY_SERIALKILLER_UI_LEATHER_NAME">Serial Killer Leather Color</Entry>
+    <Entry key="FANCY_SERIALKILLER_UI_LEATHER_DESC">Dictates how the leather of the main UI looks like when Serial Killer.</Entry>
+    <Entry key="FANCY_SERIALKILLER_UI_WAX_NAME">Serial Killer Wax Color</Entry>
+    <Entry key="FANCY_SERIALKILLER_UI_WAX_DESC">Dictates how the wax of the main UI looks like when Serial Killer.</Entry>
+    <Entry key="FANCY_SERIALKILLER_UI_WOOD_NAME">Serial Killer Wood Color</Entry>
+    <Entry key="FANCY_SERIALKILLER_UI_WOOD_DESC">Dictates how the wood of the main UI looks like when Serial Killer.</Entry>
+
+    <!-- Arsonist -->
+    <Entry key="FANCY_ARSONIST_UI_FIRE_NAME">Arsonist Fire Color</Entry>
+    <Entry key="FANCY_ARSONIST_UI_FIRE_DESC">Dictates how the fire of the main UI looks like when Arsonist.</Entry>
+    <Entry key="FANCY_ARSONIST_UI_PAPER_NAME">Arsonist Paper Color</Entry>
+    <Entry key="FANCY_ARSONIST_UI_PAPER_DESC">Dictates how the paper of the main UI looks like when Arsonist.</Entry>
+    <Entry key="FANCY_ARSONIST_UI_METAL_NAME">Arsonist Metal Color</Entry>
+    <Entry key="FANCY_ARSONIST_UI_METAL_DESC">Dictates how the metal of the main UI looks like when Arsonist.</Entry>
+    <Entry key="FANCY_ARSONIST_UI_LEATHER_NAME">Arsonist Leather Color</Entry>
+    <Entry key="FANCY_ARSONIST_UI_LEATHER_DESC">Dictates how the leather of the main UI looks like when Arsonist.</Entry>
+    <Entry key="FANCY_ARSONIST_UI_WAX_NAME">Arsonist Wax Color</Entry>
+    <Entry key="FANCY_ARSONIST_UI_WAX_DESC">Dictates how the wax of the main UI looks like when Arsonist.</Entry>
+    <Entry key="FANCY_ARSONIST_UI_WOOD_NAME">Arsonist Wood Color</Entry>
+    <Entry key="FANCY_ARSONIST_UI_WOOD_DESC">Dictates how the wood of the main UI looks like when Arsonist.</Entry>
+
+    <!-- Werewolf -->
+    <Entry key="FANCY_WEREWOLF_UI_FIRE_NAME">Werewolf Fire Color</Entry>
+    <Entry key="FANCY_WEREWOLF_UI_FIRE_DESC">Dictates how the fire of the main UI looks like when Werewolf.</Entry>
+    <Entry key="FANCY_WEREWOLF_UI_PAPER_NAME">Werewolf Paper Color</Entry>
+    <Entry key="FANCY_WEREWOLF_UI_PAPER_DESC">Dictates how the paper of the main UI looks like when Werewolf.</Entry>
+    <Entry key="FANCY_WEREWOLF_UI_METAL_NAME">Werewolf Metal Color</Entry>
+    <Entry key="FANCY_WEREWOLF_UI_METAL_DESC">Dictates how the metal of the main UI looks like when Werewolf.</Entry>
+    <Entry key="FANCY_WEREWOLF_UI_LEATHER_NAME">Werewolf Leather Color</Entry>
+    <Entry key="FANCY_WEREWOLF_UI_LEATHER_DESC">Dictates how the leather of the main UI looks like when Werewolf.</Entry>
+    <Entry key="FANCY_WEREWOLF_UI_WAX_NAME">Werewolf Wax Color</Entry>
+    <Entry key="FANCY_WEREWOLF_UI_WAX_DESC">Dictates how the wax of the main UI looks like when Werewolf.</Entry>
+    <Entry key="FANCY_WEREWOLF_UI_WOOD_NAME">Werewolf Wood Color</Entry>
+    <Entry key="FANCY_WEREWOLF_UI_WOOD_DESC">Dictates how the wood of the main UI looks like when Werewolf.</Entry>
+
+    <!-- Shroud -->
+    <Entry key="FANCY_SHROUD_UI_FIRE_NAME">Shroud Fire Color</Entry>
+    <Entry key="FANCY_SHROUD_UI_FIRE_DESC">Dictates how the fire of the main UI looks like when Shroud.</Entry>
+    <Entry key="FANCY_SHROUD_UI_PAPER_NAME">Shroud Paper Color</Entry>
+    <Entry key="FANCY_SHROUD_UI_PAPER_DESC">Dictates how the paper of the main UI looks like when Shroud.</Entry>
+    <Entry key="FANCY_SHROUD_UI_METAL_NAME">Shroud Metal Color</Entry>
+    <Entry key="FANCY_SHROUD_UI_METAL_DESC">Dictates how the metal of the main UI looks like when Shroud.</Entry>
+    <Entry key="FANCY_SHROUD_UI_LEATHER_NAME">Shroud Leather Color</Entry>
+    <Entry key="FANCY_SHROUD_UI_LEATHER_DESC">Dictates how the leather of the main UI looks like when Shroud.</Entry>
+    <Entry key="FANCY_SHROUD_UI_WAX_NAME">Shroud Wax Color</Entry>
+    <Entry key="FANCY_SHROUD_UI_WAX_DESC">Dictates how the wax of the main UI looks like when Shroud.</Entry>
+    <Entry key="FANCY_SHROUD_UI_WOOD_NAME">Shroud Wood Color</Entry>
+    <Entry key="FANCY_SHROUD_UI_WOOD_DESC">Dictates how the wood of the main UI looks like when Shroud.</Entry>
+
+    <!-- Apocalypse -->
+    <Entry key="FANCY_APOCALYPSE_UI_FIRE_NAME">Apocalypse Fire Color</Entry>
+    <Entry key="FANCY_APOCALYPSE_UI_FIRE_DESC">Dictates how the fire of the main UI looks like when Apocalypse.</Entry>
+    <Entry key="FANCY_APOCALYPSE_UI_PAPER_NAME">Apocalypse Paper Color</Entry>
+    <Entry key="FANCY_APOCALYPSE_UI_PAPER_DESC">Dictates how the paper of the main UI looks like when Apocalypse.</Entry>
+    <Entry key="FANCY_APOCALYPSE_UI_METAL_NAME">Apocalypse Metal Color</Entry>
+    <Entry key="FANCY_APOCALYPSE_UI_METAL_DESC">Dictates how the metal of the main UI looks like when Apocalypse.</Entry>
+    <Entry key="FANCY_APOCALYPSE_UI_LEATHER_NAME">Apocalypse Leather Color</Entry>
+    <Entry key="FANCY_APOCALYPSE_UI_LEATHER_DESC">Dictates how the leather of the main UI looks like when Apocalypse.</Entry>
+    <Entry key="FANCY_APOCALYPSE_UI_WAX_NAME">Apocalypse Wax Color</Entry>
+    <Entry key="FANCY_APOCALYPSE_UI_WAX_DESC">Dictates how the wax of the main UI looks like when Apocalypse.</Entry>
+    <Entry key="FANCY_APOCALYPSE_UI_WOOD_NAME">Apocalypse Wood Color</Entry>
+    <Entry key="FANCY_APOCALYPSE_UI_WOOD_DESC">Dictates how the wood of the main UI looks like when Apocalypse.</Entry>
+
+    <!-- Executioner -->
+    <Entry key="FANCY_EXECUTIONER_UI_FIRE_NAME">Executioner Fire Color</Entry>
+    <Entry key="FANCY_EXECUTIONER_UI_FIRE_DESC">Dictates how the fire of the main UI looks like when Executioner.</Entry>
+    <Entry key="FANCY_EXECUTIONER_UI_PAPER_NAME">Executioner Paper Color</Entry>
+    <Entry key="FANCY_EXECUTIONER_UI_PAPER_DESC">Dictates how the paper of the main UI looks like when Executioner.</Entry>
+    <Entry key="FANCY_EXECUTIONER_UI_METAL_NAME">Executioner Metal Color</Entry>
+    <Entry key="FANCY_EXECUTIONER_UI_METAL_DESC">Dictates how the metal of the main UI looks like when Executioner.</Entry>
+    <Entry key="FANCY_EXECUTIONER_UI_LEATHER_NAME">Executioner Leather Color</Entry>
+    <Entry key="FANCY_EXECUTIONER_UI_LEATHER_DESC">Dictates how the leather of the main UI looks like when Executioner.</Entry>
+    <Entry key="FANCY_EXECUTIONER_UI_WAX_NAME">Executioner Wax Color</Entry>
+    <Entry key="FANCY_EXECUTIONER_UI_WAX_DESC">Dictates how the wax of the main UI looks like when Executioner.</Entry>
+    <Entry key="FANCY_EXECUTIONER_UI_WOOD_NAME">Executioner Wood Color</Entry>
+    <Entry key="FANCY_EXECUTIONER_UI_WOOD_DESC">Dictates how the wood of the main UI looks like when Executioner.</Entry>
+
+    <!-- Jester -->
+    <Entry key="FANCY_JESTER_UI_FIRE_NAME">Jester Fire Color</Entry>
+    <Entry key="FANCY_JESTER_UI_FIRE_DESC">Dictates how the fire of the main UI looks like when Jester.</Entry>
+    <Entry key="FANCY_JESTER_UI_PAPER_NAME">Jester Paper Color</Entry>
+    <Entry key="FANCY_JESTER_UI_PAPER_DESC">Dictates how the paper of the main UI looks like when Jester.</Entry>
+    <Entry key="FANCY_JESTER_UI_METAL_NAME">Jester Metal Color</Entry>
+    <Entry key="FANCY_JESTER_UI_METAL_DESC">Dictates how the metal of the main UI looks like when Jester.</Entry>
+    <Entry key="FANCY_JESTER_UI_LEATHER_NAME">Jester Leather Color</Entry>
+    <Entry key="FANCY_JESTER_UI_LEATHER_DESC">Dictates how the leather of the main UI looks like when Jester.</Entry>
+    <Entry key="FANCY_JESTER_UI_WAX_NAME">Jester Wax Color</Entry>
+    <Entry key="FANCY_JESTER_UI_WAX_DESC">Dictates how the wax of the main UI looks like when Jester.</Entry>
+    <Entry key="FANCY_JESTER_UI_WOOD_NAME">Jester Wood Color</Entry>
+    <Entry key="FANCY_JESTER_UI_WOOD_DESC">Dictates how the wood of the main UI looks like when Jester.</Entry>
+
+    <!-- Pirate -->
+    <Entry key="FANCY_PIRATE_UI_FIRE_NAME">Pirate Fire Color</Entry>
+    <Entry key="FANCY_PIRATE_UI_FIRE_DESC">Dictates how the fire of the main UI looks like when Pirate.</Entry>
+    <Entry key="FANCY_PIRATE_UI_PAPER_NAME">Pirate Paper Color</Entry>
+    <Entry key="FANCY_PIRATE_UI_PAPER_DESC">Dictates how the paper of the main UI looks like when Pirate.</Entry>
+    <Entry key="FANCY_PIRATE_UI_METAL_NAME">Pirate Metal Color</Entry>
+    <Entry key="FANCY_PIRATE_UI_METAL_DESC">Dictates how the metal of the main UI looks like when Pirate.</Entry>
+    <Entry key="FANCY_PIRATE_UI_LEATHER_NAME">Pirate Leather Color</Entry>
+    <Entry key="FANCY_PIRATE_UI_LEATHER_DESC">Dictates how the leather of the main UI looks like when Pirate.</Entry>
+    <Entry key="FANCY_PIRATE_UI_WAX_NAME">Pirate Wax Color</Entry>
+    <Entry key="FANCY_PIRATE_UI_WAX_DESC">Dictates how the wax of the main UI looks like when Pirate.</Entry>
+    <Entry key="FANCY_PIRATE_UI_WOOD_NAME">Pirate Wood Color</Entry>
+    <Entry key="FANCY_PIRATE_UI_WOOD_DESC">Dictates how the wood of the main UI looks like when Pirate.</Entry>
+
+    <!-- Doomsayer -->
+    <Entry key="FANCY_DOOMSAYER_UI_FIRE_NAME">Doomsayer Fire Color</Entry>
+    <Entry key="FANCY_DOOMSAYER_UI_FIRE_DESC">Dictates how the fire of the main UI looks like when Doomsayer.</Entry>
+    <Entry key="FANCY_DOOMSAYER_UI_PAPER_NAME">Doomsayer Paper Color</Entry>
+    <Entry key="FANCY_DOOMSAYER_UI_PAPER_DESC">Dictates how the paper of the main UI looks like when Doomsayer.</Entry>
+    <Entry key="FANCY_DOOMSAYER_UI_METAL_NAME">Doomsayer Metal Color</Entry>
+    <Entry key="FANCY_DOOMSAYER_UI_METAL_DESC">Dictates how the metal of the main UI looks like when Doomsayer.</Entry>
+    <Entry key="FANCY_DOOMSAYER_UI_LEATHER_NAME">Doomsayer Leather Color</Entry>
+    <Entry key="FANCY_DOOMSAYER_UI_LEATHER_DESC">Dictates how the leather of the main UI looks like when Doomsayer.</Entry>
+    <Entry key="FANCY_DOOMSAYER_UI_WAX_NAME">Doomsayer Wax Color</Entry>
+    <Entry key="FANCY_DOOMSAYER_UI_WAX_DESC">Dictates how the wax of the main UI looks like when Doomsayer.</Entry>
+    <Entry key="FANCY_DOOMSAYER_UI_WOOD_NAME">Doomsayer Wood Color</Entry>
+    <Entry key="FANCY_DOOMSAYER_UI_WOOD_DESC">Dictates how the wood of the main UI looks like when Doomsayer.</Entry>
+
+    <!-- Vampire -->
+    <Entry key="FANCY_VAMPIRE_UI_FIRE_NAME">Vampire Fire Color</Entry>
+    <Entry key="FANCY_VAMPIRE_UI_FIRE_DESC">Dictates how the fire of the main UI looks like when Vampire.</Entry>
+    <Entry key="FANCY_VAMPIRE_UI_PAPER_NAME">Vampire Paper Color</Entry>
+    <Entry key="FANCY_VAMPIRE_UI_PAPER_DESC">Dictates how the paper of the main UI looks like when Vampire.</Entry>
+    <Entry key="FANCY_VAMPIRE_UI_METAL_NAME">Vampire Metal Color</Entry>
+    <Entry key="FANCY_VAMPIRE_UI_METAL_DESC">Dictates how the metal of the main UI looks like when Vampire.</Entry>
+    <Entry key="FANCY_VAMPIRE_UI_LEATHER_NAME">Vampire Leather Color</Entry>
+    <Entry key="FANCY_VAMPIRE_UI_LEATHER_DESC">Dictates how the leather of the main UI looks like when Vampire.</Entry>
+    <Entry key="FANCY_VAMPIRE_UI_WAX_NAME">Vampire Wax Color</Entry>
+    <Entry key="FANCY_VAMPIRE_UI_WAX_DESC">Dictates how the wax of the main UI looks like when Vampire.</Entry>
+    <Entry key="FANCY_VAMPIRE_UI_WOOD_NAME">Vampire Wood Color</Entry>
+    <Entry key="FANCY_VAMPIRE_UI_WOOD_DESC">Dictates how the wood of the main UI looks like when Vampire.</Entry>
+
+    <!-- Cursed Soul -->
+    <Entry key="FANCY_CURSED_SOUL_UI_FIRE_NAME">Cursed Soul Fire Color</Entry>
+    <Entry key="FANCY_CURSED_SOUL_UI_FIRE_DESC">Dictates how the fire of the main UI looks like when Cursed Soul.</Entry>
+    <Entry key="FANCY_CURSED_SOUL_UI_PAPER_NAME">Cursed Soul Paper Color</Entry>
+    <Entry key="FANCY_CURSED_SOUL_UI_PAPER_DESC">Dictates how the paper of the main UI looks like when Cursed Soul.</Entry>
+    <Entry key="FANCY_CURSED_SOUL_UI_METAL_NAME">Cursed Soul Metal Color</Entry>
+    <Entry key="FANCY_CURSED_SOUL_UI_METAL_DESC">Dictates how the metal of the main UI looks like when Cursed Soul.</Entry>
+    <Entry key="FANCY_CURSED_SOUL_UI_LEATHER_NAME">Cursed Soul Leather Color</Entry>
+    <Entry key="FANCY_CURSED_SOUL_UI_LEATHER_DESC">Dictates how the leather of the main UI looks like when Cursed Soul.</Entry>
+    <Entry key="FANCY_CURSED_SOUL_UI_WAX_NAME">Cursed Soul Wax Color</Entry>
+    <Entry key="FANCY_CURSED_SOUL_UI_WAX_DESC">Dictates how the wax of the main UI looks like when Cursed Soul.</Entry>
+    <Entry key="FANCY_CURSED_SOUL_UI_WOOD_NAME">Cursed Soul Wood Color</Entry>
+    <Entry key="FANCY_CURSED_SOUL_UI_WOOD_DESC">Dictates how the wood of the main UI looks like when Cursed Soul.</Entry>
+
+    <!-- Jackal -->
+    <Entry key="FANCY_JACKAL_UI_FIRE_NAME">Jackal Fire Color</Entry>
+    <Entry key="FANCY_JACKAL_UI_FIRE_DESC">Dictates how the fire of the main UI looks like when Jackal.</Entry>
+    <Entry key="FANCY_JACKAL_UI_PAPER_NAME">Jackal Paper Color</Entry>
+    <Entry key="FANCY_JACKAL_UI_PAPER_DESC">Dictates how the paper of the main UI looks like when Jackal.</Entry>
+    <Entry key="FANCY_JACKAL_UI_METAL_NAME">Jackal Metal Color</Entry>
+    <Entry key="FANCY_JACKAL_UI_METAL_DESC">Dictates how the metal of the main UI looks like when Jackal.</Entry>
+    <Entry key="FANCY_JACKAL_UI_LEATHER_NAME">Jackal Leather Color</Entry>
+    <Entry key="FANCY_JACKAL_UI_LEATHER_DESC">Dictates how the leather of the main UI looks like when Jackal.</Entry>
+    <Entry key="FANCY_JACKAL_UI_WAX_NAME">Jackal Wax Color</Entry>
+    <Entry key="FANCY_JACKAL_UI_WAX_DESC">Dictates how the wax of the main UI looks like when Jackal.</Entry>
+    <Entry key="FANCY_JACKAL_UI_WOOD_NAME">Jackal Wood Color</Entry>
+    <Entry key="FANCY_JACKAL_UI_WOOD_DESC">Dictates how the wood of the main UI looks like when Jackal.</Entry>
+
+    <!-- Frogs -->
+    <Entry key="FANCY_FROGS_UI_FIRE_NAME">Frogs Fire Color</Entry>
+    <Entry key="FANCY_FROGS_UI_FIRE_DESC">Dictates how the fire of the main UI looks like when Frogs.</Entry>
+    <Entry key="FANCY_FROGS_UI_PAPER_NAME">Frogs Paper Color</Entry>
+    <Entry key="FANCY_FROGS_UI_PAPER_DESC">Dictates how the paper of the main UI looks like when Frogs.</Entry>
+    <Entry key="FANCY_FROGS_UI_METAL_NAME">Frogs Metal Color</Entry>
+    <Entry key="FANCY_FROGS_UI_METAL_DESC">Dictates how the metal of the main UI looks like when Frogs.</Entry>
+    <Entry key="FANCY_FROGS_UI_LEATHER_NAME">Frogs Leather Color</Entry>
+    <Entry key="FANCY_FROGS_UI_LEATHER_DESC">Dictates how the leather of the main UI looks like when Frogs.</Entry>
+    <Entry key="FANCY_FROGS_UI_WAX_NAME">Frogs Wax Color</Entry>
+    <Entry key="FANCY_FROGS_UI_WAX_DESC">Dictates how the wax of the main UI looks like when Frogs.</Entry>
+    <Entry key="FANCY_FROGS_UI_WOOD_NAME">Frogs Wood Color</Entry>
+    <Entry key="FANCY_FROGS_UI_WOOD_DESC">Dictates how the wood of the main UI looks like when Frogs.</Entry>
+
+    <!-- Lions -->
+    <Entry key="FANCY_LIONS_UI_FIRE_NAME">Lions Fire Color</Entry>
+    <Entry key="FANCY_LIONS_UI_FIRE_DESC">Dictates how the fire of the main UI looks like when Lions.</Entry>
+    <Entry key="FANCY_LIONS_UI_PAPER_NAME">Lions Paper Color</Entry>
+    <Entry key="FANCY_LIONS_UI_PAPER_DESC">Dictates how the paper of the main UI looks like when Lions.</Entry>
+    <Entry key="FANCY_LIONS_UI_METAL_NAME">Lions Metal Color</Entry>
+    <Entry key="FANCY_LIONS_UI_METAL_DESC">Dictates how the metal of the main UI looks like when Lions.</Entry>
+    <Entry key="FANCY_LIONS_UI_LEATHER_NAME">Lions Leather Color</Entry>
+    <Entry key="FANCY_LIONS_UI_LEATHER_DESC">Dictates how the leather of the main UI looks like when Lions.</Entry>
+    <Entry key="FANCY_LIONS_UI_WAX_NAME">Lions Wax Color</Entry>
+    <Entry key="FANCY_LIONS_UI_WAX_DESC">Dictates how the wax of the main UI looks like when Lions.</Entry>
+    <Entry key="FANCY_LIONS_UI_WOOD_NAME">Lions Wood Color</Entry>
+    <Entry key="FANCY_LIONS_UI_WOOD_DESC">Dictates how the wood of the main UI looks like when Lions.</Entry>
+    
+    <!-- Hawks -->
+    <Entry key="FANCY_HAWKS_UI_FIRE_NAME">Hawks Fire Color</Entry>
+    <Entry key="FANCY_HAWKS_UI_FIRE_DESC">Dictates how the fire of the main UI looks like when Hawks.</Entry>
+    <Entry key="FANCY_HAWKS_UI_PAPER_NAME">Hawks Paper Color</Entry>
+    <Entry key="FANCY_HAWKS_UI_PAPER_DESC">Dictates how the paper of the main UI looks like when Hawks.</Entry>
+    <Entry key="FANCY_HAWKS_UI_METAL_NAME">Hawks Metal Color</Entry>
+    <Entry key="FANCY_HAWKS_UI_METAL_DESC">Dictates how the metal of the main UI looks like when Hawks.</Entry>
+    <Entry key="FANCY_HAWKS_UI_LEATHER_NAME">Hawks Leather Color</Entry>
+    <Entry key="FANCY_HAWKS_UI_LEATHER_DESC">Dictates how the leather of the main UI looks like when Hawks.</Entry>
+    <Entry key="FANCY_HAWKS_UI_WAX_NAME">Hawks Wax Color</Entry>
+    <Entry key="FANCY_HAWKS_UI_WAX_DESC">Dictates how the wax of the main UI looks like when Hawks.</Entry>
+    <Entry key="FANCY_HAWKS_UI_WOOD_NAME">Hawks Wood Color</Entry>
+    <Entry key="FANCY_HAWKS_UI_WOOD_DESC">Dictates how the wood of the main UI looks like when Hawks.</Entry>
+
+    <!-- Judge --> 
+    <Entry key="FANCY_JUDGE_UI_FIRE_NAME">Judge Fire Color</Entry>
+    <Entry key="FANCY_JUDGE_UI_FIRE_DESC">Dictates how the fire of the main UI looks like when Judge.</Entry>
+    <Entry key="FANCY_JUDGE_UI_PAPER_NAME">Judge Paper Color</Entry>
+    <Entry key="FANCY_JUDGE_UI_PAPER_DESC">Dictates how the paper of the main UI looks like when Judge.</Entry>
+    <Entry key="FANCY_JUDGE_UI_METAL_NAME">Judge Metal Color</Entry>
+    <Entry key="FANCY_JUDGE_UI_METAL_DESC">Dictates how the metal of the main UI looks like when Judge.</Entry>
+    <Entry key="FANCY_JUDGE_UI_LEATHER_NAME">Judge Leather Color</Entry>
+    <Entry key="FANCY_JUDGE_UI_LEATHER_DESC">Dictates how the leather of the main UI looks like when Judge.</Entry>
+    <Entry key="FANCY_JUDGE_UI_WAX_NAME">Judge Wax Color</Entry>
+    <Entry key="FANCY_JUDGE_UI_WAX_DESC">Dictates how the wax of the main UI looks like when Judge.</Entry>
+    <Entry key="FANCY_JUDGE_UI_WOOD_NAME">Judge Wood Color</Entry>
+    <Entry key="FANCY_JUDGE_UI_WOOD_DESC">Dictates how the wood of the main UI looks like when Judge.</Entry>
+
+    <!-- Auditor -->
+    <Entry key="FANCY_AUDITOR_UI_FIRE_NAME">Auditor Fire Color</Entry>
+    <Entry key="FANCY_AUDITOR_UI_FIRE_DESC">Dictates how the fire of the main UI looks like when Auditor.</Entry>
+    <Entry key="FANCY_AUDITOR_UI_PAPER_NAME">Auditor Paper Color</Entry>
+    <Entry key="FANCY_AUDITOR_UI_PAPER_DESC">Dictates how the paper of the main UI looks like when Auditor.</Entry>
+    <Entry key="FANCY_AUDITOR_UI_METAL_NAME">Auditor Metal Color</Entry>
+    <Entry key="FANCY_AUDITOR_UI_METAL_DESC">Dictates how the metal of the main UI looks like when Auditor.</Entry>
+    <Entry key="FANCY_AUDITOR_UI_LEATHER_NAME">Auditor Leather Color</Entry>
+    <Entry key="FANCY_AUDITOR_UI_LEATHER_DESC">Dictates how the leather of the main UI looks like when Auditor.</Entry>
+    <Entry key="FANCY_AUDITOR_UI_WAX_NAME">Auditor Wax Color</Entry>
+    <Entry key="FANCY_AUDITOR_UI_WAX_DESC">Dictates how the wax of the main UI looks like when Auditor.</Entry>
+    <Entry key="FANCY_AUDITOR_UI_WOOD_NAME">Auditor Wood Color</Entry>
+    <Entry key="FANCY_AUDITOR_UI_WOOD_DESC">Dictates how the wood of the main UI looks like when Auditor.</Entry>
+
+    <!-- Inquisitor -->
+    <Entry key="FANCY_INQUISITOR_UI_FIRE_NAME">Inquisitor Fire Color</Entry>
+    <Entry key="FANCY_INQUISITOR_UI_FIRE_DESC">Dictates how the fire of the main UI looks like when Inquisitor.</Entry>
+    <Entry key="FANCY_INQUISITOR_UI_PAPER_NAME">Inquisitor Paper Color</Entry>
+    <Entry key="FANCY_INQUISITOR_UI_PAPER_DESC">Dictates how the paper of the main UI looks like when Inquisitor.</Entry>
+    <Entry key="FANCY_INQUISITOR_UI_METAL_NAME">Inquisitor Metal Color</Entry>
+    <Entry key="FANCY_INQUISITOR_UI_METAL_DESC">Dictates how the metal of the main UI looks like when Inquisitor.</Entry>
+    <Entry key="FANCY_INQUISITOR_UI_LEATHER_NAME">Inquisitor Leather Color</Entry>
+    <Entry key="FANCY_INQUISITOR_UI_LEATHER_DESC">Dictates how the leather of the main UI looks like when Inquisitor.</Entry>
+    <Entry key="FANCY_INQUISITOR_UI_WAX_NAME">Inquisitor Wax Color</Entry>
+    <Entry key="FANCY_INQUISITOR_UI_WAX_DESC">Dictates how the wax of the main UI looks like when Inquisitor.</Entry>
+    <Entry key="FANCY_INQUISITOR_UI_WOOD_NAME">Inquisitor Wood Color</Entry>
+    <Entry key="FANCY_INQUISITOR_UI_WOOD_DESC">Dictates how the wood of the main UI looks like when Inquisitor.</Entry>
+
+    <!-- Starspawn -->
+    <Entry key="FANCY_STARSPAWN_UI_FIRE_NAME">Starspawn Fire Color</Entry>
+    <Entry key="FANCY_STARSPAWN_UI_FIRE_DESC">Dictates how the fire of the main UI looks like when Starspawn.</Entry>
+    <Entry key="FANCY_STARSPAWN_UI_PAPER_NAME">Starspawn Paper Color</Entry>
+    <Entry key="FANCY_STARSPAWN_UI_PAPER_DESC">Dictates how the paper of the main UI looks like when Starspawn.</Entry>
+    <Entry key="FANCY_STARSPAWN_UI_METAL_NAME">Starspawn Metal Color</Entry>
+    <Entry key="FANCY_STARSPAWN_UI_METAL_DESC">Dictates how the metal of the main UI looks like when Starspawn.</Entry>
+    <Entry key="FANCY_STARSPAWN_UI_LEATHER_NAME">Starspawn Leather Color</Entry>
+    <Entry key="FANCY_STARSPAWN_UI_LEATHER_DESC">Dictates how the leather of the main UI looks like when Starspawn.</Entry>
+    <Entry key="FANCY_STARSPAWN_UI_WAX_NAME">Starspawn Wax Color</Entry>
+    <Entry key="FANCY_STARSPAWN_UI_WAX_DESC">Dictates how the wax of the main UI looks like when Starspawn.</Entry>
+    <Entry key="FANCY_STARSPAWN_UI_WOOD_NAME">Starspawn Wood Color</Entry>
+    <Entry key="FANCY_STARSPAWN_UI_WOOD_DESC">Dictates how the wood of the main UI looks like when Starspawn.</Entry>
+
+    <!-- Egotist -->
+    <Entry key="FANCY_EGOTIST_UI_FIRE_NAME">Egotist Fire Color</Entry>
+    <Entry key="FANCY_EGOTIST_UI_FIRE_DESC">Dictates how the fire of the main UI looks like when Egotist.</Entry>
+    <Entry key="FANCY_EGOTIST_UI_PAPER_NAME">Egotist Paper Color</Entry>
+    <Entry key="FANCY_EGOTIST_UI_PAPER_DESC">Dictates how the paper of the main UI looks like when Egotist.</Entry>
+    <Entry key="FANCY_EGOTIST_UI_METAL_NAME">Egotist Metal Color</Entry>
+    <Entry key="FANCY_EGOTIST_UI_METAL_DESC">Dictates how the metal of the main UI looks like when Egotist.</Entry>
+    <Entry key="FANCY_EGOTIST_UI_LEATHER_NAME">Egotist Leather Color</Entry>
+    <Entry key="FANCY_EGOTIST_UI_LEATHER_DESC">Dictates how the leather of the main UI looks like when Egotist.</Entry>
+    <Entry key="FANCY_EGOTIST_UI_WAX_NAME">Egotist Wax Color</Entry>
+    <Entry key="FANCY_EGOTIST_UI_WAX_DESC">Dictates how the wax of the main UI looks like when Egotist.</Entry>
+    <Entry key="FANCY_EGOTIST_UI_WOOD_NAME">Egotist Wood Color</Entry>
+    <Entry key="FANCY_EGOTIST_UI_WOOD_DESC">Dictates how the wood of the main UI looks like when Egotist.</Entry>
+
+    <!-- Pandora -->
+    <Entry key="FANCY_PANDORA_UI_FIRE_NAME">Pandora Fire Color</Entry>
+    <Entry key="FANCY_PANDORA_UI_FIRE_DESC">Dictates how the fire of the main UI looks like when Pandora.</Entry>
+    <Entry key="FANCY_PANDORA_UI_PAPER_NAME">Pandora Paper Color</Entry>
+    <Entry key="FANCY_PANDORA_UI_PAPER_DESC">Dictates how the paper of the main UI looks like when Pandora.</Entry>
+    <Entry key="FANCY_PANDORA_UI_METAL_NAME">Pandora Metal Color</Entry>
+    <Entry key="FANCY_PANDORA_UI_METAL_DESC">Dictates how the metal of the main UI looks like when Pandora.</Entry>
+    <Entry key="FANCY_PANDORA_UI_LEATHER_NAME">Pandora Leather Color</Entry>
+    <Entry key="FANCY_PANDORA_UI_LEATHER_DESC">Dictates how the leather of the main UI looks like when Pandora.</Entry>
+    <Entry key="FANCY_PANDORA_UI_WAX_NAME">Pandora Wax Color</Entry>
+    <Entry key="FANCY_PANDORA_UI_WAX_DESC">Dictates how the wax of the main UI looks like when Pandora.</Entry>
+    <Entry key="FANCY_PANDORA_UI_WOOD_NAME">Pandora Wood Color</Entry>
+    <Entry key="FANCY_PANDORA_UI_WOOD_DESC">Dictates how the wood of the main UI looks like when Pandora.</Entry>
+
+    <!-- Compliance -->
+    <Entry key="FANCY_COMPLIANCE_UI_FIRE_NAME">Compliance Fire Color</Entry>
+    <Entry key="FANCY_COMPLIANCE_UI_FIRE_DESC">Dictates how the fire of the main UI looks like when Compliance.</Entry>
+    <Entry key="FANCY_COMPLIANCE_UI_PAPER_NAME">Compliance Paper Color</Entry>
+    <Entry key="FANCY_COMPLIANCE_UI_PAPER_DESC">Dictates how the paper of the main UI looks like when Compliance.</Entry>
+    <Entry key="FANCY_COMPLIANCE_UI_METAL_NAME">Compliance Metal Color</Entry>
+    <Entry key="FANCY_COMPLIANCE_UI_METAL_DESC">Dictates how the metal of the main UI looks like when Compliance.</Entry>
+    <Entry key="FANCY_COMPLIANCE_UI_LEATHER_NAME">Compliance Leather Color</Entry>
+    <Entry key="FANCY_COMPLIANCE_UI_LEATHER_DESC">Dictates how the leather of the main UI looks like when Compliance.</Entry>
+    <Entry key="FANCY_COMPLIANCE_UI_WAX_NAME">Compliance Wax Color</Entry>
+    <Entry key="FANCY_COMPLIANCE_UI_WAX_DESC">Dictates how the wax of the main UI looks like when Compliance.</Entry>
+    <Entry key="FANCY_COMPLIANCE_UI_WOOD_NAME">Compliance Wood Color</Entry>
+    <Entry key="FANCY_COMPLIANCE_UI_WOOD_DESC">Dictates how the wood of the main UI looks like when Compliance.</Entry>
+
+
 </StringTable>
