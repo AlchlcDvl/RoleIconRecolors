@@ -208,7 +208,7 @@ public class Fancy
                 }
 
                 FactionToColorMap[faction][type] = new($"{factionName}_UI_{name}", color, PackType.RecoloredUI, _ => Constants.EnableCustomUI() && Constants.ShowFactionalSettings() &&
-                    SelectTestingFaction.Value == faction);
+                    SelectTestingFaction.Value == faction && SelectColorFilter.Value == type);
             }
         }
 
