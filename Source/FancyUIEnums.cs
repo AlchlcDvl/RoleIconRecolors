@@ -23,7 +23,7 @@ public enum ColorType : byte
     Metal,
     Paper,
     Leather,
-    Flame,
+    Fire,
     Wax
 }
 

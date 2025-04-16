@@ -580,22 +580,13 @@ public static class Utils
         _ => FactionType.NONE
     };
 
-    public static void SetImageColor(this Image img, ColorType type, Color? color = null, float a = 1f, float shade = 0f, FactionType? faction = null)
+    public static void SetImageColor(this Image img, ColorType type, float a = 1f, float shade = 0f, FactionType? faction = null)
     {
         if (!img)
             return;
 
         var mat = img.material = new(Grayscale);
-        var color2 = type switch
-        {
-            ColorType.Metal => Constants.GetMainUIThemeMetalColor(faction),
-            ColorType.Paper => Constants.GetMainUIThemePaperColor(faction),
-            ColorType.Leather => Constants.GetMainUIThemeLeatherColor(faction),
-            ColorType.Wood => Constants.GetMainUIThemeWoodColor(faction),
-            ColorType.Flame => Constants.GetMainUIThemeFireColor(faction),
-            ColorType.Wax => Constants.GetMainUIThemeWaxColor(faction),
-            _ => color ?? Color.white
-        };
+        var color2 = Constants.GetUIThemeColor(type, faction);
 
         if (color2 == Color.clear)
         {
@@ -609,21 +600,12 @@ public static class Utils
         mat.SetFloat("_GrayscaleAmount", Constants.GrayscaleAmount());
     }
 
-    public static void SetGraphicColor(this Graphic graphic, ColorType type, Color? color = null, float shade = 0f, float a = 1f, FactionType? faction = null)
+    public static void SetGraphicColor(this Graphic graphic, ColorType type, float shade = 0f, float a = 1f, FactionType? faction = null)
     {
         if (!graphic)
             return;
 
-        var color2 = type switch
-        {
-            ColorType.Metal => Constants.GetMainUIThemeMetalColor(faction),
-            ColorType.Paper => Constants.GetMainUIThemePaperColor(faction),
-            ColorType.Leather => Constants.GetMainUIThemeLeatherColor(faction),
-            ColorType.Wood => Constants.GetMainUIThemeWoodColor(faction),
-            ColorType.Flame => Constants.GetMainUIThemeFireColor(faction),
-            ColorType.Wax => Constants.GetMainUIThemeWaxColor(faction),
-            _ => color ?? Color.white
-        };
+        var color2 = Constants.GetUIThemeColor(type, faction);
 
         if (color2 == Color.clear)
             return;
@@ -634,16 +616,7 @@ public static class Utils
 
     public static Color ShadeColor(this Color color, ColorType type, float alpha = 1f, float shadeParam = 0f, bool flip = false)
     {
-        var shade = type switch
-        {
-            ColorType.Metal => Fancy.MetalShade.Value,
-            ColorType.Paper => Fancy.PaperShade.Value,
-            ColorType.Leather => Fancy.LeatherShade.Value,
-            ColorType.Wood => Fancy.WoodShade.Value,
-            ColorType.Flame => Fancy.FireShade.Value,
-            ColorType.Wax => Fancy.WaxShade.Value,
-            _ => shadeParam
-        };
+        var shade = Fancy.ColorShadeMap.TryGetValue(type, out var opt) ? opt.Value : shadeParam;
 
         if (shade == 0f)
             shade = 50f;

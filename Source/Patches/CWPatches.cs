@@ -56,13 +56,12 @@ public static class RoleCardPanelPatch
         return false;
     }
 }
-[HarmonyPatch(typeof(SpecialAbilityPanel))]
+
+[HarmonyPatch(typeof(SpecialAbilityPanel), nameof(SpecialAbilityPanel.Start))]
 public static class SpecialAbilityPanelPatch1
 {
     public static SpecialAbilityPanel Cache;
 
-    [HarmonyPatch(nameof(SpecialAbilityPanel.Show))]
-    [HarmonyPatch(nameof(SpecialAbilityPanel.Start))]
     public static void Postfix(SpecialAbilityPanel __instance)
     {
         if (!Constants.EnableCustomUI())
@@ -90,17 +89,15 @@ public static class SpecialAbilityPanelPatch1
 
         og.SetImageColor(ColorType.Wood); // Main wood container
         copy.SetImageColor(ColorType.Metal); // The metal support
-        __instance.useButton.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Flame);
+        __instance.useButton.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Fire);
     }
 }
 
-[HarmonyPatch(typeof(SpecialAbilityPopupPanel))]
+[HarmonyPatch(typeof(SpecialAbilityPopupPanel), nameof(SpecialAbilityPopupPanel.Start))]
 public static class SpecialAbilityPopupPanelPatch
 {
     public static SpecialAbilityPopupPanel Cache;
 
-    [HarmonyPatch(nameof(SpecialAbilityPopupPanel.Show))]
-    [HarmonyPatch(nameof(SpecialAbilityPopupPanel.Start))]
     public static void Postfix(SpecialAbilityPopupPanel __instance)
     {
         if (!Constants.EnableCustomUI())
@@ -279,8 +276,6 @@ public static class PatchAbilityPanel
     {
         if (!Constants.EnableCustomUI())
             return;
-		
-
 
         Cache = __instance;
         new[] { __instance.allFilterBtn, __instance.livingFilterBtn, __instance.targetFilterBtn, __instance.factionFilterBtn, __instance.graveyardFilterBtn }

@@ -221,7 +221,7 @@ public class SettingsAndTestingUI : UIController
         BookLeather.SetImageColor(ColorType.Leather);
         BookPaper.SetImageColor(ColorType.Paper);
         PlayerPanelButton.SetImageColor(ColorType.Wax);
-        Flame.Renderer.SetImageColor(ColorType.Flame, a: 0.7f);
+        Flame.Renderer.SetImageColor(ColorType.Fire, a: 0.7f);
         ToggleImage.sprite = Fancy.Assets.GetSprite($"{(IsBTOS2 ? "B" : "")}ToS2Icon");
         SwapIcon.material.SetFloat("_FlipX", OtherUI ? 1 : 0);
         BookPanel.gameObject.SetActive(OtherUI);

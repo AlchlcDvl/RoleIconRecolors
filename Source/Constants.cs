@@ -43,64 +43,19 @@ public static class Constants
     public static UITheme GetMainUIThemeType() => Fancy.SelectedUITheme.Value;
 
     public static FactionType GetSelectedFaction() => Fancy.SelectTestingFaction.Value;
-    public static bool ShowFactionalWoodSettings() => GetMainUIThemeType() == UITheme.Faction;
 
-    public static Color GetMainUIThemeWoodColor(FactionType? faction = null) => GetMainUIThemeType() switch
-    {
-        UITheme.Faction => ThemeColors.GetWoodColor(),
-        UITheme.Custom => Fancy.MainUIThemeWood.Value.ToColor(),
-        _ => Color.clear
-    };
+    public static bool ShowFactionalSettings() => GetMainUIThemeType() == UITheme.Faction;
 
-    public static Color GetMainUIThemeMetalColor(FactionType? faction = null) => GetMainUIThemeType() switch
+    public static Color GetUIThemeColor(ColorType type, FactionType? faction = null) => GetMainUIThemeType() switch
     {
-        UITheme.Faction => ThemeColors.GetMetalColor(),
-        UITheme.Custom => Fancy.MainUIThemeMetal.Value.ToColor(),
-        _ => Color.clear
-    };
-
-    public static Color GetMainUIThemePaperColor(FactionType? faction = null) => GetMainUIThemeType() switch
-    {
-        UITheme.Faction => ThemeColors.GetPaperColor(),
-        UITheme.Custom => Fancy.MainUIThemePaper.Value.ToColor(),
-        _ => Color.clear
-    };
-
-    public static Color GetMainUIThemeLeatherColor(FactionType? faction = null) => GetMainUIThemeType() switch
-    {
-        UITheme.Faction => ThemeColors.GetLeatherColor(),
-        UITheme.Custom => Fancy.MainUIThemeLeather.Value.ToColor(),
-        _ => Color.clear
-    };
-
-    public static Color GetMainUIThemeFireColor(FactionType? faction = null) => GetMainUIThemeType() switch
-    {
-        UITheme.Faction => ThemeColors.GetFireColor(),
-        UITheme.Custom => Fancy.MainUIThemeFire.Value.ToColor(),
-        _ => Color.clear
-    };
-
-    public static Color GetMainUIThemeWaxColor(FactionType? faction = null) => GetMainUIThemeType() switch
-    {
-        UITheme.Faction => ThemeColors.GetWaxColor(),
-        UITheme.Custom => Fancy.MainUIThemeWax.Value.ToColor(),
+        UITheme.Faction => GetThemeColor(type, faction),
+        UITheme.Custom => Fancy.CustomUIColorsMap[type].Value.ToColor(),
         _ => Color.clear
     };
 
     private static Color GetThemeColor(ColorType color, FactionType? faction = null)
     {
-        var shade = color switch
-        {
-            ColorType.Metal => Fancy.ColorMetal.Value,
-            ColorType.Paper => Fancy.ColorPaper.Value,
-            ColorType.Leather => Fancy.ColorLeather.Value,
-            ColorType.Wood => Fancy.ColorWood.Value,
-            ColorType.Flame => Fancy.ColorFire.Value,
-            ColorType.Wax => Fancy.ColorWax.Value,
-            _ => true
-        };
-
-        if (!shade)
+        if (!Fancy.ColorShadeToggleMap[color].Value)
             return Color.clear;
 
         if (!faction.HasValue)
@@ -111,21 +66,21 @@ public static class Constants
                 faction = Pepper.GetMyFaction();
         }
 
-        if (faction is null or FactionType.NONE)
+        var shouldUseCustom = faction is null or FactionType.NONE;
+        var colorString = "";
+
+        if (!shouldUseCustom)
         {
-            return (color switch
-            {
-                ColorType.Metal => Fancy.MainUIThemeMetal.Value,
-                ColorType.Paper => Fancy.MainUIThemePaper.Value,
-                ColorType.Leather => Fancy.MainUIThemeLeather.Value,
-                ColorType.Wood => Fancy.MainUIThemeWood.Value,
-                ColorType.Flame => Fancy.MainUIThemeFire.Value,
-                ColorType.Wax => Fancy.MainUIThemeWax.Value,
-                _ => "#00000000"
-            }).ToColor();
+            if (Fancy.FactionToColorMap.TryGetValue(faction.Value, out var dict) && dict.TryGetValue(color, out var opt))
+                colorString = opt.Value;
+            else
+                shouldUseCustom = true;
         }
 
-        return faction.Value.GetFactionColor().ToColor();
+        if (shouldUseCustom)
+            colorString = Fancy.CustomUIColorsMap.TryGetValue(color, out var opt) ? opt.Value : "#000000";
+
+        return colorString.ToColor();
     }
 
     public static float GeneralBrightness() => Fancy.GeneralBrightness.Value * 5f / 100f;
