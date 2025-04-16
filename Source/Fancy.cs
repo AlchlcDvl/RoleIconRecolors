@@ -142,8 +142,8 @@ public class Fancy
         SelectColorFilter = new("COLOR_FILTER", ColorType.Wood, PackType.RecoloredUI, useTranslations: true);
 
         var colors = GeneralUtils.GetEnumValues<ColorType>().ToDictionary(x => x, x => x.ToString().ToUpperInvariant());
-        var factions = BTOS2Factions.Where(x => x is Btos2Faction.Lovers or Btos2Faction.Cannibal or Btos2Faction.None).ToDictionary(x => x, x => Utils.FactionName(x, Constants.BTOS2Exists() ?
-            ModType.BTOS2 : ModType.Vanilla).ToUpperInvariant());
+        var factions = BTOS2Factions.Where(x => x is not (Btos2Faction.Lovers or Btos2Faction.Cannibal or Btos2Faction.None)).ToDictionary(x => x, x => Utils.FactionName(x,
+            Constants.BTOS2Exists() ? ModType.BTOS2 : ModType.Vanilla).ToUpperInvariant());
 
         foreach (var (type, name) in colors)
         {

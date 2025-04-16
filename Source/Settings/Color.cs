@@ -28,9 +28,6 @@ public class ColorSetting : BaseInputSetting
     {
         var cache = value;
 
-        if (!value.StartsWith("#"))
-            value = "#" + value;
-
         if (ColorUtility.TryParseHtmlString(value, out var color))
             ValueBg.color = color;
 
