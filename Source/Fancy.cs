@@ -185,6 +185,19 @@ public class Fancy
                         }
                     };
                 }
+                else if (type == ColorType.Metal && faction is Btos2Faction.Town or Btos2Faction.Coven or Btos2Faction.Apocalypse or Btos2Faction.Vampire or Btos2Faction.Jackal or Btos2Faction.CursedSoul)
+                {
+                    color = faction switch
+                    {
+                        Btos2Faction.Town => "#737373",
+                        Btos2Faction.Coven => "#CFDEE6",
+                        Btos2Faction.Apocalypse => "#6E472C",
+                        Btos2Faction.Vampire => "#2c1a1a",
+                        Btos2Faction.Jackal => "#D9BF41",
+                        Btos2Faction.CursedSoul => "#52C2EF",
+                        _ => "#808080",
+                    };
+                }
                 else
                 {
                     color = type switch
