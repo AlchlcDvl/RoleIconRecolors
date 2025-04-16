@@ -580,7 +580,7 @@ public static class Utils
         _ => FactionType.NONE
     };
 
-    public static void SetImageColor(this Image img, ColorType type, float a = 1f, float shade = 0f, FactionType? faction = null)
+    public static void SetImageColor(this Image img, ColorType type, float a = 1f, FactionType? faction = null)
     {
         if (!img)
             return;
@@ -594,13 +594,13 @@ public static class Utils
             return;
         }
 
-        color2 = color2.ShadeColor(type, a, shade);
+        color2 = color2.ShadeColor(type, a);
         mat.SetColor("_Color", color2);
         mat.SetFloat("_Brightness", Constants.GeneralBrightness());
         mat.SetFloat("_GrayscaleAmount", Constants.GrayscaleAmount());
     }
 
-    public static void SetGraphicColor(this Graphic graphic, ColorType type, float shade = 0f, float a = 1f, FactionType? faction = null)
+    public static void SetGraphicColor(this Graphic graphic, ColorType type, float a = 1f, FactionType? faction = null)
     {
         if (!graphic)
             return;
@@ -610,15 +610,15 @@ public static class Utils
         if (color2 == Color.clear)
             return;
 
-        color2 = color2.ShadeColor(type, a, shade, true);
+        color2 = color2.ShadeColor(type, a, true, false);
         graphic.color = color2;
     }
 
-    public static Color ShadeColor(this Color color, ColorType type, float alpha = 1f, float shadeParam = 0f, bool flip = false)
+    public static Color ShadeColor(this Color color, ColorType type, float alpha = 1f, bool flip = false, bool isImage = true)
     {
-        var shade = Fancy.ColorShadeMap.TryGetValue(type, out var opt) ? opt.Value : shadeParam;
+        var shade = Fancy.ColorShadeMap[type].Value;
 
-        if (shade == 0f)
+        if (shade == 0f && !isImage)
             shade = 50f;
 
         if (flip)
