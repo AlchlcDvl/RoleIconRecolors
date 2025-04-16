@@ -139,10 +139,11 @@ public class Fancy
         FactionOverride1 = new("FACTION_OVERRIDE_1", "None", PackType.IconPacks, () => GetOptions(ModType.Vanilla, false), _ => Constants.EnableIcons());
         FactionOverride2 = new("FACTION_OVERRIDE_2", "None", PackType.IconPacks, () => GetOptions(ModType.BTOS2, false), _ => Constants.BTOS2Exists() && Constants.EnableIcons());
 
-        SelectColorFilter = new("SELECTED_TESTING_FACTION", ColorType.Wood, PackType.Testing, useTranslations: true);
+        SelectColorFilter = new("COLOR_FILTER", ColorType.Wood, PackType.Testing, useTranslations: true);
 
         var colors = GeneralUtils.GetEnumValues<ColorType>().ToDictionary(x => x, x => x.ToString().ToUpperInvariant());
-        var factions = BTOS2Factions.ToDictionary(x => x, x => Utils.FactionName(x, Constants.BTOS2Exists() ? ModType.BTOS2 : ModType.Vanilla).ToUpperInvariant());
+        var factions = BTOS2Factions.ToDictionary(x => x, x => x == Btos2Faction.None ? "NONE" : Utils.FactionName(x, Constants.BTOS2Exists() ? ModType.BTOS2 : ModType.Vanilla)
+            .ToUpperInvariant());
 
         foreach (var (type, name) in colors)
         {

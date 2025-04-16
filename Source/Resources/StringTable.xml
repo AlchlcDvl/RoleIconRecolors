@@ -119,6 +119,9 @@
     <Entry key="FANCY_GENERAL_BRIGHTNESS_NAME">Color Brightness</Entry>
     <Entry key="FANCY_GENERAL_BRIGHTNESS_DESC">How bright do all forms of custom color appear on the UI.</Entry>
 
+    <Entry key="FANCY_COLOR_FILTER_NAME">Color Filter</Entry>
+    <Entry key="FANCY_COLOR_FILTER_DESC">Filters the color settings for easier browsing.</Entry>
+
     <Entry key="FANCY_VANILLA">Vanilla</Entry>
     <Entry key="FANCY_DEFAULT">Default</Entry>
     <Entry key="FANCY_FACTION">Faction</Entry>
@@ -175,9 +178,21 @@
     <Entry key="FANCY_44">Compliance</Entry>
     <Entry key="FANCY_250">Lovers</Entry>
 
+    <!-- None -->
+    <Entry key="FANCY_NONE_UI_FIRE_NAME">None Fire Color</Entry>
+    <Entry key="FANCY_NONE_UI_FIRE_DESC">Dictates how the fire of the main UI looks like when None.</Entry>
+    <Entry key="FANCY_NONE_UI_PAPER_NAME">None Paper Color</Entry>
+    <Entry key="FANCY_NONE_UI_PAPER_DESC">Dictates how the paper of the main UI looks like when None.</Entry>
+    <Entry key="FANCY_NONE_UI_METAL_NAME">None Metal Color</Entry>
+    <Entry key="FANCY_NONE_UI_METAL_DESC">Dictates how the metal of the main UI looks like when None.</Entry>
+    <Entry key="FANCY_NONE_UI_LEATHER_NAME">None Leather Color</Entry>
+    <Entry key="FANCY_NONE_UI_LEATHER_DESC">Dictates how the leather of the main UI looks like when None.</Entry>
+    <Entry key="FANCY_NONE_UI_WAX_NAME">None Wax Color</Entry>
+    <Entry key="FANCY_NONE_UI_WAX_DESC">Dictates how the wax of the main UI looks like when None.</Entry>
+    <Entry key="FANCY_NONE_UI_WOOD_NAME">None Wood Color</Entry>
+    <Entry key="FANCY_NONE_UI_WOOD_DESC">Dictates how the wood of the main UI looks like when None.</Entry>
 
-
-        <!-- Town -->
+    <!-- Town -->
     <Entry key="FANCY_TOWN_UI_FIRE_NAME">Town Fire Color</Entry>
     <Entry key="FANCY_TOWN_UI_FIRE_DESC">Dictates how the fire of the main UI looks like when Town.</Entry>
     <Entry key="FANCY_TOWN_UI_PAPER_NAME">Town Paper Color</Entry>
@@ -400,7 +415,7 @@
     <Entry key="FANCY_LIONS_UI_WAX_DESC">Dictates how the wax of the main UI looks like when Lions.</Entry>
     <Entry key="FANCY_LIONS_UI_WOOD_NAME">Lions Wood Color</Entry>
     <Entry key="FANCY_LIONS_UI_WOOD_DESC">Dictates how the wood of the main UI looks like when Lions.</Entry>
-    
+
     <!-- Hawks -->
     <Entry key="FANCY_HAWKS_UI_FIRE_NAME">Hawks Fire Color</Entry>
     <Entry key="FANCY_HAWKS_UI_FIRE_DESC">Dictates how the fire of the main UI looks like when Hawks.</Entry>
@@ -415,7 +430,7 @@
     <Entry key="FANCY_HAWKS_UI_WOOD_NAME">Hawks Wood Color</Entry>
     <Entry key="FANCY_HAWKS_UI_WOOD_DESC">Dictates how the wood of the main UI looks like when Hawks.</Entry>
 
-    <!-- Judge --> 
+    <!-- Judge -->
     <Entry key="FANCY_JUDGE_UI_FIRE_NAME">Judge Fire Color</Entry>
     <Entry key="FANCY_JUDGE_UI_FIRE_DESC">Dictates how the fire of the main UI looks like when Judge.</Entry>
     <Entry key="FANCY_JUDGE_UI_PAPER_NAME">Judge Paper Color</Entry>
