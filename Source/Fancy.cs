@@ -156,7 +156,27 @@ public class Fancy
             {
                 string color;
 
-                switch (faction)
+                if (type == ColorType.Metal)
+                {
+                    color = faction switch
+                    {
+                        Btos2Faction.Town => "#737373",
+                        Btos2Faction.Apocalypse => "#6E472C",
+                        Btos2Faction.Coven => "#CFDEE6",
+                        Btos2Faction.CursedSoul when Constants.BTOS2Exists() => "#52C2EF",
+                        Btos2Faction.CursedSoul when !Constants.BTOS2Exists() => "#8500BF",
+                        Btos2Faction.Jackal => "#D9BF41",
+                        Btos2Faction.Doomsayer => "#CCCCCC",
+                        Btos2Faction.Shroud => "#70FAF1",
+                        Btos2Faction.Compliance => "#AE1B1E",
+                        Btos2Faction.Pandora => "#B545FF",
+                        Btos2Faction.Judge => "#C77364",
+                        Btos2Faction.Auditor => "#AEBA87",
+                        Btos2Faction.Starspawn => "#FCE79A",
+                        _ => faction.GetFactionColor()
+                    };
+                }
+                else switch (faction)
                 {
                     case < Btos2Faction.CursedSoul or (> Btos2Faction.Jackal and < Btos2Faction.Judge) or Btos2Faction.Inquisitor:
                     case Btos2Faction.CursedSoul when !Constants.BTOS2Exists():
@@ -164,7 +184,8 @@ public class Fancy
                         color = faction.GetFactionColor();
                         break;
                     }
-                    case Btos2Faction.Compliance or Btos2Faction.CursedSoul or Btos2Faction.Pandora:
+                    case Btos2Faction.Compliance or Btos2Faction.Pandora:
+                    case Btos2Faction.CursedSoul when Constants.BTOS2Exists():
                     {
                         color = type switch
                         {

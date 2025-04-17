@@ -189,7 +189,7 @@ public class SettingsAndTestingUI : UIController
                     toggle.Setting.Option = toggle;
                     break;
                 }
-                }
+            }
         }
 
         SliderTemplate!.gameObject.SetActive(false);
