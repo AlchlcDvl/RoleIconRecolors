@@ -1,4 +1,4 @@
-using FancyUI.Assets.SilhouetteSwapper;
+// using FancyUI.Assets.SilhouetteSwapper;
 using Home.Shared;
 
 namespace FancyUI;
@@ -17,6 +17,9 @@ public static class Utils
         "Werewolf_Ability_1" ];
 
     private static readonly Dictionary<ModType, (Dictionary<string, string>, Dictionary<string, int>)> RoleStuff = [];
+    private static readonly int Color1 = Shader.PropertyToID("_Color");
+    private static readonly int Brightness = Shader.PropertyToID("_Brightness");
+    private static readonly int GrayscaleAmount = Shader.PropertyToID("_GrayscaleAmount");
 
     public static string RoleName(Role role, ModType? mod = null)
     {
@@ -595,9 +598,9 @@ public static class Utils
         }
 
         color2 = color2.ShadeColor(type, a);
-        mat.SetColor("_Color", color2);
-        mat.SetFloat("_Brightness", Constants.GeneralBrightness());
-        mat.SetFloat("_GrayscaleAmount", Constants.GrayscaleAmount());
+        mat.SetColor(Color1, color2);
+        mat.SetFloat(Brightness, Constants.GeneralBrightness());
+        mat.SetFloat(GrayscaleAmount, Constants.GrayscaleAmount());
     }
 
     public static void SetGraphicColor(this Graphic graphic, ColorType type, float a = 1f, FactionType? faction = null)
@@ -614,7 +617,7 @@ public static class Utils
         graphic.color = color2;
     }
 
-    public static Color ShadeColor(this Color color, ColorType type, float alpha = 1f, bool flip = false, bool isImage = true)
+    private static Color ShadeColor(this Color color, ColorType type, float alpha = 1f, bool flip = false, bool isImage = true)
     {
         var shade = Fancy.ColorShadeMap[type].Value;
 
@@ -629,7 +632,7 @@ public static class Utils
         return color2;
     }
 
-    public static bool IsValid(this SilhouetteAnimation anim) => anim != null && anim != Loading;
+    // public static bool IsValid(this SilhouetteAnimation anim) => anim != null && anim != Loading;
 
     public static bool GetRoleAndFaction(int pos, out Tuple<Role, FactionType> tuple) => Service.Game.Sim.simulation.knownRolesAndFactions.Data.TryGetValue(pos, out tuple);
 
@@ -667,12 +670,12 @@ public static class Utils
     // public static void DebugTransformRecursive(this Transform transform)
     // {
     //     transform.DebugSingleTransform();
-
+    //
     //     for (var i = 0; i < transform.childCount; i++)
     //         transform.GetChild(i).DebugTransformRecursive();
     // }
 
-    public static IEnumerable<T2> Select<T1, T2>(this IEnumerable<T1> source, Func<int, T1, T2> selector)
+    private static IEnumerable<T2> Select<T1, T2>(this IEnumerable<T1> source, Func<int, T1, T2> selector)
     {
         var i = 0;
 
@@ -694,7 +697,7 @@ public static class Utils
         return ApplyGradient(text, gradient);
     }
 
-    public static string ApplyGradient(string text, Gradient gradient)
+    private static string ApplyGradient(string text, Gradient gradient)
     {
         var text2 = "";
 
@@ -704,7 +707,7 @@ public static class Utils
         return text2;
     }
 
-    public static Color ShadeColor(this Color color, float strength = 0f)
+    private static Color ShadeColor(this Color color, float strength = 0f)
     {
         strength = Mathf.Clamp(strength, -1f, 1f);
         return Color.Lerp(color, strength < 0 ? Color.white : Color.black, Mathf.Abs(strength));

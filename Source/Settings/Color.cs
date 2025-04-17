@@ -26,13 +26,8 @@ public class ColorSetting : BaseInputSetting
 
     public void OnValueChanged(string value)
     {
-        var cache = value;
-
         if (ColorUtility.TryParseHtmlString(value, out var color))
             ValueBg.color = color;
-
-        if (cache != value)
-            Input.SetTextWithoutNotify(value);
 
         Option.Value = value;
     }

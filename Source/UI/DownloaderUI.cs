@@ -3,7 +3,6 @@ using UnityEngine.Networking;
 using Newtonsoft.Json;
 using FancyUI.Assets.IconPacks;
 using System.IO.Compression;
-using Home.Shared;
 
 namespace FancyUI.UI;
 
@@ -109,7 +108,7 @@ public class DownloaderUI : UIController
             GeneralUtils.SaveText("OtherPacks.json", JsonConvert.SerializeObject(enumerable, enumerable.GetType(), Formatting.Indented, new()), path: IPPath);
         }
 
-        if (FancyUI.Instance.Page == PackType.IconPacks)
+        if (FancyUI.Instance.Page == PackType.SilhouetteSets)
         {
             var enumerable = Packs.Where(x => !x.FromMainRepo && x.Type == "SilhouetteSets");
             GeneralUtils.SaveText("OtherSets.json", JsonConvert.SerializeObject(enumerable, enumerable.GetType(), Formatting.Indented, new()), path: SSPath);
@@ -309,11 +308,11 @@ public class DownloaderUI : UIController
         {
             var tempLength = Directory.GetFiles(tempPath, "*.png", SearchOption.AllDirectories).Length;
 
-            if (tempLength > pngAmount)
-            {
-                theDir = tempPath;
-                pngAmount = tempLength;
-            }
+            if (tempLength <= pngAmount)
+                continue;
+
+            theDir = tempPath;
+            pngAmount = tempLength;
         }
 
         foreach (var file in Directory.EnumerateFiles(theDir!, "*.png", SearchOption.AllDirectories).Where(x => x.ContainsAny(packName, packJson.RepoName)))

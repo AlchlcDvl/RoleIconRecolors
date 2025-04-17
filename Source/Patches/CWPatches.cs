@@ -13,15 +13,11 @@ public static class RoleCardPanelPatch
         __instance.ValidateSpecialAbilityPanel();
         __instance.ValidateBackgroundColor();
         __instance.ShowRoleDescIf0Quality();
-        var theme = Constants.GetMainUIThemeType();
-
-        if (theme == UITheme.Vanilla)
-            return false;
 
         __instance.transform.GetChild(5).GetComponent<Image>().SetImageColor(ColorType.Wood);
         __instance.transform.GetChild(10).GetComponent<Image>().SetImageColor(ColorType.Wood);
 
-        if (theme == UITheme.Faction)
+        if (Constants.GetMainUIThemeType() == UITheme.Faction)
         {
             var pooledChat = PooledChatViewSwitcherPatch.Cache;
             var chatInput = ChatInputControllerPatch.Cache;
@@ -64,9 +60,6 @@ public static class SpecialAbilityPanelPatch1
 
     public static void Postfix(SpecialAbilityPanel __instance)
     {
-        if (!Constants.EnableCustomUI())
-            return;
-
         Cache = __instance;
         var og = __instance.transform.GetChild(1).GetComponent<Image>();
         Image copy;
@@ -100,9 +93,6 @@ public static class SpecialAbilityPopupPanelPatch
 
     public static void Postfix(SpecialAbilityPopupPanel __instance)
     {
-        if (!Constants.EnableCustomUI())
-            return;
-
         Cache = __instance;
         var og = __instance.transform.GetChild(0).GetComponent<Image>();
         Image copy;
@@ -133,9 +123,6 @@ public static class RoleCardPopupControllerPatch
 {
     public static void Postfix(RoleCardPopupPanel __instance)
     {
-        if (!Constants.EnableCustomUI())
-            return;
-
         __instance.transform.GetChild(4).GetComponent<Image>().SetImageColor(ColorType.Wood); // Frame
         __instance.transform.GetChild(10).GetComponent<Image>().SetImageColor(ColorType.Wood); // Slot count for display
         __instance.transform.GetChild(13).GetComponent<Image>().SetImageColor(ColorType.Wood); // Slot count prefab 1
@@ -149,11 +136,7 @@ public static class RoleCardPopupControllerPatch
 [HarmonyPatch(typeof(AchievementItem), nameof(AchievementItem.SetAchievement))]
 public static class AchievementItemPatch
 {
-    public static void Postfix(AchievementItem __instance)
-    {
-        if (Constants.EnableCustomUI())
-            __instance.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
-    }
+    public static void Postfix(AchievementItem __instance) => __instance.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
 }
 
 [HarmonyPatch(typeof(HudDockPanel), nameof(HudDockPanel.Start))]
@@ -163,9 +146,6 @@ public static class HudDockPanelPatch
 
     public static void Postfix(HudDockPanel __instance)
     {
-        if (!Constants.EnableCustomUI())
-            return;
-
         Cache = __instance;
         __instance.GetComponent<Image>().SetImageColor(ColorType.Wood);
     }
@@ -178,9 +158,6 @@ public static class PooledChatViewSwitcherPatch
 
     public static void Postfix(PooledChatViewSwitcher __instance)
     {
-        if (!Constants.EnableCustomUI())
-            return;
-
         Cache = __instance;
         __instance.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
         var parts = __instance.transform.GetChild(1).GetChild(1);
@@ -195,7 +172,6 @@ public static class PooledChatViewSwitcherPatch
         nameplate.GetComponent<Image>().SetImageColor(ColorType.Metal);
         nameplate.Find("Name").GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Metal);
     }
-
 }
 
 [HarmonyPatch(typeof(ChatInputController), nameof(ChatInputController.SetChatState))]
@@ -205,9 +181,6 @@ public static class ChatInputControllerPatch
 
     public static void Postfix(ChatInputController __instance)
     {
-        if (!Constants.EnableCustomUI())
-            return;
-
         Cache = __instance;
         __instance.parchmentBackgroundImage.SetImageColor(ColorType.Paper);
         __instance.chatInputText.SetGraphicColor(ColorType.Paper);
@@ -221,24 +194,12 @@ public static class ChatInputControllerPatch
     }
 }
 
-[HarmonyPatch(typeof(LobbyInfoClassicPanel), nameof(LobbyInfoClassicPanel.Start))]
-public static class LobbyInfoClassicPanelPatch
+[HarmonyPatch]
+public static class LobbyInfoClassicPanelAndTimerPatch
 {
-    public static void Postfix(LobbyInfoClassicPanel __instance)
-    {
-        if (Constants.EnableCustomUI())
-            __instance.GetComponent<Image>().SetImageColor(ColorType.Wood);
-    }
-}
-
-[HarmonyPatch(typeof(LobbyTimer), nameof(LobbyTimer.HandleOnLobbyDataChanged))]
-public static class LobbyTimerPatch
-{
-    public static void Postfix(LobbyTimer __instance)
-    {
-        if (Constants.EnableCustomUI())
-            __instance.GetComponent<Image>().SetImageColor(ColorType.Wood);
-    }
+    [HarmonyPatch(typeof(LobbyTimer), nameof(LobbyTimer.HandleOnLobbyDataChanged))]
+    [HarmonyPatch(typeof(LobbyInfoClassicPanel), nameof(LobbyInfoClassicPanel.Start))]
+    public static void Postfix(MonoBehaviour __instance) => __instance.GetComponent<Image>().SetImageColor(ColorType.Wood);
 }
 
 [HarmonyPatch(typeof(HudTimeChangePanel), nameof(HudTimeChangePanel.UpdateDayNightNumber))]
@@ -248,9 +209,6 @@ public static class HudTimeChangePanelPatch
 
     public static void Postfix(HudTimeChangePanel __instance)
     {
-        if (!Constants.EnableCustomUI())
-            return;
-
         Cache = __instance;
         __instance.transform.GetChild(0).GetChild(3).GetComponent<Image>().SetImageColor(ColorType.Wood);
         __instance.transform.GetChild(1).GetChild(3).GetComponent<Image>().SetImageColor(ColorType.Wood);
@@ -260,11 +218,7 @@ public static class HudTimeChangePanelPatch
 [HarmonyPatch(typeof(LobbyGameModeChoicePanel), nameof(LobbyGameModeChoicePanel.Start))]
 public static class LobbyGameModeChoicePanelPatch
 {
-    public static void Postfix(LobbyGameModeChoicePanel __instance)
-    {
-        if (Constants.EnableCustomUI())
-            __instance.transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetChild(15).GetComponent<Image>().SetImageColor(ColorType.Wood);
-    }
+    public static void Postfix(LobbyGameModeChoicePanel __instance) => __instance.transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetChild(15).GetComponent<Image>().SetImageColor(ColorType.Wood);
 }
 
 [HarmonyPatch(typeof(TosAbilityPanel), nameof(TosAbilityPanel.Start))]
@@ -274,9 +228,6 @@ public static class PatchAbilityPanel
 
     public static void Postfix(TosAbilityPanel __instance)
     {
-        if (!Constants.EnableCustomUI())
-            return;
-
         Cache = __instance;
         new[] { __instance.allFilterBtn, __instance.livingFilterBtn, __instance.targetFilterBtn, __instance.factionFilterBtn, __instance.graveyardFilterBtn }
             .ForEach(x => x.transform.GetAllComponents<Image>()
@@ -322,7 +273,7 @@ public static class PatchAbilityPanel
 // {
 //     public static void Postfix(SafeAreaController __instance)
 //     {
-//         if (!Constants.EnableCustomUI() || Pepper.IsLobbyOrGamePhase())
+//         if (Pepper.IsLobbyOrGamePhase())
 //             return;
 //
 //         var parts = __instance.transform.GetChild(12);
@@ -338,8 +289,5 @@ public static class PatchAbilityPanel
 // {
 //     public static void Postfix(HudGraveyardPanel __instance)
 //     {
-//         if (!Constants.EnableCustomUI())
-//             return;
-//
 //     }
 // }

@@ -88,6 +88,7 @@ public class SettingsAndTestingUI : UIController
         [ new(-45f, -190f, 0f), new(0f, -188f, 0f), new(45f, -190f, 0f) ],
         [ new(-72f, -180f, 0f), new(-24f, -190f, 0f), new(-24f, -190f, 0f), new(72f, -180f, 0f) ]
     ];
+    private static readonly int FlipX = Shader.PropertyToID("_FlipX");
 
     private const string DefaultRoleText = "<sprite=\"%mod%RoleIcons (%type%)\" name=\"Role%roleInt%\"><b>%roleName%</b>";
     private const string DefaultNameText = "<sprite=\"PlayerNumbers\" name=\"PlayerNumbers_%num%\"><b>Giles Corey</b>";
@@ -156,38 +157,46 @@ public class SettingsAndTestingUI : UIController
 
         foreach (var opt in Option.All)
         {
-            if (opt is FloatOption slider)
+            switch (opt)
             {
-                slider.Setting = Instantiate(SliderTemplate, SliderTemplate.transform.parent);
-                slider.Setting.Option = slider;
-            }
-            else if (opt is IDropdown dropdown)
-            {
-                dropdown.Setting = Instantiate(DropdownTemplate, DropdownTemplate.transform.parent);
-                dropdown.Setting.Option = dropdown;
-            }
-            else if (opt is ColorOption color)
-            {
-                color.Setting = Instantiate(ColorTemplate, ColorTemplate.transform.parent);
-                color.Setting.Option = color;
-            }
-            else if (opt is StringInputOption input)
-            {
-                input.Setting = Instantiate(InputTemplate, InputTemplate.transform.parent);
-                input.Setting.Option = input;
-            }
-            else if (opt is ToggleOption toggle)
-            {
-                toggle.Setting = Instantiate(ToggleTemplate, ToggleTemplate.transform.parent);
-                toggle.Setting.Option = toggle;
-            }
+                case FloatOption slider:
+                {
+                    slider.Setting = Instantiate(SliderTemplate, SliderTemplate!.transform.parent);
+                    slider.Setting.Option = slider;
+                    break;
+                }
+                case IDropdown dropdown:
+                {
+                    dropdown.Setting = Instantiate(DropdownTemplate, DropdownTemplate!.transform.parent);
+                    dropdown.Setting.Option = dropdown;
+                    break;
+                }
+                case ColorOption color:
+                {
+                    color.Setting = Instantiate(ColorTemplate, ColorTemplate!.transform.parent);
+                    color.Setting.Option = color;
+                    break;
+                }
+                case StringInputOption input:
+                {
+                    input.Setting = Instantiate(InputTemplate, InputTemplate!.transform.parent);
+                    input.Setting.Option = input;
+                    break;
+                }
+                case ToggleOption toggle:
+                {
+                    toggle.Setting = Instantiate(ToggleTemplate, ToggleTemplate!.transform.parent);
+                    toggle.Setting.Option = toggle;
+                    break;
+                }
+                }
         }
 
-        SliderTemplate.gameObject.SetActive(false);
-        DropdownTemplate.gameObject.SetActive(false);
-        ColorTemplate.gameObject.SetActive(false);
-        InputTemplate.gameObject.SetActive(false);
-        ToggleTemplate.gameObject.SetActive(false);
+        SliderTemplate!.gameObject.SetActive(false);
+        DropdownTemplate!.gameObject.SetActive(false);
+        ColorTemplate!.gameObject.SetActive(false);
+        InputTemplate!.gameObject.SetActive(false);
+        ToggleTemplate!.gameObject.SetActive(false);
 
         Page = PackType.RecoloredUI;
 
@@ -223,7 +232,7 @@ public class SettingsAndTestingUI : UIController
         PlayerPanelButton.SetImageColor(ColorType.Wax);
         Flame.Renderer.SetImageColor(ColorType.Fire, 0.7f);
         ToggleImage.sprite = Fancy.Assets.GetSprite($"{(IsBTOS2 ? "B" : "")}ToS2Icon");
-        SwapIcon.material.SetFloat("_FlipX", OtherUI ? 1 : 0);
+        SwapIcon.material.SetFloat(FlipX, OtherUI ? 1 : 0);
         BookPanel.gameObject.SetActive(OtherUI);
         RoleCard.gameObject.SetActive(!OtherUI);
 

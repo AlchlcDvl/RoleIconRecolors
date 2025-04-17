@@ -121,7 +121,7 @@ public static class PatchRoleCards
                 button.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal, faction: faction); // Rings at the back
         }
 
-        role = Constants.IsTransformed() ? Utils.GetTransformedVersion(role) : role;
+        role = Constants.IsTransformed() && !isGuide ? Utils.GetTransformedVersion(role) : role;
         var index = 0;
         var roleName = Utils.RoleName(role);
         var factionName = Utils.FactionName(faction);
@@ -227,17 +227,14 @@ public static class PatchAbilityPanelListItems
 {
     public static void Postfix(TosAbilityPanelListItem __instance, AbilityType overrideType)
     {
-        if (Constants.EnableCustomUI())
-        {
-            if (__instance.choice1Sprite)
-                __instance.choice1Sprite.transform.parent.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wax);
+        if (__instance.choice1Sprite)
+            __instance.choice1Sprite.transform.parent.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wax);
 
-            if (__instance.choice2Sprite)
-                __instance.choice2Sprite.transform.parent.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wax);
+        if (__instance.choice2Sprite)
+            __instance.choice2Sprite.transform.parent.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wax);
 
-            __instance.playerName.SetGraphicColor(ColorType.Paper);
-            __instance.playerNumber.SetGraphicColor(ColorType.Paper);
-        }
+        __instance.playerName.SetGraphicColor(ColorType.Paper);
+        __instance.playerNumber.SetGraphicColor(ColorType.Paper);
 
         if (!Constants.EnableIcons() || overrideType == AbilityType.VOTING)
             return;
@@ -660,22 +657,22 @@ public static class FixDecodingAndEncoding
     [HarmonyPatch(nameof(BaseDecoder.Encode))]
     public static void Postfix(ChatLogMessage chatLogMessage, ref string __result)
     {
-        if (Constants.EnableIcons() && chatLogMessage.chatLogEntry is ChatLogChatMessageEntry entry)
-        {
-            var faction = "Regular";
+        if (!Constants.EnableIcons() || chatLogMessage.chatLogEntry is not ChatLogChatMessageEntry entry)
+            return;
 
-            if (Utils.GetRoleAndFaction(entry.speakerId, out var tuple))
-                faction = Utils.FactionName(tuple.Item2, false);
+        var faction = "Regular";
 
-            var myFact = Pepper.GetMyFaction();
+        if (Utils.GetRoleAndFaction(entry.speakerId, out var tuple))
+            faction = Utils.FactionName(tuple.Item2, false);
 
-            if (myFact == tuple.Item2 && Constants.CurrentStyle() == "Regular")
-                faction = "Regular";
-            else if (entry.speakerId == Pepper.GetMyPosition())
-                faction = Utils.FactionName(myFact, false);
+        var myFact = Pepper.GetMyFaction();
 
-            __result = __result.Replace("RoleIcons\"", $"RoleIcons ({faction})\"");
-        }
+        if (myFact == tuple.Item2 && Constants.CurrentStyle() == "Regular")
+            faction = "Regular";
+        else if (entry.speakerId == Pepper.GetMyPosition())
+            faction = Utils.FactionName(myFact, false);
+
+        __result = __result.Replace("RoleIcons\"", $"RoleIcons ({faction})\"");
     }
 }
 
@@ -809,21 +806,24 @@ public static class ReplaceTMPSpritesPatch
 
                 asset ??= defaultSprite;
             }
-            else if (str == "PlayerNumbers")
+            else switch (str)
             {
-                if (!pack.PlayerNumbers && Constants.CustomNumbers())
-                    Fancy.Instance.Warning($"{packName} PlayerNumber was null");
+                case "PlayerNumbers":
+                {
+                    if (!pack.PlayerNumbers && Constants.CustomNumbers())
+                        Fancy.Instance.Warning($"{packName} PlayerNumber was null");
 
-                asset = pack.PlayerNumbers ?? Vanilla2 ?? CacheDefaults.Numbers;
-                return Constants.CustomNumbers() && asset;
-            }
-            else if (str == "Emojis")
-            {
-                if (!pack.Emojis)
-                    Fancy.Instance.Warning($"{packName} Emoji was null");
+                    asset = pack.PlayerNumbers ?? Vanilla2 ?? CacheDefaults.Numbers;
+                    return Constants.CustomNumbers() && asset;
+                }
+                case "Emojis":
+                {
+                    if (!pack.Emojis)
+                        Fancy.Instance.Warning($"{packName} Emoji was null");
 
-                asset = pack.Emojis ?? Vanilla3 ?? CacheDefaults.Emojis;
-                return asset;
+                    asset = pack.Emojis ?? Vanilla3 ?? CacheDefaults.Emojis;
+                    return asset;
+                }
             }
 
             return (str.Contains("RoleIcons") || str is "PlayerNumbers" or "Emojis") && asset;
@@ -972,6 +972,7 @@ public static class MentionsProviderPatches
     }
 
     [HarmonyPatch(nameof(MentionsProvider.Start))] // Achievements mentions
+    // ReSharper disable once InconsistentNaming
     public static void Prefix(ref HashSet<char> ___ExpansionTokens) => ___ExpansionTokens.Add('~');
 }
 

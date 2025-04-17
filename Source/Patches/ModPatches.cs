@@ -71,12 +71,13 @@ public static class RemoveJailorOverlay
 [HarmonyPatch(typeof(FactionWinsCinematicPlayer), nameof(FactionWinsCinematicPlayer.Init))]
 public static class PatchDefaultWinScreens
 {
+    private static readonly int State = Animator.StringToHash("State");
     public static bool Prefix(FactionWinsCinematicPlayer __instance, ICinematicData cinematicData)
     {
         __instance.elapsedDuration = 0f;
-        Debug.Log(string.Format("FactionWinsCinematicPlayer current phase at start = {0}", Pepper.GetGamePhase()));
+        Debug.Log($"FactionWinsCinematicPlayer current phase at start = {Pepper.GetGamePhase()}");
         __instance.cinematicData = cinematicData as FactionWinsCinematicData;
-        __instance.totalDuration = CinematicFactionWinsTimes.GetWinTimeByFaction(__instance.cinematicData.winningFaction);
+        __instance.totalDuration = CinematicFactionWinsTimes.GetWinTimeByFaction(__instance.cinematicData!.winningFaction);
         __instance.callbackTimers.Clear();
         var spawnedCharacters = Service.Game.Cast.GetSpawnedCharacters();
 
@@ -100,21 +101,21 @@ public static class PatchDefaultWinScreens
         // Audio and prop changes based on winning faction
         if (winningFaction == FactionType.TOWN)
         {
-            Service.Home.AudioService.PlayMusic("Audio/Music/TownVictory.wav", false, AudioController.AudioChannel.Cinematic, true);
+            Service.Home.AudioService.PlayMusic("Audio/Music/TownVictory.wav", false, AudioController.AudioChannel.Cinematic);
             __instance.evilProp.SetActive(false);
             __instance.goodProp.SetActive(true);
-            __instance.m_Animator.SetInteger("State", 1);
+            __instance.m_Animator.SetInteger(State, 1);
         }
         else
         {
-            Service.Home.AudioService.PlayMusic("Audio/Music/CovenVictory.wav", false, AudioController.AudioChannel.Cinematic, true);
+            Service.Home.AudioService.PlayMusic("Audio/Music/CovenVictory.wav", false, AudioController.AudioChannel.Cinematic);
             __instance.evilProp.SetActive(true);
             __instance.goodProp.SetActive(false);
-            __instance.m_Animator.SetInteger("State", 2);
+            __instance.m_Animator.SetInteger(State, 2);
         }
 
         // Define the colors for each faction
-        // Default for generic start, Default for generic middle (not used), Placeholder for generic end color
+        // Default for generic start, Default for the generic middle (not used), Placeholder for generic end color
         var (startColor, middleColor, endColor) = winningFaction switch
         {
             (FactionType)43 => (new Color32(181, 69, 255, 255), (Color32)Color.clear, new Color32(255, 0, 78, 255)), // #B545FF (Pandora Start), #FF004E (Pandora End)
@@ -140,14 +141,9 @@ public static class PatchDefaultWinScreens
 
         __instance.leftImage.color = startColor;
         __instance.rightImage.color = endColor;
-        var text = string.Format("GUI_WINNERS_ARE_{0}", (int)winningFaction);
+        var text = $"GUI_WINNERS_ARE_{(int)winningFaction}";
         var text2 = __instance.l10n(text);
-        string gradientText;
-
-        if (winningFaction == (FactionType)44)
-            gradientText = Utils.ApplyGradient(text2, startColor, middleColor, endColor);
-        else
-            gradientText = Utils.ApplyGradient(text2, startColor, endColor);
+        var gradientText = winningFaction == (FactionType)44 ? Utils.ApplyGradient(text2, startColor, middleColor, endColor) : Utils.ApplyGradient(text2, startColor, endColor);
 
         if (__instance.textAnimatorPlayer.gameObject.activeSelf)
             __instance.textAnimatorPlayer.ShowText(gradientText);
@@ -174,6 +170,8 @@ public static class PatchDefaultWinScreens
 [HarmonyPatch(typeof(RoleRevealCinematicPlayer), nameof(RoleRevealCinematicPlayer.SetRole))]
 public static class RoleRevealCinematicPlayerPatch
 {
+    private static FactionType CurrentFaction;
+
     [HarmonyPatch(nameof(RoleRevealCinematicPlayer.SetRole))]
     public static bool Prefix(RoleRevealCinematicPlayer __instance, ref Role role)
     {
@@ -188,11 +186,11 @@ public static class RoleRevealCinematicPlayerPatch
         __instance.skinTextPlayer.ShowText(text);
         __instance.totalDuration = Tuning.ROLE_REVEAL_TIME;
         __instance.silhouetteWrapper.gameObject.SetActive(true);
-        __instance.silhouetteWrapper.SwapWithSilhouette((int)role, true);
+        __instance.silhouetteWrapper.SwapWithSilhouette((int)role);
         var newValue2 = flag ? (role.GetTMPSprite() + role.ToColorizedDisplayString(CurrentFaction)) : role.ToColorizedDisplayString(CurrentFaction);
         newValue2 = newValue2.Replace("RoleIcons\"", "RoleIcons (" + ((role.GetFactionType() == CurrentFaction && Constants.CurrentStyle() == "Regular")
             ? "Regular"
-            : Utils.FactionName(CurrentFaction, false, null)) + ")\"");
+            : Utils.FactionName(CurrentFaction, false)) + ")\"");
         var text2 = __instance.l10n("CINE_ROLE_REVEAL_ROLE").Replace("%role%", newValue2);
         __instance.roleTextPlayer.ShowText(text2);
 
@@ -201,8 +199,6 @@ public static class RoleRevealCinematicPlayerPatch
 
         return false;
     }
-
-    public static FactionType CurrentFaction;
 
     [HarmonyPatch(nameof(RoleRevealCinematicPlayer.HandleOnMyIdentityChanged))]
     public static void Prefix(ref PlayerIdentityData playerIdentity) => CurrentFaction = playerIdentity.faction;
@@ -239,7 +235,7 @@ public static class AchievementMentionsPatch
 
             __instance.MentionInfos.Add(mentionInfo);
 
-            __instance.MentionTokens.Add(new MentionToken
+            __instance.MentionTokens.Add(new()
             {
                 mentionTokenType = MentionToken.MentionTokenType.ACHIEVEMENT,
                 match = match,

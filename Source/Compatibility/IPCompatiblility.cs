@@ -17,9 +17,9 @@ public static class Btos2IPCompatibility
 
             var btos2Assembly = Assembly.LoadFile(btos2Mod!.AssemblyPath);
             var btos2Types = AccessTools.GetTypesFromAssembly(btos2Assembly);
-            var roleDeckPlusPanelController = btos2Types.FirstOrDefault(x => x.Name == "RoleDeckPlusPanelController");
+            var roleDeckPlusPanelController = btos2Types.FirstOrDefault(x => x.Name == "RoleDeckPlusPanelController")!;
             var deckItem = roleDeckPlusPanelController.GetNestedTypes(AccessTools.all).FirstOrDefault(x => x.Name == "DeckItem");
-            var roleSelectionPlusController = btos2Types.FirstOrDefault(x => x.Name == "RoleSelectionPlusController");
+            var roleSelectionPlusController = btos2Types.FirstOrDefault(x => x.Name == "RoleSelectionPlusController")!;
             var menuRole = roleSelectionPlusController.GetNestedTypes(AccessTools.all).FirstOrDefault(x => x.Name == "MenuRole");
 
             RoleIcon = AccessTools.Field(deckItem, "roleIcon");
@@ -106,9 +106,5 @@ public static class Btos2IPCompatibility
             bannedIcon.sprite = bannedSprite;
     }
 
-    public static void RoleDeckPostfix(dynamic __instance)
-    {
-        if (Constants.EnableCustomUI())
-            ((Image)__instance.GetComponent<Image>()).SetImageColor(ColorType.Paper);
-    }
+    public static void RoleDeckPostfix(dynamic __instance) => __instance.GetComponent<Image>().SetImageColor(ColorType.Paper);
 }

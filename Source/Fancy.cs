@@ -122,7 +122,7 @@ public class Fancy
     [LoadConfigs]
     public static void LoadConfigs()
     {
-        VanillaFactions = [.. GeneralUtils.GetEnumValues<FactionType>().Except([FactionType.UNKNOWN])];
+        VanillaFactions = [.. GeneralUtils.GetEnumValues<FactionType>()!.Except([FactionType.UNKNOWN])];
         BTOS2Factions = [.. AccessTools.GetDeclaredFields(typeof(Btos2Faction)).Select(x => (FactionType)x.GetRawConstantValue())];
 
         BTOS2Factions.ForEach(x => FactionToColorMap[x] = []);
@@ -141,7 +141,7 @@ public class Fancy
 
         SelectColorFilter = new("COLOR_FILTER", ColorType.Wood, PackType.RecoloredUI, useTranslations: true);
 
-        var colors = GeneralUtils.GetEnumValues<ColorType>().Where(x => x != ColorType.All).ToDictionary(x => x, x => x.ToString().ToUpperInvariant());
+        var colors = GeneralUtils.GetEnumValues<ColorType>()!.Where(x => x != ColorType.All).ToDictionary(x => x, x => x.ToString().ToUpperInvariant());
         var factions = BTOS2Factions.Where(x => x is not (Btos2Faction.Lovers or Btos2Faction.Cannibal or Btos2Faction.None)).ToDictionary(x => x, x => Utils.FactionName(x,
             Constants.BTOS2Exists() ? ModType.BTOS2 : ModType.Vanilla).ToUpperInvariant());
 
@@ -154,58 +154,64 @@ public class Fancy
 
             foreach (var (faction, factionName) in factions)
             {
-                var color = "";
+                string color;
 
-                if (faction is < Btos2Faction.CursedSoul or (> Btos2Faction.Jackal and < Btos2Faction.Judge) or Btos2Faction.Inquisitor || (faction == Btos2Faction.CursedSoul &&
-                    !Constants.BTOS2Exists()))
+                switch (faction)
                 {
-                    color = faction.GetFactionColor();
-                }
-                else if (faction is Btos2Faction.Compliance or Btos2Faction.CursedSoul or Btos2Faction.Pandora)
-                {
-                    color = type switch
+                    case < Btos2Faction.CursedSoul or (> Btos2Faction.Jackal and < Btos2Faction.Judge) or Btos2Faction.Inquisitor:
+                    case Btos2Faction.CursedSoul when !Constants.BTOS2Exists():
                     {
-                        ColorType.Fire => faction switch
-                        {
-                            Btos2Faction.Compliance => "#FC9F32",
-                            Btos2Faction.CursedSoul => "#B54FFF",
-                            _ => "#DA23A7",
-                        },
-                        ColorType.Wood or ColorType.Wax => faction switch
-                        {
-                            Btos2Faction.Compliance => "#2D44B5",
-                            Btos2Faction.CursedSoul => "#4FFF9F",
-                            _ => "#FF004E",
-                        },
-                        _ => faction switch
-                        {
-                            Btos2Faction.Compliance => "#AE1B1E",
-                            Btos2Faction.CursedSoul => "#7500AF",
-                            _ => "#B545FF",
-                        }
-                    };
-                }
-                else
-                {
-                    color = type switch
+                        color = faction.GetFactionColor();
+                        break;
+                    }
+                    case Btos2Faction.Compliance or Btos2Faction.CursedSoul or Btos2Faction.Pandora:
                     {
-                        ColorType.Wood or ColorType.Wax or ColorType.Fire => faction switch
+                        color = type switch
                         {
-                            Btos2Faction.Jackal => "#D0D0D0",
-                            Btos2Faction.Judge => "#C93D50",
-                            Btos2Faction.Auditor => "#E8FCC5",
-                            Btos2Faction.Starspawn => "#999CFF",
-                            _ => "#3F359F",
-                        },
-                        _ => faction switch
+                            ColorType.Fire => faction switch
+                            {
+                                Btos2Faction.Compliance => "#FC9F32",
+                                Btos2Faction.CursedSoul => "#B54FFF",
+                                _ => "#DA23A7",
+                            },
+                            ColorType.Wood or ColorType.Wax => faction switch
+                            {
+                                Btos2Faction.Compliance => "#2D44B5",
+                                Btos2Faction.CursedSoul => "#4FFF9F",
+                                _ => "#FF004E",
+                            },
+                            _ => faction switch
+                            {
+                                Btos2Faction.Compliance => "#AE1B1E",
+                                Btos2Faction.CursedSoul => "#7500AF",
+                                _ => "#B545FF",
+                            }
+                        };
+                        break;
+                    }
+                    default:
+                    {
+                        color = type switch
                         {
-                            Btos2Faction.Jackal => "#404040",
-                            Btos2Faction.Judge => "#C77364",
-                            Btos2Faction.Auditor => "#AEBA87",
-                            Btos2Faction.Starspawn => "#FCE79A",
-                            _ => "#359F3F",
-                        },
-                    };
+                            ColorType.Wood or ColorType.Wax or ColorType.Fire => faction switch
+                            {
+                                Btos2Faction.Jackal => "#D0D0D0",
+                                Btos2Faction.Judge => "#C93D50",
+                                Btos2Faction.Auditor => "#E8FCC5",
+                                Btos2Faction.Starspawn => "#999CFF",
+                                _ => "#3F359F",
+                            },
+                            _ => faction switch
+                            {
+                                Btos2Faction.Jackal => "#404040",
+                                Btos2Faction.Judge => "#C77364",
+                                Btos2Faction.Auditor => "#AEBA87",
+                                Btos2Faction.Starspawn => "#FCE79A",
+                                _ => "#359F3F",
+                            },
+                        };
+                    }
+                    break;
                 }
 
                 FactionToColorMap[faction][type] = new($"{factionName}_UI_{name}", color, PackType.RecoloredUI, _ => Constants.EnableCustomUI() && Constants.ShowFactionalSettings() &&

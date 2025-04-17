@@ -1,5 +1,3 @@
-using Home.Shared;
-
 namespace FancyUI;
 
 public static class Constants
