@@ -231,8 +231,8 @@ public class Fancy
                                 _ => "#359F3F",
                             },
                         };
+                        break;
                     }
-                    break;
                 }
 
                 FactionToColorMap[faction][type] = new($"{factionName}_UI_{name}", color, PackType.RecoloredUI, _ => Constants.EnableCustomUI() && Constants.ShowFactionalSettings() &&
