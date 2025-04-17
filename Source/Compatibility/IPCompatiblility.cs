@@ -106,5 +106,5 @@ public static class Btos2IPCompatibility
             bannedIcon.sprite = bannedSprite;
     }
 
-    public static void RoleDeckPostfix(dynamic __instance) => __instance.GetComponent<Image>().SetImageColor(ColorType.Paper);
+    public static void RoleDeckPostfix(dynamic __instance) => ((Image)__instance.GetComponent<Image>()).SetImageColor(ColorType.Paper);
 }
