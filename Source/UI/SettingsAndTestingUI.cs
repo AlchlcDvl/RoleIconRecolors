@@ -7,16 +7,13 @@ public class SettingsAndTestingUI : UIController
     private CustomAnimator Animator { get; set; }
     private CustomAnimator Flame { get; set; }
 
-    private RoleCardIcon ButtonTemplate { get; set; }
+    private RoleCardIcon IconTemplate { get; set; }
 
     private SliderSetting SliderTemplate { get; set; }
     private ColorSetting ColorTemplate { get; set; }
     private DropdownSetting DropdownTemplate { get; set; }
     private ToggleSetting ToggleTemplate { get; set; }
     private StringInputSetting InputTemplate { get; set; }
-
-    private Transform RoleCard { get; set; }
-    private Transform BookPanel { get; set; }
 
     private TextMeshProUGUI RoleText { get; set; }
     private TextMeshProUGUI NameText { get; set; }
@@ -28,18 +25,15 @@ public class SettingsAndTestingUI : UIController
     private Image Defense { get; set; }
     private Image SpecialButtonImage { get; set; }
     private Image EffectButtonImage { get; set; }
-    private Image Frame { get; set; }
-    private Image SpecialWood { get; set; }
-    private Image SpecialMetal { get; set; }
-    private Image EffectWood { get; set; }
-    private Image EffectMetal { get; set; }
 
-    private Image BookPaper { get; set; }
-    private Image BookLeather { get; set; }
-    private Image BookCorners { get; set; }
-    private Image PlayerPanelButton { get; set; }
+    private readonly List<Image> Leathers = [];
+    private readonly List<Image> Papers = [];
+    private readonly List<Image> Metals = [];
+    private readonly List<Image> Waxes = [];
+    private readonly List<Image> Fires = [];
+    private readonly List<Image> Woods = [];
 
-    private Image SwapIcon { get; set; }
+    private readonly Dictionary<DisplayType, GameObject> Displays = [];
 
     private bool isBTOS2;
     public bool IsBTOS2
@@ -48,17 +42,6 @@ public class SettingsAndTestingUI : UIController
         set
         {
             isBTOS2 = value;
-            RefreshOptions();
-        }
-    }
-
-    private bool otherUI;
-    private bool OtherUI
-    {
-        get => otherUI;
-        set
-        {
-            otherUI = value;
             RefreshOptions();
         }
     }
@@ -74,9 +57,7 @@ public class SettingsAndTestingUI : UIController
         }
     }
 
-    private readonly List<GameObject> ButtonGOs = [];
-    private readonly List<Image> ButtonImages = [];
-    private readonly List<Sprite> ButtonSprites = [];
+    private readonly List<RoleCardIcon> Icons = [];
 
     public readonly List<Setting> Settings = [];
 
@@ -88,7 +69,6 @@ public class SettingsAndTestingUI : UIController
         [ new(-45f, -190f, 0f), new(0f, -188f, 0f), new(45f, -190f, 0f) ],
         [ new(-72f, -180f, 0f), new(-24f, -190f, 0f), new(-24f, -190f, 0f), new(72f, -180f, 0f) ]
     ];
-    private static readonly int FlipX = Shader.PropertyToID("_FlipX");
 
     private const string DefaultRoleText = "<sprite=\"%mod%RoleIcons (%type%)\" name=\"Role%roleInt%\"><b>%roleName%</b>";
     private const string DefaultNameText = "<sprite=\"PlayerNumbers\" name=\"PlayerNumbers_%num%\"><b>Giles Corey</b>";
@@ -101,32 +81,32 @@ public class SettingsAndTestingUI : UIController
         Animator.SetAnim(Loading.Frames, Constants.AnimationDuration());
         Animator.AddComponent<HoverEffect>()!.NonLocalizedString = "This Is Your Animator";
 
-        RoleCard = transform.FindRecursive("RoleCard");
-        BookPanel = transform.FindRecursive("Book");
+        var roleCard = transform.FindRecursive("RoleCard");
+        var playerList = transform.FindRecursive("PlayerList");
+        var roleDeck = transform.FindRecursive("RoleDeck");
+        var chat = transform.FindRecursive("Chat");
+        var roleListGyOpen = transform.FindRecursive("RoleListGyOpen");
+        var roleListGyClosed = transform.FindRecursive("RoleListGyClosed");
 
-        ButtonTemplate = RoleCard.EnsureComponent<RoleCardIcon>("ButtonTemplate");
+        Displays[DisplayType.RoleCard] = roleCard.gameObject;
+        Displays[DisplayType.PlayerList] = playerList.gameObject;
+        Displays[DisplayType.RoleDeck] = roleDeck.gameObject;
+        Displays[DisplayType.Chat] = chat.gameObject;
+        Displays[DisplayType.RoleListGyOpen] = roleListGyOpen.gameObject;
+        Displays[DisplayType.RoleListGyClosed] = roleListGyClosed.gameObject;
 
-        SpecialMetal = RoleCard.GetComponent<Image>("Special")!;
-        EffectMetal = RoleCard.GetComponent<Image>("Effect")!;
-        SpecialWood = SpecialMetal.transform.GetComponent<Image>("Wood");
-        EffectWood = EffectMetal.transform.GetComponent<Image>("Wood");
+        IconTemplate = roleCard.EnsureComponent<RoleCardIcon>("ButtonTemplate");
 
-        BookLeather = BookPanel.GetComponent<Image>("Leather")!;
-        BookCorners = BookPanel.GetComponent<Image>("Corners")!;
-        PlayerPanelButton = BookPanel.GetComponent<Image>("Tab")!;
-        BookPaper = BookPanel.GetComponent<Image>()!;
-
-        Flame = SpecialMetal.transform.EnsureComponent<CustomAnimator>("Fire")!;
+        Flame = roleCard.EnsureComponent<CustomAnimator>("Fire")!;
         Flame.SetAnim([ .. FancyAssetManager.Flame.Frames.Select(x => x.RenderedSprite) ], 1f);
 
-        RoleText = RoleCard.GetComponent<TextMeshProUGUI>("Role");
+        RoleText = roleCard.GetComponent<TextMeshProUGUI>("Role");
         NameText = transform.GetComponent<TextMeshProUGUI>("NameText");
 
-        SlotCounter = RoleCard.GetComponent<Image>("SlotCounter");
-        RoleIcon = RoleCard.GetComponent<Image>("RoleIcon");
-        Attack = RoleCard.GetComponent<Image>("Attack");
-        Defense = RoleCard.GetComponent<Image>("Defense");
-        Frame = RoleCard.GetComponent<Image>("Frame");
+        SlotCounter = roleCard.GetComponent<Image>("SlotCounter");
+        RoleIcon = roleCard.GetComponent<Image>("RoleIcon");
+        Attack = roleCard.GetComponent<Image>("Attack");
+        Defense = roleCard.GetComponent<Image>("Defense");
 
         SliderTemplate = transform.EnsureComponent<SliderSetting>("SliderTemplate");
         ColorTemplate = transform.EnsureComponent<ColorSetting>("ColorTemplate");
@@ -149,9 +129,37 @@ public class SettingsAndTestingUI : UIController
         transform.GetComponent<Button>("Testing")!.onClick.AddListener(() => Page = PackType.Testing);
         transform.GetComponent<Button>("Toggle")!.onClick.AddListener(() => IsBTOS2 = !IsBTOS2);
 
-        var swap =  transform.GetComponent<Button>("Swap")!;
-        swap.onClick.AddListener(() => OtherUI = !OtherUI);
-        SwapIcon = swap.GetComponent<Image>();
+        Metals.Add(roleCard.GetComponent<Image>("Special"));
+        Metals.Add(roleCard.GetComponent<Image>("Effect"));
+        Metals.Add(playerList.GetComponent<Image>("Corners"));
+        Metals.Add(roleDeck.GetComponent<Image>("Metal"));
+        Metals.Add(chat.GetComponent<Image>("Metal"));
+        Metals.Add(chat.GetComponent<Image>("Nameplate"));
+        Metals.Add(roleListGyOpen.GetComponent<Image>("Metal"));
+        Metals.Add(roleListGyClosed.GetComponent<Image>("Metal"));
+
+        Woods.Add(roleCard.GetComponent<Image>("Frame"));
+        Woods.Add(Metals[0].transform.GetComponent<Image>("Wood"));
+        Woods.Add(Metals[1].transform.GetComponent<Image>("Wood"));
+        Woods.Add(SlotCounter);
+        Woods.Add(chat.transform.GetComponent<Image>("WoodFrame"));
+        Woods.Add(chat.transform.GetComponent<Image>("WoodDetails1"));
+        Woods.Add(chat.transform.GetComponent<Image>("WoodDetails2"));
+        Woods.Add(chat.transform.GetComponent<Image>("ChatBottom"));
+        Woods.Add(roleListGyOpen.transform.GetComponent<Image>("Wood"));
+        Woods.Add(roleListGyClosed.transform.GetComponent<Image>("Wood"));
+
+        Leathers.Add(playerList.GetComponent<Image>("Leather"));
+        Leathers.Add(roleDeck.GetComponent<Image>("Leather"));
+
+        Waxes.Add(playerList.GetComponent<Image>("Tab"));
+        Waxes.Add(chat.GetComponent<Image>("Wax"));
+
+        Papers.Add(playerList.GetComponent<Image>("Paper"));
+        Papers.Add(roleDeck.GetComponent<Image>("Paper"));
+        Papers.Add(chat.GetComponent<Image>("SendPaper"));
+
+        Fires.Add(Flame.Renderer);
 
         FancyUI.SetupFonts(transform);
 
@@ -197,11 +205,9 @@ public class SettingsAndTestingUI : UIController
         ColorTemplate!.gameObject.SetActive(false);
         InputTemplate!.gameObject.SetActive(false);
         ToggleTemplate!.gameObject.SetActive(false);
-
-        Page = PackType.RecoloredUI;
-
-        RefreshOptions();
     }
+
+    public void Start() => RefreshOptions();
 
     public void OnEnable() => RefreshOptions();
 
@@ -220,21 +226,15 @@ public class SettingsAndTestingUI : UIController
         NameText.SetGraphicColor(ColorType.Paper);
         RoleText.SetText(DefaultRoleText.Replace("%type%", $"{Utils.FactionName(Constants.GetSelectedFaction(), IsBTOS2 ? ModType.BTOS2 : ModType.Vanilla)}").Replace("%mod%", IsBTOS2 ? "BTOS" :
             "").Replace("%roleName%", "Admirer").Replace("%roleInt%", "1"));
-        SpecialMetal.SetImageColor(ColorType.Metal);
-        EffectMetal.SetImageColor(ColorType.Metal);
-        SpecialWood.SetImageColor(ColorType.Wood);
-        EffectWood.SetImageColor(ColorType.Wood);
-        SlotCounter.SetImageColor(ColorType.Wood);
-        Frame.SetImageColor(ColorType.Wood);
-        BookCorners.SetImageColor(ColorType.Metal);
-        BookLeather.SetImageColor(ColorType.Leather);
-        BookPaper.SetImageColor(ColorType.Paper);
-        PlayerPanelButton.SetImageColor(ColorType.Wax);
-        Flame.Renderer.SetImageColor(ColorType.Fire, 0.7f);
+        Leathers.ForEach(x => x.SetImageColor(ColorType.Leather));
+        Metals.ForEach(x => x.SetImageColor(ColorType.Metal));
+        Woods.ForEach(x => x.SetImageColor(ColorType.Wood));
+        Papers.ForEach(x => x.SetImageColor(ColorType.Paper));
+        Waxes.ForEach(x => x.SetImageColor(ColorType.Wax));
+        Fires.ForEach(x => x.SetImageColor(ColorType.Fire, 0.7f));
+        Displays.ForEach((x, y) => y.SetActive(Fancy.SelectDisplay.Value == x));
+        Icons.ForEach(x => x.UpdateIcon(Fancy.SelectTestingRole.Value));
         ToggleImage.sprite = Fancy.Assets.GetSprite($"{(IsBTOS2 ? "B" : "")}ToS2Icon");
-        SwapIcon.material.SetFloat(FlipX, OtherUI ? 1 : 0);
-        BookPanel.gameObject.SetActive(OtherUI);
-        RoleCard.gameObject.SetActive(!OtherUI);
 
         foreach (var setting in Settings)
         {

@@ -26,7 +26,7 @@ public class ColorSetting : BaseInputSetting
 
     public void OnValueChanged(string value)
     {
-        if (ColorUtility.TryParseHtmlString(value, out var color))
+        if (ColorUtility.TryParseHtmlString(value.StartsWith("#") ? value : $"#{value}", out var color))
             ValueBg.color = color;
 
         Option.Value = value;

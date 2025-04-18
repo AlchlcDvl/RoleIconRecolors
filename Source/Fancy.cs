@@ -110,6 +110,7 @@ public class Fancy
     public static EnumDropdownOption<FactionType> SelectTestingFaction;
     public static EnumDropdownOption<ColorType> SelectColorFilter;
     public static EnumDropdownOption<Role> SelectTestingRole; // TODO: Implement this
+    public static EnumDropdownOption<DisplayType> SelectDisplay;
 
     private static FactionType[] VanillaFactions;
     private static FactionType[] BTOS2Factions;
@@ -139,7 +140,7 @@ public class Fancy
         FactionOverride1 = new("FACTION_OVERRIDE_1", "None", PackType.IconPacks, () => GetOptions(ModType.Vanilla, false), _ => Constants.EnableIcons());
         FactionOverride2 = new("FACTION_OVERRIDE_2", "None", PackType.IconPacks, () => GetOptions(ModType.BTOS2, false), _ => Constants.BTOS2Exists() && Constants.EnableIcons());
 
-        SelectColorFilter = new("COLOR_FILTER", ColorType.Wood, PackType.RecoloredUI, useTranslations: true);
+        SelectColorFilter = new("COLOR_FILTER", ColorType.Wood, PackType.RecoloredUI, setActive: _ => Constants.EnableCustomUI(), useTranslations: true);
 
         var colors = GeneralUtils.GetEnumValues<ColorType>()!.Where(x => x != ColorType.All).ToDictionary(x => x, x => x.ToString().ToUpperInvariant());
         var factions = BTOS2Factions.Where(x => x is not (Btos2Faction.Lovers or Btos2Faction.Cannibal or Btos2Faction.None)).ToDictionary(x => x, x => Utils.FactionName(x,
@@ -256,6 +257,7 @@ public class Fancy
         ShowOverlayWhenJailed = new("SHOW_TO_JAILED", true, PackType.Testing);
         ShowOverlayAsJailor = new("SHOW_TO_JAILOR", false, PackType.Testing);
         IconsInRoleReveal = new("ROLE_REVEAL_ICONS", true, PackType.Testing);
+        SelectDisplay = new("SELECT_DISPLAY", DisplayType.RoleCard, PackType.Testing, useTranslations: true);
         SelectTestingFaction = new("SELECTED_TESTING_FACTION", FactionType.NONE, PackType.Testing, useTranslations: true, values:
             () => SettingsAndTestingUI.Instance?.IsBTOS2 == true ? BTOS2Factions : VanillaFactions);
     }

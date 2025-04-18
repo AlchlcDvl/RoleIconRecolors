@@ -31,7 +31,7 @@ public class CreateAssetBundles
         {
             Directory.EnumerateFiles(win, "*.*", SearchOption.AllDirectories).ToList().ForEach(File.Delete);
         }
-        BuildPipeline.BuildAssetBundles(win, BuildAssetBundleOptions.None, BuildTarget.StandaloneWindows);
         BuildPipeline.BuildAssetBundles(mac, BuildAssetBundleOptions.None, BuildTarget.StandaloneOSX);
+        BuildPipeline.BuildAssetBundles(win, BuildAssetBundleOptions.None, BuildTarget.StandaloneWindows);
     }
 }

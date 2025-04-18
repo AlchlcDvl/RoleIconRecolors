@@ -122,6 +122,9 @@
     <Entry key="FANCY_COLOR_FILTER_NAME">Color Filter</Entry>
     <Entry key="FANCY_COLOR_FILTER_DESC">Filters the color settings for easier browsing.</Entry>
 
+    <Entry key="FANCY_SELECT_DISPLAY_NAME">Current Testing Display</Entry>
+    <Entry key="FANCY_SELECT_DISPLAY_DESC">Changes which testing display is currently visible.</Entry>
+
     <Entry key="FANCY_VANILLA">Vanilla</Entry>
     <Entry key="FANCY_DEFAULT">Default</Entry>
     <Entry key="FANCY_FACTION">Faction</Entry>
@@ -185,6 +188,13 @@
     <Entry key="FANCY_WOOD">Wood</Entry>
     <Entry key="FANCY_WAX">Wax</Entry>
     <Entry key="FANCY_ALL">All</Entry>
+
+    <Entry key="FANCY_ROLECARD">Role Card</Entry>
+    <Entry key="FANCY_PLAYERLIST">Player List</Entry>
+    <Entry key="FANCY_ROLEDECK">Role Deck</Entry>
+    <Entry key="FANCY_CHAT">Chat</Entry>
+    <Entry key="FANCY_ROLELISTGYOPEN">Role List + Graveyard</Entry>
+    <Entry key="FANCY_ROLELISTGYCLOSED">Role List</Entry>
 
     <!-- Town -->
     <Entry key="FANCY_TOWN_UI_FIRE_NAME">Town Fire Color</Entry>

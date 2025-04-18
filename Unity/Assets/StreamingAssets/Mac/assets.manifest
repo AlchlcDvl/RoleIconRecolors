@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 4288777779
+CRC: 458826177
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 635b733572061ede7abce5a166502432
+    Hash: 2df57db9fc2c8e5a57034231e7853b5b
   TypeTreeHash:
     serializedVersion: 2
     Hash: 89c7f6d629771a0fed8e491f2a4febe2
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 635b733572061ede7abce5a166502432
+    Hash: 2df57db9fc2c8e5a57034231e7853b5b
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -136,6 +136,7 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: UnityEngine.UI
   ClassName: UnityEngine.UI.Toggle/ToggleEvent
 Assets:
+- Assets/Assets/Chat_Stamp.png
 - Assets/Assets/PlayerList_Main_M.png
 - Assets/Assets/RoleList_Open_W.png
 - Assets/Assets/RoleList_Open_M.png
@@ -151,16 +152,21 @@ Assets:
 - Assets/Assets/DownloaderUI.prefab
 - Assets/Assets/SilhouetteSwapper.png
 - Assets/Assets/ScrollbarBackground.png
+- Assets/Assets/Chat_Nameplate.png
 - Assets/Assets/FancyUI.prefab
 - Assets/Assets/ColoredWood.png
 - Assets/Assets/ButtonRed.png
 - Assets/Assets/GrayscaleShader.shader
 - Assets/Assets/IconPacks.png
+- Assets/Assets/Chat_FrameCorners.png
+- Assets/Assets/Chat_Backing.png
 - Assets/Assets/PackBackground.png
 - Assets/Assets/RoleCard_Main_2.png
 - Assets/Assets/ClosedChest.png
 - Assets/Assets/Dropdown_BG.png
 - Assets/Assets/ImageFlipperShader.shader
+- Assets/Assets/Frame_9Slice.png
+- Assets/Assets/Chat_Bottom.png
 - Assets/Assets/Input.png
 - Assets/Assets/AbilitySlots_2.png
 - Assets/Assets/Option_BG.png
@@ -192,8 +198,10 @@ Assets:
 - Assets/Assets/Banned.png
 - Assets/Assets/MRC.png
 - Assets/Assets/Graveyard_M.png
+- Assets/Assets/ChatBox_FrameDetail.png
 - Assets/Assets/Graveyard_W.png
 - Assets/Assets/Ability_Circle.png
+- Assets/Assets/Chat_Paper.png
 - Assets/Assets/Rolecard_Mask.png
 - Assets/Assets/GrayscaleMaterial.mat
 Dependencies: []

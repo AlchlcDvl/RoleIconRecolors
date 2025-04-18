@@ -10,8 +10,8 @@ public enum ModType : byte
 
 public enum PackType : byte
 {
-    IconPacks,
     RecoloredUI,
+    IconPacks,
     SilhouetteSets,
     MiscRoleCustomisation,
     Testing
@@ -33,4 +33,23 @@ public enum UITheme : byte
     Vanilla,
     Faction,
     Custom
+}
+
+public enum DisplayType : byte
+{
+    RoleCard,
+    PlayerList,
+    RoleListGyClosed,
+    RoleListGyOpen,
+    RoleDeck,
+    Chat
+}
+
+public enum IconType : byte
+{
+    Ability1,
+    Ability2,
+    Attribute,
+    Necronomicon,
+    Effect
 }
