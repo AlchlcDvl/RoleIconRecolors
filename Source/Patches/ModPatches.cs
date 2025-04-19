@@ -7,6 +7,7 @@ using Server.Shared.Cinematics.Data;
 using Server.Shared.Cinematics;
 using Mentions;
 using Mentions.Providers;
+using UnityEngine.EventSystems;
 
 namespace FancyUI.Patches;
 
@@ -254,7 +255,7 @@ public static class AchievementMentionsPatch
 public static class SpecialAbilityPopupGenericListItemPatch
 {
     [HarmonyPrefix]
-    public static bool Prefix(SpecialAbilityPopupGenericListItem __instance, ref int position, ref string player_name, ref Sprite headshot, ref bool hasChoice1, ref bool hasChoice2, ref UIRoleData data)
+    public static bool Prefix(SpecialAbilityPopupGenericListItem __instance, int position, string player_name, Sprite headshot, bool hasChoice1, bool hasChoice2, UIRoleData data)
     {
         Tuple<Role, FactionType> tuple;
         Service.Game.Sim.simulation.knownRolesAndFactions.Data.TryGetValue(position, out tuple);
@@ -265,7 +266,7 @@ public static class SpecialAbilityPopupGenericListItemPatch
             role = tuple.Item1;
             factionType = tuple.Item2;
         }
-        string text = (role == Role.NONE) ? player_name : player_name + (" (" + (Constants.MiscRoleExists() ? role.ToFactionString(factionType) : role.ToDisplayString()) + ")").ApplyFactionColor(factionType);
+        string text = (role == Role.NONE) ? player_name : player_name + role.ToColorizedFactionStringParentheses(factionType);
         __instance.playerName.SetText(text);
         __instance.playerHeadshot.sprite = headshot;
         __instance.characterPosition = position;
@@ -298,7 +299,7 @@ public static class SpecialAbilityPopupGenericListItemPatch
 public static class SpecialAbilityPopupDayConfirmListItemPatch
 {
     [HarmonyPrefix]
-    public static bool Prefix(SpecialAbilityPopupDayConfirmListItem __instance, ref int position, ref string player_name, ref Sprite headshot, ref bool hasChoice1, ref UIRoleData data)
+    public static bool Prefix(SpecialAbilityPopupDayConfirmListItem __instance, int position, string player_name, Sprite headshot, bool hasChoice1, UIRoleData data)
     {
         Tuple<Role, FactionType> tuple;
         Service.Game.Sim.simulation.knownRolesAndFactions.Data.TryGetValue(position, out tuple);
@@ -309,7 +310,7 @@ public static class SpecialAbilityPopupDayConfirmListItemPatch
             role = tuple.Item1;
             factionType = tuple.Item2;
         }
-        string text = (role == Role.NONE) ? player_name : player_name + (" (" + (Constants.MiscRoleExists() ? role.ToFactionString(factionType) : role.ToDisplayString()) + ")").ApplyFactionColor(factionType);
+        string text = (role == Role.NONE) ? player_name : player_name + role.ToColorizedFactionStringParentheses(factionType);
         __instance.playerName.SetText(text);
         __instance.playerHeadshot.sprite = headshot;
         __instance.characterPosition = position;
@@ -322,6 +323,71 @@ public static class SpecialAbilityPopupDayConfirmListItemPatch
         }
         __instance.choiceButton.gameObject.SetActive(hasChoice1);
         __instance.selected = false;
+        return false;
+    }
+}
+
+[HarmonyPatch(typeof(SpecialAbilityPopupNecromancerRetributionistListItem), nameof(SpecialAbilityPopupNecromancerRetributionistListItem.SetData))]
+public static class SpecialAbilityPopupNecromancerRetributionistListItemPatch
+{
+    [HarmonyPrefix]
+    public static bool Prefix(SpecialAbilityPopupNecromancerRetributionistListItem __instance, int position, string player_name, Sprite headshot, bool hasChoice1, bool hasChoice2, UIRoleData data, Role role, SpecialAbilityPopupNecromancerRetributionist parent)
+    {
+        Role myRole = Pepper.GetMyCurrentIdentity().role;
+        __instance.parent = parent;
+        Tuple<Role, FactionType> tuple;
+        Service.Game.Sim.simulation.knownRolesAndFactions.Data.TryGetValue(position, out tuple);
+        Role role2 = Role.NONE;
+        FactionType factionType = FactionType.NONE;
+        if (tuple != null)
+        {
+            role2 = tuple.Item1;
+            factionType = tuple.Item2;
+        }
+        string text = (role == Role.NONE) ? player_name : player_name + role.ToColorizedFactionStringParentheses(factionType);
+        __instance.playerName.SetText(text);
+        __instance.playerHeadshot.sprite = headshot;
+        __instance.characterPosition = position;
+        __instance.playerNumber.text = string.Format("{0}.", __instance.characterPosition + 1);
+        UIRoleData.UIRoleDataInstance uiroleDataInstance = data.roleDataList.Find((UIRoleData.UIRoleDataInstance d) => d.role == myRole);
+        UIRoleData.UIRoleDataInstance uiroleDataInstance2 = data.roleDataList.Find((UIRoleData.UIRoleDataInstance d) => d.role == role);
+        if (uiroleDataInstance != null)
+        {
+            __instance.choiceText.text = __instance.l10n(string.Format("GUI_ROLE_SPECIAL_ABILITY_VERB_{0}", (int)myRole));
+            __instance.choiceSprite.sprite = uiroleDataInstance.specialAbilityIcon;
+        }
+        if (uiroleDataInstance2 != null)
+        {
+            __instance.choice2Text.text = __instance.GetAbilityVerb(uiroleDataInstance2.role);
+            if (uiroleDataInstance2.role == Role.DEPUTY || uiroleDataInstance2.role == Role.CONJURER)
+            {
+                __instance.choice2Sprite.sprite = uiroleDataInstance2.specialAbilityIcon;
+            }
+            else
+            {
+                __instance.choice2Sprite.sprite = uiroleDataInstance2.abilityIcon;
+            }
+        }
+        __instance.choiceButton.gameObject.SetActive(hasChoice1);
+        __instance.choice2Button.gameObject.SetActive(hasChoice2);
+        if (!hasChoice1)
+        {
+            __instance.selected1 = false;
+            __instance.choiceButton.Deselect();
+        }
+        if (!hasChoice2)
+        {
+            __instance.selected2 = false;
+            __instance.choice2Button.Deselect();
+        }
+        if (EventSystem.current.currentSelectedGameObject != __instance.gpSelectable.gameObject)
+        {
+            __instance.GPSelectExit();
+        }
+        else
+        {
+            __instance.GPSelectEnter();
+        }
         return false;
     }
 }
