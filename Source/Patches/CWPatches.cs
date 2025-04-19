@@ -316,8 +316,7 @@ public static class HudRoleListAndGraveyardControllerPatch
         roleList.transform.GetComponent<Image>("RolesButton").SetImageColor(ColorType.Wax);
         roleList.transform.GetComponent<Image>("BansButton").SetImageColor(ColorType.Wax);
         roleList.transform.GetComponent<Image>("Sprite").SetImageColor(ColorType.Metal);
-        // roleList.transform.GetComponent<TextMeshProUGUI>("RoleListTitle").SetGraphicColor(ColorType.Metal);
-        roleList.transform.Find("RoleListTitle").gameObject.SetActive(false);
+        roleList.transform.GetComponent<TextMeshProUGUI>("RoleListTitle").SetGraphicColor(ColorType.Metal);
         RoleListWood = roleList.transform.parent.Find("RoleListWood")?.GetComponent<Image>();
 
         if (!RoleListWood)
@@ -335,8 +334,9 @@ public static class HudRoleListAndGraveyardControllerPatch
 
         var graveyard = __instance.graveyardPanelBackground;
         graveyard.transform.GetComponent<Image>("Sprite").SetImageColor(ColorType.Metal);
-        // graveyard.GetComponentsInChildren<TextMeshProUGUI>(true).FirstOrDefault(t => t.name == "RoleListTitle").SetGraphicColor(ColorType.Metal);
-        graveyard.GetComponentsInChildren<TextMeshProUGUI>(true).FirstOrDefault(t => t.name == "RoleListTitle")?.gameObject.SetActive(false);
+
+        // This, for some reason, ignores the Blue channel. #FFFFFF returns as #FFFF00, for example.
+        graveyard.GetComponentsInChildren<TextMeshProUGUI>(true).FirstOrDefault(t => t.name == "RoleListTitle").SetGraphicColor(ColorType.Metal);
 
         if (!GraveyardWood)
         {
