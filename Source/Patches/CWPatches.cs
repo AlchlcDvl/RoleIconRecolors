@@ -334,8 +334,10 @@ public static class HudRoleListAndGraveyardControllerPatch
 
         var graveyard = __instance.graveyardPanelBackground;
         graveyard.transform.GetComponent<Image>("Sprite").SetImageColor(ColorType.Metal);
-        graveyard.transform.GetComponent<TextMeshProUGUI>("RoleListTitle").SetGraphicColor(ColorType.Metal);
-        GraveyardWood = graveyard.transform.parent.Find("GraveyardWood")?.GetComponent<Image>();
+        graveyard.GetComponentsInChildren<TextMeshProUGUI>(true).FirstOrDefault(t => t.name == "RoleListTitle").SetGraphicColor(ColorType.Metal);
+
+        var roleListTitle = roleList.transform.GetComponent<TextMeshProUGUI>("RoleListTitle");
+        var graveyardTitle = graveyard.GetComponentsInChildren<TextMeshProUGUI>(true).FirstOrDefault(t => t.name == "RoleListTitle");
 
         if (!GraveyardWood)
         {
@@ -349,6 +351,7 @@ public static class HudRoleListAndGraveyardControllerPatch
 
         graveyard.SetImageColor(ColorType.Metal);
         GraveyardWood.SetImageColor(ColorType.Wood);
+
     }
 
     [HarmonyPatch(nameof(HudRoleListAndGraveyardController.ValidateVisibility)), HarmonyPostfix]
