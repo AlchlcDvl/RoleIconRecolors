@@ -17,6 +17,7 @@ public static class Utils
         "Werewolf_Ability_1" ];
 
     private static readonly Dictionary<ModType, (Dictionary<string, string>, Dictionary<string, int>)> RoleStuff = [];
+
     private static readonly int Color1 = Shader.PropertyToID("_Color");
     private static readonly int Brightness = Shader.PropertyToID("_Brightness");
     private static readonly int GrayscaleAmount = Shader.PropertyToID("_GrayscaleAmount");
@@ -374,7 +375,8 @@ public static class Utils
                 .Where(x => x is not (Btos2Role.None or Btos2Role.Hangman or Btos2Role.Unknown or Btos2Role.RoleCount)),
             _ => GeneralUtils.GetEnumValues<Role>()!.Where(x => x is not (Role.NONE or Role.ROLE_COUNT or Role.UNKNOWN or Role.HANGMAN))
         };
-        return RoleStuff[mod] = (roles.ToDictionary(x => x.ToString(), x => $"Role{(int)x}"), roles.ToDictionary(x => x.ToString(), x => (int)x));
+        var dict = roles.ToDictionary(x => x.ToString(), x => (int)x);
+        return RoleStuff[mod] = (dict.ToDictionary(x => x.Key, x => $"Role{x.Value}"), dict);
     }
 
     public static void DumpSprite(Texture2D texture, string fileName = null, string path = null, bool decompress = false, bool skipSetting = false)
@@ -643,8 +645,7 @@ public static class Utils
             try
             {
                 return role.MrcDisplayString(faction);
-            }
-            catch { }
+            } catch {}
         }
 
         var result = role.ToDisplayString();
@@ -657,8 +658,6 @@ public static class Utils
 
     private static string MrcDisplayString(this Role role, FactionType faction) => ModSettings.GetBool("Faction-Specific Role Names", "det.rolecustomizationmod") ?
         MiscRoleCustomisation.Utils.ToRoleFactionDisplayString(role, faction) : role.ToDisplayString();
-
-    public static Color ToColor(this string html) => ColorUtility.TryParseHtmlString(html.StartsWith("#") ? html : $"#{html}", out var color) ? color : Color.white;
 
     // public static void DebugSingleTransform(this Transform transform)
     // {
@@ -674,17 +673,6 @@ public static class Utils
     //     for (var i = 0; i < transform.childCount; i++)
     //         transform.GetChild(i).DebugTransformRecursive();
     // }
-
-    private static IEnumerable<T2> Select<T1, T2>(this IEnumerable<T1> source, Func<int, T1, T2> selector)
-    {
-        var i = 0;
-
-        foreach (var item in source)
-        {
-            yield return selector(i, item);
-            i++;
-        }
-    }
 
     public static string ApplyGradient(string text, params Color32[] colors)
     {
@@ -712,6 +700,4 @@ public static class Utils
         strength = Mathf.Clamp(strength, -1f, 1f);
         return Color.Lerp(color, strength < 0 ? Color.white : Color.black, Mathf.Abs(strength));
     }
-
-    public static bool IsAny<T>(this T item, params T[] items) => items.Contains(item);
 }

@@ -39,8 +39,9 @@ public enum DisplayType : byte
 {
     RoleCard,
     PlayerList,
-    RoleListGyClosed,
-    RoleListGyOpen,
+    RoleList,
+    Graveyard,
+    RlPlusGy,
     RoleDeck,
     Chat
 }

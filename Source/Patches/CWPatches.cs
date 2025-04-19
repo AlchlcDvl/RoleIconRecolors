@@ -16,6 +16,7 @@ public static class RoleCardPanelPatch
 
         __instance.transform.GetChild(5).GetComponent<Image>().SetImageColor(ColorType.Wood);
         __instance.transform.GetChild(10).GetComponent<Image>().SetImageColor(ColorType.Wood);
+        __instance.transform.GetChild(20).GetComponentInChildren<Image>().SetImageColor(ColorType.Metal);
 
         if (Constants.GetMainUIThemeType() == UITheme.Faction)
         {
@@ -26,6 +27,7 @@ public static class RoleCardPanelPatch
             var specialAbility = SpecialAbilityPanelPatch1.Cache;
             var specialAbilityPopup = SpecialAbilityPopupPanelPatch.Cache;
             var hudDock = HudDockPanelPatch.Cache;
+            var rLGY = HudRoleListAndGraveyardControllerPatch.Cache;
 
             if (pooledChat)
                 PooledChatViewSwitcherPatch.Postfix(pooledChat);
@@ -47,6 +49,9 @@ public static class RoleCardPanelPatch
 
             if (hudDock)
                 HudDockPanelPatch.Postfix(hudDock);
+
+            if (rLGY)
+                HudRoleListAndGraveyardControllerPatch.Postfix1(rLGY);
         }
 
         return false;
@@ -82,9 +87,11 @@ public static class SpecialAbilityPanelPatch1
 
         og.SetImageColor(ColorType.Wood); // Main wood container
         copy.SetImageColor(ColorType.Metal); // The metal support
-        try 
-        { __instance.useButton.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Fire); }
-        catch { }
+
+        try
+        {
+            __instance.useButton.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Fire);
+        } catch {}
     }
 }
 
@@ -266,7 +273,95 @@ public static class PatchAbilityPanel
         leather.SetImageColor(ColorType.Leather);
         paper.SetImageColor(ColorType.Paper);
 
-        parent.Find("MinimizeUIButton").GetComponent<Image>().SetImageColor(ColorType.Metal);
+        parent.Find("MinimizeUIButton").GetComponentInChildren<Image>().SetImageColor(ColorType.Metal);
+    }
+}
+
+// HudRoleListPanel - Roles = 3, Bans = 4
+
+[HarmonyPatch(typeof(HudRoleListAndGraveyardController), nameof(HudRoleListAndGraveyardController.Start))]
+public static class HudRoleListAndGraveyardControllerPatch
+{
+    public static HudRoleListAndGraveyardController Cache;
+
+    private static Image OpenWood;
+    private static Image RoleListWood;
+    private static Image GraveyardWood;
+
+    [HarmonyPatch(nameof(HudRoleListAndGraveyardController.Start)), HarmonyPostfix]
+    public static void Postfix1(HudRoleListAndGraveyardController __instance)
+    {
+        Cache = __instance;
+
+        var template1 = __instance.GetComponent<Image>();
+        template1.SetImageColor(ColorType.Wood);
+        OpenWood = __instance.transform.parent.Find("OpenWood")?.GetComponent<Image>();
+
+        if (!OpenWood)
+        {
+            template1.sprite = Fancy.Assets.GetSprite("RoleList_Open_M");
+            OpenWood = UObject.Instantiate(template1, __instance.transform.parent);
+            OpenWood.transform.SetSiblingIndex(template1.transform.GetSiblingIndex());
+            OpenWood.transform.ClearChildren();
+            OpenWood.GetComponent<HudRoleListAndGraveyardController>().Destroy();
+            OpenWood.GetComponent<HorizontalLayoutGroup>().Destroy();
+            OpenWood.name = "OpenWood";
+            OpenWood.sprite = Fancy.Assets.GetSprite("RoleList_Open_W");
+        }
+
+        template1.SetImageColor(ColorType.Metal);
+        OpenWood.SetImageColor(ColorType.Wood);
+
+        var roleList = __instance.roleListPanelBackground;
+        roleList.transform.GetComponent<Image>("RolesButton").SetImageColor(ColorType.Wax);
+        roleList.transform.GetComponent<Image>("BansButton").SetImageColor(ColorType.Wax);
+        roleList.transform.GetComponent<Image>("Sprite").SetImageColor(ColorType.Metal);
+        roleList.transform.GetComponent<TextMeshProUGUI>("RoleListTitle").SetGraphicColor(ColorType.Metal);
+        RoleListWood = roleList.transform.parent.Find("RoleListWood")?.GetComponent<Image>();
+
+        if (!RoleListWood)
+        {
+            roleList.sprite = Fancy.Assets.GetSprite("RoleList_Closed_M");
+            RoleListWood = UObject.Instantiate(roleList, __instance.transform.parent);
+            RoleListWood.transform.SetSiblingIndex(roleList.transform.GetSiblingIndex());
+            RoleListWood.transform.ClearChildren();
+            RoleListWood.name = "RoleListWood";
+            RoleListWood.sprite = Fancy.Assets.GetSprite("RoleList_Closed_W");
+        }
+
+        roleList.SetImageColor(ColorType.Metal);
+        RoleListWood.SetImageColor(ColorType.Wood);
+
+        var graveyard = __instance.graveyardPanelBackground;
+        graveyard.transform.GetComponent<Image>("Sprite").SetImageColor(ColorType.Metal);
+        graveyard.transform.GetComponent<TextMeshProUGUI>("RoleListTitle").SetGraphicColor(ColorType.Metal);
+        GraveyardWood = graveyard.transform.parent.Find("GraveyardWood")?.GetComponent<Image>();
+
+        if (!GraveyardWood)
+        {
+            graveyard.sprite = Fancy.Assets.GetSprite("Graveyard_M");
+            GraveyardWood = UObject.Instantiate(graveyard, __instance.transform.parent);
+            GraveyardWood.transform.SetSiblingIndex(graveyard.transform.GetSiblingIndex());
+            GraveyardWood.transform.ClearChildren();
+            GraveyardWood.name = "GraveyardWood";
+            GraveyardWood.sprite = Fancy.Assets.GetSprite("Graveyard_W");
+        }
+
+        graveyard.SetImageColor(ColorType.Metal);
+        GraveyardWood.SetImageColor(ColorType.Wood);
+    }
+
+    [HarmonyPatch(nameof(HudRoleListAndGraveyardController.ValidateVisibility)), HarmonyPostfix]
+    public static void Postfix2(HudRoleListAndGraveyardController __instance)
+    {
+        if (OpenWood)
+            OpenWood.enabled = __instance.GetComponent<Image>().enabled;
+
+        if (RoleListWood)
+            RoleListWood.enabled = __instance.roleListPanelBackground.enabled;
+
+        if (GraveyardWood)
+            GraveyardWood.enabled = __instance.graveyardPanelBackground.enabled;
     }
 }
 
@@ -281,15 +376,5 @@ public static class PatchAbilityPanel
 //         var parts = __instance.transform.GetChild(12);
 //         parts.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood); // Wood frame at the back
 //         parts.GetChild(13).GetComponent<Image>().SetImageColor(ColorType.Wood); // Wood frame in the front
-//     }
-// }
-
-// HudRoleListPanel - Roles = 3, Bans = 4
-
-// [HarmonyPatch(typeof(HudGraveyardPanel), nameof(HudGraveyardPanel.Start))]
-// public static class HudRoleListPanelPatch
-// {
-//     public static void Postfix(HudGraveyardPanel __instance)
-//     {
 //     }
 // }

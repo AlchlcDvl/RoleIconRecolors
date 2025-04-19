@@ -35,6 +35,9 @@ public class SettingsAndTestingUI : UIController
 
     private readonly Dictionary<DisplayType, GameObject> Displays = [];
 
+    private readonly List<RoleCardIcon> Icons = [];
+    public readonly List<Setting> Settings = [];
+
     private bool isBTOS2;
     public bool IsBTOS2
     {
@@ -56,10 +59,6 @@ public class SettingsAndTestingUI : UIController
             RefreshOptions();
         }
     }
-
-    private readonly List<RoleCardIcon> Icons = [];
-
-    public readonly List<Setting> Settings = [];
 
     private static readonly Vector3 SpecialOrEffectButtonPosition = new(0f, -20f, 0f);
     private static readonly Vector3[][] ButtonPositions =
@@ -85,15 +84,17 @@ public class SettingsAndTestingUI : UIController
         var playerList = transform.FindRecursive("PlayerList");
         var roleDeck = transform.FindRecursive("RoleDeck");
         var chat = transform.FindRecursive("Chat");
-        var roleListGyOpen = transform.FindRecursive("RoleListGyOpen");
-        var roleListGyClosed = transform.FindRecursive("RoleListGyClosed");
+        var rlPlusGy = transform.FindRecursive("RlPlusGy");
+        var roleList = transform.FindRecursive("RoleList");
+        var graveyard = transform.FindRecursive("Graveyard");
 
         Displays[DisplayType.RoleCard] = roleCard.gameObject;
         Displays[DisplayType.PlayerList] = playerList.gameObject;
         Displays[DisplayType.RoleDeck] = roleDeck.gameObject;
         Displays[DisplayType.Chat] = chat.gameObject;
-        Displays[DisplayType.RoleListGyOpen] = roleListGyOpen.gameObject;
-        Displays[DisplayType.RoleListGyClosed] = roleListGyClosed.gameObject;
+        Displays[DisplayType.RlPlusGy] = rlPlusGy.gameObject;
+        Displays[DisplayType.RoleList] = roleList.gameObject;
+        Displays[DisplayType.Graveyard] = graveyard.gameObject;
 
         IconTemplate = roleCard.EnsureComponent<RoleCardIcon>("ButtonTemplate");
 
@@ -121,13 +122,14 @@ public class SettingsAndTestingUI : UIController
         hover.FillInKeys = [ ("%type%", "Testing") ];
 
         ToggleImage = transform.GetComponent<Image>("Toggle");
+        ToggleImage.gameObject.SetActive(Constants.BTOS2Exists());
 
         transform.GetComponent<Button>("RecolouredUI")!.onClick.AddListener(() => Page = PackType.RecoloredUI);
         transform.GetComponent<Button>("IconPacks")!.onClick.AddListener(() => Page = PackType.IconPacks);
         transform.GetComponent<Button>("SilSwapper")!.onClick.AddListener(() => Page = PackType.SilhouetteSets);
         transform.GetComponent<Button>("MRC")!.onClick.AddListener(() => Page = PackType.MiscRoleCustomisation);
         transform.GetComponent<Button>("Testing")!.onClick.AddListener(() => Page = PackType.Testing);
-        transform.GetComponent<Button>("Toggle")!.onClick.AddListener(() => IsBTOS2 = !IsBTOS2);
+        ToggleImage.GetComponent<Button>()!.onClick.AddListener(() => IsBTOS2 = !IsBTOS2);
 
         Metals.Add(roleCard.GetComponent<Image>("Special"));
         Metals.Add(roleCard.GetComponent<Image>("Effect"));
@@ -135,8 +137,9 @@ public class SettingsAndTestingUI : UIController
         Metals.Add(roleDeck.GetComponent<Image>("Metal"));
         Metals.Add(chat.GetComponent<Image>("Metal"));
         Metals.Add(chat.GetComponent<Image>("Nameplate"));
-        Metals.Add(roleListGyOpen.GetComponent<Image>("Metal"));
-        Metals.Add(roleListGyClosed.GetComponent<Image>("Metal"));
+        Metals.Add(rlPlusGy.GetComponent<Image>("Metal"));
+        Metals.Add(roleList.GetComponent<Image>("Metal"));
+        Metals.Add(graveyard.GetComponent<Image>("Metal"));
 
         Woods.Add(roleCard.GetComponent<Image>("Frame"));
         Woods.Add(Metals[0].transform.GetComponent<Image>("Wood"));
@@ -146,8 +149,9 @@ public class SettingsAndTestingUI : UIController
         Woods.Add(chat.transform.GetComponent<Image>("WoodDetails1"));
         Woods.Add(chat.transform.GetComponent<Image>("WoodDetails2"));
         Woods.Add(chat.transform.GetComponent<Image>("ChatBottom"));
-        Woods.Add(roleListGyOpen.transform.GetComponent<Image>("Wood"));
-        Woods.Add(roleListGyClosed.transform.GetComponent<Image>("Wood"));
+        Woods.Add(rlPlusGy.transform.GetComponent<Image>("Wood"));
+        Woods.Add(roleList.transform.GetComponent<Image>("Wood"));
+        Woods.Add(graveyard.transform.GetComponent<Image>("Wood"));
 
         Leathers.Add(playerList.GetComponent<Image>("Leather"));
         Leathers.Add(roleDeck.GetComponent<Image>("Leather"));

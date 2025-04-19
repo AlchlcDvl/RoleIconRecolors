@@ -280,6 +280,8 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
             if (mod is ModType.Common or ModType.None)
                 continue;
 
+            var index = Utils.Filtered(mod);
+
             foreach (var (style, icons) in assets.BaseIcons)
             {
                 if (icons.Count == 0/* || (style != "Regular" && style != Constants.CurrentStyle(mod))*/)
@@ -287,7 +289,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
 
                 try
                 {
-                    var asset = BuildSpriteSheet(mod, mod.ToString(), style, icons);
+                    var asset = BuildSpriteSheet(mod, mod.ToString(), style, icons, index);
                     assets.MentionStyles[style] = asset;
                     // SpriteSheetCanExist[style] = true;
                     Utils.DumpSprite(asset?.spriteSheet as Texture2D, $"{style}{mod}RoleIcons", Path.Combine(PackPath, $"{mod}"));
@@ -310,7 +312,8 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                 try
                 {
                     var type = Enum.Parse<ModType>(mod);
-                    var asset = BuildSpriteSheet(type, mod, style, icons);
+                    var index = Utils.Filtered(type);
+                    var asset = BuildSpriteSheet(type, mod, style, icons, index);
                     Assets[type].MentionStyles[style] = asset;
                     // SpriteSheetCanExist[style] = true;
                     Utils.DumpSprite(asset?.spriteSheet as Texture2D, $"{style}{mod}RoleIcons", Path.Combine(PackPath, mod));
@@ -331,12 +334,11 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
         Fancy.Instance.Message($"{Name} Loaded!", true);
     }
 
-    private TMP_SpriteAsset BuildSpriteSheet(ModType type, string mod, string style, Dictionary<string, Sprite> icons)
+    private TMP_SpriteAsset BuildSpriteSheet(ModType type, string mod, string style, Dictionary<string, Sprite> icons, (Dictionary<string, string>, Dictionary<string, int>) index)
     {
         if (type == ModType.BTOS2 && !Constants.BTOS2Exists())
             return null;
 
-        var index = Utils.Filtered(type);
         var sprites = new List<Sprite>();
 
         foreach (var (role, roleInt) in index.Item2)

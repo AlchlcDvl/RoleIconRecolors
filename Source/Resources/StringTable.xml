@@ -193,8 +193,9 @@
     <Entry key="FANCY_PLAYERLIST">Player List</Entry>
     <Entry key="FANCY_ROLEDECK">Role Deck</Entry>
     <Entry key="FANCY_CHAT">Chat</Entry>
-    <Entry key="FANCY_ROLELISTGYOPEN">Role List + Graveyard</Entry>
-    <Entry key="FANCY_ROLELISTGYCLOSED">Role List</Entry>
+    <Entry key="FANCY_RLPLUSGY">Role List + Graveyard</Entry>
+    <Entry key="FANCY_ROLELIST">Role List</Entry>
+    <Entry key="FANCY_GRAVEYARD">Graveyard</Entry>
 
     <!-- Town -->
     <Entry key="FANCY_TOWN_UI_FIRE_NAME">Town Fire Color</Entry>
