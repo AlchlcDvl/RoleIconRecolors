@@ -336,9 +336,6 @@ public static class HudRoleListAndGraveyardControllerPatch
         graveyard.transform.GetComponent<Image>("Sprite").SetImageColor(ColorType.Metal);
         graveyard.GetComponentsInChildren<TextMeshProUGUI>(true).FirstOrDefault(t => t.name == "RoleListTitle").SetGraphicColor(ColorType.Metal);
 
-        var roleListTitle = roleList.transform.GetComponent<TextMeshProUGUI>("RoleListTitle");
-        var graveyardTitle = graveyard.GetComponentsInChildren<TextMeshProUGUI>(true).FirstOrDefault(t => t.name == "RoleListTitle");
-
         if (!GraveyardWood)
         {
             graveyard.sprite = Fancy.Assets.GetSprite("Graveyard_M");
