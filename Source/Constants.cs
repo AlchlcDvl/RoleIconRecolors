@@ -54,7 +54,12 @@ public static class Constants
     private static Color GetThemeColor(ColorType color, FactionType? faction = null)
     {
         if (!Fancy.ColorShadeToggleMap[color].Value)
-            return Color.clear;
+        {
+            if (Fancy.CustomUIColorsMap.TryGetValue(color, out var custom))
+                return custom.Value.ToColor();
+            else
+                return Color.clear;
+        }
 
         if (!faction.HasValue)
         {
