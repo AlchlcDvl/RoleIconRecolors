@@ -153,4 +153,56 @@ public static class Constants
             return false;
         }
     }
+
+    public static Material GetMaterial(ColorType? type = null)
+    {
+        switch (type)
+        {
+            case ColorType.Wood:
+            {
+                if (!WoodMaterial)
+                    WoodMaterial = new(Grayscale);
+                return WoodMaterial;
+            }
+            case ColorType.Metal:
+            {
+                if (!MetalMaterial)
+                    MetalMaterial = new(Grayscale);
+                return MetalMaterial;
+            }
+            case ColorType.Paper:
+            {
+                if (!PaperMaterial)
+                    PaperMaterial = new(Grayscale);
+                return PaperMaterial;
+            }
+            case ColorType.Leather:
+            {
+                if (!LeatherMaterial)
+                    LeatherMaterial = new(Grayscale);
+                return LeatherMaterial;
+            }
+            case ColorType.Fire:
+            {
+                if (!FireMaterial)
+                    FireMaterial = new(Grayscale);
+                return FireMaterial;
+            }
+            case ColorType.Wax:
+            {
+                if (!WaxMaterial)
+                    WaxMaterial = new(Grayscale);
+                return WaxMaterial;
+            }
+            default:
+                return new(Grayscale);
+        }
+    }
+
+    private static Material WoodMaterial;
+    private static Material MetalMaterial;
+    private static Material PaperMaterial;
+    private static Material LeatherMaterial;
+    private static Material FireMaterial;
+    private static Material WaxMaterial;
 }

@@ -591,7 +591,7 @@ public static class Utils
         if (!img)
             return;
 
-        var mat = img.material = new(Grayscale);
+        var mat = img.material = Constants.GetMaterial(type);
         var color2 = Constants.GetUIThemeColor(type, faction);
 
         if (color2 == Color.clear)
@@ -601,9 +601,15 @@ public static class Utils
         }
 
         color2 = color2.ShadeColor(type, a);
+
+        var mask = img.gameObject.GetComponent<Mask>();
+        if (mask != null)
+            mask.enabled = false;
         mat.SetColor(Color1, color2);
         mat.SetFloat(Brightness, Constants.GeneralBrightness());
         mat.SetFloat(GrayscaleAmount, Constants.GrayscaleAmount());
+        if (mask != null)
+            mask.enabled = true;
     }
 
     public static void SetGraphicColor(this Graphic graphic, ColorType type, float a = 1f, FactionType? faction = null)
