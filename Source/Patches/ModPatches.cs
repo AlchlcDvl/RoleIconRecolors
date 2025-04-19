@@ -250,6 +250,82 @@ public static class AchievementMentionsPatch
     }
 }
 
+[HarmonyPatch(typeof(SpecialAbilityPopupGenericListItem), nameof(SpecialAbilityPopupGenericListItem.SetData))]
+public static class SpecialAbilityPopupGenericListItemPatch
+{
+    [HarmonyPrefix]
+    public static bool Prefix(SpecialAbilityPopupGenericListItem __instance, ref int position, ref string player_name, ref Sprite headshot, ref bool hasChoice1, ref bool hasChoice2, ref UIRoleData data)
+    {
+        Tuple<Role, FactionType> tuple;
+        Service.Game.Sim.simulation.knownRolesAndFactions.Data.TryGetValue(position, out tuple);
+        Role role = Role.NONE;
+        FactionType factionType = FactionType.NONE;
+        if (tuple != null)
+        {
+            role = tuple.Item1;
+            factionType = tuple.Item2;
+        }
+        string text = (role == Role.NONE) ? player_name : player_name + (" (" + (Constants.MiscRoleExists() ? role.ToFactionString(factionType) : role.ToDisplayString()) + ")").ApplyFactionColor(factionType);
+        __instance.playerName.SetText(text);
+        __instance.playerHeadshot.sprite = headshot;
+        __instance.characterPosition = position;
+        __instance.playerNumber.text = string.Format("{0}.", __instance.characterPosition + 1);
+        UIRoleData.UIRoleDataInstance uiroleDataInstance = data.roleDataList.Find((UIRoleData.UIRoleDataInstance d) => d.role == Pepper.GetMyCurrentIdentity().role);
+        if (uiroleDataInstance != null)
+        {
+            __instance.choiceText.text = __instance.l10n(string.Format("GUI_ROLE_SPECIAL_ABILITY_VERB_{0}", (int)uiroleDataInstance.role));
+            __instance.choiceSprite.sprite = uiroleDataInstance.specialAbilityIcon;
+            __instance.choice2Text.text = __instance.l10n(string.Format("GUI_ROLE_ABILITY2_VERB_{0}", (int)uiroleDataInstance.role));
+            __instance.choice2Sprite.sprite = uiroleDataInstance.abilityIcon2;
+        }
+        __instance.choiceButton.gameObject.SetActive(hasChoice1);
+        __instance.choice2Button.gameObject.SetActive(hasChoice2);
+        if (!hasChoice1)
+        {
+            __instance.selected1 = false;
+            __instance.choiceButton.Deselect();
+        }
+        if (!hasChoice2)
+        {
+            __instance.selected2 = false;
+            __instance.choice2Button.Deselect();
+        }
+        return false;
+    }
+}
+
+[HarmonyPatch(typeof(SpecialAbilityPopupDayConfirmListItem), nameof(SpecialAbilityPopupDayConfirmListItem.SetData))]
+public static class SpecialAbilityPopupDayConfirmListItemPatch
+{
+    [HarmonyPrefix]
+    public static bool Prefix(SpecialAbilityPopupDayConfirmListItem __instance, ref int position, ref string player_name, ref Sprite headshot, ref bool hasChoice1, ref UIRoleData data)
+    {
+        Tuple<Role, FactionType> tuple;
+        Service.Game.Sim.simulation.knownRolesAndFactions.Data.TryGetValue(position, out tuple);
+        Role role = Role.NONE;
+        FactionType factionType = FactionType.NONE;
+        if (tuple != null)
+        {
+            role = tuple.Item1;
+            factionType = tuple.Item2;
+        }
+        string text = (role == Role.NONE) ? player_name : player_name + (" (" + (Constants.MiscRoleExists() ? role.ToFactionString(factionType) : role.ToDisplayString()) + ")").ApplyFactionColor(factionType);
+        __instance.playerName.SetText(text);
+        __instance.playerHeadshot.sprite = headshot;
+        __instance.characterPosition = position;
+        __instance.playerNumber.text = string.Format("{0}.", __instance.characterPosition + 1);
+        UIRoleData.UIRoleDataInstance uiroleDataInstance = data.roleDataList.Find((UIRoleData.UIRoleDataInstance d) => d.role == Pepper.GetMyCurrentIdentity().role);
+        if (uiroleDataInstance != null)
+        {
+            __instance.choiceText.text = __instance.l10n(uiroleDataInstance.specialAbilityVerb);
+            __instance.choiceSprite.sprite = uiroleDataInstance.specialAbilityIcon;
+        }
+        __instance.choiceButton.gameObject.SetActive(hasChoice1);
+        __instance.selected = false;
+        return false;
+    }
+}
+
 [HarmonyPatch(typeof(Pepper), nameof(Pepper.GetMyFaction))]
 public static class FixMyFaction
 {
