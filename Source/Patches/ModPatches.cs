@@ -344,7 +344,7 @@ public static class SpecialAbilityPopupNecromancerRetributionistListItemPatch
             role2 = tuple.Item1;
             factionType = tuple.Item2;
         }
-        string text = (role == Role.NONE) ? player_name : player_name + role.ToColorizedFactionStringParentheses(factionType);
+        string text = (role2 == Role.NONE) ? player_name : player_name + role2.ToColorizedFactionStringParentheses(factionType);
         __instance.playerName.SetText(text);
         __instance.playerHeadshot.sprite = headshot;
         __instance.characterPosition = position;
