@@ -351,6 +351,14 @@ public static class HudRoleListAndGraveyardControllerPatch
         graveyard.SetImageColor(ColorType.Metal);
         GraveyardWood.SetImageColor(ColorType.Wood);
 
+        var title = graveyard.GetComponentsInChildren<TextMeshProUGUI>(true)
+		.FirstOrDefault(t => t.name == "RoleListTitle");
+
+		if (title != null)
+		{
+			title.gameObject.SetActive(false); 
+		}
+
     }
 
     [HarmonyPatch(nameof(HudRoleListAndGraveyardController.ValidateVisibility)), HarmonyPostfix]
