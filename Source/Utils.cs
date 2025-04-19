@@ -1,6 +1,5 @@
 // using FancyUI.Assets.SilhouetteSwapper;
 using Home.Shared;
-using MiscRoleCustomisation;
 
 namespace FancyUI;
 
@@ -603,11 +602,14 @@ public static class Utils
         color2 = color2.ShadeColor(type, a);
 
         var mask = img.gameObject.GetComponent<Mask>();
+
         if (mask != null)
             mask.enabled = false;
+
         mat.SetColor(Color1, color2);
         mat.SetFloat(Brightness, Constants.GeneralBrightness());
         mat.SetFloat(GrayscaleAmount, Constants.GrayscaleAmount());
+
         if (mask != null)
             mask.enabled = true;
     }
@@ -658,7 +660,7 @@ public static class Utils
         var result = role.ToDisplayString();
 
         if (role.GetFactionType() != faction)
-            result += $" ({Home.Shared.ClientRoleExtensions.ToDisplayString(faction)})";
+            result += $" ({faction.ToDisplayString()})";
 
         return result;
     }
@@ -670,8 +672,7 @@ public static class Utils
             try
             {
                 return role.MrcDisplayStringParentheses(faction);
-            }
-            catch { }
+            } catch {}
         }
 
         return ("(" + role.ToDisplayString() + ")").ApplyFactionColor(faction);
@@ -682,15 +683,13 @@ public static class Utils
 
     private static string MrcDisplayStringParentheses(this Role role, FactionType faction)
     {
-        Gradient changedGradient = faction.GetChangedGradient(role);
+        var changedGradient = MiscRoleCustomisation.GetChangedGradients.GetChangedGradient(faction, role);
+
         if (changedGradient != null)
         {
-            if (faction == Btos2Faction.Compliance)
-            {
-                return AddChangedConversionTags.ApplyThreeColorGradient("(" + MrcDisplayString(role, faction) + ")", changedGradient.Evaluate(0f), changedGradient.Evaluate(0.5f), changedGradient.Evaluate(1f));
-            }
-            return AddChangedConversionTags.ApplyGradient("(" + MrcDisplayString(role, faction) + ")", changedGradient.Evaluate(0f), changedGradient.Evaluate(1f));
+            return ApplyGradient("(" + MrcDisplayString(role, faction) + ")", changedGradient);
         }
+
         return ("(" + role.MrcDisplayString(faction) + ")").ApplyFactionColor(faction);
     }
 

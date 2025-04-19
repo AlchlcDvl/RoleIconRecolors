@@ -335,9 +335,11 @@ public static class HudRoleListAndGraveyardControllerPatch
         var graveyard = __instance.graveyardPanelBackground;
         graveyard.transform.GetComponent<Image>("Sprite").SetImageColor(ColorType.Metal);
 
-        TextMeshProUGUI graveyardListTitle = graveyard.GetComponentsInChildren<TextMeshProUGUI>(true).FirstOrDefault(t => t.name == "RoleListTitle");
+        var graveyardListTitle = graveyard.transform.GetComponent<TextMeshProUGUI>("RoleListTitle");
         graveyardListTitle.enableVertexGradient = false;
         graveyardListTitle.SetGraphicColor(ColorType.Metal);
+
+        GraveyardWood = graveyard.transform.parent.Find("GraveyardWood")?.GetComponent<Image>();
 
         if (!GraveyardWood)
         {
@@ -351,7 +353,6 @@ public static class HudRoleListAndGraveyardControllerPatch
 
         graveyard.SetImageColor(ColorType.Metal);
         GraveyardWood.SetImageColor(ColorType.Wood);
-
     }
 
     [HarmonyPatch(nameof(HudRoleListAndGraveyardController.ValidateVisibility)), HarmonyPostfix]
@@ -366,8 +367,6 @@ public static class HudRoleListAndGraveyardControllerPatch
         if (GraveyardWood)
             GraveyardWood.enabled = __instance.graveyardPanelBackground.enabled;
     }
-
-
 }
 
 // [HarmonyPatch(typeof(SafeAreaController), nameof(SafeAreaController.OnEnable))]

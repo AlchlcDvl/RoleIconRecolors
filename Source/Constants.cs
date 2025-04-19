@@ -154,55 +154,21 @@ public static class Constants
         }
     }
 
-    public static Material GetMaterial(ColorType? type = null)
+    public static Material GetMaterial(ColorType type) => type switch
     {
-        switch (type)
-        {
-            case ColorType.Wood:
-            {
-                if (!WoodMaterial)
-                    WoodMaterial = new(Grayscale);
-                return WoodMaterial;
-            }
-            case ColorType.Metal:
-            {
-                if (!MetalMaterial)
-                    MetalMaterial = new(Grayscale);
-                return MetalMaterial;
-            }
-            case ColorType.Paper:
-            {
-                if (!PaperMaterial)
-                    PaperMaterial = new(Grayscale);
-                return PaperMaterial;
-            }
-            case ColorType.Leather:
-            {
-                if (!LeatherMaterial)
-                    LeatherMaterial = new(Grayscale);
-                return LeatherMaterial;
-            }
-            case ColorType.Fire:
-            {
-                if (!FireMaterial)
-                    FireMaterial = new(Grayscale);
-                return FireMaterial;
-            }
-            case ColorType.Wax:
-            {
-                if (!WaxMaterial)
-                    WaxMaterial = new(Grayscale);
-                return WaxMaterial;
-            }
-            default:
-                return new(Grayscale);
-        }
-    }
+        ColorType.Wood => WoodMaterial,
+        ColorType.Metal => MetalMaterial,
+        ColorType.Paper => PaperMaterial,
+        ColorType.Leather => LeatherMaterial,
+        ColorType.Fire => FireMaterial,
+        ColorType.Wax => WaxMaterial,
+        _ => Grayscale,
+    };
 
-    private static Material WoodMaterial;
-    private static Material MetalMaterial;
-    private static Material PaperMaterial;
-    private static Material LeatherMaterial;
-    private static Material FireMaterial;
-    private static Material WaxMaterial;
+    public static Material WoodMaterial;
+    public static Material MetalMaterial;
+    public static Material PaperMaterial;
+    public static Material LeatherMaterial;
+    public static Material FireMaterial;
+    public static Material WaxMaterial;
 }

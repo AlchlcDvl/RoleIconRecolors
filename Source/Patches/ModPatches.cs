@@ -254,43 +254,48 @@ public static class AchievementMentionsPatch
 [HarmonyPatch(typeof(SpecialAbilityPopupGenericListItem), nameof(SpecialAbilityPopupGenericListItem.SetData))]
 public static class SpecialAbilityPopupGenericListItemPatch
 {
-    [HarmonyPrefix]
     public static bool Prefix(SpecialAbilityPopupGenericListItem __instance, int position, string player_name, Sprite headshot, bool hasChoice1, bool hasChoice2, UIRoleData data)
     {
-        Tuple<Role, FactionType> tuple;
-        Service.Game.Sim.simulation.knownRolesAndFactions.Data.TryGetValue(position, out tuple);
-        Role role = Role.NONE;
-        FactionType factionType = FactionType.NONE;
-        if (tuple != null)
+        var role = Role.NONE;
+        var factionType = FactionType.NONE;
+
+        if (Utils.GetRoleAndFaction(position, out var tuple))
         {
             role = tuple.Item1;
             factionType = tuple.Item2;
         }
-        string text = (role == Role.NONE) ? player_name : player_name + role.ToColorizedFactionStringParentheses(factionType);
+
+        var text = role == Role.NONE ? player_name : player_name + role.ToColorizedFactionStringParentheses(factionType);
         __instance.playerName.SetText(text);
         __instance.playerHeadshot.sprite = headshot;
         __instance.characterPosition = position;
         __instance.playerNumber.text = string.Format("{0}.", __instance.characterPosition + 1);
-        UIRoleData.UIRoleDataInstance uiroleDataInstance = data.roleDataList.Find((UIRoleData.UIRoleDataInstance d) => d.role == Pepper.GetMyCurrentIdentity().role);
-        if (uiroleDataInstance != null)
+        var myRole = Pepper.GetMyRole();
+        var uiRoleDataInstance = data.roleDataList.Find(d => d.role == myRole);
+
+        if (uiRoleDataInstance != null)
         {
-            __instance.choiceText.text = __instance.l10n(string.Format("GUI_ROLE_SPECIAL_ABILITY_VERB_{0}", (int)uiroleDataInstance.role));
-            __instance.choiceSprite.sprite = uiroleDataInstance.specialAbilityIcon;
-            __instance.choice2Text.text = __instance.l10n(string.Format("GUI_ROLE_ABILITY2_VERB_{0}", (int)uiroleDataInstance.role));
-            __instance.choice2Sprite.sprite = uiroleDataInstance.abilityIcon2;
+            __instance.choiceText.text = __instance.l10n(string.Format("GUI_ROLE_SPECIAL_ABILITY_VERB_{0}", (int)uiRoleDataInstance.role));
+            __instance.choiceSprite.sprite = uiRoleDataInstance.specialAbilityIcon;
+            __instance.choice2Text.text = __instance.l10n(string.Format("GUI_ROLE_ABILITY2_VERB_{0}", (int)uiRoleDataInstance.role));
+            __instance.choice2Sprite.sprite = uiRoleDataInstance.abilityIcon2;
         }
+
         __instance.choiceButton.gameObject.SetActive(hasChoice1);
         __instance.choice2Button.gameObject.SetActive(hasChoice2);
+
         if (!hasChoice1)
         {
             __instance.selected1 = false;
             __instance.choiceButton.Deselect();
         }
+
         if (!hasChoice2)
         {
             __instance.selected2 = false;
             __instance.choice2Button.Deselect();
         }
+
         return false;
     }
 }
@@ -298,29 +303,31 @@ public static class SpecialAbilityPopupGenericListItemPatch
 [HarmonyPatch(typeof(SpecialAbilityPopupDayConfirmListItem), nameof(SpecialAbilityPopupDayConfirmListItem.SetData))]
 public static class SpecialAbilityPopupDayConfirmListItemPatch
 {
-    [HarmonyPrefix]
     public static bool Prefix(SpecialAbilityPopupDayConfirmListItem __instance, int position, string player_name, Sprite headshot, bool hasChoice1, UIRoleData data)
     {
-        Tuple<Role, FactionType> tuple;
-        Service.Game.Sim.simulation.knownRolesAndFactions.Data.TryGetValue(position, out tuple);
-        Role role = Role.NONE;
-        FactionType factionType = FactionType.NONE;
-        if (tuple != null)
+        var role = Role.NONE;
+        var factionType = FactionType.NONE;
+
+        if (Utils.GetRoleAndFaction(position, out var tuple))
         {
             role = tuple.Item1;
             factionType = tuple.Item2;
         }
-        string text = (role == Role.NONE) ? player_name : player_name + role.ToColorizedFactionStringParentheses(factionType);
+
+        var text = role == Role.NONE ? player_name : player_name + role.ToColorizedFactionStringParentheses(factionType);
         __instance.playerName.SetText(text);
         __instance.playerHeadshot.sprite = headshot;
         __instance.characterPosition = position;
         __instance.playerNumber.text = string.Format("{0}.", __instance.characterPosition + 1);
-        UIRoleData.UIRoleDataInstance uiroleDataInstance = data.roleDataList.Find((UIRoleData.UIRoleDataInstance d) => d.role == Pepper.GetMyCurrentIdentity().role);
-        if (uiroleDataInstance != null)
+        var myRole = Pepper.GetMyRole();
+        var uiRoleDataInstance = data.roleDataList.Find(d => d.role == myRole);
+
+        if (uiRoleDataInstance != null)
         {
-            __instance.choiceText.text = __instance.l10n(uiroleDataInstance.specialAbilityVerb);
-            __instance.choiceSprite.sprite = uiroleDataInstance.specialAbilityIcon;
+            __instance.choiceText.text = __instance.l10n(uiRoleDataInstance.specialAbilityVerb);
+            __instance.choiceSprite.sprite = uiRoleDataInstance.specialAbilityIcon;
         }
+
         __instance.choiceButton.gameObject.SetActive(hasChoice1);
         __instance.selected = false;
         return false;
@@ -330,64 +337,60 @@ public static class SpecialAbilityPopupDayConfirmListItemPatch
 [HarmonyPatch(typeof(SpecialAbilityPopupNecromancerRetributionistListItem), nameof(SpecialAbilityPopupNecromancerRetributionistListItem.SetData))]
 public static class SpecialAbilityPopupNecromancerRetributionistListItemPatch
 {
-    [HarmonyPrefix]
-    public static bool Prefix(SpecialAbilityPopupNecromancerRetributionistListItem __instance, int position, string player_name, Sprite headshot, bool hasChoice1, bool hasChoice2, UIRoleData data, Role role, SpecialAbilityPopupNecromancerRetributionist parent)
+    public static bool Prefix(SpecialAbilityPopupNecromancerRetributionistListItem __instance, int position, string player_name, Sprite headshot, bool hasChoice1, bool hasChoice2, UIRoleData
+        data, Role role, SpecialAbilityPopupNecromancerRetributionist parent)
     {
-        Role myRole = Pepper.GetMyCurrentIdentity().role;
+        var myRole = Pepper.GetMyRole();
         __instance.parent = parent;
-        Tuple<Role, FactionType> tuple;
-        Service.Game.Sim.simulation.knownRolesAndFactions.Data.TryGetValue(position, out tuple);
-        Role role2 = Role.NONE;
-        FactionType factionType = FactionType.NONE;
-        if (tuple != null)
+        var role2 = Role.NONE;
+        var factionType = FactionType.NONE;
+
+        if (Utils.GetRoleAndFaction(position, out var tuple))
         {
             role2 = tuple.Item1;
             factionType = tuple.Item2;
         }
-        string text = (role2 == Role.NONE) ? player_name : player_name + role2.ToColorizedFactionStringParentheses(factionType);
+
+        var text = role2 == Role.NONE ? player_name : player_name + role2.ToColorizedFactionStringParentheses(factionType);
         __instance.playerName.SetText(text);
         __instance.playerHeadshot.sprite = headshot;
         __instance.characterPosition = position;
         __instance.playerNumber.text = string.Format("{0}.", __instance.characterPosition + 1);
-        UIRoleData.UIRoleDataInstance uiroleDataInstance = data.roleDataList.Find((UIRoleData.UIRoleDataInstance d) => d.role == myRole);
-        UIRoleData.UIRoleDataInstance uiroleDataInstance2 = data.roleDataList.Find((UIRoleData.UIRoleDataInstance d) => d.role == role);
-        if (uiroleDataInstance != null)
+        var uiRoleDataInstance = data.roleDataList.Find((UIRoleData.UIRoleDataInstance d) => d.role == myRole);
+        var uiRoleDataInstance2 = data.roleDataList.Find((UIRoleData.UIRoleDataInstance d) => d.role == role);
+
+        if (uiRoleDataInstance != null)
         {
             __instance.choiceText.text = __instance.l10n(string.Format("GUI_ROLE_SPECIAL_ABILITY_VERB_{0}", (int)myRole));
-            __instance.choiceSprite.sprite = uiroleDataInstance.specialAbilityIcon;
+            __instance.choiceSprite.sprite = uiRoleDataInstance.specialAbilityIcon;
         }
-        if (uiroleDataInstance2 != null)
+
+        if (uiRoleDataInstance2 != null)
         {
-            __instance.choice2Text.text = __instance.GetAbilityVerb(uiroleDataInstance2.role);
-            if (uiroleDataInstance2.role == Role.DEPUTY || uiroleDataInstance2.role == Role.CONJURER)
-            {
-                __instance.choice2Sprite.sprite = uiroleDataInstance2.specialAbilityIcon;
-            }
-            else
-            {
-                __instance.choice2Sprite.sprite = uiroleDataInstance2.abilityIcon;
-            }
+            __instance.choice2Text.text = __instance.GetAbilityVerb(uiRoleDataInstance2.role);
+            __instance.choice2Sprite.sprite = uiRoleDataInstance2.role is Role.DEPUTY or Role.CONJURER ? uiRoleDataInstance2.specialAbilityIcon : uiRoleDataInstance2.abilityIcon;
         }
+
         __instance.choiceButton.gameObject.SetActive(hasChoice1);
         __instance.choice2Button.gameObject.SetActive(hasChoice2);
+
         if (!hasChoice1)
         {
             __instance.selected1 = false;
             __instance.choiceButton.Deselect();
         }
+
         if (!hasChoice2)
         {
             __instance.selected2 = false;
             __instance.choice2Button.Deselect();
         }
+
         if (EventSystem.current.currentSelectedGameObject != __instance.gpSelectable.gameObject)
-        {
             __instance.GPSelectExit();
-        }
         else
-        {
             __instance.GPSelectEnter();
-        }
+
         return false;
     }
 }

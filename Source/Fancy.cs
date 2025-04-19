@@ -60,6 +60,12 @@ public class Fancy
         Ethereal = Assets.GetSprite("Ethereal");
 
         Grayscale = Assets.GetMaterial("GrayscaleMaterial");
+        Constants.WoodMaterial = new(Grayscale);
+        Constants.MetalMaterial = new(Grayscale);
+        Constants.FireMaterial = new(Grayscale);
+        Constants.PaperMaterial = new(Grayscale);
+        Constants.LeatherMaterial = new(Grayscale);
+        Constants.WaxMaterial = new(Grayscale);
 
         LoadingGif = Assets.GetGif("Placeholder")!;
         LoadingGif.RenderAllFrames();
