@@ -335,8 +335,9 @@ public static class HudRoleListAndGraveyardControllerPatch
         var graveyard = __instance.graveyardPanelBackground;
         graveyard.transform.GetComponent<Image>("Sprite").SetImageColor(ColorType.Metal);
 
-        // This, for some reason, ignores the Blue channel. #FFFFFF returns as #FFFF00, for example.
-        graveyard.GetComponentsInChildren<TextMeshProUGUI>(true).FirstOrDefault(t => t.name == "RoleListTitle").SetGraphicColor(ColorType.Metal);
+        TextMeshProUGUI graveyardListTitle = graveyard.GetComponentsInChildren<TextMeshProUGUI>(true).FirstOrDefault(t => t.name == "RoleListTitle");
+        graveyardListTitle.enableVertexGradient = false;
+        graveyardListTitle.SetGraphicColor(ColorType.Metal);
 
         if (!GraveyardWood)
         {
@@ -350,14 +351,6 @@ public static class HudRoleListAndGraveyardControllerPatch
 
         graveyard.SetImageColor(ColorType.Metal);
         GraveyardWood.SetImageColor(ColorType.Wood);
-
-        var title = graveyard.GetComponentsInChildren<TextMeshProUGUI>(true)
-		.FirstOrDefault(t => t.name == "RoleListTitle");
-
-		if (title != null)
-		{
-			title.gameObject.SetActive(false); 
-		}
 
     }
 
@@ -373,6 +366,8 @@ public static class HudRoleListAndGraveyardControllerPatch
         if (GraveyardWood)
             GraveyardWood.enabled = __instance.graveyardPanelBackground.enabled;
     }
+
+
 }
 
 // [HarmonyPatch(typeof(SafeAreaController), nameof(SafeAreaController.OnEnable))]
