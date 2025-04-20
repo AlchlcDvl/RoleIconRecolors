@@ -6,12 +6,6 @@ public class StringInputSetting : BaseInputSetting
 {
     public StringInputOption Option { get; set; }
 
-    public override void Awake()
-    {
-        base.Awake();
-        Input.GetComponent<Image>().SetImageColor(ColorType.Metal);
-    }
-
     public void Start()
     {
         if (Option == null)

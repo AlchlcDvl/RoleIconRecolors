@@ -11,9 +11,6 @@ public class SliderSetting : Setting
         base.Awake();
         Slider = transform.GetComponent<Slider>("Slider");
         Input = transform.GetComponent<TMP_InputField>("Input");
-        Input.GetComponent<Image>().SetImageColor(ColorType.Metal);
-        (Slider.targetGraphic as Image).SetImageColor(ColorType.Metal);
-        Slider.transform.GetComponent<Image>("Background").SetImageColor(ColorType.Metal);
     }
 
     public void Start()
@@ -28,6 +25,7 @@ public class SliderSetting : Setting
         Slider.onValueChanged.AddListener(OnValueChanged);
 
         Input.SetTextWithoutNotify($"{Slider.value:0.##}");
+        Input.restoreOriginalTextOnEscape = true;
         Input.onValueChanged.AddListener(OnTextValueChanged);
     }
 
@@ -43,11 +41,11 @@ public class SliderSetting : Setting
         if (float.TryParse(value, out var value2))
         {
             if (value2.IsInRange(Option.Min, Option.Max, true, true))
-                Slider.value = value2;
+                Slider.SetValueWithoutNotify(value2);
             else if (value2 < Option.Min)
-                Slider.value = Option.Min;
+                Slider.SetValueWithoutNotify(value2);
             else if (value2 > Option.Max)
-                Slider.value = Option.Max;
+                Slider.SetValueWithoutNotify(value2);
         }
 
         SettingsAndTestingUI.Instance.Refresh();

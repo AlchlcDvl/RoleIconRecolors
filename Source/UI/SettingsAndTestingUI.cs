@@ -184,30 +184,41 @@ public class SettingsAndTestingUI : UIController
                 {
                     slider.Setting = Instantiate(SliderTemplate, SliderTemplate!.transform.parent);
                     slider.Setting.Option = slider;
+                    Metals.Add(slider.Setting.Input.GetComponent<Image>());
+                    Metals.Add(slider.Setting.Slider.targetGraphic as Image);
+                    Metals.Add(slider.Setting.Background);
                     break;
                 }
                 case IDropdown dropdown:
                 {
                     dropdown.Setting = Instantiate(DropdownTemplate, DropdownTemplate!.transform.parent);
                     dropdown.Setting.Option = dropdown;
+                    Metals.Add(dropdown.Setting.Dropdown.GetComponent<Image>());
+                    Metals.Add(dropdown.Setting.Dropdown.transform.GetComponent<Image>("Arrow"));
+                    Metals.Add(dropdown.Setting.Background);
+                    Woods.Add(dropdown.Setting.Dropdown.transform.FindRecursive("Template").Find("Background").GetComponent<Image>());
                     break;
                 }
                 case ColorOption color:
                 {
                     color.Setting = Instantiate(ColorTemplate, ColorTemplate!.transform.parent);
                     color.Setting.Option = color;
+                    Metals.Add(color.Setting.Background);
                     break;
                 }
                 case StringInputOption input:
                 {
                     input.Setting = Instantiate(InputTemplate, InputTemplate!.transform.parent);
                     input.Setting.Option = input;
+                    Metals.Add(input.Setting.Input.GetComponent<Image>());
+                    Metals.Add(input.Setting.Background);
                     break;
                 }
                 case ToggleOption toggle:
                 {
                     toggle.Setting = Instantiate(ToggleTemplate, ToggleTemplate!.transform.parent);
                     toggle.Setting.Option = toggle;
+                    Metals.Add(toggle.Setting.Background);
                     break;
                 }
             }

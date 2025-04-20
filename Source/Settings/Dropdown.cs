@@ -9,9 +9,6 @@ public class DropdownSetting : Setting
     {
         base.Awake();
         Dropdown = transform.GetComponent<TMP_Dropdown>("Dropdown");
-        transform.FindRecursive("Template").Find("Background").GetComponent<Image>().SetImageColor(ColorType.Metal);
-        Dropdown.GetComponent<Image>().SetImageColor(ColorType.Metal);
-        Dropdown.transform.GetComponent<Image>("Arrow").SetImageColor(ColorType.Metal);
     }
 
     public void Start()

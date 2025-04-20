@@ -9,7 +9,6 @@ public abstract class Setting : UIController
     {
         TitleText = transform.GetComponent<TextMeshProUGUI>("SettingName");
         Background = transform.GetComponent<Image>("Background");
-        Background.SetImageColor(ColorType.Metal);
     }
 
     public virtual void Refresh() {}

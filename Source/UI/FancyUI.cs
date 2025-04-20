@@ -48,6 +48,7 @@ public class FancyUI : UIController
         LoadingUI.Instance?.gameObject?.Destroy();
         DownloaderUI.Instance?.gameObject?.Destroy();
         SettingsAndTestingUI.Instance?.gameObject?.Destroy();
+        Utils.UpdateMaterials();
     }
 
     public static void SetupFonts(Transform trans)
