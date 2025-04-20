@@ -28,8 +28,6 @@ public class DropdownSetting : Setting
 
     public override void Refresh()
     {
-        base.Refresh();
-
         if (Option == null)
             return;
 

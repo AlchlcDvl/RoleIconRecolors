@@ -64,7 +64,7 @@ public class Fancy
         var normalMats = Constants.AllMaterials[true] = [];
         var guideMats = Constants.AllMaterials[false] = [];
 
-        foreach (var type in GeneralUtils.GetEnumValues<ColorType>().Where(x => x != ColorType.All))
+        foreach (var type in GeneralUtils.GetEnumValues<ColorType>()!.Where(x => x != ColorType.All))
         {
             normalMats[type] = new(Grayscale);
             guideMats[type] = new(Grayscale);
@@ -119,7 +119,7 @@ public class Fancy
     public static FloatOption PlayerNumber;
 
     public static EnumDropdownOption<FactionType> SelectTestingFaction;
-    public static EnumDropdownOption<ColorType> SelectColorFilter;
+    private static EnumDropdownOption<ColorType> SelectColorFilter;
     public static EnumDropdownOption<Role> SelectTestingRole; // TODO: Implement this
     public static EnumDropdownOption<DisplayType> SelectDisplay;
 

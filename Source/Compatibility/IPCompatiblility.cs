@@ -1,6 +1,6 @@
 namespace FancyUI.Compatibility;
 
-public static class Btos2IPCompatibility
+public static class Btos2IpCompatibility
 {
     private static FieldInfo RoleIcon;
 
@@ -23,7 +23,7 @@ public static class Btos2IPCompatibility
 
         var setData = AccessTools.Method(deckItem, "SetData", [ typeof(Role), typeof(FactionType), typeof(bool), roleDeckPlusPanelController ]);
         var refreshData = AccessTools.Method(menuRole, "RefreshData");
-        var compat = typeof(Btos2IPCompatibility);
+        var compat = typeof(Btos2IpCompatibility);
 
         Btos2Compatibility.Btos2PatchesHarmony.Patch(setData, null, new(AccessTools.Method(compat, nameof(ItemPostfix1))));
         Btos2Compatibility.Btos2PatchesHarmony.Patch(refreshData, null, new(AccessTools.Method(compat, nameof(ItemPostfix2))));

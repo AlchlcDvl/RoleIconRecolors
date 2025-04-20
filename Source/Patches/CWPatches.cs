@@ -32,7 +32,7 @@ public static class RoleCardPanelPatch
             var specialAbility = SpecialAbilityPanelPatch1.Cache;
             var specialAbilityPopup = SpecialAbilityPopupPanelPatch.Cache;
             var hudDock = HudDockPanelPatch.Cache;
-            var rLGY = HudRoleListAndGraveyardControllerPatch.Cache;
+            var rlgy = HudRoleListAndGraveyardControllerPatch.Cache;
 
             if (pooledChat)
                 PooledChatViewSwitcherPatch.Postfix(pooledChat);
@@ -55,8 +55,8 @@ public static class RoleCardPanelPatch
             if (hudDock)
                 HudDockPanelPatch.Postfix(hudDock);
 
-            if (rLGY)
-                HudRoleListAndGraveyardControllerPatch.Postfix1(rLGY);
+            if (rlgy)
+                HudRoleListAndGraveyardControllerPatch.Postfix1(rlgy);
         }
 
         Utils.UpdateMaterials();
@@ -318,7 +318,7 @@ public static class PatchDialogBox
         __instance.closeButtonClusterGO.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
         __instance.closeButtonClusterGO.transform.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
         __instance.inputConfirmClusterGO.transform.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
-        // Cannot change the color of the buttons to Wax because of the Animator resetting its Material (sadly turning off the Animator will stop its animations if you didn't know)
+        // Cannot change the color of the buttons to Wax because of the Animator resetting its Material (sadly, turning off the Animator will stop its animations if you didn't know)
     }
 }
 
@@ -491,7 +491,7 @@ public static class PatchGameModeChoices
 
         var lobbyDescription = __instance.transform.parent.GetChild(2);
         lobbyDescription.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wood);
-        // Cannot change the color of Join button to Wax because of the Animator resetting its Material
+        // Cannot change the color of the Join button to Wax because of the Animator resetting its Material
     }
 }
 
@@ -779,7 +779,7 @@ public static class HudRoleListAndGraveyardControllerPatch
         var graveyard = __instance.graveyardPanelBackground;
         graveyard.transform.GetComponent<Image>("Sprite").SetImageColor(ColorType.Metal);
 
-        var graveyardListTitle = graveyard.transform.GetComponent<TextMeshProUGUI>("RoleListTitle");
+        var graveyardListTitle = graveyard.transform.GetComponent<TextMeshProUGUI>("RoleListTitle")!;
         graveyardListTitle.enableVertexGradient = false;
         graveyardListTitle.SetGraphicColor(ColorType.Metal);
 

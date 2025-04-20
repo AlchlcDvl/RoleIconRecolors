@@ -3,7 +3,7 @@ namespace FancyUI.Options;
 public abstract class Option
 {
     public static readonly List<Option> All = [];
-    public string ID { get; }
+    protected string ID { get; }
     public PackType Page { get; }
 
     protected Option(string id, PackType page)

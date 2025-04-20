@@ -40,8 +40,6 @@ public static class PatchRoleListPanel
 {
     public static void Postfix(RoleDeckListItem __instance, Role a_role, bool a_isBan)
     {
-        // __instance.transform.GetComponent<Image>("NameBG").SetImageColor(ColorType.Metal);
-
         if (!Constants.EnableIcons())
             return;
 
@@ -95,11 +93,11 @@ public static class RoleCardFixesAndPatches
     [HarmonyPatch(nameof(RoleCardPanelBackground.HandleRoleCardChanged))]
     public static void Postfix(RoleCardPanelBackground __instance)
     {
-        if (Constants.EnableIcons())
-        {
-            var panel = __instance.GetComponentInParent<RoleCardPanel>();
-            PatchRoleCards.ChangeRoleCard(panel?.roleIcon, panel?.specialAbilityPanel?.useButton?.abilityIcon, panel?.roleInfoButtons, __instance.currentRole, __instance.currentFaction);
-        }
+        if (!Constants.EnableIcons())
+            return;
+
+        var panel = __instance.GetComponentInParent<RoleCardPanel>();
+        PatchRoleCards.ChangeRoleCard(panel?.roleIcon, panel?.specialAbilityPanel?.useButton?.abilityIcon, panel?.roleInfoButtons, __instance.currentRole, __instance.currentFaction);
     }
 }
 

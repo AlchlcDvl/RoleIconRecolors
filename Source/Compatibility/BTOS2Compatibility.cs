@@ -15,7 +15,7 @@ public static class Btos2Compatibility
             var btos2Assembly = Assembly.LoadFile(btos2Mod!.AssemblyPath);
             var btos2Types = AccessTools.GetTypesFromAssembly(btos2Assembly);
             Btos2PatchesHarmony = new("alchlcsystm.btos2patches");
-            var result = Btos2IPCompatibility.Init(btos2Types) && Btos2CWCompatibility.Init(btos2Types);
+            var result = Btos2IpCompatibility.Init(btos2Types) && Btos2CwCompatibility.Init(btos2Types);
             Fancy.Instance.Message("BTOS2 compatibility was successful");
             return result;
         }

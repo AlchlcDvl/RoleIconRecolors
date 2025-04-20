@@ -2,6 +2,8 @@ namespace FancyUI;
 
 public static class Constants
 {
+    public static readonly Dictionary<bool, Dictionary<ColorType, Material>> AllMaterials = [];
+
     public static bool PlayerPanelEasterEggs() => Fancy.PlayerPanelEasterEggs.Value;
 
     public static bool AllEasterEggs() => Fancy.AllEasterEggs.Value;
@@ -54,12 +56,7 @@ public static class Constants
     private static Color GetThemeColor(ColorType color, FactionType? faction = null)
     {
         if (!Fancy.ColorShadeToggleMap[color].Value)
-        {
-            if (Fancy.CustomUIColorsMap.TryGetValue(color, out var custom))
-                return custom.Value.ToColor();
-            else
-                return Color.clear;
-        }
+            return Fancy.CustomUIColorsMap.TryGetValue(color, out var custom) ? custom.Value.ToColor() : Color.clear;
 
         if (!faction.HasValue)
         {
@@ -153,6 +150,4 @@ public static class Constants
             return false;
         }
     }
-
-    public static readonly Dictionary<bool, Dictionary<ColorType, Material>> AllMaterials = [];
 }

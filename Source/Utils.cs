@@ -1,6 +1,5 @@
 // using FancyUI.Assets.SilhouetteSwapper;
 using Home.Shared;
-using Unity.Profiling;
 
 namespace FancyUI;
 

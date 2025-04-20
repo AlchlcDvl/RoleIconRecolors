@@ -123,7 +123,7 @@ public class SettingsAndTestingUI : UIController
         hover.LookupKey = "FANCY_CLOSE_MENU";
         hover.FillInKeys = [("%type%", "Testing")];
 
-        ToggleImage = transform.GetComponent<Image>("Toggle");
+        ToggleImage = transform.GetComponent<Image>("Toggle")!;
         ToggleImage.gameObject.SetActive(Constants.BTOS2Exists());
 
         transform.GetComponent<Button>("RecolouredUI")!.onClick.AddListener(() => Page = PackType.RecoloredUI);

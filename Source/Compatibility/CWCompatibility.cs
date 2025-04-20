@@ -1,6 +1,6 @@
 namespace FancyUI.Compatibility;
 
-public static class Btos2CWCompatibility
+public static class Btos2CwCompatibility
 {
     public static bool Init(Type[] btos2Types)
     {
@@ -9,7 +9,7 @@ public static class Btos2CWCompatibility
 
         var validateStartButtonState = AccessTools.Method(roleDeckPlusPanelController, "ValidateStartButtonState");
         var fancyCasual = AccessTools.Method(casualModeMenuController, "Start");
-        var compat = typeof(Btos2CWCompatibility);
+        var compat = typeof(Btos2CwCompatibility);
 
         Btos2Compatibility.Btos2PatchesHarmony.Patch(validateStartButtonState, null, new(AccessTools.Method(compat, nameof(RoleDeckPostfix))));
         Btos2Compatibility.Btos2PatchesHarmony.Patch(fancyCasual, null, new(AccessTools.Method(compat, nameof(CasualModePostfix))));

@@ -13,8 +13,6 @@ public interface IDropdown
 
     void SetString(string value);
 
-    void OptionCreated();
-
     int GetInt() => Options().IndexOf(x => x == ValueString);
 
     IEnumerable<string> DisplayOptions() => Options().Select(Mapping);

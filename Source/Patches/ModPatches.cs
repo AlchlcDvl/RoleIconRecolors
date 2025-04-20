@@ -73,6 +73,7 @@ public static class RemoveJailorOverlay
 public static class PatchDefaultWinScreens
 {
     private static readonly int State = Animator.StringToHash("State");
+
     public static bool Prefix(FactionWinsCinematicPlayer __instance, ICinematicData cinematicData)
     {
         __instance.elapsedDuration = 0f;
@@ -247,13 +248,14 @@ public static class AchievementMentionsPatch
             num++;
         }
 
-        return false; // Skip original method
+        return false; // Skip the original method
     }
 }
 
 [HarmonyPatch(typeof(SpecialAbilityPopupGenericListItem), nameof(SpecialAbilityPopupGenericListItem.SetData))]
 public static class SpecialAbilityPopupGenericListItemPatch
 {
+    // ReSharper disable once InconsistentNaming
     public static bool Prefix(SpecialAbilityPopupGenericListItem __instance, int position, string player_name, Sprite headshot, bool hasChoice1, bool hasChoice2, UIRoleData data)
     {
         var role = Role.NONE;
@@ -269,15 +271,15 @@ public static class SpecialAbilityPopupGenericListItemPatch
         __instance.playerName.SetText(text);
         __instance.playerHeadshot.sprite = headshot;
         __instance.characterPosition = position;
-        __instance.playerNumber.text = string.Format("{0}.", __instance.characterPosition + 1);
+        __instance.playerNumber.text = $"{__instance.characterPosition + 1}.";
         var myRole = Pepper.GetMyRole();
         var uiRoleDataInstance = data.roleDataList.Find(d => d.role == myRole);
 
         if (uiRoleDataInstance != null)
         {
-            __instance.choiceText.text = __instance.l10n(string.Format("GUI_ROLE_SPECIAL_ABILITY_VERB_{0}", (int)uiRoleDataInstance.role));
+            __instance.choiceText.text = __instance.l10n($"GUI_ROLE_SPECIAL_ABILITY_VERB_{(int)uiRoleDataInstance.role}");
             __instance.choiceSprite.sprite = uiRoleDataInstance.specialAbilityIcon;
-            __instance.choice2Text.text = __instance.l10n(string.Format("GUI_ROLE_ABILITY2_VERB_{0}", (int)uiRoleDataInstance.role));
+            __instance.choice2Text.text = __instance.l10n($"GUI_ROLE_ABILITY2_VERB_{(int)uiRoleDataInstance.role}");
             __instance.choice2Sprite.sprite = uiRoleDataInstance.abilityIcon2;
         }
 
@@ -303,6 +305,7 @@ public static class SpecialAbilityPopupGenericListItemPatch
 [HarmonyPatch(typeof(SpecialAbilityPopupDayConfirmListItem), nameof(SpecialAbilityPopupDayConfirmListItem.SetData))]
 public static class SpecialAbilityPopupDayConfirmListItemPatch
 {
+    // ReSharper disable once InconsistentNaming
     public static bool Prefix(SpecialAbilityPopupDayConfirmListItem __instance, int position, string player_name, Sprite headshot, bool hasChoice1, UIRoleData data)
     {
         var role = Role.NONE;
@@ -318,7 +321,7 @@ public static class SpecialAbilityPopupDayConfirmListItemPatch
         __instance.playerName.SetText(text);
         __instance.playerHeadshot.sprite = headshot;
         __instance.characterPosition = position;
-        __instance.playerNumber.text = string.Format("{0}.", __instance.characterPosition + 1);
+        __instance.playerNumber.text = $"{__instance.characterPosition + 1}.";
         var myRole = Pepper.GetMyRole();
         var uiRoleDataInstance = data.roleDataList.Find(d => d.role == myRole);
 
@@ -337,6 +340,7 @@ public static class SpecialAbilityPopupDayConfirmListItemPatch
 [HarmonyPatch(typeof(SpecialAbilityPopupNecromancerRetributionistListItem), nameof(SpecialAbilityPopupNecromancerRetributionistListItem.SetData))]
 public static class SpecialAbilityPopupNecromancerRetributionistListItemPatch
 {
+    // ReSharper disable once InconsistentNaming
     public static bool Prefix(SpecialAbilityPopupNecromancerRetributionistListItem __instance, int position, string player_name, Sprite headshot, bool hasChoice1, bool hasChoice2, UIRoleData
         data, Role role, SpecialAbilityPopupNecromancerRetributionist parent)
     {
@@ -355,13 +359,13 @@ public static class SpecialAbilityPopupNecromancerRetributionistListItemPatch
         __instance.playerName.SetText(text);
         __instance.playerHeadshot.sprite = headshot;
         __instance.characterPosition = position;
-        __instance.playerNumber.text = string.Format("{0}.", __instance.characterPosition + 1);
+        __instance.playerNumber.text = $"{__instance.characterPosition + 1}.";
         var uiRoleDataInstance = data.roleDataList.Find(d => d.role == myRole);
         var uiRoleDataInstance2 = data.roleDataList.Find(d => d.role == role);
 
         if (uiRoleDataInstance != null)
         {
-            __instance.choiceText.text = __instance.l10n(string.Format("GUI_ROLE_SPECIAL_ABILITY_VERB_{0}", (int)myRole));
+            __instance.choiceText.text = __instance.l10n($"GUI_ROLE_SPECIAL_ABILITY_VERB_{(int)myRole}");
             __instance.choiceSprite.sprite = uiRoleDataInstance.specialAbilityIcon;
         }
 
