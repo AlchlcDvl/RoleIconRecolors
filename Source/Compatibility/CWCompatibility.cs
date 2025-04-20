@@ -17,7 +17,11 @@ public static class Btos2CWCompatibility
         return true;
     }
 
-    public static void RoleDeckPostfix(dynamic __instance) => ((Image)__instance.GetComponent<Image>()).SetImageColor(ColorType.Paper);
+    public static void RoleDeckPostfix(dynamic __instance)
+    {
+        ((Image)__instance.GetComponent<Image>()).SetImageColor(ColorType.Paper);
+        Utils.UpdateMaterials();
+    }
 
     public static void CasualModePostfix(dynamic __instance)
     {
@@ -36,8 +40,9 @@ public static class Btos2CWCompatibility
 
         queuePanel.GetChild(1).GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Metal);
         queuePanel.GetChild(2).GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Metal);
-        var chatWindow = (Transform)globalChatPanel.GetChild(0).GetChild(0);
+        var chatWindow = globalChatPanel.GetChild(0).GetChild(0);
         chatWindow.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wood);
         chatWindow.GetChild(2).GetComponent<Image>().SetImageColor(ColorType.Metal);
+        Utils.UpdateMaterials();
     }
 }

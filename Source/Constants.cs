@@ -154,21 +154,5 @@ public static class Constants
         }
     }
 
-    public static Material GetMaterial(ColorType type) => type switch
-    {
-        ColorType.Wood => WoodMaterial,
-        ColorType.Metal => MetalMaterial,
-        ColorType.Paper => PaperMaterial,
-        ColorType.Leather => LeatherMaterial,
-        ColorType.Fire => FireMaterial,
-        ColorType.Wax => WaxMaterial,
-        _ => Grayscale,
-    };
-
-    public static Material WoodMaterial;
-    public static Material MetalMaterial;
-    public static Material PaperMaterial;
-    public static Material LeatherMaterial;
-    public static Material FireMaterial;
-    public static Material WaxMaterial;
+    public static readonly Dictionary<bool, Dictionary<ColorType, Material>> AllMaterials = [];
 }

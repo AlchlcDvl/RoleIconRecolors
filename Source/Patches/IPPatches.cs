@@ -118,7 +118,9 @@ public static class PatchRoleCards
         if (Constants.EnableCustomUI())
         {
             foreach (var button in roleInfoButtons)
-                button.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal, faction: faction); // Rings at the back
+                button.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal); // Rings at the back
+
+            Utils.UpdateMaterials(!isGuide, faction);
         }
 
         role = Constants.IsTransformed() && !isGuide ? Utils.GetTransformedVersion(role) : role;

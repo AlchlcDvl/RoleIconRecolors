@@ -2,7 +2,7 @@ namespace FancyUI.UI;
 
 public class LoadingUI : UIController
 {
-    private Image Cog { get; set; }
+    private Transform Cog { get; set; }
 
     private GameObject Caller { get; set; }
 
@@ -11,17 +11,16 @@ public class LoadingUI : UIController
 
     private bool Started { get; set; }
 
-    private Image Frame { get; set; }
-
     public static LoadingUI Instance { get; private set; }
 
     public void Awake()
     {
         Instance = this;
 
-        Cog = transform.Find("Cog").GetComponent<Image>();
+        Cog = transform.Find("Cog");
         Title = transform.GetComponent<TextMeshProUGUI>("Title");
         LoadingProgress = transform.GetComponent<TextMeshProUGUI>("Progress");
+        Cog.GetComponent<Image>().SetImageColor(ColorType.Metal);
 
         Started = false;
 
@@ -29,15 +28,9 @@ public class LoadingUI : UIController
         cancel.AddComponent<HoverEffect>()!.LookupKey = "FANCY_CANCEL_CURRENT";
         cancel.GetComponent<Button>().onClick.AddListener(Cancel);
 
-        Frame = transform.Find("Panel").GetComponent<Image>();
+        transform.Find("Panel").GetComponent<Image>().SetImageColor(ColorType.Metal);
 
         FancyUI.SetupFonts(transform);
-    }
-
-    public void OnEnable()
-    {
-        Frame.SetImageColor(ColorType.Metal);
-        Cog.SetImageColor(ColorType.Metal);
     }
 
     public void OnDestroy() => Instance = null;
@@ -47,7 +40,7 @@ public class LoadingUI : UIController
     public void Update()
     {
         if (Started)
-            Cog.transform.Rotate(Vector3.forward * (-10 * Time.fixedDeltaTime));
+            Cog.Rotate(Vector3.forward * (-10 * Time.fixedDeltaTime));
     }
 
     public void BeginLoading(GameObject caller, string title)

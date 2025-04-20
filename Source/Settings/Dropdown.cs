@@ -4,32 +4,27 @@ public class DropdownSetting : Setting
 {
     public TMP_Dropdown Dropdown { get; set; }
     public IDropdown Option { get; set; }
-    private Image DisplayBackground { get; set; }
-    private Image DropdownBackground { get; set; }
-    private Image Arrow { get; set; }
 
     public override void Awake()
     {
         base.Awake();
         Dropdown = transform.GetComponent<TMP_Dropdown>("Dropdown");
-        DropdownBackground = transform.FindRecursive("Template").Find("Background").GetComponent<Image>();
-        DisplayBackground = Dropdown.GetComponent<Image>();
-        Arrow = Dropdown.transform.GetComponent<Image>("Arrow");
+        transform.FindRecursive("Template").Find("Background").GetComponent<Image>().SetImageColor(ColorType.Metal);
+        Dropdown.GetComponent<Image>().SetImageColor(ColorType.Metal);
+        Dropdown.transform.GetComponent<Image>("Arrow").SetImageColor(ColorType.Metal);
     }
 
     public void Start()
     {
-        if (Option == null)
-            return;
-
-        Dropdown.onValueChanged.AddListener(OnValueChanged);
-        Dropdown.onValueChanged.AddListener(_ => SettingsAndTestingUI.Instance.RefreshOptions());
+        if (Option != null)
+            Dropdown.onValueChanged.AddListener(OnValueChanged);
     }
 
     public void OnValueChanged(int index)
     {
         var options = Option.Options();
         Option.SetString(options[index] ?? options.FirstOrDefault() ?? "Error");
+        SettingsAndTestingUI.Instance.Refresh();
     }
 
     public override bool SetActive() => Option.SetActive() && Option.Page == SettingsAndTestingUI.Instance.Page;
@@ -37,9 +32,6 @@ public class DropdownSetting : Setting
     public override void Refresh()
     {
         base.Refresh();
-        DropdownBackground.SetImageColor(ColorType.Wood);
-        DisplayBackground.SetImageColor(ColorType.Metal);
-        Arrow.SetImageColor(ColorType.Metal);
 
         if (Option == null)
             return;

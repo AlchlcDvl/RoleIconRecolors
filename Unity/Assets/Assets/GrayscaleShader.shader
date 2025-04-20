@@ -14,6 +14,7 @@ Shader "Custom/GrayscaleShader"
         _Color ("Tint", Color) = (1,1,1,1)
         _GrayscaleAmount ("Grayscale Amount", Range(0, 1)) = 1
         _Brightness ("Brightness", Range(1, 5)) = 2
+        [MaterialToggle] _Vanilla ("Clear Effects", Float) = 0
     }
 
     SubShader
@@ -68,6 +69,7 @@ Shader "Custom/GrayscaleShader"
             fixed4 _Color;
             float _GrayscaleAmount;
             float _Brightness;
+            float _Vanilla;
 
             v2f vert(appdata_t v)
             {
@@ -81,6 +83,10 @@ Shader "Custom/GrayscaleShader"
             fixed4 frag(v2f i) : SV_Target
             {
                 fixed4 col = tex2D(_MainTex, i.texcoord) * i.color;
+
+                if (_Vanilla > 0)
+                    return col;
+
                 float luminance = Luminance(col.rgb);
                 col.rgb = lerp(col.rgb, luminance.xxx, _GrayscaleAmount);
                 col.rgb *= _Brightness;

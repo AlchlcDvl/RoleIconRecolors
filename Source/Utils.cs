@@ -19,6 +19,7 @@ public static class Utils
     private static readonly Dictionary<ModType, (Dictionary<string, string>, Dictionary<string, int>)> RoleStuff = [];
 
     private static readonly int Color1 = Shader.PropertyToID("_Color");
+    private static readonly int Vanilla = Shader.PropertyToID("_Vanilla");
     private static readonly int Brightness = Shader.PropertyToID("_Brightness");
     private static readonly int GrayscaleAmount = Shader.PropertyToID("_GrayscaleAmount");
 
@@ -585,50 +586,50 @@ public static class Utils
         _ => FactionType.NONE
     };
 
-    public static void SetImageColor(this Image img, ColorType type, float a = 1f, FactionType? faction = null, bool flip = false)
+    public static void SetImageColor(this Image img, ColorType type, bool notGuide = true)
     {
-        if (!img)
-            return;
-
-        var mat = img.material = Constants.GetMaterial(type);
-        var color2 = Constants.GetUIThemeColor(type, faction);
-
-        if (color2 == Color.clear)
-        {
-            img.material = new(Graphic.defaultGraphicMaterial);
-            return;
-        }
-
-        color2 = color2.ShadeColor(type, a, flip);
-
         var hasMask = img.TryGetComponent<Mask>(out var mask);
 
         if (hasMask)
             mask.enabled = false;
 
-        mat.SetColor(Color1, color2);
-        mat.SetFloat(Brightness, Constants.GeneralBrightness());
-        mat.SetFloat(GrayscaleAmount, Constants.GrayscaleAmount());
+        img.material = Constants.AllMaterials[notGuide][type];
 
         if (hasMask)
             mask.enabled = true;
     }
 
-    public static void SetGraphicColor(this Graphic graphic, ColorType type, float a = 1f, FactionType? faction = null, bool flip = true)
+    public static void SetGraphicColor(this Graphic graphic, ColorType type, FactionType? faction = null, bool flip = true)
     {
-        if (!graphic)
-            return;
-
         var color2 = Constants.GetUIThemeColor(type, faction);
 
         if (color2 == Color.clear)
             return;
 
-        color2 = color2.ShadeColor(type, a, flip, false);
+        color2 = color2.ShadeColor(type, flip, false);
         graphic.color = color2;
     }
 
-    private static Color ShadeColor(this Color color, ColorType type, float alpha = 1f, bool flip = false, bool isImage = true)
+    public static void UpdateMaterials(bool notGuide = true, FactionType? faction = null, bool flip = false)
+    {
+        if (Constants.GetMainUIThemeType() == UITheme.Vanilla)
+            Constants.AllMaterials[notGuide].Values.ForEach(x => x.SetFloat(Vanilla, 1));
+        else
+        {
+            var brightness = Constants.GeneralBrightness();
+            var effectiveness = Constants.GrayscaleAmount();
+
+            foreach (var (type, mat) in Constants.AllMaterials[notGuide])
+            {
+                mat.SetColor(Color1, Constants.GetUIThemeColor(type, faction).ShadeColor(type, flip));
+                mat.SetFloat(Brightness, brightness);
+                mat.SetFloat(GrayscaleAmount, effectiveness);
+                mat.SetFloat(Vanilla, 0);
+            }
+        }
+    }
+
+    private static Color ShadeColor(this Color color, ColorType type, bool flip = false, bool isImage = true)
     {
         var shade = Fancy.ColorShadeMap[type].Value;
 
@@ -638,9 +639,7 @@ public static class Utils
         if (flip)
             shade = -shade;
 
-        var color2 = color.ShadeColor(shade / 100f);
-        color2.a = alpha;
-        return color2;
+        return color.ShadeColor(shade / 100f);
     }
 
     // public static bool IsValid(this SilhouetteAnimation anim) => anim != null && anim != Loading;

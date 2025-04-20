@@ -25,7 +25,6 @@ public class ToggleSetting : Setting
 
         Toggle.SetIsOnWithoutNotify(Option.Value);
         Toggle.onValueChanged.AddListener(OnValueChanged);
-        Toggle.onValueChanged.AddListener(_ => SettingsAndTestingUI.Instance.RefreshOptions());
 
         ValueText.SetText(Toggle.isOn ? "On" : "Off");
 
@@ -41,6 +40,7 @@ public class ToggleSetting : Setting
         OnBg.gameObject.SetActive(value);
         OffBg.gameObject.SetActive(!value);
         Toggle.targetGraphic = value ? OnBg : OffBg;
+        SettingsAndTestingUI.Instance.Refresh();
     }
 
     public override bool SetActive() => Option.SetActive(Option.Value) && Option.Page == SettingsAndTestingUI.Instance.Page;

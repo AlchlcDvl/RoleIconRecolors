@@ -29,12 +29,6 @@ public class DownloaderUI : UIController
     private HoverEffect RepoOwnerHover { get; set; }
     private HoverEffect BranchNameHover { get; set; }
 
-    private Image Frame { get; set; }
-    private Image Chest { get; set; }
-    private Image BackImage { get; set; }
-
-    private readonly List<Image> Metals = [];
-    private readonly List<Image> Waxes = [];
     private readonly List<TextMeshProUGUI> WaxTexts = [];
 
     public IEnumerator InProgress { get; set; }
@@ -56,10 +50,10 @@ public class DownloaderUI : UIController
         RepoOwner = transform.GetComponent<TMP_InputField>("RepoOwner")!;
         BranchName = transform.GetComponent<TMP_InputField>("BranchName")!;
 
-        Metals.Add(PackName.targetGraphic as Image);
-        Metals.Add(RepoName.targetGraphic as Image);
-        Metals.Add(RepoOwner.targetGraphic as Image);
-        Metals.Add(BranchName.targetGraphic as Image);
+        (PackName.targetGraphic as Image).SetImageColor(ColorType.Metal);
+        (RepoName.targetGraphic as Image).SetImageColor(ColorType.Metal);
+        (RepoOwner.targetGraphic as Image).SetImageColor(ColorType.Metal);
+        (BranchName.targetGraphic as Image).SetImageColor(ColorType.Metal);
 
         PackNameHover = PackName.EnsureComponent<HoverEffect>()!;
         PackNameHover.LookupKey = "FANCY_PACK_NAME";
@@ -81,21 +75,23 @@ public class DownloaderUI : UIController
         Back = transform.EnsureComponent<HoverEffect>("Back")!;
         Back.GetComponent<Button>().onClick.AddListener(GoBack);
         Back.LookupKey = "FANCY_CLOSE_MENU";
-        BackImage = Back.GetComponent<Image>();
+        Back.GetComponent<Image>().SetImageColor(ColorType.Metal);
 
         OpenDir = transform.EnsureComponent<HoverEffect>("Directory")!;
         OpenDir.LookupKey = "FANCY_OPEN_MENU";
         OpenDir.GetComponent<Button>().onClick.AddListener(OpenDirectory);
 
-        Chest = OpenDir.GetComponent<Image>();
-        OpenDir.AddOnOverListener(() => Chest.sprite = Fancy.Assets.GetSprite("OpenChest"));
-        OpenDir.AddOnOutListener(() => Chest.sprite = Fancy.Assets.GetSprite("ClosedChest"));
+        var chest = OpenDir.GetComponent<Image>();
+        chest.SetImageColor(ColorType.Metal);
+        OpenDir.AddOnOverListener(() => chest.sprite = Fancy.Assets.GetSprite("OpenChest"));
+        OpenDir.AddOnOutListener(() => chest.sprite = Fancy.Assets.GetSprite("ClosedChest"));
 
         var confirm = transform.FindRecursive("Confirm");
         confirm.GetComponent<Button>().onClick.AddListener(AfterGenerating);
         confirm.EnsureComponent<HoverEffect>()!.LookupKey = "FANCY_CONFIRM_INPUT";
+        confirm.GetComponent<Image>().SetImageColor(ColorType.Metal);
 
-        Frame = transform.GetComponent<Image>("Fill");
+        transform.GetComponent<Image>("Fill").SetImageColor(ColorType.Metal);
 
         PackTemplate.SetActive(false);
 
@@ -104,12 +100,7 @@ public class DownloaderUI : UIController
 
     private void Refresh()
     {
-        Frame.SetImageColor(ColorType.Metal);
-        Chest.SetImageColor(ColorType.Metal);
-        BackImage.SetImageColor(ColorType.Metal);
-
-        Metals.ForEach(x => x.SetImageColor(ColorType.Metal));
-        Waxes.ForEach(x => x.SetImageColor(ColorType.Wax));
+        Utils.UpdateMaterials();
         WaxTexts.ForEach(x => x.SetGraphicColor(ColorType.Wax));
     }
 
@@ -204,9 +195,9 @@ public class DownloaderUI : UIController
                 go.EnsureComponent<HoverEffect>()!.NonLocalizedString = packJson.Credits;
 
             PackGOs.Add(go);
-            Metals.Add(go.transform.GetComponent<Image>("Background"));
-            Waxes.Add(button.GetComponent<Image>());
-            Waxes.Add(link.GetComponent<Image>());
+            go.transform.GetComponent<Image>("Background").SetImageColor(ColorType.Metal);
+            button.GetComponent<Image>().SetImageColor(ColorType.Wax);
+            link.GetComponent<Image>().SetImageColor(ColorType.Wax);
             WaxTexts.Add(link.GetComponent<TextMeshProUGUI>("Text"));
             WaxTexts.Add(button.GetComponent<TextMeshProUGUI>("Text"));
         }

@@ -11,11 +11,11 @@ public class RoleCardIcon : UIController
     {
         Background = GetComponent<Image>();
         Icon = GetComponentInChildren<Image>();
+        Background.SetImageColor(ColorType.Metal);
     }
 
     public void UpdateIcon(Role role)
     {
         Role = role;
-        Background.SetImageColor(ColorType.Metal);
     }
 }

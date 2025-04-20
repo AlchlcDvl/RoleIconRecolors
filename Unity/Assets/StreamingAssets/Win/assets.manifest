@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1077213359
+CRC: 2302903344
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 4a8792c118b9f681d8bfb0730844e3c0
+    Hash: a06993881c7ff0ee931856ccd5c44bdf
   TypeTreeHash:
     serializedVersion: 2
     Hash: 89c7f6d629771a0fed8e491f2a4febe2
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 4a8792c118b9f681d8bfb0730844e3c0
+    Hash: a06993881c7ff0ee931856ccd5c44bdf
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -165,7 +165,6 @@ Assets:
 - Assets/Assets/RoleCard_Main_2.png
 - Assets/Assets/ClosedChest.png
 - Assets/Assets/Dropdown_BG.png
-- Assets/Assets/ImageFlipperShader.shader
 - Assets/Assets/Frame_9Slice.png
 - Assets/Assets/Chat_Bottom.png
 - Assets/Assets/Chat_Stamp.png
@@ -174,7 +173,6 @@ Assets:
 - Assets/Assets/OpenChest.png
 - Assets/Assets/AbilitySlots_1.png
 - Assets/Assets/Background1_G.png
-- Assets/Assets/ImageFlipperMaterial.mat
 - Assets/Assets/SpecialAbility_Exclamation.png
 - Assets/Assets/Button_VolumeHandle.png
 - Assets/Assets/ButtonBlue.png
@@ -191,6 +189,7 @@ Assets:
 - Assets/Assets/IconPack.png
 - Assets/Assets/RoleCard_Ability_Main_M.png
 - Assets/Assets/Background_G.png
+- Assets/Assets/Button_VolumeHandle_J.png
 - Assets/Assets/SettingsAndTestingUI.prefab
 - Assets/Assets/LoadingUI.prefab
 - Assets/Assets/PlayerList_Main_P.png

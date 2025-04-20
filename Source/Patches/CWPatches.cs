@@ -57,6 +57,7 @@ public static class RoleCardPanelPatch
                 HudRoleListAndGraveyardControllerPatch.Postfix1(rLGY);
         }
 
+        Utils.UpdateMaterials();
         return false;
     }
 }
@@ -95,6 +96,8 @@ public static class SpecialAbilityPanelPatch1
         {
             __instance.useButton.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Fire);
         } catch {}
+
+        Utils.UpdateMaterials();
     }
 }
 
@@ -125,8 +128,9 @@ public static class SpecialAbilityPopupPanelPatch
             copy.AddComponent<DummyBehaviour>();
         }
 
-        og.SetImageColor(ColorType.Wood, faction: __instance.roleCardPanel.CurrentFaction); // Main wood container
-        copy.SetImageColor(ColorType.Metal, faction: __instance.roleCardPanel.CurrentFaction); // The metal support
+        og.SetImageColor(ColorType.Wood); // Main wood container
+        copy.SetImageColor(ColorType.Metal); // The metal support
+        Utils.UpdateMaterials(false, __instance.roleCardPanel.CurrentFaction);
     }
 }
 
@@ -135,20 +139,25 @@ public static class RoleCardPopupControllerPatch
 {
     public static void Postfix(RoleCardPopupPanel __instance)
     {
-        __instance.transform.GetChild(4).GetComponent<Image>().SetImageColor(ColorType.Wood, faction: __instance.CurrentFaction); // Frame
-        __instance.transform.GetChild(10).GetComponent<Image>().SetImageColor(ColorType.Wood, faction: __instance.CurrentFaction); // Slot count for display
-        __instance.transform.GetChild(13).GetComponent<Image>().SetImageColor(ColorType.Wood, faction: __instance.CurrentFaction); // Slot count prefab 1
-        __instance.transform.GetChild(14).GetComponent<Image>().SetImageColor(ColorType.Wood, faction: __instance.CurrentFaction); // Slot count prefab 2
-        __instance.transform.GetChild(15).GetComponent<Image>().SetImageColor(ColorType.Wood, faction: __instance.CurrentFaction); // Slot count prefab 3
-        __instance.transform.GetChild(16).GetComponent<Image>().SetImageColor(ColorType.Wood, faction: __instance.CurrentFaction); // Slot count prefab 4
-        __instance.transform.GetChild(17).GetComponent<Image>().SetImageColor(ColorType.Metal, faction: __instance.CurrentFaction); // Closing screw
+        __instance.transform.GetChild(4).GetComponent<Image>().SetImageColor(ColorType.Wood); // Frame
+        __instance.transform.GetChild(10).GetComponent<Image>().SetImageColor(ColorType.Wood); // Slot count for display
+        __instance.transform.GetChild(13).GetComponent<Image>().SetImageColor(ColorType.Wood); // Slot count prefab 1
+        __instance.transform.GetChild(14).GetComponent<Image>().SetImageColor(ColorType.Wood); // Slot count prefab 2
+        __instance.transform.GetChild(15).GetComponent<Image>().SetImageColor(ColorType.Wood); // Slot count prefab 3
+        __instance.transform.GetChild(16).GetComponent<Image>().SetImageColor(ColorType.Wood); // Slot count prefab 4
+        __instance.transform.GetChild(17).GetComponent<Image>().SetImageColor(ColorType.Metal); // Closing screw
+        Utils.UpdateMaterials(false, __instance.CurrentFaction);
     }
 }
 
 [HarmonyPatch(typeof(AchievementItem), nameof(AchievementItem.SetAchievement))]
 public static class AchievementItemPatch
 {
-    public static void Postfix(AchievementItem __instance) => __instance.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
+    public static void Postfix(AchievementItem __instance)
+    {
+        __instance.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
+        Utils.UpdateMaterials();
+    }
 }
 
 [HarmonyPatch(typeof(HudDockPanel), nameof(HudDockPanel.Start))]
@@ -160,6 +169,7 @@ public static class HudDockPanelPatch
     {
         Cache = __instance;
         __instance.GetComponent<Image>().SetImageColor(ColorType.Wood);
+        Utils.UpdateMaterials();
     }
 }
 
@@ -183,6 +193,7 @@ public static class PooledChatViewSwitcherPatch
         var nameplate = __instance.transform.GetChild(3).GetChild(0);
         nameplate.GetComponent<Image>().SetImageColor(ColorType.Metal);
         nameplate.Find("Name").GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Metal);
+        Utils.UpdateMaterials();
     }
 }
 
@@ -202,7 +213,10 @@ public static class ChatInputControllerPatch
         try
         {
             __instance.parchmentBackgroundImage.transform.GetChild(2).GetChild(2).GetComponent<Image>().SetImageColor(ColorType.Wax);
-        } catch {}
+        }
+        catch { }
+
+        Utils.UpdateMaterials();
     }
 }
 
@@ -211,7 +225,11 @@ public static class LobbyInfoClassicPanelAndTimerPatch
 {
     [HarmonyPatch(typeof(LobbyTimer), nameof(LobbyTimer.HandleOnLobbyDataChanged))]
     [HarmonyPatch(typeof(LobbyInfoClassicPanel), nameof(LobbyInfoClassicPanel.Start))]
-    public static void Postfix(MonoBehaviour __instance) => __instance.GetComponent<Image>().SetImageColor(ColorType.Wood);
+    public static void Postfix(MonoBehaviour __instance)
+    {
+        __instance.GetComponent<Image>().SetImageColor(ColorType.Wood);
+        Utils.UpdateMaterials();
+    }
 }
 
 [HarmonyPatch(typeof(HudTimeChangePanel), nameof(HudTimeChangePanel.UpdateDayNightNumber))]
@@ -224,13 +242,18 @@ public static class HudTimeChangePanelPatch
         Cache = __instance;
         __instance.transform.GetChild(0).GetChild(3).GetComponent<Image>().SetImageColor(ColorType.Wood);
         __instance.transform.GetChild(1).GetChild(3).GetComponent<Image>().SetImageColor(ColorType.Wood);
+        Utils.UpdateMaterials();
     }
 }
 
 [HarmonyPatch(typeof(LobbyGameModeChoicePanel), nameof(LobbyGameModeChoicePanel.Start))]
 public static class LobbyGameModeChoicePanelPatch
 {
-    public static void Postfix(LobbyGameModeChoicePanel __instance) => __instance.transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetChild(15).GetComponent<Image>().SetImageColor(ColorType.Wood);
+    public static void Postfix(LobbyGameModeChoicePanel __instance)
+    {
+        __instance.transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetChild(15).GetComponent<Image>().SetImageColor(ColorType.Wood);
+        Utils.UpdateMaterials();
+    }
 }
 
 [HarmonyPatch(typeof(TosAbilityPanel), nameof(TosAbilityPanel.Start))]
@@ -277,6 +300,7 @@ public static class PatchAbilityPanel
         paper.SetImageColor(ColorType.Paper);
 
         parent.Find("MinimizeUIButton").GetComponentInChildren<Image>().SetImageColor(ColorType.Metal);
+        Utils.UpdateMaterials();
     }
 }
 
@@ -298,6 +322,7 @@ public static class PatchLobbyInfo
         __instance.notificationPanel.GetComponent<Image>().SetImageColor(ColorType.Wood);
         __instance.splatIconGood.GetComponent<Image>().SetImageColor(ColorType.Wax);
         __instance.splatIconBad.GetComponent<Image>().SetImageColor(ColorType.Wax);
+        Utils.UpdateMaterials();
     }
 }
 
@@ -311,6 +336,7 @@ public static class PatchDialogBox
         __instance.closeButtonClusterGO.transform.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
         __instance.inputConfirmClusterGO.transform.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
         // Cannot change the color of the buttons to Wax because of the Animator resetting its Material (sadly turning off the Animator will stop its animations if you didn't know)
+        Utils.UpdateMaterials();
     }
 }
 
@@ -464,6 +490,8 @@ public static class PatchSettingsController
 
         for (var i = 1; i < 7; i++)
             links.GetChild(i).GetComponent<Image>().SetImageColor(ColorType.Metal);
+
+        Utils.UpdateMaterials();
     }
 }
 
@@ -472,18 +500,20 @@ public static class PatchGameModeChoices
 {
     public static void Postfix(GameModeChoicePanelController __instance)
     {
-        if (!__instance.transform.GetComponent<DummyBehaviour>())
-        {
-            __instance.transform.AddComponent<DummyBehaviour>();
-            __instance.transform.GetChild(__instance.transform.childCount - 1).GetComponent<Image>().SetImageColor(ColorType.Wood);
+        if (__instance.transform.GetComponent<DummyBehaviour>())
+            return;
 
-            for (var i = 0; i < __instance.transform.childCount - 1; i++)
-                __instance.transform.GetChild(i).GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
+        __instance.transform.AddComponent<DummyBehaviour>();
+        __instance.transform.GetChild(__instance.transform.childCount - 1).GetComponent<Image>().SetImageColor(ColorType.Wood);
 
-            var lobbyDescription = __instance.transform.parent.GetChild(2);
-            lobbyDescription.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wood);
-            // Cannot change the color of Join button to Wax because of the Animator resetting its Material
-        }
+        for (var i = 0; i < __instance.transform.childCount - 1; i++)
+            __instance.transform.GetChild(i).GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
+
+        var lobbyDescription = __instance.transform.parent.GetChild(2);
+        lobbyDescription.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wood);
+        // Cannot change the color of Join button to Wax because of the Animator resetting its Material
+
+        Utils.UpdateMaterials();
     }
 }
 
@@ -504,6 +534,8 @@ public static class PatchHomeMenu
             if (trans.name == "GameModeChoiceElementsUI(Clone)" && !trans.GetChild(0).GetChild(0).GetComponent<DummyBehaviour>())
                 PatchGameModeChoices.Postfix(trans.GetChild(0).GetChild(0).GetComponent<GameModeChoicePanelController>());
         }
+
+        Utils.UpdateMaterials();
     }
 }
 
@@ -515,6 +547,7 @@ public static class PatchHomeBanner
         __instance.usernameText.transform.parent.GetComponent<Image>().SetImageColor(ColorType.Paper);
         __instance.usernameText.SetGraphicColor(ColorType.Paper);
         __instance.townPointText.SetGraphicColor(ColorType.Paper);
+        Utils.UpdateMaterials();
     }
 }
 
@@ -529,6 +562,7 @@ public static class PatchFeaturedItem
         titlePlate.GetComponent<Image>().SetImageColor(ColorType.Metal);
         titlePlate.GetChild(0).GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Metal);
         __instance.featuredItem.transform.GetChild(5).GetComponent<Image>().SetImageColor(ColorType.Wax);
+        Utils.UpdateMaterials();
     }
 }
 
@@ -607,6 +641,7 @@ public static class HudRoleListAndGraveyardControllerPatch
 
         graveyard.SetImageColor(ColorType.Metal);
         GraveyardWood.SetImageColor(ColorType.Wood);
+        Utils.UpdateMaterials();
     }
 
     [HarmonyPatch(nameof(HudRoleListAndGraveyardController.ValidateVisibility)), HarmonyPostfix]

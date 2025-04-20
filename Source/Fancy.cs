@@ -60,12 +60,15 @@ public class Fancy
         Ethereal = Assets.GetSprite("Ethereal");
 
         Grayscale = Assets.GetMaterial("GrayscaleMaterial");
-        Constants.WoodMaterial = new(Grayscale);
-        Constants.MetalMaterial = new(Grayscale);
-        Constants.FireMaterial = new(Grayscale);
-        Constants.PaperMaterial = new(Grayscale);
-        Constants.LeatherMaterial = new(Grayscale);
-        Constants.WaxMaterial = new(Grayscale);
+
+        var normalMats = Constants.AllMaterials[true] = [];
+        var guideMats = Constants.AllMaterials[false] = [];
+
+        foreach (var type in GeneralUtils.GetEnumValues<ColorType>().Where(x => x != ColorType.All))
+        {
+            normalMats[type] = new(Grayscale);
+            guideMats[type] = new(Grayscale);
+        }
 
         LoadingGif = Assets.GetGif("Placeholder")!;
         LoadingGif.RenderAllFrames();

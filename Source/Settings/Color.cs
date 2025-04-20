@@ -19,7 +19,6 @@ public class ColorSetting : BaseInputSetting
         Input.SetTextWithoutNotify(Option.Value);
         Input.restoreOriginalTextOnEscape = true;
         Input.onValueChanged.AddListener(OnValueChanged);
-        Input.onValueChanged.AddListener(_ => SettingsAndTestingUI.Instance.RefreshOptions());
 
         ValueBg.color = Option.Value.ToColor();
     }
@@ -30,6 +29,7 @@ public class ColorSetting : BaseInputSetting
             ValueBg.color = color;
 
         Option.Value = value;
+        SettingsAndTestingUI.Instance.Refresh();
     }
 
     public override bool SetActive() => Option.SetActive(Option.Value) && Option.Page == SettingsAndTestingUI.Instance.Page;

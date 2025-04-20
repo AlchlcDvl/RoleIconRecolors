@@ -45,7 +45,7 @@ public class SettingsAndTestingUI : UIController
         set
         {
             isBTOS2 = value;
-            RefreshOptions();
+            Refresh();
         }
     }
 
@@ -56,7 +56,7 @@ public class SettingsAndTestingUI : UIController
         set
         {
             page = value;
-            RefreshOptions();
+            Refresh();
         }
     }
 
@@ -218,11 +218,18 @@ public class SettingsAndTestingUI : UIController
         ColorTemplate!.gameObject.SetActive(false);
         InputTemplate!.gameObject.SetActive(false);
         ToggleTemplate!.gameObject.SetActive(false);
+
+        Leathers.ForEach(x => x.SetImageColor(ColorType.Leather));
+        Metals.ForEach(x => x.SetImageColor(ColorType.Metal));
+        Woods.ForEach(x => x.SetImageColor(ColorType.Wood));
+        Papers.ForEach(x => x.SetImageColor(ColorType.Paper));
+        Waxes.ForEach(x => x.SetImageColor(ColorType.Wax));
+        Fires.ForEach(x => x.SetImageColor(ColorType.Fire));
     }
 
-    public void Start() => RefreshOptions();
+    public void Start() => Refresh();
 
-    public void OnEnable() => RefreshOptions();
+    public void OnEnable() => Refresh();
 
     public void OnDestroy() => Instance = null;
 
@@ -232,19 +239,13 @@ public class SettingsAndTestingUI : UIController
         FancyUI.Instance.gameObject.SetActive(true);
     }
 
-    public void RefreshOptions()
+    public void Refresh()
     {
         Animator.SetDuration(Constants.AnimationDuration());
         NameText.SetText(DefaultNameText.Replace("%num%", $"{Constants.PlayerNumber()}"));
         NameText.SetGraphicColor(ColorType.Paper);
         RoleText.SetText(DefaultRoleText.Replace("%type%", $"{Utils.FactionName(Constants.GetSelectedFaction(), IsBTOS2 ? ModType.BTOS2 : ModType.Vanilla)}").Replace("%mod%", IsBTOS2 ? "BTOS" :
             "").Replace("%roleName%", "Admirer").Replace("%roleInt%", "1"));
-        Leathers.ForEach(x => x.SetImageColor(ColorType.Leather));
-        Metals.ForEach(x => x.SetImageColor(ColorType.Metal));
-        Woods.ForEach(x => x.SetImageColor(ColorType.Wood));
-        Papers.ForEach(x => x.SetImageColor(ColorType.Paper));
-        Waxes.ForEach(x => x.SetImageColor(ColorType.Wax));
-        Fires.ForEach(x => x.SetImageColor(ColorType.Fire, 0.7f));
         Displays.ForEach((x, y) => y.SetActive(Fancy.SelectDisplay.Value == x));
         Icons.ForEach(x => x.UpdateIcon(Fancy.SelectTestingRole.Value));
         ToggleImage.sprite = Fancy.Assets.GetSprite($"{(IsBTOS2 ? "B" : "")}ToS2Icon");
@@ -254,5 +255,7 @@ public class SettingsAndTestingUI : UIController
             setting.Refresh();
             setting.gameObject.SetActive(setting.SetActive());
         }
+
+        Utils.UpdateMaterials();
     }
 }
