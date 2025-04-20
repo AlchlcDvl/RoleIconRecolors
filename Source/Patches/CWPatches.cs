@@ -1,5 +1,6 @@
 using Game.Achievements;
 using Home.Common.Settings;
+using Home.Interface;
 
 namespace FancyUI.Patches;
 
@@ -449,6 +450,67 @@ public static class PatchSettingsController
 
         for (var i = 1; i < 7; i++)
             links.GetChild(i).GetComponent<Image>().SetImageColor(ColorType.Metal);
+    }
+}
+
+[HarmonyPatch(typeof(GameModeChoicePanelController), nameof(GameModeChoicePanelController.Start))]
+public static class PatchGameModeChoices
+{
+    public static void Postfix(GameModeChoicePanelController __instance)
+    {
+        if (!__instance.transform.GetComponent<DummyBehaviour>())
+        {
+            __instance.transform.AddComponent<DummyBehaviour>();
+            __instance.transform.GetChild(__instance.transform.childCount - 1).GetComponent<Image>().SetImageColor(ColorType.Wood);
+            for (var i = 0; i < __instance.transform.childCount - 1; i++)
+                __instance.transform.GetChild(i).GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
+            var lobbyDescription = __instance.transform.parent.GetChild(2);
+            lobbyDescription.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wood);
+            // Cannot change the color of Join button to Wax because of the Animator resetting its Material (sadly turning off the Animator will stop its animations if you didn't know)
+        }
+    }
+}
+
+[HarmonyPatch(typeof(SafeAreaController), nameof(SafeAreaController.OnEnable))]
+public static class PatchHomeMenu
+{
+    [HarmonyPriority(Priority.Last)]
+    public static void Postfix(SafeAreaController __instance)
+    {
+        var leftButtons = __instance.transform.Find("LeftButtons");
+        leftButtons.GetChild(leftButtons.childCount - 1).GetComponent<Image>().SetImageColor(ColorType.Wood);
+        for (var i = 1; i < leftButtons.childCount - 1; i++)
+            leftButtons.GetChild(i).GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
+        foreach (var trans in __instance.transform.GetComponentsInChildren<Transform>(true))
+        {
+            if (trans.name == "GameModeChoiceElementsUI(Clone)" && !trans.GetChild(0).GetChild(0).GetComponent<DummyBehaviour>())
+                PatchGameModeChoices.Postfix(trans.GetChild(0).GetChild(0).GetComponent<GameModeChoicePanelController>());
+        }
+    }
+}
+
+[HarmonyPatch(typeof(HomeBannerController), nameof(HomeBannerController.Start))]
+public static class PatchHomeBanner
+{
+    public static void Postfix(HomeBannerController __instance)
+    {
+        __instance.usernameText.transform.parent.GetComponent<Image>().SetImageColor(ColorType.Paper);
+        __instance.usernameText.SetGraphicColor(ColorType.Paper);
+        __instance.townPointText.SetGraphicColor(ColorType.Paper);
+    }
+}
+
+[HarmonyPatch(typeof(HomeFeaturedItemElementsPanel), nameof(HomeFeaturedItemElementsPanel.Start))]
+public static class PatchFeaturedItem
+{
+    public static void Postfix(HomeFeaturedItemElementsPanel __instance)
+    {
+        var canvas = __instance.panelCanvas.transform.GetChild(0).GetChild(0);
+        canvas.GetComponent<Image>().SetImageColor(ColorType.Wood);
+        var titlePlate = canvas.GetChild(2).GetChild(0);
+        titlePlate.GetComponent<Image>().SetImageColor(ColorType.Metal);
+        titlePlate.GetChild(0).GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Metal);
+        __instance.featuredItem.transform.GetChild(5).GetComponent<Image>().SetImageColor(ColorType.Wax);
     }
 }
 
