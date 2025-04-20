@@ -4,11 +4,17 @@ public class DropdownSetting : Setting
 {
     public TMP_Dropdown Dropdown { get; set; }
     public IDropdown Option { get; set; }
+    private Image DisplayBackground { get; set; }
+    private Image DropdownBackground { get; set; }
+    private Image Arrow { get; set; }
 
     public override void Awake()
     {
         base.Awake();
         Dropdown = transform.GetComponent<TMP_Dropdown>("Dropdown");
+        DropdownBackground = transform.FindRecursive("Template").Find("Background").GetComponent<Image>();
+        DisplayBackground = Dropdown.GetComponent<Image>();
+        Arrow = Dropdown.transform.GetComponent<Image>("Arrow");
     }
 
     public void Start()
@@ -30,6 +36,11 @@ public class DropdownSetting : Setting
 
     public override void Refresh()
     {
+        base.Refresh();
+        DropdownBackground.SetImageColor(ColorType.Wood);
+        DisplayBackground.SetImageColor(ColorType.Metal);
+        Arrow.SetImageColor(ColorType.Metal);
+
         if (Option == null)
             return;
 

@@ -196,6 +196,7 @@
     <Entry key="FANCY_RLPLUSGY">Role List + Graveyard</Entry>
     <Entry key="FANCY_ROLELIST">Role List</Entry>
     <Entry key="FANCY_GRAVEYARD">Graveyard</Entry>
+    <Entry key="FANCY_SPECIALABILITYPOPUP">Special Ability</Entry>
 
     <!-- Town -->
     <Entry key="FANCY_TOWN_UI_FIRE_NAME">Town Fire Color</Entry>

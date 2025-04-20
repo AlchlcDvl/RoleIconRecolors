@@ -43,6 +43,7 @@ public enum DisplayType : byte
     Graveyard,
     RlPlusGy,
     RoleDeck,
+    SpecialAbilityPopup,
     Chat
 }
 

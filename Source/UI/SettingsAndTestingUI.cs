@@ -87,6 +87,7 @@ public class SettingsAndTestingUI : UIController
         var rlPlusGy = transform.FindRecursive("RlPlusGy");
         var roleList = transform.FindRecursive("RoleList");
         var graveyard = transform.FindRecursive("Graveyard");
+        var specialAbilityPopup = transform.FindRecursive("SpecialAbilityPopup");
 
         Displays[DisplayType.RoleCard] = roleCard.gameObject;
         Displays[DisplayType.PlayerList] = playerList.gameObject;
@@ -95,11 +96,12 @@ public class SettingsAndTestingUI : UIController
         Displays[DisplayType.RlPlusGy] = rlPlusGy.gameObject;
         Displays[DisplayType.RoleList] = roleList.gameObject;
         Displays[DisplayType.Graveyard] = graveyard.gameObject;
+        Displays[DisplayType.SpecialAbilityPopup] = specialAbilityPopup.gameObject;
 
         IconTemplate = roleCard.EnsureComponent<RoleCardIcon>("ButtonTemplate");
 
         Flame = roleCard.EnsureComponent<CustomAnimator>("Fire")!;
-        Flame.SetAnim([ .. FancyAssetManager.Flame.Frames.Select(x => x.RenderedSprite) ], 1f);
+        Flame.SetAnim([.. FancyAssetManager.Flame.Frames.Select(x => x.RenderedSprite)], 1f);
 
         RoleText = roleCard.GetComponent<TextMeshProUGUI>("Role");
         NameText = transform.GetComponent<TextMeshProUGUI>("NameText");
@@ -119,7 +121,7 @@ public class SettingsAndTestingUI : UIController
         back.GetComponent<Button>().onClick.AddListener(GoBack);
         var hover = back.AddComponent<HoverEffect>();
         hover.LookupKey = "FANCY_CLOSE_MENU";
-        hover.FillInKeys = [ ("%type%", "Testing") ];
+        hover.FillInKeys = [("%type%", "Testing")];
 
         ToggleImage = transform.GetComponent<Image>("Toggle");
         ToggleImage.gameObject.SetActive(Constants.BTOS2Exists());
@@ -128,7 +130,8 @@ public class SettingsAndTestingUI : UIController
         transform.GetComponent<Button>("IconPacks")!.onClick.AddListener(() => Page = PackType.IconPacks);
         transform.GetComponent<Button>("SilSwapper")!.onClick.AddListener(() => Page = PackType.SilhouetteSets);
         transform.GetComponent<Button>("MRC")!.onClick.AddListener(() => Page = PackType.MiscRoleCustomisation);
-        transform.GetComponent<Button>("Testing")!.onClick.AddListener(() => Page = PackType.Testing);
+        var testing = transform.GetComponent<Button>("Testing");
+        testing!.onClick.AddListener(() => Page = PackType.Testing);
         ToggleImage.GetComponent<Button>()!.onClick.AddListener(() => IsBTOS2 = !IsBTOS2);
 
         Metals.Add(roleCard.GetComponent<Image>("Special"));
@@ -140,6 +143,10 @@ public class SettingsAndTestingUI : UIController
         Metals.Add(rlPlusGy.GetComponent<Image>("Metal"));
         Metals.Add(roleList.GetComponent<Image>("Metal"));
         Metals.Add(graveyard.GetComponent<Image>("Metal"));
+        Metals.Add(back.GetComponent<Image>());
+        Metals.Add(testing.targetGraphic as Image);
+        Metals.Add(transform.GetComponent<Image>("Fill"));
+        Metals.Add(specialAbilityPopup.GetComponent<Image>("Ring"));
 
         Woods.Add(roleCard.GetComponent<Image>("Frame"));
         Woods.Add(Metals[0].transform.GetComponent<Image>("Wood"));
@@ -152,6 +159,7 @@ public class SettingsAndTestingUI : UIController
         Woods.Add(rlPlusGy.transform.GetComponent<Image>("Wood"));
         Woods.Add(roleList.transform.GetComponent<Image>("Wood"));
         Woods.Add(graveyard.transform.GetComponent<Image>("Wood"));
+        Woods.Add(specialAbilityPopup.GetComponent<Image>("Frame"));
 
         Leathers.Add(playerList.GetComponent<Image>("Leather"));
         Leathers.Add(roleDeck.GetComponent<Image>("Leather"));
@@ -164,6 +172,7 @@ public class SettingsAndTestingUI : UIController
         Papers.Add(chat.GetComponent<Image>("SendPaper"));
 
         Fires.Add(Flame.Renderer);
+        Fires.Add(specialAbilityPopup.GetComponent<Image>("Fire"));
 
         FancyUI.SetupFonts(transform);
 
