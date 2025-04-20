@@ -365,7 +365,7 @@ public static class SpecialAbilityPopupNecromancerRetributionistListItemPatch
             __instance.choiceSprite.sprite = uiRoleDataInstance.specialAbilityIcon;
         }
 
-        if (uiRoleDataInstance2 != null)
+        if (uiRoleDataInstance2 != null && role != Role.NONE)
         {
             __instance.choice2Text.text = __instance.GetAbilityVerb(uiRoleDataInstance2.role);
             __instance.choice2Sprite.sprite = uiRoleDataInstance2.role is Role.DEPUTY or Role.CONJURER ? uiRoleDataInstance2.specialAbilityIcon : uiRoleDataInstance2.abilityIcon;

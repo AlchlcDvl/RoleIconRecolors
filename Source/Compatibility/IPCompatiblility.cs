@@ -21,6 +21,7 @@ public static class Btos2IPCompatibility
             var deckItem = roleDeckPlusPanelController.GetNestedTypes(AccessTools.all).FirstOrDefault(x => x.Name == "DeckItem");
             var roleSelectionPlusController = btos2Types.FirstOrDefault(x => x.Name == "RoleSelectionPlusController")!;
             var menuRole = roleSelectionPlusController.GetNestedTypes(AccessTools.all).FirstOrDefault(x => x.Name == "MenuRole");
+            var casualModeMenuControler = btos2Types.FirstOrDefault(x => x.Name == "CasualModeMenuController")!;
 
             RoleIcon = AccessTools.Field(deckItem, "roleIcon");
 
@@ -31,11 +32,13 @@ public static class Btos2IPCompatibility
             var setData = AccessTools.Method(deckItem, "SetData", [ typeof(Role), typeof(FactionType), typeof(bool), roleDeckPlusPanelController ]);
             var refreshData = AccessTools.Method(menuRole, "RefreshData");
             var validateStartButtonState = AccessTools.Method(roleDeckPlusPanelController, "ValidateStartButtonState");
+            var fancyCasual = AccessTools.Method(casualModeMenuControler, "Start");
             var compat = typeof(Btos2IPCompatibility);
 
             Btos2Compatibility.Btos2PatchesHarmony.Patch(setData, null, new(AccessTools.Method(compat, nameof(ItemPostfix1))));
             Btos2Compatibility.Btos2PatchesHarmony.Patch(refreshData, null, new(AccessTools.Method(compat, nameof(ItemPostfix2))));
             Btos2Compatibility.Btos2PatchesHarmony.Patch(validateStartButtonState, null, new(AccessTools.Method(compat, nameof(RoleDeckPostfix))));
+            Btos2Compatibility.Btos2PatchesHarmony.Patch(fancyCasual, null, new(AccessTools.Method(compat, nameof(CasualModePostfix))));
             Fancy.Instance.Message("BTOS2 compatibility was successful");
             return true;
         }
@@ -107,4 +110,23 @@ public static class Btos2IPCompatibility
     }
 
     public static void RoleDeckPostfix(dynamic __instance) => ((Image)__instance.GetComponent<Image>()).SetImageColor(ColorType.Paper);
+
+    public static void CasualModePostfix(dynamic __instance)
+    {
+        var globalChatPanel = (Transform)__instance.transform.GetChild(1);
+        globalChatPanel.GetChild(0).GetChild(0).GetChild(0).GetChild(1).GetChild(0).GetChild(0).GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wax);
+        var queuePanel = (Transform)__instance.transform.GetChild(3);
+        queuePanel.GetComponent<Image>().SetImageColor(ColorType.Wood);
+        var starspawn = (Sprite)GetSprite("Starspawn", "Starspawn");
+        var alert = (Sprite)GetSprite("Veteran_Special", "Town");
+        if (starspawn != Blank)
+            queuePanel.GetChild(0).GetComponent<Image>().sprite = starspawn;
+        if (alert != Blank)
+            queuePanel.GetChild(3).GetComponent<Image>().sprite = GetSprite("Veteran_Special", "Town");
+        queuePanel.GetChild(1).GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Metal);
+        queuePanel.GetChild(2).GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Metal);
+        var chatWindow = (Transform)globalChatPanel.GetChild(0).GetChild(0);
+        chatWindow.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wood);
+        chatWindow.GetChild(2).GetComponent<Image>().SetImageColor(ColorType.Metal);
+    }
 }
