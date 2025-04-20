@@ -287,21 +287,22 @@ public static class HudRoleListAndGraveyardControllerPatch
     private static Image OpenWood;
     private static Image RoleListWood;
     private static Image GraveyardWood;
+    private static Image PanelImage;
 
     [HarmonyPatch(nameof(HudRoleListAndGraveyardController.Start)), HarmonyPostfix]
     public static void Postfix1(HudRoleListAndGraveyardController __instance)
     {
         Cache = __instance;
 
-        var template1 = __instance.GetComponent<Image>();
-        template1.SetImageColor(ColorType.Wood);
+        PanelImage = __instance.GetComponent<Image>();
+        PanelImage.SetImageColor(ColorType.Wood);
         OpenWood = __instance.transform.parent.Find("OpenWood")?.GetComponent<Image>();
 
         if (!OpenWood)
         {
-            template1.sprite = Fancy.Assets.GetSprite("RoleList_Open_M");
-            OpenWood = UObject.Instantiate(template1, __instance.transform.parent);
-            OpenWood.transform.SetSiblingIndex(template1.transform.GetSiblingIndex());
+            PanelImage.sprite = Fancy.Assets.GetSprite("RoleList_Open_M");
+            OpenWood = UObject.Instantiate(PanelImage, __instance.transform.parent);
+            OpenWood.transform.SetSiblingIndex(PanelImage.transform.GetSiblingIndex());
             OpenWood.transform.ClearChildren();
             OpenWood.GetComponent<HudRoleListAndGraveyardController>().Destroy();
             OpenWood.GetComponent<HorizontalLayoutGroup>().Destroy();
@@ -309,7 +310,7 @@ public static class HudRoleListAndGraveyardControllerPatch
             OpenWood.sprite = Fancy.Assets.GetSprite("RoleList_Open_W");
         }
 
-        template1.SetImageColor(ColorType.Metal);
+        PanelImage.SetImageColor(ColorType.Metal);
         OpenWood.SetImageColor(ColorType.Wood);
 
         var roleList = __instance.roleListPanelBackground;
@@ -359,7 +360,7 @@ public static class HudRoleListAndGraveyardControllerPatch
     public static void Postfix2(HudRoleListAndGraveyardController __instance)
     {
         if (OpenWood)
-            OpenWood.enabled = __instance.GetComponent<Image>().enabled;
+            OpenWood.enabled = PanelImage.enabled;
 
         if (RoleListWood)
             RoleListWood.enabled = __instance.roleListPanelBackground.enabled;

@@ -265,7 +265,7 @@ public static class SpecialAbilityPopupGenericListItemPatch
             factionType = tuple.Item2;
         }
 
-        var text = role == Role.NONE ? player_name : player_name + role.ToColorizedFactionStringParentheses(factionType);
+        var text = player_name + " " + (role == Role.NONE ? "" : role.ToColorizedFactionStringParentheses(factionType));
         __instance.playerName.SetText(text);
         __instance.playerHeadshot.sprite = headshot;
         __instance.characterPosition = position;
@@ -314,7 +314,7 @@ public static class SpecialAbilityPopupDayConfirmListItemPatch
             factionType = tuple.Item2;
         }
 
-        var text = role == Role.NONE ? player_name : player_name + role.ToColorizedFactionStringParentheses(factionType);
+        var text = player_name + " " + (role == Role.NONE ? "" : role.ToColorizedFactionStringParentheses(factionType));
         __instance.playerName.SetText(text);
         __instance.playerHeadshot.sprite = headshot;
         __instance.characterPosition = position;
@@ -351,13 +351,13 @@ public static class SpecialAbilityPopupNecromancerRetributionistListItemPatch
             factionType = tuple.Item2;
         }
 
-        var text = role2 == Role.NONE ? player_name : player_name + role2.ToColorizedFactionStringParentheses(factionType);
+        var text = player_name + " " + (role2 == Role.NONE ? "" : role2.ToColorizedFactionStringParentheses(factionType));
         __instance.playerName.SetText(text);
         __instance.playerHeadshot.sprite = headshot;
         __instance.characterPosition = position;
         __instance.playerNumber.text = string.Format("{0}.", __instance.characterPosition + 1);
-        var uiRoleDataInstance = data.roleDataList.Find((UIRoleData.UIRoleDataInstance d) => d.role == myRole);
-        var uiRoleDataInstance2 = data.roleDataList.Find((UIRoleData.UIRoleDataInstance d) => d.role == role);
+        var uiRoleDataInstance = data.roleDataList.Find(d => d.role == myRole);
+        var uiRoleDataInstance2 = data.roleDataList.Find(d => d.role == role);
 
         if (uiRoleDataInstance != null)
         {
