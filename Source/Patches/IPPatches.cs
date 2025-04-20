@@ -289,7 +289,7 @@ public static class PatchAbilityPanelListItems
 
                 break;
             }
-            case AbilityType.POISONER_POISON or AbilityType.SHROUD or AbilityType.INVESTIGATOR or AbilityType.PIRATE:
+            case AbilityType.POISONER_POISON or AbilityType.SHROUD or AbilityType.INVESTIGATOR or AbilityType.PIRATE or (AbilityType)30 or (AbilityType)32 or (AbilityType)33:
             {
                 var special = GetSprite(reg, $"{name}_Special", faction, ee);
 

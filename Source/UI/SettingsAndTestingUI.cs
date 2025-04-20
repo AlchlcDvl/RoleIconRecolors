@@ -236,6 +236,8 @@ public class SettingsAndTestingUI : UIController
         Papers.ForEach(x => x.SetImageColor(ColorType.Paper));
         Waxes.ForEach(x => x.SetImageColor(ColorType.Wax));
         Fires.ForEach(x => x.SetImageColor(ColorType.Fire));
+
+        Utils.UpdateMaterials();
     }
 
     public void Start() => Refresh();

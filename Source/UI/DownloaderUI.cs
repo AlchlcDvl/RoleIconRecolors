@@ -95,6 +95,7 @@ public class DownloaderUI : UIController
 
         PackTemplate.SetActive(false);
 
+        Utils.UpdateMaterials();
         FancyUI.SetupFonts(transform);
     }
 

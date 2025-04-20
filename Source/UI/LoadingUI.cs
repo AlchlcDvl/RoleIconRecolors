@@ -30,6 +30,7 @@ public class LoadingUI : UIController
 
         transform.Find("Panel").GetComponent<Image>().SetImageColor(ColorType.Metal);
 
+        Utils.UpdateMaterials();
         FancyUI.SetupFonts(transform);
     }
 

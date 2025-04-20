@@ -39,6 +39,7 @@ public class FancyUI : UIController
 
         transform.GetComponent<Image>("Fill").SetImageColor(ColorType.Metal);
 
+        Utils.UpdateMaterials();
         SetupFonts(transform);
     }
 
