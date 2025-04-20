@@ -40,7 +40,7 @@ public static class PatchRoleListPanel
 {
     public static void Postfix(RoleDeckListItem __instance, Role a_role, bool a_isBan)
     {
-        __instance.transform.GetComponent<Image>("NameBG").SetImageColor(ColorType.Metal);
+        // __instance.transform.GetComponent<Image>("NameBG").SetImageColor(ColorType.Metal);
 
         if (!Constants.EnableIcons())
             return;
