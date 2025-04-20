@@ -532,8 +532,6 @@ public static class PatchFeaturedItem
     }
 }
 
-// HudRoleListPanel - Roles = 3, Bans = 4
-
 [HarmonyPatch(typeof(HudRoleListAndGraveyardController), nameof(HudRoleListAndGraveyardController.Start))]
 public static class HudRoleListAndGraveyardControllerPatch
 {

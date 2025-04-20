@@ -5,6 +5,13 @@ namespace FancyUI.Settings;
 public class StringInputSetting : BaseInputSetting
 {
     public StringInputOption Option { get; set; }
+    private Image InputField { get; set; }
+
+    public override void Awake()
+    {
+        base.Awake();
+        InputField = Input.GetComponent<Image>();
+    }
 
     public void Start()
     {
@@ -31,4 +38,10 @@ public class StringInputSetting : BaseInputSetting
     }
 
     public override bool SetActive() => Option.SetActive(Option.Value) && Option.Page == SettingsAndTestingUI.Instance.Page;
+
+    public override void Refresh()
+    {
+        base.Refresh();
+        InputField.SetImageColor(ColorType.Metal);
+    }
 }
