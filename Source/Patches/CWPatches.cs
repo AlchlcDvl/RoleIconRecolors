@@ -462,8 +462,10 @@ public static class PatchGameModeChoices
         {
             __instance.transform.AddComponent<DummyBehaviour>();
             __instance.transform.GetChild(__instance.transform.childCount - 1).GetComponent<Image>().SetImageColor(ColorType.Wood);
+
             for (var i = 0; i < __instance.transform.childCount - 1; i++)
                 __instance.transform.GetChild(i).GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
+
             var lobbyDescription = __instance.transform.parent.GetChild(2);
             lobbyDescription.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wood);
             // Cannot change the color of Join button to Wax because of the Animator resetting its Material (sadly turning off the Animator will stop its animations if you didn't know)
@@ -479,8 +481,10 @@ public static class PatchHomeMenu
     {
         var leftButtons = __instance.transform.Find("LeftButtons");
         leftButtons.GetChild(leftButtons.childCount - 1).GetComponent<Image>().SetImageColor(ColorType.Wood);
+
         for (var i = 1; i < leftButtons.childCount - 1; i++)
             leftButtons.GetChild(i).GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
+
         foreach (var trans in __instance.transform.GetComponentsInChildren<Transform>(true))
         {
             if (trans.name == "GameModeChoiceElementsUI(Clone)" && !trans.GetChild(0).GetChild(0).GetComponent<DummyBehaviour>())
@@ -606,17 +610,3 @@ public static class HudRoleListAndGraveyardControllerPatch
             GraveyardWood.enabled = __instance.graveyardPanelBackground.enabled;
     }
 }
-
-// [HarmonyPatch(typeof(SafeAreaController), nameof(SafeAreaController.OnEnable))]
-// public static class SafeAreaController_OnEnable
-// {
-//     public static void Postfix(SafeAreaController __instance)
-//     {
-//         if (Pepper.IsLobbyOrGamePhase())
-//             return;
-//
-//         var parts = __instance.transform.GetChild(12);
-//         parts.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood); // Wood frame at the back
-//         parts.GetChild(13).GetComponent<Image>().SetImageColor(ColorType.Wood); // Wood frame in the front
-//     }
-// }
