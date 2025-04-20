@@ -1,4 +1,5 @@
 using Game.Achievements;
+using Home.Common.Dialog;
 using Home.Common.Settings;
 using Home.Interface;
 
@@ -300,6 +301,19 @@ public static class PatchLobbyInfo
     }
 }
 
+[HarmonyPatch(typeof(DialogController), nameof(DialogController.Start))]
+public static class PatchDialogBox
+{
+    public static void Postfix(DialogController __instance)
+    {
+        __instance.background.GetChild(0).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
+        __instance.closeButtonClusterGO.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
+        __instance.closeButtonClusterGO.transform.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
+        __instance.inputConfirmClusterGO.transform.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
+        // Cannot change the color of the buttons to Wax because of the Animator resetting its Material (sadly turning off the Animator will stop its animations if you didn't know)
+    }
+}
+
 [HarmonyPatch(typeof(SettingsController), nameof(SettingsController.Start))]
 public static class PatchSettingsController
 {
@@ -468,7 +482,7 @@ public static class PatchGameModeChoices
 
             var lobbyDescription = __instance.transform.parent.GetChild(2);
             lobbyDescription.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wood);
-            // Cannot change the color of Join button to Wax because of the Animator resetting its Material (sadly turning off the Animator will stop its animations if you didn't know)
+            // Cannot change the color of Join button to Wax because of the Animator resetting its Material
         }
     }
 }
