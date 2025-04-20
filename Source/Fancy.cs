@@ -70,9 +70,11 @@ public class Fancy
             guideMats[type] = new(Grayscale);
         }
 
+        Utils.UpdateMaterials();
+
         LoadingGif = Assets.GetGif("Placeholder")!;
         LoadingGif.RenderAllFrames();
-        Loading = new("Loading") { Frames = [ .. LoadingGif.Frames.Select(x => x.RenderedSprite) ] };
+        Loading = new("Loading") { Frames = [.. LoadingGif.Frames.Select(x => x.RenderedSprite)] };
 
         Flame = Assets.GetGif("Flame")!;
         Flame.RenderAllFrames();

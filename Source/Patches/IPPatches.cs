@@ -40,6 +40,8 @@ public static class PatchRoleListPanel
 {
     public static void Postfix(RoleDeckListItem __instance, Role a_role, bool a_isBan)
     {
+        __instance.transform.GetComponent<Image>("NameBG").SetImageColor(ColorType.Metal);
+
         if (!Constants.EnableIcons())
             return;
 
@@ -115,13 +117,11 @@ public static class PatchRoleCards
         roleInfoButtons ??= [];
 
         // Merged a CW patch here for optimisation purposes
-        if (Constants.EnableCustomUI())
-        {
-            foreach (var button in roleInfoButtons)
-                button.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal); // Rings at the back
 
-            Utils.UpdateMaterials(!isGuide, faction);
-        }
+        foreach (var button in roleInfoButtons)
+            button.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal); // Rings at the back
+
+        Utils.UpdateMaterials(!isGuide, faction);
 
         role = Constants.IsTransformed() && !isGuide ? Utils.GetTransformedVersion(role) : role;
         var index = 0;
@@ -345,11 +345,14 @@ public static class PatchAbilityPanelListItems
                 if (!ability1.IsValid())
                     ability1 = GetSprite(reg, abilityName + "_1", faction, ee);
 
-                if (!ability1.IsValid() && reg)
-                    ability1 = GetSprite(abilityName, ogfaction, ee);
+                if (reg)
+                {
+                    if (!ability1.IsValid())
+                        ability1 = GetSprite(abilityName, ogfaction, ee);
 
-                if (!ability1.IsValid() && reg)
-                    ability1 = GetSprite(abilityName + "_1", ogfaction, ee);
+                    if (!ability1.IsValid())
+                        ability1 = GetSprite(abilityName + "_1", ogfaction, ee);
+                }
 
                 if (ability1.IsValid() && __instance.choice1Sprite)
                     __instance.choice1Sprite.sprite = ability1;
@@ -422,6 +425,7 @@ public static class CacheDefaults
         Assets.ForEach(key =>
         {
             Debug.Log($"HomeInterfaceService:: Add Sprite Asset {key}");
+            // var asset = (TMP_SpriteAsset)LoadResource.Invoke(__instance, [$"TmpSpriteAssets/{key}.asset"]);
             var asset = __instance.LoadResource<TMP_SpriteAsset>($"TmpSpriteAssets/{key}.asset");
 
             switch (key)

@@ -414,7 +414,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
         icons ??= [];
         icons.TryGetValue(iconName, out var sprite);
 
-        if ((!allowEe && sprite.IsValid()) || URandom.RandomRangeInt(1, 101) > Constants.EasterEggChance())
+        if ((!allowEe && sprite.IsValid()) || (allowEe && URandom.RandomRangeInt(1, 101) > Constants.EasterEggChance()))
             return sprite ?? Blank;
 
         var sprites = new List<Sprite>();

@@ -95,15 +95,10 @@ public class DownloaderUI : UIController
 
         PackTemplate.SetActive(false);
 
-        Utils.UpdateMaterials();
         FancyUI.SetupFonts(transform);
     }
 
-    private void Refresh()
-    {
-        Utils.UpdateMaterials();
-        WaxTexts.ForEach(x => x.SetGraphicColor(ColorType.Wax));
-    }
+    private void Refresh() => WaxTexts.ForEach(x => x.SetGraphicColor(ColorType.Wax));
 
     public void OnEnable()
     {

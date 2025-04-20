@@ -1,5 +1,6 @@
 // using FancyUI.Assets.SilhouetteSwapper;
 using Home.Shared;
+using Unity.Profiling;
 
 namespace FancyUI;
 
@@ -653,7 +654,8 @@ public static class Utils
             try
             {
                 return role.MrcDisplayString(faction);
-            } catch {}
+            }
+            catch { }
         }
 
         var result = role.ToDisplayString();
@@ -671,7 +673,8 @@ public static class Utils
             try
             {
                 return role.MrcDisplayStringParentheses(faction);
-            } catch {}
+            }
+            catch { }
         }
 
         return ("(" + role.ToDisplayString() + ")").ApplyFactionColor(faction);
