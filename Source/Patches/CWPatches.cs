@@ -1,7 +1,9 @@
 using Game.Achievements;
+using Game.Interface.Customization;
 using Home.Common.Dialog;
 using Home.Common.Settings;
 using Home.Interface;
+using Mentions.UI;
 
 namespace FancyUI.Patches;
 
@@ -563,6 +565,186 @@ public static class PatchFeaturedItem
         titlePlate.GetChild(0).GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Metal);
         __instance.featuredItem.transform.GetChild(5).GetComponent<Image>().SetImageColor(ColorType.Wax);
         Utils.UpdateMaterials();
+    }
+}
+
+[HarmonyPatch(typeof(HomeDailyDealElementsPanel), nameof(HomeDailyDealElementsPanel.Start))]
+public static class PatchDailyDeal
+{
+    public static void Postfix(HomeDailyDealElementsPanel __instance)
+    {
+        var canvas = __instance.panelCanvas.transform.GetChild(1).GetChild(0);
+        canvas.GetComponent<Image>().SetImageColor(ColorType.Wood);
+        canvas.GetChild(5).GetComponent<Image>().SetImageColor(ColorType.Metal);
+        canvas.GetChild(5).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
+        var titlePlate = canvas.GetChild(4).GetChild(0);
+        titlePlate.GetComponent<Image>().SetImageColor(ColorType.Metal);
+        titlePlate.GetChild(0).GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Metal);
+        canvas.GetChild(2).GetChild(0).GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wax);
+        Utils.UpdateMaterials();
+    }
+}
+
+[HarmonyPatch(typeof(RoleMenuPopupElementsPanel), nameof(RoleMenuPopupElementsPanel.Start))]
+public static class PatchRoleMenuPopup
+{
+    public static void Postfix(RoleMenuPopupElementsPanel __instance)
+    {
+        var template = __instance.RoleMenuPopupTemplate;
+        template.transform.GetChild(0).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
+        template.transform.GetChild(1).GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
+        foreach (var button in template.buttons)
+            button.transform.GetComponent<Image>().SetImageColor(ColorType.Metal);
+        Utils.UpdateMaterials();
+    }
+}
+
+[HarmonyPatch(typeof(KeywordMenuPopupElementsPanel), nameof(KeywordMenuPopupElementsPanel.Start))]
+public static class PatchKeywordMenuPopup
+{
+    public static void Postfix(KeywordMenuPopupElementsPanel __instance)
+    {
+        var template = __instance.KeywordMenuPopupTemplate;
+        template.transform.GetChild(0).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
+        template.transform.GetChild(1).GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
+        template.transform.GetChild(2).GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
+        template.transform.GetChild(2).GetChild(0).GetChild(1).GetChild(0).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
+        Utils.UpdateMaterials();
+    }
+}
+
+[HarmonyPatch(typeof(KeywordTooltipElementsPanel), nameof(KeywordTooltipElementsPanel.Start))]
+public static class PatchKeywordTooltip
+{
+    public static void Postfix(KeywordTooltipElementsPanel __instance)
+    {
+        __instance.KeywordTooltipTemplate.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
+        Utils.UpdateMaterials();
+    }
+}
+
+[HarmonyPatch(typeof(PlayerPopupElementsPanel), nameof(PlayerPopupElementsPanel.Start))]
+public static class PatchPlayerPopup
+{
+    public static void Postfix(PlayerPopupElementsPanel __instance)
+    {
+        var template = __instance.PlayerPopupTemplate;
+        template.transform.GetChild(2).GetComponent<Image>().SetImageColor(ColorType.Wood);
+        template.transform.GetChild(3).GetComponent<Image>().SetImageColor(ColorType.Metal);
+        var buttons = template.transform.GetChild(1).GetChild(0);
+        for (var i = 0; i < 15; i++)
+        {
+            var tempHolder = buttons.GetChild(i);
+            if (i == 2)
+                tempHolder.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wax);
+            else if (i == 3)
+                tempHolder.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
+            else
+            {
+                var tempButton = tempHolder.GetChild(1).GetChild(0);
+                tempButton.GetComponent<Image>().SetImageColor(ColorType.Metal);
+                if (i != 6)
+                    tempButton.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wax);
+                if (i == 12)
+                {
+                    tempButton = tempHolder.GetChild(2).GetChild(0);
+                    tempButton.GetComponent<Image>().SetImageColor(ColorType.Metal);
+                    tempButton.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wax);
+                }
+            }
+        }
+        Utils.UpdateMaterials();
+    }
+}
+
+[HarmonyPatch(typeof(MentionPanel), nameof(MentionPanel.Start))]
+public static class PatchMentionPanel
+{
+    public static void Postfix(MentionPanel __instance)
+    {
+        __instance.transform.GetChild(0).GetChild(2).GetComponent<Image>().SetImageColor(ColorType.Wood);
+        var template = __instance.transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0);
+        template.GetComponent<Image>().SetImageColor(ColorType.Metal);
+        template.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
+        Utils.UpdateMaterials();
+    }
+}
+
+[HarmonyPatch(typeof(CustomizationPanel), nameof(CustomizationPanel.Start))]
+public static class PatchCustomizationPanel
+{
+    public static void Postfix(CustomizationPanel __instance)
+    {
+        // Main Panel
+        foreach (var tab in __instance.tabAnims)
+            tab.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
+        var mainPanel = __instance.transform.GetChild(1);
+        mainPanel.GetChild(1).GetChild(1).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
+        mainPanel.GetChild(2).GetComponent<Image>().SetImageColor(ColorType.Wood);
+        var title = mainPanel.GetChild(4);
+        title.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
+        title.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Metal);
+        title.GetChild(1).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
+        title.GetChild(1).GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
+        Utils.UpdateMaterials();
+
+        // Tome
+        var tome = __instance.transform.GetChild(0);
+        tome.GetComponent<Image>().SetImageColor(ColorType.Wood);
+        tome.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
+        tome.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
+        for (var i = 2; i < 5; i++)
+            tome.GetChild(i).GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Metal);
+        var buyContainer = tome.GetChild(5);
+        buyContainer.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wax);
+        buyContainer.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wax);
+        tome.GetChild(7).GetComponent<Image>().SetImageColor(ColorType.Wood);
+    }
+}
+
+[HarmonyPatch(typeof(RoleSelectionPanel), nameof(RoleSelectionPanel.Start))]
+public static class PatchRoleSelectionPanel
+{
+    public static void Postfix(RoleSelectionPanel __instance)
+    {
+        try
+        {
+            foreach (var tab in __instance.tabInstances)
+            {
+                tab.transform.GetComponent<Image>().SetImageColor(ColorType.Wood);
+                tab.transform.GetChild(0).GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Metal);
+            }
+            __instance.transform.GetChild(1).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
+            __instance.helpTipDecks.transform.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
+            __instance.helpTipDecks.transform.GetChild(2).GetComponent<Image>().SetImageColor(ColorType.Metal);
+            __instance.helpTipRoles.transform.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
+            __instance.helpTipRoles.transform.GetChild(2).GetComponent<Image>().SetImageColor(ColorType.Metal);
+            var roles = __instance.transform.GetChild(4);
+            roles.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
+            roles.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wood);
+            var top = roles.GetChild(5);
+            top.GetComponent<Image>().SetImageColor(ColorType.Wood);
+            var title = top.GetChild(0).GetChild(0);
+            title.GetComponent<Image>().SetImageColor(ColorType.Metal);
+            title.GetChild(0).GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Metal);
+            title.GetChild(1).GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Metal);
+            var template = __instance.cardListItemTemplate;
+            var roleTitle = template.transform.GetChild(1);
+            roleTitle.GetComponent<Image>().SetImageColor(ColorType.Metal);
+            roleTitle.GetChild(0).GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Metal);
+            template.transform.GetChild(3).GetComponent<Image>().SetImageColor(ColorType.Wax);
+            foreach (var cardListItem in __instance.roleCardListItems)
+            {
+                roleTitle = cardListItem.transform.GetChild(1);
+                roleTitle.GetComponent<Image>().SetImageColor(ColorType.Metal);
+                roleTitle.GetChild(0).GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Metal);
+                cardListItem.transform.GetChild(3).GetComponent<Image>().SetImageColor(ColorType.Wax);
+            }
+            __instance.transform.GetChild(5).GetComponent<Image>().SetImageColor(ColorType.Metal);
+        } catch (Exception e)
+        {
+            Debug.LogWarning(e);
+        }
     }
 }
 
