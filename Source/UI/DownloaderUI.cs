@@ -1,4 +1,3 @@
-using UnityEngine.Events;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
 using FancyUI.Assets.IconPacks;
@@ -30,6 +29,14 @@ public class DownloaderUI : UIController
     private HoverEffect RepoOwnerHover { get; set; }
     private HoverEffect BranchNameHover { get; set; }
 
+    private Image Frame { get; set; }
+    private Image Chest { get; set; }
+    private Image BackImage { get; set; }
+
+    private readonly List<Image> Metals = [];
+    private readonly List<Image> Waxes = [];
+    private readonly List<TextMeshProUGUI> WaxTexts = [];
+
     public IEnumerator InProgress { get; set; }
 
     private static string Type => FancyUI.Instance.Page == PackType.IconPacks ? "Icon Pack" : "Silhouette Set";
@@ -48,6 +55,11 @@ public class DownloaderUI : UIController
         RepoName = transform.GetComponent<TMP_InputField>("RepoName")!;
         RepoOwner = transform.GetComponent<TMP_InputField>("RepoOwner")!;
         BranchName = transform.GetComponent<TMP_InputField>("BranchName")!;
+
+        Metals.Add(PackName.targetGraphic as Image);
+        Metals.Add(RepoName.targetGraphic as Image);
+        Metals.Add(RepoOwner.targetGraphic as Image);
+        Metals.Add(BranchName.targetGraphic as Image);
 
         PackNameHover = PackName.EnsureComponent<HoverEffect>()!;
         PackNameHover.LookupKey = "FANCY_PACK_NAME";
@@ -69,33 +81,48 @@ public class DownloaderUI : UIController
         Back = transform.EnsureComponent<HoverEffect>("Back")!;
         Back.GetComponent<Button>().onClick.AddListener(GoBack);
         Back.LookupKey = "FANCY_CLOSE_MENU";
+        BackImage = Back.GetComponent<Image>();
 
         OpenDir = transform.EnsureComponent<HoverEffect>("Directory")!;
         OpenDir.LookupKey = "FANCY_OPEN_MENU";
         OpenDir.GetComponent<Button>().onClick.AddListener(OpenDirectory);
 
-        var rend = OpenDir.GetComponent<Image>();
-        OpenDir.AddOnOverListener(() => rend.sprite = Fancy.Assets.GetSprite("OpenChest"));
-        OpenDir.AddOnOutListener(() => rend.sprite = Fancy.Assets.GetSprite("ClosedChest"));
+        Chest = OpenDir.GetComponent<Image>();
+        OpenDir.AddOnOverListener(() => Chest.sprite = Fancy.Assets.GetSprite("OpenChest"));
+        OpenDir.AddOnOutListener(() => Chest.sprite = Fancy.Assets.GetSprite("ClosedChest"));
 
         var confirm = transform.FindRecursive("Confirm");
         confirm.GetComponent<Button>().onClick.AddListener(AfterGenerating);
         confirm.EnsureComponent<HoverEffect>()!.LookupKey = "FANCY_CONFIRM_INPUT";
+
+        Frame = transform.GetComponent<Image>("Fill");
 
         PackTemplate.SetActive(false);
 
         FancyUI.SetupFonts(transform);
     }
 
+    private void Refresh()
+    {
+        Frame.SetImageColor(ColorType.Metal);
+        Chest.SetImageColor(ColorType.Metal);
+        BackImage.SetImageColor(ColorType.Metal);
+
+        Metals.ForEach(x => x.SetImageColor(ColorType.Metal));
+        Waxes.ForEach(x => x.SetImageColor(ColorType.Wax));
+        WaxTexts.ForEach(x => x.SetGraphicColor(ColorType.Wax));
+    }
+
     public void OnEnable()
     {
         Title.SetText(l10n("FANCY_DOWNLOADER_TITLE").Replace("%type%", Type));
 
-        OpenDir.FillInKeys = Back.FillInKeys = PackNameHover.FillInKeys = RepoNameHover.FillInKeys = RepoOwnerHover.FillInKeys = BranchNameHover.FillInKeys = [ ( "%type%", Type ) ];
+        OpenDir.FillInKeys = Back.FillInKeys = PackNameHover.FillInKeys = RepoNameHover.FillInKeys = RepoOwnerHover.FillInKeys = BranchNameHover.FillInKeys = [("%type%", Type)];
 
-        Packs.ForEach(x => SetUpPack(x, () => DownloadIcons(x.Name)));
+        Packs.ForEach(SetUpPack);
 
         NoPacks.SetActive(Packs.Count(x => x.Type == FancyUI.Instance.Page.ToString()) == 0);
+        Refresh();
     }
 
     public void OnDestroy()
@@ -119,7 +146,8 @@ public class DownloaderUI : UIController
     {
         var json = GenerateLinkAndAddToPackCount();
         json.Type = FancyUI.Instance.Page.ToString();
-        SetUpPack(json, () => DownloadIcons(json.Name));
+        SetUpPack(json);
+        Refresh();
     }
 
     public void GoBack()
@@ -153,7 +181,7 @@ public class DownloaderUI : UIController
     public void OpenDirectory() => GeneralUtils.OpenDirectory(FolderPath);
 
     // Why the hell am I not allowed to make extension methods in instance classes smh
-    public void SetUpPack(PackJson packJson, UnityAction download)
+    public void SetUpPack(PackJson packJson)
     {
         if (!Packs.Contains(packJson))
             Packs.Add(packJson);
@@ -167,15 +195,20 @@ public class DownloaderUI : UIController
             link.GetComponent<Button>().onClick.AddListener(() => Application.OpenURL(packJson.Link()));
             link.EnsureComponent<HoverEffect>()!.LookupKey = "FANCY_OPEN_LINK";
             var button = go.transform.Find("Download");
-            button.GetComponent<Button>().onClick.AddListener(download);
+            button.GetComponent<Button>().onClick.AddListener(() => DownloadIcons(packJson.Name));
             var hover = button.EnsureComponent<HoverEffect>()!;
             hover.LookupKey = "FANCY_DOWNLOAD_PACK";
-            hover.FillInKeys = [ ( "%pack%", packJson.Name ) ];
+            hover.FillInKeys = [("%pack%", packJson.Name)];
 
             if (!StringUtils.IsNullEmptyOrWhiteSpace(packJson.Credits))
                 go.EnsureComponent<HoverEffect>()!.NonLocalizedString = packJson.Credits;
 
             PackGOs.Add(go);
+            Metals.Add(go.transform.GetComponent<Image>("Background"));
+            Waxes.Add(button.GetComponent<Image>());
+            Waxes.Add(link.GetComponent<Image>());
+            WaxTexts.Add(link.GetComponent<TextMeshProUGUI>("Text"));
+            WaxTexts.Add(button.GetComponent<TextMeshProUGUI>("Text"));
         }
 
         go!.SetActive(packJson.Type == FancyUI.Instance.Page.ToString());

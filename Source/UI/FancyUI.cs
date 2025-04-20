@@ -9,6 +9,10 @@ public class FancyUI : UIController
 
     public PackType Page { get; set; }
 
+    private Image Cog { get; set; }
+    private Image Frame { get; set; }
+    private Image Screw { get; set; }
+
     public static FancyUI Instance { get; private set; }
 
     public void Awake()
@@ -30,12 +34,23 @@ public class FancyUI : UIController
         var settingsButton = transform.Find("Settings");
         settingsButton.GetComponent<Button>().onClick.AddListener(OpenSettings);
         settingsButton.AddComponent<HoverEffect>()!.LookupKey = "FANCY_OPEN_SETTINGS";
+        Cog = settingsButton.GetComponent<Image>();
 
         var close = transform.Find("CloseButton");
         close.GetComponent<Button>().onClick.AddListener(gameObject.Destroy);
         close.AddComponent<HoverEffect>()!.LookupKey = "FANCY_CLOSE_FANCY";
+        Screw = close.GetComponent<Image>();
+
+        Frame = transform.GetComponent<Image>("Fill");
 
         SetupFonts(transform);
+    }
+
+    public void OnEnable()
+    {
+        Cog.SetImageColor(ColorType.Metal);
+        Frame.SetImageColor(ColorType.Metal);
+        Screw.SetImageColor(ColorType.Metal);
     }
 
     public void OnDestroy()

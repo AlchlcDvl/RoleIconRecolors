@@ -21,7 +21,6 @@ public static class FancyAssetManager
     public static TMP_SpriteAsset BTOS22 { get; private set; }
 
     public static Material Grayscale { get; set; }
-    // public static Material DefaultWood { get; set; }
 
     public static Gif LoadingGif { get; set; }
     public static Gif Flame { get; set; }
