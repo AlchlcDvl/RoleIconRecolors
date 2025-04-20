@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3516122043
+CRC: 3987903107
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: fb8cc56d28b85a975c3d02aa8f2c7139
+    Hash: 48ba75c3749ff1f8b62ce96ac040e8e4
   TypeTreeHash:
     serializedVersion: 2
     Hash: 89c7f6d629771a0fed8e491f2a4febe2
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: fb8cc56d28b85a975c3d02aa8f2c7139
+    Hash: 48ba75c3749ff1f8b62ce96ac040e8e4
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -169,7 +169,6 @@ Assets:
 - Assets/Assets/Frame_9Slice.png
 - Assets/Assets/Chat_Bottom.png
 - Assets/Assets/Chat_Stamp.png
-- Assets/Assets/Input.png
 - Assets/Assets/AbilitySlots_2.png
 - Assets/Assets/Option_BG.png
 - Assets/Assets/OpenChest.png
