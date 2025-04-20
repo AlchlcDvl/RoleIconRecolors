@@ -122,7 +122,7 @@ public static class Btos2IPCompatibility
         if (starspawn != Blank)
             queuePanel.GetChild(0).GetComponent<Image>().sprite = starspawn;
         if (alert != Blank)
-            queuePanel.GetChild(3).GetComponent<Image>().sprite = GetSprite("Veteran_Special", "Town");
+            queuePanel.GetChild(3).GetComponent<Image>().sprite = alert;
         queuePanel.GetChild(1).GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Metal);
         queuePanel.GetChild(2).GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Metal);
         var chatWindow = (Transform)globalChatPanel.GetChild(0).GetChild(0);
