@@ -1189,3 +1189,37 @@ public static class PatchPirateMenu
             __instance.Role3.sprite = sprite;
     }
 }
+
+[HarmonyPatch(typeof(Tos2GameBrowserListItem), nameof(Tos2GameBrowserListItem.Initialize))]
+public static class Tos2GameBrowserListItemPatch
+{
+    public static void Postfix(Tos2GameBrowserListItem __instance)
+    {
+        if (!Constants.EnableIcons())
+            return;
+
+        var town = __instance.transform.GetComponent<Image>("Icon_Townie");
+        var coven = __instance.transform.GetComponent<Image>("Icon_Traitor");
+        var neut = __instance.transform.GetComponent<Image>("Icon_Neutral");
+        var any = __instance.transform.GetComponent<Image>("Icon_Any");
+        var sprite = GetSprite("Town");
+
+        if (sprite.IsValid() && town)
+            town.sprite = sprite;
+
+        sprite = GetSprite("Coven");
+
+        if (sprite.IsValid() && coven)
+            coven.sprite = sprite;
+
+        sprite = GetSprite("Neutral");
+
+        if (sprite.IsValid() && neut)
+            neut.sprite = sprite;
+
+        sprite = GetSprite("Any");
+
+        if (sprite.IsValid() && any)
+            any.sprite = sprite;
+    }
+}

@@ -722,7 +722,7 @@ public static class PatchRoleSelectionPanel
     }
 }
 
-[HarmonyPatch(typeof(HudRoleListAndGraveyardController), nameof(HudRoleListAndGraveyardController.Start))]
+[HarmonyPatch(typeof(HudRoleListAndGraveyardController))]
 public static class HudRoleListAndGraveyardControllerPatch
 {
     public static HudRoleListAndGraveyardController Cache;
@@ -820,5 +820,118 @@ public static class Tos2GameBrowserControllerPatch
     {
         // The buttons at the bottom have the animator component that resets the material, rip
         __instance.transform.GetComponent<Image>("Refresh").SetImageColor(ColorType.Metal);
+        __instance.transform.GetComponent<Image>("Frame").SetImageColor(ColorType.Wood);
+        var nameplate = __instance.transform.GetComponent<Image>("TopGold");
+        nameplate.SetImageColor(ColorType.Metal);
+        nameplate.GetComponentInChildren<TextMeshProUGUI>().SetGraphicColor(ColorType.Metal);
+    }
+}
+
+[HarmonyPatch(typeof(RoleDeckPanelController), nameof(RoleDeckPanelController.Start))]
+public static class RoleDeckPanelControllerPatch
+{
+    public static void Postfix(RoleDeckPanelController __instance)
+    {
+        var baseLeather = __instance.transform.GetComponent<Image>("DeckView");
+        // This doesn't work lmao
+        // Image metal;
+        // Image paper;
+
+        // if (baseLeather.GetComponent<DummyBehaviour>())
+        // {
+        //     metal = __instance.transform.GetComponent<Image>("DeckMetal");
+        //     paper = __instance.transform.GetComponent<Image>("DeckPaper");
+        // }
+        // else
+        // {
+        //     metal = UObject.Instantiate(baseLeather, baseLeather.transform.parent);
+        //     metal.transform.ClearChildren();
+        //     metal.transform.SetSiblingIndex(0);
+        //     metal.sprite = Fancy.Assets.GetSprite("RoleList_M");
+        //     metal.name = "DeckMetal";
+
+        //     paper = UObject.Instantiate(baseLeather, baseLeather.transform.parent);
+        //     paper.transform.ClearChildren();
+        //     paper.transform.SetSiblingIndex(1);
+        //     paper.sprite = Fancy.Assets.GetSprite("RoleList_P");
+        //     paper.name = "DeckPaper";
+
+        //     baseLeather.sprite = Fancy.Assets.GetSprite("RoleList_W");
+        //     baseLeather.AddComponent<DummyBehaviour>();
+        // }
+
+        baseLeather.SetImageColor(ColorType.Leather);
+        // metal.SetImageColor(ColorType.Metal);
+        // paper.SetImageColor(ColorType.Paper);
+        __instance.transform.GetComponent<Image>("RolesIcon").SetImageColor(ColorType.Paper);
+        __instance.transform.GetComponent<Image>("PlayersIcon").SetImageColor(ColorType.Wax);
+
+        if (!Constants.EnableIcons())
+            return;
+
+        var town = __instance.transform.GetComponent<Image>("TowniesIcon");
+        var coven = __instance.transform.GetComponent<Image>("Coven");
+        var neut = __instance.transform.GetComponent<Image>("Neutral");
+        var any = __instance.transform.GetComponent<Image>("AnyIcon");
+        var sprite = GetSprite("Town");
+
+        if (sprite.IsValid() && town)
+            town.sprite = sprite;
+
+        sprite = GetSprite("Coven");
+
+        if (sprite.IsValid() && coven)
+            coven.sprite = sprite;
+
+        sprite = GetSprite("Neutral");
+
+        if (sprite.IsValid() && neut)
+            neut.sprite = sprite;
+
+        sprite = GetSprite("Any");
+
+        if (sprite.IsValid() && any)
+            any.sprite = sprite;
+    }
+}
+
+[HarmonyPatch(typeof(GameBrowserRoleDeck), nameof(GameBrowserRoleDeck.Start))]
+public static class GameBrowserRoleDeckPatch
+{
+    public static void Postfix(GameBrowserRoleDeck __instance)
+    {
+        var baseLeather = __instance.transform.GetComponent<Image>("DeckView");
+        // Doesn't work either lmao
+        // Image metal;
+        // Image paper;
+
+        // if (baseLeather.GetComponent<DummyBehaviour>())
+        // {
+        //     metal = __instance.transform.GetComponent<Image>("DeckMetal");
+        //     paper = __instance.transform.GetComponent<Image>("DeckPaper");
+        // }
+        // else
+        // {
+        //     metal = UObject.Instantiate(baseLeather, baseLeather.transform.parent);
+        //     metal.GetComponent<ScrollRect>().Destroy();
+        //     metal.transform.ClearChildren();
+        //     metal.transform.SetSiblingIndex(0);
+        //     metal.sprite = Fancy.Assets.GetSprite("RoleList_M");
+        //     metal.name = "DeckMetal";
+
+        //     paper = UObject.Instantiate(baseLeather, baseLeather.transform.parent);
+        //     paper.GetComponent<ScrollRect>().Destroy();
+        //     paper.transform.ClearChildren();
+        //     paper.transform.SetSiblingIndex(1);
+        //     paper.sprite = Fancy.Assets.GetSprite("RoleList_P");
+        //     paper.name = "DeckPaper";
+
+        //     baseLeather.sprite = Fancy.Assets.GetSprite("RoleList_W");
+        //     baseLeather.AddComponent<DummyBehaviour>();
+        // }
+
+        baseLeather.SetImageColor(ColorType.Leather);
+        // metal.SetImageColor(ColorType.Metal);
+        // paper.SetImageColor(ColorType.Paper);
     }
 }
