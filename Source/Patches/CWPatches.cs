@@ -833,38 +833,45 @@ public static class RoleDeckPanelControllerPatch
     public static void Postfix(RoleDeckPanelController __instance)
     {
         var baseLeather = __instance.transform.GetComponent<Image>("DeckView");
-        // This doesn't work lmao
-        // Image metal;
-        // Image paper;
+        baseLeather.type = Image.Type.Sliced;
+        baseLeather.pixelsPerUnitMultiplier = 2.5f;
+        Image metal;
+        Image paper;
 
-        // if (baseLeather.GetComponent<DummyBehaviour>())
-        // {
-        //     metal = __instance.transform.GetComponent<Image>("DeckMetal");
-        //     paper = __instance.transform.GetComponent<Image>("DeckPaper");
-        // }
-        // else
-        // {
-        //     metal = UObject.Instantiate(baseLeather, baseLeather.transform.parent);
-        //     metal.transform.ClearChildren();
-        //     metal.transform.SetSiblingIndex(0);
-        //     metal.sprite = Fancy.Assets.GetSprite("RoleList_M");
-        //     metal.name = "DeckMetal";
+        if (baseLeather.GetComponent<DummyBehaviour>())
+        {
+            metal = __instance.transform.GetComponent<Image>("DeckMetal");
+            paper = __instance.transform.GetComponent<Image>("DeckPaper");
+        }
+        else
+        {
+            metal = UObject.Instantiate(baseLeather, baseLeather.transform.parent);
+            metal.transform.ClearChildren();
+            metal.transform.SetSiblingIndex(0);
+            metal.sprite = Fancy.Assets.GetSprite("RoleList_M");
+            metal.name = "DeckMetal";
+            metal.type = Image.Type.Sliced;
+            metal.pixelsPerUnitMultiplier = 2.5f;
 
-        //     paper = UObject.Instantiate(baseLeather, baseLeather.transform.parent);
-        //     paper.transform.ClearChildren();
-        //     paper.transform.SetSiblingIndex(1);
-        //     paper.sprite = Fancy.Assets.GetSprite("RoleList_P");
-        //     paper.name = "DeckPaper";
+            paper = UObject.Instantiate(baseLeather, baseLeather.transform.parent);
+            paper.transform.ClearChildren();
+            paper.transform.SetSiblingIndex(1);
+            paper.sprite = Fancy.Assets.GetSprite("RoleList_P");
+            paper.name = "DeckPaper";
+            paper.type = Image.Type.Sliced;
+            paper.pixelsPerUnitMultiplier = 2.5f;
 
-        //     baseLeather.sprite = Fancy.Assets.GetSprite("RoleList_W");
-        //     baseLeather.AddComponent<DummyBehaviour>();
-        // }
+            baseLeather.sprite = Fancy.Assets.GetSprite("RoleList_L");
+            baseLeather.AddComponent<DummyBehaviour>();
+        }
 
         baseLeather.SetImageColor(ColorType.Leather);
-        // metal.SetImageColor(ColorType.Metal);
-        // paper.SetImageColor(ColorType.Paper);
+        metal.SetImageColor(ColorType.Metal);
+        paper.SetImageColor(ColorType.Paper);
         __instance.transform.GetComponent<Image>("RolesIcon").SetImageColor(ColorType.Paper);
         __instance.transform.GetComponent<Image>("PlayersIcon").SetImageColor(ColorType.Wax);
+        __instance.transform.GetComponent<TextMeshProUGUI>("LobbyInstructionsText").SetGraphicColor(ColorType.Paper);
+        __instance.splatIcon.GetComponent<Image>().SetImageColor(ColorType.Wax);
 
         if (!Constants.EnableIcons())
             return;
@@ -901,37 +908,36 @@ public static class GameBrowserRoleDeckPatch
     public static void Postfix(GameBrowserRoleDeck __instance)
     {
         var baseLeather = __instance.transform.GetComponent<Image>("DeckView");
-        // Doesn't work either lmao
-        // Image metal;
-        // Image paper;
+        Image metal;
+        Image paper;
 
-        // if (baseLeather.GetComponent<DummyBehaviour>())
-        // {
-        //     metal = __instance.transform.GetComponent<Image>("DeckMetal");
-        //     paper = __instance.transform.GetComponent<Image>("DeckPaper");
-        // }
-        // else
-        // {
-        //     metal = UObject.Instantiate(baseLeather, baseLeather.transform.parent);
-        //     metal.GetComponent<ScrollRect>().Destroy();
-        //     metal.transform.ClearChildren();
-        //     metal.transform.SetSiblingIndex(0);
-        //     metal.sprite = Fancy.Assets.GetSprite("RoleList_M");
-        //     metal.name = "DeckMetal";
+        if (baseLeather.GetComponent<DummyBehaviour>())
+        {
+            metal = __instance.transform.GetComponent<Image>("DeckMetal");
+            paper = __instance.transform.GetComponent<Image>("DeckPaper");
+        }
+        else
+        {
+            metal = UObject.Instantiate(baseLeather, baseLeather.transform.parent);
+            metal.GetComponent<ScrollRect>().Destroy();
+            metal.transform.ClearChildren();
+            metal.transform.SetSiblingIndex(0);
+            metal.sprite = Fancy.Assets.GetSprite("RoleList_M");
+            metal.name = "DeckMetal";
 
-        //     paper = UObject.Instantiate(baseLeather, baseLeather.transform.parent);
-        //     paper.GetComponent<ScrollRect>().Destroy();
-        //     paper.transform.ClearChildren();
-        //     paper.transform.SetSiblingIndex(1);
-        //     paper.sprite = Fancy.Assets.GetSprite("RoleList_P");
-        //     paper.name = "DeckPaper";
+            paper = UObject.Instantiate(baseLeather, baseLeather.transform.parent);
+            paper.GetComponent<ScrollRect>().Destroy();
+            paper.transform.ClearChildren();
+            paper.transform.SetSiblingIndex(1);
+            paper.sprite = Fancy.Assets.GetSprite("RoleList_P");
+            paper.name = "DeckPaper";
 
-        //     baseLeather.sprite = Fancy.Assets.GetSprite("RoleList_W");
-        //     baseLeather.AddComponent<DummyBehaviour>();
-        // }
+            baseLeather.sprite = Fancy.Assets.GetSprite("RoleList_L");
+            baseLeather.AddComponent<DummyBehaviour>();
+        }
 
         baseLeather.SetImageColor(ColorType.Leather);
-        // metal.SetImageColor(ColorType.Metal);
-        // paper.SetImageColor(ColorType.Paper);
+        metal.SetImageColor(ColorType.Metal);
+        paper.SetImageColor(ColorType.Paper);
     }
 }

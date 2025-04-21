@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2945664936
+CRC: 2665184877
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: fed476cbba5dde993e9456b768599b54
+    Hash: 6007015d77d430afd65224ac4a7d0db1
   TypeTreeHash:
     serializedVersion: 2
     Hash: 89c7f6d629771a0fed8e491f2a4febe2
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: fed476cbba5dde993e9456b768599b54
+    Hash: 6007015d77d430afd65224ac4a7d0db1
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -142,7 +142,7 @@ Assets:
 - Assets/Assets/RoleList_Open_M.png
 - Assets/Assets/RoleList_P.png
 - Assets/Assets/PlayerList_Main_L.png
-- Assets/Assets/RoleList_W.png
+- Assets/Assets/RoleList_L.png
 - Assets/Assets/AbilitySlots_3.png
 - Assets/Assets/Swap.png
 - Assets/Assets/DropDown_ArrowDown.png
