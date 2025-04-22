@@ -682,7 +682,7 @@ public static class PatchRoleSelectionPanel
             foreach (var tab in __instance.tabInstances)
             {
                 tab.transform.GetComponent<Image>().SetImageColor(ColorType.Wood);
-                tab.transform.GetChild(0).GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Metal);
+                tab.transform.GetChild(0).GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Wood);
             }
 
             __instance.transform.GetChild(1).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
