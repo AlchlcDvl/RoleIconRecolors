@@ -908,8 +908,11 @@ public static class RoleDeckPanelControllerPatch
     }
 
     [HarmonyPatch(nameof(RoleDeckPanelController.AdjustSizeBasedOnRolesAdded)), HarmonyPostfix]
-    public static void AdjustSizeBasedOnRolesAddedPostfix(RoleDeckPanelController __instance) =>
-        MetalTransform.offsetMax = PaperTransform.offsetMax = __instance.deckView.GetComponent<RectTransform>().offsetMax;
+    public static void AdjustSizeBasedOnRolesAddedPostfix(RoleDeckPanelController __instance)
+    {
+        if (MetalTransform && PaperTransform)
+            MetalTransform.offsetMax = PaperTransform.offsetMax = __instance.deckView.GetComponent<RectTransform>().offsetMax;
+    }
 }
 
 [HarmonyPatch(typeof(GameBrowserRoleDeck), nameof(GameBrowserRoleDeck.Start))]
