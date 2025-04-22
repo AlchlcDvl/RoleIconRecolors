@@ -827,12 +827,16 @@ public static class Tos2GameBrowserControllerPatch
     }
 }
 
-[HarmonyPatch(typeof(RoleDeckPanelController), nameof(RoleDeckPanelController.Start))]
+[HarmonyPatch(typeof(RoleDeckPanelController))]
 public static class RoleDeckPanelControllerPatch
 {
-    public static void Postfix(RoleDeckPanelController __instance)
+    private static RectTransform MetalTransform;
+    private static RectTransform PaperTransform;
+
+    [HarmonyPatch(nameof(RoleDeckPanelController.Start)), HarmonyPostfix]
+    public static void StartPostfix(RoleDeckPanelController __instance)
     {
-        var baseLeather = __instance.transform.GetComponent<Image>("DeckView");
+        var baseLeather = __instance.deckView.GetComponent<Image>();
         baseLeather.type = Image.Type.Sliced;
         baseLeather.pixelsPerUnitMultiplier = 2.5f;
         Image metal;
@@ -852,6 +856,7 @@ public static class RoleDeckPanelControllerPatch
             metal.name = "DeckMetal";
             metal.type = Image.Type.Sliced;
             metal.pixelsPerUnitMultiplier = 2.5f;
+            MetalTransform = metal.GetComponent<RectTransform>();
 
             paper = UObject.Instantiate(baseLeather, baseLeather.transform.parent);
             paper.transform.ClearChildren();
@@ -860,6 +865,7 @@ public static class RoleDeckPanelControllerPatch
             paper.name = "DeckPaper";
             paper.type = Image.Type.Sliced;
             paper.pixelsPerUnitMultiplier = 2.5f;
+            PaperTransform = paper.GetComponent<RectTransform>();
 
             baseLeather.sprite = Fancy.Assets.GetSprite("RoleList_L");
             baseLeather.AddComponent<DummyBehaviour>();
@@ -900,6 +906,10 @@ public static class RoleDeckPanelControllerPatch
         if (sprite.IsValid() && any)
             any.sprite = sprite;
     }
+
+    [HarmonyPatch(nameof(RoleDeckPanelController.AdjustSizeBasedOnRolesAdded)), HarmonyPostfix]
+    public static void AdjustSizeBasedOnRolesAddedPostfix(RoleDeckPanelController __instance) =>
+        MetalTransform.offsetMax = PaperTransform.offsetMax = __instance.deckView.GetComponent<RectTransform>().offsetMax;
 }
 
 [HarmonyPatch(typeof(GameBrowserRoleDeck), nameof(GameBrowserRoleDeck.Start))]

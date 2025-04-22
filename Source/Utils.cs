@@ -621,7 +621,15 @@ public static class Utils
 
             foreach (var (type, mat) in Constants.AllMaterials[notGuide])
             {
-                mat.SetColor(Color1, Constants.GetUIThemeColor(type, faction).ShadeColor(type, flip));
+                var color = Constants.GetUIThemeColor(type, faction).ShadeColor(type, flip);
+
+                if (color.a == 0)
+                {
+                    mat.SetFloat(Vanilla, 1);
+                    continue;
+                }
+
+                mat.SetColor(Color1, color);
                 mat.SetFloat(Brightness, brightness);
                 mat.SetFloat(GrayscaleAmount, effectiveness);
                 mat.SetFloat(Vanilla, 0);

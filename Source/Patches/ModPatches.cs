@@ -406,7 +406,7 @@ public static class FixMyFaction
     {
         try
         {
-            __result = Service.Game.Sim.simulation.myIdentity.Data.faction;
+            __result = Pepper.IsLobbyPhase() ? FactionType.NONE : Service.Game.Sim.simulation.myIdentity.Data.faction;
         }
         catch
         {
