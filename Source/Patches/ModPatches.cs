@@ -406,6 +406,7 @@ public static class FixMyFaction
     {
         try
         {
+            if (Leo.IsHomeScene())
             __result = Pepper.IsLobbyPhase() ? FactionType.NONE : Service.Game.Sim.simulation.myIdentity.Data.faction;
         }
         catch

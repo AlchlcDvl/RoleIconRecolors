@@ -3,6 +3,7 @@ using Game.Interface.Customization;
 using Home.Common.Dialog;
 using Home.Common.Settings;
 using Home.Interface;
+using Home.Shared;
 using Mentions.UI;
 
 namespace FancyUI.Patches;
@@ -952,5 +953,18 @@ public static class GameBrowserRoleDeckPatch
         baseLeather.SetImageColor(ColorType.Leather);
         metal.SetImageColor(ColorType.Metal);
         paper.SetImageColor(ColorType.Paper);
+    }
+}
+
+[HarmonyPatch(typeof(NavigationController), nameof(NavigationController.ShowScene))]
+public static class NavigationControllerPatch
+{
+    public static void Postfix()
+    {
+        try
+        {
+            Utils.UpdateMaterials();
+        }
+        catch { }
     }
 }

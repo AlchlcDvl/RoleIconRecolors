@@ -62,6 +62,8 @@ public static class Constants
         {
             if (SettingsAndTestingUI.Instance)
                 faction = GetSelectedFaction();
+            else if (Pepper.IsNonePhase() || Pepper.IsLobbyOrPickNamesPhase())
+                faction = FactionType.NONE;
             else if (Leo.IsGameScene())
                 faction = Pepper.GetMyFaction();
         }
