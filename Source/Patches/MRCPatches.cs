@@ -1,6 +1,5 @@
 using Home.Shared;
 using Server.Shared.Extensions;
-using BetterTOS2;
 
 namespace FancyUI.Patches
 
@@ -11,22 +10,25 @@ namespace FancyUI.Patches
 */
 
 {
-    [HarmonyPatch(typeof(ClientRoleExtensions), nameof(ClientRoleExtensions.ToColorizedDisplayString), typeof(Role), typeof(FactionType))]
-    public static class ColorizeDisplayStringPatch
+[HarmonyPatch(typeof(ClientRoleExtensions), nameof(ClientRoleExtensions.ToColorizedDisplayString), typeof(Role), typeof(FactionType))]
+public static class ColorizeDisplayStringPatch
+{
+    [HarmonyPostfix]
+    public static void Result(ref string __result, ref Role role, ref FactionType factionType)
     {
-        [HarmonyPostfix]
-        public static void Result(ref string __result, ref Role role, ref FactionType factionType)
-        {
-            if (!Fancy.FactionalRoleNames.Value) return;
+        if (!Fancy.FactionalRoleNames.Value) return;
 
-            if (RoleExtensions.IsResolved(role) || role is Role.FAMINE or Role.DEATH or Role.PESTILENCE or Role.WAR)
+        if (RoleExtensions.IsResolved(role) || role is Role.FAMINE or Role.DEATH or Role.PESTILENCE or Role.WAR)
+        {
+            var roleName = Utils.ToRoleFactionDisplayString(role, factionType);
+            
+            try
             {
-                var roleName = Utils.ToRoleFactionDisplayString(role, factionType);
-                var gradient = factionType.GetGradient();
+                var gradient = BetterTOS2.GetGradients.GetGradient(factionType); 
 
                 if (gradient != null)
                 {
-                    __result = AddNewConversionTags.ApplyGradient(roleName, gradient.Evaluate(0f), gradient.Evaluate(1f));
+                    __result = BetterTOS2.AddNewConversionTags.ApplyGradient(roleName, gradient.Evaluate(0f), gradient.Evaluate(1f));
                 }
                 else
                 {
@@ -34,26 +36,40 @@ namespace FancyUI.Patches
                     __result = $"<color={color}>{roleName}</color>";
                 }
             }
+            catch
+            {
+                var color = ClientRoleExtensions.GetFactionColor(factionType);
+                __result = $"<color={color}>{roleName}</color>";
+            }
         }
     }
+}
 
 [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.UpdateTitle))]
 public static class PatchRoleCard
 {
     public static void Postfix(RoleCardPanel __instance)
     {
-        string roleName;
+        string roleName = string.Empty;
 
         if (Fancy.FactionalRoleNames.Value)
         {
-            var gradient = Pepper.GetMyFaction().GetGradient();
-            roleName = Utils.ToRoleFactionDisplayString(Pepper.GetMyRole(), Pepper.GetMyFaction());
-
-            if (gradient != null)
+            try
             {
-                roleName = AddNewConversionTags.ApplyGradient(roleName, gradient.Evaluate(0f), gradient.Evaluate(1f));
+                var gradient = BetterTOS2.GetGradients.GetGradient(Pepper.GetMyFaction());
+                roleName = Utils.ToRoleFactionDisplayString(Pepper.GetMyRole(), Pepper.GetMyFaction());
+
+                if (gradient != null)
+                {
+                    roleName = BetterTOS2.AddNewConversionTags.ApplyGradient(roleName, gradient.Evaluate(0f), gradient.Evaluate(1f));
+                }
+                else
+                {
+                    var color = Pepper.GetMyFaction().GetFactionColor();
+                    roleName = $"<color={color}>{roleName}</color>";
+                }
             }
-            else
+            catch
             {
                 var color = Pepper.GetMyFaction().GetFactionColor();
                 roleName = $"<color={color}>{roleName}</color>";
@@ -73,43 +89,50 @@ public static class PatchRoleCard
         public static void Postfix(ref Role role, RoleCardPopupPanel __instance) => __instance.roleNameText.text = ClientRoleExtensions.ToColorizedDisplayString(role);
     }
 
-    [HarmonyPatch(typeof(TosAbilityPanelListItem), nameof(TosAbilityPanelListItem.SetKnownRole))]
-    public static class PlayerListPatch
+[HarmonyPatch(typeof(TosAbilityPanelListItem), nameof(TosAbilityPanelListItem.SetKnownRole))]
+public static class PlayerListPatch
+{
+    public static bool Prefix(ref Role role, ref FactionType faction, TosAbilityPanelListItem __instance)
     {
-        public static bool Prefix(ref Role role, ref FactionType faction, TosAbilityPanelListItem __instance)
+        __instance.playerRole = role;
+
+        if (role is not (0 or (Role)byte.MaxValue))
         {
-            __instance.playerRole = role;
+            string roleName;
 
-            if (role is not (0 or (Role)byte.MaxValue))
+            if (Fancy.FactionalRoleNames.Value)
             {
-                string roleName;
-
-                if (Fancy.FactionalRoleNames.Value)
+                try
                 {
-                    var gradient = faction.GetGradient();
+                    var gradient = BetterTOS2.GetGradients.GetGradient(faction);
                     roleName = Utils.ToRoleFactionDisplayString(role, faction);
 
                     if (gradient != null)
                     {
-                        roleName = AddNewConversionTags.ApplyGradient($"({roleName})", gradient.Evaluate(0f), gradient.Evaluate(1f));
+                        roleName = BetterTOS2.AddNewConversionTags.ApplyGradient($"({roleName})", gradient.Evaluate(0f), gradient.Evaluate(1f));
                     }
                     else
                     {
                         var color = faction.GetFactionColor();
                         roleName = $"<color={color}>({roleName})</color>";
                     }
-                    roleName = $"{roleName}";
                 }
-                else
+                catch
                 {
-                    roleName = $"({role.ToDisplayString()})";
+                    var color = faction.GetFactionColor();
+                    roleName = $"<color={color}>({role.ToDisplayString()})</color>";
                 }
-
-                __instance.playerRoleText.text = roleName;
-                __instance.playerRoleText.gameObject.SetActive(true);
+            }
+            else
+            {
+                roleName = $"({role.ToDisplayString()})";
             }
 
-            return false;
+            __instance.playerRoleText.text = roleName;
+            __instance.playerRoleText.gameObject.SetActive(true);
         }
+
+        return false;
     }
+}
 }
