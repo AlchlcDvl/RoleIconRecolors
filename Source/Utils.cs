@@ -610,7 +610,7 @@ public static class Utils
         graphic.color = color2;
     }
 
-    public static void UpdateMaterials(bool notGuide = true, FactionType? faction = null, bool flip = false)
+    public static void UpdateMaterials(bool notGuide = true, FactionType? faction = null, bool flip = false, bool skipFactionCheck = false)
     {
         if (Constants.GetMainUIThemeType() == UITheme.Vanilla)
             Constants.AllMaterials[notGuide].Values.ForEach(x => x.SetFloat(Vanilla, 1));
@@ -621,9 +621,9 @@ public static class Utils
 
             foreach (var (type, mat) in Constants.AllMaterials[notGuide])
             {
-                var color = Constants.GetUIThemeColor(type, faction).ShadeColor(type, flip);
+                var color = Constants.GetUIThemeColor(type, faction, skipFactionCheck).ShadeColor(type, flip);
 
-                if (color.a == 0)
+                if (color == Color.clear)
                 {
                     mat.SetFloat(Vanilla, 1);
                     continue;
@@ -639,6 +639,9 @@ public static class Utils
 
     private static Color ShadeColor(this Color color, ColorType type, bool flip = false, bool isImage = true)
     {
+        if (color == Color.clear)
+            return color;
+
         var shade = Fancy.ColorShadeMap[type].Value;
 
         if (shade == 0f && !isImage)

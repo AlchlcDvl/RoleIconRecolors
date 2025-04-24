@@ -38,10 +38,12 @@ public class FancyUI : UIController
         close.GetComponent<Image>().SetImageColor(ColorType.Metal);
 
         transform.GetComponent<Image>("Fill").SetImageColor(ColorType.Metal);
+        transform.GetComponent<Image>("Wax").SetImageColor(ColorType.Wax);
 
         SetupFonts(transform);
-        Utils.UpdateMaterials();
     }
+
+    public void Start() => Utils.UpdateMaterials(skipFactionCheck: true);
 
     public void OnDestroy()
     {
@@ -49,7 +51,7 @@ public class FancyUI : UIController
         LoadingUI.Instance?.gameObject?.Destroy();
         DownloaderUI.Instance?.gameObject?.Destroy();
         SettingsAndTestingUI.Instance?.gameObject?.Destroy();
-        Utils.UpdateMaterials();
+        Utils.UpdateMaterials(skipFactionCheck: true);
     }
 
     public static void SetupFonts(Transform trans)
@@ -91,6 +93,7 @@ public class FancyUI : UIController
 
     private void OpenSettings()
     {
+        Utils.UpdateMaterials();
         Page = PackType.Testing;
 
         if (SettingsAndTestingUI.Instance)

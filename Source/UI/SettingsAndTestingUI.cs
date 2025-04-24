@@ -7,7 +7,7 @@ public class SettingsAndTestingUI : UIController
     private CustomAnimator Animator { get; set; }
     private CustomAnimator Flame { get; set; }
 
-    private RoleCardIcon IconTemplate { get; set; }
+    // private RoleCardIcon IconTemplate { get; set; }
 
     private SliderSetting SliderTemplate { get; set; }
     private ColorSetting ColorTemplate { get; set; }
@@ -20,11 +20,11 @@ public class SettingsAndTestingUI : UIController
 
     private Image ToggleImage { get; set; }
     private Image SlotCounter { get; set; }
-    private Image RoleIcon { get; set; }
-    private Image Attack { get; set; }
-    private Image Defense { get; set; }
-    private Image SpecialButtonImage { get; set; }
-    private Image EffectButtonImage { get; set; }
+    // private Image RoleIcon { get; set; }
+    // private Image Attack { get; set; }
+    // private Image Defense { get; set; }
+    // private Image SpecialButtonImage { get; set; }
+    // private Image EffectButtonImage { get; set; }
 
     private readonly List<Image> Leathers = [];
     private readonly List<Image> Papers = [];
@@ -35,7 +35,7 @@ public class SettingsAndTestingUI : UIController
 
     private readonly Dictionary<DisplayType, GameObject> Displays = [];
 
-    private readonly List<RoleCardIcon> Icons = [];
+    // private readonly List<RoleCardIcon> Icons = [];
     public readonly List<Setting> Settings = [];
 
     private bool isBTOS2;
@@ -60,14 +60,14 @@ public class SettingsAndTestingUI : UIController
         }
     }
 
-    private static readonly Vector3 SpecialOrEffectButtonPosition = new(0f, -20f, 0f);
-    private static readonly Vector3[][] ButtonPositions =
-    [
-        [ new(0f, -182f, 0f) ],
-        [ new(-24f, -190f, 0f), new(24f, -190f, 0f) ],
-        [ new(-45f, -190f, 0f), new(0f, -188f, 0f), new(45f, -190f, 0f) ],
-        [ new(-72f, -180f, 0f), new(-24f, -190f, 0f), new(-24f, -190f, 0f), new(72f, -180f, 0f) ]
-    ];
+    // private static readonly Vector3 SpecialOrEffectButtonPosition = new(0f, -20f, 0f);
+    // private static readonly Vector3[][] ButtonPositions =
+    // [
+    //     [ new(0f, -182f, 0f) ],
+    //     [ new(-24f, -190f, 0f), new(24f, -190f, 0f) ],
+    //     [ new(-45f, -190f, 0f), new(0f, -188f, 0f), new(45f, -190f, 0f) ],
+    //     [ new(-72f, -180f, 0f), new(-24f, -190f, 0f), new(-24f, -190f, 0f), new(72f, -180f, 0f) ]
+    // ];
 
     private const string DefaultRoleText = "<sprite=\"%mod%RoleIcons (%type%)\" name=\"Role%roleInt%\"><b>%roleName%</b>";
     private const string DefaultNameText = "<sprite=\"PlayerNumbers\" name=\"PlayerNumbers_%num%\"><b>Giles Corey</b>";
@@ -98,7 +98,7 @@ public class SettingsAndTestingUI : UIController
         Displays[DisplayType.Graveyard] = graveyard.gameObject;
         Displays[DisplayType.SpecialAbilityPopup] = specialAbilityPopup.gameObject;
 
-        IconTemplate = roleCard.EnsureComponent<RoleCardIcon>("ButtonTemplate");
+        // IconTemplate = roleCard.EnsureComponent<RoleCardIcon>("ButtonTemplate");
 
         Flame = roleCard.EnsureComponent<CustomAnimator>("Fire")!;
         Flame.SetAnim([.. FancyAssetManager.Flame.Frames.Select(x => x.RenderedSprite)], 1f);
@@ -107,9 +107,9 @@ public class SettingsAndTestingUI : UIController
         NameText = transform.GetComponent<TextMeshProUGUI>("NameText");
 
         SlotCounter = roleCard.GetComponent<Image>("SlotCounter");
-        RoleIcon = roleCard.GetComponent<Image>("RoleIcon");
-        Attack = roleCard.GetComponent<Image>("Attack");
-        Defense = roleCard.GetComponent<Image>("Defense");
+        // RoleIcon = roleCard.GetComponent<Image>("RoleIcon");
+        // Attack = roleCard.GetComponent<Image>("Attack");
+        // Defense = roleCard.GetComponent<Image>("Defense");
 
         SliderTemplate = transform.EnsureComponent<SliderSetting>("SliderTemplate");
         ColorTemplate = transform.EnsureComponent<ColorSetting>("ColorTemplate");
@@ -166,6 +166,7 @@ public class SettingsAndTestingUI : UIController
 
         Waxes.Add(playerList.GetComponent<Image>("Tab"));
         Waxes.Add(chat.GetComponent<Image>("Wax"));
+        Waxes.Add(transform.GetComponent<Image>("Wax"));
 
         Papers.Add(playerList.GetComponent<Image>("Paper"));
         Papers.Add(roleDeck.GetComponent<Image>("Paper"));
@@ -238,16 +239,13 @@ public class SettingsAndTestingUI : UIController
         Fires.ForEach(x => x.SetImageColor(ColorType.Fire));
     }
 
-    public void Start() => Refresh();
-
-    public void OnEnable() => Refresh();
-
     public void OnDestroy() => Instance = null;
 
     public void GoBack()
     {
         gameObject.SetActive(false);
         FancyUI.Instance.gameObject.SetActive(true);
+        Utils.UpdateMaterials(skipFactionCheck: true);
     }
 
     public void Refresh()
@@ -258,7 +256,7 @@ public class SettingsAndTestingUI : UIController
         RoleText.SetText(DefaultRoleText.Replace("%type%", $"{Utils.FactionName(Constants.GetSelectedFaction(), IsBTOS2 ? ModType.BTOS2 : ModType.Vanilla)}").Replace("%mod%", IsBTOS2 ? "BTOS" :
             "").Replace("%roleName%", "Admirer").Replace("%roleInt%", "1"));
         Displays.ForEach((x, y) => y.SetActive(Fancy.SelectDisplay.Value == x));
-        Icons.ForEach(x => x.UpdateIcon(Fancy.SelectTestingRole.Value));
+        // Icons.ForEach(x => x.UpdateIcon(Fancy.SelectTestingRole.Value));
         ToggleImage.sprite = Fancy.Assets.GetSprite($"{(IsBTOS2 ? "B" : "")}ToS2Icon");
 
         foreach (var setting in Settings)

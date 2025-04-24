@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2665184877
+CRC: 406656651
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 6007015d77d430afd65224ac4a7d0db1
+    Hash: 3ef0d903b109897a6fd82a45dd157014
   TypeTreeHash:
     serializedVersion: 2
     Hash: 89c7f6d629771a0fed8e491f2a4febe2
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 6007015d77d430afd65224ac4a7d0db1
+    Hash: 3ef0d903b109897a6fd82a45dd157014
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -165,6 +165,7 @@ Assets:
 - Assets/Assets/RoleCard_Main_2.png
 - Assets/Assets/ClosedChest.png
 - Assets/Assets/Dropdown_BG.png
+- Assets/Assets/Background_W.png
 - Assets/Assets/Frame_9Slice.png
 - Assets/Assets/Chat_Bottom.png
 - Assets/Assets/Chat_Stamp.png

@@ -956,14 +956,14 @@ public static class GameBrowserRoleDeckPatch
     }
 }
 
-[HarmonyPatch(typeof(NavigationController), nameof(NavigationController.ShowScene))]
+[HarmonyPatch(typeof(NavigationController), nameof(NavigationController.ShowSceneWithMapSelection))]
 public static class NavigationControllerPatch
 {
-    public static void Postfix()
+    public static void Postfix(string baseSceneName)
     {
         try
         {
-            Utils.UpdateMaterials();
+            Utils.UpdateMaterials(skipFactionCheck: baseSceneName is not (SceneNames.GAME or SceneNames.GAME_BASE));
         }
         catch { }
     }

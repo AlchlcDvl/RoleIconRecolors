@@ -92,6 +92,7 @@ public class DownloaderUI : UIController
         confirm.GetComponent<Image>().SetImageColor(ColorType.Metal);
 
         transform.GetComponent<Image>("Fill").SetImageColor(ColorType.Metal);
+        transform.GetComponent<Image>("Wax").SetImageColor(ColorType.Wax);
 
         PackTemplate.SetActive(false);
 

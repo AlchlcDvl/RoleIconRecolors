@@ -46,43 +46,51 @@ public static class Constants
 
     public static bool ShowFactionalSettings() => GetMainUIThemeType() == UITheme.Faction;
 
-    public static Color GetUIThemeColor(ColorType type, FactionType? faction = null) => GetMainUIThemeType() switch
+    public static Color GetUIThemeColor(ColorType type, FactionType? faction = null, bool skipFactionCheck = false) => GetMainUIThemeType() switch
     {
-        UITheme.Faction => GetThemeColor(type, faction),
+        UITheme.Faction when !skipFactionCheck => GetThemeColor(type, faction),
         UITheme.Custom => Fancy.CustomUIColorsMap[type].Value.ToColor(),
+        _ when skipFactionCheck => Fancy.CustomUIColorsMap[type].Value.ToColor(),
         _ => Color.clear
     };
 
     private static Color GetThemeColor(ColorType color, FactionType? faction = null)
     {
-        if (!Fancy.ColorShadeToggleMap[color].Value)
-            return Fancy.CustomUIColorsMap.TryGetValue(color, out var custom) ? custom.Value.ToColor() : Color.clear;
-
-        if (!faction.HasValue)
+        try
         {
-            if (SettingsAndTestingUI.Instance)
-                faction = GetSelectedFaction();
-            else if (Pepper.IsNonePhase() || Pepper.IsLobbyOrPickNamesPhase())
-                faction = FactionType.NONE;
-            else if (Leo.IsGameScene())
-                faction = Pepper.GetMyFaction();
+            if (!Fancy.ColorShadeToggleMap[color].Value)
+                return Fancy.CustomUIColorsMap.TryGetValue(color, out var custom) ? custom.Value.ToColor() : Color.clear;
+
+            if (!faction.HasValue)
+            {
+                if (SettingsAndTestingUI.Instance)
+                    faction = GetSelectedFaction();
+                else if (Pepper.IsNonePhase() || Pepper.IsLobbyOrPickNamesPhase())
+                    faction = FactionType.NONE;
+                else if (Leo.IsGameScene())
+                    faction = Pepper.GetMyFaction();
+            }
+
+            var shouldUseCustom = faction is null or FactionType.NONE;
+            var colorString = "";
+
+            if (!shouldUseCustom)
+            {
+                if (Fancy.FactionToColorMap.TryGetValue(faction.Value, out var dict) && dict.TryGetValue(color, out var opt))
+                    colorString = opt.Value;
+                else
+                    shouldUseCustom = true;
+            }
+
+            if (shouldUseCustom)
+                colorString = Fancy.CustomUIColorsMap.TryGetValue(color, out var opt) ? opt.Value : "#000000";
+
+            return colorString.ToColor();
         }
-
-        var shouldUseCustom = faction is null or FactionType.NONE;
-        var colorString = "";
-
-        if (!shouldUseCustom)
+        catch
         {
-            if (Fancy.FactionToColorMap.TryGetValue(faction.Value, out var dict) && dict.TryGetValue(color, out var opt))
-                colorString = opt.Value;
-            else
-                shouldUseCustom = true;
+            return (Fancy.CustomUIColorsMap.TryGetValue(color, out var opt) ? opt.Value : "#000000").ToColor();
         }
-
-        if (shouldUseCustom)
-            colorString = Fancy.CustomUIColorsMap.TryGetValue(color, out var opt) ? opt.Value : "#000000";
-
-        return colorString.ToColor();
     }
 
     public static float GeneralBrightness() => Fancy.GeneralBrightness.Value * 5f / 100f;
