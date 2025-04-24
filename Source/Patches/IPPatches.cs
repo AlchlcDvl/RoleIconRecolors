@@ -657,19 +657,29 @@ public static class TosCharacterNametagPatch
 
             if (role != Role.STONED && role != Role.HIDDEN)
             {
-                var gradient = BetterTOS2.GetGradients.GetGradient(factionType);
-
-                if (gradient != null)
+                try
                 {
-                    nameText = BetterTOS2.AddNewConversionTags.ApplyGradient(theName, gradient.Evaluate(0f), gradient.Evaluate(1f));
-                    roleText = BetterTOS2.AddNewConversionTags.ApplyGradient($"({roleName})", gradient.Evaluate(0f), gradient.Evaluate(1f));
+                    var gradient = BetterTOS2.GetGradients.GetGradient(factionType);
+
+                    if (gradient != null)
+                    {
+                        nameText = BetterTOS2.AddNewConversionTags.ApplyGradient(theName, gradient.Evaluate(0f), gradient.Evaluate(1f));
+                        roleText = BetterTOS2.AddNewConversionTags.ApplyGradient($"({roleName})", gradient.Evaluate(0f), gradient.Evaluate(1f));
+                    }
+                    else
+                    {
+                        var color = factionType.GetFactionColor();
+                        nameText = $"<color={color}>{theName}</color>";
+                        roleText = $"<color={color}>({roleName})</color>";
+                    }
                 }
-                else
+                catch
                 {
                     var color = factionType.GetFactionColor();
                     nameText = $"<color={color}>{theName}</color>";
                     roleText = $"<color={color}>({roleName})</color>";
                 }
+
             }
 
             __result = $"<size=36><sprite=\"RoleIcons\" name=\"Role{(int)role}\"></size>\n<size=24>{nameText}</size>\n<size=18>{roleText}</size>";
