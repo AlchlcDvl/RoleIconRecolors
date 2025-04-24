@@ -741,4 +741,45 @@ public static class Utils
         strength = Mathf.Clamp(strength, -1f, 1f);
         return Color.Lerp(color, strength < 0 ? Color.white : Color.black, Mathf.Abs(strength));
     }
+
+    public static string ToRoleFactionDisplayString(Role role, FactionType faction)
+    {
+        if (role is Role.STONED or Role.HIDDEN or Role.UNKNOWN) 
+            faction = FactionType.NONE;
+
+        var factionName = faction switch
+        {
+            FactionType.TOWN => "TOWN",
+            FactionType.COVEN => "COVEN",
+            FactionType.APOCALYPSE => "APOCALYPSE",
+            FactionType.SERIALKILLER => "SERIALKILLER",
+            FactionType.ARSONIST => "ARSONIST",
+            FactionType.WEREWOLF => "WEREWOLF",
+            FactionType.SHROUD => "SHROUD",
+            FactionType.EXECUTIONER => "EXECUTIONER",
+            FactionType.JESTER => "JESTER",
+            FactionType.PIRATE => "PIRATE",
+            FactionType.DOOMSAYER => "DOOMSAYER",
+            FactionType.VAMPIRE => "VAMPIRE",
+            FactionType.CURSED_SOUL => "CURSEDSOUL",
+            (FactionType)33 => "JACKAL",
+            (FactionType)34 => "FROGS",
+            (FactionType)35 => "LIONS",
+            (FactionType)36 => "HAWKS",
+            (FactionType)38 => "JUDGE",
+            (FactionType)39 => "AUDITOR",
+            (FactionType)40 => "INQUISITOR",
+            (FactionType)41 => "STARSPAWN",
+            (FactionType)42 => "EGOTIST",
+            (FactionType)43 => "PANDORA",
+            (FactionType)44 => "COMPLIANCE",
+            _ => "NONE",
+        };
+
+        if (Constants.IsBTOS2())
+            factionName += "_BTOS";
+
+        return Service.Home.LocalizationService.GetLocalizedString($"FANCY_{factionName}_ROLENAME_{(int)role}");
+    }
+
 }

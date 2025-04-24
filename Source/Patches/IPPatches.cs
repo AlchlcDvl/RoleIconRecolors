@@ -11,6 +11,7 @@ using Server.Shared.Extensions;
 using Home.Shared;
 using System.Text.RegularExpressions;
 using AbilityType = Game.Interface.TosAbilityPanelListItem.OverrideAbilityType;
+using BetterTOS2;
 
 namespace FancyUI.Patches;
 
@@ -647,8 +648,34 @@ public static class GetVipRoleIconAndNameInlineStringPatch
 [HarmonyPatch(typeof(TosCharacterNametag), nameof(TosCharacterNametag.ColouredName))]
 public static class TosCharacterNametagPatch
 {
-    public static void Postfix(FactionType factionType, ref string __result)
+    public static void Postfix(FactionType factionType, ref string __result, ref string theName, ref Role role)
     {
+        if (Fancy.FactionalRoleNames.Value)
+        {
+            var roleName = Utils.ToRoleFactionDisplayString(role, factionType);
+            var nameText = theName;
+            var roleText = $"({roleName})";
+
+            if (role != Role.STONED && role != Role.HIDDEN)
+            {
+                var gradient = factionType.GetGradient();
+
+                if (gradient != null)
+                {
+                    nameText = AddNewConversionTags.ApplyGradient(theName, gradient.Evaluate(0f), gradient.Evaluate(1f));
+                    roleText = AddNewConversionTags.ApplyGradient($"({roleName})", gradient.Evaluate(0f), gradient.Evaluate(1f));
+                }
+                else
+                {
+                    var color = factionType.GetFactionColor();
+                    nameText = $"<color={color}>{theName}</color>";
+                    roleText = $"<color={color}>({roleName})</color>";
+                }
+            }
+
+            __result = $"<size=36><sprite=\"RoleIcons\" name=\"Role{(int)role}\"></size>\n<size=24>{nameText}</size>\n<size=18>{roleText}</size>";
+        }
+
         if (Constants.EnableIcons())
             __result = __result.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(factionType, false)})\"");
     }
