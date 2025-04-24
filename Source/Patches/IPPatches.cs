@@ -11,7 +11,6 @@ using Server.Shared.Extensions;
 using Home.Shared;
 using System.Text.RegularExpressions;
 using AbilityType = Game.Interface.TosAbilityPanelListItem.OverrideAbilityType;
-using BetterTOS2;
 
 namespace FancyUI.Patches;
 
@@ -658,12 +657,12 @@ public static class TosCharacterNametagPatch
 
             if (role != Role.STONED && role != Role.HIDDEN)
             {
-                var gradient = factionType.GetGradient();
+                var gradient = BetterTOS2.GetGradients.GetGradient(factionType);
 
                 if (gradient != null)
                 {
-                    nameText = AddNewConversionTags.ApplyGradient(theName, gradient.Evaluate(0f), gradient.Evaluate(1f));
-                    roleText = AddNewConversionTags.ApplyGradient($"({roleName})", gradient.Evaluate(0f), gradient.Evaluate(1f));
+                    nameText = BetterTOS2.AddNewConversionTags.ApplyGradient(theName, gradient.Evaluate(0f), gradient.Evaluate(1f));
+                    roleText = BetterTOS2.AddNewConversionTags.ApplyGradient($"({roleName})", gradient.Evaluate(0f), gradient.Evaluate(1f));
                 }
                 else
                 {
