@@ -657,7 +657,7 @@ public static class TosCharacterNametagPatch
 
             if (role != Role.STONED && role != Role.HIDDEN)
             {
-                try
+                if (Constants.IsBTOS2())
                 {
                     var gradient = BetterTOS2.GetGradients.GetGradient(factionType);
 
@@ -673,7 +673,7 @@ public static class TosCharacterNametagPatch
                         roleText = $"<color={color}>({roleName})</color>";
                     }
                 }
-                catch
+                else
                 {
                     var color = factionType.GetFactionColor();
                     nameText = $"<color={color}>{theName}</color>";

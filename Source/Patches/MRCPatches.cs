@@ -22,7 +22,7 @@ public static class ColorizeDisplayStringPatch
         {
             var roleName = Utils.ToRoleFactionDisplayString(role, factionType);
             
-            try
+            if (Constants.IsBTOS2())
             {
                 var gradient = BetterTOS2.GetGradients.GetGradient(factionType); 
 
@@ -36,7 +36,7 @@ public static class ColorizeDisplayStringPatch
                     __result = $"<color={color}>{roleName}</color>";
                 }
             }
-            catch
+            else
             {
                 var color = ClientRoleExtensions.GetFactionColor(factionType);
                 __result = $"<color={color}>{roleName}</color>";
@@ -54,7 +54,7 @@ public static class PatchRoleCard
 
         if (Fancy.FactionalRoleNames.Value)
         {
-            try
+            if (Constants.IsBTOS2())
             {
                 var gradient = BetterTOS2.GetGradients.GetGradient(Pepper.GetMyFaction());
                 roleName = Utils.ToRoleFactionDisplayString(Pepper.GetMyRole(), Pepper.GetMyFaction());
@@ -69,7 +69,7 @@ public static class PatchRoleCard
                     roleName = $"<color={color}>{roleName}</color>";
                 }
             }
-            catch
+            else
             {
                 var color = Pepper.GetMyFaction().GetFactionColor();
                 roleName = $"<color={color}>{roleName}</color>";
@@ -102,7 +102,7 @@ public static class PlayerListPatch
 
             if (Fancy.FactionalRoleNames.Value)
             {
-                try
+                if (Constants.IsBTOS2())
                 {
                     var gradient = BetterTOS2.GetGradients.GetGradient(faction);
                     roleName = Utils.ToRoleFactionDisplayString(role, faction);
@@ -117,7 +117,7 @@ public static class PlayerListPatch
                         roleName = $"<color={color}>({roleName})</color>";
                     }
                 }
-                catch
+                else
                 {
                     var color = faction.GetFactionColor();
                     roleName = $"<color={color}>({role.ToDisplayString()})</color>";
