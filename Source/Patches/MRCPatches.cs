@@ -87,8 +87,8 @@ namespace FancyUI.Patches
         {
             if (Fancy.FactionalRoleNames.Value)
             {
-                var nameText = $"({Utils.GetColorizedText(theName, factionType)})";
-                var roleText = $"({Utils.GetColorizedRoleName(role, factionType, true)})";
+                var nameText = Utils.GetColorizedText(theName, factionType);
+                var roleText = Utils.GetColorizedRoleName(role, factionType, true);
 
                 if (role != Role.STONED && role != Role.HIDDEN)
                 {
