@@ -267,7 +267,21 @@ public static class SpecialAbilityPopupGenericListItemPatch
             factionType = tuple.Item2;
         }
 
-        var text = player_name + " " + (role == Role.NONE ? "" : role.ToColorizedFactionStringParentheses(factionType));
+        string roleText = "";
+
+        if (role != Role.NONE)
+        {
+            if (Fancy.FactionalRoleNames.Value)
+            {
+                roleText = Utils.GetColorizedRoleName(role, factionType, true);
+            }
+            else
+            {
+                roleText = role.ToColorizedFactionStringParentheses(factionType);
+            }
+        }
+
+        var text = player_name + " " + roleText;
         __instance.playerName.SetText(text);
         __instance.playerHeadshot.sprite = headshot;
         __instance.characterPosition = position;
@@ -317,7 +331,21 @@ public static class SpecialAbilityPopupDayConfirmListItemPatch
             factionType = tuple.Item2;
         }
 
-        var text = player_name + " " + (role == Role.NONE ? "" : role.ToColorizedFactionStringParentheses(factionType));
+        string roleText = "";
+
+        if (role != Role.NONE)
+        {
+            if (Fancy.FactionalRoleNames.Value)
+            {
+                roleText = Utils.GetColorizedRoleName(role, factionType, true);
+            }
+            else
+            {
+                roleText = role.ToColorizedFactionStringParentheses(factionType);
+            }
+        }
+
+        var text = player_name + " " + roleText;
         __instance.playerName.SetText(text);
         __instance.playerHeadshot.sprite = headshot;
         __instance.characterPosition = position;
@@ -355,7 +383,23 @@ public static class SpecialAbilityPopupNecromancerRetributionistListItemPatch
             factionType = tuple.Item2;
         }
 
-        var text = player_name + " " + (role2 == Role.NONE ? "" : role2.ToColorizedFactionStringParentheses(factionType));
+        
+
+        string roleText = "";
+
+        if (role2 != Role.NONE)
+        {
+            if (Fancy.FactionalRoleNames.Value)
+            {
+                roleText = Utils.GetColorizedRoleName(role2, factionType, true);
+            }
+            else
+            {
+                roleText = role2.ToColorizedFactionStringParentheses(factionType);
+            }
+        }
+
+        var text = player_name + " " + roleText;
         __instance.playerName.SetText(text);
         __instance.playerHeadshot.sprite = headshot;
         __instance.characterPosition = position;
