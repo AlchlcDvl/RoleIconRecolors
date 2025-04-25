@@ -784,47 +784,57 @@ public static class Utils
 
     public static string GetColorizedRoleName(Role role, FactionType factionType, bool useBrackets = false)
     {
-        if (Constants.IsBTOS2())
-        {
-            try
-            {
-                var gradient = BetterTOS2.GetGradients.GetGradient(factionType);
-                var roleName = ToRoleFactionDisplayString(role, factionType);
+        var roleName = ToRoleFactionDisplayString(role, factionType);
+        if (useBrackets)
+            roleName = $"({roleName})";
 
-                if (gradient != null)
-                {
-                    return BetterTOS2.AddNewConversionTags.ApplyGradient(roleName, gradient.Evaluate(0f), gradient.Evaluate(1f));
-                }
-            }
-            catch
-            {
-            }
-        }
+        var gradientText = Utils.TryApplyGradient(roleName, factionType);
+        if (gradientText != null)
+            return gradientText;
 
-        var color = ClientRoleExtensions.GetFactionColor(factionType);
-        return useBrackets ? $"<color={color}>({ToRoleFactionDisplayString(role, factionType)})</color>" : $"<color={color}>{ToRoleFactionDisplayString(role, factionType)}</color>";
+        var color = factionType.GetFactionColor();
+        return $"<color={color}>{roleName}</color>";
     }
-
     public static string GetColorizedText(string text, FactionType factionType)
     {
-        if (Constants.IsBTOS2())
-        {
-            try
-            {
-                var gradient = BetterTOS2.GetGradients.GetGradient(factionType);
-                if (gradient != null)
-                {
-                    return BetterTOS2.AddNewConversionTags.ApplyGradient(text, gradient.Evaluate(0f), gradient.Evaluate(1f));
-                }
-            }
-            catch
-            {
-            }
-        }
+        var gradientText = Utils.TryApplyGradient(text, factionType);
+        if (gradientText != null)
+            return gradientText;
 
         var color = factionType.GetFactionColor();
         return $"<color={color}>{text}</color>";
     }
+
+    public static string TryApplyGradient(string text, FactionType factionType)
+    {
+        if (!Constants.IsBTOS2())
+            return null;
+
+        try
+        {
+            return GetGradient(text, factionType);
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private static string GetGradient(string text, FactionType factionType)
+    {
+        var gradient = BetterTOS2.GetGradients.GetGradient(factionType);
+        if (gradient != null)
+        {
+            return BetterTOS2.AddNewConversionTags.ApplyGradient(
+                text,
+                gradient.Evaluate(0f),
+                gradient.Evaluate(1f)
+            );
+        }
+
+        return null;
+    }
+
 
 
 }

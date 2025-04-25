@@ -1166,7 +1166,7 @@
     <Entry key="FANCY_JESTER_ROLENAME_56">Oracle</Entry>
     <Entry key="FANCY_JESTER_ROLENAME_250">Famine</Entry>
     <Entry key="FANCY_JESTER_ROLENAME_251">War</Entry>
-    <Entry key="FANCY_JESTER_ROLENAME_252">Pestilence</Entry>
+    <Entry key="FANCY_JESTER_ROLENAME_252">Jestilence</Entry>
     <Entry key="FANCY_JESTER_ROLENAME_253">Death</Entry>
 
     <!-- PIRATE -->
@@ -2384,7 +2384,7 @@
     <Entry key="FANCY_JESTER_BTOS_ROLENAME_62">Warlock</Entry>
     <Entry key="FANCY_JESTER_BTOS_ROLENAME_250">Famine</Entry>
     <Entry key="FANCY_JESTER_BTOS_ROLENAME_251">War</Entry>
-    <Entry key="FANCY_JESTER_BTOS_ROLENAME_252">Pestilence</Entry>
+    <Entry key="FANCY_JESTER_BTOS_ROLENAME_252">Jestilence</Entry>
     <Entry key="FANCY_JESTER_BTOS_ROLENAME_253">Death</Entry>
 
     <Entry key="FANCY_PIRATE_BTOS_ROLENAME_0">None</Entry>
@@ -2433,7 +2433,7 @@
     <Entry key="FANCY_PIRATE_BTOS_ROLENAME_43">Doomsayer</Entry>
     <Entry key="FANCY_PIRATE_BTOS_ROLENAME_44">Executioner</Entry>
     <Entry key="FANCY_PIRATE_BTOS_ROLENAME_45">Jester</Entry>
-    <Entry key="FANCY_PIRATE_BTOS_ROLENAME_46">PIRATE</Entry>
+    <Entry key="FANCY_PIRATE_BTOS_ROLENAME_46">Pirate</Entry>
     <Entry key="FANCY_PIRATE_BTOS_ROLENAME_47">Plaguebearer</Entry>
     <Entry key="FANCY_PIRATE_BTOS_ROLENAME_48">Serial Killer</Entry>
     <Entry key="FANCY_PIRATE_BTOS_ROLENAME_49">Shroud</Entry>
@@ -3424,9 +3424,6 @@
     <Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_241">Hidden</Entry>
     <Entry key="FANCY_JESTER_BTOS_ROLENAME_241">Hidden</Entry>
     <Entry key="FANCY_PIRATE_BTOS_ROLENAME_241">Hidden</Entry>
-    <Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_241">Hidden</Entry>
-    <Entry key="FANCY_SHROUD_BTOS_ROLENAME_241">Hidden</Entry>
-    <Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_241">Hidden</Entry>
     <Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_241">Hidden</Entry>
     <Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_241">Hidden</Entry>
     <Entry key="FANCY_JUDGE_BTOS_ROLENAME_241">Hidden</Entry>
