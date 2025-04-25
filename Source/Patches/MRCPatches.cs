@@ -88,7 +88,7 @@ namespace FancyUI.Patches
             if (Fancy.FactionalRoleNames.Value)
             {
                 var nameText = $"({Utils.GetColorizedText(theName, factionType)})";
-                var roleText = $"({Utils.GetColorizedRoleName(role, factionType, true)})"; // Use the method here
+                var roleText = $"({Utils.GetColorizedRoleName(role, factionType, true)})";
 
                 if (role != Role.STONED && role != Role.HIDDEN)
                 {
@@ -96,11 +96,9 @@ namespace FancyUI.Patches
                     nameText = $"<color={color}>{theName}</color>";
                 }
 
-                // Final result with colorized role name
                 __result = $"<size=36><sprite=\"RoleIcons\" name=\"Role{(int)role}\"></size>\n<size=24>{nameText}</size>\n<size=18>{roleText}</size>";
             }
 
-            // Modify icon name based on faction
             if (Constants.EnableIcons())
             {
                 __result = __result.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(factionType, false)})\"");
