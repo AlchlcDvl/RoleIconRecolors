@@ -129,8 +129,8 @@ public static class SpecialAbilityPopupPanelPatch
             copy.AddComponent<DummyBehaviour>();
         }
 
-        og.SetImageColor(ColorType.Wood); // Main wood container
-        copy.SetImageColor(ColorType.Metal); // The metal support
+        og.SetImageColor(ColorType.Wood, false); // Main wood container
+        copy.SetImageColor(ColorType.Metal, false); // The metal support
         Utils.UpdateMaterials(false, __instance.roleCardPanel.CurrentFaction);
     }
 }
@@ -140,13 +140,13 @@ public static class RoleCardPopupControllerPatch
 {
     public static void Postfix(RoleCardPopupPanel __instance)
     {
-        __instance.transform.GetChild(4).GetComponent<Image>().SetImageColor(ColorType.Wood); // Frame
-        __instance.transform.GetChild(10).GetComponent<Image>().SetImageColor(ColorType.Wood); // Slot count for display
-        __instance.transform.GetChild(13).GetComponent<Image>().SetImageColor(ColorType.Wood); // Slot count prefab 1
-        __instance.transform.GetChild(14).GetComponent<Image>().SetImageColor(ColorType.Wood); // Slot count prefab 2
-        __instance.transform.GetChild(15).GetComponent<Image>().SetImageColor(ColorType.Wood); // Slot count prefab 3
-        __instance.transform.GetChild(16).GetComponent<Image>().SetImageColor(ColorType.Wood); // Slot count prefab 4
-        __instance.transform.GetChild(17).GetComponent<Image>().SetImageColor(ColorType.Metal); // Closing screw
+        __instance.transform.GetChild(4).GetComponent<Image>().SetImageColor(ColorType.Wood, false); // Frame
+        __instance.transform.GetChild(10).GetComponent<Image>().SetImageColor(ColorType.Wood, false); // Slot count for display
+        __instance.transform.GetChild(13).GetComponent<Image>().SetImageColor(ColorType.Wood, false); // Slot count prefab 1
+        __instance.transform.GetChild(14).GetComponent<Image>().SetImageColor(ColorType.Wood, false); // Slot count prefab 2
+        __instance.transform.GetChild(15).GetComponent<Image>().SetImageColor(ColorType.Wood, false); // Slot count prefab 3
+        __instance.transform.GetChild(16).GetComponent<Image>().SetImageColor(ColorType.Wood, false); // Slot count prefab 4
+        __instance.transform.GetChild(17).GetComponent<Image>().SetImageColor(ColorType.Metal, false); // Closing screw
         Utils.UpdateMaterials(false, __instance.CurrentFaction);
     }
 }
@@ -236,10 +236,8 @@ public static class HudTimeChangePanelPatch
 [HarmonyPatch(typeof(LobbyGameModeChoicePanel), nameof(LobbyGameModeChoicePanel.Start))]
 public static class LobbyGameModeChoicePanelPatch
 {
-    public static void Postfix(LobbyGameModeChoicePanel __instance)
-    {
+    public static void Postfix(LobbyGameModeChoicePanel __instance) =>
         __instance.transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetChild(15).GetComponent<Image>().SetImageColor(ColorType.Wood);
-    }
 }
 
 [HarmonyPatch(typeof(TosAbilityPanel), nameof(TosAbilityPanel.Start))]
