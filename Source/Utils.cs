@@ -782,4 +782,49 @@ public static class Utils
         return Service.Home.LocalizationService.GetLocalizedString($"FANCY_{factionName}_ROLENAME_{(int)role}");
     }
 
+    public static string GetColorizedRoleName(Role role, FactionType factionType, bool useBrackets = false)
+    {
+        if (Constants.IsBTOS2())
+        {
+            try
+            {
+                var gradient = BetterTOS2.GetGradients.GetGradient(factionType);
+                var roleName = ToRoleFactionDisplayString(role, factionType);
+
+                if (gradient != null)
+                {
+                    return BetterTOS2.AddNewConversionTags.ApplyGradient(roleName, gradient.Evaluate(0f), gradient.Evaluate(1f));
+                }
+            }
+            catch
+            {
+            }
+        }
+
+        var color = ClientRoleExtensions.GetFactionColor(factionType);
+        return useBrackets ? $"<color={color}>({ToRoleFactionDisplayString(role, factionType)})</color>" : $"<color={color}>{ToRoleFactionDisplayString(role, factionType)}</color>";
+    }
+
+    public static string GetColorizedText(string text, FactionType factionType)
+    {
+        if (Constants.IsBTOS2())
+        {
+            try
+            {
+                var gradient = BetterTOS2.GetGradients.GetGradient(factionType);
+                if (gradient != null)
+                {
+                    return BetterTOS2.AddNewConversionTags.ApplyGradient(text, gradient.Evaluate(0f), gradient.Evaluate(1f));
+                }
+            }
+            catch
+            {
+            }
+        }
+
+        var color = factionType.GetFactionColor();
+        return $"<color={color}>{text}</color>";
+    }
+
+
 }

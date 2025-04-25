@@ -1,3 +1,4 @@
+using Game.Characters;
 using Home.Shared;
 using Server.Shared.Extensions;
 
@@ -10,129 +11,100 @@ namespace FancyUI.Patches
 */
 
 {
-[HarmonyPatch(typeof(ClientRoleExtensions), nameof(ClientRoleExtensions.ToColorizedDisplayString), typeof(Role), typeof(FactionType))]
-public static class ColorizeDisplayStringPatch
-{
-    [HarmonyPostfix]
-    public static void Result(ref string __result, ref Role role, ref FactionType factionType)
+    [HarmonyPatch(typeof(ClientRoleExtensions), nameof(ClientRoleExtensions.ToColorizedDisplayString), typeof(Role), typeof(FactionType))]
+    public static class ColorizeDisplayStringPatch
     {
-        if (!Fancy.FactionalRoleNames.Value) return;
-
-        if (RoleExtensions.IsResolved(role) || role is Role.FAMINE or Role.DEATH or Role.PESTILENCE or Role.WAR)
+        [HarmonyPostfix]
+        public static void Result(ref string __result, ref Role role, ref FactionType factionType)
         {
-            var roleName = Utils.ToRoleFactionDisplayString(role, factionType);
-            
-            if (Constants.IsBTOS2())
-            {
-                var gradient = BetterTOS2.GetGradients.GetGradient(factionType); 
+            if (!Fancy.FactionalRoleNames.Value) return;
 
-                if (gradient != null)
-                {
-                    __result = BetterTOS2.AddNewConversionTags.ApplyGradient(roleName, gradient.Evaluate(0f), gradient.Evaluate(1f));
-                }
-                else
-                {
-                    var color = ClientRoleExtensions.GetFactionColor(factionType);
-                    __result = $"<color={color}>{roleName}</color>";
-                }
-            }
-            else
+            if (RoleExtensions.IsResolved(role) || role is Role.FAMINE or Role.DEATH or Role.PESTILENCE or Role.WAR)
             {
-                var color = ClientRoleExtensions.GetFactionColor(factionType);
-                __result = $"<color={color}>{roleName}</color>";
+                // me when I'm Canadian and refuse to use "colour"
+                __result = Utils.GetColorizedRoleName(role, factionType);
             }
         }
     }
-}
 
-[HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.UpdateTitle))]
-public static class PatchRoleCard
-{
-    public static void Postfix(RoleCardPanel __instance)
+    [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.UpdateTitle))]
+    public static class PatchRoleCard
     {
-        string roleName = string.Empty;
-
-        if (Fancy.FactionalRoleNames.Value)
+        public static void Postfix(RoleCardPanel __instance)
         {
-            if (Constants.IsBTOS2())
-            {
-                var gradient = BetterTOS2.GetGradients.GetGradient(Pepper.GetMyFaction());
-                roleName = Utils.ToRoleFactionDisplayString(Pepper.GetMyRole(), Pepper.GetMyFaction());
-
-                if (gradient != null)
-                {
-                    roleName = BetterTOS2.AddNewConversionTags.ApplyGradient(roleName, gradient.Evaluate(0f), gradient.Evaluate(1f));
-                }
-                else
-                {
-                    var color = Pepper.GetMyFaction().GetFactionColor();
-                    roleName = $"<color={color}>{roleName}</color>";
-                }
-            }
-            else
-            {
-                var color = Pepper.GetMyFaction().GetFactionColor();
-                roleName = $"<color={color}>{roleName}</color>";
-            }
-        }
-        else
-        {
-            roleName = Pepper.GetMyRole().ToDisplayString();
-        }
-
-        __instance.roleNameText.text = roleName;
-    }
-}
-    [HarmonyPatch(typeof(RoleCardPopupPanel), nameof(RoleCardPopupPanel.SetRole))]
-    public static class RoleCardPopupPatches
-    {
-        public static void Postfix(ref Role role, RoleCardPopupPanel __instance) => __instance.roleNameText.text = ClientRoleExtensions.ToColorizedDisplayString(role);
-    }
-
-[HarmonyPatch(typeof(TosAbilityPanelListItem), nameof(TosAbilityPanelListItem.SetKnownRole))]
-public static class PlayerListPatch
-{
-    public static bool Prefix(ref Role role, ref FactionType faction, TosAbilityPanelListItem __instance)
-    {
-        __instance.playerRole = role;
-
-        if (role is not (0 or (Role)byte.MaxValue))
-        {
-            string roleName;
+            string roleName = string.Empty;
 
             if (Fancy.FactionalRoleNames.Value)
             {
-                if (Constants.IsBTOS2())
-                {
-                    var gradient = BetterTOS2.GetGradients.GetGradient(faction);
-                    roleName = Utils.ToRoleFactionDisplayString(role, faction);
-
-                    if (gradient != null)
-                    {
-                        roleName = BetterTOS2.AddNewConversionTags.ApplyGradient($"({roleName})", gradient.Evaluate(0f), gradient.Evaluate(1f));
-                    }
-                    else
-                    {
-                        var color = faction.GetFactionColor();
-                        roleName = $"<color={color}>({roleName})</color>";
-                    }
-                }
-                else
-                {
-                    var color = faction.GetFactionColor();
-                    roleName = $"<color={color}>({role.ToDisplayString()})</color>";
-                }
+                roleName = Utils.GetColorizedRoleName(Pepper.GetMyRole(), Pepper.GetMyFaction());
             }
             else
             {
-                roleName = $"({role.ToDisplayString()})";
+                roleName = Pepper.GetMyRole().ToDisplayString();
             }
 
-            __instance.playerRoleText.text = roleName;
-            __instance.playerRoleText.gameObject.SetActive(true);
+            __instance.roleNameText.text = roleName;
+        }
+    }
+        [HarmonyPatch(typeof(RoleCardPopupPanel), nameof(RoleCardPopupPanel.SetRole))]
+        public static class RoleCardPopupPatches
+        {
+            public static void Postfix(ref Role role, RoleCardPopupPanel __instance) => __instance.roleNameText.text = ClientRoleExtensions.ToColorizedDisplayString(role);
         }
 
-        return false;
+    [HarmonyPatch(typeof(TosAbilityPanelListItem), nameof(TosAbilityPanelListItem.SetKnownRole))]
+    public static class PlayerListPatch
+    {
+        public static bool Prefix(ref Role role, ref FactionType faction, TosAbilityPanelListItem __instance)
+        {
+            __instance.playerRole = role;
+
+            if (role is not (0 or (Role)byte.MaxValue))
+            {
+                string roleName;
+
+                if (Fancy.FactionalRoleNames.Value)
+                {
+                    roleName = Utils.GetColorizedRoleName(role, faction, true);
+                }
+                else
+                {
+                    roleName = $"({role.ToDisplayString()})";
+                }
+
+                __instance.playerRoleText.text = roleName;
+                __instance.playerRoleText.gameObject.SetActive(true);
+            }
+
+            return false;
+        }
     }
-}
+
+    [HarmonyPatch(typeof(TosCharacterNametag), nameof(TosCharacterNametag.ColouredName))]
+    public static class TosCharacterNametagPatch
+    {
+        public static void Postfix(FactionType factionType, ref string __result, ref string theName, ref Role role)
+        {
+            if (Fancy.FactionalRoleNames.Value)
+            {
+                var nameText = $"({Utils.GetColorizedText(theName, factionType)})";
+                var roleText = $"({Utils.GetColorizedRoleName(role, factionType, true)})"; // Use the method here
+
+                if (role != Role.STONED && role != Role.HIDDEN)
+                {
+                    var color = factionType.GetFactionColor();
+                    nameText = $"<color={color}>{theName}</color>";
+                }
+
+                // Final result with colorized role name
+                __result = $"<size=36><sprite=\"RoleIcons\" name=\"Role{(int)role}\"></size>\n<size=24>{nameText}</size>\n<size=18>{roleText}</size>";
+            }
+
+            // Modify icon name based on faction
+            if (Constants.EnableIcons())
+            {
+                __result = __result.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(factionType, false)})\"");
+            }
+        }
+    }
 }
