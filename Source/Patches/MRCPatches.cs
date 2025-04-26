@@ -104,10 +104,10 @@ namespace FancyUI.Patches
             {
                 __result = __result.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(factionType, false)})\"");
             }
-            
+
             if (Constants.IsBTOS2())
             {
-                __result = __result.Replace("RoleIcons\"", $"BTOSRoleIcons\"");
+                __result = __result.Replace("\"RoleIcons", "\"BTOSRoleIcons");
             }
         }
     }
