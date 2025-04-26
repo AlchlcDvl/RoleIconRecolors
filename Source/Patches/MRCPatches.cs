@@ -72,6 +72,7 @@ namespace FancyUI.Patches
                     roleName = $"({role.ToDisplayString()})";
                 }
 
+                __instance.playerRoleText.enableAutoSizing = false;
                 __instance.playerRoleText.text = roleName;
                 __instance.playerRoleText.gameObject.SetActive(true);
             }
