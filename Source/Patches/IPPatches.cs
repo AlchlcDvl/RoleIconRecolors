@@ -768,15 +768,15 @@ public static class ReplaceTMPSpritesPatch
         {
             if (str.Contains("RoleIcons"))
             {
-                var mod = ModType.Vanilla;
+                var mod = GameModType.Vanilla;
 
                 if (str.Contains("BTOS") || Constants.IsBTOS2() || Utils.FindCasualQueue())
-                    mod = ModType.BTOS2;
+                    mod = GameModType.BTOS2;
 
                 var deconstructed = Constants.CurrentStyle();
                 var defaultSprite = mod switch
                 {
-                    ModType.BTOS2 => BTOS22 ?? BTOS21,
+                    GameModType.BTOS2 => BTOS22 ?? BTOS21,
                     _ => Vanilla1 ?? CacheDefaults.RoleIcons
                 };
 

@@ -137,7 +137,7 @@ public static class FancyAssetManager
         }
 
         Utils.DumpSprite(BTOS21.spriteSheet as Texture2D, "BTOSRoleIcons", Path.Combine(IPPath, "BTOS2"), true);
-        Fancy.Assets.RegisterBundle(BetterTOS2.BTOSInfo.assetBundle);
+        Fancy.Instance.Assets.RegisterBundle(BetterTOS2.BTOSInfo.assetBundle);
     }
 
     public static string FancySanitisePath(this string path, bool removeIcon = false)
@@ -295,11 +295,11 @@ public static class FancyAssetManager
 
             foreach (var (role, roleInt) in index.Item2)
             {
-                var name = Utils.RoleName((Role)roleInt, ModType.Vanilla);
-                var sprite = Fancy.Assets.GetSprite(name + "_Vanilla") ?? Blank;
+                var name = Utils.RoleName((Role)roleInt, GameModType.Vanilla);
+                var sprite = Fancy.Instance.Assets.GetSprite(name + "_Vanilla") ?? Blank;
 
                 if (!sprite.IsValid())
-                    sprite = Fancy.Assets.GetSprite(name) ?? Blank;
+                    sprite = Fancy.Instance.Assets.GetSprite(name) ?? Blank;
 
                 if (sprite.IsValid())
                 {
@@ -326,7 +326,7 @@ public static class FancyAssetManager
 
             for (var i = 0; i < 16; i++)
             {
-                var sprite = Fancy.Assets.GetSprite($"{i}") ?? Blank;
+                var sprite = Fancy.Instance.Assets.GetSprite($"{i}") ?? Blank;
 
                 if (sprite.IsValid())
                 {
@@ -355,7 +355,7 @@ public static class FancyAssetManager
 
             for (var i = 1; i < 7; i++)
             {
-                var sprite = Fancy.Assets.GetSprite($"Emoji{i}") ?? Blank;
+                var sprite = Fancy.Instance.Assets.GetSprite($"Emoji{i}") ?? Blank;
 
                 if (sprite.IsValid())
                 {
@@ -385,16 +385,16 @@ public static class FancyAssetManager
 
         try
         {
-            var index = Utils.Filtered(ModType.BTOS2);
+            var index = Utils.Filtered(GameModType.BTOS2);
             var sprites = new List<Sprite>();
 
             foreach (var (role, roleInt) in index.Item2)
             {
-                var name = Utils.RoleName((Role)roleInt, ModType.BTOS2);
-                var sprite = Fancy.Assets.GetSprite(name + "_BTOS2") ?? Blank;
+                var name = Utils.RoleName((Role)roleInt, GameModType.BTOS2);
+                var sprite = Fancy.Instance.Assets.GetSprite(name + "_BTOS2") ?? Blank;
 
                 if (!sprite.IsValid())
-                    sprite = Fancy.Assets.GetSprite(name) ?? Blank;
+                    sprite = Fancy.Instance.Assets.GetSprite(name) ?? Blank;
 
                 if (sprite.IsValid())
                 {

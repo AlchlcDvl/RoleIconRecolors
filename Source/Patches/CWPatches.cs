@@ -85,8 +85,8 @@ public static class SpecialAbilityPanelPatch1
         {
             copy = UObject.Instantiate(og, og.transform.parent);
 
-            og.sprite = Fancy.Assets.GetSprite("RoleCard_Ability_Main_W");
-            copy.sprite = Fancy.Assets.GetSprite("RoleCard_Ability_Main_M");
+            og.sprite = Fancy.Instance.Assets.GetSprite("RoleCard_Ability_Main_W");
+            copy.sprite = Fancy.Instance.Assets.GetSprite("RoleCard_Ability_Main_M");
 
             copy.transform.SetSiblingIndex(1);
             copy.AddComponent<DummyBehaviour>();
@@ -122,8 +122,8 @@ public static class SpecialAbilityPopupPanelPatch
         {
             copy = UObject.Instantiate(og, og.transform.parent);
 
-            og.sprite = Fancy.Assets.GetSprite("RoleCard_Ability_Main_W");
-            copy.sprite = Fancy.Assets.GetSprite("RoleCard_Ability_Main_M");
+            og.sprite = Fancy.Instance.Assets.GetSprite("RoleCard_Ability_Main_W");
+            copy.sprite = Fancy.Instance.Assets.GetSprite("RoleCard_Ability_Main_M");
 
             copy.transform.SetSiblingIndex(0);
             copy.AddComponent<DummyBehaviour>();
@@ -262,7 +262,7 @@ public static class PatchAbilityPanel
             corners = UObject.Instantiate(leather, parent);
             corners.transform.SetSiblingIndex(1);
             corners.name = "ListCorners";
-            corners.sprite = Fancy.Assets.GetSprite("PlayerList_Main_M");
+            corners.sprite = Fancy.Instance.Assets.GetSprite("PlayerList_Main_M");
         }
 
         if (!paper)
@@ -270,12 +270,12 @@ public static class PatchAbilityPanel
             paper = UObject.Instantiate(leather, parent);
             paper.transform.SetSiblingIndex(2);
             paper.name = "ListPaper";
-            paper.sprite = Fancy.Assets.GetSprite("PlayerList_Main_P");
+            paper.sprite = Fancy.Instance.Assets.GetSprite("PlayerList_Main_P");
         }
 
         if (!leather.GetComponent<DummyBehaviour>())
         {
-            leather.sprite = Fancy.Assets.GetSprite("PlayerList_Main_L");
+            leather.sprite = Fancy.Instance.Assets.GetSprite("PlayerList_Main_L");
             leather.AddComponent<DummyBehaviour>();
         }
 
@@ -742,14 +742,14 @@ public static class HudRoleListAndGraveyardControllerPatch
 
         if (!OpenWood)
         {
-            PanelImage.sprite = Fancy.Assets.GetSprite("RoleList_Open_M");
+            PanelImage.sprite = Fancy.Instance.Assets.GetSprite("RoleList_Open_M");
             OpenWood = UObject.Instantiate(PanelImage, __instance.transform.parent);
             OpenWood.transform.SetSiblingIndex(PanelImage.transform.GetSiblingIndex());
             OpenWood.transform.ClearChildren();
             OpenWood.GetComponent<HudRoleListAndGraveyardController>().Destroy();
             OpenWood.GetComponent<HorizontalLayoutGroup>().Destroy();
             OpenWood.name = "OpenWood";
-            OpenWood.sprite = Fancy.Assets.GetSprite("RoleList_Open_W");
+            OpenWood.sprite = Fancy.Instance.Assets.GetSprite("RoleList_Open_W");
         }
 
         PanelImage.SetImageColor(ColorType.Metal);
@@ -764,12 +764,12 @@ public static class HudRoleListAndGraveyardControllerPatch
 
         if (!RoleListWood)
         {
-            roleList.sprite = Fancy.Assets.GetSprite("RoleList_Closed_M");
+            roleList.sprite = Fancy.Instance.Assets.GetSprite("RoleList_Closed_M");
             RoleListWood = UObject.Instantiate(roleList, __instance.transform.parent);
             RoleListWood.transform.SetSiblingIndex(roleList.transform.GetSiblingIndex());
             RoleListWood.transform.ClearChildren();
             RoleListWood.name = "RoleListWood";
-            RoleListWood.sprite = Fancy.Assets.GetSprite("RoleList_Closed_W");
+            RoleListWood.sprite = Fancy.Instance.Assets.GetSprite("RoleList_Closed_W");
         }
 
         roleList.SetImageColor(ColorType.Metal);
@@ -786,12 +786,12 @@ public static class HudRoleListAndGraveyardControllerPatch
 
         if (!GraveyardWood)
         {
-            graveyard.sprite = Fancy.Assets.GetSprite("Graveyard_M");
+            graveyard.sprite = Fancy.Instance.Assets.GetSprite("Graveyard_M");
             GraveyardWood = UObject.Instantiate(graveyard, __instance.transform.parent);
             GraveyardWood.transform.SetSiblingIndex(graveyard.transform.GetSiblingIndex());
             GraveyardWood.transform.ClearChildren();
             GraveyardWood.name = "GraveyardWood";
-            GraveyardWood.sprite = Fancy.Assets.GetSprite("Graveyard_W");
+            GraveyardWood.sprite = Fancy.Instance.Assets.GetSprite("Graveyard_W");
         }
 
         graveyard.SetImageColor(ColorType.Metal);
@@ -851,7 +851,7 @@ public static class RoleDeckPanelControllerPatch
             metal = UObject.Instantiate(baseLeather, baseLeather.transform.parent);
             metal.transform.ClearChildren();
             metal.transform.SetSiblingIndex(0);
-            metal.sprite = Fancy.Assets.GetSprite("RoleList_M");
+            metal.sprite = Fancy.Instance.Assets.GetSprite("RoleList_M");
             metal.name = "DeckMetal";
             metal.type = Image.Type.Sliced;
             metal.pixelsPerUnitMultiplier = 2.5f;
@@ -860,13 +860,13 @@ public static class RoleDeckPanelControllerPatch
             paper = UObject.Instantiate(baseLeather, baseLeather.transform.parent);
             paper.transform.ClearChildren();
             paper.transform.SetSiblingIndex(1);
-            paper.sprite = Fancy.Assets.GetSprite("RoleList_P");
+            paper.sprite = Fancy.Instance.Assets.GetSprite("RoleList_P");
             paper.name = "DeckPaper";
             paper.type = Image.Type.Sliced;
             paper.pixelsPerUnitMultiplier = 2.5f;
             PaperTransform = paper.GetComponent<RectTransform>();
 
-            baseLeather.sprite = Fancy.Assets.GetSprite("RoleList_L");
+            baseLeather.sprite = Fancy.Instance.Assets.GetSprite("RoleList_L");
             baseLeather.AddComponent<DummyBehaviour>();
         }
 
@@ -934,17 +934,17 @@ public static class GameBrowserRoleDeckPatch
             metal.GetComponent<ScrollRect>().Destroy();
             metal.transform.ClearChildren();
             metal.transform.SetSiblingIndex(0);
-            metal.sprite = Fancy.Assets.GetSprite("RoleList_M");
+            metal.sprite = Fancy.Instance.Assets.GetSprite("RoleList_M");
             metal.name = "DeckMetal";
 
             paper = UObject.Instantiate(baseLeather, baseLeather.transform.parent);
             paper.GetComponent<ScrollRect>().Destroy();
             paper.transform.ClearChildren();
             paper.transform.SetSiblingIndex(1);
-            paper.sprite = Fancy.Assets.GetSprite("RoleList_P");
+            paper.sprite = Fancy.Instance.Assets.GetSprite("RoleList_P");
             paper.name = "DeckPaper";
 
-            baseLeather.sprite = Fancy.Assets.GetSprite("RoleList_L");
+            baseLeather.sprite = Fancy.Instance.Assets.GetSprite("RoleList_L");
             baseLeather.AddComponent<DummyBehaviour>();
         }
 

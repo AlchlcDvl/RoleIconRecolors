@@ -2,18 +2,18 @@ using Home.Shared;
 
 namespace FancyUI;
 
-[SalemMod, WitchcraftMod(typeof(Fancy), "Fancy UI", [ "Assets" ], true)]
-public class Fancy
+[SalemMod]
+public class Fancy : BaseMod<Fancy>
 {
-    public static WitchcraftMod Instance { get; private set; }
+    public override string Name => "Fancy UI";
+    public override string[] Bundles => [ "Assets" ];
+    public override bool HasFolder => true;
 
-    public void Start()
+    public static FieldInfo InputRegex;
+
+    public override void Start()
     {
-        Instance = ModSingleton<Fancy>.Instance!;
-
         Instance.Message("Fancying...", true);
-
-        Assets = Instance.Assets;
 
         if (!Directory.Exists(IPPath))
             Directory.CreateDirectory(IPPath);
@@ -44,15 +44,15 @@ public class Fancy
         try
         {
             LoadBtos();
-        } catch {}
+        }
+        catch { }
+
+        InputRegex = AccessTools.Field(typeof(TMP_InputField), "m_RegexValue");
 
         Instance.Message("Fancy!", true);
     }
 
-    public static AssetManager Assets { get; private set; }
-
-    [UponAssetsLoaded]
-    public static void UponLoad()
+    public override void UponAssetsLoaded()
     {
         Blank = Assets.GetSprite("Blank");
         FancyAssetManager.Attack = Assets.GetSprite("Attack");
@@ -131,8 +131,7 @@ public class Fancy
     public static readonly Dictionary<ColorType, ToggleOption> ColorShadeToggleMap = [];
     public static readonly Dictionary<ColorType, FloatOption> ColorShadeMap = [];
 
-    [LoadConfigs]
-    public static void LoadConfigs()
+    public override void LoadConfigs()
     {
         VanillaFactions = [.. GeneralUtils.GetEnumValues<FactionType>()!.Except([FactionType.UNKNOWN])];
         BTOS2Factions = [.. AccessTools.GetDeclaredFields(typeof(Btos2Faction)).Select(x => (FactionType)x.GetRawConstantValue())];
@@ -145,17 +144,17 @@ public class Fancy
 
         SelectedUITheme = new("SELECTED_UI_THEME", UITheme.Vanilla, PackType.RecoloredUI, useTranslations: true);
 
-        MentionStyle1 = new("MENTION_STYLE_1", "Regular", PackType.IconPacks, () => GetOptions(ModType.Vanilla, true), _ => Constants.EnableIcons());
-        MentionStyle2 = new("MENTION_STYLE_2", "Regular", PackType.IconPacks, () => GetOptions(ModType.BTOS2, true), _ => Constants.BTOS2Exists() && Constants.EnableIcons());
+        MentionStyle1 = new("MENTION_STYLE_1", "Regular", PackType.IconPacks, () => GetOptions(GameModType.Vanilla, true), _ => Constants.EnableIcons());
+        MentionStyle2 = new("MENTION_STYLE_2", "Regular", PackType.IconPacks, () => GetOptions(GameModType.BTOS2, true), _ => Constants.BTOS2Exists() && Constants.EnableIcons());
 
-        FactionOverride1 = new("FACTION_OVERRIDE_1", "None", PackType.IconPacks, () => GetOptions(ModType.Vanilla, false), _ => Constants.EnableIcons());
-        FactionOverride2 = new("FACTION_OVERRIDE_2", "None", PackType.IconPacks, () => GetOptions(ModType.BTOS2, false), _ => Constants.BTOS2Exists() && Constants.EnableIcons());
+        FactionOverride1 = new("FACTION_OVERRIDE_1", "None", PackType.IconPacks, () => GetOptions(GameModType.Vanilla, false), _ => Constants.EnableIcons());
+        FactionOverride2 = new("FACTION_OVERRIDE_2", "None", PackType.IconPacks, () => GetOptions(GameModType.BTOS2, false), _ => Constants.BTOS2Exists() && Constants.EnableIcons());
 
         SelectColorFilter = new("COLOR_FILTER", ColorType.Wood, PackType.RecoloredUI, setActive: _ => Constants.EnableCustomUI(), useTranslations: true);
 
         var colors = GeneralUtils.GetEnumValues<ColorType>()!.Where(x => x != ColorType.All).ToDictionary(x => x, x => x.ToString().ToUpperInvariant());
         var factions = BTOS2Factions.Where(x => x is not (Btos2Faction.Lovers or Btos2Faction.Cannibal or Btos2Faction.None)).ToDictionary(x => x, x => Utils.FactionName(x,
-            Constants.BTOS2Exists() ? ModType.BTOS2 : ModType.Vanilla).ToUpperInvariant());
+            Constants.BTOS2Exists() ? GameModType.BTOS2 : GameModType.Vanilla).ToUpperInvariant());
 
         foreach (var (type, name) in colors)
         {
@@ -286,7 +285,7 @@ public class Fancy
         return [.. result];
     }
 
-    private static string[] GetOptions(ModType mod, bool mentionStyle)
+    private static string[] GetOptions(GameModType mod, bool mentionStyle)
     {
         try
         {
@@ -296,7 +295,7 @@ public class Fancy
             {
                 result.Add(mentionStyle ? "Regular" : "None");
 
-                if (pack.Assets.TryGetValue(ModType.Common, out var assets))
+                if (pack.Assets.TryGetValue(GameModType.Common, out var assets))
                 {
                     foreach (var (folder, icons) in assets.BaseIcons)
                     {
@@ -328,26 +327,9 @@ public class Fancy
         }
         catch
         {
-            return [ mentionStyle ? mod.ToString() : "None" ];
+            return [mentionStyle ? mod.ToString() : "None"];
         }
     }
-
-    // private static void AttemptCreateSpriteSheet(FancyUI.ModType mod, string name)
-    // {
-    //     if (AssetManager.IconPacks.TryGetValue(Constants.CurrentPack(), out var pack))
-    //     {
-    //         if (!pack.Assets.TryGetValue(mod, out var iconAssets))
-    //             return;
-
-    //         var modName = mod.ToString();
-
-    //         if ((!iconAssets.MentionStyles.TryGetValue(name, out var asset) || !asset) && iconAssets.BaseIcons.TryGetValue(name, out var baseIcons))
-    //         {
-    //             iconAssets.MentionStyles[name] = asset = pack.BuildSpriteSheet(mod, modName, name, baseIcons);
-    //             Utils.DumpSprite(asset?.spriteSheet as Texture2D, $"{name}{mod}RoleIcons", Path.Combine(pack.PackPath, modName));
-    //         }
-    //     }
-    // }
 }
 
 [SalemMenuItem]
@@ -361,7 +343,7 @@ public static class MenuButton
 
     private static void OpenMenu()
     {
-        var go = UObject.Instantiate(Fancy.Assets.GetGameObject("FancyUI"), CacheHomeSceneController.Controller.SafeArea.transform, false);
+        var go = UObject.Instantiate(Fancy.Instance.Assets.GetGameObject("FancyUI"), CacheHomeSceneController.Controller.SafeArea.transform, false);
         go.transform.localPosition = new(0, 0, 0);
         go.transform.localScale = Vector3.one * 2f;
         go.AddComponent<UI.FancyUI>();

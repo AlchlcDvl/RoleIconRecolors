@@ -51,7 +51,7 @@ public static class Btos2IpCompatibility
             return;
         }
 
-        var ogfaction = a_role.GetFactionType(ModType.BTOS2);
+        var ogfaction = a_role.GetFactionType(GameModType.BTOS2);
         var reg = ogfaction != faction;
         var name = Utils.RoleName(a_role);
         var sprite = GetSprite(reg, name, Utils.FactionName(faction));
@@ -74,7 +74,7 @@ public static class Btos2IpCompatibility
             return;
 
         var role = (Role)Role.GetValue(__instance);
-        var sprite = GetSprite(Utils.RoleName(role), Utils.FactionName(role.GetFactionType(ModType.BTOS2)));
+        var sprite = GetSprite(Utils.RoleName(role), Utils.FactionName(role.GetFactionType(GameModType.BTOS2)));
 
         if (sprite.IsValid())
             roleIcon.sprite = sprite;

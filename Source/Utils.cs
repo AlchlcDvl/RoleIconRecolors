@@ -16,20 +16,20 @@ public static class Utils
         "TavernKeeper_Ability", "Tracker_Ability", "Trapper_Ability", "Vampire_Ability", "Vigilante_Ability", "VoodooMaster_Ability", "War_Ability_2", "Witch_Ability_1", "Witch_Ability_2",
         "Werewolf_Ability_1" ];
 
-    private static readonly Dictionary<ModType, (Dictionary<string, string>, Dictionary<string, int>)> RoleStuff = [];
+    private static readonly Dictionary<GameModType, (Dictionary<string, string>, Dictionary<string, int>)> RoleStuff = [];
 
     private static readonly int Color1 = Shader.PropertyToID("_Color");
     private static readonly int Vanilla = Shader.PropertyToID("_Vanilla");
     private static readonly int Brightness = Shader.PropertyToID("_Brightness");
     private static readonly int GrayscaleAmount = Shader.PropertyToID("_GrayscaleAmount");
 
-    public static string RoleName(Role role, ModType? mod = null)
+    public static string RoleName(Role role, GameModType? mod = null)
     {
         try
         {
             return (mod ?? GetGameType()) switch
             {
-                ModType.BTOS2 => BTOSRoleName(role),
+                GameModType.BTOS2 => BTOSRoleName(role),
                 _ => VanillaRoleName(role)
             };
         }
@@ -262,9 +262,9 @@ public static class Utils
         _ => "Blank"
     };
 
-    public static string FactionName(FactionType faction, bool allowOverrides, ModType? mod = null) => FactionName(faction, mod, allowOverrides);
+    public static string FactionName(FactionType faction, bool allowOverrides, GameModType? mod = null) => FactionName(faction, mod, allowOverrides);
 
-    public static string FactionName(FactionType faction, ModType? mod = null, bool allowOverrides = true)
+    public static string FactionName(FactionType faction, GameModType? mod = null, bool allowOverrides = true)
     {
         if (Constants.FactionOverridden() && allowOverrides)
             return Constants.FactionOverride();
@@ -273,7 +273,7 @@ public static class Utils
         {
             return (mod ?? GetGameType()) switch
             {
-                ModType.BTOS2 => BTOSFactionName(faction),
+                GameModType.BTOS2 => BTOSFactionName(faction),
                 _ => VanillaFactionName(faction)
             };
         }
@@ -359,19 +359,19 @@ public static class Utils
 
         return GetGameType() switch
         {
-            ModType.BTOS2 => BTOS2SkippableNames.Contains(name),
+            GameModType.BTOS2 => BTOS2SkippableNames.Contains(name),
             _ => VanillaSkippableNames.Contains(name)
         };
     }
 
-    public static (Dictionary<string, string>, Dictionary<string, int>) Filtered(ModType mod = ModType.Vanilla)
+    public static (Dictionary<string, string>, Dictionary<string, int>) Filtered(GameModType mod = GameModType.Vanilla)
     {
         if (RoleStuff.TryGetValue(mod, out var result))
             return result;
 
         var roles = mod switch
         {
-            ModType.BTOS2 => AccessTools.GetDeclaredFields(typeof(Btos2Role))
+            GameModType.BTOS2 => AccessTools.GetDeclaredFields(typeof(Btos2Role))
                 .Select(x => (Role)x.GetRawConstantValue())
                 .Where(x => x is not (Btos2Role.None or Btos2Role.Hangman or Btos2Role.Unknown or Btos2Role.RoleCount)),
             _ => GeneralUtils.GetEnumValues<Role>()!.Where(x => x is not (Role.NONE or Role.ROLE_COUNT or Role.UNKNOWN or Role.HANGMAN))
@@ -395,13 +395,13 @@ public static class Utils
         File.WriteAllBytes(assetPath, (decompress ? AssetManager.Decompress(texture) : texture).EncodeToPNG());
     }
 
-    public static bool IsTransformedApoc(this Role role, ModType? mod = null)
+    public static bool IsTransformedApoc(this Role role, GameModType? mod = null)
     {
         try
         {
             return (mod ?? GetGameType()) switch
             {
-                ModType.BTOS2 => IsTransformedApocBTOS(role),
+                GameModType.BTOS2 => IsTransformedApocBTOS(role),
                 _ => IsTransformedApocVanilla(role),
             };
         }
@@ -461,12 +461,12 @@ public static class Utils
         _ => "Blank"
     };
 
-    public static ModType GetGameType()
+    public static GameModType GetGameType()
     {
         if (Constants.IsBTOS2() || FindCasualQueue())
-            return ModType.BTOS2;
+            return GameModType.BTOS2;
 
-        return ModType.Vanilla;
+        return GameModType.Vanilla;
     }
 
     public static bool FindCasualQueue()
@@ -495,14 +495,14 @@ public static class Utils
         }
     }
 
-    public static Role GetTransformedVersion(Role role, ModType? mod = null)
+    public static Role GetTransformedVersion(Role role, GameModType? mod = null)
     {
         try
         {
             mod ??= GetGameType();
             return mod switch
             {
-                ModType.BTOS2 => role switch
+                GameModType.BTOS2 => role switch
                 {
                     Btos2Role.Baker => Btos2Role.Famine,
                     Btos2Role.Berserker => Btos2Role.War,
@@ -533,14 +533,14 @@ public static class Utils
         }
     }
 
-    public static Role GetWar(ModType? mod = null)
+    public static Role GetWar(GameModType? mod = null)
     {
         try
         {
             mod ??= GetGameType();
             return mod switch
             {
-                ModType.BTOS2 => Btos2Role.War,
+                GameModType.BTOS2 => Btos2Role.War,
                 _ => Role.WAR,
             };
         }
@@ -550,7 +550,7 @@ public static class Utils
         }
     }
 
-    public static FactionType GetFactionType(this Role role, ModType? mod = null) => ((int)role, role, mod ?? GetGameType()) switch
+    public static FactionType GetFactionType(this Role role, GameModType? mod = null) => ((int)role, role, mod ?? GetGameType()) switch
     {
         // Basic faction checks based on role ID ranges
         ( > 0 and < 25, _, _) => FactionType.TOWN,
@@ -570,17 +570,17 @@ public static class Utils
         ( < 54, Role.CURSED_SOUL, _) => FactionType.CURSED_SOUL,
 
         // BTOS2 specific role checks
-        (_, Btos2Role.Banshee, ModType.BTOS2) => Btos2Faction.Coven,
-        (_, Btos2Role.Marshal or Btos2Role.Oracle, ModType.BTOS2) => Btos2Faction.Town,
-        (_, Btos2Role.Jackal, ModType.BTOS2) => Btos2Faction.Jackal,
-        (_, Btos2Role.Judge, ModType.BTOS2) => Btos2Faction.Judge,
-        (_, Btos2Role.Auditor, ModType.BTOS2) => Btos2Faction.Auditor,
-        (_, Btos2Role.Inquisitor, ModType.BTOS2) => Btos2Faction.Inquisitor,
-        (_, Btos2Role.Starspawn, ModType.BTOS2) => Btos2Faction.Starspawn,
-        (_, Btos2Role.Warlock, ModType.BTOS2) => Btos2Faction.Apocalypse,
+        (_, Btos2Role.Banshee, GameModType.BTOS2) => Btos2Faction.Coven,
+        (_, Btos2Role.Marshal or Btos2Role.Oracle, GameModType.BTOS2) => Btos2Faction.Town,
+        (_, Btos2Role.Jackal, GameModType.BTOS2) => Btos2Faction.Jackal,
+        (_, Btos2Role.Judge, GameModType.BTOS2) => Btos2Faction.Judge,
+        (_, Btos2Role.Auditor, GameModType.BTOS2) => Btos2Faction.Auditor,
+        (_, Btos2Role.Inquisitor, GameModType.BTOS2) => Btos2Faction.Inquisitor,
+        (_, Btos2Role.Starspawn, GameModType.BTOS2) => Btos2Faction.Starspawn,
+        (_, Btos2Role.Warlock, GameModType.BTOS2) => Btos2Faction.Apocalypse,
 
         // Vanilla specific role checks
-        ( > 53 and < 57, _, ModType.Vanilla) => FactionType.TOWN,
+        ( > 53 and < 57, _, GameModType.Vanilla) => FactionType.TOWN,
 
         // Default case
         _ => FactionType.NONE

@@ -103,7 +103,7 @@ public class FancyUI : UIController
             return;
         }
 
-        var go = Instantiate(Fancy.Assets.GetGameObject("SettingsAndTestingUI"), transform.parent, false);
+        var go = Instantiate(Fancy.Instance.Assets.GetGameObject("SettingsAndTestingUI"), transform.parent, false);
         go.transform.localPosition = new(0, 0, 0);
         go.transform.localScale = Vector3.one * 1.5f;
         go.AddComponent<SettingsAndTestingUI>();
@@ -112,7 +112,7 @@ public class FancyUI : UIController
 
     private void OpenMenu()
     {
-        var go = Instantiate(Fancy.Assets.GetGameObject("DownloaderUI"), transform.parent, false);
+        var go = Instantiate(Fancy.Instance.Assets.GetGameObject("DownloaderUI"), transform.parent, false);
         go.transform.localPosition = new(0, 0, 0);
         go.transform.localScale = Vector3.one * 1.5f;
         go.AddComponent<DownloaderUI>();

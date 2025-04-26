@@ -253,11 +253,11 @@ public class SettingsAndTestingUI : UIController
         Animator.SetDuration(Constants.AnimationDuration());
         NameText.SetText(DefaultNameText.Replace("%num%", $"{Constants.PlayerNumber()}"));
         NameText.SetGraphicColor(ColorType.Paper);
-        RoleText.SetText(DefaultRoleText.Replace("%type%", $"{Utils.FactionName(Constants.GetSelectedFaction(), IsBTOS2 ? ModType.BTOS2 : ModType.Vanilla)}").Replace("%mod%", IsBTOS2 ? "BTOS" :
+        RoleText.SetText(DefaultRoleText.Replace("%type%", $"{Utils.FactionName(Constants.GetSelectedFaction(), IsBTOS2 ? GameModType.BTOS2 : GameModType.Vanilla)}").Replace("%mod%", IsBTOS2 ? "BTOS" :
             "").Replace("%roleName%", "Admirer").Replace("%roleInt%", "1"));
         Displays.ForEach((x, y) => y.SetActive(Fancy.SelectDisplay.Value == x));
         // Icons.ForEach(x => x.UpdateIcon(Fancy.SelectTestingRole.Value));
-        ToggleImage.sprite = Fancy.Assets.GetSprite($"{(IsBTOS2 ? "B" : "")}ToS2Icon");
+        ToggleImage.sprite = Fancy.Instance.Assets.GetSprite($"{(IsBTOS2 ? "B" : "")}ToS2Icon");
 
         foreach (var setting in Settings)
         {
