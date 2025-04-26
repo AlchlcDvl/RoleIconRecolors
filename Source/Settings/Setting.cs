@@ -5,6 +5,8 @@ public abstract class Setting : UIController
     public TextMeshProUGUI TitleText { get; set; }
     public Image Background { get; set; }
 
+    public virtual Option BoxedOption { get; set; }
+
     public virtual void Awake()
     {
         TitleText = transform.GetComponent<TextMeshProUGUI>("SettingName");

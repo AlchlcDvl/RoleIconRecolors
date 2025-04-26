@@ -179,47 +179,35 @@ public class SettingsAndTestingUI : UIController
 
         foreach (var opt in Option.All)
         {
+            var setting = opt.BoxedSetting = Instantiate((Setting)(opt switch
+            {
+                FloatOption => SliderTemplate,
+                IDropdown => DropdownTemplate,
+                ColorOption => ColorTemplate,
+                StringInputOption => InputTemplate,
+                _ => ToggleTemplate,
+            }), SliderTemplate!.transform.parent);
+            setting.BoxedOption = opt;
+            Metals.Add(setting.Background);
+
             switch (opt)
             {
                 case FloatOption slider:
                 {
-                    slider.Setting = Instantiate(SliderTemplate, SliderTemplate!.transform.parent);
-                    slider.Setting.Option = slider;
                     Metals.Add(slider.Setting.Input.GetComponent<Image>());
                     Metals.Add(slider.Setting.Slider.targetGraphic as Image);
-                    Metals.Add(slider.Setting.Background);
                     break;
                 }
                 case IDropdown dropdown:
                 {
-                    dropdown.Setting = Instantiate(DropdownTemplate, DropdownTemplate!.transform.parent);
-                    dropdown.Setting.Option = dropdown;
                     Metals.Add(dropdown.Setting.Dropdown.GetComponent<Image>());
                     Metals.Add(dropdown.Setting.Dropdown.transform.GetComponent<Image>("Arrow"));
-                    Metals.Add(dropdown.Setting.Background);
                     Woods.Add(dropdown.Setting.Dropdown.transform.FindRecursive("Template").Find("Background").GetComponent<Image>());
-                    break;
-                }
-                case ColorOption color:
-                {
-                    color.Setting = Instantiate(ColorTemplate, ColorTemplate!.transform.parent);
-                    color.Setting.Option = color;
-                    Metals.Add(color.Setting.Background);
                     break;
                 }
                 case StringInputOption input:
                 {
-                    input.Setting = Instantiate(InputTemplate, InputTemplate!.transform.parent);
-                    input.Setting.Option = input;
                     Metals.Add(input.Setting.Input.GetComponent<Image>());
-                    Metals.Add(input.Setting.Background);
-                    break;
-                }
-                case ToggleOption toggle:
-                {
-                    toggle.Setting = Instantiate(ToggleTemplate, ToggleTemplate!.transform.parent);
-                    toggle.Setting.Option = toggle;
-                    Metals.Add(toggle.Setting.Background);
                     break;
                 }
             }
@@ -237,6 +225,8 @@ public class SettingsAndTestingUI : UIController
         Papers.ForEach(x => x.SetImageColor(ColorType.Paper));
         Waxes.ForEach(x => x.SetImageColor(ColorType.Wax));
         Fires.ForEach(x => x.SetImageColor(ColorType.Fire));
+
+        Refresh();
     }
 
     public void OnDestroy() => Instance = null;
@@ -253,8 +243,8 @@ public class SettingsAndTestingUI : UIController
         Animator.SetDuration(Constants.AnimationDuration());
         NameText.SetText(DefaultNameText.Replace("%num%", $"{Constants.PlayerNumber()}"));
         NameText.SetGraphicColor(ColorType.Paper);
-        RoleText.SetText(DefaultRoleText.Replace("%type%", $"{Utils.FactionName(Constants.GetSelectedFaction(), IsBTOS2 ? GameModType.BTOS2 : GameModType.Vanilla)}").Replace("%mod%", IsBTOS2 ? "BTOS" :
-            "").Replace("%roleName%", "Admirer").Replace("%roleInt%", "1"));
+        RoleText.SetText(DefaultRoleText.Replace("%type%", $"{Utils.FactionName(Constants.GetSelectedFaction(), IsBTOS2 ? GameModType.BTOS2 : GameModType.Vanilla)}").Replace("%mod%", IsBTOS2 ?
+            "BTOS" : "").Replace("%roleName%", "Admirer").Replace("%roleInt%", "1"));
         Displays.ForEach((x, y) => y.SetActive(Fancy.SelectDisplay.Value == x));
         // Icons.ForEach(x => x.UpdateIcon(Fancy.SelectTestingRole.Value));
         ToggleImage.sprite = Fancy.Instance.Assets.GetSprite($"{(IsBTOS2 ? "B" : "")}ToS2Icon");

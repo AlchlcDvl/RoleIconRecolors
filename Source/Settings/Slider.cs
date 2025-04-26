@@ -6,6 +6,12 @@ public class SliderSetting : Setting
     public TMP_InputField Input { get; set; }
     public FloatOption Option { get; set; }
 
+    public override Option BoxedOption
+    {
+        get => Option;
+        set => Option = (FloatOption)value;
+    }
+
     public override void Awake()
     {
         base.Awake();

@@ -6,6 +6,8 @@ public abstract class Option
     protected string ID { get; }
     public PackType Page { get; }
 
+    public virtual Setting BoxedSetting { get; set; }
+
     protected Option(string id, PackType page)
     {
         ID = id;

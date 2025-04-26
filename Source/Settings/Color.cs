@@ -5,6 +5,12 @@ public class ColorSetting : BaseInputSetting
     public Image ValueBg { get; set; }
     public ColorOption Option { get; set; }
 
+    public override Option BoxedOption
+    {
+        get => Option;
+        set => Option = (ColorOption)value;
+    }
+
     public override void Awake()
     {
         base.Awake();

@@ -6,8 +6,13 @@ public class ToggleSetting : Setting
     public Image OnBg { get; set; }
     public Image OffBg { get; set; }
     public TextMeshProUGUI ValueText { get; set; }
-
     public ToggleOption Option { get; set; }
+
+    public override Option BoxedOption
+    {
+        get => Option;
+        set => Option = (ToggleOption)value;
+    }
 
     public override void Awake()
     {

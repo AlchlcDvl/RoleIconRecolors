@@ -4,6 +4,12 @@ public class StringInputSetting : BaseInputSetting
 {
     public StringInputOption Option { get; set; }
 
+    public override Option BoxedOption
+    {
+        get => Option;
+        set => Option = (StringInputOption)value;
+    }
+
     public void Start()
     {
         if (Option == null)
