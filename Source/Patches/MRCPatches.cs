@@ -91,7 +91,7 @@ namespace FancyUI.Patches
                 var nameText = Utils.GetColorizedText(theName, factionType);
                 var roleText = Utils.GetColorizedRoleName(role, factionType, true);
 
-                if (role != Role.STONED && role != Role.HIDDEN)
+                if (nameText == theName) // Stoned and Hidden are not checked here because gradients can be given to them via PlayerNotes+
                 {
                     var color = factionType.GetFactionColor();
                     nameText = $"<color={color}>{theName}</color>";
@@ -103,6 +103,11 @@ namespace FancyUI.Patches
             if (Constants.EnableIcons())
             {
                 __result = __result.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(factionType, false)})\"");
+            }
+            
+            if (Constants.IsBTOS2())
+            {
+                __result = __result.Replace("RoleIcons\"", $"BTOSRoleIcons\"");
             }
         }
     }
