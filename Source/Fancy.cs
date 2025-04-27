@@ -115,8 +115,6 @@ public class Fancy : BaseMod<Fancy>
     public static ToggleOption FactionalRoleNames;
     public static ToggleOption FactionNameNextToRole; // Could not figure out why the code for this setting did not work
 
-    public static ToggleOption IsJackalMajor;
-    public static ToggleOption IsVampireMajor;
     public static ToggleOption MajorColors;
 
     public static FloatOption GeneralBrightness;
@@ -347,8 +345,6 @@ public static ColorOption EgotistMajor;
 
         FactionalRoleNames = new("FACTIONAL_ROLE_NAMES", false, PackType.MiscRoleCustomisation);
         MajorColors = new("MAJOR_COLORS", false, PackType.MiscRoleCustomisation);
-        IsJackalMajor = new("IS_JACKAL_MAJOR", false, PackType.MiscRoleCustomisation);
-        IsVampireMajor = new("IS_VAMPIRE_MAJOR", false, PackType.MiscRoleCustomisation);
         RecruitLabel = new("RECRUIT_LABEL", "Recruited", PackType.MiscRoleCustomisation);
         TraitorLabel = new("TRAITOR_LABEL", "Town Traitor", PackType.MiscRoleCustomisation);
         VIPLabel = new("VIP_LABEL", "VIP", PackType.MiscRoleCustomisation);

@@ -76,8 +76,8 @@ namespace FancyUI.Patches
             if (Fancy.FactionalRoleNames.Value) { roleName = Utils.ToRoleFactionDisplayString(role, faction); }
             else { roleName = role.ToDisplayString(); }
 
-            if (faction.GetChangedGradient() != null)
-                text = AddChangedConversionTags.ApplyGradient(roleName, faction.GetChangedGradient());
+            if (faction.GetChangedGradient(role) != null)
+                text = AddChangedConversionTags.ApplyGradient(roleName, faction.GetChangedGradient(role));
             else
             {
                 text = string.Concat(
@@ -90,7 +90,7 @@ namespace FancyUI.Patches
                 ]);
             }
 
-            var gradientTT = faction.GetChangedGradient();
+            var gradientTT = faction.GetChangedGradient(role);
 
             if (modifier == (ROLE_MODIFIER)2 && gradientTT != null)
             {
@@ -98,12 +98,12 @@ namespace FancyUI.Patches
             }
             else if (modifier == (ROLE_MODIFIER)10)
             {
-                var gradient = ((FactionType)33).GetChangedGradient();
+                var gradient = ((FactionType)33).GetChangedGradient(role);
                 text = text + "\n<size=85%>" + AddChangedConversionTags.ApplyGradient($"({Fancy.RecruitLabel.Value})", gradient.Evaluate(0f), gradient.Evaluate(1f)) + "</size>";
             }
             else if (RoleExtensions.GetFaction(role) != faction)
             {
-                var gradient2 = faction.GetChangedGradient();
+                var gradient2 = faction.GetChangedGradient(role);
 
                 if (gradient2 != null)
                 {
@@ -188,7 +188,7 @@ namespace FancyUI.Patches
 
             if (role is not (0 or (Role)byte.MaxValue))
             {
-                var gradient = faction.GetChangedGradient();
+                var gradient = faction.GetChangedGradient(role);
 
                 if (gradient != null && role is not ((Role)254 or (Role)241))
                 {
@@ -199,7 +199,7 @@ namespace FancyUI.Patches
                     }
                     else if (faction == (FactionType)33 && role != BetterTOS2.RolePlus.JACKAL)
                     {
-                        Gradient jackalGradient = Btos2Faction.Jackal.GetChangedGradient();
+                        Gradient jackalGradient = Btos2Faction.Jackal.GetChangedGradient(role);
 
                         __instance.playerRoleText.text = AddChangedConversionTags.ApplyGradient("(" + roleName + ")", jackalGradient.Evaluate(0f), jackalGradient.Evaluate(1f));
                     }
@@ -278,9 +278,9 @@ public static class TosCharacterNametagPatch
             else { roleName = role.ToDisplayString(); }
 
 
-        if (factionType.GetChangedGradient() != null && role is not (Role.STONED or Role.HIDDEN))
+        if (factionType.GetChangedGradient(role) != null && role is not (Role.STONED or Role.HIDDEN))
         {
-            var gradient = factionType.GetChangedGradient();
+            var gradient = factionType.GetChangedGradient(role);
             var gradientName = "";
             var gradientRole = "";
 
@@ -291,7 +291,7 @@ public static class TosCharacterNametagPatch
             }
             else if (factionType == (FactionType)33 && role != Btos2Role.Jackal)
             {
-                Gradient jackalGradient = Btos2Faction.Jackal.GetChangedGradient();
+                Gradient jackalGradient = Btos2Faction.Jackal.GetChangedGradient(role);
                 gradientName = AddChangedConversionTags.ApplyGradient(theName, jackalGradient.Evaluate(0f), jackalGradient.Evaluate(1f));
                 gradientRole = AddChangedConversionTags.ApplyGradient("(" + roleName + ")", gradient.Evaluate(0f), jackalGradient.Evaluate(1f));
             }
@@ -333,8 +333,8 @@ public static class TosCharacterNametagPatch
                 else { text = ClientRoleExtensions.ToDisplayString(role); }
 
 
-                if (factionType.GetChangedGradient() != null)
-                    newtext = AddChangedConversionTags.ApplyGradient(text, factionType.GetChangedGradient());
+                if (factionType.GetChangedGradient(role) != null)
+                    newtext = AddChangedConversionTags.ApplyGradient(text, factionType.GetChangedGradient(role));
                 else
                 {
                     newtext = string.Concat(
@@ -352,10 +352,10 @@ public static class TosCharacterNametagPatch
                 {
                     if (factionType is not ((FactionType)33 or (FactionType)44))
                     {
-                        if (factionType.GetChangedGradient() != null)
+                        if (factionType.GetChangedGradient(role) != null)
                         {
-                            newtext += " " + AddChangedConversionTags.ApplyGradient("(" + factionType.ToDisplayString() + ")", factionType.GetChangedGradient().Evaluate(0f),
-                                factionType.GetChangedGradient().Evaluate(1f));
+                            newtext += " " + AddChangedConversionTags.ApplyGradient("(" + factionType.ToDisplayString() + ")", factionType.GetChangedGradient(role).Evaluate(0f),
+                                factionType.GetChangedGradient(role).Evaluate(1f));
                         }
                         else
                             newtext += " " + "<color=" + ClientRoleExtensions.GetFactionColor(factionType) + ">(" + factionType.ToDisplayString() + ")</color>";
@@ -363,12 +363,12 @@ public static class TosCharacterNametagPatch
                     else if (factionType == (FactionType)33)
                     {
                         newtext += " " + AddChangedConversionTags.ApplyGradient("(" + Fancy.RecruitLabel.Value + ")",
-                            factionType.GetChangedGradient().Evaluate(0f), factionType.GetChangedGradient().Evaluate(1f));
+                            factionType.GetChangedGradient(role).Evaluate(0f), factionType.GetChangedGradient(role).Evaluate(1f));
                     }
                     else if (factionType == (FactionType)44)
                     {
-                        newtext += " " + AddChangedConversionTags.ApplyThreeColorGradient("(" + factionType.ToDisplayString() + ")", factionType.GetChangedGradient().Evaluate(0f),
-                            factionType.GetChangedGradient().Evaluate(0.5f), factionType.GetChangedGradient().Evaluate(1f));
+                        newtext += " " + AddChangedConversionTags.ApplyThreeColorGradient("(" + factionType.ToDisplayString() + ")", factionType.GetChangedGradient(role).Evaluate(0f),
+                            factionType.GetChangedGradient(role).Evaluate(0.5f), factionType.GetChangedGradient(role).Evaluate(1f));
                     }
 
                 } */
@@ -441,8 +441,8 @@ public static class AddChangedConversionTags
             else { text = role.ToDisplayString(); }
 
 
-            if (factionType.GetChangedGradient() != null)
-                __result = ApplyGradient(text, factionType.GetChangedGradient());
+            if (factionType.GetChangedGradient(role) != null)
+                __result = ApplyGradient(text, factionType.GetChangedGradient(role));
             else
                 __result = $"<color={factionType.GetFactionColor()}>{text}</color>";
         }
@@ -529,12 +529,12 @@ public static class FancyChatExperimentalBTOS2
 
                 if (Utils.GetRoleInfo(position, out var playerInfo))
                 {
-                    if (playerInfo.Item2.GetChangedGradient() != null)
+                    if (playerInfo.Item2.GetChangedGradient(playerInfo.Item1) != null)
                     {
-                        var gradient = playerInfo.Item2.GetChangedGradient();
+                        var gradient = playerInfo.Item2.GetChangedGradient(playerInfo.Item1);
 
                         if (isRecruited)
-                            gradient = ((FactionType)33).GetChangedGradient();
+                            gradient = ((FactionType)33).GetChangedGradient(playerInfo.Item1);
 
                         var text3 = "";
 
@@ -557,7 +557,7 @@ public static class FancyChatExperimentalBTOS2
                     }
                     else if (isRecruited)
                     {
-                        var gradient2 = ((FactionType)33).GetChangedGradient();
+                        var gradient2 = ((FactionType)33).GetChangedGradient(playerInfo.Item1);
                         var text4 = AddChangedConversionTags.ApplyGradient(Pepper.GetDiscussionPlayerByPosition(position).gameName + ":", gradient2.Evaluate(0f), gradient2.Evaluate(1f));
                         text2 = text2.Replace(string.Concat(
                         [
@@ -576,7 +576,7 @@ public static class FancyChatExperimentalBTOS2
                 }
                 else if (isRecruited)
                 {
-                    var gradient3 = ((FactionType)33).GetChangedGradient();
+                    var gradient3 = ((FactionType)33).GetChangedGradient(playerInfo.Item1);
                     var text6 = AddChangedConversionTags.ApplyGradient(Pepper.GetDiscussionPlayerByPosition(position).gameName + ":", gradient3.Evaluate(0f), gradient3.Evaluate(1f));
                     text2 = text2.Replace(string.Concat(
                     [
@@ -640,14 +640,15 @@ public static class SwapColor
 
 public static class GetChangedGradients
 {
-    public static Gradient GetChangedGradient(this FactionType faction, Role role = Role.NONE)
+    public static Gradient GetChangedGradient(this FactionType faction, Role role)
     {
         var gradient = new Gradient();
         var array = new GradientColorKey[2];
         var array2 = new GradientAlphaKey[2];
 
         Gradient result;
-        if (Fancy.MajorColors.Value && Utils.IsMajorRole(role))
+        if (Fancy.MajorColors.Value && (role.GetSubAlignment() == SubAlignment.POWER || role == Role.FAMINE || role == Role.WAR || role == Role.PESTILENCE || role == Role.DEATH))
+
         {
             switch (faction)
             {
@@ -935,13 +936,13 @@ public class GradientRoleColorController : MonoBehaviour
     private readonly float duration = 10f;
     private float value = 0f;
 
-    public void Start() => StartCoroutine(ChangeValueOverTime(__instance.currentFaction));
+    public void Start() => StartCoroutine(ChangeValueOverTime(__instance.currentFaction, this.__instance.currentRole));
 
-    public void OnDestroy() => StopCoroutine(ChangeValueOverTime(__instance.currentFaction));
+    public void OnDestroy() => StopCoroutine(ChangeValueOverTime(__instance.currentFaction, this.__instance.currentRole));
 
-    private IEnumerator ChangeValueOverTime(FactionType faction)
+    private IEnumerator ChangeValueOverTime(FactionType faction, Role role)
     {
-        var grad = faction.GetChangedGradient();
+        var grad = faction.GetChangedGradient(role);
 
         if (grad == null)
         {
@@ -1039,9 +1040,9 @@ public static class PatchDefaultWinScreens
         var text2 = __instance.l10n(text);
         string gradientText;
 
-        if (winningFaction.GetChangedGradient() != null)
+        if (winningFaction.GetChangedGradient(Role.NONE) != null)
         {
-            var gradient = winningFaction.GetChangedGradient();
+            var gradient = winningFaction.GetChangedGradient(Role.NONE);
             __instance.leftImage.color = Utils.GetFactionStartingColor(winningFaction);
             __instance.rightImage.color = Utils.GetFactionEndingColor(winningFaction);
 
@@ -1094,9 +1095,9 @@ public static class PatchCustomWinScreens
         var text2 = __instance.l10n(string.Format("GUI_WINNERS_ARE_{0}", (int)winningFaction));
         string gradientText;
 
-        if (winningFaction.GetChangedGradient() != null)
+        if (winningFaction.GetChangedGradient(Role.NONE) != null)
         {
-            Gradient gradient = winningFaction.GetChangedGradient();
+            Gradient gradient = winningFaction.GetChangedGradient(Role.NONE);
 
             if (winningFaction == (FactionType)44)
                 gradientText = AddChangedConversionTags.ApplyThreeColorGradient(text2, gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));

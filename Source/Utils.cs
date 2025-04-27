@@ -926,35 +926,6 @@ public static class Utils
         _ => ModSettings.GetColor("Stoned/Hidden", "det.rolecustomizationmod"),
     };
 
-    public static bool IsMajorRole(Role role)
-    {
-        switch (role)
-        {
-            case Role.JAILOR:
-            case Role.MAYOR:
-            case Role.PROSECUTOR:
-            case Role.MONARCH:
-            case Role.COVENLEADER:
-            case Role.WITCH:
-            case Role.HEXMASTER:
-            case Role.FAMINE:
-            case Role.WAR:
-            case Role.PESTILENCE:
-            case Role.DEATH:
-                return true;
-
-            case Role.MARSHAL:
-                if (Constants.IsBTOS2())
-                    return Fancy.IsJackalMajor.Value;
-                return true;
-
-            case Role.VAMPIRE:
-                return Constants.IsBTOS2() && Fancy.IsVampireMajor.Value;
-
-            default:
-                return false;
-        }
-    }
 
 
 }
