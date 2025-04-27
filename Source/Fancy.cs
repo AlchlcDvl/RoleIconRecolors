@@ -181,27 +181,28 @@ public class Fancy : BaseMod<Fancy>
     public static ColorOption Lovers;
     public static ColorOption StonedHidden;
     public static ColorOption TownMajor;
-public static ColorOption CovenMajor;
-public static ColorOption ApocalypseMajor;
-public static ColorOption VampireMajor;
-public static ColorOption CursedSoulMajor;
-public static ColorOption PandoraMajor;
-public static ColorOption ComplianceMajor;
-public static ColorOption SerialKillerMajor;
-public static ColorOption ArsonistMajor;
-public static ColorOption WerewolfMajor;
-public static ColorOption ShroudMajor;
-public static ColorOption JackalMajor;
-public static ColorOption FrogsMajor;
-public static ColorOption HawksMajor;
-public static ColorOption LionsMajor;
-public static ColorOption EgotistMajor;
+    public static ColorOption CovenMajor;
+    public static ColorOption ApocalypseMajor;
+    public static ColorOption VampireMajor;
+    public static ColorOption CursedSoulMajor;
+    public static ColorOption PandoraMajor;
+    public static ColorOption ComplianceMajor;
+    public static ColorOption SerialKillerMajor;
+    public static ColorOption ArsonistMajor;
+    public static ColorOption WerewolfMajor;
+    public static ColorOption ShroudMajor;
+    public static ColorOption JackalMajor;
+    public static ColorOption FrogsMajor;
+    public static ColorOption HawksMajor;
+    public static ColorOption LionsMajor;
+    public static ColorOption EgotistMajor;
 
 
 
     public static EnumDropdownOption<FactionType> SelectTestingFaction;
     private static EnumDropdownOption<ColorType> SelectColorFilter;
     public static EnumDropdownOption<Role> SelectTestingRole; // TODO: Implement this
+    public static EnumDropdownOption<RecruitEndType> RecruitEndingColor;
     public static EnumDropdownOption<DisplayType> SelectDisplay;
 
     private static FactionType[] VanillaFactions;
@@ -345,6 +346,7 @@ public static ColorOption EgotistMajor;
 
         FactionalRoleNames = new("FACTIONAL_ROLE_NAMES", false, PackType.MiscRoleCustomisation);
         MajorColors = new("MAJOR_COLORS", false, PackType.MiscRoleCustomisation);
+        RecruitEndingColor = new("RECRUIT_ENDING", RecruitEndType.JackalEnd, PackType.MiscRoleCustomisation, useTranslations: true);
         RecruitLabel = new("RECRUIT_LABEL", "Recruited", PackType.MiscRoleCustomisation);
         TraitorLabel = new("TRAITOR_LABEL", "Town Traitor", PackType.MiscRoleCustomisation);
         VIPLabel = new("VIP_LABEL", "VIP", PackType.MiscRoleCustomisation);

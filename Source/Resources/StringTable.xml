@@ -14,6 +14,9 @@
     <Entry key="FANCY_MAJOR_COLORS_NAME">Override End Color If Role Is Major</Entry>
     <Entry key="FANCY_MAJOR_COLORS_DESC">Determines whether or not end colors on factions will be overwritten with a separate Major color value when Coven Power, Town Power, or a Horseman of the Apocalypse.</Entry>
    
+    <Entry key="FANCY_RECRUIT_ENDING_NAME">Override Recruit End Color</Entry>
+    <Entry key="FANCY_RECRUIT_ENDING_DESC">Determines what color recruits will pull. Jackal means it pulls from the Jackal End Color, Original Start means it pulls from their original faction's Start color, and Original End pulls from their original faction's End color (Major if a Major role with the setting on).</Entry>
+   
     <Entry key="FANCY_IS_JACKAL_MAJOR_NAME">Jackal is Major</Entry>
     <Entry key="FANCY_IS_JACKAL_MAJOR_DESC">Determines whether or not the Jackal role is considered Major.</Entry>
    
@@ -263,14 +266,14 @@
     <Entry key="FANCY_VAMPIRE_MAJOR_NAME">Vampire Major Color</Entry>
     <Entry key="FANCY_VAMPIRE_MAJOR_DESC">The major ending color for the Vampire faction.</Entry>
 
-    <Entry key="FANCY_CURSED_SOUL_START_NAME">Cursed Soul Start Color</Entry>
-    <Entry key="FANCY_CURSED_SOUL_START_DESC">The start color for the Cursed Soul faction.</Entry>
+    <Entry key="FANCY_CURSEDSOUL_START_NAME">Cursed Soul Start Color</Entry>
+    <Entry key="FANCY_CURSEDSOUL_START_DESC">The start color for the Cursed Soul faction.</Entry>
 
-    <Entry key="FANCY_CURSED_SOUL_END_NAME">Cursed Soul End Color</Entry>
-    <Entry key="FANCY_CURSED_SOUL_END_DESC">The end color for the Cursed Soul faction.</Entry>
+    <Entry key="FANCY_CURSEDSOUL_END_NAME">Cursed Soul End Color</Entry>
+    <Entry key="FANCY_CURSEDSOUL_END_DESC">The end color for the Cursed Soul faction.</Entry>
 
-    <Entry key="FANCY_CURSED_SOUL_MAJOR_NAME">Cursed Soul Major Color</Entry>
-    <Entry key="FANCY_CURSED_SOUL_MAJOR_DESC">The major ending color for the Cursed Soul faction.</Entry>
+    <Entry key="FANCY_CURSEDSOUL_MAJOR_NAME">Cursed Soul Major Color</Entry>
+    <Entry key="FANCY_CURSEDSOUL_MAJOR_DESC">The major ending color for the Cursed Soul faction.</Entry>
 
     <Entry key="FANCY_JESTER_START_NAME">Jester Start Color</Entry>
     <Entry key="FANCY_JESTER_START_DESC">The start color for the Jester faction.</Entry>
@@ -426,6 +429,10 @@
     <Entry key="FANCY_WOOD">Wood</Entry>
     <Entry key="FANCY_WAX">Wax</Entry>
     <Entry key="FANCY_ALL">All</Entry>
+
+    <Entry key="FANCY_JACKALEND">Jackal</Entry>
+    <Entry key="FANCY_FACTIONSTART">Original Start</Entry>
+    <Entry key="FANCY_FACTIONEND">Original End</Entry>
 
     <Entry key="FANCY_ROLECARD">Role Card</Entry>
     <Entry key="FANCY_PLAYERLIST">Player List</Entry>

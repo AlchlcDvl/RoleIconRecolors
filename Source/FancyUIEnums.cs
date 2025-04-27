@@ -58,8 +58,7 @@ public enum IconType : byte
 
 public enum RecruitEndType : byte
 {
-    Default,
+    JackalEnd,
     FactionStart,
-    FactionEnd,
-    FactionMajor
+    FactionEnd
 }
