@@ -83,8 +83,10 @@ public class DownloaderUI : UIController
 
         var chest = OpenDir.GetComponent<Image>();
         chest.SetImageColor(ColorType.Metal);
-        OpenDir.AddOnOverListener(() => chest.sprite = Fancy.Assets.GetSprite("OpenChest"));
-        OpenDir.AddOnOutListener(() => chest.sprite = Fancy.Assets.GetSprite("ClosedChest"));
+        var open = Fancy.Instance.Assets.GetSprite("OpenChest");
+        var closed = Fancy.Instance.Assets.GetSprite("ClosedChest");
+        OpenDir.AddOnOverListener(() => chest.sprite = open);
+        OpenDir.AddOnOutListener(() => chest.sprite = closed);
 
         var confirm = transform.FindRecursive("Confirm");
         confirm.GetComponent<Button>().onClick.AddListener(AfterGenerating);

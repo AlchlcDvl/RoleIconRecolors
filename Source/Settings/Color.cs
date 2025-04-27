@@ -5,6 +5,12 @@ public class ColorSetting : BaseInputSetting
     public Image ValueBg { get; set; }
     public ColorOption Option { get; set; }
 
+    public override Option BoxedOption
+    {
+        get => Option;
+        set => Option = (ColorOption)value;
+    }
+
     public override void Awake()
     {
         base.Awake();
@@ -19,6 +25,7 @@ public class ColorSetting : BaseInputSetting
         Input.SetTextWithoutNotify(Option.Value);
         Input.restoreOriginalTextOnEscape = true;
         Input.onValueChanged.AddListener(OnValueChanged);
+        Fancy.InputRegex.SetValue(Input, Option.Regex);
 
         ValueBg.color = Option.Value.ToColor();
     }

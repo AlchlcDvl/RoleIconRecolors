@@ -6,6 +6,12 @@ public class SliderSetting : Setting
     public TMP_InputField Input { get; set; }
     public FloatOption Option { get; set; }
 
+    public override Option BoxedOption
+    {
+        get => Option;
+        set => Option = (FloatOption)value;
+    }
+
     public override void Awake()
     {
         base.Awake();
@@ -27,6 +33,7 @@ public class SliderSetting : Setting
         Input.SetTextWithoutNotify($"{Slider.value:0.##}");
         Input.restoreOriginalTextOnEscape = true;
         Input.onValueChanged.AddListener(OnTextValueChanged);
+        Fancy.InputRegex.SetValue(Input, "^[0-9]+$");
     }
 
     public void OnValueChanged(float value)

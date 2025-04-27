@@ -7,13 +7,13 @@ public abstract class Option<TValue, TSetting>(string id, TValue defaultValue, P
     public Func<TValue, bool> SetActive { get; } = setActive ?? (_ => true);
     private Action<TValue> OnChanged { get; } = onChanged ?? (_ => {});
 
-    private TSetting SettingPriv;
+    private TSetting setting;
     public TSetting Setting
     {
-        get => SettingPriv;
+        get => setting;
         set
         {
-            SettingPriv = value;
+            setting = value;
             OptionCreated();
         }
     }
@@ -26,6 +26,12 @@ public abstract class Option<TValue, TSetting>(string id, TValue defaultValue, P
             Entry.Value = value;
             OnChanged(value);
         }
+    }
+
+    public override Setting BoxedSetting
+    {
+        get => Setting;
+        set => Setting = (TSetting)value;
     }
 
     public virtual void OptionCreated()

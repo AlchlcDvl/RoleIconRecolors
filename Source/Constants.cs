@@ -12,15 +12,15 @@ public static class Constants
 
     public static string CurrentPack() => Fancy.SelectedIconPack.Value;
 
-    public static string CurrentStyle(ModType? mod = null) => (mod ?? Utils.GetGameType()) switch
+    public static string CurrentStyle(GameModType? mod = null) => (mod ?? Utils.GetGameType()) switch
     {
-        ModType.BTOS2 => Fancy.MentionStyle2.Value,
+        GameModType.BTOS2 => Fancy.MentionStyle2.Value,
         _ => Fancy.MentionStyle1.Value
     };
 
-    public static string FactionOverride(ModType? mod = null) => (mod ?? Utils.GetGameType()) switch
+    public static string FactionOverride(GameModType? mod = null) => (mod ?? Utils.GetGameType()) switch
     {
-        ModType.BTOS2 => Fancy.FactionOverride2.Value,
+        GameModType.BTOS2 => Fancy.FactionOverride2.Value,
         _ => Fancy.FactionOverride1.Value
     };
 

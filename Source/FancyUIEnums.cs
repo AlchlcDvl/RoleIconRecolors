@@ -1,6 +1,6 @@
 namespace FancyUI;
 
-public enum ModType : byte
+public enum GameModType : byte
 {
     Common,
     Vanilla,

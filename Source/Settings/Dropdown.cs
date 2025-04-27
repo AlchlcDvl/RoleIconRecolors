@@ -5,6 +5,12 @@ public class DropdownSetting : Setting
     public TMP_Dropdown Dropdown { get; set; }
     public IDropdown Option { get; set; }
 
+    public override Option BoxedOption
+    {
+        get => Option as Option;
+        set => Option = (IDropdown)value;
+    }
+
     public override void Awake()
     {
         base.Awake();

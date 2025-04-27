@@ -1,10 +1,14 @@
-using System.Text.RegularExpressions;
-
 namespace FancyUI.Settings;
 
 public class StringInputSetting : BaseInputSetting
 {
     public StringInputOption Option { get; set; }
+
+    public override Option BoxedOption
+    {
+        get => Option;
+        set => Option = (StringInputOption)value;
+    }
 
     public void Start()
     {
@@ -14,18 +18,11 @@ public class StringInputSetting : BaseInputSetting
         Input.SetTextWithoutNotify(Option.Value);
         Input.restoreOriginalTextOnEscape = true;
         Input.onValueChanged.AddListener(OnValueChanged);
+        Fancy.InputRegex.SetValue(Input, Option.Regex);
     }
 
     public void OnValueChanged(string value)
     {
-        var cache = value;
-
-        if (Regex.IsMatch(value, Option.Regex))
-            value = Regex.Replace(value, Option.Regex, "");
-
-        if (cache != value)
-            Input.SetTextWithoutNotify(Option.Value);
-
         Option.Value = value;
         SettingsAndTestingUI.Instance.Refresh();
     }

@@ -38,13 +38,13 @@ public abstract class Pack(string name, PackType type)
 
     public static implicit operator bool(Pack exists) => exists != null;
 
-    protected static ModType GetModKey(string folder)
+    protected static GameModType GetModKey(string folder)
     {
         var key = ModsToFolders.Find(x => x.Value.Contains(folder)).Key;
 
         if (StringUtils.IsNullEmptyOrWhiteSpace(key))
             key = "Common";
 
-        return Enum.Parse<ModType>(key);
+        return Enum.Parse<GameModType>(key);
     }
 }

@@ -2,7 +2,7 @@ namespace FancyUI.Assets.IconPacks;
 
 public class IconPack(string name) : Pack(name, PackType.IconPacks)
 {
-    public Dictionary<ModType, IconAssets> Assets { get; } = [];
+    public Dictionary<GameModType, IconAssets> Assets { get; } = [];
     private Dictionary<string, Sprite> NumberSprites { get; } = [];
     private Dictionary<string, Sprite> EmojiSprites { get; } = [];
     // public Dictionary<string, bool> SpriteSheetCanExist { get; } = [];
@@ -84,11 +84,11 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                     Fancy.Instance.Warning($"{Name} {mod} folder doesn't exist");
                 }
 
-                if (Enum.TryParse<ModType>(mod, out var type))
+                if (Enum.TryParse<GameModType>(mod, out var type))
                 {
                     var assets = Assets[type] = new(mod);
 
-                    if (type == ModType.BTOS2 && !Constants.BTOS2Exists())
+                    if (type == GameModType.BTOS2 && !Constants.BTOS2Exists())
                         continue;
 
                     foreach (var name1 in ModsToFolders[mod])
@@ -153,7 +153,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                         }
                     }
 
-                    if (type != ModType.Common)
+                    if (type != GameModType.Common)
                         continue;
 
                     var icons3 = assets.BaseIcons["Custom"] = [];
@@ -213,7 +213,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                 for (var i = 0; i < 16; i++)
                 {
                     if (!NumberSprites.TryGetValue($"{i}", out var sprite))
-                        sprite = Fancy.Assets.GetSprite($"{i}") ?? Blank;
+                        sprite = Fancy.Instance.Assets.GetSprite($"{i}") ?? Blank;
 
                     if (sprite.IsValid())
                     {
@@ -249,7 +249,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                 for (var i = 1; i < 7; i++)
                 {
                     if (!EmojiSprites.TryGetValue($"Emoji{i}", out var sprite))
-                        sprite = Fancy.Assets.GetSprite($"Emoji{i}") ?? Blank;
+                        sprite = Fancy.Instance.Assets.GetSprite($"Emoji{i}") ?? Blank;
 
                     if (sprite.IsValid())
                     {
@@ -277,7 +277,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
 
         foreach (var (mod, assets) in Assets)
         {
-            if (mod is ModType.Common or ModType.None)
+            if (mod is GameModType.Common or GameModType.None)
                 continue;
 
             var index = Utils.Filtered(mod);
@@ -302,7 +302,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
             }
         }
 
-        foreach (var (style, icons) in Assets[ModType.Common].BaseIcons)
+        foreach (var (style, icons) in Assets[GameModType.Common].BaseIcons)
         {
             if (icons.Count == 0/* || (style != "Regular" && style != Constants.CurrentStyle(ModType.Vanilla) && style != Constants.CurrentStyle(ModType.BTOS2))*/)
                 continue;
@@ -311,7 +311,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
             {
                 try
                 {
-                    var type = Enum.Parse<ModType>(mod);
+                    var type = Enum.Parse<GameModType>(mod);
                     var index = Utils.Filtered(type);
                     var asset = BuildSpriteSheet(type, mod, style, icons, index);
                     Assets[type].MentionStyles[style] = asset;
@@ -321,7 +321,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                 catch (Exception e)
                 {
                     Fancy.Instance.Error($"Unable to create custom role icons for {Name} {style} because:\n{e}");
-                    Assets[ModType.Vanilla].MentionStyles[style] = Assets[ModType.BTOS2].MentionStyles[style] = null;
+                    Assets[GameModType.Vanilla].MentionStyles[style] = Assets[GameModType.BTOS2].MentionStyles[style] = null;
                 }
             }
         }
@@ -334,9 +334,9 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
         Fancy.Instance.Message($"{Name} Loaded!", true);
     }
 
-    private TMP_SpriteAsset BuildSpriteSheet(ModType type, string mod, string style, Dictionary<string, Sprite> icons, (Dictionary<string, string>, Dictionary<string, int>) index)
+    private TMP_SpriteAsset BuildSpriteSheet(GameModType type, string mod, string style, Dictionary<string, Sprite> icons, (Dictionary<string, string>, Dictionary<string, int>) index)
     {
-        if (type == ModType.BTOS2 && !Constants.BTOS2Exists())
+        if (type == GameModType.BTOS2 && !Constants.BTOS2Exists())
             return null;
 
         var sprites = new List<Sprite>();
@@ -360,7 +360,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                     sprite = icons2.TryGetValue(name2, out sprite1) ? sprite1 : Blank;
             }
 
-            if (!sprite.IsValid() && name3 != style && Assets[ModType.Common].BaseIcons.TryGetValue(name3, out icons2))
+            if (!sprite.IsValid() && name3 != style && Assets[GameModType.Common].BaseIcons.TryGetValue(name3, out icons2))
             {
                 sprite = icons2.TryGetValue(name2 + $"_{mod}", out sprite1) ? sprite1 : Blank;
 
@@ -368,7 +368,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                     sprite = icons2.TryGetValue(name2, out sprite1) ? sprite1 : Blank;
             }
 
-            if (!sprite.IsValid() && style != "Regular" && Assets[ModType.Common].BaseIcons.TryGetValue("Regular", out icons2))
+            if (!sprite.IsValid() && style != "Regular" && Assets[GameModType.Common].BaseIcons.TryGetValue("Regular", out icons2))
             {
                 sprite = icons2.TryGetValue(name2 + $"_{mod}", out sprite1) ? sprite1 : Blank;
 
@@ -376,7 +376,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                     sprite = icons2.TryGetValue(name2, out sprite1) ? sprite1 : Blank;
             }
 
-            if (!sprite.IsValid() && style != "Factionless" && Assets[ModType.Common].BaseIcons.TryGetValue("Factionless", out icons2))
+            if (!sprite.IsValid() && style != "Factionless" && Assets[GameModType.Common].BaseIcons.TryGetValue("Factionless", out icons2))
             {
                 sprite = icons2.TryGetValue(name2 + $"_{mod}", out sprite1) ? sprite1 : Blank;
 
@@ -385,10 +385,10 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
             }
 
             if (!sprite.IsValid())
-                sprite = Fancy.Assets.GetSprite(name2 + $"_{mod}") ?? Blank;
+                sprite = Fancy.Instance.Assets.GetSprite(name2 + $"_{mod}") ?? Blank;
 
             if (!sprite.IsValid())
-                sprite = Fancy.Assets.GetSprite(name2) ??  Blank;
+                sprite = Fancy.Instance.Assets.GetSprite(name2) ??  Blank;
 
             if (sprite.IsValid())
             {
