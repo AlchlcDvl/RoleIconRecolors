@@ -112,6 +112,7 @@ public class Fancy : BaseMod<Fancy>
     public static ToggleOption ShowOverlayWhenJailed;
     public static ToggleOption ShowOverlayAsJailor;
     public static ToggleOption IconsInRoleReveal;
+    public static ToggleOption FactionalRoleNames;
 
     public static FloatOption GeneralBrightness;
     public static FloatOption GrayscaleAmount;
@@ -260,6 +261,8 @@ public class Fancy : BaseMod<Fancy>
         CustomNumbers = new("CUSTOM_NUMBERS", false, PackType.IconPacks, _ => Constants.EnableIcons());
         AllEasterEggs = new("ALL_EE", false, PackType.IconPacks, _ => Constants.EnableIcons());
         PlayerPanelEasterEggs = new("PLAYER_PANEL_EE", false, PackType.IconPacks, _ => Constants.EnableIcons());
+
+        FactionalRoleNames = new("FACTIONAL_ROLE_NAMES", false, PackType.MiscRoleCustomisation);
 
         PlayerNumber = new("PLAYER_NUMBER", 0, PackType.Testing, 0, 15, true, _ => Constants.CustomNumbers());
         DumpSpriteSheets = new("DUMP_SHEETS", false, PackType.Testing);

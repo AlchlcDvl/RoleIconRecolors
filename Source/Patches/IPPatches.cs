@@ -644,16 +644,6 @@ public static class GetVipRoleIconAndNameInlineStringPatch
     }
 }
 
-[HarmonyPatch(typeof(TosCharacterNametag), nameof(TosCharacterNametag.ColouredName))]
-public static class TosCharacterNametagPatch
-{
-    public static void Postfix(FactionType factionType, ref string __result)
-    {
-        if (Constants.EnableIcons())
-            __result = __result.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(factionType, false)})\"");
-    }
-}
-
 [HarmonyPatch(typeof(BaseDecoder))]
 public static class FixDecodingAndEncoding
 {
