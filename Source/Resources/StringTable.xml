@@ -290,8 +290,8 @@
     <Entry key="FANCY_DOOMSDAYER_START_NAME">Doomsayer Start Color</Entry>
     <Entry key="FANCY_DOOMSDAYER_START_DESC">The start color for the Doomsayer faction.</Entry>
 
-    <Entry key="FANCY_DOOMSDAYER_END_NAME">Doomsayer End Color</Entry>
-    <Entry key="FANCY_DOOMSDAYER_END_DESC">The end color for the Doomsayer faction.</Entry>
+    <Entry key="FANCY_DOOMSAYER_END_NAME">Doomsayer End Color</Entry>
+    <Entry key="FANCY_DOOMSAYER_END_DESC">The end color for the Doomsayer faction.</Entry>
 
     <Entry key="FANCY_PIRATE_START_NAME">Pirate Start Color</Entry>
     <Entry key="FANCY_PIRATE_START_DESC">The start color for the Pirate faction.</Entry>
