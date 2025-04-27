@@ -647,7 +647,7 @@ public static class GetChangedGradients
         var array2 = new GradientAlphaKey[2];
 
         Gradient result;
-        if ((role.GetSubAlignment() == SubAlignment.POWER || role == Role.FAMINE || role == Role.WAR || role == Role.PESTILENCE || role == Role.DEATH || (role == Role.MARSHAL && Constants.IsBTOS2() && Fancy.IsJackalMajor.Value) || (role == Role.VAMPIRE && Constants.IsBTOS2() && Fancy.IsVampireMajor.Value)) && Fancy.MajorColors.Value)
+        if (Fancy.MajorColors.Value && Utils.IsMajorRole(role))
         {
             switch (faction)
             {
