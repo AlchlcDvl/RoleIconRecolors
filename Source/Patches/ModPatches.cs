@@ -69,7 +69,7 @@ public static class RemoveJailorOverlay
 }
 
 // This patches the default win screens (used by modded factions).
-[HarmonyPatch(typeof(FactionWinsCinematicPlayer), nameof(FactionWinsCinematicPlayer.Init))]
+/* [HarmonyPatch(typeof(FactionWinsCinematicPlayer), nameof(FactionWinsCinematicPlayer.Init))]
 public static class PatchDefaultWinScreens
 {
     private static readonly int State = Animator.StringToHash("State");
@@ -167,7 +167,7 @@ public static class PatchDefaultWinScreens
         __instance.SetUpWinners(__instance.winningCharacters);
         return false;
     }
-}
+} */
 
 [HarmonyPatch(typeof(RoleRevealCinematicPlayer), nameof(RoleRevealCinematicPlayer.SetRole))]
 public static class RoleRevealCinematicPlayerPatch

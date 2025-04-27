@@ -55,3 +55,11 @@ public enum IconType : byte
     Necronomicon,
     Effect
 }
+
+public enum RecruitEndType : byte
+{
+    Default,
+    FactionStart,
+    FactionEnd,
+    FactionMajor
+}

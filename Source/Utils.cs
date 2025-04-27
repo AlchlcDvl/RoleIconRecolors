@@ -782,6 +782,39 @@ public static class Utils
         return Service.Home.LocalizationService.GetLocalizedString($"FANCY_{factionName}_ROLENAME_{(int)role}");
     }
 
+    public static Color GetPlayerRoleColor(int pos)
+    {
+        var color = Color.white;
+        Service.Game.Sim.simulation.knownRolesAndFactions.Data.TryGetValue(pos, out Tuple<Role, FactionType> tuple);
+        Color color2;
+
+        if (tuple == null)
+            color2 = color;
+        else
+        {
+            if (tuple.Item1 is Role.STONED or Role.HIDDEN)
+                color2 = color;
+            else
+            {
+                color = ClientRoleExtensions.GetFactionColor(tuple.Item2).ParseColor();
+                color2 = color;
+            }
+        }
+
+        return color2;
+    }
+
+
+    public static bool GetRoleInfo(int pos, out Tuple<Role, FactionType> value) => Service.Game.Sim.simulation.knownRolesAndFactions.Data.TryGetValue(pos, out value);
+
+    public static string GetRoleName(Role role, FactionType factionType, bool useBrackets = false)
+    {
+        var roleName = ToRoleFactionDisplayString(role, factionType);
+        if (useBrackets)
+            roleName = $"({roleName})";
+
+        return roleName;
+    }
     public static string GetColorizedRoleName(Role role, FactionType factionType, bool useBrackets = false)
     {
         var roleName = ToRoleFactionDisplayString(role, factionType);
@@ -834,6 +867,64 @@ public static class Utils
 
         return null;
     }
+
+    public static Color GetFactionStartingColor(FactionType faction) => faction switch
+    {
+        FactionType.TOWN => ModSettings.GetColor("Town Start", "det.rolecustomizationmod"),
+        FactionType.COVEN => ModSettings.GetColor("Coven Start", "det.rolecustomizationmod"),
+        FactionType.APOCALYPSE => ModSettings.GetColor("Apocalypse Start", "det.rolecustomizationmod"),
+        FactionType.EXECUTIONER => ModSettings.GetColor("Executioner Start", "det.rolecustomizationmod"),
+        FactionType.SERIALKILLER => ModSettings.GetColor("Serial Killer Start", "det.rolecustomizationmod"),
+        FactionType.ARSONIST => ModSettings.GetColor("Arsonist Start", "det.rolecustomizationmod"),
+        FactionType.WEREWOLF => ModSettings.GetColor("Werewolf Start", "det.rolecustomizationmod"),
+        FactionType.SHROUD => ModSettings.GetColor("Shroud Start", "det.rolecustomizationmod"),
+        FactionType.JESTER => ModSettings.GetColor("Jester Start", "det.rolecustomizationmod"),
+        (FactionType)40 => ModSettings.GetColor("Inquisitor Start", "det.rolecustomizationmod"),
+        FactionType.PIRATE => ModSettings.GetColor("Pirate Start", "det.rolecustomizationmod"),
+        FactionType.DOOMSAYER => ModSettings.GetColor("Doomsayer Start", "det.rolecustomizationmod"),
+        FactionType.VAMPIRE => ModSettings.GetColor("Vampire Start", "det.rolecustomizationmod"),
+        FactionType.CURSED_SOUL => ModSettings.GetColor("Cursed Soul Start", "det.rolecustomizationmod"),
+        (FactionType)33 => ModSettings.GetColor("Jackal/Recruit Start", "det.rolecustomizationmod"),
+        (FactionType)38 => ModSettings.GetColor("Judge Start", "det.rolecustomizationmod"),
+        (FactionType)39 => ModSettings.GetColor("Auditor Start", "det.rolecustomizationmod"),
+        (FactionType)41 => ModSettings.GetColor("Starspawn Start", "det.rolecustomizationmod"),
+        (FactionType)42 => ModSettings.GetColor("Egotist Start", "det.rolecustomizationmod"),
+        (FactionType)43 => ModSettings.GetColor("Pandora Start", "det.rolecustomizationmod"),
+        (FactionType)34 => ModSettings.GetColor("Frogs Start", "det.rolecustomizationmod"),
+        (FactionType)35 => ModSettings.GetColor("Lions Start", "det.rolecustomizationmod"),
+        (FactionType)36 => ModSettings.GetColor("Hawks Start", "det.rolecustomizationmod"),
+        (FactionType)44 => ModSettings.GetColor("Compliance Start", "det.rolecustomizationmod"),
+        _ => ModSettings.GetColor("Stoned/Hidden", "det.rolecustomizationmod"),
+    };
+
+    public static Color GetFactionEndingColor(FactionType faction) => faction switch
+    {
+        FactionType.TOWN => ModSettings.GetColor("Town End", "det.rolecustomizationmod"),
+        FactionType.COVEN => ModSettings.GetColor("Coven End", "det.rolecustomizationmod"),
+        FactionType.APOCALYPSE => ModSettings.GetColor("Apocalypse End", "det.rolecustomizationmod"),
+        FactionType.EXECUTIONER => ModSettings.GetColor("Executioner End", "det.rolecustomizationmod"),
+        FactionType.SERIALKILLER => ModSettings.GetColor("Serial Killer End", "det.rolecustomizationmod"),
+        FactionType.ARSONIST => ModSettings.GetColor("Arsonist End", "det.rolecustomizationmod"),
+        FactionType.WEREWOLF => ModSettings.GetColor("Werewolf End", "det.rolecustomizationmod"),
+        FactionType.SHROUD => ModSettings.GetColor("Shroud End", "det.rolecustomizationmod"),
+        FactionType.JESTER => ModSettings.GetColor("Jester End", "det.rolecustomizationmod"),
+        (FactionType)40 => ModSettings.GetColor("Inquisitor End", "det.rolecustomizationmod"),
+        FactionType.PIRATE => ModSettings.GetColor("Pirate End", "det.rolecustomizationmod"),
+        FactionType.DOOMSAYER => ModSettings.GetColor("Doomsayer End", "det.rolecustomizationmod"),
+        FactionType.VAMPIRE => ModSettings.GetColor("Vampire End", "det.rolecustomizationmod"),
+        FactionType.CURSED_SOUL => ModSettings.GetColor("Cursed Soul End", "det.rolecustomizationmod"),
+        (FactionType)33 => ModSettings.GetColor("Jackal/Recruit End", "det.rolecustomizationmod"),
+        (FactionType)38 => ModSettings.GetColor("Judge End", "det.rolecustomizationmod"),
+        (FactionType)39 => ModSettings.GetColor("Auditor End", "det.rolecustomizationmod"),
+        (FactionType)41 => ModSettings.GetColor("Starspawn End", "det.rolecustomizationmod"),
+        (FactionType)42 => ModSettings.GetColor("Egotist End", "det.rolecustomizationmod"),
+        (FactionType)43 => ModSettings.GetColor("Pandora End", "det.rolecustomizationmod"),
+        (FactionType)34 => ModSettings.GetColor("Frogs End", "det.rolecustomizationmod"),
+        (FactionType)35 => ModSettings.GetColor("Lions End", "det.rolecustomizationmod"),
+        (FactionType)36 => ModSettings.GetColor("Hawks End", "det.rolecustomizationmod"),
+        (FactionType)44 => ModSettings.GetColor("Compliance End", "det.rolecustomizationmod"),
+        _ => ModSettings.GetColor("Stoned/Hidden", "det.rolecustomizationmod"),
+    };
 
 
 
