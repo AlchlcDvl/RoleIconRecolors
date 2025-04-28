@@ -62,3 +62,10 @@ public enum RecruitEndType : byte
     FactionStart,
     FactionEnd
 }
+
+public enum FactionLabelOption : byte
+{
+    Mismatch,
+    Always,
+    Never
+}

@@ -203,6 +203,7 @@ public class Fancy : BaseMod<Fancy>
     private static EnumDropdownOption<ColorType> SelectColorFilter;
     public static EnumDropdownOption<Role> SelectTestingRole; // TODO: Implement this
     public static EnumDropdownOption<RecruitEndType> RecruitEndingColor;
+    public static EnumDropdownOption<FactionLabelOption> RoleCardFactionLabel;
     public static EnumDropdownOption<DisplayType> SelectDisplay;
 
     private static FactionType[] VanillaFactions;
@@ -347,6 +348,7 @@ public class Fancy : BaseMod<Fancy>
         FactionalRoleNames = new("FACTIONAL_ROLE_NAMES", false, PackType.MiscRoleCustomisation);
         MajorColors = new("MAJOR_COLORS", false, PackType.MiscRoleCustomisation);
         RecruitEndingColor = new("RECRUIT_ENDING", RecruitEndType.JackalEnd, PackType.MiscRoleCustomisation, useTranslations: true);
+        RoleCardFactionLabel = new("FACTION_LABEL", FactionLabelOption.Mismatch, PackType.MiscRoleCustomisation, useTranslations: true);
         RecruitLabel = new("RECRUIT_LABEL", "Recruited", PackType.MiscRoleCustomisation);
         TraitorLabel = new("TRAITOR_LABEL", "Town Traitor", PackType.MiscRoleCustomisation);
         VIPLabel = new("VIP_LABEL", "VIP", PackType.MiscRoleCustomisation);

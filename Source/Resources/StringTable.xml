@@ -11,6 +11,9 @@
     <Entry key="FANCY_FACTION_NEXT_TO_ROLE_NAME">Faction Name Next to Role</Entry>
     <Entry key="FANCY_FACTION_NEXT_TO_ROLE_DESC">Determines whether or not factions will be displayed next to roles as if colors were off in Town of Salem 2's chat settings.</Entry>
    
+    <Entry key="FANCY_FACTION_LABEL_NAME">Faction Label in Role Card</Entry>
+    <Entry key="FANCY_FACTION_LABEL_DESC">Determines whether or not the faction label within the role card will be displayed and under what conditions. Mismatch means if the role doesn't belong in the current faction. Always and Never are self explanatory. Does not affect the Town Traitor and Recruit Labels.</Entry>
+   
     <Entry key="FANCY_MAJOR_COLORS_NAME">Override End Color If Role Is Major</Entry>
     <Entry key="FANCY_MAJOR_COLORS_DESC">Determines whether or not end colors on factions will be overwritten with a separate Major color value when Coven Power, Town Power, or a Horseman of the Apocalypse.</Entry>
    
@@ -433,6 +436,10 @@
     <Entry key="FANCY_JACKALEND">Jackal</Entry>
     <Entry key="FANCY_FACTIONSTART">Original Start</Entry>
     <Entry key="FANCY_FACTIONEND">Original End</Entry>
+
+    <Entry key="FANCY_MISMATCH">Mismatch</Entry>
+    <Entry key="FANCY_ALWAYS">Always</Entry>
+    <Entry key="FANCY_NEVER">Never</Entry>
 
     <Entry key="FANCY_ROLECARD">Role Card</Entry>
     <Entry key="FANCY_PLAYERLIST">Player List</Entry>

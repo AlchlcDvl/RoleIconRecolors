@@ -926,6 +926,9 @@ public static class Utils
         _ => ModSettings.GetColor("Stoned/Hidden", "det.rolecustomizationmod"),
     };
 
-
+    public static string GetString(string key)
+    {
+        return Service.Home.LocalizationService.GetLocalizedString(key);
+    }
 
 }

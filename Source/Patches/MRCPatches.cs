@@ -1,6 +1,7 @@
 using Game.Characters;
 using Home.HomeScene;
 using Home.Shared;
+using Home.Utils;
 using Server.Shared.Extensions;
 using Game;
 using HarmonyLib;
@@ -101,7 +102,7 @@ namespace FancyUI.Patches
                 var gradient = ((FactionType)33).GetChangedGradient(role);
                 text = text + "\n<size=85%>" + AddChangedConversionTags.ApplyGradient($"({Fancy.RecruitLabel.Value})", gradient.Evaluate(0f), gradient.Evaluate(1f)) + "</size>";
             }
-            else if (RoleExtensions.GetFaction(role) != faction)
+            else if ((RoleExtensions.GetFaction(role) != faction && Fancy.RoleCardFactionLabel.Value == FactionLabelOption.Mismatch) || Fancy.RoleCardFactionLabel.Value == FactionLabelOption.Always)
             {
                 var gradient2 = faction.GetChangedGradient(role);
 
@@ -351,7 +352,7 @@ public static class TosCharacterNametagPatch
 
                 // DOES NOT WORK, SOMEONE LOOK AT THIS
                 // if (RoleExtensions.GetFaction(role) != factionType && factionType != FactionType.NONE && Fancy.FactionNameNextToRole.Value)
-                if (factionType != FactionType.NONE) // TESTING PURPOSES
+                // if (factionType != FactionType.NONE) // TESTING PURPOSES
                 {
                     if (factionType is not ((FactionType)33 or (FactionType)44))
                     {
@@ -1448,7 +1449,6 @@ public static class PatchCustomWinScreens
         return;
     }
 }
-
 
 }
 
