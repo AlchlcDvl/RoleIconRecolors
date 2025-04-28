@@ -66,6 +66,7 @@ public enum RecruitEndType : byte
 public enum FactionLabelOption : byte
 {
     Mismatch,
+    Conditional,
     Always,
     Never
 }

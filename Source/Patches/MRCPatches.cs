@@ -70,6 +70,27 @@ namespace FancyUI.Patches
             __instance.roleNameText.text = Pepper.GetMyRole().ToChangedDisplayString(Pepper.GetMyFaction(), Service.Game.Sim.simulation.observations.roleCardObservation.Data.modifier);
         }
 
+        private static bool ConditionalCompliancePandora(FactionType originalFaction, FactionType currentFaction)
+        {
+            if (currentFaction == (FactionType)43)
+            {
+                return originalFaction == FactionType.COVEN || originalFaction == FactionType.APOCALYPSE;
+            }
+            if (originalFaction == (FactionType)43)
+            {
+                return currentFaction == FactionType.COVEN || currentFaction == FactionType.APOCALYPSE;
+            }
+            if (currentFaction == (FactionType)44)
+            {
+                return originalFaction == FactionType.SERIALKILLER || originalFaction == FactionType.ARSONIST || originalFaction == FactionType.WEREWOLF || originalFaction == FactionType.SHROUD;
+            }
+            if (originalFaction == (FactionType)44)
+            {
+                return currentFaction == FactionType.SERIALKILLER || currentFaction == FactionType.ARSONIST || currentFaction == FactionType.WEREWOLF || currentFaction == FactionType.SHROUD;
+            }
+            return originalFaction == currentFaction;
+        }
+
         public static string ToChangedDisplayString(this Role role, FactionType faction, ROLE_MODIFIER modifier)
         {
             var text = "";
@@ -102,7 +123,7 @@ namespace FancyUI.Patches
                 var gradient = ((FactionType)33).GetChangedGradient(role);
                 text = text + "\n<size=85%>" + AddChangedConversionTags.ApplyGradient($"({Fancy.RecruitLabel.Value})", gradient.Evaluate(0f), gradient.Evaluate(1f)) + "</size>";
             }
-            else if ((RoleExtensions.GetFaction(role) != faction && Fancy.RoleCardFactionLabel.Value == FactionLabelOption.Mismatch) || Fancy.RoleCardFactionLabel.Value == FactionLabelOption.Always)
+            else if ((Fancy.RoleCardFactionLabel.Value == FactionLabelOption.Mismatch && RoleExtensions.GetFaction(role) != faction) || (Fancy.RoleCardFactionLabel.Value == FactionLabelOption.Always) || (Fancy.RoleCardFactionLabel.Value == FactionLabelOption.Conditional && !ConditionalCompliancePandora(RoleExtensions.GetFaction(role), faction)))
             {
                 var gradient2 = faction.GetChangedGradient(role);
 
