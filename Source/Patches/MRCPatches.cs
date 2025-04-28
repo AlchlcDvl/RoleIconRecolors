@@ -348,7 +348,8 @@ public static class TosCharacterNametagPatch
                 }
 
                 // DOES NOT WORK, SOMEONE LOOK AT THIS
-                /* if (RoleExtensions.GetFaction(role) != factionType && factionType != FactionType.NONE&& Fancy.FactionNameNextToRole.Value)
+                // if (RoleExtensions.GetFaction(role) != factionType && factionType != FactionType.NONE && Fancy.FactionNameNextToRole.Value)
+                if (factionType != FactionType.NONE) // TESTING PURPOSES
                 {
                     if (factionType is not ((FactionType)33 or (FactionType)44))
                     {
@@ -371,7 +372,7 @@ public static class TosCharacterNametagPatch
                             factionType.GetChangedGradient(role).Evaluate(0.5f), factionType.GetChangedGradient(role).Evaluate(1f));
                     }
 
-                } */
+                } 
 
                 __result = newtext;
             }
