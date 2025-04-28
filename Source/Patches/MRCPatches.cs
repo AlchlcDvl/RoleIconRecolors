@@ -328,7 +328,9 @@ public static class TosCharacterNametagPatch
 
             if (RoleExtensions.IsResolved(role) || role is Role.FAMINE or Role.DEATH or Role.PESTILENCE or Role.WAR)
             {
-                string text;
+                var text = "";
+                text = ClientRoleExtensions.ToDisplayString(role);
+                
                 if (Fancy.FactionalRoleNames.Value) { text = Utils.ToRoleFactionDisplayString(role, factionType); }
                 else { text = ClientRoleExtensions.ToDisplayString(role); }
 
