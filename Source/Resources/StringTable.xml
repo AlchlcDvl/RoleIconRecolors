@@ -287,8 +287,8 @@
     <Entry key="FANCY_EXECUTIONER_END_NAME">Executioner End Color</Entry>
     <Entry key="FANCY_EXECUTIONER_END_DESC">The end color for the Executioner faction.</Entry>
 
-    <Entry key="FANCY_DOOMSDAYER_START_NAME">Doomsayer Start Color</Entry>
-    <Entry key="FANCY_DOOMSDAYER_START_DESC">The start color for the Doomsayer faction.</Entry>
+    <Entry key="FANCY_DOOMSAYER_START_NAME">Doomsayer Start Color</Entry>
+    <Entry key="FANCY_DOOMSAYER_START_DESC">The start color for the Doomsayer faction.</Entry>
 
     <Entry key="FANCY_DOOMSAYER_END_NAME">Doomsayer End Color</Entry>
     <Entry key="FANCY_DOOMSAYER_END_DESC">The end color for the Doomsayer faction.</Entry>

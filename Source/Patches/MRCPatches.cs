@@ -597,44 +597,47 @@ public static class FancyChatExperimentalBTOS2
 }
 
 // AS take a look at this, TOS2 freaks out when loading it
-/*[HarmonyPatch(typeof(ClientRoleExtensions), nameof(ClientRoleExtensions.GetFactionColor))]
+[HarmonyPatch(typeof(ClientRoleExtensions), nameof(ClientRoleExtensions.GetFactionColor))]
 public static class SwapColor
 {
     [HarmonyPostfix]
     public static void Swap(ref string __result, ref FactionType factionType)
     {
-        var faction = (int)factionType;
-        __result = faction switch
+        if (Fancy.TownStart?.Value != null)
         {
-            1 => Fancy.TownStart.Value,
-            2 => Fancy.CovenStart.Value,
-            3 => Fancy.SerialKillerStart.Value,
-            4 => Fancy.ArsonistStart.Value,
-            5 => Fancy.WerewolfStart.Value,
-            6 => Fancy.ShroudStart.Value,
-            7 => Fancy.ApocalypseStart.Value,
-            8 => Fancy.ExecutionerStart.Value,
-            9 => Fancy.JesterStart.Value,
-            10 => Fancy.PirateStart.Value,
-            11 => Fancy.DoomsayerStart.Value,
-            12 => Fancy.VampireStart.Value,
-            13 => Fancy.CursedSoulStart.Value,
-            33 => Fancy.JackalStart.Value,
-            34 => Fancy.FrogsStart.Value,
-            35 => Fancy.LionsStart.Value,
-            36 => Fancy.HawksStart.Value,
-            38 => Fancy.JudgeStart.Value,
-            39 => Fancy.AuditorStart.Value,
-            40 => Fancy.InquisitorStart.Value,
-            41 => Fancy.StarspawnStart.Value,
-            42 => Fancy.EgotistStart.Value,
-            43 => Fancy.PandoraStart.Value,
-            44 => Fancy.ComplianceStart.Value,
-            250 => Fancy.Lovers.Value,
-            _ => Fancy.StonedHidden.Value,
-        };
+            var faction = (int)factionType;
+            __result = faction switch
+            {
+                1 => Fancy.TownStart.Value,
+                2 => Fancy.CovenStart.Value,
+                3 => Fancy.SerialKillerStart.Value,
+                4 => Fancy.ArsonistStart.Value,
+                5 => Fancy.WerewolfStart.Value,
+                6 => Fancy.ShroudStart.Value,
+                7 => Fancy.ApocalypseStart.Value,
+                8 => Fancy.ExecutionerStart.Value,
+                9 => Fancy.JesterStart.Value,
+                10 => Fancy.PirateStart.Value,
+                11 => Fancy.DoomsayerStart.Value,
+                12 => Fancy.VampireStart.Value,
+                13 => Fancy.CursedSoulStart.Value,
+                33 => Fancy.JackalStart.Value,
+                34 => Fancy.FrogsStart.Value,
+                35 => Fancy.LionsStart.Value,
+                36 => Fancy.HawksStart.Value,
+                38 => Fancy.JudgeStart.Value,
+                39 => Fancy.AuditorStart.Value,
+                40 => Fancy.InquisitorStart.Value,
+                41 => Fancy.StarspawnStart.Value,
+                42 => Fancy.EgotistStart.Value,
+                43 => Fancy.PandoraStart.Value,
+                44 => Fancy.ComplianceStart.Value,
+                250 => Fancy.Lovers.Value,
+                _ => Fancy.StonedHidden.Value,
+            };
+        }
     }
-} */
+} 
 
 
 
