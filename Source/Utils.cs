@@ -868,63 +868,49 @@ public static class Utils
         return null;
     }
 
-public static Color GetFactionStartingColor(FactionType faction) => faction switch
-{
-    FactionType.TOWN => Fancy.Colors["TOWN"].start.ToColor(),
-    FactionType.COVEN => Fancy.Colors["COVEN"].start.ToColor(),
-    FactionType.APOCALYPSE => Fancy.Colors["APOCALYPSE"].start.ToColor(),
-    FactionType.EXECUTIONER => Fancy.Colors["EXECUTIONER"].start.ToColor(),
-    FactionType.SERIALKILLER => Fancy.Colors["SERIALKILLER"].start.ToColor(),
-    FactionType.ARSONIST => Fancy.Colors["ARSONIST"].start.ToColor(),
-    FactionType.WEREWOLF => Fancy.Colors["WEREWOLF"].start.ToColor(),
-    FactionType.SHROUD => Fancy.Colors["SHROUD"].start.ToColor(),
-    FactionType.JESTER => Fancy.Colors["JESTER"].start.ToColor(),
-    (FactionType)40 => Fancy.Colors["INQUISITOR"].start.ToColor(),
-    FactionType.PIRATE => Fancy.Colors["PIRATE"].start.ToColor(),
-    FactionType.DOOMSAYER => Fancy.Colors["DOOMSAYER"].start.ToColor(),
-    FactionType.VAMPIRE => Fancy.Colors["VAMPIRE"].start.ToColor(),
-    FactionType.CURSED_SOUL => Fancy.Colors["CURSEDSOUL"].start.ToColor(),
-    (FactionType)33 => Fancy.Colors["JACKAL"].start.ToColor(),
-    (FactionType)38 => Fancy.Colors["JUDGE"].start.ToColor(),
-    (FactionType)39 => Fancy.Colors["AUDITOR"].start.ToColor(),
-    (FactionType)41 => Fancy.Colors["STARSPAWN"].start.ToColor(),
-    (FactionType)42 => Fancy.Colors["EGOTIST"].start.ToColor(),
-    (FactionType)43 => Fancy.Colors["PANDORA"].start.ToColor(),
-    (FactionType)34 => Fancy.Colors["FROGS"].start.ToColor(),
-    (FactionType)35 => Fancy.Colors["LIONS"].start.ToColor(),
-    (FactionType)36 => Fancy.Colors["HAWKS"].start.ToColor(),
-    (FactionType)44 => Fancy.Colors["COMPLIANCE"].start.ToColor(),
-    _ => Fancy.Colors["STONED_HIDDEN"].start.ToColor(),
-};
-
-    public static Color GetFactionEndingColor(FactionType faction) => faction switch
+    private static readonly Dictionary<FactionType, string> FactionColorKeys = new()
     {
-        FactionType.TOWN => Fancy.Colors["TOWN"].end.ToColor(),
-        FactionType.COVEN => Fancy.Colors["COVEN"].end.ToColor(),
-        FactionType.APOCALYPSE => Fancy.Colors["APOCALYPSE"].end.ToColor(),
-        FactionType.EXECUTIONER => Fancy.Colors["EXECUTIONER"].end.ToColor(),
-        FactionType.SERIALKILLER => Fancy.Colors["SERIALKILLER"].end.ToColor(),
-        FactionType.ARSONIST => Fancy.Colors["ARSONIST"].end.ToColor(),
-        FactionType.WEREWOLF => Fancy.Colors["WEREWOLF"].end.ToColor(),
-        FactionType.SHROUD => Fancy.Colors["SHROUD"].end.ToColor(),
-        FactionType.JESTER => Fancy.Colors["JESTER"].end.ToColor(),
-        (FactionType)40 => Fancy.Colors["INQUISITOR"].end.ToColor(),
-        FactionType.PIRATE => Fancy.Colors["PIRATE"].end.ToColor(),
-        FactionType.DOOMSAYER => Fancy.Colors["DOOMSAYER"].end.ToColor(),
-        FactionType.VAMPIRE => Fancy.Colors["VAMPIRE"].end.ToColor(),
-        FactionType.CURSED_SOUL => Fancy.Colors["CURSEDSOUL"].end.ToColor(),
-        (FactionType)33 => Fancy.Colors["JACKAL"].end.ToColor(),
-        (FactionType)38 => Fancy.Colors["JUDGE"].end.ToColor(),
-        (FactionType)39 => Fancy.Colors["AUDITOR"].end.ToColor(),
-        (FactionType)41 => Fancy.Colors["STARSPAWN"].end.ToColor(),
-        (FactionType)42 => Fancy.Colors["EGOTIST"].end.ToColor(),
-        (FactionType)43 => Fancy.Colors["PANDORA"].end.ToColor(),
-        (FactionType)34 => Fancy.Colors["FROGS"].end.ToColor(),
-        (FactionType)35 => Fancy.Colors["LIONS"].end.ToColor(),
-        (FactionType)36 => Fancy.Colors["HAWKS"].end.ToColor(),
-        (FactionType)44 => Fancy.Colors["COMPLIANCE"].end.ToColor(),
-        _ => Fancy.Colors["STONED_HIDDEN"].start.ToColor(),
+        [FactionType.TOWN] = "TOWN",
+        [FactionType.COVEN] = "COVEN",
+        [FactionType.APOCALYPSE] = "APOCALYPSE",
+        [FactionType.EXECUTIONER] = "EXECUTIONER",
+        [FactionType.SERIALKILLER] = "SERIALKILLER",
+        [FactionType.ARSONIST] = "ARSONIST",
+        [FactionType.WEREWOLF] = "WEREWOLF",
+        [FactionType.SHROUD] = "SHROUD",
+        [FactionType.JESTER] = "JESTER",
+        [(FactionType)40] = "INQUISITOR",
+        [FactionType.PIRATE] = "PIRATE",
+        [FactionType.DOOMSAYER] = "DOOMSAYER",
+        [FactionType.VAMPIRE] = "VAMPIRE",
+        [FactionType.CURSED_SOUL] = "CURSEDSOUL",
+        [(FactionType)33] = "JACKAL",
+        [(FactionType)38] = "JUDGE",
+        [(FactionType)39] = "AUDITOR",
+        [(FactionType)41] = "STARSPAWN",
+        [(FactionType)42] = "EGOTIST",
+        [(FactionType)43] = "PANDORA",
+        [(FactionType)34] = "FROGS",
+        [(FactionType)35] = "LIONS",
+        [(FactionType)36] = "HAWKS",
+        [(FactionType)44] = "COMPLIANCE"
     };
+
+    public static Color GetFactionStartingColor(FactionType faction)
+    {
+        return Fancy.Colors[
+            FactionColorKeys.TryGetValue(faction, out var colorKey) ? colorKey : "STONED_HIDDEN"
+        ].start.ToColor();
+    }
+
+    public static Color GetFactionEndingColor(FactionType faction)
+    {
+        if (FactionColorKeys.TryGetValue(faction, out var colorKey))
+            return Fancy.Colors[colorKey].end.ToColor();
+
+        // Explicit fallback to start color for STONED_HIDDEN
+        return Fancy.Colors["STONED_HIDDEN"].start.ToColor();
+    }
 
     public static string GetString(string key)
     {
