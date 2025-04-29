@@ -128,75 +128,9 @@ public class Fancy : BaseMod<Fancy>
     public static StringInputOption CourtLabel;
     public static StringInputOption JuryLabel;
     public static StringInputOption PirateLabel;
-    public static ColorOption TownStart;
-    public static ColorOption TownEnd;
-    public static ColorOption CovenStart;
-    public static ColorOption CovenEnd;
-    public static ColorOption ApocalypseStart;
-    public static ColorOption ApocalypseEnd;
-    public static ColorOption VampireStart;
-    public static ColorOption VampireEnd;
-    public static ColorOption CursedSoulStart;
-    public static ColorOption CursedSoulEnd;
-    public static ColorOption PandoraStart;
-    public static ColorOption PandoraEnd;
-    public static ColorOption ComplianceStart;
-    public static ColorOption ComplianceMiddle;
-    public static ColorOption ComplianceEnd;
-    public static ColorOption SerialKillerStart;
-    public static ColorOption SerialKillerEnd;
-    public static ColorOption ArsonistStart;
-    public static ColorOption ArsonistEnd;
-    public static ColorOption WerewolfStart;
-    public static ColorOption WerewolfEnd;
-    public static ColorOption ShroudStart;
-    public static ColorOption ShroudEnd;
-    public static ColorOption JackalStart;
-    public static ColorOption JackalEnd;
-    public static ColorOption FrogsStart;
-    public static ColorOption FrogsEnd;
-    public static ColorOption HawksStart;
-    public static ColorOption HawksEnd;
-    public static ColorOption LionsStart;
-    public static ColorOption LionsEnd;
-    public static ColorOption EgotistStart;
-    public static ColorOption EgotistEnd;
-    public static ColorOption JesterStart;
-    public static ColorOption JesterEnd;
-    public static ColorOption ExecutionerStart;
-    public static ColorOption ExecutionerEnd;
-    public static ColorOption DoomsayerStart;
-    public static ColorOption DoomsayerEnd;
-    public static ColorOption PirateStart;
-    public static ColorOption PirateEnd;
-    public static ColorOption InquisitorStart;
-    public static ColorOption InquisitorEnd;
-    public static ColorOption StarspawnStart;
-    public static ColorOption StarspawnEnd;
-    public static ColorOption JudgeStart;
-    public static ColorOption JudgeEnd;
-    public static ColorOption AuditorStart;
-    public static ColorOption AuditorEnd;
-    public static ColorOption Neutral;
-    public static ColorOption Lovers;
-    public static ColorOption StonedHidden;
-    public static ColorOption TownMajor;
-    public static ColorOption CovenMajor;
-    public static ColorOption ApocalypseMajor;
-    public static ColorOption VampireMajor;
-    public static ColorOption CursedSoulMajor;
-    public static ColorOption PandoraMajor;
-    public static ColorOption ComplianceMajor;
-    public static ColorOption SerialKillerMajor;
-    public static ColorOption ArsonistMajor;
-    public static ColorOption WerewolfMajor;
-    public static ColorOption ShroudMajor;
-    public static ColorOption JackalMajor;
-    public static ColorOption FrogsMajor;
-    public static ColorOption HawksMajor;
-    public static ColorOption LionsMajor;
-    public static ColorOption EgotistMajor;
 
+    public static Dictionary<string, ColorOption> ColorOptions = new();
+    public static Dictionary<string, (string start, string end, string major, string middle)> Colors;
 
 
     public static EnumDropdownOption<FactionType> SelectTestingFaction;
@@ -371,75 +305,6 @@ public class Fancy : BaseMod<Fancy>
         CourtLabel = new("COURT_LABEL", "Court", PackType.MiscRoleCustomisation);
         JuryLabel = new("JURY_LABEL", "Jury", PackType.MiscRoleCustomisation);
         PirateLabel = new("PIRATE_LABEL", "Pirate", PackType.MiscRoleCustomisation);
-        TownStart = new("TOWN_START", "#06E00C", PackType.MiscRoleCustomisation);
-        TownEnd = new("TOWN_END", "#06E00C", PackType.MiscRoleCustomisation);
-        TownMajor = new("TOWN_MAJOR", "#06E00C", PackType.MiscRoleCustomisation);
-        CovenStart = new("COVEN_START", "#B545FF", PackType.MiscRoleCustomisation);
-        CovenEnd = new("COVEN_END", "#B545FF", PackType.MiscRoleCustomisation);
-        CovenMajor = new("COVEN_MAJOR", "#B545FF", PackType.MiscRoleCustomisation);
-        ApocalypseStart = new("APOCALYPSE_START", "#FF004E", PackType.MiscRoleCustomisation);
-        ApocalypseEnd = new("APOCALYPSE_END", "#FF004E", PackType.MiscRoleCustomisation);
-        ApocalypseMajor = new("APOCALYPSE_MAJOR", "#FF004E", PackType.MiscRoleCustomisation);
-        JesterStart = new("JESTER_START", "#F5A6D4", PackType.MiscRoleCustomisation);
-        JesterEnd = new("JESTER_END", "#F5A6D4", PackType.MiscRoleCustomisation);
-        DoomsayerStart = new("DOOMSAYER_START", "#00CC99", PackType.MiscRoleCustomisation);
-        DoomsayerEnd = new("DOOMSAYER_END", "#00CC99", PackType.MiscRoleCustomisation);
-        PirateStart = new("PIRATE_START", "#ECC23E", PackType.MiscRoleCustomisation);
-        PirateEnd = new("PIRATE_END", "#ECC23E", PackType.MiscRoleCustomisation);
-        ExecutionerStart = new("EXECUTIONER_START", "#949797", PackType.MiscRoleCustomisation);
-        ExecutionerEnd = new("EXECUTIONER_END", "#949797", PackType.MiscRoleCustomisation);
-        InquisitorStart = new("INQUISITOR_START", "#821252", PackType.MiscRoleCustomisation);
-        InquisitorEnd = new("INQUISITOR_END", "#821252", PackType.MiscRoleCustomisation);
-        ArsonistStart = new("ARSONIST_START", "#DB7601", PackType.MiscRoleCustomisation);
-        ArsonistEnd = new("ARSONIST_END", "#DB7601", PackType.MiscRoleCustomisation);
-        ArsonistMajor = new("ARSONIST_MAJOR", "#DB7601", PackType.MiscRoleCustomisation);
-        SerialKillerStart = new("SERIALKILLER_START", "#1D4DFC", PackType.MiscRoleCustomisation);
-        SerialKillerEnd = new("SERIALKILLER_END", "#1D4DFC", PackType.MiscRoleCustomisation);
-        SerialKillerMajor = new("SERIALKILLER_MAJOR", "#1D4DFC", PackType.MiscRoleCustomisation);
-        ShroudStart = new("SHROUD_START", "#6699FF", PackType.MiscRoleCustomisation);
-        ShroudEnd = new("SHROUD_END", "#6699FF", PackType.MiscRoleCustomisation);
-        ShroudMajor = new("SHROUD_MAJOR", "#6699FF", PackType.MiscRoleCustomisation);
-        WerewolfStart = new("WEREWOLF_START", "#9D7038", PackType.MiscRoleCustomisation);
-        WerewolfEnd = new("WEREWOLF_END", "#9D7038", PackType.MiscRoleCustomisation);
-        WerewolfMajor = new("WEREWOLF_MAJOR", "#9D7038", PackType.MiscRoleCustomisation);
-        VampireStart = new("VAMPIRE_START", "#A22929", PackType.MiscRoleCustomisation);
-        VampireEnd = new("VAMPIRE_END", "#A22929", PackType.MiscRoleCustomisation);
-        VampireMajor = new("VAMPIRE_MAJOR", "#A22929", PackType.MiscRoleCustomisation);
-        AuditorStart = new("AUDITOR_START", "#AEBA87", PackType.MiscRoleCustomisation);
-        AuditorEnd = new("AUDITOR_END", "#E8FCC5", PackType.MiscRoleCustomisation);
-        JudgeStart = new("JUDGE_START", "#C77364", PackType.MiscRoleCustomisation);
-        JudgeEnd = new("JUDGE_END", "#C93D50", PackType.MiscRoleCustomisation);
-        StarspawnStart = new("STARSPAWN_START", "#FCE79A", PackType.MiscRoleCustomisation);
-        StarspawnEnd = new("STARSPAWN_END", "#999CFF", PackType.MiscRoleCustomisation);
-        CursedSoulStart = new("CURSEDSOUL_START", "#4FFF9F", PackType.MiscRoleCustomisation);
-        CursedSoulEnd = new("CURSEDSOUL_END", "#B54FFF", PackType.MiscRoleCustomisation);
-        CursedSoulMajor = new("CURSEDSOUL_MAJOR", "#4FFF9F", PackType.MiscRoleCustomisation);
-        JackalStart = new("JACKAL_START", "#404040", PackType.MiscRoleCustomisation);
-        JackalEnd = new("JACKAL_END", "#D0D0D0", PackType.MiscRoleCustomisation);
-        JackalMajor = new("JACKAL_MAJOR", "#D0D0D0", PackType.MiscRoleCustomisation);
-        PandoraStart = new("PANDORA_START", "#B545FF", PackType.MiscRoleCustomisation);
-        PandoraEnd = new("PANDORA_END", "#FF004E", PackType.MiscRoleCustomisation);
-        PandoraMajor = new("PANDORA_MAJOR", "#FF004E", PackType.MiscRoleCustomisation);
-        ComplianceStart = new("COMPLIANCE_START", "#2D44B5", PackType.MiscRoleCustomisation);
-        ComplianceMiddle = new("COMPLIANCE_MIDDLE", "#AE1B1E", PackType.MiscRoleCustomisation);
-        ComplianceEnd = new("COMPLIANCE_END", "#FC9F32", PackType.MiscRoleCustomisation);
-        ComplianceMajor = new("COMPLIANCE_MAJOR", "#FC9F32", PackType.MiscRoleCustomisation);
-        EgotistStart = new("EGOTIST_START", "#359f3f", PackType.MiscRoleCustomisation);
-        EgotistEnd = new("EGOTIST_END", "#3f359f", PackType.MiscRoleCustomisation);
-        EgotistMajor = new("EGOTIST_MAJOR", "#3f359f", PackType.MiscRoleCustomisation);
-        Neutral = new("NEUTRAL", "#A9A9A9", PackType.MiscRoleCustomisation);
-        StonedHidden = new("STONED_HIDDEN", "#9C9A9A", PackType.MiscRoleCustomisation);
-        Lovers = new("LOVERS", "#FEA6FA", PackType.MiscRoleCustomisation);
-        FrogsStart = new("FROGS_START", "#1e49cf", PackType.MiscRoleCustomisation);
-        FrogsEnd = new("FROGS_END", "#1e49cf", PackType.MiscRoleCustomisation);
-        FrogsMajor = new("FROGS_MAJOR", "#1e49cf", PackType.MiscRoleCustomisation);
-        LionsStart = new("LIONS_START", "#ffc34f", PackType.MiscRoleCustomisation);
-        LionsEnd = new("LIONS_END", "#ffc34f", PackType.MiscRoleCustomisation);
-        LionsMajor = new("LIONS_MAJOR", "#ffc34f", PackType.MiscRoleCustomisation);
-        HawksStart = new("HAWKS_START", "#a81538", PackType.MiscRoleCustomisation);
-        HawksEnd = new("HAWKS_END", "#a81538", PackType.MiscRoleCustomisation);
-        HawksMajor = new("HAWKS_MAJOR", "#a81538", PackType.MiscRoleCustomisation);
-
 
 
         PlayerNumber = new("PLAYER_NUMBER", 0, PackType.Testing, 0, 15, true, _ => Constants.CustomNumbers());
@@ -526,6 +391,8 @@ public class Fancy : BaseMod<Fancy>
             "LOVERS_CINEMATIC", CinematicType.FactionWins, PackType.Testing,
             useTranslations: true,
             values: () => AllowedCinematics());
+
+        InitializeColors();
     }
 
     private static CinematicType[] AllowedCinematics()
@@ -542,6 +409,90 @@ public class Fancy : BaseMod<Fancy>
             CinematicType.ApocolypseWins,
             CinematicType.VampireWins,
         };
+    }
+
+    public static void InitializeColors()
+    {
+        Colors = new Dictionary<string, (string start, string end, string major, string middle)>
+        {
+            { "TOWN", ("#06E00C", "#06E00C", "#06E00C", null) },
+            { "COVEN", ("#B545FF", "#B545FF", "#B545FF", null) },
+            { "APOCALYPSE", ("#FF004E", "#FF004E", "#FF004E", null) },
+            { "VAMPIRE", ("#A22929", "#A22929", "#A22929", null) },
+            { "CURSEDSOUL", ("#4FFF9F", "#B54FFF", "#4FFF9F", null) },
+            { "PANDORA", ("#B545FF", "#FF004E", "#FF004E", null) },
+            { "COMPLIANCE", ("#2D44B5", "#FC9F32", "#FC9F32", "#AE1B1E") },
+            { "SERIALKILLER", ("#1D4DFC", "#1D4DFC", "#1D4DFC", null) },
+            { "ARSONIST", ("#DB7601", "#DB7601", "#DB7601", null) },
+            { "WEREWOLF", ("#9D7038", "#9D7038", "#9D7038", null) },
+            { "SHROUD", ("#6699FF", "#6699FF", "#6699FF", null) },
+            { "JACKAL", ("#404040", "#D0D0D0", "#D0D0D0", null) },
+            { "FROGS", ("#1e49cf", "#1e49cf", "#1e49cf", null) },
+            { "EGOTIST", ("#359f3f", "#3f359f", "#3f359f", null) },
+            { "JESTER", ("#F5A6D4", "#F5A6D4", null, null) },
+            { "EXECUTIONER", ("#949797", "#949797", null, null) },
+            { "DOOMSAYER", ("#00CC99", "#00CC99", null, null) },
+            { "PIRATE", ("#ECC23E", "#ECC23E", null, null) },
+            { "INQUISITOR", ("#821252", "#821252", null, null) },
+            { "AUDITOR", ("#AEBA87", "#E8FCC5", null, null) },
+            { "JUDGE", ("#C77364", "#C93D50", null, null) },
+            { "STARSPAWN", ("#FCE79A", "#999CFF", null, null) },
+            { "HAWKS", ("#7E4C9C", "#7E4C9C", "#7E4C9C", null) },
+            { "LIONS", ("#D19000", "#D19000", "#D19000", null) },
+            { "NEUTRAL", ("#A9A9A9", null, null, null) },
+            { "STONED_HIDDEN", ("#9C9A9A", null, null, null) },
+            { "LOVERS", ("#FEA6FA", null, null, null) },
+        };
+
+        foreach (var kvp in Colors)
+        {
+            string key = kvp.Key;
+            var (start, end, major, middle) = kvp.Value;
+
+            if (start != null)
+            {
+                if (middle == null && major == null && end == null)
+                {
+                    ColorOptions[$"{key}"] = new($"{key}", start, PackType.MiscRoleCustomisation);
+                }
+                else
+                {
+                    ColorOptions[$"{key}_START"] = new($"{key}_START", start, PackType.MiscRoleCustomisation, onChanged: _ => ReloadColors());
+                    if (middle != null)
+                        ColorOptions[$"{key}_MIDDLE"] = new($"{key}_MIDDLE", middle, PackType.MiscRoleCustomisation, onChanged: _ => ReloadColors());
+                    if (end != null)
+                        ColorOptions[$"{key}_END"] = new($"{key}_END", end, PackType.MiscRoleCustomisation, onChanged: _ => ReloadColors());
+                    if (major != null)
+                        ColorOptions[$"{key}_MAJOR"] = new($"{key}_MAJOR", major, PackType.MiscRoleCustomisation, onChanged: _ => ReloadColors());
+
+                }
+            }
+        }
+
+        foreach (var key in Colors.Keys.ToList())
+        {
+            string start = ColorOptions.TryGetValue($"{key}_START", out var s) ? s.Value : ColorOptions.TryGetValue($"{key}", out var s2) ? s2.Value : null;
+            string end = ColorOptions.TryGetValue($"{key}_END", out var e) ? e.Value : null;
+            string major = ColorOptions.TryGetValue($"{key}_MAJOR", out var m) ? m.Value : null;
+            string middle = ColorOptions.TryGetValue($"{key}_MIDDLE", out var mi) ? mi.Value : null;
+
+            Colors[key] = (start, end, major, middle);
+        }
+
+
+    }
+    public static void ReloadColors()
+    {
+        foreach (var key in Colors.Keys.ToList())
+        {
+            string start  = ColorOptions.TryGetValue($"{key}_START", out var s) ? s.Value
+                        : ColorOptions.TryGetValue($"{key}", out var s2) ? s2.Value : null;
+            string end    = ColorOptions.TryGetValue($"{key}_END", out var e) ? e.Value : null;
+            string major  = ColorOptions.TryGetValue($"{key}_MAJOR", out var m) ? m.Value : null;
+            string middle = ColorOptions.TryGetValue($"{key}_MIDDLE", out var mi) ? mi.Value : null;
+
+            Colors[key] = (start, end, major, middle);
+        }
     }
 
     private static string[] GetPackNames(PackType type)

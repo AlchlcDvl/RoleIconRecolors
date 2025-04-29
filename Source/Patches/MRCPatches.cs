@@ -404,55 +404,55 @@ public static class TosCharacterNametagPatch
     }
 
     [HarmonyPatch(typeof(HomeSceneController), nameof(HomeSceneController.HandleClickPlay))]
-public static class FixStyles
-{
-    [HarmonyPostfix]
-    public static void RefreshStyles()
+    public static class FixStyles
     {
-        var defaultStyleSheet = TMP_Settings.defaultStyleSheet;
-
-        FieldInfo stylesField = AccessTools.Field(typeof(TMP_StyleSheet), "m_StyleList");
-        if (stylesField == null)
+        [HarmonyPostfix]
+        public static void RefreshStyles()
         {
-            return;
+            var defaultStyleSheet = TMP_Settings.defaultStyleSheet;
+
+            FieldInfo stylesField = AccessTools.Field(typeof(TMP_StyleSheet), "m_StyleList");
+            if (stylesField == null)
+            {
+                return;
+            }
+
+            var styles = stylesField.GetValue(defaultStyleSheet) as List<TMP_Style>;
+            if (styles == null)
+            {
+                return;
+            }
+
+            SetStyle(styles, "TownColor", Fancy.Colors["TOWN"].start);
+            SetStyle(styles, "CovenColor", Fancy.Colors["COVEN"].start);
+            SetStyle(styles, "ApocalypseColor", Fancy.Colors["APOCALYPSE"].start);
+            SetStyle(styles, "SerialKillerColor", Fancy.Colors["SERIALKILLER"].start);
+            SetStyle(styles, "ArsonistColor", Fancy.Colors["ARSONIST"].start);
+            SetStyle(styles, "WerewolfColor", Fancy.Colors["WEREWOLF"].start);
+            SetStyle(styles, "ShroudColor", Fancy.Colors["SHROUD"].start);
+            SetStyle(styles, "ExecutionerColor", Fancy.Colors["EXECUTIONER"].start);
+            SetStyle(styles, "JesterColor", Fancy.Colors["JESTER"].start);
+            SetStyle(styles, "PirateColor", Fancy.Colors["PIRATE"].start);
+            SetStyle(styles, "DoomsayerColor", Fancy.Colors["DOOMSAYER"].start);
+            SetStyle(styles, "VampireColor", Fancy.Colors["VAMPIRE"].start);
+            SetStyle(styles, "CursedSoulColor", Fancy.Colors["CURSEDSOUL"].start);
+            SetStyle(styles, "NeutralColor", Fancy.Colors["NEUTRAL"].start);
+
+            defaultStyleSheet.RefreshStyles();
         }
 
-        var styles = stylesField.GetValue(defaultStyleSheet) as List<TMP_Style>;
-        if (styles == null)
+        private static void SetStyle(List<TMP_Style> styles, string styleName, string colorValue)
         {
-            return;
-        }
+            var style = styles.Find(s => s.name == styleName);
+            if (style == null) return;
 
-        SetStyle(styles, "TownColor", Fancy.TownStart.Value);
-        SetStyle(styles, "CovenColor", Fancy.CovenStart.Value);
-        SetStyle(styles, "ApocalypseColor", Fancy.ApocalypseStart.Value);
-        SetStyle(styles, "SerialKillerColor", Fancy.SerialKillerStart.Value);
-        SetStyle(styles, "ArsonistColor", Fancy.ArsonistStart.Value);
-        SetStyle(styles, "WerewolfColor", Fancy.WerewolfStart.Value);
-        SetStyle(styles, "ShroudColor", Fancy.ShroudStart.Value);
-        SetStyle(styles, "ExecutionerColor", Fancy.ExecutionerStart.Value);
-        SetStyle(styles, "JesterColor", Fancy.JesterStart.Value);
-        SetStyle(styles, "PirateColor", Fancy.PirateStart.Value);
-        SetStyle(styles, "DoomsayerColor", Fancy.DoomsayerStart.Value);
-        SetStyle(styles, "VampireColor", Fancy.VampireStart.Value);
-        SetStyle(styles, "CursedSoulColor", Fancy.CursedSoulStart.Value);
-        SetStyle(styles, "NeutralColor", Fancy.Neutral.Value);
-
-        defaultStyleSheet.RefreshStyles();
+            var openingDefField = typeof(TMP_Style).GetField("m_OpeningDefinition", BindingFlags.Instance | BindingFlags.NonPublic);
+            if (openingDefField != null)
+            {
+                openingDefField.SetValue(style, $"<color={colorValue}>");
+            }
+        }   
     }
-
-    private static void SetStyle(List<TMP_Style> styles, string styleName, string colorValue)
-    {
-        var style = styles.Find(s => s.name == styleName);
-        if (style == null) return;
-
-        var openingDefField = typeof(TMP_Style).GetField("m_OpeningDefinition", BindingFlags.Instance | BindingFlags.NonPublic);
-        if (openingDefField != null)
-        {
-            openingDefField.SetValue(style, $"<color={colorValue}>");
-        }
-    }   
-}
 
 [HarmonyPatch(typeof(ClientRoleExtensions), nameof(ClientRoleExtensions.ToColorizedDisplayString), typeof(Role), typeof(FactionType))]
 public static class AddChangedConversionTags
@@ -621,48 +621,47 @@ public static class FancyChatExperimentalBTOS2
 
 }
 
-// AS take a look at this, TOS2 freaks out when loading it
 [HarmonyPatch(typeof(ClientRoleExtensions), nameof(ClientRoleExtensions.GetFactionColor))]
 public static class SwapColor
 {
     [HarmonyPostfix]
     public static void Swap(ref string __result, ref FactionType factionType)
     {
-        if (Fancy.TownStart?.Value != null)
+        if (Fancy.Colors != null)
         {
             var faction = (int)factionType;
             __result = faction switch
             {
-                1 => Fancy.TownStart.Value,
-                2 => Fancy.CovenStart.Value,
-                3 => Fancy.SerialKillerStart.Value,
-                4 => Fancy.ArsonistStart.Value,
-                5 => Fancy.WerewolfStart.Value,
-                6 => Fancy.ShroudStart.Value,
-                7 => Fancy.ApocalypseStart.Value,
-                8 => Fancy.ExecutionerStart.Value,
-                9 => Fancy.JesterStart.Value,
-                10 => Fancy.PirateStart.Value,
-                11 => Fancy.DoomsayerStart.Value,
-                12 => Fancy.VampireStart.Value,
-                13 => Fancy.CursedSoulStart.Value,
-                33 => Fancy.JackalStart.Value,
-                34 => Fancy.FrogsStart.Value,
-                35 => Fancy.LionsStart.Value,
-                36 => Fancy.HawksStart.Value,
-                38 => Fancy.JudgeStart.Value,
-                39 => Fancy.AuditorStart.Value,
-                40 => Fancy.InquisitorStart.Value,
-                41 => Fancy.StarspawnStart.Value,
-                42 => Fancy.EgotistStart.Value,
-                43 => Fancy.PandoraStart.Value,
-                44 => Fancy.ComplianceStart.Value,
-                250 => Fancy.Lovers.Value,
-                _ => Fancy.StonedHidden.Value,
+                1 => Fancy.Colors["TOWN"].start,
+                2 => Fancy.Colors["COVEN"].start,
+                3 => Fancy.Colors["SERIALKILLER"].start,
+                4 => Fancy.Colors["ARSONIST"].start,
+                5 => Fancy.Colors["WEREWOLF"].start,
+                6 => Fancy.Colors["SHROUD"].start,
+                7 => Fancy.Colors["APOCALYPSE"].start,
+                8 => Fancy.Colors["EXECUTIONER"].start,
+                9 => Fancy.Colors["JESTER"].start,
+                10 => Fancy.Colors["PIRATE"].start,
+                11 => Fancy.Colors["DOOMSAYER"].start,
+                12 => Fancy.Colors["VAMPIRE"].start,
+                13 => Fancy.Colors["CURSEDSOUL"].start,
+                33 => Fancy.Colors["JACKAL"].start,
+                34 => Fancy.Colors["FROGS"].start,
+                35 => Fancy.Colors["LIONS"].start,
+                36 => Fancy.Colors["HAWKS"].start,
+                38 => Fancy.Colors["JUDGE"].start,
+                39 => Fancy.Colors["AUDITOR"].start,
+                40 => Fancy.Colors["INQUISITOR"].start,
+                41 => Fancy.Colors["STARSPAWN"].start,
+                42 => Fancy.Colors["EGOTIST"].start,
+                43 => Fancy.Colors["PANDORA"].start,
+                44 => Fancy.Colors["COMPLIANCE"].start,
+                250 => Fancy.Colors["LOVERS"].start,
+                _ => Fancy.Colors["STONED_HIDDEN"].start,
             };
         }
     }
-} 
+}
 
 
 
@@ -676,295 +675,261 @@ public static class GetChangedGradients
 
         Gradient result;
         if (Fancy.MajorColors.Value && (role.GetSubAlignment() == SubAlignment.POWER || role == Role.FAMINE || role == Role.WAR || role == Role.PESTILENCE || role == Role.DEATH))
-
         {
             switch (faction)
             {
                 case FactionType.TOWN:
-                    array[0] = new(Fancy.TownStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.TownMajor.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["TOWN"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["TOWN"].major.ToColor(), 1f);
                     goto setmajor;
 
                 case FactionType.COVEN:
-                    array[0] = new(Fancy.CovenStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.CovenMajor.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["COVEN"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["COVEN"].major.ToColor(), 1f);
                     goto setmajor;
 
                 case FactionType.APOCALYPSE:
-                    array[0] = new(Fancy.ApocalypseStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.ApocalypseMajor.Value.ToColor(), 1f);
-                    goto setmajor;
-
-                case FactionType.EXECUTIONER:
-                    array[0] = new(Fancy.ExecutionerStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.ExecutionerEnd.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["APOCALYPSE"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["APOCALYPSE"].major.ToColor(), 1f);
                     goto setmajor;
 
                 case FactionType.SERIALKILLER:
-                    array[0] = new(Fancy.SerialKillerStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.SerialKillerMajor.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["SERIALKILLER"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["SERIALKILLER"].major.ToColor(), 1f);
                     goto setmajor;
 
                 case FactionType.ARSONIST:
-                    array[0] = new(Fancy.ArsonistStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.ArsonistMajor.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["ARSONIST"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["ARSONIST"].major.ToColor(), 1f);
                     goto setmajor;
 
                 case FactionType.WEREWOLF:
-                    array[0] = new(Fancy.WerewolfStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.WerewolfMajor.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["WEREWOLF"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["WEREWOLF"].major.ToColor(), 1f);
                     goto setmajor;
 
                 case FactionType.SHROUD:
-                    array[0] = new(Fancy.ShroudStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.ShroudMajor.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["SHROUD"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["SHROUD"].major.ToColor(), 1f);
+                    goto setmajor;
+
+                case FactionType.EXECUTIONER:
+                    array[0] = new(Fancy.Colors["EXECUTIONER"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["EXECUTIONER"].end.ToColor(), 1f);
                     goto setmajor;
 
                 case FactionType.JESTER:
-                    array[0] = new(Fancy.JesterStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.JesterEnd.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["JESTER"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["JESTER"].end.ToColor(), 1f);
                     goto setmajor;
 
                 case (FactionType)40:
-                    array[0] = new(Fancy.InquisitorStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.InquisitorEnd.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["INQUISITOR"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["INQUISITOR"].end.ToColor(), 1f);
                     goto setmajor;
 
                 case FactionType.PIRATE:
-                    array[0] = new(Fancy.PirateStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.PirateEnd.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["PIRATE"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["PIRATE"].end.ToColor(), 1f);
                     goto setmajor;
 
                 case FactionType.DOOMSAYER:
-                    array[0] = new(Fancy.DoomsayerStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.DoomsayerEnd.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["DOOMSAYER"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["DOOMSAYER"].end.ToColor(), 1f);
                     goto setmajor;
 
                 case FactionType.VAMPIRE:
-                    array[0] = new(Fancy.VampireStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.VampireMajor.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["VAMPIRE"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["VAMPIRE"].major.ToColor(), 1f);
                     goto setmajor;
 
                 case FactionType.CURSED_SOUL:
-                    array[0] = new(Fancy.CursedSoulStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.CursedSoulMajor.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["CURSEDSOUL"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["CURSEDSOUL"].major.ToColor(), 1f);
                     goto setmajor;
 
                 case (FactionType)33:
                     switch (Fancy.RecruitEndingColor.Value)
                     {
                         case RecruitEndType.JackalEnd:
-                            array[0] = new(Fancy.JackalStart.Value.ToColor(), 0f);
-                            array[1] = new(Fancy.JackalMajor.Value.ToColor(), 1f);
+                            array[0] = new(Fancy.Colors["JACKAL"].start.ToColor(), 0f);
+                            array[1] = new(Fancy.Colors["JACKAL"].major.ToColor(), 1f);
                             goto setmajor;
 
                         case RecruitEndType.FactionStart:
-                            array[0] = new(Fancy.JackalStart.Value.ToColor(), 0f);
+                            array[0] = new(Fancy.Colors["JACKAL"].start.ToColor(), 0f);
                             switch (role.GetFaction())
                             {
                                 case FactionType.TOWN:
-                                    array[1] = new(Fancy.TownStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["TOWN"].start.ToColor(), 1f);
                                     break;
                                 case FactionType.COVEN:
-                                    array[1] = new(Fancy.CovenStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["COVEN"].start.ToColor(), 1f);
                                     break;
                                 case FactionType.SERIALKILLER:
-                                    array[1] = new(Fancy.SerialKillerStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["SERIALKILLER"].start.ToColor(), 1f);
                                     break;
                                 case FactionType.ARSONIST:
-                                    array[1] = new(Fancy.ArsonistStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["ARSONIST"].start.ToColor(), 1f);
                                     break;
                                 case FactionType.WEREWOLF:
-                                    array[1] = new(Fancy.WerewolfStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["WEREWOLF"].start.ToColor(), 1f);
                                     break;
                                 case FactionType.SHROUD:
-                                    array[1] = new(Fancy.ShroudStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["SHROUD"].start.ToColor(), 1f);
                                     break;
                                 case FactionType.APOCALYPSE:
-                                    array[1] = new(Fancy.ApocalypseStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["APOCALYPSE"].start.ToColor(), 1f);
                                     break;
                                 case FactionType.EXECUTIONER:
-                                    array[1] = new(Fancy.ExecutionerStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["EXECUTIONER"].start.ToColor(), 1f);
                                     break;
                                 case FactionType.JESTER:
-                                    array[1] = new(Fancy.JesterStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["JESTER"].start.ToColor(), 1f);
                                     break;
                                 case FactionType.PIRATE:
-                                    array[1] = new(Fancy.PirateStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["PIRATE"].start.ToColor(), 1f);
                                     break;
                                 case FactionType.DOOMSAYER:
-                                    array[1] = new(Fancy.DoomsayerStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["DOOMSAYER"].start.ToColor(), 1f);
                                     break;
                                 case FactionType.VAMPIRE:
-                                    array[1] = new(Fancy.VampireStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["VAMPIRE"].start.ToColor(), 1f);
                                     break;
                                 case FactionType.CURSED_SOUL:
-                                    array[1] = new(Fancy.CursedSoulStart.Value.ToColor(), 1f);
-                                    break;
-                                case (FactionType)34:
-                                    array[1] = new(Fancy.FrogsStart.Value.ToColor(), 1f);
-                                    break;
-                                case (FactionType)35:
-                                    array[1] = new(Fancy.LionsStart.Value.ToColor(), 1f);
-                                    break;
-                                case (FactionType)36:
-                                    array[1] = new(Fancy.HawksStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["CURSEDSOUL"].start.ToColor(), 1f);
                                     break;
                                  case (FactionType)38:
-                                    array[1] = new(Fancy.JudgeStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["JUDGE"].start.ToColor(), 1f);
                                     break;
                                 case (FactionType)39:
-                                    array[1] = new(Fancy.AuditorStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["AUDITOR"].start.ToColor(), 1f);
                                     break;
                                 case (FactionType)40:
-                                    array[1] = new(Fancy.InquisitorStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["INQUISITOR"].start.ToColor(), 1f);
                                     break;
                                 case (FactionType)41:
-                                    array[1] = new(Fancy.StarspawnStart.Value.ToColor(), 1f);
-                                    break;
-                                case (FactionType)42:
-                                    array[1] = new(Fancy.EgotistStart.Value.ToColor(), 1f);
-                                    break;
-                                case (FactionType)43:
-                                    array[1] = new(Fancy.PandoraStart.Value.ToColor(), 1f);
-                                    break;
-                                case (FactionType)44:
-                                    array[1] = new(Fancy.ComplianceStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["STARSPAWN"].start.ToColor(), 1f);
                                     break;
                                default:
-                                    array[1] = new(Fancy.JackalMajor.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["JACKAL"].major.ToColor(), 1f);
                                     break;
                             }
                             goto setmajor;
 
                         case RecruitEndType.FactionEnd: 
-                            array[0] = new(Fancy.JackalStart.Value.ToColor(), 0f);
+                            array[0] = new(Fancy.Colors["JACKAL"].start.ToColor(), 1f);
                             switch (role.GetFaction())
                             {
                                 case FactionType.TOWN:
-                                    array[1] = new(Fancy.TownMajor.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["TOWN"].major.ToColor(), 1f);
                                     break;
                                 case FactionType.COVEN:
-                                    array[1] = new(Fancy.CovenMajor.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["COVEN"].major.ToColor(), 1f);
                                     break;
                                 case FactionType.SERIALKILLER:
-                                    array[1] = new(Fancy.SerialKillerMajor.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["SERIALKILLER"].major.ToColor(), 1f);
                                     break;
                                 case FactionType.ARSONIST:
-                                    array[1] = new(Fancy.ArsonistMajor.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["ARSONIST"].major.ToColor(), 1f);
                                     break;
                                 case FactionType.WEREWOLF:
-                                    array[1] = new(Fancy.WerewolfMajor.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["WEREWOLF"].major.ToColor(), 1f);
                                     break;
                                 case FactionType.SHROUD:
-                                    array[1] = new(Fancy.ShroudMajor.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["SHROUD"].major.ToColor(), 1f);
                                     break;
                                 case FactionType.APOCALYPSE:
-                                    array[1] = new(Fancy.ApocalypseMajor.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["APOCALYPSE"].major.ToColor(), 1f);
                                     break;
                                 case FactionType.EXECUTIONER:
-                                    array[1] = new(Fancy.ExecutionerStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["EXECUTIONER"].end.ToColor(), 1f);
                                     break;
                                 case FactionType.JESTER:
-                                    array[1] = new(Fancy.JesterStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["JESTER"].end.ToColor(), 1f);
                                     break;
                                 case FactionType.PIRATE:
-                                    array[1] = new(Fancy.PirateStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["PIRATE"].end.ToColor(), 1f);
                                     break;
                                 case FactionType.DOOMSAYER:
-                                    array[1] = new(Fancy.DoomsayerStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["DOOMSAYER"].end.ToColor(), 1f);
                                     break;
                                 case FactionType.VAMPIRE:
-                                    array[1] = new(Fancy.VampireMajor.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["VAMPIRE"].major.ToColor(), 1f);
                                     break;
                                 case FactionType.CURSED_SOUL:
-                                    array[1] = new(Fancy.CursedSoulMajor.Value.ToColor(), 1f);
-                                    break;
-                                case (FactionType)34:
-                                    array[1] = new(Fancy.FrogsMajor.Value.ToColor(), 1f);
-                                    break;
-                                case (FactionType)35:
-                                    array[1] = new(Fancy.LionsMajor.Value.ToColor(), 1f);
-                                    break;
-                                case (FactionType)36:
-                                    array[1] = new(Fancy.HawksMajor.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["CURSEDSOUL"].major.ToColor(), 1f);
                                     break;
                                  case (FactionType)38:
-                                    array[1] = new(Fancy.JudgeStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["JUDGE"].end.ToColor(), 1f);
                                     break;
                                 case (FactionType)39:
-                                    array[1] = new(Fancy.AuditorStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["AUDITOR"].end.ToColor(), 1f);
                                     break;
                                 case (FactionType)40:
-                                    array[1] = new(Fancy.InquisitorStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["INQUISITOR"].end.ToColor(), 1f);
                                     break;
                                 case (FactionType)41:
-                                    array[1] = new(Fancy.StarspawnStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["STARSPAWN"].end.ToColor(), 1f);
                                     break;
-                                case (FactionType)42:
-                                    array[1] = new(Fancy.EgotistMajor.Value.ToColor(), 1f);
-                                    break;
-                                case (FactionType)43:
-                                    array[1] = new(Fancy.PandoraMajor.Value.ToColor(), 1f);
-                                    break;
-                                case (FactionType)44:
-                                    array[1] = new(Fancy.ComplianceMajor.Value.ToColor(), 1f);
+                               default:
+                                    array[1] = new(Fancy.Colors["JACKAL"].major.ToColor(), 1f);
                                     break;
                             }
                             goto setmajor;
 
                         default:
-                            array[0] = new(Fancy.JackalStart.Value.ToColor(), 0f);
-                            array[1] = new(Fancy.JackalMajor.Value.ToColor(), 1f);
+                            array[0] = new(Fancy.Colors["JACKAL"].start.ToColor(), 0f);
+                            array[1] = new(Fancy.Colors["JACKAL"].major.ToColor(), 1f);
                             goto setmajor;
                     }
 
                 case (FactionType)38:
-                    array[0] = new(Fancy.JudgeStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.JudgeEnd.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["JUDGE"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["JUDGE"].end.ToColor(), 1f);
                     goto setmajor;
 
                 case (FactionType)39:
-                    array[0] = new(Fancy.AuditorStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.AuditorEnd.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["AUDITOR"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["AUDITOR"].end.ToColor(), 1f);
                     goto setmajor;
 
                 case (FactionType)41:
-                    array[0] = new(Fancy.StarspawnStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.StarspawnEnd.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["STARSPAWN"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["STARSPAWN"].end.ToColor(), 1f);
                     goto setmajor;
 
                 case (FactionType)42:
-                    array[0] = new(Fancy.EgotistStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.EgotistMajor.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["EGOTIST"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["EGOTIST"].major.ToColor(), 1f);
                     goto setmajor;
 
                 case (FactionType)43:
-                    array[0] = new(Fancy.PandoraStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.PandoraMajor.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["PANDORA"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["PANDORA"].major.ToColor(), 1f);
                     goto setmajor;
 
                 case (FactionType)34:
-                    array[0] = new(Fancy.FrogsStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.FrogsMajor.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["FROGS"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["FROGS"].major.ToColor(), 1f);
                     goto setmajor;
 
                 case (FactionType)35:
-                    array[0] = new(Fancy.LionsStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.LionsMajor.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["LIONS"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["LIONS"].major.ToColor(), 1f);
                     goto setmajor;
 
                 case (FactionType)36:
-                    array[0] = new(Fancy.HawksStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.HawksMajor.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["HAWKS"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["HAWKS"].major.ToColor(), 1f);
                     goto setmajor;
 
                 case (FactionType)44:
                     array =
                     [
-                        new(Fancy.ComplianceStart.Value.ToColor(), 0f),
-                        new(Fancy.ComplianceMiddle.Value.ToColor(), 0.5f),
-                        new(Fancy.ComplianceMajor.Value.ToColor(), 1f)
+                        new(Fancy.Colors["COMPLIANCE"].start.ToColor(), 0f),
+                        new(Fancy.Colors["COMPLIANCE"].middle.ToColor(), 0.5f),
+                        new(Fancy.Colors["COMPLIANCE"].major.ToColor(), 1f)
                     ];
                     goto setmajor;
 
@@ -983,290 +948,257 @@ public static class GetChangedGradients
             switch (faction)
             {
                 case FactionType.TOWN:
-                    array[0] = new(Fancy.TownStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.TownEnd.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["TOWN"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["TOWN"].end.ToColor(), 1f);
                     goto setgradient;
 
                 case FactionType.COVEN:
-                    array[0] = new(Fancy.CovenStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.CovenEnd.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["COVEN"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["COVEN"].end.ToColor(), 1f);
                     goto setgradient;
 
                 case FactionType.APOCALYPSE:
-                    array[0] = new(Fancy.ApocalypseStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.ApocalypseEnd.Value.ToColor(), 1f);
-                    goto setgradient;
-
-                case FactionType.EXECUTIONER:
-                    array[0] = new(Fancy.ExecutionerStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.ExecutionerEnd.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["APOCALYPSE"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["APOCALYPSE"].end.ToColor(), 1f);
                     goto setgradient;
 
                 case FactionType.SERIALKILLER:
-                    array[0] = new(Fancy.SerialKillerStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.SerialKillerEnd.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["SERIALKILLER"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["SERIALKILLER"].end.ToColor(), 1f);
                     goto setgradient;
 
                 case FactionType.ARSONIST:
-                    array[0] = new(Fancy.ArsonistStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.ArsonistEnd.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["ARSONIST"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["ARSONIST"].end.ToColor(), 1f);
                     goto setgradient;
 
                 case FactionType.WEREWOLF:
-                    array[0] = new(Fancy.WerewolfStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.WerewolfEnd.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["WEREWOLF"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["WEREWOLF"].end.ToColor(), 1f);
                     goto setgradient;
 
                 case FactionType.SHROUD:
-                    array[0] = new(Fancy.ShroudStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.ShroudEnd.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["SHROUD"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["SHROUD"].end.ToColor(), 1f);
+                    goto setgradient;
+
+                case FactionType.EXECUTIONER:
+                    array[0] = new(Fancy.Colors["EXECUTIONER"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["EXECUTIONER"].end.ToColor(), 1f);
                     goto setgradient;
 
                 case FactionType.JESTER:
-                    array[0] = new(Fancy.JesterStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.JesterEnd.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["JESTER"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["JESTER"].end.ToColor(), 1f);
                     goto setgradient;
 
                 case (FactionType)40:
-                    array[0] = new(Fancy.InquisitorStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.InquisitorEnd.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["INQUISITOR"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["INQUISITOR"].end.ToColor(), 1f);
                     goto setgradient;
 
                 case FactionType.PIRATE:
-                    array[0] = new(Fancy.PirateStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.PirateEnd.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["PIRATE"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["PIRATE"].end.ToColor(), 1f);
                     goto setgradient;
 
                 case FactionType.DOOMSAYER:
-                    array[0] = new(Fancy.DoomsayerStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.DoomsayerEnd.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["DOOMSAYER"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["DOOMSAYER"].end.ToColor(), 1f);
                     goto setgradient;
 
                 case FactionType.VAMPIRE:
-                    array[0] = new(Fancy.VampireStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.VampireEnd.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["VAMPIRE"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["VAMPIRE"].end.ToColor(), 1f);
                     goto setgradient;
 
                 case FactionType.CURSED_SOUL:
-                    array[0] = new(Fancy.CursedSoulStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.CursedSoulEnd.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["CURSEDSOUL"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["CURSEDSOUL"].end.ToColor(), 1f);
                     goto setgradient;
 
                 case (FactionType)33:
                     switch (Fancy.RecruitEndingColor.Value)
                     {
                         case RecruitEndType.JackalEnd:
-                            array[0] = new(Fancy.JackalStart.Value.ToColor(), 0f);
-                            array[1] = new(Fancy.JackalEnd.Value.ToColor(), 1f);
+                            array[0] = new(Fancy.Colors["JACKAL"].start.ToColor(), 0f);
+                            array[1] = new(Fancy.Colors["JACKAL"].end.ToColor(), 1f);
                             goto setgradient;
 
                         case RecruitEndType.FactionStart:
-                            array[0] = new(Fancy.JackalStart.Value.ToColor(), 0f);
+                            array[0] = new(Fancy.Colors["JACKAL"].start.ToColor(), 0f);
                             switch (role.GetFaction())
                             {
                                 case FactionType.TOWN:
-                                    array[1] = new(Fancy.TownStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["TOWN"].start.ToColor(), 1f);
                                     break;
                                 case FactionType.COVEN:
-                                    array[1] = new(Fancy.CovenStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["COVEN"].start.ToColor(), 1f);
                                     break;
                                 case FactionType.SERIALKILLER:
-                                    array[1] = new(Fancy.SerialKillerStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["SERIALKILLER"].start.ToColor(), 1f);
                                     break;
                                 case FactionType.ARSONIST:
-                                    array[1] = new(Fancy.ArsonistStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["ARSONIST"].start.ToColor(), 1f);
                                     break;
                                 case FactionType.WEREWOLF:
-                                    array[1] = new(Fancy.WerewolfStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["WEREWOLF"].start.ToColor(), 1f);
                                     break;
                                 case FactionType.SHROUD:
-                                    array[1] = new(Fancy.ShroudStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["SHROUD"].start.ToColor(), 1f);
                                     break;
                                 case FactionType.APOCALYPSE:
-                                    array[1] = new(Fancy.ApocalypseStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["APOCALYPSE"].start.ToColor(), 1f);
                                     break;
                                 case FactionType.EXECUTIONER:
-                                    array[1] = new(Fancy.ExecutionerStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["EXECUTIONER"].start.ToColor(), 1f);
                                     break;
                                 case FactionType.JESTER:
-                                    array[1] = new(Fancy.JesterStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["JESTER"].start.ToColor(), 1f);
                                     break;
                                 case FactionType.PIRATE:
-                                    array[1] = new(Fancy.PirateStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["PIRATE"].start.ToColor(), 1f);
                                     break;
                                 case FactionType.DOOMSAYER:
-                                    array[1] = new(Fancy.DoomsayerStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["DOOMSAYER"].start.ToColor(), 1f);
                                     break;
                                 case FactionType.VAMPIRE:
-                                    array[1] = new(Fancy.VampireStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["VAMPIRE"].start.ToColor(), 1f);
                                     break;
                                 case FactionType.CURSED_SOUL:
-                                    array[1] = new(Fancy.CursedSoulStart.Value.ToColor(), 1f);
-                                    break;
-                                case (FactionType)34:
-                                    array[1] = new(Fancy.FrogsStart.Value.ToColor(), 1f);
-                                    break;
-                                case (FactionType)35:
-                                    array[1] = new(Fancy.LionsStart.Value.ToColor(), 1f);
-                                    break;
-                                case (FactionType)36:
-                                    array[1] = new(Fancy.HawksStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["CURSEDSOUL"].start.ToColor(), 1f);
                                     break;
                                  case (FactionType)38:
-                                    array[1] = new(Fancy.JudgeStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["JUDGE"].start.ToColor(), 1f);
                                     break;
                                 case (FactionType)39:
-                                    array[1] = new(Fancy.AuditorStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["AUDITOR"].start.ToColor(), 1f);
                                     break;
                                 case (FactionType)40:
-                                    array[1] = new(Fancy.InquisitorStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["INQUISITOR"].start.ToColor(), 1f);
                                     break;
                                 case (FactionType)41:
-                                    array[1] = new(Fancy.StarspawnStart.Value.ToColor(), 1f);
-                                    break;
-                                case (FactionType)42:
-                                    array[1] = new(Fancy.EgotistStart.Value.ToColor(), 1f);
-                                    break;
-                                case (FactionType)43:
-                                    array[1] = new(Fancy.PandoraStart.Value.ToColor(), 1f);
-                                    break;
-                                case (FactionType)44:
-                                    array[1] = new(Fancy.ComplianceStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["STARSPAWN"].start.ToColor(), 1f);
                                     break;
                                default:
-                                    array[1] = new(Fancy.JackalEnd.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["JACKAL"].end.ToColor(), 1f);
                                     break;
                             }
                             goto setgradient;
 
                         case RecruitEndType.FactionEnd: 
-                            array[0] = new(Fancy.JackalStart.Value.ToColor(), 0f);
+                            array[0] = new(Fancy.Colors["JACKAL"].start.ToColor(), 1f);
                             switch (role.GetFaction())
                             {
                                 case FactionType.TOWN:
-                                    array[1] = new(Fancy.TownEnd.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["TOWN"].end.ToColor(), 1f);
                                     break;
                                 case FactionType.COVEN:
-                                    array[1] = new(Fancy.CovenEnd.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["COVEN"].end.ToColor(), 1f);
                                     break;
                                 case FactionType.SERIALKILLER:
-                                    array[1] = new(Fancy.SerialKillerEnd.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["SERIALKILLER"].end.ToColor(), 1f);
                                     break;
                                 case FactionType.ARSONIST:
-                                    array[1] = new(Fancy.ArsonistEnd.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["ARSONIST"].end.ToColor(), 1f);
                                     break;
                                 case FactionType.WEREWOLF:
-                                    array[1] = new(Fancy.WerewolfEnd.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["WEREWOLF"].end.ToColor(), 1f);
                                     break;
                                 case FactionType.SHROUD:
-                                    array[1] = new(Fancy.ShroudEnd.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["SHROUD"].end.ToColor(), 1f);
                                     break;
                                 case FactionType.APOCALYPSE:
-                                    array[1] = new(Fancy.ApocalypseEnd.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["APOCALYPSE"].end.ToColor(), 1f);
                                     break;
                                 case FactionType.EXECUTIONER:
-                                    array[1] = new(Fancy.ExecutionerStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["EXECUTIONER"].end.ToColor(), 1f);
                                     break;
                                 case FactionType.JESTER:
-                                    array[1] = new(Fancy.JesterStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["JESTER"].end.ToColor(), 1f);
                                     break;
                                 case FactionType.PIRATE:
-                                    array[1] = new(Fancy.PirateStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["PIRATE"].end.ToColor(), 1f);
                                     break;
                                 case FactionType.DOOMSAYER:
-                                    array[1] = new(Fancy.DoomsayerStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["DOOMSAYER"].end.ToColor(), 1f);
                                     break;
                                 case FactionType.VAMPIRE:
-                                    array[1] = new(Fancy.VampireEnd.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["VAMPIRE"].end.ToColor(), 1f);
                                     break;
                                 case FactionType.CURSED_SOUL:
-                                    array[1] = new(Fancy.CursedSoulEnd.Value.ToColor(), 1f);
-                                    break;
-                                case (FactionType)34:
-                                    array[1] = new(Fancy.FrogsEnd.Value.ToColor(), 1f);
-                                    break;
-                                case (FactionType)35:
-                                    array[1] = new(Fancy.LionsEnd.Value.ToColor(), 1f);
-                                    break;
-                                case (FactionType)36:
-                                    array[1] = new(Fancy.HawksEnd.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["CURSEDSOUL"].end.ToColor(), 1f);
                                     break;
                                  case (FactionType)38:
-                                    array[1] = new(Fancy.JudgeStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["JUDGE"].end.ToColor(), 1f);
                                     break;
                                 case (FactionType)39:
-                                    array[1] = new(Fancy.AuditorStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["AUDITOR"].end.ToColor(), 1f);
                                     break;
                                 case (FactionType)40:
-                                    array[1] = new(Fancy.InquisitorStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["INQUISITOR"].end.ToColor(), 1f);
                                     break;
                                 case (FactionType)41:
-                                    array[1] = new(Fancy.StarspawnStart.Value.ToColor(), 1f);
+                                    array[1] = new(Fancy.Colors["STARSPAWN"].end.ToColor(), 1f);
                                     break;
-                                case (FactionType)42:
-                                    array[1] = new(Fancy.EgotistEnd.Value.ToColor(), 1f);
-                                    break;
-                                case (FactionType)43:
-                                    array[1] = new(Fancy.PandoraEnd.Value.ToColor(), 1f);
-                                    break;
-                                case (FactionType)44:
-                                    array[1] = new(Fancy.ComplianceEnd.Value.ToColor(), 1f);
+                               default:
+                                    array[1] = new(Fancy.Colors["JACKAL"].end.ToColor(), 1f);
                                     break;
                             }
                             goto setgradient;
 
                         default:
-                            array[0] = new(Fancy.JackalStart.Value.ToColor(), 0f);
-                            array[1] = new(Fancy.JackalEnd.Value.ToColor(), 1f);
+                            array[0] = new(Fancy.Colors["JACKAL"].start.ToColor(), 0f);
+                            array[1] = new(Fancy.Colors["JACKAL"].end.ToColor(), 1f);
                             goto setgradient;
                     }
 
                 case (FactionType)38:
-                    array[0] = new(Fancy.JudgeStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.JudgeEnd.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["JUDGE"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["JUDGE"].end.ToColor(), 1f);
                     goto setgradient;
 
                 case (FactionType)39:
-                    array[0] = new(Fancy.AuditorStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.AuditorEnd.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["AUDITOR"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["AUDITOR"].end.ToColor(), 1f);
                     goto setgradient;
 
                 case (FactionType)41:
-                    array[0] = new(Fancy.StarspawnStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.StarspawnEnd.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["STARSPAWN"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["STARSPAWN"].end.ToColor(), 1f);
                     goto setgradient;
 
                 case (FactionType)42:
-                    array[0] = new(Fancy.EgotistStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.EgotistEnd.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["EGOTIST"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["EGOTIST"].end.ToColor(), 1f);
                     goto setgradient;
 
                 case (FactionType)43:
-                    array[0] = new(Fancy.PandoraStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.PandoraEnd.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["PANDORA"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["PANDORA"].end.ToColor(), 1f);
                     goto setgradient;
 
                 case (FactionType)34:
-                    array[0] = new(Fancy.FrogsStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.FrogsEnd.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["FROGS"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["FROGS"].end.ToColor(), 1f);
                     goto setgradient;
 
                 case (FactionType)35:
-                    array[0] = new(Fancy.LionsStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.LionsEnd.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["LIONS"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["LIONS"].end.ToColor(), 1f);
                     goto setgradient;
 
                 case (FactionType)36:
-                    array[0] = new(Fancy.HawksStart.Value.ToColor(), 0f);
-                    array[1] = new(Fancy.HawksEnd.Value.ToColor(), 1f);
+                    array[0] = new(Fancy.Colors["HAWKS"].start.ToColor(), 0f);
+                    array[1] = new(Fancy.Colors["HAWKS"].end.ToColor(), 1f);
                     goto setgradient;
 
                 case (FactionType)44:
                     array =
                     [
-                        new(Fancy.ComplianceStart.Value.ToColor(), 0f),
-                        new(Fancy.ComplianceMiddle.Value.ToColor(), 0.5f),
-                        new(Fancy.ComplianceEnd.Value.ToColor(), 1f)
+                        new(Fancy.Colors["COMPLIANCE"].start.ToColor(), 0f),
+                        new(Fancy.Colors["COMPLIANCE"].middle.ToColor(), 0.5f),
+                        new(Fancy.Colors["COMPLIANCE"].end.ToColor(), 1f)
                     ];
                     goto setgradient;
 
@@ -1351,14 +1283,14 @@ public static class PatchJudge
         {
             if (position == 70)
             {
-                __result = "<link=\"r57\"><sprite=\"BTOSRoleIcons\" name=\"Role57\"><indent=1.1em><b>" + AddChangedConversionTags.ApplyGradient(Fancy.CourtLabel.Value, Fancy.JudgeStart.Value.ToColor(), Fancy.JudgeEnd.Value.ToColor()) + ":" +
+                __result = "<link=\"r57\"><sprite=\"BTOSRoleIcons\" name=\"Role57\"><indent=1.1em><b>" + AddChangedConversionTags.ApplyGradient(Fancy.CourtLabel.Value, Fancy.Colors["JUDGE"].start.ToColor(), Fancy.Colors["JUDGE"].end.ToColor()) + ":" +
                     "</b> </link>" + encodedText.Replace("????: </color>", "").Replace("white", "#FFFF00");
             }
             else if (position == 69)
                 __result = encodedText.Replace("????:", $"<sprite=\"BTOSRoleIcons\" name=\"Role16\"> {Fancy.JuryLabel.Value}:");
             else if (position == 71)
             {
-                __result = "<link=\"r46\"><sprite=\"BTOSRoleIcons\" name=\"Role46\"><indent=1.1em><b>" + AddChangedConversionTags.ApplyGradient(Fancy.PirateLabel.Value, Fancy.PirateStart.Value.ToColor(), Fancy.PirateEnd.Value.ToColor()) + ":</b> </link>" + encodedText.Replace("????: </color>", "").Replace("white", "#ECC23E");
+                __result = "<link=\"r46\"><sprite=\"BTOSRoleIcons\" name=\"Role46\"><indent=1.1em><b>" + AddChangedConversionTags.ApplyGradient(Fancy.PirateLabel.Value, Fancy.Colors["PIRATE"].start.ToColor(), Fancy.Colors["PIRATE"].end.ToColor()) + ":</b> </link>" + encodedText.Replace("????: </color>", "").Replace("white", "#ECC23E");
             }
         }
     }
