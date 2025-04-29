@@ -205,6 +205,21 @@ public class Fancy : BaseMod<Fancy>
     public static EnumDropdownOption<RecruitEndType> RecruitEndingColor;
     public static EnumDropdownOption<FactionLabelOption> RoleCardFactionLabel;
     public static EnumDropdownOption<DisplayType> SelectDisplay;
+    public static EnumDropdownOption<CinematicType> TownCinematic;
+    public static EnumDropdownOption<CinematicType> CovenCinematic;
+    public static EnumDropdownOption<CinematicType> SerialKillerCinematic;
+    public static EnumDropdownOption<CinematicType> ArsonistCinematic;
+    public static EnumDropdownOption<CinematicType> WerewolfCinematic;
+    public static EnumDropdownOption<CinematicType> ShroudCinematic;
+    public static EnumDropdownOption<CinematicType> ApocalypseCinematic;
+    public static EnumDropdownOption<CinematicType> VampireCinematic;
+    public static EnumDropdownOption<CinematicType> JackalCinematic;
+    public static EnumDropdownOption<CinematicType> FrogsCinematic;
+    public static EnumDropdownOption<CinematicType> LionsCinematic;
+    public static EnumDropdownOption<CinematicType> HawksCinematic;
+    public static EnumDropdownOption<CinematicType> PandoraCinematic;
+    public static EnumDropdownOption<CinematicType> ComplianceCinematic;
+    public static EnumDropdownOption<CinematicType> LoversCinematic;
 
     private static FactionType[] VanillaFactions;
     private static FactionType[] BTOS2Factions;
@@ -216,6 +231,7 @@ public class Fancy : BaseMod<Fancy>
 
     public override void LoadConfigs()
     {
+        
         VanillaFactions = [.. GeneralUtils.GetEnumValues<FactionType>()!.Except([FactionType.UNKNOWN])];
         BTOS2Factions = [.. AccessTools.GetDeclaredFields(typeof(Btos2Faction)).Select(x => (FactionType)x.GetRawConstantValue())];
 
@@ -435,6 +451,97 @@ public class Fancy : BaseMod<Fancy>
         SelectDisplay = new("SELECT_DISPLAY", DisplayType.RoleCard, PackType.Testing, useTranslations: true);
         SelectTestingFaction = new("SELECTED_TESTING_FACTION", FactionType.NONE, PackType.Testing, useTranslations: true, values:
             () => SettingsAndTestingUI.Instance?.IsBTOS2 == true ? BTOS2Factions : VanillaFactions);
+        
+        TownCinematic = new EnumDropdownOption<CinematicType>(
+            "TOWN_CINEMATIC", CinematicType.TownWins, PackType.Testing,
+            useTranslations: true,
+            values: () => AllowedCinematics());
+
+        CovenCinematic = new EnumDropdownOption<CinematicType>(
+            "COVEN_CINEMATIC", CinematicType.CovenWins, PackType.Testing,
+            useTranslations: true,
+            values: () => AllowedCinematics());
+
+        SerialKillerCinematic = new EnumDropdownOption<CinematicType>(
+            "SERIALKILLER_CINEMATIC", CinematicType.SerialKillersWin, PackType.Testing,
+            useTranslations: true,
+            values: () => AllowedCinematics());
+
+        ArsonistCinematic = new EnumDropdownOption<CinematicType>(
+            "ARSONIST_CINEMATIC", CinematicType.ArsonistsWins, PackType.Testing,
+            useTranslations: true,
+            values: () => AllowedCinematics());
+
+        WerewolfCinematic = new EnumDropdownOption<CinematicType>(
+            "WEREWOLF_CINEMATIC", CinematicType.WerewolvesWin, PackType.Testing,
+            useTranslations: true,
+            values: () => AllowedCinematics());
+
+        ShroudCinematic = new EnumDropdownOption<CinematicType>(
+            "SHROUD_CINEMATIC", CinematicType.ShroudsWin, PackType.Testing,
+            useTranslations: true,
+            values: () => AllowedCinematics());
+
+        ApocalypseCinematic = new EnumDropdownOption<CinematicType>(
+            "APOCALYPSE_CINEMATIC", CinematicType.ApocolypseWins, PackType.Testing,
+            useTranslations: true,
+            values: () => AllowedCinematics());
+
+        VampireCinematic = new EnumDropdownOption<CinematicType>(
+            "VAMPIRE_CINEMATIC", CinematicType.VampireWins, PackType.Testing,
+            useTranslations: true,
+            values: () => AllowedCinematics());
+
+        JackalCinematic = new EnumDropdownOption<CinematicType>(
+            "JACKAL_CINEMATIC", CinematicType.FactionWins, PackType.Testing,
+            useTranslations: true,
+            values: () => AllowedCinematics());
+
+        FrogsCinematic = new EnumDropdownOption<CinematicType>(
+            "FROGS_CINEMATIC", CinematicType.FactionWins, PackType.Testing,
+            useTranslations: true,
+            values: () => AllowedCinematics());
+
+        LionsCinematic = new EnumDropdownOption<CinematicType>(
+            "LIONS_CINEMATIC", CinematicType.FactionWins, PackType.Testing,
+            useTranslations: true,
+            values: () => AllowedCinematics());
+
+        HawksCinematic = new EnumDropdownOption<CinematicType>(
+            "HAWKS_CINEMATIC", CinematicType.FactionWins, PackType.Testing,
+            useTranslations: true,
+            values: () => AllowedCinematics());
+
+        PandoraCinematic = new EnumDropdownOption<CinematicType>(
+            "PANDORA_CINEMATIC", CinematicType.FactionWins, PackType.Testing,
+            useTranslations: true,
+            values: () => AllowedCinematics());
+
+        ComplianceCinematic = new EnumDropdownOption<CinematicType>(
+            "COMPLIANCE_CINEMATIC", CinematicType.FactionWins, PackType.Testing,
+            useTranslations: true,
+            values: () => AllowedCinematics());
+
+        LoversCinematic = new EnumDropdownOption<CinematicType>(
+            "LOVERS_CINEMATIC", CinematicType.FactionWins, PackType.Testing,
+            useTranslations: true,
+            values: () => AllowedCinematics());
+    }
+
+    private static CinematicType[] AllowedCinematics()
+    {
+        return new CinematicType[]
+        {
+            CinematicType.FactionWins,
+            CinematicType.TownWins,
+            CinematicType.CovenWins,
+            CinematicType.SerialKillersWin,
+            CinematicType.ArsonistsWins,
+            CinematicType.WerewolvesWin,
+            CinematicType.ShroudsWin,
+            CinematicType.ApocolypseWins,
+            CinematicType.VampireWins,
+        };
     }
 
     private static string[] GetPackNames(PackType type)

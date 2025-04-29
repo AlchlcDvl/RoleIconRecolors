@@ -8,6 +8,9 @@ using Server.Shared.Cinematics;
 using Mentions;
 using Mentions.Providers;
 using UnityEngine.EventSystems;
+using Game.DevMenu;
+using Server.Shared.Collections;
+using FlexMenu;
 
 namespace FancyUI.Patches;
 
@@ -506,5 +509,39 @@ public static class FixMyFaction
         }
 
         return false;
+    }
+
+
+    [HarmonyPatch(typeof(FactionWinsCinematicData), nameof(FactionWinsCinematicData.SetFaction))]
+    public static class VictoryCinematicSwapperPatch
+    {
+        private static readonly Dictionary<FactionType, CinematicType> CinematicMap = new()
+        {
+            { FactionType.TOWN, Fancy.TownCinematic.Value },
+            { FactionType.COVEN, Fancy.CovenCinematic.Value },
+            { FactionType.SERIALKILLER, Fancy.SerialKillerCinematic.Value },
+            { FactionType.ARSONIST, Fancy.ArsonistCinematic.Value },
+            { FactionType.WEREWOLF, Fancy.WerewolfCinematic.Value },
+            { FactionType.SHROUD, Fancy.ShroudCinematic.Value },
+            { FactionType.APOCALYPSE, Fancy.ApocalypseCinematic.Value },
+            { FactionType.VAMPIRE, Fancy.VampireCinematic.Value },
+            { (FactionType)33, Fancy.JackalCinematic.Value },
+            { (FactionType)34, Fancy.FrogsCinematic.Value },
+            { (FactionType)35, Fancy.LionsCinematic.Value },
+            { (FactionType)36, Fancy.HawksCinematic.Value },
+            { (FactionType)43, Fancy.PandoraCinematic.Value },
+            { (FactionType)44, Fancy.ComplianceCinematic.Value },
+            { (FactionType)250, Fancy.LoversCinematic.Value },
+        };
+
+        public static void Postfix(FactionType factionType, FactionWinsCinematicData __instance)
+        {
+            __instance.winningFaction_ = factionType;
+
+            if (CinematicMap.TryGetValue(factionType, out var cinematic))
+            {
+                __instance.cinematicType_ = cinematic;
+            }
+        }
     }
 }

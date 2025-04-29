@@ -1460,10 +1460,7 @@ public static class PatchCustomWinScreens
 
         var winningFaction = __instance.cinematicData.winningFaction;
 
-        if (winningFaction == FactionType.TOWN)
-            Service.Home.AudioService.PlayMusic("Audio/Music/TownVictory.wav", false, AudioController.AudioChannel.Cinematic, true);
-        else if (winningFaction is FactionType.COVEN or FactionType.NONE)
-            Service.Home.AudioService.PlayMusic("Audio/Music/CovenVictory.wav", false, AudioController.AudioChannel.Cinematic, true);
+        PlayVictoryMusic(winningFaction);
 
         var text2 = __instance.l10n(string.Format("GUI_WINNERS_ARE_{0}", (int)winningFaction));
         string gradientText;
@@ -1486,7 +1483,50 @@ public static class PatchCustomWinScreens
         __instance.SetUpWinners();
         return;
     }
+
+    private static void PlayVictoryMusic(FactionType winningFaction)
+    {
+        string musicPath = GetVictoryMusicPath(winningFaction);
+        if (!string.IsNullOrEmpty(musicPath))
+        {
+            Service.Home.AudioService.PlayMusic(musicPath, false, AudioController.AudioChannel.Cinematic, true);
+        }
+    }
+
+    private static string GetVictoryMusicPath(FactionType faction)
+    {
+        CinematicType? cinematicType = faction switch
+        {
+            FactionType.NONE => CinematicType.CovenWins,
+            FactionType.TOWN => Fancy.TownCinematic.Value,
+            FactionType.COVEN => Fancy.CovenCinematic.Value,
+            FactionType.SERIALKILLER => Fancy.SerialKillerCinematic.Value,
+            FactionType.ARSONIST => Fancy.ArsonistCinematic.Value,
+            FactionType.WEREWOLF => Fancy.WerewolfCinematic.Value,
+            FactionType.SHROUD => Fancy.ShroudCinematic.Value,
+            FactionType.APOCALYPSE => Fancy.ApocalypseCinematic.Value,
+            FactionType.VAMPIRE => Fancy.VampireCinematic.Value,
+            (FactionType)33 => Fancy.JackalCinematic.Value,
+            (FactionType)34 => Fancy.FrogsCinematic.Value,
+            (FactionType)35 => Fancy.LionsCinematic.Value,
+            (FactionType)36 => Fancy.HawksCinematic.Value,
+            (FactionType)43 => Fancy.PandoraCinematic.Value,
+            (FactionType)44 => Fancy.ComplianceCinematic.Value,
+            (FactionType)250 => Fancy.LoversCinematic.Value,
+            _ => null,
+        };
+
+        if (cinematicType == CinematicType.TownWins)
+            return "Audio/Music/TownVictory.wav";
+        if (cinematicType == CinematicType.CovenWins || cinematicType == CinematicType.FactionWins)
+            return "Audio/Music/CovenVictory.wav";
+
+        return null;
+    }
+
 }
+
+
 
 }
 
