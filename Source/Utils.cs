@@ -930,5 +930,63 @@ public static class Utils
     {
         return Service.Home.LocalizationService.GetLocalizedString(key);
     }
+    
+    public static string ApplyGradient(string text, Color color1, Color color2)
+    {
+        var gradient = new Gradient();
+        gradient.SetKeys(
+        [
+            new(color1, 0f),
+            new(color2, 1f)
+        ],
+        [
+            new(1f, 0f),
+            new(1f, 1f)
+        ]);
+        var text2 = "";
+
+        for (var i = 0; i < text.Length; i++)
+            text2 += $"<color={ToHexString(gradient.Evaluate((float)i / text.Length))}>{text[i]}</color>";
+
+        return text2;
+    }
+
+    public static string ApplyThreeColorGradient(string text, Color color1, Color color2, Color color3)
+    {
+        var gradient = new Gradient();
+        gradient.SetKeys(
+        [
+            new(color1, 0f),
+            new(color2, 0.5f),
+            new(color3, 1f)
+        ],
+        [
+            new(1f, 0f),
+            new(1f, 1f)
+        ]);
+        var text2 = "";
+
+        for (var i = 0; i < text.Length; i++)
+            text2 += $"<color={ToHexString(gradient.Evaluate((float)i / text.Length))}>{text[i]}</color>";
+
+        return text2;
+    }
+
+    public static string SetGradient(string text, Gradient gradient)
+    {
+        var text2 = "";
+
+        for (var i = 0; i < text.Length; i++)
+            text2 += $"<color={ToHexString(gradient.Evaluate((float)i / text.Length))}>{text[i]}</color>";
+
+        return text2;
+    }
+
+    public static string ToHexString(Color color)
+    {
+        Color32 color2 = color;
+        return $"#{color2.r:X2}{color2.g:X2}{color2.b:X2}";
+    }
+
 
 }
