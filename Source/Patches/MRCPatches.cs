@@ -1289,37 +1289,54 @@ public static class GetChangedGradients
 public class GradientRoleColorController : MonoBehaviour
 {
     public RoleCardPanelBackground __instance;
+
+    private Coroutine activeCoroutine;
     private readonly float duration = 10f;
     private float value = 0f;
 
-    public void Start() => StartCoroutine(ChangeValueOverTime(__instance.currentFaction, this.__instance.currentRole));
+    private void Start()
+    {
+        activeCoroutine = StartCoroutine(ChangeValueOverTime(__instance.currentFaction, __instance.currentRole));
+    }
 
-    public void OnDestroy() => StopCoroutine(ChangeValueOverTime(__instance.currentFaction, this.__instance.currentRole));
+    private void OnDestroy()
+    {
+        if (activeCoroutine != null)
+        {
+            StopCoroutine(activeCoroutine);
+            activeCoroutine = null;
+        }
+    }
 
     private IEnumerator ChangeValueOverTime(FactionType faction, Role role)
     {
-        var grad = faction.GetChangedGradient(role);
+        Gradient grad = faction.GetChangedGradient(role);
 
         if (grad == null)
         {
-            Destroy(this);
             yield break;
         }
 
-        for (;;)
+        while (true)
         {
-            for (var t = 0f; t < duration; t += Time.deltaTime)
+            for (float t = 0f; t < duration; t += Time.deltaTime)
             {
                 value = Mathf.Lerp(0f, 1f, t / duration);
-                __instance.rolecardBackgroundInstance.SetColor(grad.Evaluate(value));
-                yield return new WaitForEndOfFrame();
+                if (__instance != null && __instance.rolecardBackgroundInstance != null)
+                {
+                    __instance.rolecardBackgroundInstance.SetColor(grad.Evaluate(value));
+                }
+                yield return null;
             }
 
-            for (var t2 = 0f; t2 < duration; t2 += Time.deltaTime)
+            for (float t2 = 0f; t2 < duration; t2 += Time.deltaTime)
             {
                 value = Mathf.Lerp(1f, 0f, t2 / duration);
-                __instance.rolecardBackgroundInstance.SetColor(grad.Evaluate(value));
-                yield return new WaitForEndOfFrame();
+                if (__instance != null && __instance.rolecardBackgroundInstance != null)
+                {
+                    __instance.rolecardBackgroundInstance.SetColor(grad.Evaluate(value));
+                }
+                yield return null;
             }
         }
     }
