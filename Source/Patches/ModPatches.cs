@@ -279,22 +279,22 @@ public static class SpecialAbilityPopupGenericListItemPatch
             {
                 if (factionType == (FactionType)44)
                 {
-                    roleText = AddChangedConversionTags.ApplyThreeColorGradient($"{Utils.GetRoleName(role, factionType, true)}", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
+                    roleText = Utils.ApplyThreeColorGradient($"{Utils.GetRoleName(role, factionType, true)}", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
                 }
                 else 
                 { 
-                    roleText = AddChangedConversionTags.ApplyGradient($"{Utils.GetRoleName(role, factionType, true)}", gradient.Evaluate(0f), gradient.Evaluate(1f));
+                    roleText = Utils.ApplyGradient($"{Utils.GetRoleName(role, factionType, true)}", gradient.Evaluate(0f), gradient.Evaluate(1f));
                 }
             }
             else
             {
                 if (factionType == (FactionType)44)
                 {
-                    roleText = AddChangedConversionTags.ApplyThreeColorGradient($"({role.ToDisplayString()})", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
+                    roleText = Utils.ApplyThreeColorGradient($"({role.ToDisplayString()})", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
                 }
                 else 
                 { 
-                    roleText = AddChangedConversionTags.ApplyGradient($"({role.ToDisplayString()})", gradient.Evaluate(0f), gradient.Evaluate(1f));
+                    roleText = Utils.ApplyGradient($"({role.ToDisplayString()})", gradient.Evaluate(0f), gradient.Evaluate(1f));
                 }
             }
         }
@@ -358,22 +358,22 @@ public static class SpecialAbilityPopupDayConfirmListItemPatch
             {
                 if (factionType == (FactionType)44)
                 {
-                    roleText = AddChangedConversionTags.ApplyThreeColorGradient($"{Utils.GetRoleName(role, factionType, true)}", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
+                    roleText = Utils.ApplyThreeColorGradient($"{Utils.GetRoleName(role, factionType, true)}", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
                 }
                 else 
                 { 
-                    roleText = AddChangedConversionTags.ApplyGradient($"{Utils.GetRoleName(role, factionType, true)}", gradient.Evaluate(0f), gradient.Evaluate(1f));
+                    roleText = Utils.ApplyGradient($"{Utils.GetRoleName(role, factionType, true)}", gradient.Evaluate(0f), gradient.Evaluate(1f));
                 }
             }
             else
             {
                 if (factionType == (FactionType)44)
                 {
-                    roleText = AddChangedConversionTags.ApplyThreeColorGradient($"({role.ToDisplayString()})", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
+                    roleText = Utils.ApplyThreeColorGradient($"({role.ToDisplayString()})", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
                 }
                 else 
                 { 
-                    roleText = AddChangedConversionTags.ApplyGradient($"({role.ToDisplayString()})", gradient.Evaluate(0f), gradient.Evaluate(1f));
+                    roleText = Utils.ApplyGradient($"({role.ToDisplayString()})", gradient.Evaluate(0f), gradient.Evaluate(1f));
                 }
             }
         }
@@ -427,22 +427,22 @@ public static class SpecialAbilityPopupNecromancerRetributionistListItemPatch
             {
                 if (factionType == (FactionType)44)
                 {
-                    roleText = AddChangedConversionTags.ApplyThreeColorGradient($"{Utils.GetRoleName(role2, factionType, true)}", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
+                    roleText = Utils.ApplyThreeColorGradient($"{Utils.GetRoleName(role2, factionType, true)}", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
                 }
                 else 
                 { 
-                    roleText = AddChangedConversionTags.ApplyGradient($"{Utils.GetRoleName(role2, factionType, true)}", gradient.Evaluate(0f), gradient.Evaluate(1f));
+                    roleText = Utils.ApplyGradient($"{Utils.GetRoleName(role2, factionType, true)}", gradient.Evaluate(0f), gradient.Evaluate(1f));
                 }
             }
             else
             {
                 if (factionType == (FactionType)44)
                 {
-                    roleText = AddChangedConversionTags.ApplyThreeColorGradient($"({role2.ToDisplayString()})", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
+                    roleText = Utils.ApplyThreeColorGradient($"({role2.ToDisplayString()})", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
                 }
                 else 
                 { 
-                    roleText = AddChangedConversionTags.ApplyGradient($"({role2.ToDisplayString()})", gradient.Evaluate(0f), gradient.Evaluate(1f));
+                    roleText = Utils.ApplyGradient($"({role2.ToDisplayString()})", gradient.Evaluate(0f), gradient.Evaluate(1f));
                 }
             }
         }
