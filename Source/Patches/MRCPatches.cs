@@ -566,9 +566,10 @@ namespace FancyUI.Patches
             var text2 = __instance.l10n(string.Format("GUI_WINNERS_ARE_{0}", (int)winningFaction));
             string gradientText;
 
+            Gradient gradient = winningFaction.GetChangedGradient(Role.NONE);
+
             if (winningFaction.GetChangedGradient(Role.NONE) != null)
             {
-                Gradient gradient = winningFaction.GetChangedGradient(Role.NONE);
 
                 if (winningFaction == (FactionType)44)
                     gradientText = Utils.ApplyThreeColorGradient(text2, gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
@@ -580,6 +581,22 @@ namespace FancyUI.Patches
             }
             else if (__instance.textAnimatorPlayer.gameObject.activeSelf)
                 __instance.textAnimatorPlayer.ShowText(text2);
+
+            foreach (Transform child in __instance.transform.GetComponentsInChildren<Transform>(true))
+            {
+                if (child.name == "Filigree_L" || child.name == "Filigree_R")
+                {
+                    var image = child.GetComponent<Image>();
+                    if (image != null)
+                    {
+                        if (child.name == "Filigree_L")
+                            image.color = Utils.GetFactionStartingColor(winningFaction);
+                        else
+                            image.color = Utils.GetFactionEndingColor(winningFaction);
+                    }
+                }
+            }
+
 
             __instance.SetUpWinners();
             return;
@@ -598,7 +615,7 @@ namespace FancyUI.Patches
         {
             CinematicType? cinematicType = faction switch
             {
-                FactionType.NONE => CinematicType.CovenWins,
+                FactionType.NONE => CinematicType.FactionWins,
                 FactionType.TOWN => Fancy.TownCinematic.Value,
                 FactionType.COVEN => Fancy.CovenCinematic.Value,
                 FactionType.SERIALKILLER => Fancy.SerialKillerCinematic.Value,
@@ -614,7 +631,7 @@ namespace FancyUI.Patches
                 (FactionType)43 => Fancy.PandoraCinematic.Value,
                 (FactionType)44 => Fancy.ComplianceCinematic.Value,
                 (FactionType)250 => Fancy.LoversCinematic.Value,
-                _ => null,
+                _ => CinematicType.FactionWins,
             };
 
             if (cinematicType == CinematicType.TownWins)
@@ -624,7 +641,6 @@ namespace FancyUI.Patches
 
             return null;
         }
-
     }
 
     [HarmonyPatch(typeof(ClientRoleExtensions), nameof(ClientRoleExtensions.ToColorizedDisplayString), typeof(Role), typeof(FactionType))]
