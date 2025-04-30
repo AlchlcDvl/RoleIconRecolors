@@ -419,9 +419,9 @@ public static class SpecialAbilityPopupNecromancerRetributionistListItemPatch
         
 
         string roleText = "";
-        var gradient = factionType.GetChangedGradient(role);
+        var gradient = factionType.GetChangedGradient(role2);
 
-        if (role != Role.NONE)
+        if (role2 != Role.NONE)
         {
             if (Fancy.FactionalRoleNames.Value)
             {
