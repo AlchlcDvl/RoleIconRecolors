@@ -185,6 +185,7 @@ namespace FancyUI.Patches
                 }
 
                 __instance.playerRoleText.gameObject.SetActive(true);
+                __instance.playerRoleText.enableAutoSizing = false; // Remove when PlayerNotes+ fix is out
             }
 
             return false;
