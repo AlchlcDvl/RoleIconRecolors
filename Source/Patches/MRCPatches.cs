@@ -57,6 +57,8 @@ namespace FancyUI.Patches
             if (Fancy.FactionalRoleNames.Value) { roleName = Utils.ToRoleFactionDisplayString(role, faction); }
             else { roleName = role.ToDisplayString(); }
 
+            
+
             if (faction.GetChangedGradient(role) != null)
                 text = Utils.SetGradient(roleName, faction.GetChangedGradient(role));
             else
@@ -233,72 +235,6 @@ namespace FancyUI.Patches
                     __result = __result.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(factionType, false)})\"");
                 }
 
-            }
-        }
-    }
-
-    [HarmonyPatch(typeof(ClientRoleExtensions), nameof(ClientRoleExtensions.ToColorizedDisplayString), typeof(Role), typeof(FactionType))]
-    public static class AddTTAndGradients
-    {
-        [HarmonyPostfix]
-        public static void Result(ref string __result, ref Role role, ref FactionType factionType)
-        {
-            var newtext = "";
-
-            if (__result.Contains("<color=#B545FF>(Traitor)"))
-                __result = __result.Replace("<color=#B545FF>(Traitor)</color>", "<style=CovenColor>(Traitor)</style>");
-
-            if (RoleExtensions.IsResolved(role) || role is Role.FAMINE or Role.DEATH or Role.PESTILENCE or Role.WAR)
-            {
-                var text = "";
-                text = ClientRoleExtensions.ToDisplayString(role);
-                
-                if (Fancy.FactionalRoleNames.Value) { text = Utils.ToRoleFactionDisplayString(role, factionType); }
-                else { text = ClientRoleExtensions.ToDisplayString(role); }
-
-
-                if (factionType.GetChangedGradient(role) != null)
-                    newtext = Utils.SetGradient(text, factionType.GetChangedGradient(role));
-                else
-                {
-                    newtext = string.Concat(
-                    [
-                        "<color=",
-                        ClientRoleExtensions.GetFactionColor(factionType),
-                        ">",
-                        text,
-                        "</color>"
-                    ]);
-                }
-
-                // DOES NOT WORK, SOMEONE LOOK AT THIS
-                // if (RoleExtensions.GetFaction(role) != factionType && factionType != FactionType.NONE && Fancy.FactionNameNextToRole.Value)
-                // if (factionType != FactionType.NONE) // TESTING PURPOSES
-                /* {
-                    if (factionType is not ((FactionType)33 or (FactionType)44))
-                    {
-                        if (factionType.GetChangedGradient(role) != null)
-                        {
-                            newtext += " " + Utils.ApplyGradient("(" + factionType.ToDisplayString() + ")", factionType.GetChangedGradient(role).Evaluate(0f),
-                                factionType.GetChangedGradient(role).Evaluate(1f));
-                        }
-                        else
-                            newtext += " " + "<color=" + ClientRoleExtensions.GetFactionColor(factionType) + ">(" + factionType.ToDisplayString() + ")</color>";
-                    }
-                    else if (factionType == (FactionType)33)
-                    {
-                        newtext += " " + Utils.ApplyGradient("(" + Fancy.RecruitLabel.Value + ")",
-                            factionType.GetChangedGradient(role).Evaluate(0f), factionType.GetChangedGradient(role).Evaluate(1f));
-                    }
-                    else if (factionType == (FactionType)44)
-                    {
-                        newtext += " " + Utils.ApplyThreeColorGradient("(" + factionType.ToDisplayString() + ")", factionType.GetChangedGradient(role).Evaluate(0f),
-                            factionType.GetChangedGradient(role).Evaluate(0.5f), factionType.GetChangedGradient(role).Evaluate(1f));
-                    }
-
-                } */
-
-                __result = newtext;
             }
         }
     }
@@ -689,6 +625,71 @@ namespace FancyUI.Patches
         }
 
     }
+
+    [HarmonyPatch(typeof(ClientRoleExtensions), nameof(ClientRoleExtensions.ToColorizedDisplayString), typeof(Role), typeof(FactionType))]
+    public static class AddTTAndGradients
+    {
+        [HarmonyPostfix]
+        public static void Result(ref string __result, ref Role role, ref FactionType factionType)
+        {
+            var newtext = "";
+
+            if (__result.Contains("<color=#B545FF>(Traitor)"))
+                __result = __result.Replace("<color=#B545FF>(Traitor)</color>", "<style=CovenColor>(Traitor)</style>");
+
+            if (RoleExtensions.IsResolved(role) || role is Role.FAMINE or Role.DEATH or Role.PESTILENCE or Role.WAR)
+            {
+                var text = "";
+                text = ClientRoleExtensions.ToDisplayString(role);
+                
+                if (Fancy.FactionalRoleNames.Value) { text = Utils.ToRoleFactionDisplayString(role, factionType); }
+                else { text = ClientRoleExtensions.ToDisplayString(role); }
+
+
+                if (factionType.GetChangedGradient(role) != null)
+                    newtext = Utils.SetGradient(text, factionType.GetChangedGradient(role));
+                else
+                {
+                    newtext = string.Concat(
+                    [
+                        "<color=",
+                        ClientRoleExtensions.GetFactionColor(factionType),
+                        ">",
+                        text,
+                        "</color>"
+                    ]);
+                }
+
+                if (RoleExtensions.GetFaction(role) != factionType && factionType != FactionType.NONE && Fancy.FactionNameNextToRole.Value && !Pepper.IsRoleRevealPhase())
+                {
+                    if (factionType is not ((FactionType)33 or (FactionType)44))
+                    {
+                        if (factionType.GetChangedGradient(role) != null)
+                        {
+                            newtext += " " + Utils.ApplyGradient("(" + factionType.ToDisplayString() + ")", factionType.GetChangedGradient(role).Evaluate(0f),
+                                factionType.GetChangedGradient(role).Evaluate(1f));
+                        }
+                        else
+                            newtext += " " + "<color=" + ClientRoleExtensions.GetFactionColor(factionType) + ">(" + factionType.ToDisplayString() + ")</color>";
+                    }
+                    else if (factionType == (FactionType)33)
+                    {
+                        newtext += " " + Utils.ApplyGradient("(" + Fancy.RecruitLabel.Value + ")",
+                            factionType.GetChangedGradient(role).Evaluate(0f), factionType.GetChangedGradient(role).Evaluate(1f));
+                    }
+                    else if (factionType == (FactionType)44)
+                    {
+                        newtext += " " + Utils.ApplyThreeColorGradient("(" + factionType.ToDisplayString() + ")", factionType.GetChangedGradient(role).Evaluate(0f),
+                            factionType.GetChangedGradient(role).Evaluate(0.5f), factionType.GetChangedGradient(role).Evaluate(1f));
+                    }
+
+                }
+
+                __result = newtext;
+            }
+        }
+    }
+
 
 }
 

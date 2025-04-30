@@ -113,7 +113,7 @@ public class Fancy : BaseMod<Fancy>
     public static ToggleOption ShowOverlayAsJailor;
     public static ToggleOption IconsInRoleReveal;
     public static ToggleOption FactionalRoleNames;
-    public static ToggleOption FactionNameNextToRole; // Could not figure out why the code for this setting did not work
+    public static ToggleOption FactionNameNextToRole; 
 
     public static ToggleOption MajorColors;
 
@@ -296,6 +296,7 @@ public class Fancy : BaseMod<Fancy>
         PlayerPanelEasterEggs = new("PLAYER_PANEL_EE", false, PackType.IconPacks, _ => Constants.EnableIcons());
 
         FactionalRoleNames = new("FACTIONAL_ROLE_NAMES", false, PackType.MiscRoleCustomisation);
+        FactionNameNextToRole = new("FACTION_NEXT_TO_ROLE", false, PackType.MiscRoleCustomisation);
         MajorColors = new("MAJOR_COLORS", false, PackType.MiscRoleCustomisation);
         RecruitEndingColor = new("RECRUIT_ENDING", RecruitEndType.JackalEnd, PackType.MiscRoleCustomisation, useTranslations: true);
         RoleCardFactionLabel = new("FACTION_LABEL", FactionLabelOption.Mismatch, PackType.MiscRoleCustomisation, useTranslations: true);

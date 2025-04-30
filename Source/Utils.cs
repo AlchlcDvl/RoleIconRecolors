@@ -919,6 +919,10 @@ public static class Utils
     
     public static string ApplyGradient(string text, Color color1, Color color2)
     {
+        if (string.IsNullOrEmpty(text))
+        return string.Empty; 
+
+
         var gradient = new Gradient();
         gradient.SetKeys(
         [
@@ -939,6 +943,10 @@ public static class Utils
 
     public static string ApplyThreeColorGradient(string text, Color color1, Color color2, Color color3)
     {
+        if (string.IsNullOrEmpty(text))
+        return string.Empty; 
+
+        
         var gradient = new Gradient();
         gradient.SetKeys(
         [

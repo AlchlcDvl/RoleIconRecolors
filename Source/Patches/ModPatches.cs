@@ -183,21 +183,21 @@ public static class RoleRevealCinematicPlayerPatch
         if (role == Role.NONE)
             return true;
 
-        var flag = Constants.IconsInRoleReveal();
-        var newValue = flag
+        var showIcons = Constants.IconsInRoleReveal();
+        var skinIcon = showIcons
             ? $"<sprite=\"Cast\" name=\"Skin{__instance.roleRevealCinematic.skinId}\">{Service.Game.Cast.GetSkinName(__instance.roleRevealCinematic.skinId)}"
             : Service.Game.Cast.GetSkinName(__instance.roleRevealCinematic.skinId);
-        var text = __instance.l10n("CINE_ROLE_REVEAL_SKIN").Replace("%skin%", newValue);
-        __instance.skinTextPlayer.ShowText(text);
+        var skinText = __instance.l10n("CINE_ROLE_REVEAL_SKIN").Replace("%skin%", skinIcon);
+        __instance.skinTextPlayer.ShowText(skinText);
         __instance.totalDuration = Tuning.ROLE_REVEAL_TIME;
         __instance.silhouetteWrapper.gameObject.SetActive(true);
         __instance.silhouetteWrapper.SwapWithSilhouette((int)role);
-        var newValue2 = flag ? (role.GetTMPSprite() + role.ToColorizedDisplayString(CurrentFaction)) : role.ToColorizedDisplayString(CurrentFaction);
-        newValue2 = newValue2.Replace("RoleIcons\"", "RoleIcons (" + ((role.GetFactionType() == CurrentFaction && Constants.CurrentStyle() == "Regular")
+        var roleIcon = showIcons ? (role.GetTMPSprite() + role.ToColorizedDisplayString(CurrentFaction)) : role.ToColorizedDisplayString(CurrentFaction);
+        roleIcon = roleIcon.Replace("RoleIcons\"", "RoleIcons (" + ((role.GetFactionType() == CurrentFaction && Constants.CurrentStyle() == "Regular")
             ? "Regular"
             : Utils.FactionName(CurrentFaction, false)) + ")\"");
-        var text2 = __instance.l10n("CINE_ROLE_REVEAL_ROLE").Replace("%role%", newValue2);
-        __instance.roleTextPlayer.ShowText(text2);
+        var roleText = __instance.l10n("CINE_ROLE_REVEAL_ROLE").Replace("%role%", roleIcon);
+        __instance.roleTextPlayer.ShowText(roleText);
 
         if (Pepper.GetCurrentGameType() == GameType.Ranked)
             __instance.playableDirector.Resume();
