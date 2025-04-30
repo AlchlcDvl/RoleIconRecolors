@@ -273,51 +273,30 @@ public static class SpecialAbilityPopupGenericListItemPatch
         string roleText = "";
         var gradient = factionType.GetChangedGradient(role);
 
-        if (role != Role.NONE && gradient != null)
+        if (role != Role.NONE)
         {
             if (Fancy.FactionalRoleNames.Value)
             {
                 if (factionType == (FactionType)44)
                 {
-                    roleText = Utils.ApplyThreeColorGradient(
-                        Utils.GetRoleName(role, factionType, true),
-                        gradient.Evaluate(0f),
-                        gradient.Evaluate(0.5f),
-                        gradient.Evaluate(1f));
+                    roleText = Utils.ApplyThreeColorGradient($"{Utils.GetRoleName(role, factionType, true)}", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
                 }
-                else
-                {
-                    roleText = Utils.ApplyGradient(
-                        Utils.GetRoleName(role, factionType, true),
-                        gradient.Evaluate(0f),
-                        gradient.Evaluate(1f));
+                else 
+                { 
+                    roleText = Utils.ApplyGradient($"{Utils.GetRoleName(role, factionType, true)}", gradient.Evaluate(0f), gradient.Evaluate(1f));
                 }
             }
             else
             {
                 if (factionType == (FactionType)44)
                 {
-                    roleText = Utils.ApplyThreeColorGradient(
-                        $"({role.ToDisplayString()})",
-                        gradient.Evaluate(0f),
-                        gradient.Evaluate(0.5f),
-                        gradient.Evaluate(1f));
+                    roleText = Utils.ApplyThreeColorGradient($"({role.ToDisplayString()})", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
                 }
-                else
-                {
-                    roleText = Utils.ApplyGradient(
-                        $"({role.ToDisplayString()})",
-                        gradient.Evaluate(0f),
-                        gradient.Evaluate(1f));
+                else 
+                { 
+                    roleText = Utils.ApplyGradient($"({role.ToDisplayString()})", gradient.Evaluate(0f), gradient.Evaluate(1f));
                 }
             }
-        }
-        else if (role != Role.NONE)
-        {
-            // Fallback if gradient is null: plain text
-            roleText = Fancy.FactionalRoleNames.Value
-                ? Utils.GetColorizedRoleName(role, factionType, true)
-                : $"({role.ToColorizedDisplayString()})";
         }
 
         var text = player_name + " " + roleText;

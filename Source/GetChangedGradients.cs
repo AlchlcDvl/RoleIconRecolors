@@ -270,8 +270,13 @@ public static class GetChangedGradients
                         ];
                         goto setmajor;
 
+                    default:
+                        array[0] = new(Fancy.Colors["STONED_HIDDEN"].start.ToColor(), 0f);
+                        array[1] = new(Fancy.Colors["STONED_HIDDEN"].start.ToColor(), 1f);
+                        goto setmajor;
+
+
                 }
-                return null;
 
 
                 setmajor:
@@ -539,8 +544,12 @@ public static class GetChangedGradients
                         ];
                         goto setgradient;
 
+                    default:
+                        array[0] = new(Fancy.Colors["STONED_HIDDEN"].start.ToColor(), 0f);
+                        array[1] = new(Fancy.Colors["STONED_HIDDEN"].start.ToColor(), 1f);
+                        goto setgradient;
+
                 }
-                return null;
 
 
                 setgradient:
