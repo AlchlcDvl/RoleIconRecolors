@@ -14,8 +14,11 @@
     <Entry key="FANCY_FACTION_LABEL_NAME">Faction Label in Role Card</Entry>
     <Entry key="FANCY_FACTION_LABEL_DESC">Determines whether or not the faction label within the role card will be displayed and under what conditions. Mismatch means if the role doesn't belong in the current faction. Conditional means Coven/Apocalypse = Pandora and SK/Arso/WW/Shroud = Compliance. Always and Never are self explanatory. Does not affect the Town Traitor and Recruit Labels.</Entry>
    
-    <Entry key="FANCY_MAJOR_COLORS_NAME">Override End Color If Role Is Major</Entry>
+    <Entry key="FANCY_MAJOR_COLORS_NAME">Override End Color If Role Is a Power Role</Entry>
     <Entry key="FANCY_MAJOR_COLORS_DESC">Determines whether or not end colors on factions will be overwritten with a separate Major color value when Coven Power, Town Power, or a Horseman of the Apocalypse.</Entry>
+   
+    <Entry key="FANCY_LETHAL_COLORS_NAME">Override End Color If Role Is a Killing Role</Entry>
+    <Entry key="FANCY_LETHAL_COLORS_DESC">Determines whether or not end colors on factions will be overwritten with a separate Lethal color value when Coven Power, Town Power, or a Horseman of the Apocalypse.</Entry>
    
     <Entry key="FANCY_RECRUIT_ENDING_NAME">Override Recruit End Color</Entry>
     <Entry key="FANCY_RECRUIT_ENDING_DESC">Determines what color recruits will pull. Jackal means it pulls from the Jackal End Color, Original Start means it pulls from their original faction's Start color, and Original End pulls from their original faction's End color (Major if a Major role with the setting on).</Entry>
@@ -185,6 +188,9 @@
     <Entry key="FANCY_TOWN_MAJOR_NAME">Town Major Color</Entry>
     <Entry key="FANCY_TOWN_MAJOR_DESC">The major ending color for the Town faction.</Entry>
 
+    <Entry key="FANCY_TOWN_LETHAL_NAME">Town Lethal Color</Entry>
+    <Entry key="FANCY_TOWN_LETHAL_DESC">The lethal ending color for the Town faction.</Entry>
+
     <Entry key="FANCY_COVEN_START_NAME">Coven Start Color</Entry>
     <Entry key="FANCY_COVEN_START_DESC">The start color for the Coven faction.</Entry>
 
@@ -194,6 +200,9 @@
     <Entry key="FANCY_COVEN_MAJOR_NAME">Coven Major Color</Entry>
     <Entry key="FANCY_COVEN_MAJOR_DESC">The major ending color for the Coven faction.</Entry>
 
+    <Entry key="FANCY_COVEN_LETHAL_NAME">Coven Lethal Color</Entry>
+    <Entry key="FANCY_COVEN_LETHAL_DESC">The lethal ending color for the Coven faction.</Entry>
+
     <Entry key="FANCY_APOCALYPSE_START_NAME">Apocalypse Start Color</Entry>
     <Entry key="FANCY_APOCALYPSE_START_DESC">The start color for the Apocalypse faction.</Entry>
 
@@ -202,6 +211,9 @@
 
     <Entry key="FANCY_APOCALYPSE_MAJOR_NAME">Apocalypse Major Color</Entry>
     <Entry key="FANCY_APOCALYPSE_MAJOR_DESC">The major ending color for the Apocalypse faction.</Entry>
+
+    <Entry key="FANCY_APOCALYPSE_LETHAL_NAME">Apocalypse Lethal Color</Entry>
+    <Entry key="FANCY_APOCALYPSE_LETHAL_DESC">The lethal ending color for the Apocalypse faction.</Entry>
 
     <Entry key="FANCY_SERIALKILLER_START_NAME">Serial Killer Start Color</Entry>
     <Entry key="FANCY_SERIALKILLER_START_DESC">The start color for the Serial Killer faction.</Entry>
@@ -248,6 +260,9 @@
     <Entry key="FANCY_JACKAL_MAJOR_NAME">Jackal Major Color</Entry>
     <Entry key="FANCY_JACKAL_MAJOR_DESC">The major ending color for the Jackal faction.</Entry>
 
+    <Entry key="FANCY_JACKAL_LETHAL_NAME">Jackal Lethal Color</Entry>
+    <Entry key="FANCY_JACKAL_LETHAL_DESC">The lethal ending color for the Jackal faction.</Entry>
+
     <Entry key="FANCY_PANDORA_START_NAME">Pandora Start Color</Entry>
     <Entry key="FANCY_PANDORA_START_DESC">The start color for the Pandora faction.</Entry>
 
@@ -256,6 +271,9 @@
 
     <Entry key="FANCY_PANDORA_MAJOR_NAME">Pandora Major Color</Entry>
     <Entry key="FANCY_PANDORA_MAJOR_DESC">The major ending color for the Pandora faction.</Entry>
+
+    <Entry key="FANCY_PANDORA_LETHAL_NAME">Pandora Lethal Color</Entry>
+    <Entry key="FANCY_PANDORA_LETHAL_DESC">The lethal ending color for the Pandora faction.</Entry>
 
     <Entry key="FANCY_COMPLIANCE_START_NAME">Compliance Start Color</Entry>
     <Entry key="FANCY_COMPLIANCE_START_DESC">The start color for the Compliance faction.</Entry>
@@ -278,6 +296,9 @@
     <Entry key="FANCY_FROGS_MAJOR_NAME">Frogs Major Color</Entry>
     <Entry key="FANCY_FROGS_MAJOR_DESC">The major ending color for the Frogs faction.</Entry>
 
+    <Entry key="FANCY_FROGS_LETHAL_NAME">Frogs Lethal Color</Entry>
+    <Entry key="FANCY_FROGS_LETHAL_DESC">The lethal ending color for the Frogs faction.</Entry>
+
     <Entry key="FANCY_HAWKS_START_NAME">Hawks Start Color</Entry>
     <Entry key="FANCY_HAWKS_START_DESC">The start color for the Hawks faction.</Entry>
 
@@ -286,6 +307,9 @@
 
     <Entry key="FANCY_HAWKS_MAJOR_NAME">Hawks Major Color</Entry>
     <Entry key="FANCY_HAWKS_MAJOR_DESC">The major ending color for the Hawks faction.</Entry>
+
+    <Entry key="FANCY_HAWKS_LETHAL_NAME">Hawks Lethal Color</Entry>
+    <Entry key="FANCY_HAWKS_LETHAL_DESC">The lethal ending color for the Hawks faction.</Entry>
 
     <Entry key="FANCY_LIONS_START_NAME">Lions Start Color</Entry>
     <Entry key="FANCY_LIONS_START_DESC">The start color for the Lions faction.</Entry>
@@ -296,6 +320,9 @@
     <Entry key="FANCY_LIONS_MAJOR_NAME">Lions Major Color</Entry>
     <Entry key="FANCY_LIONS_MAJOR_DESC">The major ending color for the Lions faction.</Entry>
 
+    <Entry key="FANCY_LIONS_LETHAL_NAME">Lions Lethal Color</Entry>
+    <Entry key="FANCY_LIONS_LETHAL_DESC">The lethal ending color for the Lions faction.</Entry>
+
     <Entry key="FANCY_EGOTIST_START_NAME">Egotist Start Color</Entry>
     <Entry key="FANCY_EGOTIST_START_DESC">The start color for the Egotist faction.</Entry>
 
@@ -304,6 +331,9 @@
 
     <Entry key="FANCY_EGOTIST_MAJOR_NAME">Egotist Major Color</Entry>
     <Entry key="FANCY_EGOTIST_MAJOR_DESC">The major ending color for the Egotist faction.</Entry>
+
+    <Entry key="FANCY_EGOTIST_LETHAL_NAME">Egotist Lethal Color</Entry>
+    <Entry key="FANCY_EGOTIST_LETHAL_DESC">The lethal ending color for the Egotist faction.</Entry>
 
     <Entry key="FANCY_VAMPIRE_START_NAME">Vampire Start Color</Entry>
     <Entry key="FANCY_VAMPIRE_START_DESC">The start color for the Vampire faction.</Entry>
@@ -314,6 +344,9 @@
     <Entry key="FANCY_VAMPIRE_MAJOR_NAME">Vampire Major Color</Entry>
     <Entry key="FANCY_VAMPIRE_MAJOR_DESC">The major ending color for the Vampire faction.</Entry>
 
+    <Entry key="FANCY_VAMPIRE_LETHAL_NAME">Vampire Lethal Color</Entry>
+    <Entry key="FANCY_VAMPIRE_LETHAL_DESC">The lethal ending color for the Vampire faction.</Entry>
+
     <Entry key="FANCY_CURSEDSOUL_START_NAME">Cursed Soul Start Color</Entry>
     <Entry key="FANCY_CURSEDSOUL_START_DESC">The start color for the Cursed Soul faction.</Entry>
 
@@ -322,6 +355,9 @@
 
     <Entry key="FANCY_CURSEDSOUL_MAJOR_NAME">Cursed Soul Major Color</Entry>
     <Entry key="FANCY_CURSEDSOUL_MAJOR_DESC">The major ending color for the Cursed Soul faction.</Entry>
+
+    <Entry key="FANCY_CURSEDSOUL_LETHAL_NAME">Cursed Soul Lethal Color</Entry>
+    <Entry key="FANCY_CURSEDSOUL_LETHAL_DESC">The lethal ending color for the Cursed Soul faction.</Entry>
 
     <Entry key="FANCY_JESTER_START_NAME">Jester Start Color</Entry>
     <Entry key="FANCY_JESTER_START_DESC">The start color for the Jester faction.</Entry>

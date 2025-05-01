@@ -116,6 +116,7 @@ public class Fancy : BaseMod<Fancy>
     public static ToggleOption FactionNameNextToRole; 
 
     public static ToggleOption MajorColors;
+    public static ToggleOption LethalColors;
 
     public static FloatOption GeneralBrightness;
     public static FloatOption GrayscaleAmount;
@@ -130,7 +131,7 @@ public class Fancy : BaseMod<Fancy>
     public static StringInputOption PirateLabel;
 
     public static Dictionary<string, ColorOption> ColorOptions = new();
-    public static Dictionary<string, (string start, string end, string major, string middle)> Colors;
+    public static Dictionary<string, (string start, string end, string major, string middle, string lethal)> Colors;
 
 
     public static EnumDropdownOption<FactionType> SelectTestingFaction;
@@ -298,6 +299,7 @@ public class Fancy : BaseMod<Fancy>
         FactionalRoleNames = new("FACTIONAL_ROLE_NAMES", false, PackType.MiscRoleCustomisation);
         FactionNameNextToRole = new("FACTION_NEXT_TO_ROLE", false, PackType.MiscRoleCustomisation);
         MajorColors = new("MAJOR_COLORS", false, PackType.MiscRoleCustomisation);
+        LethalColors = new("LETHAL_COLORS", false, PackType.MiscRoleCustomisation);
         RecruitEndingColor = new("RECRUIT_ENDING", RecruitEndType.JackalEnd, PackType.MiscRoleCustomisation, useTranslations: true);
         RoleCardFactionLabel = new("FACTION_LABEL", FactionLabelOption.Mismatch, PackType.MiscRoleCustomisation, useTranslations: true);
         RecruitLabel = new("RECRUIT_LABEL", "Recruited", PackType.MiscRoleCustomisation);
@@ -414,41 +416,41 @@ public class Fancy : BaseMod<Fancy>
 
     public static void InitializeColors()
     {
-        Colors = new Dictionary<string, (string start, string end, string major, string middle)>
+        Colors = new Dictionary<string, (string start, string end, string major, string middle, string lethal)>
         {
-            { "TOWN", ("#06E00C", "#06E00C", "#06E00C", null) },
-            { "COVEN", ("#B545FF", "#B545FF", "#B545FF", null) },
-            { "APOCALYPSE", ("#FF004E", "#FF004E", "#FF004E", null) },
-            { "VAMPIRE", ("#A22929", "#A22929", "#A22929", null) },
-            { "CURSEDSOUL", ("#4FFF9F", "#B54FFF", "#4FFF9F", null) },
-            { "PANDORA", ("#B545FF", "#FF004E", "#FF004E", null) },
-            { "COMPLIANCE", ("#2D44B5", "#FC9F32", "#FC9F32", "#AE1B1E") },
-            { "SERIALKILLER", ("#1D4DFC", "#1D4DFC", "#1D4DFC", null) },
-            { "ARSONIST", ("#DB7601", "#DB7601", "#DB7601", null) },
-            { "WEREWOLF", ("#9D7038", "#9D7038", "#9D7038", null) },
-            { "SHROUD", ("#6699FF", "#6699FF", "#6699FF", null) },
-            { "JACKAL", ("#404040", "#D0D0D0", "#D0D0D0", null) },
-            { "FROGS", ("#1e49cf", "#1e49cf", "#1e49cf", null) },
-            { "EGOTIST", ("#359f3f", "#3f359f", "#3f359f", null) },
-            { "JESTER", ("#F5A6D4", "#F5A6D4", null, null) },
-            { "EXECUTIONER", ("#949797", "#949797", null, null) },
-            { "DOOMSAYER", ("#00CC99", "#00CC99", null, null) },
-            { "PIRATE", ("#ECC23E", "#ECC23E", null, null) },
-            { "INQUISITOR", ("#821252", "#821252", null, null) },
-            { "AUDITOR", ("#AEBA87", "#E8FCC5", null, null) },
-            { "JUDGE", ("#C77364", "#C93D50", null, null) },
-            { "STARSPAWN", ("#FCE79A", "#999CFF", null, null) },
-            { "HAWKS", ("#7E4C9C", "#7E4C9C", "#7E4C9C", null) },
-            { "LIONS", ("#D19000", "#D19000", "#D19000", null) },
-            { "NEUTRAL", ("#A9A9A9", null, null, null) },
-            { "STONED_HIDDEN", ("#9C9A9A", null, null, null) },
-            { "LOVERS", ("#FEA6FA", null, null, null) },
+            { "TOWN", ("#06E00C", "#06E00C", "#06E00C", null, "#06E00C") },
+            { "COVEN", ("#B545FF", "#B545FF", "#B545FF", null, "#B545FF") },
+            { "APOCALYPSE", ("#FF004E", "#FF004E", "#FF004E", null, "#FF004E") },
+            { "VAMPIRE", ("#A22929", "#A22929", "#A22929", null, "#A22929") },
+            { "CURSEDSOUL", ("#4FFF9F", "#B54FFF", "#4FFF9F", null, "#4FFF9F") },
+            { "PANDORA", ("#B545FF", "#FF004E", "#FF004E", null, "#FF004E") },
+            { "COMPLIANCE", ("#2D44B5", "#FC9F32", "#FC9F32", "#AE1B1E", null) },
+            { "SERIALKILLER", ("#1D4DFC", "#1D4DFC", "#1D4DFC", null, null) },
+            { "ARSONIST", ("#DB7601", "#DB7601", "#DB7601", null, null) },
+            { "WEREWOLF", ("#9D7038", "#9D7038", "#9D7038", null, null) },
+            { "SHROUD", ("#6699FF", "#6699FF", "#6699FF", null, null) },
+            { "JACKAL", ("#404040", "#D0D0D0", "#D0D0D0", null, "#D0D0D0") },
+            { "EGOTIST", ("#359f3f", "#3f359f", "#3f359f", null, "#3f359f") },
+            { "JESTER", ("#F5A6D4", "#F5A6D4", null, null, null) },
+            { "EXECUTIONER", ("#949797", "#949797", null, null, null) },
+            { "DOOMSAYER", ("#00CC99", "#00CC99", null, null, null) },
+            { "PIRATE", ("#ECC23E", "#ECC23E", null, null, null) },
+            { "INQUISITOR", ("#821252", "#821252", null, null, null) },
+            { "AUDITOR", ("#AEBA87", "#E8FCC5", null, null, null) },
+            { "JUDGE", ("#C77364", "#C93D50", null, null, null) },
+            { "STARSPAWN", ("#FCE79A", "#999CFF", null, null, null) },
+            { "FROGS", ("#1e49cf", "#1e49cf", "#1e49cf", null, "#1e49cf") },
+            { "HAWKS", ("#7E4C9C", "#7E4C9C", "#7E4C9C", null, "#7E4C9C") },
+            { "LIONS", ("#D19000", "#D19000", "#D19000", null, "#D19000") },
+            { "NEUTRAL", ("#A9A9A9", null, null, null, null) },
+            { "STONED_HIDDEN", ("#9C9A9A", null, null, null, null) },
+            { "LOVERS", ("#FEA6FA", null, null, null, null) },
         };
 
         foreach (var kvp in Colors)
         {
             string key = kvp.Key;
-            var (start, end, major, middle) = kvp.Value;
+            var (start, end, major, middle, lethal) = kvp.Value;
 
             if (start != null)
             {
@@ -465,6 +467,8 @@ public class Fancy : BaseMod<Fancy>
                         ColorOptions[$"{key}_END"] = new($"{key}_END", end, PackType.MiscRoleCustomisation, onChanged: _ => ReloadColors());
                     if (major != null)
                         ColorOptions[$"{key}_MAJOR"] = new($"{key}_MAJOR", major, PackType.MiscRoleCustomisation, onChanged: _ => ReloadColors());
+                    if (lethal != null)
+                        ColorOptions[$"{key}_LETHAL"] = new($"{key}_LETHAL", lethal, PackType.MiscRoleCustomisation, onChanged: _ => ReloadColors());
 
                 }
             }
@@ -476,8 +480,9 @@ public class Fancy : BaseMod<Fancy>
             string end = ColorOptions.TryGetValue($"{key}_END", out var e) ? e.Value : null;
             string major = ColorOptions.TryGetValue($"{key}_MAJOR", out var m) ? m.Value : null;
             string middle = ColorOptions.TryGetValue($"{key}_MIDDLE", out var mi) ? mi.Value : null;
+            string lethal = ColorOptions.TryGetValue($"{key}_LETHAL", out var l) ? l.Value : null;
 
-            Colors[key] = (start, end, major, middle);
+            Colors[key] = (start, end, major, middle, lethal);
         }
 
 
@@ -491,8 +496,9 @@ public class Fancy : BaseMod<Fancy>
             string end    = ColorOptions.TryGetValue($"{key}_END", out var e) ? e.Value : null;
             string major  = ColorOptions.TryGetValue($"{key}_MAJOR", out var m) ? m.Value : null;
             string middle = ColorOptions.TryGetValue($"{key}_MIDDLE", out var mi) ? mi.Value : null;
+            string lethal = ColorOptions.TryGetValue($"{key}_LETHAL", out var l) ? l.Value : null;
 
-            Colors[key] = (start, end, major, middle);
+            Colors[key] = (start, end, major, middle, lethal);
         }
     }
 
