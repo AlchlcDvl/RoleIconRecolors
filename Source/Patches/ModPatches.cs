@@ -4,13 +4,9 @@ using SalemModLoaderUI;
 using Home.Shared;
 using Cinematics.Players;
 using Server.Shared.Cinematics.Data;
-using Server.Shared.Cinematics;
 using Mentions;
 using Mentions.Providers;
 using UnityEngine.EventSystems;
-using Game.DevMenu;
-using Server.Shared.Collections;
-using FlexMenu;
 
 namespace FancyUI.Patches;
 
@@ -270,39 +266,13 @@ public static class SpecialAbilityPopupGenericListItemPatch
             factionType = tuple.Item2;
         }
 
-
         var roleText = "";
         var gradient = factionType.GetChangedGradient(role);
 
         if (role != Role.NONE)
-        {
-            if (Fancy.FactionalRoleNames.Value)
+            roleText = Fancy.FactionalRoleNames.Value ? Utils.GetRoleName(role, factionType, true) : role.ToDisplayString();
 
-            {
-                if (factionType == (FactionType)44)
-                {
-                    roleText = Utils.ApplyGradient($"{Utils.GetRoleName(role, factionType, true)}", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
-                }
-                else
-                {
-                    roleText = Utils.ApplyGradient($"{Utils.GetRoleName(role, factionType, true)}", gradient.Evaluate(0f), gradient.Evaluate(1f));
-                }
-            }
-            else
-            {
-                if (factionType == (FactionType)44)
-                {
-                    roleText = Utils.ApplyGradient($"({role.ToDisplayString()})", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
-                }
-                else
-                {
-                    roleText = Utils.ApplyGradient($"({role.ToDisplayString()})", gradient.Evaluate(0f), gradient.Evaluate(1f));
-                }
-            }
-
-        }
-
-        var text = player_name + " " + roleText;
+        var text = player_name + " " + Utils.ApplyGradient(roleText, gradient);
         __instance.playerName.SetText(text);
         __instance.playerHeadshot.sprite = headshot;
         __instance.characterPosition = position;
@@ -356,32 +326,9 @@ public static class SpecialAbilityPopupDayConfirmListItemPatch
         var gradient = factionType.GetChangedGradient(role);
 
         if (role != Role.NONE)
-        {
-            if (Fancy.FactionalRoleNames.Value)
-            {
-                if (factionType == (FactionType)44)
-                {
-                    roleText = Utils.ApplyGradient($"{Utils.GetRoleName(role, factionType, true)}", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
-                }
-                else
-                {
-                    roleText = Utils.ApplyGradient($"{Utils.GetRoleName(role, factionType, true)}", gradient.Evaluate(0f), gradient.Evaluate(1f));
-                }
-            }
-            else
-            {
-                if (factionType == (FactionType)44)
-                {
-                    roleText = Utils.ApplyGradient($"({role.ToDisplayString()})", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
-                }
-                else
-                {
-                    roleText = Utils.ApplyGradient($"({role.ToDisplayString()})", gradient.Evaluate(0f), gradient.Evaluate(1f));
-                }
-            }
-        }
+            roleText = Fancy.FactionalRoleNames.Value ? Utils.GetRoleName(role, factionType, true) : role.ToDisplayString();
 
-        var text = player_name + " " + roleText;
+        var text = player_name + " " + Utils.ApplyGradient(roleText, gradient);
         __instance.playerName.SetText(text);
         __instance.playerHeadshot.sprite = headshot;
         __instance.characterPosition = position;
@@ -419,37 +366,13 @@ public static class SpecialAbilityPopupNecromancerRetributionistListItemPatch
             factionType = tuple.Item2;
         }
 
-
         var roleText = "";
         var gradient = factionType.GetChangedGradient(role2);
 
         if (role2 != Role.NONE)
-        {
-            if (Fancy.FactionalRoleNames.Value)
-            {
-                if (factionType == (FactionType)44)
-                {
-                    roleText = Utils.ApplyGradient($"{Utils.GetRoleName(role2, factionType, true)}", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
-                }
-                else
-                {
-                    roleText = Utils.ApplyGradient($"{Utils.GetRoleName(role2, factionType, true)}", gradient.Evaluate(0f), gradient.Evaluate(1f));
-                }
-            }
-            else
-            {
-                if (factionType == (FactionType)44)
-                {
-                    roleText = Utils.ApplyGradient($"({role2.ToDisplayString()})", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
-                }
-                else
-                {
-                    roleText = Utils.ApplyGradient($"({role2.ToDisplayString()})", gradient.Evaluate(0f), gradient.Evaluate(1f));
-                }
-            }
-        }
+            roleText = Fancy.FactionalRoleNames.Value ? Utils.GetRoleName(role2, factionType, true) : role2.ToDisplayString();
 
-        var text = player_name + " " + roleText;
+        var text = player_name + " " + Utils.ApplyGradient(roleText, gradient);
         __instance.playerName.SetText(text);
         __instance.playerHeadshot.sprite = headshot;
         __instance.characterPosition = position;
@@ -507,7 +430,7 @@ public static class FixMyFaction
         }
         catch
         {
-            __result = FactionType.NONE; // Because the base game is allergic null checks
+            __result = FactionType.NONE; // Because the base game is allergic to null checks
         }
 
         return false;
@@ -544,7 +467,7 @@ public static class VictoryCinematicSwapperPatch
     }
 }
 
-// Did the guys at TMP never think of devs trying to modify the arrow button??? seriously??? the drop downs look so damn off with the arrow not updating up or down with respect to its selection
+// Did the guys at TMP never think of devs trying to modify the arrow button??? seriously??? the drop-downs look so damn off with the arrow not updating up or down with respect to its selection
 [HarmonyPatch(typeof(TMP_Dropdown))]
 public static class DropdownPatch
 {

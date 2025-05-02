@@ -2,7 +2,6 @@ using Home.Services;
 using SalemModLoader;
 using Game.Services;
 using Game.Simulation;
-using Game.Characters;
 using Game.Chat.Decoders;
 using Server.Shared.Messages;
 using Server.Shared.State.Chat;
@@ -929,7 +928,7 @@ public static class MentionsProviderPatches
 
         var role = (Role)result;
         var factionType = (FactionType)result2;
-        var text = __instance._useColors ? role.ToColorizedDisplayString(factionType) : role.ToFactionString(factionType);
+        var text = __instance._useColors ? role.ToColorizedDisplayString(factionType) : role.ToRoleFactionDisplayString(factionType);
         var text2 = __instance._roleEffects ? $"<sprite=\"RoleIcons ({Utils.FactionName(factionType)})\" name=\"Role{(int)role}\">" : "";
         var text3 = $"{__instance.styleTagOpen}{__instance.styleTagFont}<link=\"r{(int)role},{(int)factionType}\">{text2}<b>{text}</b></link>{__instance.styleTagClose}";
         var item = new MentionInfo()

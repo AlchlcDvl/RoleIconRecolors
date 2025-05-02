@@ -126,8 +126,8 @@ public class Fancy : BaseMod<Fancy>
     public static StringInputOption JuryLabel;
     public static StringInputOption PirateLabel;
 
-    public static Dictionary<string, ColorOption> ColorOptions = [];
-    public static Dictionary<string, (string Start, string End, string Major, string Middle, string Lethal)> Colors = new()
+    public static readonly Dictionary<string, ColorOption> ColorOptions = [];
+    public static readonly Dictionary<string, (string Start, string End, string Major, string Middle, string Lethal)> Colors = new()
     {
         { "TOWN", ("#06E00C", "#06E00C", "#06E00C", null, "#06E00C") },
         { "COVEN", ("#B545FF", "#B545FF", "#B545FF", null, "#B545FF") },

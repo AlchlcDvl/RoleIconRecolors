@@ -686,29 +686,8 @@ public static class Utils
         return result;
     }
 
-    public static string ToColorizedFactionStringParentheses(this Role role, FactionType faction)
-    {
-        if (Constants.MiscRoleExists())
-        {
-            try
-            {
-                return role.MrcDisplayStringParentheses(faction);
-            }
-            catch { }
-        }
-
-        return ("(" + role.ToDisplayString() + ")").ApplyFactionColor(faction);
-    }
-
     private static string MrcDisplayString(this Role role, FactionType faction) => ModSettings.GetBool("Faction-Specific Role Names", "det.rolecustomizationmod") ?
         MiscRoleCustomisation.Utils.ToRoleFactionDisplayString(role, faction) : role.ToDisplayString();
-
-    private static string MrcDisplayStringParentheses(this Role role, FactionType faction)
-    {
-        var changedGradient = MiscRoleCustomisation.GetChangedGradients.GetChangedGradient(faction, role);
-        var result = "(" + MrcDisplayString(role, faction) + ")";
-        return changedGradient != null ? ApplyGradient(result, changedGradient) : result.ApplyFactionColor(faction);
-    }
 
     // public static void DebugSingleTransform(this Transform transform)
     // {
@@ -724,6 +703,8 @@ public static class Utils
     //     for (var i = 0; i < transform.childCount; i++)
     //         transform.GetChild(i).DebugTransformRecursive();
     // }
+
+    public static string ApplyGradient(string text, params string[] colors) => ApplyGradient(text, [.. colors.Select(x => x.ToColor())]);
 
     public static string ApplyGradient(string text, params Color32[] colors)
     {
@@ -755,44 +736,23 @@ public static class Utils
         return Color.Lerp(color, strength < 0 ? Color.white : Color.black, Mathf.Abs(strength));
     }
 
-    public static string ToRoleFactionDisplayString(Role role, FactionType faction)
+    public static string ToRoleFactionDisplayString(this Role role, FactionType faction)
     {
+        if (!Fancy.FactionalRoleNames.Value)
+            return role.ToDisplayString();
+
         if (role is Role.STONED or Role.HIDDEN or Role.UNKNOWN)
             faction = FactionType.NONE;
 
-        var factionName = faction switch
-        {
-            FactionType.TOWN => "TOWN",
-            FactionType.COVEN => "COVEN",
-            FactionType.APOCALYPSE => "APOCALYPSE",
-            FactionType.SERIALKILLER => "SERIALKILLER",
-            FactionType.ARSONIST => "ARSONIST",
-            FactionType.WEREWOLF => "WEREWOLF",
-            FactionType.SHROUD => "SHROUD",
-            FactionType.EXECUTIONER => "EXECUTIONER",
-            FactionType.JESTER => "JESTER",
-            FactionType.PIRATE => "PIRATE",
-            FactionType.DOOMSAYER => "DOOMSAYER",
-            FactionType.VAMPIRE => "VAMPIRE",
-            FactionType.CURSED_SOUL => "CURSEDSOUL",
-            (FactionType)33 => "JACKAL",
-            (FactionType)34 => "FROGS",
-            (FactionType)35 => "LIONS",
-            (FactionType)36 => "HAWKS",
-            (FactionType)38 => "JUDGE",
-            (FactionType)39 => "AUDITOR",
-            (FactionType)40 => "INQUISITOR",
-            (FactionType)41 => "STARSPAWN",
-            (FactionType)42 => "EGOTIST",
-            (FactionType)43 => "PANDORA",
-            (FactionType)44 => "COMPLIANCE",
-            _ => "NONE",
-        };
+        var factionName = FactionName(faction, GameModType.BTOS2);
+
+        if (factionName == "Factionless")
+            factionName = "NONE";
 
         if (Constants.IsBTOS2())
             factionName += "_BTOS";
 
-        return Service.Home.LocalizationService.GetLocalizedString($"FANCY_{factionName}_ROLENAME_{(int)role}");
+        return GetString($"FANCY_{factionName}_ROLENAME_{(int)role}");
     }
 
     public static Color GetPlayerRoleColor(int pos)
@@ -805,63 +765,12 @@ public static class Utils
 
     public static string GetRoleName(Role role, FactionType factionType, bool useBrackets = false)
     {
-        var roleName = ToRoleFactionDisplayString(role, factionType);
+        var roleName = role.ToRoleFactionDisplayString(factionType);
+
         if (useBrackets)
             roleName = $"({roleName})";
 
         return roleName;
-    }
-
-    public static string GetColorizedRoleName(Role role, FactionType factionType, bool useBrackets = false)
-    {
-        var roleName = ToRoleFactionDisplayString(role, factionType);
-
-        if (useBrackets)
-            roleName = $"({roleName})";
-
-        var gradientText = TryApplyGradient(roleName, factionType);
-
-        if (gradientText != null)
-            return gradientText;
-
-        var color = factionType.GetFactionColor();
-        return $"<color={color}>{roleName}</color>";
-    }
-
-    public static string GetColorizedText(string text, FactionType factionType)
-    {
-        var gradientText = TryApplyGradient(text, factionType);
-
-        if (gradientText != null)
-            return gradientText;
-
-        var color = factionType.GetFactionColor();
-        return $"<color={color}>{text}</color>";
-    }
-
-    public static string TryApplyGradient(string text, FactionType factionType)
-    {
-        if (!Constants.IsBTOS2())
-            return null;
-
-        try
-        {
-            return GetGradient(text, factionType);
-        }
-        catch
-        {
-            return null;
-        }
-    }
-
-    private static string GetGradient(string text, FactionType factionType)
-    {
-        var gradient = BetterTOS2.GetGradients.GetGradient(factionType);
-
-        if (gradient != null)
-            return ApplyGradient(text, gradient);
-
-        return null;
     }
 
     public static Color GetFactionStartingColor(FactionType faction)

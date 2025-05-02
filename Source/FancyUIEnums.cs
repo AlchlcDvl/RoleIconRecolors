@@ -47,14 +47,14 @@ public enum DisplayType : byte
     Chat
 }
 
-public enum IconType : byte
-{
-    Ability1,
-    Ability2,
-    Attribute,
-    Necronomicon,
-    Effect
-}
+// public enum IconType : byte
+// {
+//     Ability1,
+//     Ability2,
+//     Attribute,
+//     Necronomicon,
+//     Effect
+// }
 
 public enum RecruitEndType : byte
 {

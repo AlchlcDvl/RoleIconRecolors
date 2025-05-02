@@ -31,76 +31,51 @@ public static class PatchRoleCard
         if (originalFaction == (FactionType)43)
             return currentFaction is FactionType.COVEN or FactionType.APOCALYPSE;
 
-        if (currentFaction == (FactionType)44)
+        if (currentFaction == Btos2Faction.Compliance)
             return originalFaction is FactionType.SERIALKILLER or FactionType.ARSONIST or FactionType.WEREWOLF or FactionType.SHROUD;
 
-        if (originalFaction == (FactionType)44)
+        if (originalFaction == Btos2Faction.Compliance)
             return currentFaction is FactionType.SERIALKILLER or FactionType.ARSONIST or FactionType.WEREWOLF or FactionType.SHROUD;
 
         return originalFaction == currentFaction;
     }
 
-    public static string ToChangedDisplayString(this Role role, FactionType faction, ROLE_MODIFIER modifier)
+    private static string ToChangedDisplayString(this Role role, FactionType faction, ROLE_MODIFIER modifier)
     {
-        var roleName = Fancy.FactionalRoleNames.Value ? Utils.ToRoleFactionDisplayString(role, faction) : role.ToDisplayString();
-        string text;
+        var roleName = Fancy.FactionalRoleNames.Value ? role.ToRoleFactionDisplayString(faction) : role.ToDisplayString();
+        var text = faction.GetChangedGradient(role) != null ? Utils.ApplyGradient(roleName, faction.GetChangedGradient(role)) : $"<color={faction.GetFactionColor()}>{roleName}</color>";
+        var gradientTt = faction.GetChangedGradient(role);
 
-        if (faction.GetChangedGradient(role) != null)
-            text = Utils.ApplyGradient(roleName, faction.GetChangedGradient(role));
-        else
+        switch (modifier)
         {
-            text = string.Concat(
-            [
-                "<color=",
-                ClientRoleExtensions.GetFactionColor(faction),
-                ">",
-                roleName,
-                "</color>"
-            ]);
-        }
-
-        var gradientTT = faction.GetChangedGradient(role);
-
-        if (modifier == (ROLE_MODIFIER)2 && gradientTT != null)
-        {
-            text = text + "\n<size=85%>" + Utils.ApplyGradient($"({Fancy.TraitorLabel.Value})", gradientTT.Evaluate(0f), gradientTT.Evaluate(1f)) + "</size>";
-        }
-        else if (modifier == (ROLE_MODIFIER)10)
-        {
-            var gradient = ((FactionType)33).GetChangedGradient(role);
-            text = text + "\n<size=85%>" + Utils.ApplyGradient($"({Fancy.RecruitLabel.Value})", gradient.Evaluate(0f), gradient.Evaluate(1f)) + "</size>";
-        }
-        else if ((Fancy.RoleCardFactionLabel.Value == FactionLabelOption.Mismatch && RoleExtensions.GetFaction(role) != faction) || (Fancy.RoleCardFactionLabel.Value == FactionLabelOption.Always) || (Fancy.RoleCardFactionLabel.Value == FactionLabelOption.Conditional && !ConditionalCompliancePandora(RoleExtensions.GetFaction(role), faction)))
-        {
-            var gradient2 = faction.GetChangedGradient(role);
-
-            if (gradient2 != null)
+            case ROLE_MODIFIER.TRAITOR when gradientTt != null:
+                text += "\n<size=85%>" + Utils.ApplyGradient($"({Fancy.TraitorLabel.Value})", gradientTt) + "</size>";
+                break;
+            case (ROLE_MODIFIER)10:
             {
-                if (faction == (FactionType)44)
-                {
-                    text = text + "\n<size=85%>" + Utils.ApplyGradient("(" + faction.ToDisplayString() + ")", gradient2.Evaluate(0f), gradient2.Evaluate(0.5f),
-                        gradient2.Evaluate(1f)) + "</size>";
-                }
-                else
-                    text = text + "\n<size=85%>" + Utils.ApplyGradient("(" + faction.ToDisplayString() + ")", gradient2.Evaluate(0f), gradient2.Evaluate(1f)) + "</size>";
-
-                if (modifier == (ROLE_MODIFIER)1)
-                {
-                    text = text + "\n<size=85%>" + Utils.ApplyGradient($"({Fancy.VIPLabel.Value})", gradientTT.Evaluate(0f), gradientTT.Evaluate(1f)) + "</size>";
-                }
-
+                var gradient = (Btos2Faction.Jackal).GetChangedGradient(role);
+                text += "\n<size=85%>" + Utils.ApplyGradient($"({Fancy.RecruitLabel.Value})", gradient) + "</size>";
+                break;
             }
-            else
+            default:
             {
-                text = string.Concat(
-                [
-                    text,
-                    "\n<size=85%><color=",
-                    ClientRoleExtensions.GetFactionColor(faction),
-                    ">(",
-                    faction.ToDisplayString(),
-                    ")</color></size>"
-                ]);
+                if ((Fancy.RoleCardFactionLabel.Value == FactionLabelOption.Mismatch && role.GetFactionType() != faction) || Fancy.RoleCardFactionLabel.Value == FactionLabelOption.Always ||
+                    (Fancy.RoleCardFactionLabel.Value == FactionLabelOption.Conditional && !ConditionalCompliancePandora(role.GetFactionType(), faction)))
+                {
+                    var gradient2 = faction.GetChangedGradient(role);
+
+                    if (gradient2 != null)
+                    {
+                        text += "\n<size=85%>" + Utils.ApplyGradient("(" + faction.ToDisplayString() + ")", gradient2) + "</size>";
+
+                        if (modifier == ROLE_MODIFIER.VIP)
+                            text += "\n<size=85%>" + Utils.ApplyGradient($"({Fancy.VIPLabel.Value})", gradientTt) + "</size>";
+                    }
+                    else
+                        text = $"{text}\n<size=85%><color={faction.GetFactionColor()}>({faction.ToDisplayString()})</color></size>";
+                }
+
+                break;
             }
         }
 
@@ -111,7 +86,7 @@ public static class PatchRoleCard
 [HarmonyPatch(typeof(RoleCardPopupPanel), nameof(RoleCardPopupPanel.SetRole))]
 public static class RoleCardPopupPatches
 {
-    public static void Postfix(ref Role role, RoleCardPopupPanel __instance) => __instance.roleNameText.text = ClientRoleExtensions.ToColorizedDisplayString(role);
+    public static void Postfix(ref Role role, RoleCardPopupPanel __instance) => __instance.roleNameText.text = role.ToColorizedDisplayString();
 }
 
 [HarmonyPatch(typeof(TosAbilityPanelListItem), nameof(TosAbilityPanelListItem.SetKnownRole))]
@@ -120,137 +95,56 @@ public static class PlayerListPatch
     public static bool Prefix(ref Role role, ref FactionType faction, TosAbilityPanelListItem __instance)
     {
         __instance.playerRole = role;
+
         if (role is not (0 or (Role)byte.MaxValue))
         {
             __instance.playerRole = role;
-            var roleName = "";
-            if (Fancy.FactionalRoleNames.Value) { roleName = Utils.ToRoleFactionDisplayString(role, faction); }
-            else { roleName = role.ToDisplayString(); }
+            var roleName = Fancy.FactionalRoleNames.Value ? role.ToRoleFactionDisplayString(faction) : role.ToDisplayString();
+            var gradient = faction.GetChangedGradient(role);
 
-            var factionName = faction.ToDisplayString();
+            if (role is not (Role.STONED or Role.HIDDEN))
+                __instance.playerRoleText.text = gradient != null ? Utils.ApplyGradient("(" + roleName + ")", gradient) : $"<color={faction.GetFactionColor()}>({roleName})</color>";
+            else
+                __instance.playerRoleText.text = $"<color={role.GetFaction().GetFactionColor()}>({roleName})</color>";
 
-            if (role is not (0 or (Role)byte.MaxValue))
-            {
-                var gradient = faction.GetChangedGradient(role);
-
-                if (gradient != null && role is not ((Role)254 or (Role)241))
-                {
-                    if (faction is ((FactionType)44) and not ((FactionType)33))
-                    {
-                        __instance.playerRoleText.text = Utils.ApplyGradient("(" + roleName + ")", gradient.Evaluate(0f), gradient.Evaluate(0.5f),
-                            gradient.Evaluate(1f));
-                    }
-                    else if (faction == (FactionType)33 && role != BetterTOS2.RolePlus.JACKAL)
-                    {
-                        Gradient jackalGradient = Btos2Faction.Jackal.GetChangedGradient(role);
-
-                        __instance.playerRoleText.text = Utils.ApplyGradient("(" + roleName + ")", jackalGradient.Evaluate(0f), jackalGradient.Evaluate(1f));
-                    }
-                    else
-                        __instance.playerRoleText.text = Utils.ApplyGradient("(" + roleName + ")", gradient.Evaluate(0f), gradient.Evaluate(1f));
-
-                }
-                else if (role is not ((Role)254 or (Role)241))
-                {
-                    __instance.playerRoleText.text = string.Concat(
-                    [
-                        "<color=",
-                        ClientRoleExtensions.GetFactionColor(faction),
-                        ">(",
-                        roleName,
-                        ")</color>"
-                    ]);
-                }
-                else
-                {
-                    __instance.playerRoleText.text = string.Concat(
-                    [
-                        "<color=",
-                        ClientRoleExtensions.GetFactionColor(RoleExtensions.GetFaction(role)),
-                        ">(",
-                        roleName,
-                        ")</color>"
-                    ]);
-                }
-
-                __instance.playerRoleText.gameObject.SetActive(true);
-                __instance.playerRoleText.enableAutoSizing = false; // Remove when PlayerNotes+ fix is out
-            }
-
-            return false;
+            __instance.playerRoleText.gameObject.SetActive(true);
+            __instance.playerRoleText.enableAutoSizing = false; // Remove when PlayerNotes+ fix is out
         }
 
         return false;
     }
 }
 
-
 [HarmonyPatch(typeof(TosCharacterNametag), nameof(TosCharacterNametag.ColouredName))]
 public static class TosCharacterNametagPatch
 {
-    public static void Postfix(TosCharacterNametag __instance, ref string theName, ref FactionType factionType, ref Role role, ref string __result)
+    public static void Postfix(string theName, ref FactionType factionType, ref Role role, ref string __result)
     {
-            var roleName = "";
-            if (Fancy.FactionalRoleNames.Value) { roleName = Utils.ToRoleFactionDisplayString(role, factionType); }
-            else { roleName = role.ToDisplayString(); }
+        var gradient = factionType.GetChangedGradient(role);
 
+        if (gradient == null || role is Role.STONED or Role.HIDDEN)
+            return;
 
-        if (factionType.GetChangedGradient(role) != null && role is not (Role.STONED or Role.HIDDEN))
-        {
-            var gradient = factionType.GetChangedGradient(role);
-            var gradientName = "";
-            var gradientRole = "";
+        var roleName = Fancy.FactionalRoleNames.Value ? role.ToRoleFactionDisplayString(factionType) : role.ToDisplayString();
+        var gradientName = Utils.ApplyGradient(theName, gradient);
+        var gradientRole = Utils.ApplyGradient("(" + roleName + ")", gradient);
+        __result = $"<size=36><sprite=\"{(Constants.IsBTOS2() ? "BTOS" : "")}RoleIcons\" name=\"Role{(int)role}\"></size>\n<size=24>{gradientName}</size>\n<size=18>{gradientRole}</size>";
 
-            if (factionType is ((FactionType)44) and not ((FactionType)33))
-            {
-                gradientName = Utils.ApplyGradient(theName, gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
-                gradientRole = Utils.ApplyGradient("(" + roleName + ")", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
-            }
-            else if (factionType == (FactionType)33 && role != Btos2Role.Jackal)
-            {
-                Gradient jackalGradient = Btos2Faction.Jackal.GetChangedGradient(role);
-                gradientName = Utils.ApplyGradient(theName, jackalGradient.Evaluate(0f), jackalGradient.Evaluate(1f));
-                gradientRole = Utils.ApplyGradient("(" + roleName + ")", gradient.Evaluate(0f), jackalGradient.Evaluate(1f));
-            }
-            else
-            {
-                gradientName = Utils.ApplyGradient(theName, gradient.Evaluate(0f), gradient.Evaluate(1f));
-                gradientRole = Utils.ApplyGradient("(" + roleName + ")", gradient.Evaluate(0f), gradient.Evaluate(1f));
-            }
-
-            if (Constants.IsBTOS2())
-                __result = $"<size=36><sprite=\"BTOSRoleIcons\" name=\"Role{(int)role}\"></size>\n<size=24>{gradientName}</size>\n<size=18>{gradientRole}</size>";
-            else
-                __result = $"<size=36><sprite=\"RoleIcons\" name=\"Role{(int)role}\"></size>\n<size=24>{gradientName}</size>\n<size=18>{gradientRole}</size>";
-
-            if (Constants.EnableIcons())
-            {
-                __result = __result.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(factionType, false)})\"");
-            }
-
-        }
+        if (Constants.EnableIcons())
+            __result = __result.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(factionType, false)})\"");
     }
 }
 
 [HarmonyPatch(typeof(HomeSceneController), nameof(HomeSceneController.HandleClickPlay))]
 public static class FixStyles
 {
-    [HarmonyPostfix]
-    public static void RefreshStyles()
+    private static FieldInfo StylesField = AccessTools.Field(typeof(TMP_StyleSheet), "m_StyleList");
+    private static FieldInfo OpeningDefField = AccessTools.Field(typeof(TMP_Style), "m_OpeningDefinition");
+
+    public static void Postfix()
     {
-        var defaultStyleSheet = TMP_Settings.defaultStyleSheet;
-
-        FieldInfo stylesField = AccessTools.Field(typeof(TMP_StyleSheet), "m_StyleList");
-        if (stylesField == null)
-        {
+        if (StylesField.GetValue(TMP_Settings.defaultStyleSheet) is not List<TMP_Style> styles)
             return;
-        }
-
-        var styles = stylesField.GetValue(defaultStyleSheet) as List<TMP_Style>;
-        if (styles == null)
-        {
-            return;
-        }
 
         SetStyle(styles, "TownColor", Fancy.Colors["TOWN"].Start);
         SetStyle(styles, "CovenColor", Fancy.Colors["COVEN"].Start);
@@ -267,19 +161,15 @@ public static class FixStyles
         SetStyle(styles, "CursedSoulColor", Fancy.Colors["CURSEDSOUL"].Start);
         SetStyle(styles, "NeutralColor", Fancy.Colors["NEUTRAL"].Start);
 
-        defaultStyleSheet.RefreshStyles();
+        TMP_Settings.defaultStyleSheet.RefreshStyles();
     }
 
     private static void SetStyle(List<TMP_Style> styles, string styleName, string colorValue)
     {
         var style = styles.Find(s => s.name == styleName);
-        if (style == null) return;
 
-        var openingDefField = typeof(TMP_Style).GetField("m_OpeningDefinition", BindingFlags.Instance | BindingFlags.NonPublic);
-        if (openingDefField != null)
-        {
-            openingDefField.SetValue(style, $"<color={colorValue}>");
-        }
+        if (style != null)
+            OpeningDefField.SetValue(style, $"<color={colorValue}>");
     }
 }
 
@@ -288,25 +178,19 @@ public static class AddChangedConversionTags
 {
     public static void Postfix(ref string __result, ref Role role, ref FactionType factionType)
     {
-        if (role.IsResolved() || role is Role.FAMINE or Role.DEATH or Role.PESTILENCE or Role.WAR)
-        {
-            var text = "";
-            if (Fancy.FactionalRoleNames.Value) { text = Utils.ToRoleFactionDisplayString(role, factionType); }
-            else { text = role.ToDisplayString(); }
+        if (!role.IsResolved() && role is not (Role.FAMINE or Role.DEATH or Role.PESTILENCE or Role.WAR))
+            return;
 
-
-            if (factionType.GetChangedGradient(role) != null)
-                __result = Utils.ApplyGradient(text, factionType.GetChangedGradient(role));
-            else
-                __result = $"<color={factionType.GetFactionColor()}>{text}</color>";
-        }
+        var text = Fancy.FactionalRoleNames.Value ? role.ToRoleFactionDisplayString(factionType) : role.ToDisplayString();
+        var gradient = factionType.GetChangedGradient(role);
+        __result = gradient != null ? Utils.ApplyGradient(text, gradient) : $"<color={factionType.GetFactionColor()}>{text}</color>";
     }
 }
 
 [HarmonyPatch(typeof(MentionsProvider), nameof(MentionsProvider.DecodeSpeaker))]
 public static class FancyChatExperimentalBTOS2
 {
-    public static List<int> ExcludedIds = [50, 69, 70, 71];
+    private static List<int> ExcludedIds = [50, 69, 70, 71];
 
     public static bool Prefix(MentionsProvider __instance, ref string __result, string encodedText, int position, bool isAlive)
     {
@@ -331,11 +215,11 @@ public static class FancyChatExperimentalBTOS2
                         var gradient = playerInfo.Item2.GetChangedGradient(playerInfo.Item1);
 
                         if (isRecruited)
-                            gradient = ((FactionType)33).GetChangedGradient(playerInfo.Item1);
+                            gradient = (Btos2Faction.Jackal).GetChangedGradient(playerInfo.Item1);
 
                         var text3 = "";
 
-                        if (playerInfo.Item2 == ((FactionType)44))
+                        if (playerInfo.Item2 == (Btos2Faction.Compliance))
                         {
                             text3 = Utils.ApplyGradient(Pepper.GetDiscussionPlayerByPosition(position).gameName + ":", gradient.Evaluate(0f),
                                 gradient.Evaluate(0.5f), gradient.Evaluate(1f));
@@ -354,7 +238,7 @@ public static class FancyChatExperimentalBTOS2
                     }
                     else if (isRecruited)
                     {
-                        var gradient2 = ((FactionType)33).GetChangedGradient(playerInfo.Item1);
+                        var gradient2 = (Btos2Faction.Jackal).GetChangedGradient(playerInfo.Item1);
                         var text4 = Utils.ApplyGradient(Pepper.GetDiscussionPlayerByPosition(position).gameName + ":", gradient2.Evaluate(0f), gradient2.Evaluate(1f));
                         text2 = text2.Replace(string.Concat(
                         [
@@ -373,7 +257,7 @@ public static class FancyChatExperimentalBTOS2
                 }
                 else if (isRecruited)
                 {
-                    var gradient3 = ((FactionType)33).GetChangedGradient(playerInfo.Item1);
+                    var gradient3 = (Btos2Faction.Jackal).GetChangedGradient(playerInfo.Item1);
                     var text6 = Utils.ApplyGradient(Pepper.GetDiscussionPlayerByPosition(position).gameName + ":", gradient3.Evaluate(0f), gradient3.Evaluate(1f));
                     text2 = text2.Replace(string.Concat(
                     [
@@ -390,48 +274,16 @@ public static class FancyChatExperimentalBTOS2
         __result = __instance.ProcessSpeakerName(text2, position, isAlive);
         return false;
     }
-
 }
 
 [HarmonyPatch(typeof(ClientRoleExtensions), nameof(ClientRoleExtensions.GetFactionColor))]
 public static class SwapColor
 {
-    [HarmonyPostfix]
-    public static void Swap(ref string __result, ref FactionType factionType)
+    public static bool Prefix(ref string __result, ref FactionType factionType)
     {
-        if (Fancy.Colors != null)
-        {
-            var faction = (int)factionType;
-            __result = faction switch
-            {
-                1 => Fancy.Colors["TOWN"].Start,
-                2 => Fancy.Colors["COVEN"].Start,
-                3 => Fancy.Colors["SERIALKILLER"].Start,
-                4 => Fancy.Colors["ARSONIST"].Start,
-                5 => Fancy.Colors["WEREWOLF"].Start,
-                6 => Fancy.Colors["SHROUD"].Start,
-                7 => Fancy.Colors["APOCALYPSE"].Start,
-                8 => Fancy.Colors["EXECUTIONER"].Start,
-                9 => Fancy.Colors["JESTER"].Start,
-                10 => Fancy.Colors["PIRATE"].Start,
-                11 => Fancy.Colors["DOOMSAYER"].Start,
-                12 => Fancy.Colors["VAMPIRE"].Start,
-                13 => Fancy.Colors["CURSEDSOUL"].Start,
-                33 => Fancy.Colors["JACKAL"].Start,
-                34 => Fancy.Colors["FROGS"].Start,
-                35 => Fancy.Colors["LIONS"].Start,
-                36 => Fancy.Colors["HAWKS"].Start,
-                38 => Fancy.Colors["JUDGE"].Start,
-                39 => Fancy.Colors["AUDITOR"].Start,
-                40 => Fancy.Colors["INQUISITOR"].Start,
-                41 => Fancy.Colors["STARSPAWN"].Start,
-                42 => Fancy.Colors["EGOTIST"].Start,
-                43 => Fancy.Colors["PANDORA"].Start,
-                44 => Fancy.Colors["COMPLIANCE"].Start,
-                250 => Fancy.Colors["LOVERS"].Start,
-                _ => Fancy.Colors["STONED_HIDDEN"].Start,
-            };
-        }
+        var name = Utils.FactionName(factionType);
+        __result = Fancy.Colors[name == "Factionless" ? "STONED_HIDDEN" : name.ToUpper()].Start;
+        return false;
     }
 }
 
@@ -441,19 +293,15 @@ public static class PatchJudge
     public static void Postfix(string encodedText, int position, ref string __result)
     {
         if (Constants.IsBTOS2())
+            return;
+
+        __result = position switch
         {
-            if (position == 70)
-            {
-                __result = "<link=\"r57\"><sprite=\"BTOSRoleIcons\" name=\"Role57\"><indent=1.1em><b>" + Utils.ApplyGradient(Fancy.CourtLabel.Value, Fancy.Colors["JUDGE"].Start.ToColor(), Fancy.Colors["JUDGE"].End.ToColor()) + ":" +
-                    "</b> </link>" + encodedText.Replace("????: </color>", "").Replace("white", "#FFFF00");
-            }
-            else if (position == 69)
-                __result = encodedText.Replace("????:", $"<sprite=\"BTOSRoleIcons\" name=\"Role16\"> {Fancy.JuryLabel.Value}:");
-            else if (position == 71)
-            {
-                __result = "<link=\"r46\"><sprite=\"BTOSRoleIcons\" name=\"Role46\"><indent=1.1em><b>" + Utils.ApplyGradient(Fancy.PirateLabel.Value, Fancy.Colors["PIRATE"].Start.ToColor(), Fancy.Colors["PIRATE"].End.ToColor()) + ":</b> </link>" + encodedText.Replace("????: </color>", "").Replace("white", "#ECC23E");
-            }
-        }
+            70 => "<link=\"r57\"><sprite=\"BTOSRoleIcons\" name=\"Role57\"><indent=1.1em><b>" + Utils.ApplyGradient(Fancy.CourtLabel.Value, Fancy.Colors["JUDGE"].Start, Fancy.Colors["JUDGE"].End) + ":</b> </link>" + encodedText.Replace("????: </color>", "").Replace("white", "#FFFF00"),
+            69 => encodedText.Replace("????:", $"<sprite=\"BTOSRoleIcons\" name=\"Role16\"> {Fancy.JuryLabel.Value}:"),
+            71 => "<link=\"r46\"><sprite=\"BTOSRoleIcons\" name=\"Role46\"><indent=1.1em><b>" + Utils.ApplyGradient(Fancy.PirateLabel.Value, Fancy.Colors["PIRATE"].Start, Fancy.Colors["PIRATE"].End) + ":</b> </link>" + encodedText.Replace("????: </color>", "").Replace("white", "#ECC23E"),
+            _ => __result
+        };
     }
 }
 
@@ -463,7 +311,7 @@ public static class PatchDefaultWinScreens
     public static void Postfix(FactionWinsCinematicPlayer __instance, ref ICinematicData cinematicData)
     {
         __instance.elapsedDuration = 0f;
-        Debug.Log(string.Format("FactionWinsCinematicPlayer current phase at start = {0}", Pepper.GetGamePhase()));
+        Debug.Log($"FactionWinsCinematicPlayer current phase at start = {Pepper.GetGamePhase()}");
         __instance.cinematicData = cinematicData as FactionWinsCinematicData;
         var winTimeByFaction = CinematicFactionWinsTimes.GetWinTimeByFaction(__instance.cinematicData.winningFaction);
         __instance.totalDuration = winTimeByFaction;
@@ -489,14 +337,14 @@ public static class PatchDefaultWinScreens
 
         if (winningFaction == FactionType.TOWN)
         {
-            Service.Home.AudioService.PlayMusic("Audio/Music/TownVictory.wav", false, AudioController.AudioChannel.Cinematic, true);
+            Service.Home.AudioService.PlayMusic("Audio/Music/TownVictory.wav", false, AudioController.AudioChannel.Cinematic);
             __instance.evilProp.SetActive(false);
             __instance.goodProp.SetActive(true);
             __instance.m_Animator.SetInteger("State", 1);
         }
         else
         {
-            Service.Home.AudioService.PlayMusic("Audio/Music/CovenVictory.wav", false, AudioController.AudioChannel.Cinematic, true);
+            Service.Home.AudioService.PlayMusic("Audio/Music/CovenVictory.wav", false, AudioController.AudioChannel.Cinematic);
             __instance.evilProp.SetActive(true);
             __instance.goodProp.SetActive(false);
             __instance.m_Animator.SetInteger("State", 2);
@@ -512,7 +360,7 @@ public static class PatchDefaultWinScreens
             __instance.leftImage.color = Utils.GetFactionStartingColor(winningFaction);
             __instance.rightImage.color = Utils.GetFactionEndingColor(winningFaction);
 
-            if (winningFaction == (FactionType)44)
+            if (winningFaction == Btos2Faction.Compliance)
                 gradientText = Utils.ApplyGradient(text2, gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
             else
                 gradientText = Utils.ApplyGradient(text2, gradient.Evaluate(0f), gradient.Evaluate(1f));
@@ -521,7 +369,7 @@ public static class PatchDefaultWinScreens
         }
         else
         {
-            if (ColorUtility.TryParseHtmlString(winningFaction.GetFactionColor(), out Color color))
+            if (ColorUtility.TryParseHtmlString(winningFaction.GetFactionColor(), out var color))
             {
                 __instance.leftImage.color = color;
                 __instance.rightImage.color = color;
@@ -533,7 +381,6 @@ public static class PatchDefaultWinScreens
         }
 
         __instance.SetUpWinners(__instance.winningCharacters);
-        return;
     }
 }
 
@@ -542,72 +389,47 @@ public static class PatchCustomWinScreens
 {
     public static void Postfix(FactionWinsStandardCinematicPlayer __instance, ref ICinematicData cinematicData)
     {
-        Debug.Log(string.Format("FactionWinsStandardCinematicPlayer current phase at end = {0}", Pepper.GetGamePhase()));
+        Debug.Log($"FactionWinsStandardCinematicPlayer current phase at end = {Pepper.GetGamePhase()}");
         __instance.elapsedDuration = 0f;
         __instance.cinematicData = cinematicData as FactionWinsCinematicData;
-        var num = CinematicFactionWinsTimes.GetWinTimeByFaction(__instance.cinematicData.winningFaction);
+        var num = CinematicFactionWinsTimes.GetWinTimeByFaction(__instance.cinematicData!.winningFaction);
         __instance.totalDuration = num;
 
-        if (Pepper.IsResultsPhase())
-            num += 0.2f;
-
         var winningFaction = __instance.cinematicData.winningFaction;
-
         PlayVictoryMusic(winningFaction);
+        var text2 = __instance.l10n($"GUI_WINNERS_ARE_{(int)winningFaction}");
+        var gradient = winningFaction.GetChangedGradient(Role.NONE);
 
-        var text2 = __instance.l10n(string.Format("GUI_WINNERS_ARE_{0}", (int)winningFaction));
-        string gradientText;
+        if (gradient != null)
+            text2 = Utils.ApplyGradient(text2, gradient);
 
-        Gradient gradient = winningFaction.GetChangedGradient(Role.NONE);
-
-        if (winningFaction.GetChangedGradient(Role.NONE) != null)
-        {
-
-            if (winningFaction == (FactionType)44)
-                gradientText = Utils.ApplyGradient(text2, gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
-            else
-                gradientText = Utils.ApplyGradient(text2, gradient.Evaluate(0f), gradient.Evaluate(1f));
-
-            if (__instance.textAnimatorPlayer.gameObject.activeSelf)
-                __instance.textAnimatorPlayer.ShowText(gradientText);
-        }
-        else if (__instance.textAnimatorPlayer.gameObject.activeSelf)
+        if (__instance.textAnimatorPlayer.gameObject.activeSelf)
             __instance.textAnimatorPlayer.ShowText(text2);
 
-        foreach (Transform child in __instance.transform.GetComponentsInChildren<Transform>(true))
+        foreach (var child in __instance.transform.GetComponentsInChildren<Transform>(true))
         {
-            if (child.name == "Filigree_L" || child.name == "Filigree_R" || child.name == "Glow")
-            {
-                var image = child.GetComponent<Image>();
-                if (image != null)
-                {
-                    if (child.name == "Filigree_R")
-                        image.color = Utils.GetFactionEndingColor(winningFaction);
-                    else
-                        image.color = Utils.GetFactionStartingColor(winningFaction);
-                }
-            }
+            if (child.name is not ("Filigree_L" or "Filigree_R" or "Glow"))
+                continue;
+
+            if (child.TryGetComponent<Image>(out var image))
+                image.color = child.name == "Filigree_R" ? Utils.GetFactionEndingColor(winningFaction) : Utils.GetFactionStartingColor(winningFaction);
         }
 
-
         __instance.SetUpWinners();
-        return;
     }
 
     private static void PlayVictoryMusic(FactionType winningFaction)
     {
-        string musicPath = GetVictoryMusicPath(winningFaction);
-        if (!string.IsNullOrEmpty(musicPath))
-        {
-            Service.Home.AudioService.PlayMusic(musicPath, false, AudioController.AudioChannel.Cinematic, true);
-        }
+        var musicPath = GetVictoryMusicPath(winningFaction);
+
+        if (!NewModLoading.Utils.IsNullEmptyOrWhiteSpace(musicPath))
+            Service.Home.AudioService.PlayMusic(musicPath, false, AudioController.AudioChannel.Cinematic);
     }
 
     private static string GetVictoryMusicPath(FactionType faction)
     {
-        CinematicType? cinematicType = faction switch
+        var cinematicType = faction switch
         {
-            FactionType.NONE => CinematicType.FactionWins,
             FactionType.TOWN => Fancy.TownCinematic.Value,
             FactionType.COVEN => Fancy.CovenCinematic.Value,
             FactionType.SERIALKILLER => Fancy.SerialKillerCinematic.Value,
@@ -616,22 +438,21 @@ public static class PatchCustomWinScreens
             FactionType.SHROUD => Fancy.ShroudCinematic.Value,
             FactionType.APOCALYPSE => Fancy.ApocalypseCinematic.Value,
             FactionType.VAMPIRE => Fancy.VampireCinematic.Value,
-            (FactionType)33 => Fancy.JackalCinematic.Value,
+            Btos2Faction.Jackal => Fancy.JackalCinematic.Value,
             (FactionType)34 => Fancy.FrogsCinematic.Value,
             (FactionType)35 => Fancy.LionsCinematic.Value,
             (FactionType)36 => Fancy.HawksCinematic.Value,
             (FactionType)43 => Fancy.PandoraCinematic.Value,
-            (FactionType)44 => Fancy.ComplianceCinematic.Value,
+            Btos2Faction.Compliance => Fancy.ComplianceCinematic.Value,
             (FactionType)250 => Fancy.LoversCinematic.Value,
             _ => CinematicType.FactionWins,
         };
-
-        if (cinematicType == CinematicType.TownWins)
-            return "Audio/Music/TownVictory.wav";
-        if (cinematicType == CinematicType.CovenWins || cinematicType == CinematicType.FactionWins)
-            return "Audio/Music/CovenVictory.wav";
-
-        return null;
+        return cinematicType switch
+        {
+            CinematicType.TownWins => "Audio/Music/TownVictory.wav",
+            CinematicType.CovenWins or CinematicType.FactionWins => "Audio/Music/CovenVictory.wav",
+            _ => null
+        };
     }
 }
 
@@ -671,7 +492,7 @@ public static class AddTTAndGradients
 
             if (RoleExtensions.GetFaction(role) != factionType && factionType != FactionType.NONE && Fancy.FactionNameNextToRole.Value && !Pepper.IsRoleRevealPhase())
             {
-                if (factionType is not ((FactionType)33 or (FactionType)44))
+                if (factionType is not (Btos2Faction.Jackal or Btos2Faction.Compliance))
                 {
                     if (factionType.GetChangedGradient(role) != null)
                     {
@@ -681,17 +502,16 @@ public static class AddTTAndGradients
                     else
                         newtext += " " + "<color=" + ClientRoleExtensions.GetFactionColor(factionType) + ">(" + factionType.ToDisplayString() + ")</color>";
                 }
-                else if (factionType == (FactionType)33)
+                else if (factionType == Btos2Faction.Jackal)
                 {
                     newtext += " " + Utils.ApplyGradient("(" + Fancy.RecruitLabel.Value + ")",
                         factionType.GetChangedGradient(role).Evaluate(0f), factionType.GetChangedGradient(role).Evaluate(1f));
                 }
-                else if (factionType == (FactionType)44)
+                else if (factionType == Btos2Faction.Compliance)
                 {
                     newtext += " " + Utils.ApplyGradient("(" + factionType.ToDisplayString() + ")", factionType.GetChangedGradient(role).Evaluate(0f),
                         factionType.GetChangedGradient(role).Evaluate(0.5f), factionType.GetChangedGradient(role).Evaluate(1f));
                 }
-
             }
 
             __result = newtext;
