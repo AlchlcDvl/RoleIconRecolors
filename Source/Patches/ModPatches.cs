@@ -507,12 +507,11 @@ public static class FixMyFaction
         }
         catch
         {
-            __result = FactionType.NONE; // Because the base game dislikes null checks
+            __result = FactionType.NONE; // Because the base game is allergic null checks
         }
 
         return false;
     }
-
 
     [HarmonyPatch(typeof(FactionWinsCinematicData), nameof(FactionWinsCinematicData.SetFaction))]
     public static class VictoryCinematicSwapperPatch
@@ -545,5 +544,20 @@ public static class FixMyFaction
                 __instance.cinematicType_ = cinematic;
             }
         }
+}
+
+// Did the guys at TMP never think of devs trying to modify the arrow button??? seriously??? the drop downs look so damn off with the arrow not updating up or down with respect to its selection
+[HarmonyPatch(typeof(TMP_Dropdown))]
+public static class DropdownPatch
+{
+    [HarmonyPatch(nameof(TMP_Dropdown.Show))]
+    [HarmonyPatch("ImmediateDestroyDropdownList")]
+    [HarmonyPostfix]
+    private static void ModifyArrow(TMP_Dropdown __instance)
+    {
+        var parent = __instance.GetComponentInParent<DropdownSetting>();
+
+        if (parent)
+            parent.Arrow.sprite = Fancy.Instance.Assets.GetSprite("DropDown_Arrow" + (__instance.IsExpanded ? "Up" : "Down"));
     }
 }

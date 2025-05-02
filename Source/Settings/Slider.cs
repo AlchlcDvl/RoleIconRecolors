@@ -32,7 +32,7 @@ public class SliderSetting : Setting
 
         Input.SetTextWithoutNotify($"{Slider.value:0.##}");
         Input.restoreOriginalTextOnEscape = true;
-        Input.onValueChanged.AddListener(OnTextValueChanged);
+        Input.onValueChanged.AddListener(OnValueChanged);
     }
 
     public void OnValueChanged(float value)
@@ -42,17 +42,10 @@ public class SliderSetting : Setting
         SettingsAndTestingUI.Instance.Refresh();
     }
 
-    public void OnTextValueChanged(string value)
+    public void OnValueChanged(string value)
     {
         if (float.TryParse(value, out var value2))
-        {
-            if (value2.IsInRange(Option.Min, Option.Max, true, true))
-                Slider.SetValueWithoutNotify(value2);
-            else if (value2 < Option.Min)
-                Slider.SetValueWithoutNotify(value2);
-            else if (value2 > Option.Max)
-                Slider.SetValueWithoutNotify(value2);
-        }
+            Slider.SetValueWithoutNotify(Mathf.Clamp(value2, Option.Min, Option.Max));
 
         SettingsAndTestingUI.Instance.Refresh();
     }

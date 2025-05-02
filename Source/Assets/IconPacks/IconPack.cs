@@ -433,7 +433,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
         }
 
         if (sprites.Count > 0)
-            return sprites.Random(null) ?? Blank;
+            return sprites.Random() ?? Blank;
 
         return sprite ?? Blank;
     }
