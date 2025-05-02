@@ -281,7 +281,7 @@ public static class SpecialAbilityPopupGenericListItemPatch
             {
                 if (factionType == (FactionType)44)
                 {
-                    roleText = Utils.ApplyThreeColorGradient($"{Utils.GetRoleName(role, factionType, true)}", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
+                    roleText = Utils.ApplyGradient($"{Utils.GetRoleName(role, factionType, true)}", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
                 }
                 else
                 {
@@ -292,7 +292,7 @@ public static class SpecialAbilityPopupGenericListItemPatch
             {
                 if (factionType == (FactionType)44)
                 {
-                    roleText = Utils.ApplyThreeColorGradient($"({role.ToDisplayString()})", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
+                    roleText = Utils.ApplyGradient($"({role.ToDisplayString()})", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
                 }
                 else
                 {
@@ -361,7 +361,7 @@ public static class SpecialAbilityPopupDayConfirmListItemPatch
             {
                 if (factionType == (FactionType)44)
                 {
-                    roleText = Utils.ApplyThreeColorGradient($"{Utils.GetRoleName(role, factionType, true)}", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
+                    roleText = Utils.ApplyGradient($"{Utils.GetRoleName(role, factionType, true)}", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
                 }
                 else
                 {
@@ -372,7 +372,7 @@ public static class SpecialAbilityPopupDayConfirmListItemPatch
             {
                 if (factionType == (FactionType)44)
                 {
-                    roleText = Utils.ApplyThreeColorGradient($"({role.ToDisplayString()})", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
+                    roleText = Utils.ApplyGradient($"({role.ToDisplayString()})", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
                 }
                 else
                 {
@@ -429,7 +429,7 @@ public static class SpecialAbilityPopupNecromancerRetributionistListItemPatch
             {
                 if (factionType == (FactionType)44)
                 {
-                    roleText = Utils.ApplyThreeColorGradient($"{Utils.GetRoleName(role2, factionType, true)}", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
+                    roleText = Utils.ApplyGradient($"{Utils.GetRoleName(role2, factionType, true)}", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
                 }
                 else
                 {
@@ -440,7 +440,7 @@ public static class SpecialAbilityPopupNecromancerRetributionistListItemPatch
             {
                 if (factionType == (FactionType)44)
                 {
-                    roleText = Utils.ApplyThreeColorGradient($"({role2.ToDisplayString()})", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
+                    roleText = Utils.ApplyGradient($"({role2.ToDisplayString()})", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
                 }
                 else
                 {
@@ -517,33 +517,30 @@ public static class FixMyFaction
 [HarmonyPatch(typeof(FactionWinsCinematicData), nameof(FactionWinsCinematicData.SetFaction))]
 public static class VictoryCinematicSwapperPatch
 {
-    private static readonly Dictionary<FactionType, CinematicType> CinematicMap = new()
+    private static readonly Dictionary<FactionType, EnumDropdownOption<CinematicType>> CinematicMap = new()
     {
-        { FactionType.TOWN, Fancy.TownCinematic.Value },
-        { FactionType.COVEN, Fancy.CovenCinematic.Value },
-        { FactionType.SERIALKILLER, Fancy.SerialKillerCinematic.Value },
-        { FactionType.ARSONIST, Fancy.ArsonistCinematic.Value },
-        { FactionType.WEREWOLF, Fancy.WerewolfCinematic.Value },
-        { FactionType.SHROUD, Fancy.ShroudCinematic.Value },
-        { FactionType.APOCALYPSE, Fancy.ApocalypseCinematic.Value },
-        { FactionType.VAMPIRE, Fancy.VampireCinematic.Value },
-        { (FactionType)33, Fancy.JackalCinematic.Value },
-        { (FactionType)34, Fancy.FrogsCinematic.Value },
-        { (FactionType)35, Fancy.LionsCinematic.Value },
-        { (FactionType)36, Fancy.HawksCinematic.Value },
-        { (FactionType)43, Fancy.PandoraCinematic.Value },
-        { (FactionType)44, Fancy.ComplianceCinematic.Value },
-        { (FactionType)250, Fancy.LoversCinematic.Value },
+        { FactionType.TOWN, Fancy.TownCinematic },
+        { FactionType.COVEN, Fancy.CovenCinematic },
+        { FactionType.SERIALKILLER, Fancy.SerialKillerCinematic },
+        { FactionType.ARSONIST, Fancy.ArsonistCinematic },
+        { FactionType.WEREWOLF, Fancy.WerewolfCinematic },
+        { FactionType.SHROUD, Fancy.ShroudCinematic },
+        { FactionType.APOCALYPSE, Fancy.ApocalypseCinematic },
+        { FactionType.VAMPIRE, Fancy.VampireCinematic },
+        { (FactionType)33, Fancy.JackalCinematic },
+        { (FactionType)34, Fancy.FrogsCinematic },
+        { (FactionType)35, Fancy.LionsCinematic },
+        { (FactionType)36, Fancy.HawksCinematic },
+        { (FactionType)43, Fancy.PandoraCinematic },
+        { (FactionType)44, Fancy.ComplianceCinematic },
+        { (FactionType)250, Fancy.LoversCinematic },
     };
 
-    public static void Postfix(FactionType factionType, FactionWinsCinematicData __instance)
+    public static bool Prefix(FactionType factionType, FactionWinsCinematicData __instance)
     {
         __instance.winningFaction_ = factionType;
-
-        if (CinematicMap.TryGetValue(factionType, out var cinematic))
-        {
-            __instance.cinematicType_ = cinematic;
-        }
+        __instance.cinematicType_ = CinematicMap.TryGetValue(factionType, out var cinematic) ? cinematic.Value : CinematicType.FactionWins;
+        return false;
     }
 }
 

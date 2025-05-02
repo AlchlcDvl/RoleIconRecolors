@@ -727,6 +727,9 @@ public static class Utils
 
     public static string ApplyGradient(string text, params Color32[] colors)
     {
+        if (colors.Length < 2)
+            throw new InvalidOperationException("Not enough colors to create a gradient");
+
         var gradient = new Gradient();
         gradient.SetKeys([.. colors.Select((i, color) => new GradientColorKey(color, (float)i / (colors.Length - 1)))], // Pays to know random ass math (that may or may not be 100% accurate)
         [
@@ -736,7 +739,7 @@ public static class Utils
         return ApplyGradient(text, gradient);
     }
 
-    private static string ApplyGradient(string text, Gradient gradient)
+    public static string ApplyGradient(string text, Gradient gradient)
     {
         var text2 = "";
 
@@ -794,28 +797,11 @@ public static class Utils
 
     public static Color GetPlayerRoleColor(int pos)
     {
-        var color = Color.white;
-        Service.Game.Sim.simulation.knownRolesAndFactions.Data.TryGetValue(pos, out Tuple<Role, FactionType> tuple);
-        Color color2;
+        if (!GetRoleAndFaction(pos, out var tuple) || tuple == null || tuple.Item1 is Role.STONED or Role.HIDDEN)
+            return Color.white;
 
-        if (tuple == null)
-            color2 = color;
-        else
-        {
-            if (tuple.Item1 is Role.STONED or Role.HIDDEN)
-                color2 = color;
-            else
-            {
-                color = ClientRoleExtensions.GetFactionColor(tuple.Item2).ParseColor();
-                color2 = color;
-            }
-        }
-
-        return color2;
+        return tuple.Item2.GetFactionColor().ParseColor();
     }
-
-
-    public static bool GetRoleInfo(int pos, out Tuple<Role, FactionType> value) => Service.Game.Sim.simulation.knownRolesAndFactions.Data.TryGetValue(pos, out value);
 
     public static string GetRoleName(Role role, FactionType factionType, bool useBrackets = false)
     {
@@ -825,6 +811,7 @@ public static class Utils
 
         return roleName;
     }
+
     public static string GetColorizedRoleName(Role role, FactionType factionType, bool useBrackets = false)
     {
         var roleName = ToRoleFactionDisplayString(role, factionType);
@@ -877,117 +864,22 @@ public static class Utils
         return null;
     }
 
-    private static readonly Dictionary<FactionType, string> FactionColorKeys = new()
-    {
-        [FactionType.TOWN] = "TOWN",
-        [FactionType.COVEN] = "COVEN",
-        [FactionType.APOCALYPSE] = "APOCALYPSE",
-        [FactionType.EXECUTIONER] = "EXECUTIONER",
-        [FactionType.SERIALKILLER] = "SERIALKILLER",
-        [FactionType.ARSONIST] = "ARSONIST",
-        [FactionType.WEREWOLF] = "WEREWOLF",
-        [FactionType.SHROUD] = "SHROUD",
-        [FactionType.JESTER] = "JESTER",
-        [(FactionType)40] = "INQUISITOR",
-        [FactionType.PIRATE] = "PIRATE",
-        [FactionType.DOOMSAYER] = "DOOMSAYER",
-        [FactionType.VAMPIRE] = "VAMPIRE",
-        [FactionType.CURSED_SOUL] = "CURSEDSOUL",
-        [(FactionType)33] = "JACKAL",
-        [(FactionType)38] = "JUDGE",
-        [(FactionType)39] = "AUDITOR",
-        [(FactionType)41] = "STARSPAWN",
-        [(FactionType)42] = "EGOTIST",
-        [(FactionType)43] = "PANDORA",
-        [(FactionType)34] = "FROGS",
-        [(FactionType)35] = "LIONS",
-        [(FactionType)36] = "HAWKS",
-        [(FactionType)44] = "COMPLIANCE"
-    };
-
     public static Color GetFactionStartingColor(FactionType faction)
     {
-        return Fancy.Colors[
-            FactionColorKeys.TryGetValue(faction, out var colorKey) ? colorKey : "STONED_HIDDEN"
-        ].start.ToColor();
+        var name = FactionName(faction);
+        return Fancy.Colors[name == "Factionless" ? "STONED_HIDDEN" : name.ToUpper()].Start.ToColor();
     }
 
     public static Color GetFactionEndingColor(FactionType faction)
     {
-        if (FactionColorKeys.TryGetValue(faction, out var colorKey))
-            return Fancy.Colors[colorKey].end.ToColor();
+        var name = FactionName(faction);
 
         // Explicit fallback to start color for STONED_HIDDEN
-        return Fancy.Colors["STONED_HIDDEN"].start.ToColor();
+        if (name == "Factionless")
+            return Fancy.Colors["STONED_HIDDEN"].Start.ToColor();
+
+        return Fancy.Colors[name.ToUpper()].End.ToColor();
     }
 
-    public static string GetString(string key)
-    {
-        return Service.Home.LocalizationService.GetLocalizedString(key);
-    }
-    
-    public static string ApplyGradient(string text, Color color1, Color color2)
-    {
-        if (string.IsNullOrEmpty(text))
-        return string.Empty; 
-
-
-        var gradient = new Gradient();
-        gradient.SetKeys(
-        [
-            new(color1, 0f),
-            new(color2, 1f)
-        ],
-        [
-            new(1f, 0f),
-            new(1f, 1f)
-        ]);
-        var text2 = "";
-
-        for (var i = 0; i < text.Length; i++)
-            text2 += $"<color={ToHexString(gradient.Evaluate((float)i / text.Length))}>{text[i]}</color>";
-
-        return text2;
-    }
-
-    public static string ApplyThreeColorGradient(string text, Color color1, Color color2, Color color3)
-    {
-        if (string.IsNullOrEmpty(text))
-        return string.Empty; 
-
-        
-        var gradient = new Gradient();
-        gradient.SetKeys(
-        [
-            new(color1, 0f),
-            new(color2, 0.5f),
-            new(color3, 1f)
-        ],
-        [
-            new(1f, 0f),
-            new(1f, 1f)
-        ]);
-        var text2 = "";
-
-        for (var i = 0; i < text.Length; i++)
-            text2 += $"<color={ToHexString(gradient.Evaluate((float)i / text.Length))}>{text[i]}</color>";
-
-        return text2;
-    }
-
-    public static string SetGradient(string text, Gradient gradient)
-    {
-        var text2 = "";
-
-        for (var i = 0; i < text.Length; i++)
-            text2 += $"<color={ToHexString(gradient.Evaluate((float)i / text.Length))}>{text[i]}</color>";
-
-        return text2;
-    }
-
-    public static string ToHexString(Color color)
-    {
-        Color32 color2 = color;
-        return $"#{color2.r:X2}{color2.g:X2}{color2.b:X2}";
-    }
+    public static string GetString(string key) => Service.Home.LocalizationService.GetLocalizedString(key);
 }
