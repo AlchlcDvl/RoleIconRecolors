@@ -249,8 +249,8 @@ public static class PatchAbilityPanel
     {
         Cache = __instance;
         new[] { __instance.allFilterBtn, __instance.livingFilterBtn, __instance.targetFilterBtn, __instance.factionFilterBtn, __instance.graveyardFilterBtn }
-            .ForEach(x => x.transform.GetAllComponents<Image>()
-                .ForEach(y => y.SetImageColor(ColorType.Wax)));
+            .Do(x => x.transform.GetAllComponents<Image>()
+                .Do(y => y.SetImageColor(ColorType.Wax)));
 
         var parent = __instance.transform.GetChild(0);
         var leather = parent.Find("ListBacking").GetComponent<Image>()!;

@@ -771,9 +771,9 @@ public static class ReplaceTMPSpritesPatch
                 };
 
                 if (str.Contains("("))
-                    deconstructed = str.Split('(', ')').Select(x => x.Trim()).Last(x => !StringUtils.IsNullEmptyOrWhiteSpace(x));
+                    deconstructed = str.Split('(', ')').Select(x => x.Trim()).Last(x => !NewModLoading.Utils.IsNullEmptyOrWhiteSpace(x));
 
-                if (deconstructed is "None" or "Blank" || StringUtils.IsNullEmptyOrWhiteSpace(deconstructed))
+                if (deconstructed is "None" or "Blank" || NewModLoading.Utils.IsNullEmptyOrWhiteSpace(deconstructed))
                     deconstructed = "Regular";
 
                 if (!pack.Assets.TryGetValue(mod, out var assets))

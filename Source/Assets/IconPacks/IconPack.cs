@@ -1,3 +1,5 @@
+using NewModLoading;
+
 namespace FancyUI.Assets.IconPacks;
 
 public class IconPack(string name) : Pack(name, PackType.IconPacks)
@@ -5,7 +7,6 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
     public Dictionary<GameModType, IconAssets> Assets { get; } = [];
     private Dictionary<string, Sprite> NumberSprites { get; } = [];
     private Dictionary<string, Sprite> EmojiSprites { get; } = [];
-    // public Dictionary<string, bool> SpriteSheetCanExist { get; } = [];
     public TMP_SpriteAsset PlayerNumbers { get; private set; }
     public TMP_SpriteAsset Emojis { get; private set; }
 
@@ -47,7 +48,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
             return;
 
         Fancy.Instance.Message($"Deleting {Name}", true);
-        Assets.Values.ForEach(x => x.Delete());
+        Assets.Values.Do(x => x.Delete());
         Fancy.Instance.Message($"{Name} Deleted!", true);
     }
 
@@ -284,14 +285,13 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
 
             foreach (var (style, icons) in assets.BaseIcons)
             {
-                if (icons.Count == 0/* || (style != "Regular" && style != Constants.CurrentStyle(mod))*/)
+                if (icons.Count == 0)
                     continue;
 
                 try
                 {
                     var asset = BuildSpriteSheet(mod, mod.ToString(), style, icons, index);
                     assets.MentionStyles[style] = asset;
-                    // SpriteSheetCanExist[style] = true;
                     Utils.DumpSprite(asset?.spriteSheet as Texture2D, $"{style}{mod}RoleIcons", Path.Combine(PackPath, $"{mod}"));
                 }
                 catch (Exception e)
@@ -304,7 +304,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
 
         foreach (var (style, icons) in Assets[GameModType.Common].BaseIcons)
         {
-            if (icons.Count == 0/* || (style != "Regular" && style != Constants.CurrentStyle(ModType.Vanilla) && style != Constants.CurrentStyle(ModType.BTOS2))*/)
+            if (icons.Count == 0)
                 continue;
 
             foreach (var mod in Mods)
@@ -315,7 +315,6 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                     var index = Utils.Filtered(type);
                     var asset = BuildSpriteSheet(type, mod, style, icons, index);
                     Assets[type].MentionStyles[style] = asset;
-                    // SpriteSheetCanExist[style] = true;
                     Utils.DumpSprite(asset?.spriteSheet as Texture2D, $"{style}{mod}RoleIcons", Path.Combine(PackPath, mod));
                 }
                 catch (Exception e)
@@ -404,7 +403,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
 
     public Sprite GetSprite(string iconName, bool allowEe, string type)
     {
-        if (StringUtils.IsNullEmptyOrWhiteSpace(type))
+        if (NewModLoading.Utils.IsNullEmptyOrWhiteSpace(type))
             type = "Regular";
 
         if (!Assets.TryGetValue(GetModKey(type), out var assets))
@@ -417,7 +416,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
         if ((!allowEe && sprite.IsValid()) || (allowEe && URandom.RandomRangeInt(1, 101) > Constants.EasterEggChance()))
             return sprite ?? Blank;
 
-        var sprites = new List<Sprite>();
+        var sprites = new HashSet<Sprite>();
 
         if (Constants.AllEasterEggs())
         {
@@ -434,7 +433,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
         }
 
         if (sprites.Count > 0)
-            return sprites.Random() ?? Blank;
+            return sprites.Random(null) ?? Blank;
 
         return sprite ?? Blank;
     }

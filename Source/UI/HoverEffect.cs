@@ -19,9 +19,9 @@ public class HoverEffect : TooltipTrigger
 
     public void AddOnOutListener(UnityAction listener) => OnMouseOut.AddListener(listener);
 
-    public void AddOnOverListeners(params UnityAction[] listeners) => listeners.ForEach(OnMouseOver.AddListener);
+    public void AddOnOverListeners(params UnityAction[] listeners) => listeners.Do(OnMouseOver.AddListener);
 
-    public void AddOnOutListeners(params UnityAction[] listeners) => listeners.ForEach(OnMouseOut.AddListener);
+    public void AddOnOutListeners(params UnityAction[] listeners) => listeners.Do(OnMouseOut.AddListener);
 
     public override void OnPointerEnter(PointerEventData eventData)
     {

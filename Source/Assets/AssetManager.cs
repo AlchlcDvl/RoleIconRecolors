@@ -1,11 +1,12 @@
 using FancyUI.Assets.SilhouetteSwapper;
 using FancyUI.Assets.IconPacks;
+using NewModLoading;
 
 namespace FancyUI.Assets;
 
 public static class FancyAssetManager
 {
-    public static readonly Dictionary<string, Dictionary<string, List<Sprite>>> GlobalEasterEggs = [];
+    public static readonly Dictionary<string, Dictionary<string, HashSet<Sprite>>> GlobalEasterEggs = [];
     public static readonly Dictionary<string, IconPack> IconPacks = [];
     private static readonly Dictionary<int, Sprite> CacheScrollSprites = [];
 
@@ -52,7 +53,7 @@ public static class FancyAssetManager
             return Blank;
         }
 
-        if (StringUtils.IsNullEmptyOrWhiteSpace(faction) || faction == "Blank" || Avoid.Any(name.Contains))
+        if (NewModLoading.Utils.IsNullEmptyOrWhiteSpace(faction) || faction == "Blank" || Avoid.Any(name.Contains))
             faction = "Regular";
 
         var og = faction;
@@ -253,7 +254,7 @@ public static class FancyAssetManager
     {
         try
         {
-            Service.Home.Scrolls.scrollInfoLookup_.Values.ForEach(y =>
+            Service.Home.Scrolls.scrollInfoLookup_.Values.Do(y =>
             {
                 var sprite = GetSprite(Utils.RoleName(y.role), Utils.FactionName(y.role.GetFactionType()), false);
 
@@ -266,7 +267,7 @@ public static class FancyAssetManager
                     CacheScrollSprites[y.id] = y.decoration.sprite;
             });
 
-            Service.Home.Scrolls.cursedScrollInfoLookup_.Values.ForEach(y =>
+            Service.Home.Scrolls.cursedScrollInfoLookup_.Values.Do(y =>
             {
                 var sprite = GetSprite(Utils.RoleName(y.role), Utils.FactionName(y.role.GetFactionType()), false);
 

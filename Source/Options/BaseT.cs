@@ -1,3 +1,5 @@
+using NewModLoading;
+
 namespace FancyUI.Options;
 
 public abstract class Option<TValue, TSetting>(string id, TValue defaultValue, PackType page, Func<TValue, bool> setActive = null, Action<TValue> onChanged = null) : Option(id, page) where

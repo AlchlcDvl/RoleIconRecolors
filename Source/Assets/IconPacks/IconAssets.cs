@@ -5,7 +5,7 @@ public class IconAssets(string name)
     private string Name { get; } = name;
 
     public Dictionary<string, Dictionary<string, Sprite>> BaseIcons { get; } = [];
-    public Dictionary<string, Dictionary<string, List<Sprite>>> EasterEggs { get; } = [];
+    public Dictionary<string, Dictionary<string, HashSet<Sprite>>> EasterEggs { get; } = [];
     public Dictionary<string, TMP_SpriteAsset> MentionStyles { get; } = [];
 
     public int Count { get; private set; }
@@ -62,16 +62,16 @@ public class IconAssets(string name)
 
     public void Delete()
     {
-        BaseIcons.Values.ForEach(x => x.Values.ForEach((Action<Sprite>)UObject.Destroy));
-        BaseIcons.Values.ForEach(x => x.Clear());
+        BaseIcons.Values.Do(x => x.Values.Do(UObject.Destroy));
+        BaseIcons.Values.Do(x => x.Clear());
         BaseIcons.Clear();
 
-        EasterEggs.Values.ForEach(x => x.Values.ForEach(y => y.ForEach(UObject.Destroy)));
-        EasterEggs.Values.ForEach(x => x.Values.ForEach(y => y.Clear()));
-        EasterEggs.Values.ForEach(x => x.Clear());
+        EasterEggs.Values.Do(x => x.Values.Do(y => y.Do(UObject.Destroy)));
+        EasterEggs.Values.Do(x => x.Values.Do(y => y.Clear()));
+        EasterEggs.Values.Do(x => x.Clear());
         EasterEggs.Clear();
 
-        MentionStyles.Values.ForEach((Action<TMP_SpriteAsset>)UObject.Destroy);
+        MentionStyles.Values.Do(UObject.Destroy);
         MentionStyles.Clear();
     }
 }

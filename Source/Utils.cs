@@ -1,5 +1,6 @@
 // using FancyUI.Assets.SilhouetteSwapper;
 using Home.Shared;
+using NewModLoading;
 
 namespace FancyUI;
 
@@ -588,6 +589,9 @@ public static class Utils
 
     public static void SetImageColor(this Image img, ColorType type, bool notGuide = true)
     {
+        if (Constants.AllMaterials.Count == 0)
+            return;
+
         var hasMask = img.TryGetComponent<Mask>(out var mask);
 
         if (hasMask)
@@ -601,6 +605,9 @@ public static class Utils
 
     public static void SetGraphicColor(this Graphic graphic, ColorType type, FactionType? faction = null, bool flip = true)
     {
+        if (Constants.AllMaterials.Count == 0)
+            return;
+
         var color2 = Constants.GetUIThemeColor(type, faction);
 
         if (color2 == Color.clear)
@@ -612,8 +619,11 @@ public static class Utils
 
     public static void UpdateMaterials(bool notGuide = true, FactionType? faction = null, bool flip = false, bool skipFactionCheck = false)
     {
+        if (Constants.AllMaterials.Count == 0)
+            return;
+
         if (Constants.GetMainUIThemeType() == UITheme.Vanilla)
-            Constants.AllMaterials[notGuide].Values.ForEach(x => x.SetFloat(Vanilla, 1));
+            Constants.AllMaterials[notGuide].Values.Do(x => x.SetFloat(Vanilla, 1));
         else
         {
             var brightness = Constants.GeneralBrightness();
@@ -744,7 +754,7 @@ public static class Utils
 
     public static string ToRoleFactionDisplayString(Role role, FactionType faction)
     {
-        if (role is Role.STONED or Role.HIDDEN or Role.UNKNOWN) 
+        if (role is Role.STONED or Role.HIDDEN or Role.UNKNOWN)
             faction = FactionType.NONE;
 
         var factionName = faction switch
@@ -818,19 +828,23 @@ public static class Utils
     public static string GetColorizedRoleName(Role role, FactionType factionType, bool useBrackets = false)
     {
         var roleName = ToRoleFactionDisplayString(role, factionType);
+
         if (useBrackets)
             roleName = $"({roleName})";
 
-        var gradientText = Utils.TryApplyGradient(roleName, factionType);
+        var gradientText = TryApplyGradient(roleName, factionType);
+
         if (gradientText != null)
             return gradientText;
 
         var color = factionType.GetFactionColor();
         return $"<color={color}>{roleName}</color>";
     }
+
     public static string GetColorizedText(string text, FactionType factionType)
     {
-        var gradientText = Utils.TryApplyGradient(text, factionType);
+        var gradientText = TryApplyGradient(text, factionType);
+
         if (gradientText != null)
             return gradientText;
 
@@ -856,14 +870,9 @@ public static class Utils
     private static string GetGradient(string text, FactionType factionType)
     {
         var gradient = BetterTOS2.GetGradients.GetGradient(factionType);
+
         if (gradient != null)
-        {
-            return BetterTOS2.AddNewConversionTags.ApplyGradient(
-                text,
-                gradient.Evaluate(0f),
-                gradient.Evaluate(1f)
-            );
-        }
+            return ApplyGradient(text, gradient);
 
         return null;
     }
@@ -981,6 +990,4 @@ public static class Utils
         Color32 color2 = color;
         return $"#{color2.r:X2}{color2.g:X2}{color2.b:X2}";
     }
-
-
 }

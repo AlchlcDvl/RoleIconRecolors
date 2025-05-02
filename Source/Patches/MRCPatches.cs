@@ -12,7 +12,7 @@ using Cinematics.Players;
 using Server.Shared.Cinematics.Data;
 using Server.Shared.Cinematics;
 
-namespace FancyUI.Patches
+namespace FancyUI.Patches;
 
 {
     [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.UpdateTitle))]
@@ -128,11 +128,23 @@ namespace FancyUI.Patches
         public static void Postfix(ref Role role, RoleCardPopupPanel __instance) => __instance.roleNameText.text = ClientRoleExtensions.ToColorizedDisplayString(role);
     }
 
-    [HarmonyPatch(typeof(TosAbilityPanelListItem), nameof(TosAbilityPanelListItem.SetKnownRole))]
-    public static class PlayerListPatch
+
+[HarmonyPatch(typeof(RoleCardPopupPanel), nameof(RoleCardPopupPanel.SetRole))]
+public static class RoleCardPopupPatches
+{
+    public static void Postfix(ref Role role, RoleCardPopupPanel __instance) => __instance.roleNameText.text = role.ToColorizedDisplayString();
+}
+
+[HarmonyPatch(typeof(TosAbilityPanelListItem), nameof(TosAbilityPanelListItem.SetKnownRole))]
+public static class PlayerListPatch
+{
+    public static bool Prefix(ref Role role, ref FactionType faction, TosAbilityPanelListItem __instance)
     {
-        public static bool Prefix(ref Role role, ref FactionType faction, TosAbilityPanelListItem __instance)
+        __instance.playerRole = role;
+
+        if (role is not (0 or (Role)byte.MaxValue))
         {
+
             __instance.playerRole = role;
             var roleName = "";
             if (Fancy.FactionalRoleNames.Value) { roleName = Utils.ToRoleFactionDisplayString(role, faction); }
@@ -190,7 +202,11 @@ namespace FancyUI.Patches
 
             return false;
         }
+
+        return false;
     }
+}
+
 
 
     [HarmonyPatch(typeof(TosCharacterNametag), nameof(TosCharacterNametag.ColouredName))]
@@ -709,5 +725,4 @@ namespace FancyUI.Patches
 
 
 }
-
 

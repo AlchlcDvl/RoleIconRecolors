@@ -23,7 +23,6 @@ global using TMPro;
 
 global using Witchcraft.Utils;
 global using Witchcraft.Modules;
-global using Witchcraft.Managers;
 
 global using FancyUI.UI;
 global using FancyUI.Assets;
