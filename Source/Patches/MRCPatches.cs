@@ -590,15 +590,15 @@ namespace FancyUI.Patches
 
             foreach (Transform child in __instance.transform.GetComponentsInChildren<Transform>(true))
             {
-                if (child.name == "Filigree_L" || child.name == "Filigree_R")
+                if (child.name == "Filigree_L" || child.name == "Filigree_R" || child.name == "Glow")
                 {
                     var image = child.GetComponent<Image>();
                     if (image != null)
                     {
-                        if (child.name == "Filigree_L")
-                            image.color = Utils.GetFactionStartingColor(winningFaction);
-                        else
+                        if (child.name == "Filigree_R")
                             image.color = Utils.GetFactionEndingColor(winningFaction);
+                        else
+                            image.color = Utils.GetFactionStartingColor(winningFaction);
                     }
                 }
             }
