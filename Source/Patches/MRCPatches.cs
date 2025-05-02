@@ -12,7 +12,7 @@ using Cinematics.Players;
 using Server.Shared.Cinematics.Data;
 using Server.Shared.Cinematics;
 
-namespace FancyUI.Patches;
+namespace FancyUI.Patches
 
 {
     [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.UpdateTitle))]
@@ -128,85 +128,75 @@ namespace FancyUI.Patches;
         public static void Postfix(ref Role role, RoleCardPopupPanel __instance) => __instance.roleNameText.text = ClientRoleExtensions.ToColorizedDisplayString(role);
     }
 
-
-[HarmonyPatch(typeof(RoleCardPopupPanel), nameof(RoleCardPopupPanel.SetRole))]
-public static class RoleCardPopupPatches
-{
-    public static void Postfix(ref Role role, RoleCardPopupPanel __instance) => __instance.roleNameText.text = role.ToColorizedDisplayString();
-}
-
-[HarmonyPatch(typeof(TosAbilityPanelListItem), nameof(TosAbilityPanelListItem.SetKnownRole))]
-public static class PlayerListPatch
-{
-    public static bool Prefix(ref Role role, ref FactionType faction, TosAbilityPanelListItem __instance)
+    [HarmonyPatch(typeof(TosAbilityPanelListItem), nameof(TosAbilityPanelListItem.SetKnownRole))]
+    public static class PlayerListPatch
     {
-        __instance.playerRole = role;
-
-        if (role is not (0 or (Role)byte.MaxValue))
+        public static bool Prefix(ref Role role, ref FactionType faction, TosAbilityPanelListItem __instance)
         {
-
             __instance.playerRole = role;
-            var roleName = "";
-            if (Fancy.FactionalRoleNames.Value) { roleName = Utils.ToRoleFactionDisplayString(role, faction); }
-            else { roleName = role.ToDisplayString(); }
-
-            var factionName = faction.ToDisplayString();
-
             if (role is not (0 or (Role)byte.MaxValue))
             {
-                var gradient = faction.GetChangedGradient(role);
+                __instance.playerRole = role;
+                var roleName = "";
+                if (Fancy.FactionalRoleNames.Value) { roleName = Utils.ToRoleFactionDisplayString(role, faction); }
+                else { roleName = role.ToDisplayString(); }
 
-                if (gradient != null && role is not ((Role)254 or (Role)241))
+                var factionName = faction.ToDisplayString();
+
+                if (role is not (0 or (Role)byte.MaxValue))
                 {
-                    if (faction is ((FactionType)44) and not ((FactionType)33))
-                    {
-                        __instance.playerRoleText.text = Utils.ApplyThreeColorGradient("(" + roleName + ")", gradient.Evaluate(0f), gradient.Evaluate(0.5f),
-                            gradient.Evaluate(1f));
-                    }
-                    else if (faction == (FactionType)33 && role != BetterTOS2.RolePlus.JACKAL)
-                    {
-                        Gradient jackalGradient = Btos2Faction.Jackal.GetChangedGradient(role);
+                    var gradient = faction.GetChangedGradient(role);
 
-                        __instance.playerRoleText.text = Utils.ApplyGradient("(" + roleName + ")", jackalGradient.Evaluate(0f), jackalGradient.Evaluate(1f));
+                    if (gradient != null && role is not ((Role)254 or (Role)241))
+                    {
+                        if (faction is ((FactionType)44) and not ((FactionType)33))
+                        {
+                            __instance.playerRoleText.text = Utils.ApplyThreeColorGradient("(" + roleName + ")", gradient.Evaluate(0f), gradient.Evaluate(0.5f),
+                                gradient.Evaluate(1f));
+                        }
+                        else if (faction == (FactionType)33 && role != BetterTOS2.RolePlus.JACKAL)
+                        {
+                            Gradient jackalGradient = Btos2Faction.Jackal.GetChangedGradient(role);
+
+                            __instance.playerRoleText.text = Utils.ApplyGradient("(" + roleName + ")", jackalGradient.Evaluate(0f), jackalGradient.Evaluate(1f));
+                        }
+                        else
+                            __instance.playerRoleText.text = Utils.ApplyGradient("(" + roleName + ")", gradient.Evaluate(0f), gradient.Evaluate(1f));
+
+                    }
+                    else if (role is not ((Role)254 or (Role)241))
+                    {
+                        __instance.playerRoleText.text = string.Concat(
+                        [
+                            "<color=",
+                            ClientRoleExtensions.GetFactionColor(faction),
+                            ">(",
+                            roleName,
+                            ")</color>"
+                        ]);
                     }
                     else
-                        __instance.playerRoleText.text = Utils.ApplyGradient("(" + roleName + ")", gradient.Evaluate(0f), gradient.Evaluate(1f));
+                    {
+                        __instance.playerRoleText.text = string.Concat(
+                        [
+                            "<color=",
+                            ClientRoleExtensions.GetFactionColor(RoleExtensions.GetFaction(role)),
+                            ">(",
+                            roleName,
+                            ")</color>"
+                        ]);
+                    }
 
-                }
-                else if (role is not ((Role)254 or (Role)241))
-                {
-                    __instance.playerRoleText.text = string.Concat(
-                    [
-                        "<color=",
-                        ClientRoleExtensions.GetFactionColor(faction),
-                        ">(",
-                        roleName,
-                        ")</color>"
-                    ]);
-                }
-                else
-                {
-                    __instance.playerRoleText.text = string.Concat(
-                    [
-                        "<color=",
-                        ClientRoleExtensions.GetFactionColor(RoleExtensions.GetFaction(role)),
-                        ">(",
-                        roleName,
-                        ")</color>"
-                    ]);
+                    __instance.playerRoleText.gameObject.SetActive(true);
+                    __instance.playerRoleText.enableAutoSizing = false; // Remove when PlayerNotes+ fix is out
                 }
 
-                __instance.playerRoleText.gameObject.SetActive(true);
-                __instance.playerRoleText.enableAutoSizing = false; // Remove when PlayerNotes+ fix is out
+                return false;
             }
 
             return false;
         }
-
-        return false;
     }
-}
-
 
 
     [HarmonyPatch(typeof(TosCharacterNametag), nameof(TosCharacterNametag.ColouredName))]
@@ -725,4 +715,5 @@ public static class PlayerListPatch
 
 
 }
+
 
