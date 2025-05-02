@@ -8,6 +8,71 @@
     <Entry key="FANCY_FACTIONAL_ROLE_NAMES_NAME">Faction-Specific Role Names</Entry>
     <Entry key="FANCY_FACTIONAL_ROLE_NAMES_DESC">Determines whether or not roles will use factional role names, meaning each faction gives each role a unique role name. Requires the Text Editor mod to customize.</Entry>
    
+    <Entry key="FANCY_FACTION_NEXT_TO_ROLE_NAME">Faction Name Next to Role</Entry>
+    <Entry key="FANCY_FACTION_NEXT_TO_ROLE_DESC">Determines whether or not factions will be displayed next to roles as if colors were off in Town of Salem 2's chat settings.</Entry>
+   
+    <Entry key="FANCY_FACTION_LABEL_NAME">Faction Label in Role Card</Entry>
+    <Entry key="FANCY_FACTION_LABEL_DESC">Determines whether or not the faction label within the role card will be displayed and under what conditions. Mismatch means if the role doesn't belong in the current faction. Conditional means Coven/Apocalypse = Pandora and SK/Arso/WW/Shroud = Compliance. Always and Never are self explanatory. Does not affect the Town Traitor and Recruit Labels.</Entry>
+   
+    <Entry key="FANCY_MAJOR_COLORS_NAME">Override End Color If Role Is a Power Role</Entry>
+    <Entry key="FANCY_MAJOR_COLORS_DESC">Determines whether or not end colors on factions will be overwritten with a separate Major color value when Coven Power, Town Power, or a Horseman of the Apocalypse.</Entry>
+   
+    <Entry key="FANCY_LETHAL_COLORS_NAME">Override End Color If Role Is a Killing Role</Entry>
+    <Entry key="FANCY_LETHAL_COLORS_DESC">Determines whether or not end colors on factions will be overwritten with a separate Lethal color value when Coven Power, Town Power, or a Horseman of the Apocalypse.</Entry>
+   
+    <Entry key="FANCY_RECRUIT_ENDING_NAME">Override Recruit End Color</Entry>
+    <Entry key="FANCY_RECRUIT_ENDING_DESC">Determines what color recruits will pull. Jackal means it pulls from the Jackal End Color, Original Start means it pulls from their original faction's Start color, and Original End pulls from their original faction's End color (Major if a Major role with the setting on).</Entry>
+   
+    <Entry key="FANCY_IS_JACKAL_MAJOR_NAME">Jackal is Major</Entry>
+    <Entry key="FANCY_IS_JACKAL_MAJOR_DESC">Determines whether or not the Jackal role is considered Major.</Entry>
+   
+    <Entry key="FANCY_IS_VAMPIRE_MAJOR_NAME">BTOS2 Vampire is Major</Entry>
+    <Entry key="FANCY_IS_VAMPIRE_MAJOR_DESC">Determines whether or not the Vampire role in BetterTOS2 is considered Major.</Entry>
+   
+    <Entry key="FANCY_TOWN_CINEMATIC_NAME">Override Town Win Cinematic</Entry>
+    <Entry key="FANCY_TOWN_CINEMATIC_DESC">Determines which victory cinematic Town will use. (Game restart required)</Entry>
+
+    <Entry key="FANCY_COVEN_CINEMATIC_NAME">Override Coven Win Cinematic</Entry>
+    <Entry key="FANCY_COVEN_CINEMATIC_DESC">Determines which victory cinematic Coven will use. (Game restart required)</Entry>
+
+    <Entry key="FANCY_SERIALKILLER_CINEMATIC_NAME">Override Serial Killer Win Cinematic</Entry>
+    <Entry key="FANCY_SERIALKILLER_CINEMATIC_DESC">Determines which victory cinematic Serial Killer will use. (Game restart required)</Entry>
+
+    <Entry key="FANCY_ARSONIST_CINEMATIC_NAME">Override Arsonist Win Cinematic</Entry>
+    <Entry key="FANCY_ARSONIST_CINEMATIC_DESC">Determines which victory cinematic Arsonist will use. (Game restart required)</Entry>
+
+    <Entry key="FANCY_WEREWOLF_CINEMATIC_NAME">Override Werewolf Win Cinematic</Entry>
+    <Entry key="FANCY_WEREWOLF_CINEMATIC_DESC">Determines which victory cinematic Werewolf will use. (Game restart required)</Entry>
+
+    <Entry key="FANCY_SHROUD_CINEMATIC_NAME">Override Shroud Win Cinematic</Entry>
+    <Entry key="FANCY_SHROUD_CINEMATIC_DESC">Determines which victory cinematic Shroud will use. (Game restart required)</Entry>
+
+    <Entry key="FANCY_APOCALYPSE_CINEMATIC_NAME">Override Apocalypse Win Cinematic</Entry>
+    <Entry key="FANCY_APOCALYPSE_CINEMATIC_DESC">Determines which victory cinematic Apocalypse will use. (Game restart required)</Entry>
+
+    <Entry key="FANCY_VAMPIRE_CINEMATIC_NAME">Override Vampire Win Cinematic</Entry>
+    <Entry key="FANCY_VAMPIRE_CINEMATIC_DESC">Determines which victory cinematic Vampire will use. (Game restart required)</Entry>
+
+    <Entry key="FANCY_JACKAL_CINEMATIC_NAME">Override Jackal Win Cinematic</Entry>
+    <Entry key="FANCY_JACKAL_CINEMATIC_DESC">Determines which victory cinematic Jackal will use. (Game restart required)</Entry>
+
+    <Entry key="FANCY_FROGS_CINEMATIC_NAME">Override Frogs Win Cinematic</Entry>
+    <Entry key="FANCY_FROGS_CINEMATIC_DESC">Determines which victory cinematic Frogs will use. (Game restart required)</Entry>
+
+    <Entry key="FANCY_LIONS_CINEMATIC_NAME">Override Lions Win Cinematic</Entry>
+    <Entry key="FANCY_LIONS_CINEMATIC_DESC">Determines which victory cinematic Lions will use. (Game restart required)</Entry>
+
+    <Entry key="FANCY_HAWKS_CINEMATIC_NAME">Override Hawks Win Cinematic</Entry>
+    <Entry key="FANCY_HAWKS_CINEMATIC_DESC">Determines which victory cinematic Hawks will use. (Game restart required)</Entry>
+
+    <Entry key="FANCY_PANDORA_CINEMATIC_NAME">Override Pandora Win Cinematic</Entry>
+    <Entry key="FANCY_PANDORA_CINEMATIC_DESC">Determines which victory cinematic Pandora will use. (Game restart required)</Entry>
+
+    <Entry key="FANCY_COMPLIANCE_CINEMATIC_NAME">Override Compliance Win Cinematic</Entry>
+    <Entry key="FANCY_COMPLIANCE_CINEMATIC_DESC">Determines which victory cinematic Compliance will use. (Game restart required)</Entry>
+
+    <Entry key="FANCY_LOVERS_CINEMATIC_NAME">Override Lovers Win Cinematic</Entry>
+    <Entry key="FANCY_LOVERS_CINEMATIC_DESC">Determines which victory cinematic Lovers will use. (Game restart required)</Entry>
 
     <Entry key="FANCY_SELECTED_ICON_PACK_NAME">Selected Icon Pack</Entry>
     <Entry key="FANCY_SELECTED_ICON_PACK_DESC">The selected icon will start replacing the visible icons with the images you put in. If it can't find the valid image or pack, it will be replaced by the mod's default files. May require a game restart for the in-text icons to change.\nVanilla - No pack selected.</Entry>
@@ -95,6 +160,262 @@
 
     <Entry key="FANCY_COLOR_WOOD_NAME">Faction UI Theme Wood</Entry>
     <Entry key="FANCY_COLOR_WOOD_DESC">Dictates if wood should be affected by Faction UI. If disabled, wood will use the color from Custom UI.</Entry>
+
+    <Entry key="FANCY_RECRUIT_LABEL_NAME">Recruit Label</Entry>
+    <Entry key="FANCY_RECRUIT_LABEL_DESC">The text that is shown when the player is recruited by the Jackal.</Entry>
+
+    <Entry key="FANCY_TRAITOR_LABEL_NAME">Town Traitor Label</Entry>
+    <Entry key="FANCY_TRAITOR_LABEL_DESC">The text that is shown in the role card when the player is a Town Traitor.</Entry>
+
+    <Entry key="FANCY_VIP_LABEL_NAME">VIP Label</Entry>
+    <Entry key="FANCY_VIP_LABEL_DESC">The text that is shown in the role card when the player is VIP (Vanilla Games Only).</Entry>
+
+    <Entry key="FANCY_COURT_LABEL_NAME">Court Label</Entry>
+    <Entry key="FANCY_COURT_LABEL_DESC">The text that is shown in chat during court when the Judge speaks (BetterTOS2 Games Only).</Entry>
+
+    <Entry key="FANCY_JURY_LABEL_NAME">Jury Label</Entry>
+    <Entry key="FANCY_JURY_LABEL_DESC">The text that is shown in chat during court when anyone other than the Judge speaks (BetterTOS2 Games Only).</Entry>
+
+    <Entry key="FANCY_PIRATE_LABEL_NAME">Pirate Label</Entry>
+    <Entry key="FANCY_PIRATE_LABEL_DESC">The text that is shown in chat at night when being dueled by the Pirate (BetterTOS2 Games Only).</Entry>
+
+    <Entry key="FANCY_TOWN_START_NAME">Town Start Color</Entry>
+    <Entry key="FANCY_TOWN_START_DESC">The start color for the Town faction.</Entry>
+
+    <Entry key="FANCY_TOWN_END_NAME">Town End Color</Entry>
+    <Entry key="FANCY_TOWN_END_DESC">The end color for the Town faction.</Entry>
+
+    <Entry key="FANCY_TOWN_MAJOR_NAME">Town Major Color</Entry>
+    <Entry key="FANCY_TOWN_MAJOR_DESC">The major ending color for the Town faction.</Entry>
+
+    <Entry key="FANCY_TOWN_LETHAL_NAME">Town Lethal Color</Entry>
+    <Entry key="FANCY_TOWN_LETHAL_DESC">The lethal ending color for the Town faction.</Entry>
+
+    <Entry key="FANCY_COVEN_START_NAME">Coven Start Color</Entry>
+    <Entry key="FANCY_COVEN_START_DESC">The start color for the Coven faction.</Entry>
+
+    <Entry key="FANCY_COVEN_END_NAME">Coven End Color</Entry>
+    <Entry key="FANCY_COVEN_END_DESC">The end color for the Coven faction.</Entry>
+
+    <Entry key="FANCY_COVEN_MAJOR_NAME">Coven Major Color</Entry>
+    <Entry key="FANCY_COVEN_MAJOR_DESC">The major ending color for the Coven faction.</Entry>
+
+    <Entry key="FANCY_COVEN_LETHAL_NAME">Coven Lethal Color</Entry>
+    <Entry key="FANCY_COVEN_LETHAL_DESC">The lethal ending color for the Coven faction.</Entry>
+
+    <Entry key="FANCY_APOCALYPSE_START_NAME">Apocalypse Start Color</Entry>
+    <Entry key="FANCY_APOCALYPSE_START_DESC">The start color for the Apocalypse faction.</Entry>
+
+    <Entry key="FANCY_APOCALYPSE_END_NAME">Apocalypse End Color</Entry>
+    <Entry key="FANCY_APOCALYPSE_END_DESC">The end color for the Apocalypse faction.</Entry>
+
+    <Entry key="FANCY_APOCALYPSE_MAJOR_NAME">Apocalypse Major Color</Entry>
+    <Entry key="FANCY_APOCALYPSE_MAJOR_DESC">The major ending color for the Apocalypse faction.</Entry>
+
+    <Entry key="FANCY_APOCALYPSE_LETHAL_NAME">Apocalypse Lethal Color</Entry>
+    <Entry key="FANCY_APOCALYPSE_LETHAL_DESC">The lethal ending color for the Apocalypse faction.</Entry>
+
+    <Entry key="FANCY_SERIALKILLER_START_NAME">Serial Killer Start Color</Entry>
+    <Entry key="FANCY_SERIALKILLER_START_DESC">The start color for the Serial Killer faction.</Entry>
+
+    <Entry key="FANCY_SERIALKILLER_END_NAME">Serial Killer End Color</Entry>
+    <Entry key="FANCY_SERIALKILLER_END_DESC">The end color for the Serial Killer faction.</Entry>
+
+    <Entry key="FANCY_SERIALKILLER_MAJOR_NAME">Serial Killer Major Color</Entry>
+    <Entry key="FANCY_SERIALKILLER_MAJOR_DESC">The major ending color for the Serial Killer faction.</Entry>
+
+    <Entry key="FANCY_ARSONIST_START_NAME">Arsonist Start Color</Entry>
+    <Entry key="FANCY_ARSONIST_START_DESC">The start color for the Arsonist faction.</Entry>
+
+    <Entry key="FANCY_ARSONIST_END_NAME">Arsonist End Color</Entry>
+    <Entry key="FANCY_ARSONIST_END_DESC">The end color for the Arsonist faction.</Entry>
+
+    <Entry key="FANCY_ARSONIST_MAJOR_NAME">Arsonist Major Color</Entry>
+    <Entry key="FANCY_ARSONIST_MAJOR_DESC">The major ending color for the Arsonist faction.</Entry>
+
+    <Entry key="FANCY_WEREWOLF_START_NAME">Werewolf Start Color</Entry>
+    <Entry key="FANCY_WEREWOLF_START_DESC">The start color for the Werewolf faction.</Entry>
+
+    <Entry key="FANCY_WEREWOLF_END_NAME">Werewolf End Color</Entry>
+    <Entry key="FANCY_WEREWOLF_END_DESC">The end color for the Werewolf faction.</Entry>
+
+    <Entry key="FANCY_WEREWOLF_MAJOR_NAME">Werewolf Major Color</Entry>
+    <Entry key="FANCY_WEREWOLF_MAJOR_DESC">The major ending color for the Werewolf faction.</Entry>
+
+    <Entry key="FANCY_SHROUD_START_NAME">Shroud Start Color</Entry>
+    <Entry key="FANCY_SHROUD_START_DESC">The start color for the Shroud faction.</Entry>
+
+    <Entry key="FANCY_SHROUD_END_NAME">Shroud End Color</Entry>
+    <Entry key="FANCY_SHROUD_END_DESC">The end color for the Shroud faction.</Entry>
+
+    <Entry key="FANCY_SHROUD_MAJOR_NAME">Shroud Major Color</Entry>
+    <Entry key="FANCY_SHROUD_MAJOR_DESC">The major ending color for the Shroud faction.</Entry>
+
+    <Entry key="FANCY_JACKAL_START_NAME">Jackal Start Color</Entry>
+    <Entry key="FANCY_JACKAL_START_DESC">The start color for the Jackal faction.</Entry>
+
+    <Entry key="FANCY_JACKAL_END_NAME">Jackal End Color</Entry>
+    <Entry key="FANCY_JACKAL_END_DESC">The end color for the Jackal faction.</Entry>
+
+    <Entry key="FANCY_JACKAL_MAJOR_NAME">Jackal Major Color</Entry>
+    <Entry key="FANCY_JACKAL_MAJOR_DESC">The major ending color for the Jackal faction.</Entry>
+
+    <Entry key="FANCY_JACKAL_LETHAL_NAME">Jackal Lethal Color</Entry>
+    <Entry key="FANCY_JACKAL_LETHAL_DESC">The lethal ending color for the Jackal faction.</Entry>
+
+    <Entry key="FANCY_PANDORA_START_NAME">Pandora Start Color</Entry>
+    <Entry key="FANCY_PANDORA_START_DESC">The start color for the Pandora faction.</Entry>
+
+    <Entry key="FANCY_PANDORA_END_NAME">Pandora End Color</Entry>
+    <Entry key="FANCY_PANDORA_END_DESC">The end color for the Pandora faction.</Entry>
+
+    <Entry key="FANCY_PANDORA_MAJOR_NAME">Pandora Major Color</Entry>
+    <Entry key="FANCY_PANDORA_MAJOR_DESC">The major ending color for the Pandora faction.</Entry>
+
+    <Entry key="FANCY_PANDORA_LETHAL_NAME">Pandora Lethal Color</Entry>
+    <Entry key="FANCY_PANDORA_LETHAL_DESC">The lethal ending color for the Pandora faction.</Entry>
+
+    <Entry key="FANCY_COMPLIANCE_START_NAME">Compliance Start Color</Entry>
+    <Entry key="FANCY_COMPLIANCE_START_DESC">The start color for the Compliance faction.</Entry>
+
+    <Entry key="FANCY_COMPLIANCE_MIDDLE_NAME">Compliance Middle Color</Entry>
+    <Entry key="FANCY_COMPLIANCE_MIDDLE_DESC">The middle color for the Compliance faction.</Entry>
+
+    <Entry key="FANCY_COMPLIANCE_END_NAME">Compliance End Color</Entry>
+    <Entry key="FANCY_COMPLIANCE_END_DESC">The end color for the Compliance faction.</Entry>
+
+    <Entry key="FANCY_COMPLIANCE_MAJOR_NAME">Compliance Major Color</Entry>
+    <Entry key="FANCY_COMPLIANCE_MAJOR_DESC">The major ending color for the Compliance faction.</Entry>
+
+    <Entry key="FANCY_FROGS_START_NAME">Frogs Start Color</Entry>
+    <Entry key="FANCY_FROGS_START_DESC">The start color for the Frogs faction.</Entry>
+
+    <Entry key="FANCY_FROGS_END_NAME">Frogs End Color</Entry>
+    <Entry key="FANCY_FROGS_END_DESC">The end color for the Frogs faction.</Entry>
+
+    <Entry key="FANCY_FROGS_MAJOR_NAME">Frogs Major Color</Entry>
+    <Entry key="FANCY_FROGS_MAJOR_DESC">The major ending color for the Frogs faction.</Entry>
+
+    <Entry key="FANCY_FROGS_LETHAL_NAME">Frogs Lethal Color</Entry>
+    <Entry key="FANCY_FROGS_LETHAL_DESC">The lethal ending color for the Frogs faction.</Entry>
+
+    <Entry key="FANCY_HAWKS_START_NAME">Hawks Start Color</Entry>
+    <Entry key="FANCY_HAWKS_START_DESC">The start color for the Hawks faction.</Entry>
+
+    <Entry key="FANCY_HAWKS_END_NAME">Hawks End Color</Entry>
+    <Entry key="FANCY_HAWKS_END_DESC">The end color for the Hawks faction.</Entry>
+
+    <Entry key="FANCY_HAWKS_MAJOR_NAME">Hawks Major Color</Entry>
+    <Entry key="FANCY_HAWKS_MAJOR_DESC">The major ending color for the Hawks faction.</Entry>
+
+    <Entry key="FANCY_HAWKS_LETHAL_NAME">Hawks Lethal Color</Entry>
+    <Entry key="FANCY_HAWKS_LETHAL_DESC">The lethal ending color for the Hawks faction.</Entry>
+
+    <Entry key="FANCY_LIONS_START_NAME">Lions Start Color</Entry>
+    <Entry key="FANCY_LIONS_START_DESC">The start color for the Lions faction.</Entry>
+
+    <Entry key="FANCY_LIONS_END_NAME">Lions End Color</Entry>
+    <Entry key="FANCY_LIONS_END_DESC">The end color for the Lions faction.</Entry>
+
+    <Entry key="FANCY_LIONS_MAJOR_NAME">Lions Major Color</Entry>
+    <Entry key="FANCY_LIONS_MAJOR_DESC">The major ending color for the Lions faction.</Entry>
+
+    <Entry key="FANCY_LIONS_LETHAL_NAME">Lions Lethal Color</Entry>
+    <Entry key="FANCY_LIONS_LETHAL_DESC">The lethal ending color for the Lions faction.</Entry>
+
+    <Entry key="FANCY_EGOTIST_START_NAME">Egotist Start Color</Entry>
+    <Entry key="FANCY_EGOTIST_START_DESC">The start color for the Egotist faction.</Entry>
+
+    <Entry key="FANCY_EGOTIST_END_NAME">Egotist End Color</Entry>
+    <Entry key="FANCY_EGOTIST_END_DESC">The end color for the Egotist faction.</Entry>
+
+    <Entry key="FANCY_EGOTIST_MAJOR_NAME">Egotist Major Color</Entry>
+    <Entry key="FANCY_EGOTIST_MAJOR_DESC">The major ending color for the Egotist faction.</Entry>
+
+    <Entry key="FANCY_EGOTIST_LETHAL_NAME">Egotist Lethal Color</Entry>
+    <Entry key="FANCY_EGOTIST_LETHAL_DESC">The lethal ending color for the Egotist faction.</Entry>
+
+    <Entry key="FANCY_VAMPIRE_START_NAME">Vampire Start Color</Entry>
+    <Entry key="FANCY_VAMPIRE_START_DESC">The start color for the Vampire faction.</Entry>
+
+    <Entry key="FANCY_VAMPIRE_END_NAME">Vampire End Color</Entry>
+    <Entry key="FANCY_VAMPIRE_END_DESC">The end color for the Vampire faction.</Entry>
+
+    <Entry key="FANCY_VAMPIRE_MAJOR_NAME">Vampire Major Color</Entry>
+    <Entry key="FANCY_VAMPIRE_MAJOR_DESC">The major ending color for the Vampire faction.</Entry>
+
+    <Entry key="FANCY_VAMPIRE_LETHAL_NAME">Vampire Lethal Color</Entry>
+    <Entry key="FANCY_VAMPIRE_LETHAL_DESC">The lethal ending color for the Vampire faction.</Entry>
+
+    <Entry key="FANCY_CURSEDSOUL_START_NAME">Cursed Soul Start Color</Entry>
+    <Entry key="FANCY_CURSEDSOUL_START_DESC">The start color for the Cursed Soul faction.</Entry>
+
+    <Entry key="FANCY_CURSEDSOUL_END_NAME">Cursed Soul End Color</Entry>
+    <Entry key="FANCY_CURSEDSOUL_END_DESC">The end color for the Cursed Soul faction.</Entry>
+
+    <Entry key="FANCY_CURSEDSOUL_MAJOR_NAME">Cursed Soul Major Color</Entry>
+    <Entry key="FANCY_CURSEDSOUL_MAJOR_DESC">The major ending color for the Cursed Soul faction.</Entry>
+
+    <Entry key="FANCY_CURSEDSOUL_LETHAL_NAME">Cursed Soul Lethal Color</Entry>
+    <Entry key="FANCY_CURSEDSOUL_LETHAL_DESC">The lethal ending color for the Cursed Soul faction.</Entry>
+
+    <Entry key="FANCY_JESTER_START_NAME">Jester Start Color</Entry>
+    <Entry key="FANCY_JESTER_START_DESC">The start color for the Jester faction.</Entry>
+
+    <Entry key="FANCY_JESTER_END_NAME">Jester End Color</Entry>
+    <Entry key="FANCY_JESTER_END_DESC">The end color for the Jester faction.</Entry>
+
+    <Entry key="FANCY_EXECUTIONER_START_NAME">Executioner Start Color</Entry>
+    <Entry key="FANCY_EXECUTIONER_START_DESC">The start color for the Executioner faction.</Entry>
+
+    <Entry key="FANCY_EXECUTIONER_END_NAME">Executioner End Color</Entry>
+    <Entry key="FANCY_EXECUTIONER_END_DESC">The end color for the Executioner faction.</Entry>
+
+    <Entry key="FANCY_DOOMSAYER_START_NAME">Doomsayer Start Color</Entry>
+    <Entry key="FANCY_DOOMSAYER_START_DESC">The start color for the Doomsayer faction.</Entry>
+
+    <Entry key="FANCY_DOOMSAYER_END_NAME">Doomsayer End Color</Entry>
+    <Entry key="FANCY_DOOMSAYER_END_DESC">The end color for the Doomsayer faction.</Entry>
+
+    <Entry key="FANCY_PIRATE_START_NAME">Pirate Start Color</Entry>
+    <Entry key="FANCY_PIRATE_START_DESC">The start color for the Pirate faction.</Entry>
+
+    <Entry key="FANCY_PIRATE_END_NAME">Pirate End Color</Entry>
+    <Entry key="FANCY_PIRATE_END_DESC">The end color for the Pirate faction.</Entry>
+
+    <Entry key="FANCY_INQUISITOR_START_NAME">Inquisitor Start Color</Entry>
+    <Entry key="FANCY_INQUISITOR_START_DESC">The start color for the Inquisitor faction.</Entry>
+
+    <Entry key="FANCY_INQUISITOR_END_NAME">Inquisitor End Color</Entry>
+    <Entry key="FANCY_INQUISITOR_END_DESC">The end color for the Inquisitor faction.</Entry>
+
+    <Entry key="FANCY_STARSPAWN_START_NAME">Starspawn Start Color</Entry>
+    <Entry key="FANCY_STARSPAWN_START_DESC">The start color for the Starspawn faction.</Entry>
+
+    <Entry key="FANCY_STARSPAWN_END_NAME">Starspawn End Color</Entry>
+    <Entry key="FANCY_STARSPAWN_END_DESC">The end color for the Starspawn faction.</Entry>
+
+    <Entry key="FANCY_JUDGE_START_NAME">Judge Start Color</Entry>
+    <Entry key="FANCY_JUDGE_START_DESC">The start color for the Judge faction.</Entry>
+
+    <Entry key="FANCY_JUDGE_END_NAME">Judge End Color</Entry>
+    <Entry key="FANCY_JUDGE_END_DESC">The end color for the Judge faction.</Entry>
+
+    <Entry key="FANCY_AUDITOR_START_NAME">Auditor Start Color</Entry>
+    <Entry key="FANCY_AUDITOR_START_DESC">The start color for the Auditor faction.</Entry>
+
+    <Entry key="FANCY_AUDITOR_END_NAME">Auditor End Color</Entry>
+    <Entry key="FANCY_AUDITOR_END_DESC">The end color for the Auditor faction.</Entry>
+
+    <Entry key="FANCY_NEUTRAL_NAME">Neutral Color</Entry>
+    <Entry key="FANCY_NEUTRAL_DESC">The Neutral color used in the Neutral role buckets.</Entry>
+
+    <Entry key="FANCY_STONED_HIDDEN_NAME">Stoned/Hidden Color</Entry>
+    <Entry key="FANCY_STONED_HIDDEN_DESC">The color for Stoned and Hidden.</Entry>
+
+    <Entry key="FANCY_LOVERS_NAME">Lovers Color</Entry>
+    <Entry key="FANCY_LOVERS_DESC">The color used when Lovers win.</Entry>
+
 
     <Entry key="FANCY_DUMP_SHEETS_NAME">Dump Sprite Sheets</Entry>
     <Entry key="FANCY_DUMP_SHEETS_DESC">Toggles whether game sprite sheets are dumped so pack debugging is possible.</Entry>
@@ -192,6 +513,26 @@
     <Entry key="FANCY_WOOD">Wood</Entry>
     <Entry key="FANCY_WAX">Wax</Entry>
     <Entry key="FANCY_ALL">All</Entry>
+
+    <Entry key="FANCY_JACKALEND">Jackal</Entry>
+    <Entry key="FANCY_FACTIONSTART">Original Start</Entry>
+    <Entry key="FANCY_FACTIONEND">Original End</Entry>
+
+    <Entry key="FANCY_MISMATCH">Mismatch</Entry>
+    <Entry key="FANCY_CONDITIONAL">Conditional</Entry>
+    <Entry key="FANCY_ALWAYS">Always</Entry>
+    <Entry key="FANCY_NEVER">Never</Entry>
+
+    <Entry key="FANCY_FACTIONWINS">Default</Entry>
+    <Entry key="FANCY_TOWNWINS">Town</Entry>
+    <Entry key="FANCY_COVENWINS">Coven</Entry>
+    <Entry key="FANCY_SERIALKILLERSWIN">Serial Killer</Entry>
+    <Entry key="FANCY_ARSONISTSWINS">Arsonist</Entry>
+    <Entry key="FANCY_WEREWOLVESWIN">Werewolf</Entry>
+    <Entry key="FANCY_SHROUDSWIN">Shroud</Entry>
+    <Entry key="FANCY_APOCOLYPSEWINS">Apocalypse</Entry>
+    <Entry key="FANCY_VAMPIREWINS">Vampire</Entry>
+
 
     <Entry key="FANCY_ROLECARD">Role Card</Entry>
     <Entry key="FANCY_PLAYERLIST">Player List</Entry>

@@ -3,7 +3,7 @@ Welcome to Fancy UI!, the tool that lets you customize <i>almost</i> anything in
 <size=200%><b>Icon Pack Creation:</b></size>
 <indent=4%>Step 1: Navigate to <b>[Your Town Of Salem 2 Installation Folder] > SalemModLoader > ModFolders > FancyUI > IconPacks</b> in your file explorer.
 Step 2: Create a folder and name it something you want your icon pack to be.
-Step 3: Navigate to the mod settings menu and select your icon pack in the <b>Selected Icon Pack</b> drop down setting.
+Step 3: Navigate to the Fancy UI settings page in the Mod Actions menu and select your icon pack in the <b>Selected Icon Pack</b> drop down setting.
 Step 4: Go back to your file explorer and enter the folder for your icon pack. There should be some folders made for you.
 Step 5: Populate the folders (only the lowest level ones, aka the roles/faction folders) with the images you want to replace, icons that don't have an image will be left unchanged.</indent>
 

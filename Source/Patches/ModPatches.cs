@@ -8,6 +8,9 @@ using Server.Shared.Cinematics;
 using Mentions;
 using Mentions.Providers;
 using UnityEngine.EventSystems;
+using Game.DevMenu;
+using Server.Shared.Collections;
+using FlexMenu;
 
 namespace FancyUI.Patches;
 
@@ -69,7 +72,7 @@ public static class RemoveJailorOverlay
 }
 
 // This patches the default win screens (used by modded factions).
-[HarmonyPatch(typeof(FactionWinsCinematicPlayer), nameof(FactionWinsCinematicPlayer.Init))]
+/* [HarmonyPatch(typeof(FactionWinsCinematicPlayer), nameof(FactionWinsCinematicPlayer.Init))]
 public static class PatchDefaultWinScreens
 {
     private static readonly int State = Animator.StringToHash("State");
@@ -167,7 +170,7 @@ public static class PatchDefaultWinScreens
         __instance.SetUpWinners(__instance.winningCharacters);
         return false;
     }
-}
+} */
 
 [HarmonyPatch(typeof(RoleRevealCinematicPlayer), nameof(RoleRevealCinematicPlayer.SetRole))]
 public static class RoleRevealCinematicPlayerPatch
@@ -180,21 +183,21 @@ public static class RoleRevealCinematicPlayerPatch
         if (role == Role.NONE)
             return true;
 
-        var flag = Constants.IconsInRoleReveal();
-        var newValue = flag
+        var showIcons = Constants.IconsInRoleReveal();
+        var skinIcon = showIcons
             ? $"<sprite=\"Cast\" name=\"Skin{__instance.roleRevealCinematic.skinId}\">{Service.Game.Cast.GetSkinName(__instance.roleRevealCinematic.skinId)}"
             : Service.Game.Cast.GetSkinName(__instance.roleRevealCinematic.skinId);
-        var text = __instance.l10n("CINE_ROLE_REVEAL_SKIN").Replace("%skin%", newValue);
-        __instance.skinTextPlayer.ShowText(text);
+        var skinText = __instance.l10n("CINE_ROLE_REVEAL_SKIN").Replace("%skin%", skinIcon);
+        __instance.skinTextPlayer.ShowText(skinText);
         __instance.totalDuration = Tuning.ROLE_REVEAL_TIME;
         __instance.silhouetteWrapper.gameObject.SetActive(true);
         __instance.silhouetteWrapper.SwapWithSilhouette((int)role);
-        var newValue2 = flag ? (role.GetTMPSprite() + role.ToColorizedDisplayString(CurrentFaction)) : role.ToColorizedDisplayString(CurrentFaction);
-        newValue2 = newValue2.Replace("RoleIcons\"", "RoleIcons (" + ((role.GetFactionType() == CurrentFaction && Constants.CurrentStyle() == "Regular")
+        var roleIcon = showIcons ? (role.GetTMPSprite() + role.ToColorizedDisplayString(CurrentFaction)) : role.ToColorizedDisplayString(CurrentFaction);
+        roleIcon = roleIcon.Replace("RoleIcons\"", "RoleIcons (" + ((role.GetFactionType() == CurrentFaction && Constants.CurrentStyle() == "Regular")
             ? "Regular"
             : Utils.FactionName(CurrentFaction, false)) + ")\"");
-        var text2 = __instance.l10n("CINE_ROLE_REVEAL_ROLE").Replace("%role%", newValue2);
-        __instance.roleTextPlayer.ShowText(text2);
+        var roleText = __instance.l10n("CINE_ROLE_REVEAL_ROLE").Replace("%role%", roleIcon);
+        __instance.roleTextPlayer.ShowText(roleText);
 
         if (Pepper.GetCurrentGameType() == GameType.Ranked)
             __instance.playableDirector.Resume();
@@ -267,14 +270,36 @@ public static class SpecialAbilityPopupGenericListItemPatch
             factionType = tuple.Item2;
         }
 
+
         var roleText = "";
+        var gradient = factionType.GetChangedGradient(role);
 
         if (role != Role.NONE)
         {
             if (Fancy.FactionalRoleNames.Value)
-                roleText = Utils.GetColorizedRoleName(role, factionType, true);
+
+            {
+                if (factionType == (FactionType)44)
+                {
+                    roleText = Utils.ApplyThreeColorGradient($"{Utils.GetRoleName(role, factionType, true)}", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
+                }
+                else 
+                { 
+                    roleText = Utils.ApplyGradient($"{Utils.GetRoleName(role, factionType, true)}", gradient.Evaluate(0f), gradient.Evaluate(1f));
+                }
+            }
             else
-                roleText = role.ToColorizedFactionStringParentheses(factionType);
+            {
+                if (factionType == (FactionType)44)
+                {
+                    roleText = Utils.ApplyThreeColorGradient($"({role.ToDisplayString()})", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
+                }
+                else 
+                { 
+                    roleText = Utils.ApplyGradient($"({role.ToDisplayString()})", gradient.Evaluate(0f), gradient.Evaluate(1f));
+                }
+            }
+
         }
 
         var text = player_name + " " + roleText;
@@ -328,13 +353,32 @@ public static class SpecialAbilityPopupDayConfirmListItemPatch
         }
 
         var roleText = "";
+        var gradient = factionType.GetChangedGradient(role);
 
         if (role != Role.NONE)
         {
             if (Fancy.FactionalRoleNames.Value)
-                roleText = Utils.GetColorizedRoleName(role, factionType, true);
+            {
+                if (factionType == (FactionType)44)
+                {
+                    roleText = Utils.ApplyThreeColorGradient($"{Utils.GetRoleName(role, factionType, true)}", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
+                }
+                else 
+                { 
+                    roleText = Utils.ApplyGradient($"{Utils.GetRoleName(role, factionType, true)}", gradient.Evaluate(0f), gradient.Evaluate(1f));
+                }
+            }
             else
-                roleText = role.ToColorizedFactionStringParentheses(factionType);
+            {
+                if (factionType == (FactionType)44)
+                {
+                    roleText = Utils.ApplyThreeColorGradient($"({role.ToDisplayString()})", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
+                }
+                else 
+                { 
+                    roleText = Utils.ApplyGradient($"({role.ToDisplayString()})", gradient.Evaluate(0f), gradient.Evaluate(1f));
+                }
+            }
         }
 
         var text = player_name + " " + roleText;
@@ -374,15 +418,35 @@ public static class SpecialAbilityPopupNecromancerRetributionistListItemPatch
             role2 = tuple.Item1;
             factionType = tuple.Item2;
         }
+        
 
         var roleText = "";
+        var gradient = factionType.GetChangedGradient(role2);
 
         if (role2 != Role.NONE)
         {
             if (Fancy.FactionalRoleNames.Value)
-                roleText = Utils.GetColorizedRoleName(role2, factionType, true);
+            {
+                if (factionType == (FactionType)44)
+                {
+                    roleText = Utils.ApplyThreeColorGradient($"{Utils.GetRoleName(role2, factionType, true)}", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
+                }
+                else 
+                { 
+                    roleText = Utils.ApplyGradient($"{Utils.GetRoleName(role2, factionType, true)}", gradient.Evaluate(0f), gradient.Evaluate(1f));
+                }
+            }
             else
-                roleText = role2.ToColorizedFactionStringParentheses(factionType);
+            {
+                if (factionType == (FactionType)44)
+                {
+                    roleText = Utils.ApplyThreeColorGradient($"({role2.ToDisplayString()})", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
+                }
+                else 
+                { 
+                    roleText = Utils.ApplyGradient($"({role2.ToDisplayString()})", gradient.Evaluate(0f), gradient.Evaluate(1f));
+                }
+            }
         }
 
         var text = player_name + " " + roleText;
@@ -448,6 +512,38 @@ public static class FixMyFaction
 
         return false;
     }
+
+    [HarmonyPatch(typeof(FactionWinsCinematicData), nameof(FactionWinsCinematicData.SetFaction))]
+    public static class VictoryCinematicSwapperPatch
+    {
+        private static readonly Dictionary<FactionType, CinematicType> CinematicMap = new()
+        {
+            { FactionType.TOWN, Fancy.TownCinematic.Value },
+            { FactionType.COVEN, Fancy.CovenCinematic.Value },
+            { FactionType.SERIALKILLER, Fancy.SerialKillerCinematic.Value },
+            { FactionType.ARSONIST, Fancy.ArsonistCinematic.Value },
+            { FactionType.WEREWOLF, Fancy.WerewolfCinematic.Value },
+            { FactionType.SHROUD, Fancy.ShroudCinematic.Value },
+            { FactionType.APOCALYPSE, Fancy.ApocalypseCinematic.Value },
+            { FactionType.VAMPIRE, Fancy.VampireCinematic.Value },
+            { (FactionType)33, Fancy.JackalCinematic.Value },
+            { (FactionType)34, Fancy.FrogsCinematic.Value },
+            { (FactionType)35, Fancy.LionsCinematic.Value },
+            { (FactionType)36, Fancy.HawksCinematic.Value },
+            { (FactionType)43, Fancy.PandoraCinematic.Value },
+            { (FactionType)44, Fancy.ComplianceCinematic.Value },
+            { (FactionType)250, Fancy.LoversCinematic.Value },
+        };
+
+        public static void Postfix(FactionType factionType, FactionWinsCinematicData __instance)
+        {
+            __instance.winningFaction_ = factionType;
+
+            if (CinematicMap.TryGetValue(factionType, out var cinematic))
+            {
+                __instance.cinematicType_ = cinematic;
+            }
+        }
 }
 
 // Did the guys at TMP never think of devs trying to modify the arrow button??? seriously??? the drop downs look so damn off with the arrow not updating up or down with respect to its selection
