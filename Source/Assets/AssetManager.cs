@@ -1,4 +1,3 @@
-using BetterTOS2;
 using FancyUI.Assets.IconPacks;
 using FancyUI.Assets.SilhouetteSwapper;
 using NewModLoading;
@@ -127,7 +126,7 @@ public static class FancyAssetManager
         if (!Directory.Exists(btos))
             Directory.CreateDirectory(btos);
 
-        BTOS21 = BTOSInfo.assetBundle.LoadAsset<TMP_SpriteAsset>("Roles");
+        BTOS21 = BetterTOS2.BTOSInfo.assetBundle.LoadAsset<TMP_SpriteAsset>("Roles");
 
         foreach (var character in BTOS21.spriteGlyphTable)
         {
@@ -139,7 +138,7 @@ public static class FancyAssetManager
         }
 
         Utils.DumpSprite(BTOS21.spriteSheet as Texture2D, "BTOSRoleIcons", Path.Combine(IPPath, "BTOS2"), true);
-        Fancy.Instance.Assets.RegisterBundle(BTOSInfo.assetBundle);
+        Fancy.Instance.Assets.RegisterBundle(BetterTOS2.BTOSInfo.assetBundle);
     }
 
     public static string FancySanitisePath(this string path, bool removeIcon = false)
