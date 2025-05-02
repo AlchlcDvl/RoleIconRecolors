@@ -283,8 +283,8 @@ public static class SpecialAbilityPopupGenericListItemPatch
                 {
                     roleText = Utils.ApplyThreeColorGradient($"{Utils.GetRoleName(role, factionType, true)}", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
                 }
-                else 
-                { 
+                else
+                {
                     roleText = Utils.ApplyGradient($"{Utils.GetRoleName(role, factionType, true)}", gradient.Evaluate(0f), gradient.Evaluate(1f));
                 }
             }
@@ -294,8 +294,8 @@ public static class SpecialAbilityPopupGenericListItemPatch
                 {
                     roleText = Utils.ApplyThreeColorGradient($"({role.ToDisplayString()})", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
                 }
-                else 
-                { 
+                else
+                {
                     roleText = Utils.ApplyGradient($"({role.ToDisplayString()})", gradient.Evaluate(0f), gradient.Evaluate(1f));
                 }
             }
@@ -363,8 +363,8 @@ public static class SpecialAbilityPopupDayConfirmListItemPatch
                 {
                     roleText = Utils.ApplyThreeColorGradient($"{Utils.GetRoleName(role, factionType, true)}", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
                 }
-                else 
-                { 
+                else
+                {
                     roleText = Utils.ApplyGradient($"{Utils.GetRoleName(role, factionType, true)}", gradient.Evaluate(0f), gradient.Evaluate(1f));
                 }
             }
@@ -374,8 +374,8 @@ public static class SpecialAbilityPopupDayConfirmListItemPatch
                 {
                     roleText = Utils.ApplyThreeColorGradient($"({role.ToDisplayString()})", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
                 }
-                else 
-                { 
+                else
+                {
                     roleText = Utils.ApplyGradient($"({role.ToDisplayString()})", gradient.Evaluate(0f), gradient.Evaluate(1f));
                 }
             }
@@ -418,7 +418,7 @@ public static class SpecialAbilityPopupNecromancerRetributionistListItemPatch
             role2 = tuple.Item1;
             factionType = tuple.Item2;
         }
-        
+
 
         var roleText = "";
         var gradient = factionType.GetChangedGradient(role2);
@@ -431,8 +431,8 @@ public static class SpecialAbilityPopupNecromancerRetributionistListItemPatch
                 {
                     roleText = Utils.ApplyThreeColorGradient($"{Utils.GetRoleName(role2, factionType, true)}", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
                 }
-                else 
-                { 
+                else
+                {
                     roleText = Utils.ApplyGradient($"{Utils.GetRoleName(role2, factionType, true)}", gradient.Evaluate(0f), gradient.Evaluate(1f));
                 }
             }
@@ -442,8 +442,8 @@ public static class SpecialAbilityPopupNecromancerRetributionistListItemPatch
                 {
                     roleText = Utils.ApplyThreeColorGradient($"({role2.ToDisplayString()})", gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f));
                 }
-                else 
-                { 
+                else
+                {
                     roleText = Utils.ApplyGradient($"({role2.ToDisplayString()})", gradient.Evaluate(0f), gradient.Evaluate(1f));
                 }
             }
@@ -512,38 +512,39 @@ public static class FixMyFaction
 
         return false;
     }
+}
 
-    [HarmonyPatch(typeof(FactionWinsCinematicData), nameof(FactionWinsCinematicData.SetFaction))]
-    public static class VictoryCinematicSwapperPatch
+[HarmonyPatch(typeof(FactionWinsCinematicData), nameof(FactionWinsCinematicData.SetFaction))]
+public static class VictoryCinematicSwapperPatch
+{
+    private static readonly Dictionary<FactionType, CinematicType> CinematicMap = new()
     {
-        private static readonly Dictionary<FactionType, CinematicType> CinematicMap = new()
-        {
-            { FactionType.TOWN, Fancy.TownCinematic.Value },
-            { FactionType.COVEN, Fancy.CovenCinematic.Value },
-            { FactionType.SERIALKILLER, Fancy.SerialKillerCinematic.Value },
-            { FactionType.ARSONIST, Fancy.ArsonistCinematic.Value },
-            { FactionType.WEREWOLF, Fancy.WerewolfCinematic.Value },
-            { FactionType.SHROUD, Fancy.ShroudCinematic.Value },
-            { FactionType.APOCALYPSE, Fancy.ApocalypseCinematic.Value },
-            { FactionType.VAMPIRE, Fancy.VampireCinematic.Value },
-            { (FactionType)33, Fancy.JackalCinematic.Value },
-            { (FactionType)34, Fancy.FrogsCinematic.Value },
-            { (FactionType)35, Fancy.LionsCinematic.Value },
-            { (FactionType)36, Fancy.HawksCinematic.Value },
-            { (FactionType)43, Fancy.PandoraCinematic.Value },
-            { (FactionType)44, Fancy.ComplianceCinematic.Value },
-            { (FactionType)250, Fancy.LoversCinematic.Value },
-        };
+        { FactionType.TOWN, Fancy.TownCinematic.Value },
+        { FactionType.COVEN, Fancy.CovenCinematic.Value },
+        { FactionType.SERIALKILLER, Fancy.SerialKillerCinematic.Value },
+        { FactionType.ARSONIST, Fancy.ArsonistCinematic.Value },
+        { FactionType.WEREWOLF, Fancy.WerewolfCinematic.Value },
+        { FactionType.SHROUD, Fancy.ShroudCinematic.Value },
+        { FactionType.APOCALYPSE, Fancy.ApocalypseCinematic.Value },
+        { FactionType.VAMPIRE, Fancy.VampireCinematic.Value },
+        { (FactionType)33, Fancy.JackalCinematic.Value },
+        { (FactionType)34, Fancy.FrogsCinematic.Value },
+        { (FactionType)35, Fancy.LionsCinematic.Value },
+        { (FactionType)36, Fancy.HawksCinematic.Value },
+        { (FactionType)43, Fancy.PandoraCinematic.Value },
+        { (FactionType)44, Fancy.ComplianceCinematic.Value },
+        { (FactionType)250, Fancy.LoversCinematic.Value },
+    };
 
-        public static void Postfix(FactionType factionType, FactionWinsCinematicData __instance)
-        {
-            __instance.winningFaction_ = factionType;
+    public static void Postfix(FactionType factionType, FactionWinsCinematicData __instance)
+    {
+        __instance.winningFaction_ = factionType;
 
-            if (CinematicMap.TryGetValue(factionType, out var cinematic))
-            {
-                __instance.cinematicType_ = cinematic;
-            }
+        if (CinematicMap.TryGetValue(factionType, out var cinematic))
+        {
+            __instance.cinematicType_ = cinematic;
         }
+    }
 }
 
 // Did the guys at TMP never think of devs trying to modify the arrow button??? seriously??? the drop downs look so damn off with the arrow not updating up or down with respect to its selection
