@@ -1,24 +1,21 @@
 namespace FancyUI.UI;
 public class GradientRoleColorController : MonoBehaviour
 {
-    public RoleCardPanelBackground __instance;
+    public RoleCardPanelBackground Instance;
 
-    private Coroutine activeCoroutine;
-    private readonly float duration = 10f;
-    private float value = 0f;
+    private Coroutine ActiveCoroutine;
+    private readonly float Duration = 10f;
+    private float Value;
 
-    private void Start()
+    public void Start() => ActiveCoroutine = StartCoroutine(ChangeValueOverTime(Instance.currentFaction, Instance.currentRole));
+
+    public void OnDestroy()
     {
-        activeCoroutine = StartCoroutine(ChangeValueOverTime(__instance.currentFaction, __instance.currentRole));
-    }
+        if (ActiveCoroutine == null)
+            return;
 
-    private void OnDestroy()
-    {
-        if (activeCoroutine != null)
-        {
-            StopCoroutine(activeCoroutine);
-            activeCoroutine = null;
-        }
+        StopCoroutine(ActiveCoroutine);
+        ActiveCoroutine = null;
     }
 
     private IEnumerator ChangeValueOverTime(FactionType faction, Role role)
@@ -26,31 +23,24 @@ public class GradientRoleColorController : MonoBehaviour
         var grad = faction.GetChangedGradient(role);
 
         if (grad == null)
-        {
             yield break;
-        }
 
         while (true)
         {
-            for (var t = 0f; t < duration; t += Time.deltaTime)
+            yield return Coroutines.CoPerformTimedAction(Duration, t =>
             {
-                value = Mathf.Lerp(0f, 1f, t / duration);
-                if (__instance != null && __instance.rolecardBackgroundInstance != null)
-                {
-                    __instance.rolecardBackgroundInstance.SetColor(grad.Evaluate(value));
-                }
-                yield return null;
-            }
+                Value = Mathf.Lerp(0f, 1f, t);
 
-            for (var t2 = 0f; t2 < duration; t2 += Time.deltaTime)
+                if (Instance?.rolecardBackgroundInstance)
+                    Instance.rolecardBackgroundInstance.SetColor(grad.Evaluate(Value));
+            });
+            yield return Coroutines.CoPerformTimedAction(Duration, t =>
             {
-                value = Mathf.Lerp(1f, 0f, t2 / duration);
-                if (__instance != null && __instance.rolecardBackgroundInstance != null)
-                {
-                    __instance.rolecardBackgroundInstance.SetColor(grad.Evaluate(value));
-                }
-                yield return null;
-            }
+                Value = Mathf.Lerp(1f, 0f, t);
+
+                if (Instance?.rolecardBackgroundInstance)
+                    Instance.rolecardBackgroundInstance.SetColor(grad.Evaluate(Value));
+            });
         }
     }
 }

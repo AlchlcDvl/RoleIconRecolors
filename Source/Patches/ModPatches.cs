@@ -1,11 +1,11 @@
+using Cinematics.Players;
 using Home.HomeScene;
 using Home.LoginScene;
-using SalemModLoaderUI;
 using Home.Shared;
-using Cinematics.Players;
-using Server.Shared.Cinematics.Data;
 using Mentions;
 using Mentions.Providers;
+using SalemModLoaderUI;
+using Server.Shared.Cinematics.Data;
 using UnityEngine.EventSystems;
 
 namespace FancyUI.Patches;
@@ -189,9 +189,9 @@ public static class RoleRevealCinematicPlayerPatch
         __instance.silhouetteWrapper.gameObject.SetActive(true);
         __instance.silhouetteWrapper.SwapWithSilhouette((int)role);
         var roleIcon = showIcons ? (role.GetTMPSprite() + role.ToColorizedDisplayString(CurrentFaction)) : role.ToColorizedDisplayString(CurrentFaction);
-        roleIcon = roleIcon.Replace("RoleIcons\"", "RoleIcons (" + ((role.GetFactionType() == CurrentFaction && Constants.CurrentStyle() == "Regular")
+        roleIcon = roleIcon.Replace("RoleIcons\"", $"RoleIcons ({((role.GetFactionType() == CurrentFaction && Constants.CurrentStyle() == "Regular")
             ? "Regular"
-            : Utils.FactionName(CurrentFaction, false)) + ")\"");
+            : Utils.FactionName(CurrentFaction, false))})\"");
         var roleText = __instance.l10n("CINE_ROLE_REVEAL_ROLE").Replace("%role%", roleIcon);
         __instance.roleTextPlayer.ShowText(roleText);
 
@@ -272,7 +272,7 @@ public static class SpecialAbilityPopupGenericListItemPatch
         if (role != Role.NONE)
             roleText = Fancy.FactionalRoleNames.Value ? Utils.GetRoleName(role, factionType, true) : role.ToDisplayString();
 
-        var text = player_name + " " + Utils.ApplyGradient(roleText, gradient);
+        var text = $"{player_name} {Utils.ApplyGradient(roleText, gradient)}";
         __instance.playerName.SetText(text);
         __instance.playerHeadshot.sprite = headshot;
         __instance.characterPosition = position;
@@ -328,7 +328,7 @@ public static class SpecialAbilityPopupDayConfirmListItemPatch
         if (role != Role.NONE)
             roleText = Fancy.FactionalRoleNames.Value ? Utils.GetRoleName(role, factionType, true) : role.ToDisplayString();
 
-        var text = player_name + " " + Utils.ApplyGradient(roleText, gradient);
+        var text = $"{player_name} {Utils.ApplyGradient(roleText, gradient)}";
         __instance.playerName.SetText(text);
         __instance.playerHeadshot.sprite = headshot;
         __instance.characterPosition = position;
@@ -372,7 +372,7 @@ public static class SpecialAbilityPopupNecromancerRetributionistListItemPatch
         if (role2 != Role.NONE)
             roleText = Fancy.FactionalRoleNames.Value ? Utils.GetRoleName(role2, factionType, true) : role2.ToDisplayString();
 
-        var text = player_name + " " + Utils.ApplyGradient(roleText, gradient);
+        var text = $"{player_name} {Utils.ApplyGradient(roleText, gradient)}";
         __instance.playerName.SetText(text);
         __instance.playerHeadshot.sprite = headshot;
         __instance.characterPosition = position;
@@ -479,6 +479,6 @@ public static class DropdownPatch
         var parent = __instance.GetComponentInParent<DropdownSetting>();
 
         if (parent)
-            parent.Arrow.sprite = Fancy.Instance.Assets.GetSprite("DropDown_Arrow" + (__instance.IsExpanded ? "Up" : "Down"));
+            parent.Arrow.sprite = Fancy.Instance.Assets.GetSprite($"DropDown_Arrow{(__instance.IsExpanded ? "Up" : "Down")}");
     }
 }

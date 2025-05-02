@@ -1,3 +1,5 @@
+using BetterTOS2;
+
 namespace FancyUI;
 
 public static class Constants
@@ -123,7 +125,7 @@ public static class Constants
         }
     }
 
-    private static bool IsBTOS2Bypass() => BTOS2Exists() && BetterTOS2.BTOSInfo.IS_MODDED;
+    private static bool IsBTOS2Bypass() => BTOS2Exists() && BTOSInfo.IS_MODDED;
 
     public static bool IsNecroActive()
     {

@@ -1,7 +1,7 @@
-using UnityEngine.Networking;
-using Newtonsoft.Json;
-using FancyUI.Assets.IconPacks;
 using System.IO.Compression;
+using FancyUI.Assets.IconPacks;
+using Newtonsoft.Json;
+using UnityEngine.Networking;
 
 namespace FancyUI.UI;
 
@@ -161,7 +161,7 @@ public class DownloaderUI : UIController
             return null;
         }
 
-        var packJson = new PackJson()
+        var packJson = new PackJson
         {
             Name = packNameText,
             RepoName = RepoName.text,

@@ -479,7 +479,7 @@ public class Fancy : BaseMod<Fancy>
 
     private static string[] GetPackNames(PackType type)
     {
-        var result = new List<string>() { "Vanilla" };
+        var result = new List<string> { "Vanilla" };
 
         foreach (var dir in Directory.EnumerateDirectories(Path.Combine(Instance.ModPath, type.ToString())))
         {

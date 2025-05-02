@@ -1,5 +1,6 @@
-using FancyUI.Assets.SilhouetteSwapper;
+using BetterTOS2;
 using FancyUI.Assets.IconPacks;
+using FancyUI.Assets.SilhouetteSwapper;
 using NewModLoading;
 
 namespace FancyUI.Assets;
@@ -126,7 +127,7 @@ public static class FancyAssetManager
         if (!Directory.Exists(btos))
             Directory.CreateDirectory(btos);
 
-        BTOS21 = BetterTOS2.BTOSInfo.assetBundle.LoadAsset<TMP_SpriteAsset>("Roles");
+        BTOS21 = BTOSInfo.assetBundle.LoadAsset<TMP_SpriteAsset>("Roles");
 
         foreach (var character in BTOS21.spriteGlyphTable)
         {
@@ -138,7 +139,7 @@ public static class FancyAssetManager
         }
 
         Utils.DumpSprite(BTOS21.spriteSheet as Texture2D, "BTOSRoleIcons", Path.Combine(IPPath, "BTOS2"), true);
-        Fancy.Instance.Assets.RegisterBundle(BetterTOS2.BTOSInfo.assetBundle);
+        Fancy.Instance.Assets.RegisterBundle(BTOSInfo.assetBundle);
     }
 
     public static string FancySanitisePath(this string path, bool removeIcon = false)
@@ -200,8 +201,7 @@ public static class FancyAssetManager
     {
         IconPack pack = null;
         var game = Utils.GetGameType();
-        var diagnostic = $"Uh oh, something happened here\nPack Name: {Constants.CurrentPack()}\nStyle Name: {Constants.CurrentStyle()}\nFaction Override: {Constants.FactionOverride()}\n" +
-            $"Custom Numbers: {Constants.CustomNumbers()}";
+        var diagnostic = $"Uh oh, something happened here\nPack Name: {Constants.CurrentPack()}\nStyle Name: {Constants.CurrentStyle()}\nFaction Override: {Constants.FactionOverride()}\nCustom Numbers: {Constants.CustomNumbers()}";
 
         if (!CacheDefaults.RoleIcons)
             diagnostic += "\nVanilla Sheet Does Not Exist";
@@ -297,7 +297,7 @@ public static class FancyAssetManager
             foreach (var (role, roleInt) in index.Item2)
             {
                 var name = Utils.RoleName((Role)roleInt, GameModType.Vanilla);
-                var sprite = Fancy.Instance.Assets.GetSprite(name + "_Vanilla") ?? Blank;
+                var sprite = Fancy.Instance.Assets.GetSprite($"{name}_Vanilla") ?? Blank;
 
                 if (!sprite.IsValid())
                     sprite = Fancy.Instance.Assets.GetSprite(name) ?? Blank;
@@ -392,7 +392,7 @@ public static class FancyAssetManager
             foreach (var (role, roleInt) in index.Item2)
             {
                 var name = Utils.RoleName((Role)roleInt, GameModType.BTOS2);
-                var sprite = Fancy.Instance.Assets.GetSprite(name + "_BTOS2") ?? Blank;
+                var sprite = Fancy.Instance.Assets.GetSprite($"{name}_BTOS2") ?? Blank;
 
                 if (!sprite.IsValid())
                     sprite = Fancy.Instance.Assets.GetSprite(name) ?? Blank;

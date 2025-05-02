@@ -95,7 +95,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                     foreach (var name1 in ModsToFolders[mod])
                     {
                         var baseIcons = assets.BaseIcons[name1] = [];
-                        var baseName = name1 + "Base";
+                        var baseName = $"{name1}Base";
                         var baseFolder = Path.Combine(modPath, baseName);
 
                         if (Directory.Exists(baseFolder))
@@ -121,7 +121,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                             GlobalEasterEggs[name1] = globalEasterEggs = [];
 
                         var easterEggs = assets.EasterEggs[name1] = [];
-                        var eeName = name1 + "EasterEggs";
+                        var eeName = $"{name1}EasterEggs";
                         var eeFolder = Path.Combine(modPath, eeName);
 
                         if (Directory.Exists(eeFolder))
@@ -346,14 +346,14 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
             var name2 = Utils.RoleName(roleEnum, type);
             var factionEnum = roleEnum.GetFactionType(type);
             var name3 = Utils.FactionName(factionEnum, type);
-            var sprite = icons.TryGetValue(name2 + $"_{mod}", out var sprite1) ? sprite1 : Blank;
+            var sprite = icons.TryGetValue($"{name2}_{mod}", out var sprite1) ? sprite1 : Blank;
 
             if (!sprite.IsValid())
                 sprite = icons.TryGetValue(name2, out sprite1) ? sprite1 : Blank;
 
             if (!sprite.IsValid() && name3 != style && Assets[type].BaseIcons.TryGetValue(name3, out var icons2))
             {
-                sprite = icons2.TryGetValue(name2 + $"_{mod}", out sprite1) ? sprite1 : Blank;
+                sprite = icons2.TryGetValue($"{name2}_{mod}", out sprite1) ? sprite1 : Blank;
 
                 if (!sprite.IsValid())
                     sprite = icons2.TryGetValue(name2, out sprite1) ? sprite1 : Blank;
@@ -361,7 +361,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
 
             if (!sprite.IsValid() && name3 != style && Assets[GameModType.Common].BaseIcons.TryGetValue(name3, out icons2))
             {
-                sprite = icons2.TryGetValue(name2 + $"_{mod}", out sprite1) ? sprite1 : Blank;
+                sprite = icons2.TryGetValue($"{name2}_{mod}", out sprite1) ? sprite1 : Blank;
 
                 if (!sprite.IsValid())
                     sprite = icons2.TryGetValue(name2, out sprite1) ? sprite1 : Blank;
@@ -369,7 +369,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
 
             if (!sprite.IsValid() && style != "Regular" && Assets[GameModType.Common].BaseIcons.TryGetValue("Regular", out icons2))
             {
-                sprite = icons2.TryGetValue(name2 + $"_{mod}", out sprite1) ? sprite1 : Blank;
+                sprite = icons2.TryGetValue($"{name2}_{mod}", out sprite1) ? sprite1 : Blank;
 
                 if (!sprite.IsValid())
                     sprite = icons2.TryGetValue(name2, out sprite1) ? sprite1 : Blank;
@@ -377,14 +377,14 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
 
             if (!sprite.IsValid() && style != "Factionless" && Assets[GameModType.Common].BaseIcons.TryGetValue("Factionless", out icons2))
             {
-                sprite = icons2.TryGetValue(name2 + $"_{mod}", out sprite1) ? sprite1 : Blank;
+                sprite = icons2.TryGetValue($"{name2}_{mod}", out sprite1) ? sprite1 : Blank;
 
                 if (!sprite.IsValid())
                     sprite = icons2.TryGetValue(name2, out sprite1) ? sprite1 : Blank;
             }
 
             if (!sprite.IsValid())
-                sprite = Fancy.Instance.Assets.GetSprite(name2 + $"_{mod}") ?? Blank;
+                sprite = Fancy.Instance.Assets.GetSprite($"{name2}_{mod}") ?? Blank;
 
             if (!sprite.IsValid())
                 sprite = Fancy.Instance.Assets.GetSprite(name2) ??  Blank;
@@ -458,12 +458,12 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
 
             foreach (var name1 in ModsToFolders[mod])
             {
-                var baseFolder = Path.Combine(modPath, name1 + "Base");
+                var baseFolder = Path.Combine(modPath, $"{name1}Base");
 
                 if (!Directory.Exists(baseFolder))
                     Directory.CreateDirectory(baseFolder);
 
-                var eeFolder = Path.Combine(modPath, name1 + "EasterEggs");
+                var eeFolder = Path.Combine(modPath, $"{name1}EasterEggs");
 
                 if (!Directory.Exists(eeFolder))
                     Directory.CreateDirectory(eeFolder);

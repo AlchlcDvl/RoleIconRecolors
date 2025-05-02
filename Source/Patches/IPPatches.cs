@@ -1,14 +1,14 @@
-using Home.Services;
-using SalemModLoader;
+using System.Text.RegularExpressions;
+using Game.Chat.Decoders;
 using Game.Services;
 using Game.Simulation;
-using Game.Chat.Decoders;
+using Home.Services;
+using Home.Shared;
+using Mentions;
+using SalemModLoader;
+using Server.Shared.Extensions;
 using Server.Shared.Messages;
 using Server.Shared.State.Chat;
-using Mentions;
-using Server.Shared.Extensions;
-using Home.Shared;
-using System.Text.RegularExpressions;
 using AbilityType = Game.Interface.TosAbilityPanelListItem.OverrideAbilityType;
 
 namespace FancyUI.Patches;
@@ -71,7 +71,7 @@ public static class RoleCardFixesAndPatches
     public static bool Prefix(RoleCardPanelBackground __instance)
     {
         __instance.rolecardBackgroundInstance = UObject.Instantiate(__instance.rolecardBackgroundTemplate);
-        Debug.Log("RoleCardPanelBackground Created " + __instance.rolecardBackgroundInstance.name);
+        Debug.Log($"RoleCardPanelBackground Created {__instance.rolecardBackgroundInstance.name}");
         __instance.deadStamp.SetActive(false);
 
         if (Service.Game.Sim.simulation != null)
@@ -147,20 +147,20 @@ public static class PatchRoleCards
         var ability1 = GetSprite(reg, abilityName, factionName);
 
         if (!ability1.IsValid())
-            ability1 = GetSprite(reg, abilityName + "_1", factionName);
+            ability1 = GetSprite(reg, $"{abilityName}_1", factionName);
 
         if (!ability1.IsValid() && reg)
             ability1 = GetSprite(abilityName, ogfaction);
 
         if (!ability1.IsValid() && reg)
-            ability1 = GetSprite(abilityName + "_1", ogfaction);
+            ability1 = GetSprite($"{abilityName}_1", ogfaction);
 
         if (ability1.IsValid() && roleInfoButtons.IsValid(index))
         {
             roleInfoButtons[index].abilityIcon.sprite = ability1;
             index++;
         }
-        else if (Utils.Skippable(abilityName) || Utils.Skippable(abilityName + "_1"))
+        else if (Utils.Skippable(abilityName) || Utils.Skippable($"{abilityName}_1"))
             index++;
 
         var abilityName2 = $"{roleName}_Ability_2";
@@ -340,7 +340,7 @@ public static class PatchAbilityPanelListItems
                 var ability1 = GetSprite(reg, abilityName, faction, ee);
 
                 if (!ability1.IsValid())
-                    ability1 = GetSprite(reg, abilityName + "_1", faction, ee);
+                    ability1 = GetSprite(reg, $"{abilityName}_1", faction, ee);
 
                 if (reg)
                 {
@@ -348,16 +348,16 @@ public static class PatchAbilityPanelListItems
                         ability1 = GetSprite(abilityName, ogfaction, ee);
 
                     if (!ability1.IsValid())
-                        ability1 = GetSprite(abilityName + "_1", ogfaction, ee);
+                        ability1 = GetSprite($"{abilityName}_1", ogfaction, ee);
                 }
 
                 if (ability1.IsValid() && __instance.choice1Sprite)
                     __instance.choice1Sprite.sprite = ability1;
 
-                var ability2 = GetSprite(reg, abilityName + "_2", faction, ee);
+                var ability2 = GetSprite(reg, $"{abilityName}_2", faction, ee);
 
                 if (!ability2.IsValid() && reg)
-                    ability2 = GetSprite(abilityName + "_2", ogfaction, ee);
+                    ability2 = GetSprite($"{abilityName}_2", ogfaction, ee);
 
                 if (ability2.IsValid() && __instance.choice2Sprite)
                     __instance.choice2Sprite.sprite = ability2;
@@ -601,7 +601,7 @@ public static class PlayerEffectsServicePatch
 
         var effect = Utils.EffectName(effectType);
         var ee = Constants.PlayerPanelEasterEggs();
-        var sprite = GetSprite(effect + "_Effect", ee);
+        var sprite = GetSprite($"{effect}_Effect", ee);
 
         if (!sprite.IsValid())
             sprite = GetSprite(effect, ee);
@@ -639,7 +639,7 @@ public static class GetVipRoleIconAndNameInlineStringPatch
     public static void Postfix(ref string __result)
     {
         if (Constants.EnableIcons())
-            __result = __result.Replace("RoleIcons\"", "RoleIcons (VIP)\"") + " <sprite=\"RoleIcons\" name=\"Role201\">";
+            __result = $"{__result.Replace("RoleIcons\"", "RoleIcons (VIP)\"")} <sprite=\"RoleIcons\" name=\"Role201\">";
     }
 }
 
@@ -931,7 +931,7 @@ public static class MentionsProviderPatches
         var text = __instance._useColors ? role.ToColorizedDisplayString(factionType) : role.ToRoleFactionDisplayString(factionType);
         var text2 = __instance._roleEffects ? $"<sprite=\"RoleIcons ({Utils.FactionName(factionType)})\" name=\"Role{(int)role}\">" : "";
         var text3 = $"{__instance.styleTagOpen}{__instance.styleTagFont}<link=\"r{(int)role},{(int)factionType}\">{text2}<b>{text}</b></link>{__instance.styleTagClose}";
-        var item = new MentionInfo()
+        var item = new MentionInfo
         {
             encodedText = mention,
             richText = text3,
@@ -995,8 +995,7 @@ public static class MakeProperFactionChecksInHeaderAnnouncement
         }
 
         var text = __instance.l10n("GUI_GAME_WHO_DIED_AND_HOW_1_2")
-            .Replace("%role%", $"<sprite=\"RoleIcons ({Utils.FactionName(killRecord.playerFaction)})\" name=\"Role{(int)killRecord.playerRole}\">" +
-                killRecord.playerRole.ToColorizedDisplayString(killRecord.playerFaction))
+            .Replace("%role%", $"<sprite=\"RoleIcons ({Utils.FactionName(killRecord.playerFaction)})\" name=\"Role{(int)killRecord.playerRole}\">{killRecord.playerRole.ToColorizedDisplayString(killRecord.playerFaction)}")
             .Replace("%name%", Service.Game.Sim.simulation.GetDisplayName(trialData.defendantPosition).ToWhiteNameString());
 
         if (Constants.IsBTOS2())
@@ -1030,8 +1029,7 @@ public static class MakeProperFactionChecksInWdah1
             Role.NONE or Role.UNKNOWN => "GUI_GAME_WHO_DIED_VICTIM_ROLE_UNKNOWN",
             _ => "GUI_GAME_WHO_DIED_VICTIM_ROLE_KNOWN"
         })
-        .Replace("%role%", $"<sprite=\"RoleIcons ({Utils.FactionName(killRecord.playerFaction)})\" name=\"Role{(int)killRecord.playerRole}\">" +
-            killRecord.playerRole.ToColorizedDisplayString(killRecord.playerFaction));
+        .Replace("%role%", $"<sprite=\"RoleIcons ({Utils.FactionName(killRecord.playerFaction)})\" name=\"Role{(int)killRecord.playerRole}\">{killRecord.playerRole.ToColorizedDisplayString(killRecord.playerFaction)}");
 
         if (Constants.IsBTOS2())
             text = text.Replace("\"RoleIcons", "\"BTOSRoleIcons");
@@ -1049,7 +1047,7 @@ public static class MakeProperFactionChecksInWdah2
         if (!Constants.EnableIcons())
             return true;
 
-        Debug.Log("HandleSubphaseWhoDied phaseTime = " + phaseTime);
+        Debug.Log($"HandleSubphaseWhoDied phaseTime = {phaseTime}");
 
         if (__instance.tombstonePanel != null)
             __instance.tombstonePanel.Clear();

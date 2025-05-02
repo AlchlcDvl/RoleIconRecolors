@@ -1,4 +1,6 @@
 // using FancyUI.Assets.SilhouetteSwapper;
+
+using BetterTOS2;
 using Home.Shared;
 using NewModLoading;
 
@@ -482,7 +484,7 @@ public static class Utils
         }
     }
 
-    private static bool FindCasualQueueBypass() => Constants.BTOS2Exists() && BetterTOS2.BTOSInfo.CasualModeController;
+    private static bool FindCasualQueueBypass() => Constants.BTOS2Exists() && BTOSInfo.CasualModeController;
 
     public static bool IsEthereal(this UIRoleData.UIRoleDataInstance ui)
     {
@@ -681,7 +683,7 @@ public static class Utils
         var result = role.ToDisplayString();
 
         if (role.GetFactionType() != faction)
-            result += $" ({faction.ToDisplayString()})";
+            result += $" ({ClientRoleExtensions.ToDisplayString(faction)})";
 
         return result;
     }
