@@ -4,6 +4,7 @@ public class DropdownSetting : Setting
 {
     public TMP_Dropdown Dropdown { get; set; }
     public IDropdown Option { get; set; }
+    public Image Arrow { get; set; }
 
     public override Option BoxedOption
     {
@@ -15,6 +16,7 @@ public class DropdownSetting : Setting
     {
         base.Awake();
         Dropdown = transform.GetComponent<TMP_Dropdown>("Dropdown");
+        Arrow = Dropdown.transform.GetComponent<Image>("Arrow");
     }
 
     public void Start()

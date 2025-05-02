@@ -196,12 +196,13 @@ public class SettingsAndTestingUI : UIController
                 {
                     Metals.Add(slider.Setting.Input.GetComponent<Image>());
                     Metals.Add(slider.Setting.Slider.targetGraphic as Image);
+                    Metals.Add(slider.Setting.Slider.transform.GetComponent<Image>("Background"));
                     break;
                 }
                 case IDropdown dropdown:
                 {
+                    Metals.Add(dropdown.Setting.Arrow);
                     Metals.Add(dropdown.Setting.Dropdown.GetComponent<Image>());
-                    Metals.Add(dropdown.Setting.Dropdown.transform.GetComponent<Image>("Arrow"));
                     Woods.Add(dropdown.Setting.Dropdown.transform.FindRecursive("Template").Find("Background").GetComponent<Image>());
                     break;
                 }
