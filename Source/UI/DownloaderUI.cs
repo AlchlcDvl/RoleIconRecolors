@@ -122,13 +122,13 @@ public class DownloaderUI : UIController
         if (FancyUI.Instance.Page == PackType.IconPacks)
         {
             var enumerable = Packs.Where(x => !x.FromMainRepo && x.Type == "IconPacks");
-            GeneralUtils.SaveText("OtherPacks.json", JsonConvert.SerializeObject(enumerable, enumerable.GetType(), Formatting.Indented, new()), path: IPPath);
+            NewModLoading.Utils.SaveText("OtherPacks.json", JsonConvert.SerializeObject(enumerable, enumerable.GetType(), Formatting.Indented, new()), path: IPPath);
         }
 
         if (FancyUI.Instance.Page == PackType.SilhouetteSets)
         {
             var enumerable = Packs.Where(x => !x.FromMainRepo && x.Type == "SilhouetteSets");
-            GeneralUtils.SaveText("OtherSets.json", JsonConvert.SerializeObject(enumerable, enumerable.GetType(), Formatting.Indented, new()), path: SSPath);
+            NewModLoading.Utils.SaveText("OtherSets.json", JsonConvert.SerializeObject(enumerable, enumerable.GetType(), Formatting.Indented, new()), path: SSPath);
         }
     }
 
@@ -137,6 +137,10 @@ public class DownloaderUI : UIController
         var json = GenerateLinkAndAddToPackCount();
         json.Type = FancyUI.Instance.Page.ToString();
         SetUpPack(json);
+
+        if (!Packs.Contains(json))
+            Packs.Add(json);
+
         Refresh();
     }
 
@@ -151,7 +155,7 @@ public class DownloaderUI : UIController
     {
         var packNameText = PackName.text;
 
-        if (StringUtils.IsNullEmptyOrWhiteSpace(packNameText))
+        if (NewModLoading.Utils.IsNullEmptyOrWhiteSpace(packNameText))
         {
             Fancy.Instance.Error("Tried to generate pack link with no pack name");
             return null;
@@ -168,14 +172,11 @@ public class DownloaderUI : UIController
         return packJson;
     }
 
-    public void OpenDirectory() => GeneralUtils.OpenDirectory(FolderPath);
+    public void OpenDirectory() => NewModLoading.Utils.OpenDirectory(FolderPath);
 
     // Why the hell am I not allowed to make extension methods in instance classes smh
     public void SetUpPack(PackJson packJson)
     {
-        if (!Packs.Contains(packJson))
-            Packs.Add(packJson);
-
         if (!PackGOs.TryFinding(x => x.name == packJson.Name, out var go))
         {
             go = Instantiate(PackTemplate, PackTemplate.transform.parent);
@@ -190,7 +191,7 @@ public class DownloaderUI : UIController
             hover.LookupKey = "FANCY_DOWNLOAD_PACK";
             hover.FillInKeys = [("%pack%", packJson.Name)];
 
-            if (!StringUtils.IsNullEmptyOrWhiteSpace(packJson.Credits))
+            if (!NewModLoading.Utils.IsNullEmptyOrWhiteSpace(packJson.Credits))
                 go.EnsureComponent<HoverEffect>()!.NonLocalizedString = packJson.Credits;
 
             PackGOs.Add(go);
@@ -226,21 +227,21 @@ public class DownloaderUI : UIController
         Packs.AddRange(JsonConvert.DeserializeObject<PackJson[]>(www.downloadHandler.text));
         Packs.ForEach(x => x.FromMainRepo = true);
 
-        var others = GeneralUtils.ReadText("OtherPacks.json", IPPath);
+        var others = NewModLoading.Utils.ReadText("OtherPacks.json", IPPath);
 
-        if (!StringUtils.IsNullEmptyOrWhiteSpace(others))
+        if (!NewModLoading.Utils.IsNullEmptyOrWhiteSpace(others))
         {
             var array = JsonConvert.DeserializeObject<PackJson[]>(others);
-            array.ForEach(x => x.Type = "IconPacks");
+            array.Do(x => x.Type = "IconPacks");
             Packs.AddRange(array);
         }
 
-        var others2 = GeneralUtils.ReadText("OtherSets.json", SSPath);
+        var others2 = NewModLoading.Utils.ReadText("OtherSets.json", SSPath);
 
-        if (!StringUtils.IsNullEmptyOrWhiteSpace(others2))
+        if (!NewModLoading.Utils.IsNullEmptyOrWhiteSpace(others2))
         {
             var array = JsonConvert.DeserializeObject<PackJson[]>(others2);
-            array.ForEach(x => x.Type = "SilhouetteSets");
+            array.Do(x => x.Type = "SilhouetteSets");
             Packs.AddRange(array);
         }
 
@@ -248,11 +249,7 @@ public class DownloaderUI : UIController
         HandlerRunning = false;
     }
 
-    private static void DownloadIcons(string packName)
-    {
-        Instance.InProgress = CoDownloadIcons(packName);
-        Coroutines.Start(Instance.InProgress);
-    }
+    private static void DownloadIcons(string packName) => Instance.InProgress = Coroutines.Start(CoDownloadIcons(packName));
 
     private static IEnumerator CoDownloadIcons(string packName)
     {
@@ -283,7 +280,7 @@ public class DownloaderUI : UIController
         if (!Directory.Exists(pack))
             Directory.CreateDirectory(pack);
         else
-            Directory.EnumerateFiles(pack, "*.png", SearchOption.AllDirectories).ForEach(File.Delete);
+            Directory.EnumerateFiles(pack, "*.png", SearchOption.AllDirectories).Do(File.Delete);
 
         IconPack.PopulateDirectory(pack);
         LoadingUI.Instance.LoadingProgress.SetText("Retrieving GitHub Data");
@@ -293,7 +290,7 @@ public class DownloaderUI : UIController
         while (!op.isDone)
         {
             LoadingUI.Instance.LoadingProgress.SetText(op.progress <= 1f ? $"Downloading Pack: {Mathf.RoundToInt(Mathf.Clamp(op.progress, 0f, 1f) * 100f)}%" : "Unity is shitting itself, please wait...");
-            yield return new WaitForEndOfFrame();
+            yield return null;
         }
 
         if (www.result != UnityWebRequest.Result.Success)
@@ -316,7 +313,7 @@ public class DownloaderUI : UIController
                 break;
             }
 
-            yield return new WaitForEndOfFrame();
+            yield return null;
         }
 
         LoadingUI.Instance.LoadingProgress.SetText("Extracting Icons");
@@ -351,7 +348,7 @@ public class DownloaderUI : UIController
                 continue;
 
             time -= 0.1f;
-            yield return new WaitForEndOfFrame();
+            yield return null;
         }
 
         LoadingUI.Instance.LoadingProgress.SetText("Cleaning Up");

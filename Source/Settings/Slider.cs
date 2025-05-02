@@ -33,7 +33,6 @@ public class SliderSetting : Setting
         Input.SetTextWithoutNotify($"{Slider.value:0.##}");
         Input.restoreOriginalTextOnEscape = true;
         Input.onValueChanged.AddListener(OnTextValueChanged);
-        Fancy.InputRegex.SetValue(Input, "^[0-9]+$");
     }
 
     public void OnValueChanged(float value)

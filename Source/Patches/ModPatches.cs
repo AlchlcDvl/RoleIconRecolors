@@ -267,18 +267,14 @@ public static class SpecialAbilityPopupGenericListItemPatch
             factionType = tuple.Item2;
         }
 
-        string roleText = "";
+        var roleText = "";
 
         if (role != Role.NONE)
         {
             if (Fancy.FactionalRoleNames.Value)
-            {
                 roleText = Utils.GetColorizedRoleName(role, factionType, true);
-            }
             else
-            {
                 roleText = role.ToColorizedFactionStringParentheses(factionType);
-            }
         }
 
         var text = player_name + " " + roleText;
@@ -331,18 +327,14 @@ public static class SpecialAbilityPopupDayConfirmListItemPatch
             factionType = tuple.Item2;
         }
 
-        string roleText = "";
+        var roleText = "";
 
         if (role != Role.NONE)
         {
             if (Fancy.FactionalRoleNames.Value)
-            {
                 roleText = Utils.GetColorizedRoleName(role, factionType, true);
-            }
             else
-            {
                 roleText = role.ToColorizedFactionStringParentheses(factionType);
-            }
         }
 
         var text = player_name + " " + roleText;
@@ -383,20 +375,14 @@ public static class SpecialAbilityPopupNecromancerRetributionistListItemPatch
             factionType = tuple.Item2;
         }
 
-        
-
-        string roleText = "";
+        var roleText = "";
 
         if (role2 != Role.NONE)
         {
             if (Fancy.FactionalRoleNames.Value)
-            {
                 roleText = Utils.GetColorizedRoleName(role2, factionType, true);
-            }
             else
-            {
                 roleText = role2.ToColorizedFactionStringParentheses(factionType);
-            }
         }
 
         var text = player_name + " " + roleText;

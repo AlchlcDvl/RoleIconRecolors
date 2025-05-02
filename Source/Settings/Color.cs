@@ -25,7 +25,6 @@ public class ColorSetting : BaseInputSetting
         Input.SetTextWithoutNotify(Option.Value);
         Input.restoreOriginalTextOnEscape = true;
         Input.onValueChanged.AddListener(OnValueChanged);
-        Fancy.InputRegex.SetValue(Input, Option.Regex);
 
         ValueBg.color = Option.Value.ToColor();
     }

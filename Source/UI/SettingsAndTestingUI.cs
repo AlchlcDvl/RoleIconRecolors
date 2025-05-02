@@ -4,8 +4,8 @@ public class SettingsAndTestingUI : UIController
 {
     public static SettingsAndTestingUI Instance { get; private set; }
 
-    private CustomAnimator Animator { get; set; }
-    private CustomAnimator Flame { get; set; }
+    private CustomImageAnimator Animator { get; set; }
+    private CustomImageAnimator Flame { get; set; }
 
     // private RoleCardIcon IconTemplate { get; set; }
 
@@ -76,7 +76,7 @@ public class SettingsAndTestingUI : UIController
     {
         Instance = this;
 
-        Animator = transform.EnsureComponent<CustomAnimator>("Animator")!;
+        Animator = transform.EnsureComponent<CustomImageAnimator>("Animator")!;
         Animator.SetAnim(Loading.Frames, Constants.AnimationDuration());
         Animator.AddComponent<HoverEffect>()!.NonLocalizedString = "This Is Your Animator";
 
@@ -100,7 +100,7 @@ public class SettingsAndTestingUI : UIController
 
         // IconTemplate = roleCard.EnsureComponent<RoleCardIcon>("ButtonTemplate");
 
-        Flame = roleCard.EnsureComponent<CustomAnimator>("Fire")!;
+        Flame = roleCard.EnsureComponent<CustomImageAnimator>("Fire")!;
         Flame.SetAnim([.. FancyAssetManager.Flame.Frames.Select(x => x.RenderedSprite)], 1f);
 
         RoleText = roleCard.GetComponent<TextMeshProUGUI>("Role");
@@ -251,8 +251,13 @@ public class SettingsAndTestingUI : UIController
 
         foreach (var setting in Settings)
         {
-            setting.Refresh();
-            setting.gameObject.SetActive(setting.SetActive());
+            setting.gameObject.SetActive(false);
+
+            if (setting.SetActive())
+            {
+                setting.Refresh();
+                setting.gameObject.SetActive(true);
+            }
         }
 
         Utils.UpdateMaterials();

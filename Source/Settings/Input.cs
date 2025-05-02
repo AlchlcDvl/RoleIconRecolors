@@ -18,7 +18,6 @@ public class StringInputSetting : BaseInputSetting
         Input.SetTextWithoutNotify(Option.Value);
         Input.restoreOriginalTextOnEscape = true;
         Input.onValueChanged.AddListener(OnValueChanged);
-        Fancy.InputRegex.SetValue(Input, Option.Regex);
     }
 
     public void OnValueChanged(string value)

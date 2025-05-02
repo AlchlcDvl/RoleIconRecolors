@@ -1,15 +1,14 @@
 using Home.Shared;
+using NewModLoading;
 
 namespace FancyUI;
 
-[SalemMod]
 public class Fancy : BaseMod<Fancy>
 {
     public override string Name => "Fancy UI";
+    public override string HarmonyId => "alchlcsystm.fancy.ui";
     public override string[] Bundles => [ "Assets" ];
     public override bool HasFolder => true;
-
-    public static FieldInfo InputRegex;
 
     public override void Start()
     {
@@ -47,17 +46,16 @@ public class Fancy : BaseMod<Fancy>
         }
         catch { }
 
-        InputRegex = AccessTools.Field(typeof(TMP_InputField), "m_RegexValue");
-
         Instance.Message("Fancy!", true);
     }
 
-    public override void UponAssetsLoaded()
+    public override void UponAssetsHandled()
     {
         Blank = Assets.GetSprite("Blank");
         FancyAssetManager.Attack = Assets.GetSprite("Attack");
         FancyAssetManager.Defense = Assets.GetSprite("Defense");
         Ethereal = Assets.GetSprite("Ethereal");
+        MenuButton.FancyMenu.Icon = Assets.GetSprite("Thumbnail");
 
         Grayscale = Assets.GetMaterial("GrayscaleMaterial");
 
@@ -86,8 +84,6 @@ public class Fancy : BaseMod<Fancy>
         {
             LoadBtos2SpriteSheet();
         } catch {}
-
-        MenuButton.FancyMenu.Icon = Assets.GetSprite("Thumbnail");
     }
 
     public static StringDropdownOption SelectedIconPack;
@@ -132,12 +128,12 @@ public class Fancy : BaseMod<Fancy>
     public static readonly Dictionary<ColorType, ToggleOption> ColorShadeToggleMap = [];
     public static readonly Dictionary<ColorType, FloatOption> ColorShadeMap = [];
 
-    public override void LoadConfigs()
+    public override void BindConfigs()
     {
         VanillaFactions = [.. GeneralUtils.GetEnumValues<FactionType>()!.Except([FactionType.UNKNOWN])];
         BTOS2Factions = [.. AccessTools.GetDeclaredFields(typeof(Btos2Faction)).Select(x => (FactionType)x.GetRawConstantValue())];
 
-        BTOS2Factions.ForEach(x => FactionToColorMap[x] = []);
+        BTOS2Factions.Do(x => FactionToColorMap[x] = []);
 
         SelectedIconPack = new("SELECTED_ICON_PACK", "Vanilla", PackType.IconPacks, () => GetPackNames(PackType.IconPacks), onChanged: x => TryLoadingSprites(x, PackType.IconPacks));
         SelectedSilhouetteSet = new("SELECTED_SIL_SET", "Vanilla", PackType.SilhouetteSets, () => GetPackNames(PackType.SilhouetteSets), onChanged: x => TryLoadingSprites(x,

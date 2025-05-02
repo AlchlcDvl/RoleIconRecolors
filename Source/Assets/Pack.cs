@@ -42,7 +42,7 @@ public abstract class Pack(string name, PackType type)
     {
         var key = ModsToFolders.Find(x => x.Value.Contains(folder)).Key;
 
-        if (StringUtils.IsNullEmptyOrWhiteSpace(key))
+        if (NewModLoading.Utils.IsNullEmptyOrWhiteSpace(key))
             key = "Common";
 
         return Enum.Parse<GameModType>(key);
