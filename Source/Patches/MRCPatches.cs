@@ -424,13 +424,13 @@ public static class PatchCustomWinScreens
 [HarmonyPatch(typeof(ClientRoleExtensions), nameof(ClientRoleExtensions.ToColorizedDisplayString), typeof(Role), typeof(FactionType))]
 public static class AddTtAndGradients
 {
-    public static bool Prefix(ref string __result, Role role, FactionType factionType)
+    public static void Postfix(ref string __result, Role role, FactionType factionType)
     {
         if (__result.Contains("<color=#B545FF>(Traitor)"))
             __result = __result.Replace("<color=#B545FF>(Traitor)</color>", "<style=CovenColor>(Traitor)</style>");
 
         if (!role.IsResolved() && role is not (Role.FAMINE or Role.DEATH or Role.PESTILENCE or Role.WAR))
-            return false;
+            return;
 
         var text = Fancy.FactionalRoleNames.Value ? role.ToRoleFactionDisplayString(factionType) : role.ToDisplayString();
         var gradient = factionType.GetChangedGradient(role);
@@ -445,6 +445,5 @@ public static class AddTtAndGradients
         }
 
         __result = newText;
-        return false;
     }
 }

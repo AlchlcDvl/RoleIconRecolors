@@ -1,6 +1,4 @@
 // using FancyUI.Assets.SilhouetteSwapper;
-
-using BetterTOS2;
 using Home.Shared;
 using NewModLoading;
 
@@ -484,7 +482,7 @@ public static class Utils
         }
     }
 
-    private static bool FindCasualQueueBypass() => Constants.BTOS2Exists() && BTOSInfo.CasualModeController;
+    private static bool FindCasualQueueBypass() => Constants.BTOS2Exists() && BetterTOS2.BTOSInfo.CasualModeController;
 
     public static bool IsEthereal(this UIRoleData.UIRoleDataInstance ui)
     {
@@ -683,7 +681,7 @@ public static class Utils
         var result = role.ToDisplayString();
 
         if (role.GetFactionType() != faction)
-            result += $" ({ClientRoleExtensions.ToDisplayString(faction)})";
+            result += $" ({faction.ToDisplayString()})";
 
         return result;
     }
@@ -786,11 +784,8 @@ public static class Utils
         var name = FactionName(faction);
 
         // Explicit fallback to start color for STONED_HIDDEN
-        if (name == "Factionless")
-            return Fancy.Colors["STONED_HIDDEN"].Start.ToColor();
-
-        return Fancy.Colors[name.ToUpper()].End.ToColor();
+        return name == "Factionless" ? Fancy.Colors["STONED_HIDDEN"].Start.ToColor() : Fancy.Colors[name.ToUpper()].End.ToColor();
     }
 
-    public static string GetString(string key) => Service.Home.LocalizationService.GetLocalizedString(key);
+    private static string GetString(string key) => Service.Home.LocalizationService.GetLocalizedString(key);
 }
