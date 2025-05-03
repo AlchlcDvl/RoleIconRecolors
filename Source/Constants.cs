@@ -109,8 +109,6 @@ public static class Constants
 
     public static bool BTOS2Exists() => ModStates.IsEnabled("curtis.tuba.better.tos2");
 
-    public static bool MiscRoleExists() => ModStates.IsEnabled("det.rolecustomizationmod");
-
     public static bool IsBTOS2()
     {
         try

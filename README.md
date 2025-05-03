@@ -13,7 +13,7 @@
 
 # Fancy UI Mod
 
-With this mod you can edit (most) visual renditions of the game to your own liking! Paired with the Color Swapper, Text Editor and Misc Role Customisations mods, you now have an *almost* fully customisable game experience!
+With this mod you can edit (most) visual renditions of the game to your own liking! Paired with the Text Editor and Soundpacks mods, you now have an *almost* fully customisable game experience!
 
 -----------------------
 

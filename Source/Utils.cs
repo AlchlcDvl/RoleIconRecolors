@@ -667,28 +667,6 @@ public static class Utils
 
     public static bool GetRoleAndFaction(int pos, out Tuple<Role, FactionType> tuple) => Service.Game.Sim.simulation.knownRolesAndFactions.Data.TryGetValue(pos, out tuple);
 
-    public static string ToFactionString(this Role role, FactionType faction)
-    {
-        if (Constants.MiscRoleExists())
-        {
-            try
-            {
-                return role.MrcDisplayString(faction);
-            }
-            catch { }
-        }
-
-        var result = role.ToDisplayString();
-
-        if (role.GetFactionType() != faction)
-            result += $" ({faction.ToDisplayString()})";
-
-        return result;
-    }
-
-    private static string MrcDisplayString(this Role role, FactionType faction) => ModSettings.GetBool("Faction-Specific Role Names", "det.rolecustomizationmod") ?
-        MiscRoleCustomisation.Utils.ToRoleFactionDisplayString(role, faction) : role.ToDisplayString();
-
     // public static void DebugSingleTransform(this Transform transform)
     // {
     //     var debug = $"[{transform.parent?.name ?? "None"} -> {transform.name}] = {{ ";
