@@ -393,26 +393,7 @@ public static class PatchCustomWinScreens
 
     private static string GetVictoryMusicPath(FactionType faction)
     {
-        var cinematicType = faction switch
-        {
-            FactionType.TOWN => Fancy.TownCinematic.Value,
-            FactionType.COVEN => Fancy.CovenCinematic.Value,
-            FactionType.SERIALKILLER => Fancy.SerialKillerCinematic.Value,
-            FactionType.ARSONIST => Fancy.ArsonistCinematic.Value,
-            FactionType.WEREWOLF => Fancy.WerewolfCinematic.Value,
-            FactionType.SHROUD => Fancy.ShroudCinematic.Value,
-            FactionType.APOCALYPSE => Fancy.ApocalypseCinematic.Value,
-            FactionType.VAMPIRE => Fancy.VampireCinematic.Value,
-            Btos2Faction.Jackal => Fancy.JackalCinematic.Value,
-            (FactionType)34 => Fancy.FrogsCinematic.Value,
-            (FactionType)35 => Fancy.LionsCinematic.Value,
-            (FactionType)36 => Fancy.HawksCinematic.Value,
-            (FactionType)43 => Fancy.PandoraCinematic.Value,
-            Btos2Faction.Compliance => Fancy.ComplianceCinematic.Value,
-            (FactionType)250 => Fancy.LoversCinematic.Value,
-            _ => CinematicType.FactionWins,
-        };
-        return cinematicType switch
+        return (Fancy.CinematicMap.TryGetValue(faction, out var setting) ? setting.Value : Fancy.GetCinematic(faction)) switch
         {
             CinematicType.TownWins => "Audio/Music/TownVictory.wav",
             CinematicType.CovenWins or CinematicType.FactionWins => "Audio/Music/CovenVictory.wav",

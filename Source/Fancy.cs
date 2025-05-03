@@ -158,27 +158,14 @@ public class Fancy : BaseMod<Fancy>
         { "LOVERS", ("#FEA6FA", null, null, null, null) },
     };
 
+    public static readonly Dictionary<FactionType, EnumDropdownOption<CinematicType>> CinematicMap = [];
+
     public static EnumDropdownOption<FactionType> SelectTestingFaction;
     private static EnumDropdownOption<ColorType> SelectColorFilter;
     public static EnumDropdownOption<Role> SelectTestingRole; // TODO: Implement this
     public static EnumDropdownOption<RecruitEndType> RecruitEndingColor;
     public static EnumDropdownOption<FactionLabelOption> RoleCardFactionLabel;
     public static EnumDropdownOption<DisplayType> SelectDisplay;
-    public static EnumDropdownOption<CinematicType> TownCinematic;
-    public static EnumDropdownOption<CinematicType> CovenCinematic;
-    public static EnumDropdownOption<CinematicType> SerialKillerCinematic;
-    public static EnumDropdownOption<CinematicType> ArsonistCinematic;
-    public static EnumDropdownOption<CinematicType> WerewolfCinematic;
-    public static EnumDropdownOption<CinematicType> ShroudCinematic;
-    public static EnumDropdownOption<CinematicType> ApocalypseCinematic;
-    public static EnumDropdownOption<CinematicType> VampireCinematic;
-    public static EnumDropdownOption<CinematicType> JackalCinematic;
-    public static EnumDropdownOption<CinematicType> FrogsCinematic;
-    public static EnumDropdownOption<CinematicType> LionsCinematic;
-    public static EnumDropdownOption<CinematicType> HawksCinematic;
-    public static EnumDropdownOption<CinematicType> PandoraCinematic;
-    public static EnumDropdownOption<CinematicType> ComplianceCinematic;
-    public static EnumDropdownOption<CinematicType> LoversCinematic;
 
     private static FactionType[] VanillaFactions;
     private static FactionType[] BTOS2Factions;
@@ -341,99 +328,16 @@ public class Fancy : BaseMod<Fancy>
         SelectTestingFaction = new("SELECTED_TESTING_FACTION", FactionType.NONE, PackType.Testing, useTranslations: true, values:
             () => SettingsAndTestingUI.Instance?.IsBTOS2 == true ? BTOS2Factions : VanillaFactions);
 
-        TownCinematic = new EnumDropdownOption<CinematicType>(
-            "TOWN_CINEMATIC", CinematicType.TownWins, PackType.Testing,
-            useTranslations: true,
-            values: AllowedCinematics);
+        foreach (var faction in BTOS2Factions.Where(x => x is not (FactionType.NONE or (> FactionType.APOCALYPSE and < FactionType.VAMPIRE) or FactionType.CURSED_SOUL or FactionType.UNKNOWN or
+            (> Btos2Faction.Hawks and < Btos2Faction.Pandora))))
+        {
+            CinematicMap[faction] = new(
+                $"{Utils.FactionName(faction, GameModType.BTOS2).ToUpper()}_CINEMATIC", GetCinematic(faction), PackType.Testing,
+                setActive: _ => faction < FactionType.UNKNOWN || Constants.BTOS2Exists(),
+                useTranslations: true,
+                values: AllowedCinematics);
+        }
 
-        CovenCinematic = new EnumDropdownOption<CinematicType>(
-            "COVEN_CINEMATIC", CinematicType.CovenWins, PackType.Testing,
-            useTranslations: true,
-            values: AllowedCinematics);
-
-        SerialKillerCinematic = new EnumDropdownOption<CinematicType>(
-            "SERIALKILLER_CINEMATIC", CinematicType.SerialKillersWin, PackType.Testing,
-            useTranslations: true,
-            values: AllowedCinematics);
-
-        ArsonistCinematic = new EnumDropdownOption<CinematicType>(
-            "ARSONIST_CINEMATIC", CinematicType.ArsonistsWins, PackType.Testing,
-            useTranslations: true,
-            values: AllowedCinematics);
-
-        WerewolfCinematic = new EnumDropdownOption<CinematicType>(
-            "WEREWOLF_CINEMATIC", CinematicType.WerewolvesWin, PackType.Testing,
-            useTranslations: true,
-            values: AllowedCinematics);
-
-        ShroudCinematic = new EnumDropdownOption<CinematicType>(
-            "SHROUD_CINEMATIC", CinematicType.ShroudsWin, PackType.Testing,
-            useTranslations: true,
-            values: AllowedCinematics);
-
-        ApocalypseCinematic = new EnumDropdownOption<CinematicType>(
-            "APOCALYPSE_CINEMATIC", CinematicType.ApocolypseWins, PackType.Testing,
-            useTranslations: true,
-            values: AllowedCinematics);
-
-        VampireCinematic = new EnumDropdownOption<CinematicType>(
-            "VAMPIRE_CINEMATIC", CinematicType.VampireWins, PackType.Testing,
-            useTranslations: true,
-            values: AllowedCinematics);
-
-        JackalCinematic = new EnumDropdownOption<CinematicType>(
-            "JACKAL_CINEMATIC", CinematicType.FactionWins, PackType.Testing,
-            useTranslations: true,
-            values: AllowedCinematics);
-
-        FrogsCinematic = new EnumDropdownOption<CinematicType>(
-            "FROGS_CINEMATIC", CinematicType.FactionWins, PackType.Testing,
-            useTranslations: true,
-            values: AllowedCinematics);
-
-        LionsCinematic = new EnumDropdownOption<CinematicType>(
-            "LIONS_CINEMATIC", CinematicType.FactionWins, PackType.Testing,
-            useTranslations: true,
-            values: AllowedCinematics);
-
-        HawksCinematic = new EnumDropdownOption<CinematicType>(
-            "HAWKS_CINEMATIC", CinematicType.FactionWins, PackType.Testing,
-            useTranslations: true,
-            values: AllowedCinematics);
-
-        PandoraCinematic = new EnumDropdownOption<CinematicType>(
-            "PANDORA_CINEMATIC", CinematicType.FactionWins, PackType.Testing,
-            useTranslations: true,
-            values: AllowedCinematics);
-
-        ComplianceCinematic = new EnumDropdownOption<CinematicType>(
-            "COMPLIANCE_CINEMATIC", CinematicType.FactionWins, PackType.Testing,
-            useTranslations: true,
-            values: AllowedCinematics);
-
-        LoversCinematic = new EnumDropdownOption<CinematicType>(
-            "LOVERS_CINEMATIC", CinematicType.FactionWins, PackType.Testing,
-            useTranslations: true,
-            values: AllowedCinematics);
-
-        InitializeColors();
-    }
-
-    private static CinematicType[] AllowedCinematics() =>
-    [
-        CinematicType.FactionWins,
-        CinematicType.TownWins,
-        CinematicType.CovenWins,
-        CinematicType.SerialKillersWin,
-        CinematicType.ArsonistsWins,
-        CinematicType.WerewolvesWin,
-        CinematicType.ShroudsWin,
-        CinematicType.ApocolypseWins,
-        CinematicType.VampireWins,
-    ];
-
-    public static void InitializeColors()
-    {
         foreach (var (key, (start, end, major, middle, lethal)) in Colors)
         {
             if (start == null)
@@ -462,6 +366,32 @@ public class Fancy : BaseMod<Fancy>
 
         ReloadColors();
     }
+
+    public static CinematicType GetCinematic(FactionType faction) => faction switch
+    {
+        FactionType.TOWN => CinematicType.TownWins,
+        FactionType.COVEN => CinematicType.CovenWins,
+        FactionType.SERIALKILLER => CinematicType.SerialKillersWin,
+        FactionType.ARSONIST => CinematicType.ArsonistsWins,
+        FactionType.WEREWOLF => CinematicType.WerewolvesWin,
+        FactionType.SHROUD => CinematicType.ShroudsWin,
+        FactionType.APOCALYPSE => CinematicType.ApocolypseWins,
+        FactionType.VAMPIRE => CinematicType.VampireWins,
+        _ => CinematicType.FactionWins,
+    };
+
+    private static CinematicType[] AllowedCinematics() =>
+    [
+        CinematicType.FactionWins,
+        CinematicType.TownWins,
+        CinematicType.CovenWins,
+        CinematicType.SerialKillersWin,
+        CinematicType.ArsonistsWins,
+        CinematicType.WerewolvesWin,
+        CinematicType.ShroudsWin,
+        CinematicType.ApocolypseWins,
+        CinematicType.VampireWins,
+    ];
 
     public static void ReloadColors()
     {

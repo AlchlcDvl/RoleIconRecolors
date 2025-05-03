@@ -440,29 +440,10 @@ public static class FixMyFaction
 [HarmonyPatch(typeof(FactionWinsCinematicData), nameof(FactionWinsCinematicData.SetFaction))]
 public static class VictoryCinematicSwapperPatch
 {
-    private static readonly Dictionary<FactionType, EnumDropdownOption<CinematicType>> CinematicMap = new()
-    {
-        { FactionType.TOWN, Fancy.TownCinematic },
-        { FactionType.COVEN, Fancy.CovenCinematic },
-        { FactionType.SERIALKILLER, Fancy.SerialKillerCinematic },
-        { FactionType.ARSONIST, Fancy.ArsonistCinematic },
-        { FactionType.WEREWOLF, Fancy.WerewolfCinematic },
-        { FactionType.SHROUD, Fancy.ShroudCinematic },
-        { FactionType.APOCALYPSE, Fancy.ApocalypseCinematic },
-        { FactionType.VAMPIRE, Fancy.VampireCinematic },
-        { (FactionType)33, Fancy.JackalCinematic },
-        { (FactionType)34, Fancy.FrogsCinematic },
-        { (FactionType)35, Fancy.LionsCinematic },
-        { (FactionType)36, Fancy.HawksCinematic },
-        { (FactionType)43, Fancy.PandoraCinematic },
-        { (FactionType)44, Fancy.ComplianceCinematic },
-        { (FactionType)250, Fancy.LoversCinematic },
-    };
-
     public static bool Prefix(FactionType factionType, FactionWinsCinematicData __instance)
     {
         __instance.winningFaction_ = factionType;
-        __instance.cinematicType_ = CinematicMap.TryGetValue(factionType, out var cinematic) ? cinematic.Value : CinematicType.FactionWins;
+        __instance.cinematicType_ = Fancy.CinematicMap.TryGetValue(factionType, out var cinematic) ? cinematic.Value : CinematicType.FactionWins;
         return false;
     }
 }

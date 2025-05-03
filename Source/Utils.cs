@@ -706,7 +706,11 @@ public static class Utils
 
     public static string ApplyGradient(string text, params string[] colors) => ApplyGradient(text, [.. colors.Select(x => x.ToColor())]);
 
-    public static string ApplyGradient(string text, params Color32[] colors)
+    public static string ApplyGradient(string text, params Color[] colors) => ApplyGradient(text, CreateGradient(colors));
+
+    public static Gradient CreateGradient(params string[] colors) => CreateGradient([.. colors.Select(x => x.ToColor())]);
+
+    public static Gradient CreateGradient(params Color[] colors)
     {
         if (colors.Length < 2)
             throw new InvalidOperationException("Not enough colors to create a gradient");
@@ -717,7 +721,7 @@ public static class Utils
             new(1f, 0f),
             new(1f, 1f)
         ]);
-        return ApplyGradient(text, gradient);
+        return gradient;
     }
 
     public static string ApplyGradient(string text, Gradient gradient)
