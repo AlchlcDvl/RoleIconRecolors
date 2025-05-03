@@ -31,7 +31,7 @@ public static class Btos2IpCompatibility
         return true;
     }
 
-    public static void ItemPostfix1(dynamic __instance, ref Role a_role, ref FactionType faction, ref bool isBan)
+    public static void ItemPostfix1(dynamic __instance, Role a_role, FactionType faction, bool isBan)
     {
         if (!Constants.EnableIcons())
             return;

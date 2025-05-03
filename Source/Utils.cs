@@ -265,7 +265,7 @@ public static class Utils
 
     public static string FactionName(FactionType faction, bool allowOverrides, GameModType? mod = null) => FactionName(faction, mod, allowOverrides);
 
-    public static string FactionName(FactionType faction, GameModType? mod = null, bool allowOverrides = true)
+    public static string FactionName(FactionType faction, GameModType? mod = null, bool allowOverrides = true, bool stoned = false)
     {
         if (Constants.FactionOverridden() && allowOverrides)
             return Constants.FactionOverride();
@@ -274,17 +274,17 @@ public static class Utils
         {
             return (mod ?? GetGameType()) switch
             {
-                GameModType.BTOS2 => BTOSFactionName(faction),
-                _ => VanillaFactionName(faction)
+                GameModType.BTOS2 => BTOSFactionName(faction, stoned),
+                _ => VanillaFactionName(faction, stoned)
             };
         }
         catch
         {
-            return VanillaFactionName(faction);
+            return VanillaFactionName(faction, stoned);
         }
     }
 
-    private static string BTOSFactionName(FactionType faction) => faction switch
+    private static string BTOSFactionName(FactionType faction, bool stoned) => faction switch
     {
         Btos2Faction.Town => "Town",
         Btos2Faction.Coven => "Coven",
@@ -311,10 +311,10 @@ public static class Utils
         Btos2Faction.Pandora => "Pandora",
         Btos2Faction.Compliance => "Compliance",
         Btos2Faction.Lovers => "Lovers",
-        _ => "Factionless"
+        _ => stoned ? "Stoned_Hidden" : "Factionless"
     };
 
-    private static string VanillaFactionName(FactionType faction) => faction switch
+    private static string VanillaFactionName(FactionType faction, bool stoned) => faction switch
     {
         FactionType.TOWN => "Town",
         FactionType.COVEN => "Coven",
@@ -329,7 +329,7 @@ public static class Utils
         FactionType.DOOMSAYER => "Doomsayer",
         FactionType.VAMPIRE => "Vampire",
         FactionType.CURSED_SOUL => "CursedSoul",
-        _ => "Factionless"
+        _ => stoned ? "Stoned_Hidden" : "Factionless"
     };
 
     public static bool IsValid(this List<BaseAbilityButton> list, int index)
@@ -704,7 +704,7 @@ public static class Utils
     //         transform.GetChild(i).DebugTransformRecursive();
     // }
 
-    public static string ApplyGradient(string text, params string[] colors) => ApplyGradient(text, [.. colors.Select(x => x.ToColor())]);
+    public static string ApplyGradient(string text, params string[] colors) => ApplyGradient(text, CreateGradient(colors));
 
     public static string ApplyGradient(string text, params Color[] colors) => ApplyGradient(text, CreateGradient(colors));
 
@@ -712,15 +712,30 @@ public static class Utils
 
     public static Gradient CreateGradient(params Color[] colors)
     {
-        if (colors.Length < 2)
-            throw new InvalidOperationException("Not enough colors to create a gradient");
+        var length = colors.Length;
+
+        if (length == 0)
+            throw new InvalidOperationException("Colors are needed to create a gradient");
 
         var gradient = new Gradient();
-        gradient.SetKeys([.. colors.Select((i, color) => new GradientColorKey(color, (float)i / (colors.Length - 1)))], // Pays to know random ass math (that may or may not be 100% accurate)
-        [
-            new(1f, 0f),
-            new(1f, 1f)
-        ]);
+
+        if (length == 1)
+        {
+            gradient.SetKeys([new(colors[0], 0f), new(colors[0], 1f)],
+            [
+                new(1f, 0f),
+                new(1f, 1f)
+            ]);
+        }
+        else
+        {
+            gradient.SetKeys([.. colors.Select((i, color) => new GradientColorKey(color, (float)i / (colors.Length - 1)))], // Pays to know random ass math (that may or may not be 100% accurate)
+            [
+                new(1f, 0f),
+                new(1f, 1f)
+            ]);
+        }
+
         return gradient;
     }
 
@@ -777,18 +792,14 @@ public static class Utils
         return roleName;
     }
 
-    public static Color GetFactionStartingColor(FactionType faction)
-    {
-        var name = FactionName(faction);
-        return Fancy.Colors[name == "Factionless" ? "STONED_HIDDEN" : name.ToUpper()].Start.ToColor();
-    }
+    public static Color GetFactionStartingColor(FactionType faction) => Fancy.Colors[FactionName(faction, stoned: true).ToUpper()].Start.ToColor();
 
     public static Color GetFactionEndingColor(FactionType faction)
     {
-        var name = FactionName(faction);
+        var name = FactionName(faction, stoned: true);
 
         // Explicit fallback to start color for STONED_HIDDEN
-        return name == "Factionless" ? Fancy.Colors["STONED_HIDDEN"].Start.ToColor() : Fancy.Colors[name.ToUpper()].End.ToColor();
+        return name == "Stoned_Hidden" ? Fancy.Colors["STONED_HIDDEN"].Start.ToColor() : Fancy.Colors[name.ToUpper()].End.ToColor();
     }
 
     private static string GetString(string key) => Service.Home.LocalizationService.GetLocalizedString(key);

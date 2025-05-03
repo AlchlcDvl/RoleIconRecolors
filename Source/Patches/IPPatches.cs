@@ -909,7 +909,7 @@ public static class NecroPassPatches
 public static class MentionsProviderPatches
 {
     [HarmonyPatch(nameof(MentionsProvider.ProcessAdvancedRoleMention)), HarmonyPriority(Priority.Low)]
-    public static bool Prefix(MentionsProvider __instance, Match roleMatch, ref string encodedText, ref string mention, ref string __result)
+    public static bool Prefix(MentionsProvider __instance, Match roleMatch, string encodedText, string mention, ref string __result)
     {
         if (!Constants.EnableIcons())
             return true;

@@ -174,7 +174,7 @@ public static class RoleRevealCinematicPlayerPatch
     private static FactionType CurrentFaction;
 
     [HarmonyPatch(nameof(RoleRevealCinematicPlayer.SetRole))]
-    public static bool Prefix(RoleRevealCinematicPlayer __instance, ref Role role)
+    public static bool Prefix(RoleRevealCinematicPlayer __instance, Role role)
     {
         if (role == Role.NONE)
             return true;
@@ -202,7 +202,7 @@ public static class RoleRevealCinematicPlayerPatch
     }
 
     [HarmonyPatch(nameof(RoleRevealCinematicPlayer.HandleOnMyIdentityChanged))]
-    public static void Prefix(ref PlayerIdentityData playerIdentity) => CurrentFaction = playerIdentity.faction;
+    public static void Prefix(PlayerIdentityData playerIdentity) => CurrentFaction = playerIdentity.faction;
 }
 
 [HarmonyPatch(typeof(SharedMentionsProvider), nameof(SharedMentionsProvider.BuildAchievementMentions))]

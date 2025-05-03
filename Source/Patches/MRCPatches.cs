@@ -53,7 +53,7 @@ public static class PatchRoleCard
                 break;
             case (ROLE_MODIFIER)10:
             {
-                var gradient = (Btos2Faction.Jackal).GetChangedGradient(role);
+                var gradient = Btos2Faction.Jackal.GetChangedGradient(role);
                 text += $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.RecruitLabel.Value})", gradient)}</size>";
                 break;
             }
@@ -86,13 +86,13 @@ public static class PatchRoleCard
 [HarmonyPatch(typeof(RoleCardPopupPanel), nameof(RoleCardPopupPanel.SetRole))]
 public static class RoleCardPopupPatches
 {
-    public static void Postfix(ref Role role, RoleCardPopupPanel __instance) => __instance.roleNameText.text = role.ToColorizedDisplayString();
+    public static void Postfix(Role role, RoleCardPopupPanel __instance) => __instance.roleNameText.text = role.ToColorizedDisplayString();
 }
 
 [HarmonyPatch(typeof(TosAbilityPanelListItem), nameof(TosAbilityPanelListItem.SetKnownRole))]
 public static class PlayerListPatch
 {
-    public static bool Prefix(ref Role role, ref FactionType faction, TosAbilityPanelListItem __instance)
+    public static bool Prefix(Role role, FactionType faction, TosAbilityPanelListItem __instance)
     {
         __instance.playerRole = role;
 
@@ -118,7 +118,7 @@ public static class PlayerListPatch
 [HarmonyPatch(typeof(TosCharacterNametag), nameof(TosCharacterNametag.ColouredName))]
 public static class TosCharacterNametagPatch
 {
-    public static void Postfix(string theName, ref FactionType factionType, ref Role role, ref string __result)
+    public static void Postfix(string theName, FactionType factionType, Role role, ref string __result)
     {
         var gradient = factionType.GetChangedGradient(role);
 
@@ -138,8 +138,8 @@ public static class TosCharacterNametagPatch
 [HarmonyPatch(typeof(HomeSceneController), nameof(HomeSceneController.HandleClickPlay))]
 public static class FixStyles
 {
-    private static FieldInfo StylesField = AccessTools.Field(typeof(TMP_StyleSheet), "m_StyleList");
-    private static FieldInfo OpeningDefField = AccessTools.Field(typeof(TMP_Style), "m_OpeningDefinition");
+    private static readonly FieldInfo StylesField = AccessTools.Field(typeof(TMP_StyleSheet), "m_StyleList");
+    private static readonly FieldInfo OpeningDefField = AccessTools.Field(typeof(TMP_Style), "m_OpeningDefinition");
 
     public static void Postfix()
     {
@@ -159,16 +159,14 @@ public static class FixStyles
         SetStyle(styles, "DoomsayerColor", Fancy.Colors["DOOMSAYER"].Start);
         SetStyle(styles, "VampireColor", Fancy.Colors["VAMPIRE"].Start);
         SetStyle(styles, "CursedSoulColor", Fancy.Colors["CURSEDSOUL"].Start);
-        SetStyle(styles, "NeutralColor", Fancy.Colors["NEUTRAL"].Start);
+        SetStyle(styles, "NeutralColor", Fancy.Colors["STONED_HIDDEN"].Start);
 
         TMP_Settings.defaultStyleSheet.RefreshStyles();
     }
 
     private static void SetStyle(List<TMP_Style> styles, string styleName, string colorValue)
     {
-        var style = styles.Find(s => s.name == styleName);
-
-        if (style != null)
+        if (styles.TryFinding(s => s.name == styleName, out var style))
             OpeningDefField.SetValue(style, $"<color={colorValue}>");
     }
 }
@@ -176,7 +174,7 @@ public static class FixStyles
 [HarmonyPatch(typeof(ClientRoleExtensions), nameof(ClientRoleExtensions.ToColorizedDisplayString), typeof(Role), typeof(FactionType))]
 public static class AddChangedConversionTags
 {
-    public static void Postfix(ref string __result, ref Role role, ref FactionType factionType)
+    public static void Postfix(ref string __result, Role role, FactionType factionType)
     {
         if (!role.IsResolved() && role is not (Role.FAMINE or Role.DEATH or Role.PESTILENCE or Role.WAR))
             return;
@@ -190,7 +188,7 @@ public static class AddChangedConversionTags
 [HarmonyPatch(typeof(MentionsProvider), nameof(MentionsProvider.DecodeSpeaker))]
 public static class FancyChatExperimentalBTOS2
 {
-    private static List<int> ExcludedIds = [50, 69, 70, 71];
+    private static readonly List<int> ExcludedIds = [50, 69, 70, 71];
 
     public static bool Prefix(MentionsProvider __instance, ref string __result, string encodedText, int position, bool isAlive)
     {
@@ -217,13 +215,13 @@ public static class FancyChatExperimentalBTOS2
                         gradient = Btos2Faction.Jackal.GetChangedGradient(playerInfo.Item1);
 
                     var text3 = Utils.ApplyGradient($"{gameName}:", gradient);
-                    text2 = text2.Replace($"<color=#{ColorUtility.ToHtmlStringRGB(Pepper.GetDiscussionPlayerRoleColor(position))}>{Pepper.GetDiscussionPlayerByPosition(position).gameName}:", text3);
+                    text2 = text2.Replace($"<color=#{ColorUtility.ToHtmlStringRGB(Pepper.GetDiscussionPlayerRoleColor(position))}>{gameName}:", text3);
                 }
                 else if (isRecruited)
                 {
                     var gradient2 = Btos2Faction.Jackal.GetChangedGradient(playerInfo.Item1);
                     var text4 = Utils.ApplyGradient($"{gameName}:", gradient2.Evaluate(0f), gradient2.Evaluate(1f));
-                    text2 = text2.Replace($"<color=#{ColorUtility.ToHtmlStringRGB(Pepper.GetDiscussionPlayerRoleColor(position))}>{Pepper.GetDiscussionPlayerByPosition(position).gameName}:", text4);
+                    text2 = text2.Replace($"<color=#{ColorUtility.ToHtmlStringRGB(Pepper.GetDiscussionPlayerRoleColor(position))}>{gameName}:", text4);
                 }
                 else
                 {
@@ -247,10 +245,9 @@ public static class FancyChatExperimentalBTOS2
 [HarmonyPatch(typeof(ClientRoleExtensions), nameof(ClientRoleExtensions.GetFactionColor))]
 public static class SwapColor
 {
-    public static bool Prefix(ref string __result, ref FactionType factionType)
+    public static bool Prefix(ref string __result, FactionType factionType)
     {
-        var name = Utils.FactionName(factionType);
-        __result = Fancy.Colors[name == "Factionless" ? "STONED_HIDDEN" : name.ToUpper()].Start;
+        __result = Fancy.Colors[Utils.FactionName(factionType, stoned: true).ToUpper()].Start;
         return false;
     }
 }
@@ -278,13 +275,12 @@ public static class PatchDefaultWinScreens
 {
     private static readonly int State = Animator.StringToHash("State");
 
-    public static bool Prefix(FactionWinsCinematicPlayer __instance, ref ICinematicData cinematicData)
+    public static bool Prefix(FactionWinsCinematicPlayer __instance, ICinematicData cinematicData)
     {
         __instance.elapsedDuration = 0f;
         Debug.Log($"FactionWinsCinematicPlayer current phase at start = {Pepper.GetGamePhase()}");
         __instance.cinematicData = cinematicData as FactionWinsCinematicData;
-        var winTimeByFaction = CinematicFactionWinsTimes.GetWinTimeByFaction(__instance.cinematicData!.winningFaction);
-        __instance.totalDuration = winTimeByFaction;
+        __instance.totalDuration = CinematicFactionWinsTimes.GetWinTimeByFaction(__instance.cinematicData!.winningFaction);
         __instance.callbackTimers.Clear();
         var spawnedCharacters = Service.Game.Cast.GetSpawnedCharacters();
 
@@ -320,15 +316,14 @@ public static class PatchDefaultWinScreens
             __instance.m_Animator.SetInteger(State, 2);
         }
 
-        var text = $"GUI_WINNERS_ARE_{(int)winningFaction}";
-        var text2 = __instance.l10n(text);
+        var text = __instance.l10n($"GUI_WINNERS_ARE_{(int)winningFaction}");
         var gradient = winningFaction.GetChangedGradient(Role.NONE);
 
         if (gradient != null)
         {
             __instance.leftImage.color = Utils.GetFactionStartingColor(winningFaction);
             __instance.rightImage.color = Utils.GetFactionEndingColor(winningFaction);
-            __instance.textAnimatorPlayer.ShowText(Utils.ApplyGradient(text2, gradient));
+            __instance.textAnimatorPlayer.ShowText(Utils.ApplyGradient(text, gradient));
         }
         else
         {
@@ -340,7 +335,7 @@ public static class PatchDefaultWinScreens
             }
 
             __instance.text.color = color;
-            __instance.textAnimatorPlayer.ShowText(text2);
+            __instance.textAnimatorPlayer.ShowText(text);
         }
 
         __instance.SetUpWinners(__instance.winningCharacters);
@@ -351,13 +346,12 @@ public static class PatchDefaultWinScreens
 [HarmonyPatch(typeof(FactionWinsStandardCinematicPlayer), nameof(FactionWinsStandardCinematicPlayer.Init))]
 public static class PatchCustomWinScreens
 {
-    public static bool Prefix(FactionWinsStandardCinematicPlayer __instance, ref ICinematicData cinematicData)
+    public static bool Prefix(FactionWinsStandardCinematicPlayer __instance, ICinematicData cinematicData)
     {
         Debug.Log($"FactionWinsStandardCinematicPlayer current phase at end = {Pepper.GetGamePhase()}");
         __instance.elapsedDuration = 0f;
         __instance.cinematicData = cinematicData as FactionWinsCinematicData;
-        var num = CinematicFactionWinsTimes.GetWinTimeByFaction(__instance.cinematicData!.winningFaction);
-        __instance.totalDuration = num;
+        __instance.totalDuration = CinematicFactionWinsTimes.GetWinTimeByFaction(__instance.cinematicData!.winningFaction);
 
         var winningFaction = __instance.cinematicData.winningFaction;
         PlayVictoryMusic(winningFaction);

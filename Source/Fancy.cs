@@ -153,9 +153,8 @@ public class Fancy : BaseMod<Fancy>
         { "FROGS", ("#1e49cf", "#1e49cf", "#1e49cf", null, "#1e49cf") },
         { "HAWKS", ("#7E4C9C", "#7E4C9C", "#7E4C9C", null, "#7E4C9C") },
         { "LIONS", ("#D19000", "#D19000", "#D19000", null, "#D19000") },
-        { "NEUTRAL", ("#A9A9A9", null, null, null, null) },
-        { "STONED_HIDDEN", ("#9C9A9A", null, null, null, null) },
         { "LOVERS", ("#FEA6FA", null, null, null, null) },
+        { "STONED_HIDDEN", ("#9C9A9A", null, null, null, null) }
     };
 
     public static readonly Dictionary<FactionType, EnumDropdownOption<CinematicType>> CinematicMap = [];
@@ -333,7 +332,7 @@ public class Fancy : BaseMod<Fancy>
         {
             CinematicMap[faction] = new(
                 $"{Utils.FactionName(faction, GameModType.BTOS2).ToUpper()}_CINEMATIC", GetCinematic(faction), PackType.Testing,
-                setActive: _ => faction < FactionType.UNKNOWN || Constants.BTOS2Exists(),
+                setActive: _ => (faction < FactionType.UNKNOWN || Constants.BTOS2Exists()) && SelectTestingFaction.Value == faction,
                 useTranslations: true,
                 values: AllowedCinematics);
         }
@@ -345,23 +344,23 @@ public class Fancy : BaseMod<Fancy>
 
             if (middle == null && major == null && end == null)
             {
-                ColorOptions[$"{key}"] = new($"{key}", start, PackType.MiscRoleCustomisation);
+                ColorOptions[$"{key}"] = new($"{key}", start, PackType.MiscRoleCustomisation, _ => Utils.FactionName(SelectTestingFaction.Value, stoned: true).ToUpper() == key, _ => ReloadColors());
                 continue;
             }
 
-            ColorOptions[$"{key}_START"] = new($"{key}_START", start, PackType.MiscRoleCustomisation, onChanged: _ => ReloadColors());
+            ColorOptions[$"{key}_START"] = new($"{key}_START", start, PackType.MiscRoleCustomisation, _ => Utils.FactionName(SelectTestingFaction.Value, stoned: true).ToUpper() == key, _ => ReloadColors());
 
             if (middle != null)
-                ColorOptions[$"{key}_MIDDLE"] = new($"{key}_MIDDLE", middle, PackType.MiscRoleCustomisation, onChanged: _ => ReloadColors());
+                ColorOptions[$"{key}_MIDDLE"] = new($"{key}_MIDDLE", middle, PackType.MiscRoleCustomisation, _ => Utils.FactionName(SelectTestingFaction.Value, stoned: true).ToUpper() == key, _ => ReloadColors());
 
             if (end != null)
-                ColorOptions[$"{key}_END"] = new($"{key}_END", end, PackType.MiscRoleCustomisation, onChanged: _ => ReloadColors());
+                ColorOptions[$"{key}_END"] = new($"{key}_END", end, PackType.MiscRoleCustomisation, _ => Utils.FactionName(SelectTestingFaction.Value, stoned: true).ToUpper() == key, _ => ReloadColors());
 
             if (major != null)
-                ColorOptions[$"{key}_MAJOR"] = new($"{key}_MAJOR", major, PackType.MiscRoleCustomisation, onChanged: _ => ReloadColors());
+                ColorOptions[$"{key}_MAJOR"] = new($"{key}_MAJOR", major, PackType.MiscRoleCustomisation, _ => Utils.FactionName(SelectTestingFaction.Value, stoned: true).ToUpper() == key, _ => ReloadColors());
 
             if (lethal != null)
-                ColorOptions[$"{key}_LETHAL"] = new($"{key}_LETHAL", lethal, PackType.MiscRoleCustomisation, onChanged: _ => ReloadColors());
+                ColorOptions[$"{key}_LETHAL"] = new($"{key}_LETHAL", lethal, PackType.MiscRoleCustomisation, _ => Utils.FactionName(SelectTestingFaction.Value, stoned: true).ToUpper() == key, _ => ReloadColors());
         }
 
         ReloadColors();

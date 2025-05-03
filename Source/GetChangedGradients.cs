@@ -2,21 +2,21 @@ using Server.Shared.Extensions;
 
 namespace FancyUI;
 
-// TODO: Get back to this
 public static class GetChangedGradients
 {
     public static Gradient GetChangedGradient(this FactionType faction, Role role)
     {
-        var middleKey = faction switch
+        var middleKey = (faction switch
         {
             FactionType.NONE or FactionType.UNKNOWN => "STONED_HIDDEN",
             _ => Utils.FactionName(faction),
-        };
-        var baseKey = role.GetFactionType() switch
+        }).ToUpper();
+        var baseFaction = role.GetFactionType();
+        var baseKey = (baseFaction switch
         {
             FactionType.NONE or FactionType.UNKNOWN => "STONED_HIDDEN",
-            _ => Utils.FactionName(faction),
-        };
+            _ => Utils.FactionName(baseFaction),
+        }).ToUpper();
         var startKey = faction switch
         {
             Btos2Faction.Jackal => Fancy.RecruitEndingColor.Value switch
@@ -44,6 +44,6 @@ public static class GetChangedGradients
         var isLethal = Fancy.LethalColors.Value && (role.GetSubAlignment() == SubAlignment.KILLING || role == Role.BERSERKER || (role == Role.JAILOR && !Fancy.MajorColors.Value));
         var end = isMajor ? majorVal : (isLethal ? lethalVal : endVal);
 
-        return middle != null ? Utils.CreateGradient(start, middle, end) : Utils.CreateGradient(start, middle, end);
+        return middle != null ? Utils.CreateGradient(start, middle, end) : (end != null ? Utils.CreateGradient(start, end) : Utils.CreateGradient(start));
     }
 }
