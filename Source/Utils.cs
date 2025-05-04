@@ -741,7 +741,7 @@ public static class Utils
         if (role is Role.STONED or Role.HIDDEN or Role.UNKNOWN)
             faction = FactionType.NONE;
 
-        var factionName = FactionName(faction, GameModType.BTOS2);
+        var factionName = FactionName(faction, GameModType.BTOS2).ToUpper();
 
         if (factionName == "Factionless")
             factionName = "NONE";
