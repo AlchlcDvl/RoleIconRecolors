@@ -270,7 +270,7 @@ public static class SpecialAbilityPopupGenericListItemPatch
         var gradient = factionType.GetChangedGradient(role);
 
         if (role != Role.NONE)
-            roleText = Fancy.FactionalRoleNames.Value ? Utils.GetRoleName(role, factionType, true) : role.ToDisplayString();
+            roleText = Fancy.FactionalRoleNames.Value ? Utils.GetRoleName(role, factionType, true) : $"({role.ToDisplayString()})";
 
         var text = $"{player_name} {Utils.ApplyGradient(roleText, gradient)}";
         __instance.playerName.SetText(text);
@@ -326,7 +326,7 @@ public static class SpecialAbilityPopupDayConfirmListItemPatch
         var gradient = factionType.GetChangedGradient(role);
 
         if (role != Role.NONE)
-            roleText = Fancy.FactionalRoleNames.Value ? Utils.GetRoleName(role, factionType, true) : role.ToDisplayString();
+            roleText = Fancy.FactionalRoleNames.Value ? Utils.GetRoleName(role, factionType, true) : $"({role.ToDisplayString()})";
 
         var text = $"{player_name} {Utils.ApplyGradient(roleText, gradient)}";
         __instance.playerName.SetText(text);
