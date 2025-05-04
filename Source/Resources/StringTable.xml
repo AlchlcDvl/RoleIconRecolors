@@ -167,6 +167,15 @@
     <Entry key="FANCY_TRAITOR_LABEL_NAME">Town Traitor Label</Entry>
     <Entry key="FANCY_TRAITOR_LABEL_DESC">The text that is shown in the role card when the player is a Town Traitor.</Entry>
 
+    <Entry key="FANCY_COVEN_TRAITOR_LABEL_NAME">Coven Town Traitor Label</Entry>
+    <Entry key="FANCY_COVEN_TRAITOR_LABEL_DESC">The text that is shown in the role card when the player is a Coven Town Traitor.</Entry>
+
+    <Entry key="FANCY_APOC_TRAITOR_LABEL_NAME">Apocalypse Town Traitor Label</Entry>
+    <Entry key="FANCY_APOC_TRAITOR_LABEL_DESC">The text that is shown in the role card when the player is an Apocalypse Town Traitor.</Entry>
+
+    <Entry key="FANCY_PANDORA_TRAITOR_LABEL_NAME">Pandora Town Traitor Label</Entry>
+    <Entry key="FANCY_PANDORA_TRAITOR_LABEL_DESC">The text that is shown in the role card when the player is a Pandora Town Traitor.</Entry>
+
     <Entry key="FANCY_VIP_LABEL_NAME">VIP Label</Entry>
     <Entry key="FANCY_VIP_LABEL_DESC">The text that is shown in the role card when the player is VIP (Vanilla Games Only).</Entry>
 

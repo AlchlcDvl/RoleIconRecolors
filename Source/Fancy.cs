@@ -120,7 +120,9 @@ public class Fancy : BaseMod<Fancy>
     public static FloatOption PlayerNumber;
 
     public static StringInputOption RecruitLabel;
-    public static StringInputOption TraitorLabel;
+    public static StringInputOption CovenTraitorLabel;
+    public static StringInputOption ApocTraitorLabel;
+    public static StringInputOption PandoraTraitorLabel;
     public static StringInputOption VIPLabel;
     public static StringInputOption CourtLabel;
     public static StringInputOption JuryLabel;
@@ -311,7 +313,9 @@ public class Fancy : BaseMod<Fancy>
         RecruitEndingColor = new("RECRUIT_ENDING", RecruitEndType.JackalEnd, PackType.MiscRoleCustomisation, useTranslations: true);
         RoleCardFactionLabel = new("FACTION_LABEL", FactionLabelOption.Mismatch, PackType.MiscRoleCustomisation, useTranslations: true);
         RecruitLabel = new("RECRUIT_LABEL", "Recruited", PackType.MiscRoleCustomisation);
-        TraitorLabel = new("TRAITOR_LABEL", "Town Traitor", PackType.MiscRoleCustomisation);
+        CovenTraitorLabel = new("COVEN_TRAITOR_LABEL", "Town Traitor", PackType.MiscRoleCustomisation);
+        ApocTraitorLabel = new("APOC_TRAITOR_LABEL", "Town Traitor", PackType.MiscRoleCustomisation);
+        PandoraTraitorLabel = new("PANDORA_TRAITOR_LABEL", "Town Traitor", PackType.MiscRoleCustomisation);
         VIPLabel = new("VIP_LABEL", "VIP", PackType.MiscRoleCustomisation);
         CourtLabel = new("COURT_LABEL", "Court", PackType.MiscRoleCustomisation);
         JuryLabel = new("JURY_LABEL", "Jury", PackType.MiscRoleCustomisation);

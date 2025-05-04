@@ -48,13 +48,35 @@ public static class PatchRoleCard
 
         switch (modifier)
         {
-            case ROLE_MODIFIER.TRAITOR when gradientTt != null:
-                text += $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.TraitorLabel.Value})", gradientTt)}</size>";
+            case ROLE_MODIFIER.TRAITOR:
+                if (gradientTt != null)
+                {
+                    switch (faction)
+                    {
+                        case FactionType.COVEN:
+                            text += $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.CovenTraitorLabel.Value})", gradientTt)}</size>";
+                            break;
+                        case FactionType.APOCALYPSE:
+                            text += $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.ApocTraitorLabel.Value})", gradientTt)}</size>";
+                            break;
+                        case (FactionType)44:
+                            text += $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.PandoraTraitorLabel.Value})", gradientTt)}</size>";
+                            break;
+                        default:
+                        text += $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.CovenTraitorLabel.Value})", gradientTt)}</size>";
+                            break;
+                    }
+                }
                 break;
-            case (ROLE_MODIFIER)10:
+            case ROLE_MODIFIER.VIP:
             {
                 var gradient = Btos2Faction.Jackal.GetChangedGradient(role);
                 text += $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.RecruitLabel.Value})", gradient)}</size>";
+                break;
+            }
+            case (ROLE_MODIFIER)10:
+            {
+                text += $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.VIPLabel.Value})", gradientTt)}</size>";
                 break;
             }
             default:
@@ -67,9 +89,6 @@ public static class PatchRoleCard
                     if (gradient2 != null)
                     {
                         text += $"\n<size=85%>{Utils.ApplyGradient($"({faction.ToDisplayString()})", gradient2)}</size>";
-
-                        if (modifier == ROLE_MODIFIER.VIP)
-                            text += $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.VIPLabel.Value})", gradientTt)}</size>";
                     }
                     else
                         text = $"{text}\n<size=85%><color={faction.GetFactionColor()}>({faction.ToDisplayString()})</color></size>";
@@ -402,7 +421,7 @@ public static class AddTtAndGradients
     public static void Postfix(ref string __result, Role role, FactionType factionType)
     {
         if (__result.Contains("<color=#B545FF>(Traitor)"))
-            __result = __result.Replace("<color=#B545FF>(Traitor)</color>", "<style=CovenColor>(Traitor)</style>");
+            __result = __result.Replace("<color=#B545FF>(Traitor)</color>", $"<style=CovenColor>({Fancy.CovenTraitorLabel.Value})</style>");
 
         if (!role.IsResolved() && role is not (Role.FAMINE or Role.DEATH or Role.PESTILENCE or Role.WAR))
             return;
