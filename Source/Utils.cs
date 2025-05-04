@@ -781,4 +781,22 @@ public static class Utils
     }
 
     private static string GetString(string key) => Service.Home.LocalizationService.GetLocalizedString(key);
+
+    private static bool ConditionalCompliancePandora(FactionType originalFaction, FactionType currentFaction)
+    {
+        if (currentFaction == (FactionType)43)
+            return originalFaction is FactionType.COVEN or FactionType.APOCALYPSE;
+
+        if (originalFaction == (FactionType)43)
+            return currentFaction is FactionType.COVEN or FactionType.APOCALYPSE;
+
+        if (currentFaction == Btos2Faction.Compliance)
+            return originalFaction is FactionType.SERIALKILLER or FactionType.ARSONIST or FactionType.WEREWOLF or FactionType.SHROUD;
+
+        if (originalFaction == Btos2Faction.Compliance)
+            return currentFaction is FactionType.SERIALKILLER or FactionType.ARSONIST or FactionType.WEREWOLF or FactionType.SHROUD;
+
+        return originalFaction == currentFaction;
+    }
+
 }

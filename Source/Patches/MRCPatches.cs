@@ -23,23 +23,6 @@ public static class PatchRoleCard
         __instance.roleNameText.text = Pepper.GetMyRole().ToChangedDisplayString(Pepper.GetMyFaction(), Service.Game.Sim.simulation.observations.roleCardObservation.Data.modifier);
     }
 
-    private static bool ConditionalCompliancePandora(FactionType originalFaction, FactionType currentFaction)
-    {
-        if (currentFaction == (FactionType)43)
-            return originalFaction is FactionType.COVEN or FactionType.APOCALYPSE;
-
-        if (originalFaction == (FactionType)43)
-            return currentFaction is FactionType.COVEN or FactionType.APOCALYPSE;
-
-        if (currentFaction == Btos2Faction.Compliance)
-            return originalFaction is FactionType.SERIALKILLER or FactionType.ARSONIST or FactionType.WEREWOLF or FactionType.SHROUD;
-
-        if (originalFaction == Btos2Faction.Compliance)
-            return currentFaction is FactionType.SERIALKILLER or FactionType.ARSONIST or FactionType.WEREWOLF or FactionType.SHROUD;
-
-        return originalFaction == currentFaction;
-    }
-
     private static string ToChangedDisplayString(this Role role, FactionType faction, ROLE_MODIFIER modifier)
     {
         var roleName = Fancy.FactionalRoleNames.Value ? role.ToRoleFactionDisplayString(faction) : role.ToDisplayString();
@@ -82,7 +65,7 @@ public static class PatchRoleCard
             default:
             {
                 if ((Fancy.RoleCardFactionLabel.Value == FactionLabelOption.Mismatch && role.GetFactionType() != faction) || Fancy.RoleCardFactionLabel.Value == FactionLabelOption.Always ||
-                    (Fancy.RoleCardFactionLabel.Value == FactionLabelOption.Conditional && !ConditionalCompliancePandora(role.GetFactionType(), faction)))
+                    (Fancy.RoleCardFactionLabel.Value == FactionLabelOption.Conditional && !Utils.ConditionalCompliancePandora(role.GetFactionType(), faction)))
                 {
                     var gradient2 = faction.GetChangedGradient(role);
 
@@ -430,7 +413,7 @@ public static class AddTtAndGradients
         var gradient = factionType.GetChangedGradient(role);
         var newText = gradient != null ? Utils.ApplyGradient(text, gradient) : $"<color={factionType.GetFactionColor()}>{text}</color>";
 
-        if (role.GetFaction() != factionType && factionType != FactionType.NONE && Fancy.FactionNameNextToRole.Value && !Pepper.IsRoleRevealPhase())
+        if (((Fancy.FactionNameNextToRole.Value == FactionLabelOption.Mismatch && role.GetFaction() != factionType) || (Fancy.FactionNameNextToRole.Value == FactionLabelOption.Always) || (Fancy.FactionNameNextToRole.Value == FactionLabelOption.Conditional && !Utils.ConditionalCompliancePandora(role.GetFaction(), factionType))) && !Pepper.IsRoleRevealPhase())
         {
             if (gradient != null)
                 newText += $" {Utils.ApplyGradient($"({factionType.ToDisplayString()})", gradient)}";
