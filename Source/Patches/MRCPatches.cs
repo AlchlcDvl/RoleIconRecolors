@@ -70,13 +70,13 @@ public static class PatchRoleCard
                 break;
             case ROLE_MODIFIER.VIP:
             {
-                var gradient = Btos2Faction.Jackal.GetChangedGradient(role);
-                text += $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.RecruitLabel.Value})", gradient)}</size>";
+                text += $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.RecruitLabel.Value})", gradientTt)}</size>";
                 break;
             }
             case (ROLE_MODIFIER)10:
             {
-                text += $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.VIPLabel.Value})", gradientTt)}</size>";
+                var gradient = Btos2Faction.Jackal.GetChangedGradient(role);
+                text += $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.VIPLabel.Value})", gradient)}</size>";
                 break;
             }
             default:
