@@ -75,9 +75,23 @@ namespace FancyUI.Patches
 
             var gradientTT = faction.GetChangedGradient(role);
 
-            if (modifier == (ROLE_MODIFIER)2 && gradientTT != null)
+            if (modifier == ROLE_MODIFIER.TRAITOR && gradientTT != null)
             {
-                text = text + "\n<size=85%>" + Utils.ApplyGradient($"({Fancy.TraitorLabel.Value})", gradientTT.Evaluate(0f), gradientTT.Evaluate(1f)) + "</size>";
+                switch (faction)
+                    {
+                        case FactionType.COVEN:
+                            text = text + "\n<size=85%>" + Utils.ApplyGradient($"({Fancy.CovenTraitorLabel.Value})", gradientTT.Evaluate(0f), gradientTT.Evaluate(1f)) + "</size>";
+                            break;
+                        case FactionType.APOCALYPSE:
+                            text = text + "\n<size=85%>" + Utils.ApplyGradient($"({Fancy.ApocTraitorLabel.Value})", gradientTT.Evaluate(0f), gradientTT.Evaluate(1f)) + "</size>";
+                            break;
+                        case (FactionType)44:
+                            text = text + "\n<size=85%>" + Utils.ApplyGradient($"({Fancy.PandoraTraitorLabel.Value})", gradientTT.Evaluate(0f), gradientTT.Evaluate(1f)) + "</size>";
+                            break;
+                        default:
+                            text = text + "\n<size=85%>" + Utils.ApplyGradient($"({Fancy.CovenTraitorLabel.Value})", gradientTT.Evaluate(0f), gradientTT.Evaluate(1f)) + "</size>";
+                            break;
+                    }
             }
             else if (modifier == (ROLE_MODIFIER)10)
             {
@@ -98,7 +112,7 @@ namespace FancyUI.Patches
                     else
                         text = text + "\n<size=85%>" + Utils.ApplyGradient("(" + faction.ToDisplayString() + ")", gradient2.Evaluate(0f), gradient2.Evaluate(1f)) + "</size>";
 
-                    if (modifier == (ROLE_MODIFIER)1)
+                    if (modifier == ROLE_MODIFIER.VIP)
                     {
                         text = text + "\n<size=85%>" + Utils.ApplyGradient($"({Fancy.VIPLabel.Value})", gradientTT.Evaluate(0f), gradientTT.Evaluate(1f)) + "</size>";
                     }
