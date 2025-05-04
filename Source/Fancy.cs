@@ -109,7 +109,6 @@ public class Fancy : BaseMod<Fancy>
     public static ToggleOption ShowOverlayAsJailor;
     public static ToggleOption IconsInRoleReveal;
     public static ToggleOption FactionalRoleNames;
-    public static ToggleOption FactionNameNextToRole; 
 
     public static ToggleOption MajorColors;
     public static ToggleOption LethalColors;
@@ -137,6 +136,7 @@ public class Fancy : BaseMod<Fancy>
     public static EnumDropdownOption<Role> SelectTestingRole; // TODO: Implement this
     public static EnumDropdownOption<RecruitEndType> RecruitEndingColor;
     public static EnumDropdownOption<FactionLabelOption> RoleCardFactionLabel;
+    public static EnumDropdownOption<FactionLabelOption> FactionNameNextToRole;
     public static EnumDropdownOption<DisplayType> SelectDisplay;
     public static EnumDropdownOption<CinematicType> TownCinematic;
     public static EnumDropdownOption<CinematicType> CovenCinematic;
@@ -295,11 +295,11 @@ public class Fancy : BaseMod<Fancy>
         PlayerPanelEasterEggs = new("PLAYER_PANEL_EE", false, PackType.IconPacks, _ => Constants.EnableIcons());
 
         FactionalRoleNames = new("FACTIONAL_ROLE_NAMES", false, PackType.MiscRoleCustomisation);
-        FactionNameNextToRole = new("FACTION_NEXT_TO_ROLE", false, PackType.MiscRoleCustomisation);
         MajorColors = new("MAJOR_COLORS", false, PackType.MiscRoleCustomisation);
         LethalColors = new("LETHAL_COLORS", false, PackType.MiscRoleCustomisation);
         RecruitEndingColor = new("RECRUIT_ENDING", RecruitEndType.JackalEnd, PackType.MiscRoleCustomisation, useTranslations: true);
         RoleCardFactionLabel = new("FACTION_LABEL", FactionLabelOption.Mismatch, PackType.MiscRoleCustomisation, useTranslations: true);
+        FactionNameNextToRole = new("FACTION_NEXT_TO_ROLE", FactionLabelOption.Never, PackType.MiscRoleCustomisation, useTranslations: true);
         RecruitLabel = new("RECRUIT_LABEL", "Recruited", PackType.MiscRoleCustomisation);
         CovenTraitorLabel = new("COVEN_TRAITOR_LABEL", "Town Traitor", PackType.MiscRoleCustomisation);
         ApocTraitorLabel = new("APOC_TRAITOR_LABEL", "Town Traitor", PackType.MiscRoleCustomisation);

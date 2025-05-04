@@ -990,4 +990,26 @@ public static class Utils
         Color32 color2 = color;
         return $"#{color2.r:X2}{color2.g:X2}{color2.b:X2}";
     }
+
+    public static bool ConditionalCompliancePandora(FactionType originalFaction, FactionType currentFaction)
+    {
+        if (currentFaction == (FactionType)43)
+        {
+            return originalFaction == FactionType.COVEN || originalFaction == FactionType.APOCALYPSE;
+        }
+        if (originalFaction == (FactionType)43)
+        {
+            return currentFaction == FactionType.COVEN || currentFaction == FactionType.APOCALYPSE;
+        }
+        if (currentFaction == (FactionType)44)
+        {
+            return originalFaction == FactionType.SERIALKILLER || originalFaction == FactionType.ARSONIST || originalFaction == FactionType.WEREWOLF || originalFaction == FactionType.SHROUD;
+        }
+        if (originalFaction == (FactionType)44)
+        {
+            return currentFaction == FactionType.SERIALKILLER || currentFaction == FactionType.ARSONIST || currentFaction == FactionType.WEREWOLF || currentFaction == FactionType.SHROUD;
+        }
+        return originalFaction == currentFaction;
+    }
+
 }
