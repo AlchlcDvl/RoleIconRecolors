@@ -115,10 +115,67 @@ namespace FancyUI.Patches
         }
     }
 
+    [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.OnClickRoleDesc))]
+    public static class RoleCardPanelPatches
+    {
+        public static void Postfix(RoleCardPanel __instance)
+        {
+            var text = __instance.roleDescText.text;
+            var header = Utils.GetString("GUI_ROLECARDHEADER_FACTION");
+            var index = text.IndexOf(header);
+            if (index < 0) return;
+
+            var start = text.IndexOf('\n', index) + 1;
+            var end = text.IndexOf('\n', start);
+            if (start <= 0 || end <= start) return;
+
+            var faction = text[start..end].Trim();
+
+            var factionName = Utils.RemoveColorTags(faction);
+
+            var factionType = __instance.CurrentFaction; 
+
+            var gradient = factionType.GetChangedGradient(Role.NONE);
+            var colored = factionType == (FactionType)44
+                ? Utils.ApplyThreeColorGradient(factionName, gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f))
+                : Utils.ApplyGradient(factionName, gradient.Evaluate(0f), gradient.Evaluate(1f));
+
+            __instance.roleDescText.text = text[..start] + colored + text[end..];
+        }
+    }
     [HarmonyPatch(typeof(RoleCardPopupPanel), nameof(RoleCardPopupPanel.SetRole))]
     public static class RoleCardPopupPatches
     {
         public static void Postfix(ref Role role, RoleCardPopupPanel __instance) => __instance.roleNameText.text = ClientRoleExtensions.ToColorizedDisplayString(role);
+    }
+
+    [HarmonyPatch(typeof(RoleCardPopupPanel), nameof(RoleCardPopupPanel.OnClickRoleDesc))]
+    public static class RoleCardPopupPatches2
+    {
+        public static void Postfix(RoleCardPopupPanel __instance)
+        {
+            var text = __instance.roleDescText.text;
+            var header = Utils.GetString("GUI_ROLECARDHEADER_FACTION");
+            var index = text.IndexOf(header);
+            if (index < 0) return;
+
+            var start = text.IndexOf('\n', index) + 1;
+            var end = text.IndexOf('\n', start);
+            if (start <= 0 || end <= start) return;
+
+            var faction = text[start..end].Trim();
+
+            var factionName = Utils.RemoveColorTags(faction);
+
+            var factionType = __instance.CurrentFaction; 
+
+            var gradient = factionType.GetChangedGradient(Role.NONE);
+            var colored = factionType == (FactionType)44
+                ? Utils.ApplyThreeColorGradient(factionName, gradient.Evaluate(0f), gradient.Evaluate(0.5f), gradient.Evaluate(1f))
+                : Utils.ApplyGradient(factionName, gradient.Evaluate(0f), gradient.Evaluate(1f));
+
+            __instance.roleDescText.text = text[..start] + colored + text[end..];
+        }
     }
 
     [HarmonyPatch(typeof(TosAbilityPanelListItem), nameof(TosAbilityPanelListItem.SetKnownRole))]

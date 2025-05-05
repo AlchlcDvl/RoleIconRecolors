@@ -1012,4 +1012,9 @@ public static class Utils
         return originalFaction == currentFaction;
     }
 
+    public static string RemoveColorTags(string input)
+    {
+        return System.Text.RegularExpressions.Regex.Replace(input, @"<color=[^>]+>|</color>", "");
+    }
+
 }
