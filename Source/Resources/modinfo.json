@@ -6,6 +6,5 @@
   "Version": "2.0.0",
   "Discord": "https://discord.gg/2EvCNcxx4c",
   "RequiredMods": [ "alchlcsystm.witchcraft", "JAN.modpagelib" ],
-  "AfterLoadedMods": [ "curtis.tuba.better.tos2" ],
   "ConflictingMods": [ "curtis.colour.swapper", "alchlcsystm.fixes", "det.rolecustomizationmod" ]
 }
