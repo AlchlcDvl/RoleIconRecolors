@@ -86,17 +86,21 @@ public static class RoleCardPanelPatches
         var text = __instance.roleDescText.text;
         var header = Utils.GetString("GUI_ROLECARDHEADER_FACTION");
         var index = text.IndexOf(header);
-        if (index < 0) return;
+
+        if (index < 0)
+            return;
 
         var start = text.IndexOf('\n', index) + 1;
         var end = text.IndexOf('\n', start);
-        if (start <= 0 || end <= start) return;
+
+        if (start <= 0 || end <= start)
+            return;
 
         var faction = text[start..end].Trim();
 
         var factionName = Utils.RemoveColorTags(faction);
 
-        var factionType = __instance.CurrentFaction; 
+        var factionType = __instance.CurrentFaction;
 
         var gradient = factionType.GetChangedGradient(Role.NONE);
         var colored = Utils.ApplyGradient(factionName, gradient);
@@ -119,17 +123,21 @@ public static class RoleCardPopupPatches2
         var text = __instance.roleDescText.text;
         var header = Utils.GetString("GUI_ROLECARDHEADER_FACTION");
         var index = text.IndexOf(header);
-        if (index < 0) return;
+
+        if (index < 0)
+            return;
 
         var start = text.IndexOf('\n', index) + 1;
         var end = text.IndexOf('\n', start);
-        if (start <= 0 || end <= start) return;
+
+        if (start <= 0 || end <= start)
+            return;
 
         var faction = text[start..end].Trim();
 
         var factionName = Utils.RemoveColorTags(faction);
 
-        var factionType = __instance.CurrentFaction; 
+        var factionType = __instance.CurrentFaction;
 
         var gradient = factionType.GetChangedGradient(Role.NONE);
         var colored = Utils.ApplyGradient(factionName, gradient);
@@ -446,7 +454,8 @@ public static class AddTtAndGradients
         var gradient = factionType.GetChangedGradient(role);
         var newText = gradient != null ? Utils.ApplyGradient(text, gradient) : $"<color={factionType.GetFactionColor()}>{text}</color>";
 
-        if (((Fancy.FactionNameNextToRole.Value == FactionLabelOption.Mismatch && role.GetFaction() != factionType) || (Fancy.FactionNameNextToRole.Value == FactionLabelOption.Always) || (Fancy.FactionNameNextToRole.Value == FactionLabelOption.Conditional && !Utils.ConditionalCompliancePandora(role.GetFaction(), factionType))) && !Pepper.IsRoleRevealPhase())
+        if (((Fancy.FactionNameNextToRole.Value == FactionLabelOption.Mismatch && role.GetFaction() != factionType) || (Fancy.FactionNameNextToRole.Value == FactionLabelOption.Always) ||
+            (Fancy.FactionNameNextToRole.Value == FactionLabelOption.Conditional && !Utils.ConditionalCompliancePandora(role.GetFaction(), factionType))) && !Pepper.IsRoleRevealPhase())
         {
             if (gradient != null)
                 newText += $" {Utils.ApplyGradient($"({factionType.ToDisplayString()})", gradient)}";

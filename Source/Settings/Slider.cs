@@ -1,9 +1,8 @@
 namespace FancyUI.Settings;
 
-public class SliderSetting : Setting
+public class SliderSetting : BaseInputSetting
 {
     public Slider Slider { get; set; }
-    public TMP_InputField Input { get; set; }
     public FloatOption Option { get; set; }
 
     public override Option BoxedOption
@@ -16,7 +15,6 @@ public class SliderSetting : Setting
     {
         base.Awake();
         Slider = transform.GetComponent<Slider>("Slider");
-        Input = transform.GetComponent<TMP_InputField>("Input");
     }
 
     public void Start()
@@ -31,7 +29,6 @@ public class SliderSetting : Setting
         Slider.onValueChanged.AddListener(OnValueChanged);
 
         Input.SetTextWithoutNotify($"{Slider.value:0.##}");
-        Input.restoreOriginalTextOnEscape = true;
         Input.onValueChanged.AddListener(OnValueChanged);
     }
 

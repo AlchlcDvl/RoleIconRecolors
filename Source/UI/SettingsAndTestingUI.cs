@@ -208,27 +208,27 @@ public class SettingsAndTestingUI : UIController
                 StringInputOption => InputTemplate,
                 _ => ToggleTemplate,
             }), optionParent);
+            setting.Refresh();
             Metals.Add(setting.Background);
 
-            switch (opt)
+            switch (setting)
             {
-                case FloatOption slider:
+                case DropdownSetting dropdown:
                 {
-                    Metals.Add(slider.Setting.Input.GetComponent<Image>());
-                    Metals.Add(slider.Setting.Slider.targetGraphic as Image);
-                    Metals.Add(slider.Setting.Slider.transform.GetComponent<Image>("Background"));
+                    Metals.Add(dropdown.Arrow);
+                    Metals.Add(dropdown.Dropdown.GetComponent<Image>());
                     break;
                 }
-                case IDropdown dropdown:
+                case BaseInputSetting input:
                 {
-                    Metals.Add(dropdown.Setting.Arrow);
-                    Metals.Add(dropdown.Setting.Dropdown.GetComponent<Image>());
-                    Woods.Add(dropdown.Setting.Dropdown.transform.FindRecursive("Template").Find("Background").GetComponent<Image>());
-                    break;
-                }
-                case StringInputOption input:
-                {
-                    Metals.Add(input.Setting.Input.GetComponent<Image>());
+                    Metals.Add(input.Input.GetComponent<Image>());
+
+                    if (input is SliderSetting slider)
+                    {
+                        Metals.Add(slider.Slider.targetGraphic as Image);
+                        Metals.Add(slider.Slider.transform.GetComponent<Image>("Background"));
+                    }
+
                     break;
                 }
             }

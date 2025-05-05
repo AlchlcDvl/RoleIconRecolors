@@ -1,4 +1,5 @@
 // using FancyUI.Assets.SilhouetteSwapper;
+using System.Text.RegularExpressions;
 using Home.Shared;
 using NewModLoading;
 
@@ -799,8 +800,5 @@ public static class Utils
         return originalFaction == currentFaction;
     }
 
-    public static string RemoveColorTags(string input)
-    {
-        return System.Text.RegularExpressions.Regex.Replace(input, @"<color=[^>]+>|</color>", "");
-    }
+    public static string RemoveColorTags(string input) => Regex.Replace(input, "<color=[^>]+>|</color>", "");
 }
