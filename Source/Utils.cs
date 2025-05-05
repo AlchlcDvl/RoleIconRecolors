@@ -780,7 +780,7 @@ public static class Utils
         return name == "Stoned_Hidden" ? Fancy.Colors["STONED_HIDDEN"].Start.ToColor() : Fancy.Colors[name.ToUpper()].End.ToColor();
     }
 
-    private static string GetString(string key) => Service.Home.LocalizationService.GetLocalizedString(key);
+    public static string GetString(string key) => Service.Home.LocalizationService.GetLocalizedString(key);
 
     public static bool ConditionalCompliancePandora(FactionType originalFaction, FactionType currentFaction)
     {
@@ -797,5 +797,10 @@ public static class Utils
             return currentFaction is FactionType.SERIALKILLER or FactionType.ARSONIST or FactionType.WEREWOLF or FactionType.SHROUD;
 
         return originalFaction == currentFaction;
+    }
+
+    public static string RemoveColorTags(string input)
+    {
+        return System.Text.RegularExpressions.Regex.Replace(input, @"<color=[^>]+>|</color>", "");
     }
 }
