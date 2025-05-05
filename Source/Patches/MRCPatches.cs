@@ -444,14 +444,21 @@ public static class AddTtAndGradients
 {
     public static void Postfix(ref string __result, Role role, FactionType factionType)
     {
+        var gradient = factionType.GetChangedGradient(role);
+
         if (__result.Contains("<color=#B545FF>(Traitor)"))
-            __result = __result.Replace("<color=#B545FF>(Traitor)</color>", $"<style=CovenColor>({Fancy.CovenTraitorLabel.Value})</style>");
+        {
+            if (gradient != null)
+                __result = __result.Replace("<color=#B545FF>(Traitor)</color>", $"{Utils.ApplyGradient($"({Fancy.CovenTraitorLabel.Value})", gradient)}");
+            else 
+                __result = __result.Replace("<color=#B545FF>(Traitor)</color>", $"<style=CovenColor>({Fancy.CovenTraitorLabel.Value})</style>");
+        }
+            
 
         if (!role.IsResolved() && role is not (Role.FAMINE or Role.DEATH or Role.PESTILENCE or Role.WAR))
             return;
 
         var text = Fancy.FactionalRoleNames.Value ? role.ToRoleFactionDisplayString(factionType) : role.ToDisplayString();
-        var gradient = factionType.GetChangedGradient(role);
         var newText = gradient != null ? Utils.ApplyGradient(text, gradient) : $"<color={factionType.GetFactionColor()}>{text}</color>";
 
         if (((Fancy.FactionNameNextToRole.Value == FactionLabelOption.Mismatch && role.GetFaction() != factionType) || (Fancy.FactionNameNextToRole.Value == FactionLabelOption.Always) ||
