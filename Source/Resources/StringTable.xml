@@ -447,6 +447,9 @@
     <Entry key="FANCY_SELECTED_TESTING_FACTION_NAME">Testing Faction</Entry>
     <Entry key="FANCY_SELECTED_TESTING_FACTION_DESC">Modifies the testing UI as per the selected faction as if you were that faction in game.</Entry>
 
+    <Entry key="FANCY_SELECTED_TESTING_ROLE_NAME">Testing Role</Entry>
+    <Entry key="FANCY_SELECTED_TESTING_ROLE_DESC">Modifies the testing UI as per the selected role as if you were that role in game.</Entry>
+
     <Entry key="FANCY_GRAYSCALE_AMOUNT_NAME">Color Effectiveness</Entry>
     <Entry key="FANCY_GRAYSCALE_AMOUNT_DESC">How effective is the custom color (0 = Custom color is additive, 100 = Custom color replaces, 50 = Mix of both 0 and 100 values).</Entry>
 
@@ -490,17 +493,75 @@
     <Entry key="FANCY_NONE">None</Entry>
     <Entry key="FANCY_TOWN">Town</Entry>
     <Entry key="FANCY_COVEN">Coven</Entry>
-    <Entry key="FANCY_SERIALKILLER">Serial Killer</Entry>
-    <Entry key="FANCY_ARSONIST">Arsonist</Entry>
-    <Entry key="FANCY_WEREWOLF">Werewolf</Entry>
-    <Entry key="FANCY_SHROUD">Shroud</Entry>
     <Entry key="FANCY_APOCALYPSE">Apocalypse</Entry>
+    <Entry key="FANCY_ADMIRER">Admirer</Entry>
+    <Entry key="FANCY_AMNESIAC">Amnesiac</Entry>
+    <Entry key="FANCY_BODYGUARD">Bodyguard</Entry>
+    <Entry key="FANCY_CLERIC">Cleric</Entry>
+    <Entry key="FANCY_CORONER">Coroner</Entry>
+    <Entry key="FANCY_CRUSADER">Crusader</Entry>
+    <Entry key="FANCY_DEPUTY">Deputy</Entry>
+    <Entry key="FANCY_INVESTIGATOR">Investigator</Entry>
+    <Entry key="FANCY_JAILOR">Jailor</Entry>
+    <Entry key="FANCY_LOOKOUT">Lookout</Entry>
+    <Entry key="FANCY_MAYOR">Mayor</Entry>
+    <Entry key="FANCY_MONARCH">Monarch</Entry>
+    <Entry key="FANCY_PROSECUTOR">Prosecutor</Entry>
+    <Entry key="FANCY_PSYCHIC">Psychic</Entry>
+    <Entry key="FANCY_RETRIBUTIONIST">Retributionist</Entry>
+    <Entry key="FANCY_SEER">Seer</Entry>
+    <Entry key="FANCY_SHERIFF">Sheriff</Entry>
+    <Entry key="FANCY_SPY">Spy</Entry>
+    <Entry key="FANCY_TAVERNKEEPER">Tavern Keeper</Entry>
+    <Entry key="FANCY_TRACKER">Tracker</Entry>
+    <Entry key="FANCY_TRAPPER">Trapper</Entry>
+    <Entry key="FANCY_TRICKSTER">Trickster</Entry>
+    <Entry key="FANCY_VETERAN">Veteran</Entry>
+    <Entry key="FANCY_VIGILANTE">Vigilante</Entry>
+    <Entry key="FANCY_CONJURER">Conjurer</Entry>
+    <Entry key="FANCY_COVENLEADER">Coven Leader</Entry>
+    <Entry key="FANCY_DREAMWEAVER">Dreamweaver</Entry>
+    <Entry key="FANCY_ENCHANTER">Enchanter</Entry>
+    <Entry key="FANCY_HEXMASTER">Hex Master</Entry>
+    <Entry key="FANCY_ILLUSIONIST">Illusionist</Entry>
+    <Entry key="FANCY_JINX">Jinx</Entry>
+    <Entry key="FANCY_MEDUSA">Medusa</Entry>
+    <Entry key="FANCY_NECROMANCER">Necromancer</Entry>
+    <Entry key="FANCY_POISONER">Poisoner</Entry>
+    <Entry key="FANCY_POTIONMASTER">Potion Master</Entry>
+    <Entry key="FANCY_RITUALIST">Ritualist</Entry>
+    <Entry key="FANCY_VOODOOMASTER">Voodoo Master</Entry>
+    <Entry key="FANCY_WILDLING">Wildling</Entry>
+    <Entry key="FANCY_WITCH">Witch</Entry>
+    <Entry key="FANCY_ARSONIST">Arsonist</Entry>
+    <Entry key="FANCY_BAKER">Baker</Entry>
+    <Entry key="FANCY_BERSERKER">Berserker</Entry>
+    <Entry key="FANCY_DOOMSAYER">Doomsayer</Entry>
     <Entry key="FANCY_EXECUTIONER">Executioner</Entry>
     <Entry key="FANCY_JESTER">Jester</Entry>
     <Entry key="FANCY_PIRATE">Pirate</Entry>
-    <Entry key="FANCY_DOOMSAYER">Doomsayer</Entry>
+    <Entry key="FANCY_PLAGUEBEARER">Plaguebearer</Entry>
+    <Entry key="FANCY_SERIALKILLER">Serial Killer</Entry>
+    <Entry key="FANCY_SHROUD">Shroud</Entry>
+    <Entry key="FANCY_SOULCOLLECTOR">Soul Collector</Entry>
+    <Entry key="FANCY_WEREWOLF">Werewolf</Entry>
     <Entry key="FANCY_VAMPIRE">Vampire</Entry>
     <Entry key="FANCY_CURSED_SOUL">Cursed Soul</Entry>
+    <Entry key="FANCY_SOCIALITE">Socialite/Banshee</Entry>
+    <Entry key="FANCY_MARSHAL">Marshal/Jackal</Entry>
+    <Entry key="FANCY_ORACLE">Oracle/Marshal</Entry>
+    <Entry key="FANCY_FAMINE">Famine</Entry>
+    <Entry key="FANCY_WAR">War</Entry>
+    <Entry key="FANCY_PESTILENCE">Pestilence</Entry>
+    <Entry key="FANCY_DEATH">Death</Entry>
+    <Entry key="FANCY_ROLE_COUNT">Judge</Entry>
+    <Entry key="FANCY_58">Auditor</Entry>
+    <Entry key="FANCY_59">Inquisitor</Entry>
+    <Entry key="FANCY_60">Starspawn</Entry>
+    <Entry key="FANCY_61">Oracle</Entry>
+    <Entry key="FANCY_62">Warlock</Entry>
+
+
     <Entry key="FANCY_33">Jackal</Entry>
     <Entry key="FANCY_34">Frogs</Entry>
     <Entry key="FANCY_35">Lions</Entry>
@@ -2322,10 +2383,10 @@
     <Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_60">Starspawn</Entry>
     <Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_61">Oracle</Entry>
     <Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_62">Warlock</Entry>
-    <Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_63">Famine</Entry>
-    <Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_64">War</Entry>
-    <Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_65">Pestilence</Entry>
-    <Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_66">Death</Entry>
+    <Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_250">Famine</Entry>
+    <Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_251">War</Entry>
+    <Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_252">Pestilence</Entry>
+    <Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_253">Death</Entry>
 
 
     <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_0">None</Entry>
@@ -2391,10 +2452,10 @@
     <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_60">Starspawn</Entry>
     <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_61">Oracle</Entry>
     <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_62">Warlock</Entry>
-    <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_63">Famine</Entry>
-    <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_64">War</Entry>
-    <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_65">Pestilence</Entry>
-    <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_66">Death</Entry>
+    <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_250">Famine</Entry>
+    <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_251">War</Entry>
+    <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_252">Pestilence</Entry>
+    <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_253">Death</Entry>
 
 
     <Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_0">None</Entry>
@@ -2460,10 +2521,10 @@
     <Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_60">Starspawn</Entry>
     <Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_61">Oracle</Entry>
     <Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_62">Warlock</Entry>
-    <Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_63">Famine</Entry>
-    <Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_64">War</Entry>
-    <Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_65">Pestilence</Entry>
-    <Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_66">Death</Entry>
+    <Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_250">Famine</Entry>
+    <Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_251">War</Entry>
+    <Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_252">Pestilence</Entry>
+    <Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_253">Death</Entry>
 
 
     <Entry key="FANCY_SHROUD_BTOS_ROLENAME_0">None</Entry>
@@ -2529,10 +2590,10 @@
     <Entry key="FANCY_SHROUD_BTOS_ROLENAME_60">Starspawn</Entry>
     <Entry key="FANCY_SHROUD_BTOS_ROLENAME_61">Oracle</Entry>
     <Entry key="FANCY_SHROUD_BTOS_ROLENAME_62">Warlock</Entry>
-    <Entry key="FANCY_SHROUD_BTOS_ROLENAME_63">Famine</Entry>
-    <Entry key="FANCY_SHROUD_BTOS_ROLENAME_64">War</Entry>
-    <Entry key="FANCY_SHROUD_BTOS_ROLENAME_65">Pestilence</Entry>
-    <Entry key="FANCY_SHROUD_BTOS_ROLENAME_66">Death</Entry>
+    <Entry key="FANCY_SHROUD_BTOS_ROLENAME_250">Famine</Entry>
+    <Entry key="FANCY_SHROUD_BTOS_ROLENAME_251">War</Entry>
+    <Entry key="FANCY_SHROUD_BTOS_ROLENAME_252">Pestilence</Entry>
+    <Entry key="FANCY_SHROUD_BTOS_ROLENAME_253">Death</Entry>
 
 <!--Apocalypse-->
 <Entry key="FANCY_APOCALYPSE_BTOS_ROLENAME_0">None</Entry>
@@ -4431,10 +4492,10 @@ Unused Arsonist strings, AS dont delete this, they will be used someday (unless 
     <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_60">Starspawn</Entry>
     <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_61">Ignis</Entry>
     <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_62">Flamespirit</Entry>
-    <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_63">Famine</Entry>
-    <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_64">War</Entry>
-    <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_65">Pestilence</Entry>
-    <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_66">Death</Entry>
+    <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_250">Famine</Entry>
+    <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_251">War</Entry>
+    <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_252">Pestilence</Entry>
+    <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_253">Death</Entry>
 -->
 
 

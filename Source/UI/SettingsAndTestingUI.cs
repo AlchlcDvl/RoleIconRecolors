@@ -1,3 +1,5 @@
+using Home.Shared;
+
 namespace FancyUI.UI;
 
 public class SettingsAndTestingUI : UIController
@@ -267,18 +269,18 @@ public class SettingsAndTestingUI : UIController
         Utils.UpdateMaterials(skipFactionCheck: true);
     }
 
-    public void Refresh()
+    public void Refresh() 
     {
         Animator.SetDuration(Constants.AnimationDuration());
         NameText.SetText(DefaultNameText
             .Replace("%num%", $"{Constants.PlayerNumber()}")
-            .Replace("%roleName%", Utils.ApplyGradient("(Admirer)", Fancy.SelectTestingFaction.Value.GetChangedGradient(Role.ADMIRER))));
+            .Replace("%roleName%", Utils.ApplyGradient($"{(Fancy.FactionalRoleNames.Value ? Utils.GetRoleName(Fancy.SelectTestingRole.Value, Fancy.SelectTestingFaction.Value, true) : Utils.GetString($"{(IsBTOS2 ? "BTOS_" : "GUI_")}ROLENAME_{(int)Fancy.SelectTestingRole.Value}"))}", Fancy.SelectTestingFaction.Value.GetChangedGradient(Fancy.SelectTestingRole.Value))));
         NameText.SetGraphicColor(ColorType.Paper);
         RoleText.SetText(DefaultRoleText
             .Replace("%type%", $"{Utils.FactionName(Constants.GetSelectedFaction(), IsBTOS2 ? GameModType.BTOS2 : GameModType.Vanilla, stoned: true)}")
             .Replace("%mod%", IsBTOS2 ? "BTOS" : "")
-            .Replace("%roleName%", Utils.ApplyGradient("Admirer", Fancy.SelectTestingFaction.Value.GetChangedGradient(Role.ADMIRER)))
-            .Replace("%roleInt%", "1"));
+            .Replace("%roleName%", Utils.ApplyGradient($"{(Fancy.FactionalRoleNames.Value ? Utils.GetRoleName(Fancy.SelectTestingRole.Value, Fancy.SelectTestingFaction.Value) : Utils.GetString($"{(IsBTOS2 ? "BTOS_" : "GUI_")}ROLENAME_{(int)Fancy.SelectTestingRole.Value}"))}", Fancy.SelectTestingFaction.Value.GetChangedGradient(Fancy.SelectTestingRole.Value)))
+            .Replace("%roleInt%", $"{(int)Fancy.SelectTestingRole.Value}"));
         Displays.ForEach((x, y) => y.SetActive(Fancy.SelectDisplay.Value == x));
         // Icons.ForEach(x => x.UpdateIcon(Fancy.SelectTestingRole.Value));
         ToggleImage.sprite = Fancy.Instance.Assets.GetSprite($"{(IsBTOS2 ? "B" : "")}ToS2Icon");

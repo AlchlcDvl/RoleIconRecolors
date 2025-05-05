@@ -750,6 +750,9 @@ public static class Utils
         if (Constants.IsBTOS2())
             factionName += "_BTOS";
 
+        if ((bool)(SettingsAndTestingUI.Instance?.IsBTOS2))
+            factionName += "_BTOS";
+
         return GetString($"FANCY_{factionName}_ROLENAME_{(int)role}");
     }
 

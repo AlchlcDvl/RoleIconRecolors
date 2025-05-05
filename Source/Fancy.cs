@@ -170,6 +170,8 @@ public class Fancy : BaseMod<Fancy>
 
     private static FactionType[] VanillaFactions;
     private static FactionType[] BTOS2Factions;
+    private static Role[] VanillaRoles;
+    private static Role[] BTOS2Roles;
 
     public static readonly Dictionary<FactionType, Dictionary<ColorType, ColorOption>> FactionToColorMap = [];
     public static readonly Dictionary<ColorType, ColorOption> CustomUIColorsMap = [];
@@ -180,6 +182,9 @@ public class Fancy : BaseMod<Fancy>
     {
         VanillaFactions = [.. GeneralUtils.GetEnumValues<FactionType>()!.Except([FactionType.UNKNOWN])];
         BTOS2Factions = [.. AccessTools.GetDeclaredFields(typeof(Btos2Faction)).Select(x => (FactionType)x.GetRawConstantValue())];
+        VanillaRoles = [.. GeneralUtils.GetEnumValues<Role>()!.Where(role => (byte)role < 57 || (byte)role > 250).Except([Role.STONED, Role.UNKNOWN, Role.NONE])];
+        BTOS2Roles = [.. AccessTools.GetDeclaredFields(typeof(Btos2Role)).Select(x => (Role)x.GetRawConstantValue()).Where(role => (byte)role < 63 || (byte)role > 249).Except([Role.STONED, Role.UNKNOWN])];
+
 
         BTOS2Factions.Do(x => FactionToColorMap[x] = []);
 
@@ -199,6 +204,8 @@ public class Fancy : BaseMod<Fancy>
 
         var colors = GeneralUtils.GetEnumValues<ColorType>()!.Where(x => x != ColorType.All).ToDictionary(x => x, x => x.ToString().ToUpperInvariant());
         var filteredFactions = BTOS2Factions.Where(x => x is not (Btos2Faction.Lovers or Btos2Faction.Cannibal or Btos2Faction.None));
+        var filteredRoles = BTOS2Roles.Where(x => ((int)x < 57 || (int)x > 249) && x != Role.STONED && x != Role.UNKNOWN).ToList();
+
         var factions = filteredFactions.ToDictionary(x => x, x => Utils.FactionName(x,
             Constants.BTOS2Exists() ? GameModType.BTOS2 : GameModType.Vanilla).ToUpperInvariant());
 
@@ -331,6 +338,8 @@ public class Fancy : BaseMod<Fancy>
         SelectDisplay = new("SELECT_DISPLAY", DisplayType.RoleCard, PackType.Testing, useTranslations: true);
         SelectTestingFaction = new("SELECTED_TESTING_FACTION", FactionType.NONE, PackType.Testing, useTranslations: true, values:
             () => SettingsAndTestingUI.Instance?.IsBTOS2 == true ? filteredFactions.AddItem(FactionType.NONE).ToArray() : VanillaFactions);
+        SelectTestingRole = new("SELECTED_TESTING_ROLE", Role.ADMIRER, PackType.Testing, useTranslations: true, values:
+            () => SettingsAndTestingUI.Instance?.IsBTOS2 == true ? BTOS2Roles : VanillaRoles);
 
         foreach (var faction in BTOS2Factions.Where(x => x is not (FactionType.NONE or (> FactionType.APOCALYPSE and < FactionType.VAMPIRE) or FactionType.CURSED_SOUL or FactionType.UNKNOWN or
             (> Btos2Faction.Hawks and < Btos2Faction.Pandora))))
