@@ -221,7 +221,8 @@ public class SettingsAndTestingUI : UIController
                 }
                 case BaseInputSetting input:
                 {
-                    Metals.Add(input.Input.GetComponent<Image>());
+                    if (input is not ColorSetting)
+                        Metals.Add(input.Input.GetComponent<Image>());
 
                     if (input is SliderSetting slider)
                     {

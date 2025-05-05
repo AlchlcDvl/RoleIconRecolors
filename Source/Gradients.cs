@@ -7,17 +7,8 @@ public static class GetChangedGradients
     public static Gradient GetChangedGradient(this FactionType faction, Role role)
     {
         var mod = Utils.GetGameType();
-        var middleKey = (faction switch
-        {
-            FactionType.NONE or FactionType.UNKNOWN => "STONED_HIDDEN",
-            _ => Utils.FactionName(faction, mod, stoned: true),
-        }).ToUpper();
-        var baseFaction = role.GetFactionType(mod);
-        var baseKey = (baseFaction switch
-        {
-            FactionType.NONE or FactionType.UNKNOWN => "STONED_HIDDEN",
-            _ => Utils.FactionName(baseFaction, mod, stoned: true),
-        }).ToUpper();
+        var middleKey = Utils.FactionName(faction, mod, stoned: true).ToUpper();
+        var baseKey = Utils.FactionName(role.GetFactionType(mod), mod, stoned: true).ToUpper();
         var startKey = faction switch
         {
             Btos2Faction.Jackal => Fancy.RecruitEndingColor.Value switch

@@ -196,7 +196,8 @@ public static class TosCharacterNametagPatch
 public static class FixStyles
 {
     private static readonly FieldInfo StylesField = AccessTools.Field(typeof(TMP_StyleSheet), "m_StyleList");
-    private static readonly FieldInfo OpeningDefField = AccessTools.Field(typeof(TMP_Style), "m_OpeningDefinition");
+    private static readonly FieldInfo OpeningDefField = AccessTools.Field(StyleType, "m_OpeningDefinition");
+    private static readonly Type StyleType = typeof(TMP_Style);
 
     public static void Postfix()
     {
@@ -225,6 +226,11 @@ public static class FixStyles
     {
         if (styles.TryFinding(s => s.name == styleName, out var style))
             OpeningDefField.SetValue(style, $"<color={colorValue}>");
+        else
+        {
+            style = (TMP_Style)Activator.CreateInstance(StyleType, styleName, $"<color={colorValue}>", "</color>");
+            styles.Add(style);
+        }
     }
 }
 
@@ -450,10 +456,9 @@ public static class AddTtAndGradients
         {
             if (gradient != null)
                 __result = __result.Replace("<color=#B545FF>(Traitor)</color>", $"{Utils.ApplyGradient($"({Fancy.CovenTraitorLabel.Value})", gradient)}");
-            else 
+            else
                 __result = __result.Replace("<color=#B545FF>(Traitor)</color>", $"<style=CovenColor>({Fancy.CovenTraitorLabel.Value})</style>");
         }
-            
 
         if (!role.IsResolved() && role is not (Role.FAMINE or Role.DEATH or Role.PESTILENCE or Role.WAR))
             return;
