@@ -14,6 +14,4 @@ public abstract class Setting : UIController
     }
 
     public virtual void Refresh() {}
-
-    public abstract bool SetActive();
 }

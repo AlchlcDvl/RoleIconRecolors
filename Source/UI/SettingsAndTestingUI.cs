@@ -26,6 +26,11 @@ public class SettingsAndTestingUI : UIController
     // private Image SpecialButtonImage { get; set; }
     // private Image EffectButtonImage { get; set; }
 
+    private Image FilterIcon { get; set; }
+    private Image FilterArrow { get; set; }
+    private GameObject FilterDropdown { get; set; }
+    private Material FilterMaterialDefault { get; set; }
+
     private readonly List<Image> Leathers = [];
     private readonly List<Image> Papers = [];
     private readonly List<Image> Metals = [];
@@ -36,13 +41,12 @@ public class SettingsAndTestingUI : UIController
     private readonly Dictionary<DisplayType, GameObject> Displays = [];
 
     // private readonly List<RoleCardIcon> Icons = [];
-    public readonly List<Setting> Settings = [];
 
     private bool isBTOS2;
     public bool IsBTOS2
     {
         get => isBTOS2;
-        set
+        private set
         {
             isBTOS2 = value;
             Refresh();
@@ -53,7 +57,7 @@ public class SettingsAndTestingUI : UIController
     public PackType Page
     {
         get => page;
-        set
+        private set
         {
             page = value;
             Refresh();
@@ -70,7 +74,7 @@ public class SettingsAndTestingUI : UIController
     // ];
 
     private const string DefaultRoleText = "<sprite=\"%mod%RoleIcons (%type%)\" name=\"Role%roleInt%\"><b>%roleName%</b>";
-    private const string DefaultNameText = "<sprite=\"PlayerNumbers\" name=\"PlayerNumbers_%num%\"><b>Giles Corey</b>";
+    private const string DefaultNameText = "<sprite=\"PlayerNumbers\" name=\"PlayerNumbers_%num%\"><b>Giles Corey %roleName%</b>";
 
     public void Awake()
     {
@@ -116,6 +120,7 @@ public class SettingsAndTestingUI : UIController
         DropdownTemplate = transform.EnsureComponent<DropdownSetting>("DropdownTemplate");
         ToggleTemplate = transform.EnsureComponent<ToggleSetting>("ToggleTemplate");
         InputTemplate = transform.EnsureComponent<StringInputSetting>("InputTemplate");
+        var optionParent = SliderTemplate.transform.parent;
 
         var back = transform.FindRecursive("Back").gameObject;
         back.GetComponent<Button>().onClick.AddListener(GoBack);
@@ -123,16 +128,30 @@ public class SettingsAndTestingUI : UIController
         hover.LookupKey = "FANCY_CLOSE_MENU";
         hover.FillInKeys = [("%type%", "Testing")];
 
-        ToggleImage = transform.GetComponent<Image>("Toggle")!;
+        var toggleButton = transform.GetComponent<Button>("Toggle")!;
+        ToggleImage = toggleButton.targetGraphic as Image;
         ToggleImage.gameObject.SetActive(Constants.BTOS2Exists());
+        toggleButton!.onClick.AddListener(() => IsBTOS2 = !IsBTOS2);
 
-        transform.GetComponent<Button>("RecolouredUI")!.onClick.AddListener(() => Page = PackType.RecoloredUI);
-        transform.GetComponent<Button>("IconPacks")!.onClick.AddListener(() => Page = PackType.IconPacks);
-        transform.GetComponent<Button>("SilSwapper")!.onClick.AddListener(() => Page = PackType.SilhouetteSets);
-        transform.GetComponent<Button>("MRC")!.onClick.AddListener(() => Page = PackType.MiscRoleCustomisation);
-        var testing = transform.GetComponent<Button>("Testing");
+        var filter = transform.FindRecursive("PageFilter");
+
+        FilterArrow = filter.GetComponent<Image>("FilterArrow");
+        FilterDropdown = filter.FindRecursive("ButtonDropdown").gameObject;
+        FilterIcon = filter.GetComponent<Image>();
+        FilterMaterialDefault = FilterIcon.material;
+        filter.GetComponent<Button>().onClick.AddListener(() =>
+        {
+            FilterArrow.sprite = Fancy.Instance.Assets.GetSprite("DropDown_ArrowUp");
+            FilterDropdown.SetActive(true);
+        });
+
+        FilterDropdown.transform.GetComponent<Button>("RecolouredUI")!.onClick.AddListener(() => Page = PackType.RecoloredUI);
+        FilterDropdown.transform.GetComponent<Button>("IconPacks")!.onClick.AddListener(() => Page = PackType.IconPacks);
+        FilterDropdown.transform.GetComponent<Button>("SilSwapper")!.onClick.AddListener(() => Page = PackType.SilhouetteSets);
+        FilterDropdown.transform.GetComponent<Button>("MRC")!.onClick.AddListener(() => Page = PackType.MiscRoleCustomisation);
+        FilterDropdown.transform.GetComponent<Button>("CineSwapper")!.onClick.AddListener(() => Page = PackType.CinematicSwapper);
+        var testing = FilterDropdown.transform.GetComponent<Button>("Testing");
         testing!.onClick.AddListener(() => Page = PackType.Testing);
-        ToggleImage.GetComponent<Button>()!.onClick.AddListener(() => IsBTOS2 = !IsBTOS2);
 
         Metals.Add(roleCard.GetComponent<Image>("Special"));
         Metals.Add(roleCard.GetComponent<Image>("Effect"));
@@ -147,6 +166,7 @@ public class SettingsAndTestingUI : UIController
         Metals.Add(testing.targetGraphic as Image);
         Metals.Add(transform.GetComponent<Image>("Fill"));
         Metals.Add(specialAbilityPopup.GetComponent<Image>("Ring"));
+        Metals.Add(FilterArrow);
 
         Woods.Add(roleCard.GetComponent<Image>("Frame"));
         Woods.Add(Metals[0].transform.GetComponent<Image>("Wood"));
@@ -160,6 +180,7 @@ public class SettingsAndTestingUI : UIController
         Woods.Add(roleList.transform.GetComponent<Image>("Wood"));
         Woods.Add(graveyard.transform.GetComponent<Image>("Wood"));
         Woods.Add(specialAbilityPopup.GetComponent<Image>("Frame"));
+        Woods.Add(FilterDropdown.GetComponent<Image>());
 
         Leathers.Add(playerList.GetComponent<Image>("Leather"));
         Leathers.Add(roleDeck.GetComponent<Image>("Leather"));
@@ -186,8 +207,7 @@ public class SettingsAndTestingUI : UIController
                 ColorOption => ColorTemplate,
                 StringInputOption => InputTemplate,
                 _ => ToggleTemplate,
-            }), SliderTemplate!.transform.parent);
-            setting.BoxedOption = opt;
+            }), optionParent);
             Metals.Add(setting.Background);
 
             switch (opt)
@@ -227,6 +247,13 @@ public class SettingsAndTestingUI : UIController
         Waxes.ForEach(x => x.SetImageColor(ColorType.Wax));
         Fires.ForEach(x => x.SetImageColor(ColorType.Fire));
 
+        Leathers.Clear();
+        Metals.Clear();
+        Woods.Clear();
+        Fires.Clear();
+        Waxes.Clear();
+        Papers.Clear();
+
         Refresh();
     }
 
@@ -242,22 +269,39 @@ public class SettingsAndTestingUI : UIController
     public void Refresh()
     {
         Animator.SetDuration(Constants.AnimationDuration());
-        NameText.SetText(DefaultNameText.Replace("%num%", $"{Constants.PlayerNumber()}"));
+        NameText.SetText(DefaultNameText
+            .Replace("%num%", $"{Constants.PlayerNumber()}")
+            .Replace("%roleName%", Utils.ApplyGradient("(Admirer)", Fancy.SelectTestingFaction.Value.GetChangedGradient(Role.ADMIRER))));
         NameText.SetGraphicColor(ColorType.Paper);
-        RoleText.SetText(DefaultRoleText.Replace("%type%", $"{Utils.FactionName(Constants.GetSelectedFaction(), IsBTOS2 ? GameModType.BTOS2 : GameModType.Vanilla)}").Replace("%mod%", IsBTOS2 ?
-            "BTOS" : "").Replace("%roleName%", "Admirer").Replace("%roleInt%", "1"));
+        RoleText.SetText(DefaultRoleText
+            .Replace("%type%", $"{Utils.FactionName(Constants.GetSelectedFaction(), IsBTOS2 ? GameModType.BTOS2 : GameModType.Vanilla, stoned: true)}")
+            .Replace("%mod%", IsBTOS2 ? "BTOS" : "")
+            .Replace("%roleName%", Utils.ApplyGradient("Admirer", Fancy.SelectTestingFaction.Value.GetChangedGradient(Role.ADMIRER)))
+            .Replace("%roleInt%", "1"));
         Displays.ForEach((x, y) => y.SetActive(Fancy.SelectDisplay.Value == x));
         // Icons.ForEach(x => x.UpdateIcon(Fancy.SelectTestingRole.Value));
         ToggleImage.sprite = Fancy.Instance.Assets.GetSprite($"{(IsBTOS2 ? "B" : "")}ToS2Icon");
-
-        foreach (var setting in Settings)
+        FilterArrow.sprite = Fancy.Instance.Assets.GetSprite("DropDown_ArrowDown");
+        FilterIcon.sprite = Fancy.Instance.Assets.GetSprite(page switch
         {
-            setting.gameObject.SetActive(false);
+            PackType.RecoloredUI => "ColoredWood",
+            PackType.IconPacks => "IconPack",
+            PackType.SilhouetteSets => "SilSwapper",
+            PackType.MiscRoleCustomisation => "MRC",
+            PackType.CinematicSwapper => "Swap",
+            _ => "Settings",
+        });
+        FilterIcon.material = page == PackType.Testing ? Constants.AllMaterials[true][ColorType.Metal] : FilterMaterialDefault;
+        FilterDropdown.SetActive(false);
 
-            if (setting.SetActive())
+        foreach (var option in Option.All)
+        {
+            option.BoxedSetting.gameObject.SetActive(false);
+
+            if (option.SetActive() && option.Page == page)
             {
-                setting.Refresh();
-                setting.gameObject.SetActive(true);
+                option.BoxedSetting.Refresh();
+                option.BoxedSetting.gameObject.SetActive(true);
             }
         }
 

@@ -23,20 +23,18 @@ public class ColorSetting : BaseInputSetting
             return;
 
         Input.SetTextWithoutNotify(Option.Value);
-        Input.restoreOriginalTextOnEscape = true;
         Input.onValueChanged.AddListener(OnValueChanged);
-
-        ValueBg.color = Option.Value.ToColor();
     }
 
     public void OnValueChanged(string value)
     {
-        if (ColorUtility.TryParseHtmlString(value.StartsWith("#") ? value : $"#{value}", out var color))
-            ValueBg.color = color;
-
         Option.Value = value;
         SettingsAndTestingUI.Instance.Refresh();
     }
 
-    public override bool SetActive() => Option.SetActive(Option.Value) && Option.Page == SettingsAndTestingUI.Instance.Page;
+    public override void Refresh()
+    {
+        if (Option != null)
+            ValueBg.color = Option.Value.ToColor();
+    }
 }

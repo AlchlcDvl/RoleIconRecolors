@@ -1,11 +1,11 @@
 namespace FancyUI.UI;
 public class GradientRoleColorController : MonoBehaviour
 {
+    private const float Duration = 10f;
+
     public RoleCardPanelBackground Instance;
 
     private Coroutine ActiveCoroutine;
-    private readonly float Duration = 10f;
-    private float Value;
 
     public void Start() => ActiveCoroutine = StartCoroutine(ChangeValueOverTime(Instance.currentFaction, Instance.currentRole));
 
@@ -29,17 +29,13 @@ public class GradientRoleColorController : MonoBehaviour
         {
             yield return Coroutines.CoPerformTimedAction(Duration, t =>
             {
-                Value = Mathf.Lerp(0f, 1f, t);
-
                 if (Instance?.rolecardBackgroundInstance)
-                    Instance.rolecardBackgroundInstance.SetColor(grad.Evaluate(Value));
+                    Instance.rolecardBackgroundInstance.SetColor(grad.Evaluate(t));
             });
             yield return Coroutines.CoPerformTimedAction(Duration, t =>
             {
-                Value = Mathf.Lerp(1f, 0f, t);
-
                 if (Instance?.rolecardBackgroundInstance)
-                    Instance.rolecardBackgroundInstance.SetColor(grad.Evaluate(Value));
+                    Instance.rolecardBackgroundInstance.SetColor(grad.Evaluate(1f - t));
             });
         }
     }

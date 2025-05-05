@@ -32,15 +32,15 @@ public class DropdownSetting : Setting
         SettingsAndTestingUI.Instance.Refresh();
     }
 
-    public override bool SetActive() => Option.SetActive() && Option.Page == SettingsAndTestingUI.Instance.Page;
-
     public override void Refresh()
     {
+        Arrow.sprite = Fancy.Instance.Assets.GetSprite("DropDown_ArrowDown");
+
         if (Option == null)
             return;
 
         Dropdown.ClearOptions();
-        Dropdown.AddOptions(Option.DisplayOptions().Select(x => Option.UseTranslations ? l10n($"FANCY_{x.ToUpper()}") : x).ToList());
+        Dropdown.AddOptions([..Option.DisplayOptions().Select(x => Option.UseTranslations ? l10n($"FANCY_{x.ToUpper()}") : x)]);
         Dropdown.SetValueWithoutNotify(Option.GetInt());
     }
 }

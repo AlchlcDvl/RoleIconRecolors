@@ -30,23 +30,22 @@ public class ToggleSetting : Setting
 
         Toggle.SetIsOnWithoutNotify(Option.Value);
         Toggle.onValueChanged.AddListener(OnValueChanged);
-
-        ValueText.SetText(Toggle.isOn ? "On" : "Off");
-
-        OnBg.gameObject.SetActive(Toggle.isOn);
-        OffBg.gameObject.SetActive(!Toggle.isOn);
-        Toggle.targetGraphic = Toggle.isOn ? OnBg : OffBg;
     }
 
     public void OnValueChanged(bool value)
     {
         Option.Value = value;
-        ValueText.SetText(value ? "On" : "Off");
-        OnBg.gameObject.SetActive(value);
-        OffBg.gameObject.SetActive(!value);
-        Toggle.targetGraphic = value ? OnBg : OffBg;
         SettingsAndTestingUI.Instance.Refresh();
     }
 
-    public override bool SetActive() => Option.SetActive(Option.Value) && Option.Page == SettingsAndTestingUI.Instance.Page;
+    public override void Refresh()
+    {
+        if (Option == null)
+            return;
+
+        ValueText.SetText(Toggle.isOn ? "On" : "Off");
+        OnBg.gameObject.SetActive(Toggle.isOn);
+        OffBg.gameObject.SetActive(!Toggle.isOn);
+        Toggle.targetGraphic = Toggle.isOn ? OnBg : OffBg;
+    }
 }

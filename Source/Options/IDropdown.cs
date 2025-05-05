@@ -9,8 +9,6 @@ public interface IDropdown
     bool UseTranslations { get; }
     DropdownSetting Setting { get; set; }
 
-    bool SetActive();
-
     void SetString(string value);
 
     int GetInt() => Options().IndexOf(x => x == ValueString);

@@ -6,16 +6,17 @@ public static class GetChangedGradients
 {
     public static Gradient GetChangedGradient(this FactionType faction, Role role)
     {
+        var mod = Utils.GetGameType();
         var middleKey = (faction switch
         {
             FactionType.NONE or FactionType.UNKNOWN => "STONED_HIDDEN",
-            _ => Utils.FactionName(faction),
+            _ => Utils.FactionName(faction, mod, stoned: true),
         }).ToUpper();
-        var baseFaction = role.GetFactionType();
+        var baseFaction = role.GetFactionType(mod);
         var baseKey = (baseFaction switch
         {
             FactionType.NONE or FactionType.UNKNOWN => "STONED_HIDDEN",
-            _ => Utils.FactionName(baseFaction),
+            _ => Utils.FactionName(baseFaction, mod, stoned: true),
         }).ToUpper();
         var startKey = faction switch
         {
@@ -42,10 +43,16 @@ public static class GetChangedGradients
         var (_, endVal, majorVal, _, lethalVal) = Fancy.Colors[endKey];
         var isMajor = Fancy.MajorColors.Value && (role.GetSubAlignment() == SubAlignment.POWER || role is Role.FAMINE or Role.WAR or Role.PESTILENCE or Role.DEATH);
         var isLethal = Fancy.LethalColors.Value && (role.GetSubAlignment() == SubAlignment.KILLING || role == Role.BERSERKER || (role == Role.JAILOR && !Fancy.MajorColors.Value));
-        var end = isMajor
-        ? majorVal
-        : (isLethal && lethalVal != null ? lethalVal : endVal);
+        var end = isMajor && majorVal != null
+            ? majorVal
+            : (isLethal && lethalVal != null
+                ? lethalVal
+                : endVal);
 
-        return middle != null ? Utils.CreateGradient(start, middle, end) : (end != null ? Utils.CreateGradient(start, end) : Utils.CreateGradient(start));
+        return middle != null
+            ? Utils.CreateGradient(start, middle, end)
+            : (end != null
+                ? Utils.CreateGradient(start, end)
+                : Utils.CreateGradient(start));
     }
 }

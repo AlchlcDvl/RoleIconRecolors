@@ -14,6 +14,7 @@ public enum PackType : byte
     IconPacks,
     SilhouetteSets,
     MiscRoleCustomisation,
+    CinematicSwapper,
     Testing
 }
 

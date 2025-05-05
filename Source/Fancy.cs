@@ -189,24 +189,25 @@ public class Fancy : BaseMod<Fancy>
 
         SelectedUITheme = new("SELECTED_UI_THEME", UITheme.Vanilla, PackType.RecoloredUI, useTranslations: true);
 
-        MentionStyle1 = new("MENTION_STYLE_1", "Regular", PackType.IconPacks, () => GetOptions(GameModType.Vanilla, true), _ => Constants.EnableIcons());
-        MentionStyle2 = new("MENTION_STYLE_2", "Regular", PackType.IconPacks, () => GetOptions(GameModType.BTOS2, true), _ => Constants.BTOS2Exists() && Constants.EnableIcons());
+        MentionStyle1 = new("MENTION_STYLE_1", "Regular", PackType.IconPacks, () => GetOptions(GameModType.Vanilla, true), Constants.EnableIcons);
+        MentionStyle2 = new("MENTION_STYLE_2", "Regular", PackType.IconPacks, () => GetOptions(GameModType.BTOS2, true), () => Constants.BTOS2Exists() && Constants.EnableIcons());
 
-        FactionOverride1 = new("FACTION_OVERRIDE_1", "None", PackType.IconPacks, () => GetOptions(GameModType.Vanilla, false), _ => Constants.EnableIcons());
-        FactionOverride2 = new("FACTION_OVERRIDE_2", "None", PackType.IconPacks, () => GetOptions(GameModType.BTOS2, false), _ => Constants.BTOS2Exists() && Constants.EnableIcons());
+        FactionOverride1 = new("FACTION_OVERRIDE_1", "None", PackType.IconPacks, () => GetOptions(GameModType.Vanilla, false), Constants.EnableIcons);
+        FactionOverride2 = new("FACTION_OVERRIDE_2", "None", PackType.IconPacks, () => GetOptions(GameModType.BTOS2, false), () => Constants.BTOS2Exists() && Constants.EnableIcons());
 
-        SelectColorFilter = new("COLOR_FILTER", ColorType.Wood, PackType.RecoloredUI, setActive: _ => Constants.EnableCustomUI(), useTranslations: true);
+        SelectColorFilter = new("COLOR_FILTER", ColorType.Wood, PackType.RecoloredUI, setActive: Constants.EnableCustomUI, useTranslations: true);
 
         var colors = GeneralUtils.GetEnumValues<ColorType>()!.Where(x => x != ColorType.All).ToDictionary(x => x, x => x.ToString().ToUpperInvariant());
-        var factions = BTOS2Factions.Where(x => x is not (Btos2Faction.Lovers or Btos2Faction.Cannibal or Btos2Faction.None)).ToDictionary(x => x, x => Utils.FactionName(x,
+        var filteredFactions = BTOS2Factions.Where(x => x is not (Btos2Faction.Lovers or Btos2Faction.Cannibal or Btos2Faction.None));
+        var factions = filteredFactions.ToDictionary(x => x, x => Utils.FactionName(x,
             Constants.BTOS2Exists() ? GameModType.BTOS2 : GameModType.Vanilla).ToUpperInvariant());
 
         foreach (var (type, name) in colors)
         {
-            CustomUIColorsMap[type] = new($"UI_{name}", "#FFFFFF", PackType.RecoloredUI, _ => Constants.EnableCustomUI() && SelectColorFilter.Value.IsAny(type, ColorType.All));
-            ColorShadeToggleMap[type] = new($"COLOR_{name}", true, PackType.RecoloredUI, _ => Constants.GetMainUIThemeType() == UITheme.Faction && SelectColorFilter.Value.IsAny(type,
+            CustomUIColorsMap[type] = new($"UI_{name}", "#FFFFFF", PackType.RecoloredUI, () => Constants.EnableCustomUI() && SelectColorFilter.Value.IsAny(type, ColorType.All));
+            ColorShadeToggleMap[type] = new($"COLOR_{name}", true, PackType.RecoloredUI, () => Constants.GetMainUIThemeType() == UITheme.Faction && SelectColorFilter.Value.IsAny(type,
                 ColorType.All));
-            ColorShadeMap[type] = new($"{name}_SHADE", 0, PackType.RecoloredUI, -100, 100, true, _ => Constants.EnableCustomUI() && SelectColorFilter.Value.IsAny(type, ColorType.All));
+            ColorShadeMap[type] = new($"{name}_SHADE", 0, PackType.RecoloredUI, -100, 100, true, () => Constants.EnableCustomUI() && SelectColorFilter.Value.IsAny(type, ColorType.All));
 
             foreach (var (faction, factionName) in factions)
             {
@@ -291,20 +292,20 @@ public class Fancy : BaseMod<Fancy>
                     }
                 }
 
-                FactionToColorMap[faction][type] = new($"{factionName}_UI_{name}", color, PackType.RecoloredUI, _ => Constants.EnableCustomUI() && Constants.ShowFactionalSettings() &&
+                FactionToColorMap[faction][type] = new($"{factionName}_UI_{name}", color, PackType.RecoloredUI, () => Constants.EnableCustomUI() && Constants.ShowFactionalSettings() &&
                     SelectTestingFaction.Value == faction && SelectColorFilter.Value.IsAny(type, ColorType.All));
             }
         }
 
-        GeneralBrightness = new("GENERAL_BRIGHTNESS", 100, PackType.RecoloredUI, 0, 100, true, _ => Constants.EnableCustomUI());
-        GrayscaleAmount = new("GRAYSCALE_AMOUNT", 100, PackType.RecoloredUI, 0, 100, true, _ => Constants.EnableCustomUI());
+        GeneralBrightness = new("GENERAL_BRIGHTNESS", 100, PackType.RecoloredUI, 0, 100, true, Constants.EnableCustomUI);
+        GrayscaleAmount = new("GRAYSCALE_AMOUNT", 100, PackType.RecoloredUI, 0, 100, true, Constants.EnableCustomUI);
 
-        EasterEggChance = new("EE_CHANCE", 5, PackType.IconPacks, 0, 100, true, _ => Constants.EnableIcons());
-        AnimationDuration = new("ANIM_DURATION", 2, PackType.SilhouetteSets, 0.5f, 10, setActive: _ => Constants.EnableSwaps());
+        EasterEggChance = new("EE_CHANCE", 5, PackType.IconPacks, 0, 100, true, Constants.EnableIcons);
+        AnimationDuration = new("ANIM_DURATION", 2, PackType.SilhouetteSets, 0.5f, 10, setActive: Constants.EnableSwaps);
 
-        CustomNumbers = new("CUSTOM_NUMBERS", false, PackType.IconPacks, _ => Constants.EnableIcons());
-        AllEasterEggs = new("ALL_EE", false, PackType.IconPacks, _ => Constants.EnableIcons());
-        PlayerPanelEasterEggs = new("PLAYER_PANEL_EE", false, PackType.IconPacks, _ => Constants.EnableIcons());
+        CustomNumbers = new("CUSTOM_NUMBERS", false, PackType.IconPacks, Constants.EnableIcons);
+        AllEasterEggs = new("ALL_EE", false, PackType.IconPacks, Constants.EnableIcons);
+        PlayerPanelEasterEggs = new("PLAYER_PANEL_EE", false, PackType.IconPacks, Constants.EnableIcons);
 
         FactionalRoleNames = new("FACTIONAL_ROLE_NAMES", false, PackType.MiscRoleCustomisation);
         MajorColors = new("MAJOR_COLORS", false, PackType.MiscRoleCustomisation);
@@ -321,7 +322,7 @@ public class Fancy : BaseMod<Fancy>
         JuryLabel = new("JURY_LABEL", "Jury", PackType.MiscRoleCustomisation);
         PirateLabel = new("PIRATE_LABEL", "Pirate", PackType.MiscRoleCustomisation);
 
-        PlayerNumber = new("PLAYER_NUMBER", 0, PackType.Testing, 0, 15, true, _ => Constants.CustomNumbers());
+        PlayerNumber = new("PLAYER_NUMBER", 0, PackType.Testing, 0, 15, true, Constants.CustomNumbers);
         DumpSpriteSheets = new("DUMP_SHEETS", false, PackType.Testing);
         DebugPackLoading = new("DEBUG_LOADING", false, PackType.Testing);
         ShowOverlayWhenJailed = new("SHOW_TO_JAILED", true, PackType.Testing);
@@ -329,14 +330,14 @@ public class Fancy : BaseMod<Fancy>
         IconsInRoleReveal = new("ROLE_REVEAL_ICONS", true, PackType.Testing);
         SelectDisplay = new("SELECT_DISPLAY", DisplayType.RoleCard, PackType.Testing, useTranslations: true);
         SelectTestingFaction = new("SELECTED_TESTING_FACTION", FactionType.NONE, PackType.Testing, useTranslations: true, values:
-            () => SettingsAndTestingUI.Instance?.IsBTOS2 == true ? BTOS2Factions : VanillaFactions);
+            () => SettingsAndTestingUI.Instance?.IsBTOS2 == true ? filteredFactions.AddItem(FactionType.NONE).ToArray() : VanillaFactions);
 
         foreach (var faction in BTOS2Factions.Where(x => x is not (FactionType.NONE or (> FactionType.APOCALYPSE and < FactionType.VAMPIRE) or FactionType.CURSED_SOUL or FactionType.UNKNOWN or
             (> Btos2Faction.Hawks and < Btos2Faction.Pandora))))
         {
             CinematicMap[faction] = new(
-                $"{Utils.FactionName(faction, GameModType.BTOS2).ToUpper()}_CINEMATIC", GetCinematic(faction), PackType.Testing,
-                setActive: _ => (faction < FactionType.UNKNOWN || Constants.BTOS2Exists()) && SelectTestingFaction.Value == faction,
+                $"{Utils.FactionName(faction, GameModType.BTOS2).ToUpper()}_CINEMATIC", GetCinematic(faction), PackType.CinematicSwapper,
+                setActive: () => (faction < FactionType.UNKNOWN || Constants.BTOS2Exists()) && SelectTestingFaction.Value == faction,
                 useTranslations: true,
                 values: AllowedCinematics);
         }
@@ -348,23 +349,25 @@ public class Fancy : BaseMod<Fancy>
 
             if (middle == null && major == null && end == null)
             {
-                ColorOptions[$"{key}"] = new($"{key}", start, PackType.MiscRoleCustomisation, _ => Utils.FactionName(SelectTestingFaction.Value, stoned: true).ToUpper() == key, _ => ReloadColors());
+                ColorOptions[$"{key}"] = new($"{key}", start, PackType.MiscRoleCustomisation, SetActive, _ => ReloadColors());
                 continue;
             }
 
-            ColorOptions[$"{key}_START"] = new($"{key}_START", start, PackType.MiscRoleCustomisation, _ => Utils.FactionName(SelectTestingFaction.Value, stoned: true).ToUpper() == key, _ => ReloadColors());
+            ColorOptions[$"{key}_START"] = new($"{key}_START", start, PackType.MiscRoleCustomisation, SetActive, _ => ReloadColors());
 
             if (middle != null)
-                ColorOptions[$"{key}_MIDDLE"] = new($"{key}_MIDDLE", middle, PackType.MiscRoleCustomisation, _ => Utils.FactionName(SelectTestingFaction.Value, stoned: true).ToUpper() == key, _ => ReloadColors());
+                ColorOptions[$"{key}_MIDDLE"] = new($"{key}_MIDDLE", middle, PackType.MiscRoleCustomisation, SetActive, _ => ReloadColors());
 
             if (end != null)
-                ColorOptions[$"{key}_END"] = new($"{key}_END", end, PackType.MiscRoleCustomisation, _ => Utils.FactionName(SelectTestingFaction.Value, stoned: true).ToUpper() == key, _ => ReloadColors());
+                ColorOptions[$"{key}_END"] = new($"{key}_END", end, PackType.MiscRoleCustomisation, SetActive, _ => ReloadColors());
 
             if (major != null)
-                ColorOptions[$"{key}_MAJOR"] = new($"{key}_MAJOR", major, PackType.MiscRoleCustomisation, _ => Utils.FactionName(SelectTestingFaction.Value, stoned: true).ToUpper() == key, _ => ReloadColors());
+                ColorOptions[$"{key}_MAJOR"] = new($"{key}_MAJOR", major, PackType.MiscRoleCustomisation, SetActive, _ => ReloadColors());
 
             if (lethal != null)
-                ColorOptions[$"{key}_LETHAL"] = new($"{key}_LETHAL", lethal, PackType.MiscRoleCustomisation, _ => Utils.FactionName(SelectTestingFaction.Value, stoned: true).ToUpper() == key, _ => ReloadColors());
+                ColorOptions[$"{key}_LETHAL"] = new($"{key}_LETHAL", lethal, PackType.MiscRoleCustomisation, SetActive, _ => ReloadColors());
+
+            bool SetActive() => Utils.FactionName(SelectTestingFaction.Value, stoned: true).ToUpper() == key;
         }
 
         ReloadColors();

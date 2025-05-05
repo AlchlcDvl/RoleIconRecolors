@@ -26,31 +26,26 @@ public static class PatchRoleCard
     private static string ToChangedDisplayString(this Role role, FactionType faction, ROLE_MODIFIER modifier)
     {
         var roleName = Fancy.FactionalRoleNames.Value ? role.ToRoleFactionDisplayString(faction) : role.ToDisplayString();
-        var text = faction.GetChangedGradient(role) != null ? Utils.ApplyGradient(roleName, faction.GetChangedGradient(role)) : $"<color={faction.GetFactionColor()}>{roleName}</color>";
         var gradientTt = faction.GetChangedGradient(role);
+        var text = gradientTt != null ? Utils.ApplyGradient(roleName, gradientTt) : $"<color={faction.GetFactionColor()}>{roleName}</color>";
 
         switch (modifier)
         {
             case ROLE_MODIFIER.TRAITOR:
+            {
                 if (gradientTt != null)
                 {
-                    switch (faction)
+                    text += faction switch
                     {
-                        case FactionType.COVEN:
-                            text += $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.CovenTraitorLabel.Value})", gradientTt)}</size>";
-                            break;
-                        case FactionType.APOCALYPSE:
-                            text += $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.ApocTraitorLabel.Value})", gradientTt)}</size>";
-                            break;
-                        case (FactionType)44:
-                            text += $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.PandoraTraitorLabel.Value})", gradientTt)}</size>";
-                            break;
-                        default:
-                        text += $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.CovenTraitorLabel.Value})", gradientTt)}</size>";
-                            break;
-                    }
+                        FactionType.COVEN => $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.CovenTraitorLabel.Value})", gradientTt)}</size>",
+                        FactionType.APOCALYPSE => $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.ApocTraitorLabel.Value})", gradientTt)}</size>",
+                        (FactionType)44 => $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.PandoraTraitorLabel.Value})", gradientTt)}</size>",
+                        _ => $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.CovenTraitorLabel.Value})", gradientTt)}</size>",
+                    };
                 }
+
                 break;
+            }
             case ROLE_MODIFIER.VIP:
             {
                 text += $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.RecruitLabel.Value})", gradientTt)}</size>";
@@ -70,9 +65,7 @@ public static class PatchRoleCard
                     var gradient2 = faction.GetChangedGradient(role);
 
                     if (gradient2 != null)
-                    {
                         text += $"\n<size=85%>{Utils.ApplyGradient($"({faction.ToDisplayString()})", gradient2)}</size>";
-                    }
                     else
                         text = $"{text}\n<size=85%><color={faction.GetFactionColor()}>({faction.ToDisplayString()})</color></size>";
                 }
@@ -206,37 +199,23 @@ public static class FancyChatExperimentalBTOS2
         {
             var isRecruited = Service.Game.Sim.simulation.observations.playerEffects.Any(x => x.Data.effects.Contains((EffectType)100) && x.Data.playerPosition == position);
             var gameName = Pepper.GetDiscussionPlayerByPosition(position).gameName;
+            Gradient gradient = null;
 
             if (Utils.GetRoleAndFaction(position, out var playerInfo))
             {
-                if (playerInfo.Item2.GetChangedGradient(playerInfo.Item1) != null)
-                {
-                    var gradient = playerInfo.Item2.GetChangedGradient(playerInfo.Item1);
+                gradient = playerInfo.Item2.GetChangedGradient(playerInfo.Item1);
 
-                    if (isRecruited)
-                        gradient = Btos2Faction.Jackal.GetChangedGradient(playerInfo.Item1);
-
-                    var text3 = Utils.ApplyGradient($"{gameName}:", gradient);
-                    text2 = text2.Replace($"<color=#{ColorUtility.ToHtmlStringRGB(Pepper.GetDiscussionPlayerRoleColor(position))}>{gameName}:", text3);
-                }
-                else if (isRecruited)
-                {
-                    var gradient2 = Btos2Faction.Jackal.GetChangedGradient(playerInfo.Item1);
-                    var text4 = Utils.ApplyGradient($"{gameName}:", gradient2.Evaluate(0f), gradient2.Evaluate(1f));
-                    text2 = text2.Replace($"<color=#{ColorUtility.ToHtmlStringRGB(Pepper.GetDiscussionPlayerRoleColor(position))}>{gameName}:", text4);
-                }
-                else
-                {
-                    var text5 = ColorUtility.ToHtmlStringRGB(Utils.GetPlayerRoleColor(position));
-                    text2 = text2.Replace($"<color=#{text}>", $"<color=#{text5}>");
-                }
+                if (gradient == null || isRecruited)
+                    gradient = Btos2Faction.Jackal.GetChangedGradient(playerInfo.Item1);
             }
-            else if (isRecruited)
+
+            if (gradient != null)
             {
-                var gradient3 = Btos2Faction.Jackal.GetChangedGradient(playerInfo.Item1);
-                var text6 = Utils.ApplyGradient($"{gameName}:", gradient3);
-                text2 = text2.Replace($"<color=#{text}>{gameName}:", text6);
+                var text4 = Utils.ApplyGradient($"{gameName}:", gradient);
+                text2 = text2.Replace($"<color=#{ColorUtility.ToHtmlStringRGB(Pepper.GetDiscussionPlayerRoleColor(position))}>{gameName}", text4);
             }
+            else
+                text2 = text2.Replace($"<color=#{text}>", $"<color=#{ColorUtility.ToHtmlStringRGB(Utils.GetPlayerRoleColor(position))}>");
         }
 
         __result = __instance.ProcessSpeakerName(text2, position, isAlive);

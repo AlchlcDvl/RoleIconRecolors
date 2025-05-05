@@ -16,7 +16,6 @@ public class StringInputSetting : BaseInputSetting
             return;
 
         Input.SetTextWithoutNotify(Option.Value);
-        Input.restoreOriginalTextOnEscape = true;
         Input.onValueChanged.AddListener(OnValueChanged);
     }
 
@@ -25,6 +24,4 @@ public class StringInputSetting : BaseInputSetting
         Option.Value = value;
         SettingsAndTestingUI.Instance.Refresh();
     }
-
-    public override bool SetActive() => Option.SetActive(Option.Value) && Option.Page == SettingsAndTestingUI.Instance.Page;
 }

@@ -1,6 +1,6 @@
 namespace FancyUI.Options;
 
-public class FloatOption(string id, float defaultValue, PackType page, float min, float max, bool useWhole = false, Func<float, bool> setActive = null, Action<float> onChanged = null) :
+public class FloatOption(string id, float defaultValue, PackType page, float min, float max, bool useWhole = false, Func<bool> setActive = null, Action<float> onChanged = null) :
     Option<float, SliderSetting>(id, defaultValue, page, setActive, onChanged)
 {
     public float Min { get; } = min;

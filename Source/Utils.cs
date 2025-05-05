@@ -464,7 +464,7 @@ public static class Utils
 
     public static GameModType GetGameType()
     {
-        if (Constants.IsBTOS2() || FindCasualQueue())
+        if (Constants.IsBTOS2() || FindCasualQueue() || SettingsAndTestingUI.Instance?.IsBTOS2 == true)
             return GameModType.BTOS2;
 
         return GameModType.Vanilla;
@@ -670,14 +670,14 @@ public static class Utils
     // public static void DebugSingleTransform(this Transform transform)
     // {
     //     var debug = $"[{transform.parent?.name ?? "None"} -> {transform.name}] = {{ ";
-    //     transform.GetComponents(typeof(Component)).ForEach(x => debug += $"{x.GetType().Name}, ");
+    //     transform.GetComponents<Component>().Do(x => debug += $"{x.GetType().Name}, ");
     //     Fancy.Instance.Fatal(debug + "}");
     // }
 
     // public static void DebugTransformRecursive(this Transform transform)
     // {
     //     transform.DebugSingleTransform();
-    //
+
     //     for (var i = 0; i < transform.childCount; i++)
     //         transform.GetChild(i).DebugTransformRecursive();
     // }
@@ -743,7 +743,7 @@ public static class Utils
 
         var factionName = FactionName(faction, GameModType.BTOS2).ToUpper();
 
-        if (factionName == "Factionless")
+        if (factionName == "FACTIONLESS")
             factionName = "NONE";
 
         if (Constants.IsBTOS2())
@@ -782,7 +782,7 @@ public static class Utils
 
     private static string GetString(string key) => Service.Home.LocalizationService.GetLocalizedString(key);
 
-    private static bool ConditionalCompliancePandora(FactionType originalFaction, FactionType currentFaction)
+    public static bool ConditionalCompliancePandora(FactionType originalFaction, FactionType currentFaction)
     {
         if (currentFaction == (FactionType)43)
             return originalFaction is FactionType.COVEN or FactionType.APOCALYPSE;
@@ -798,5 +798,4 @@ public static class Utils
 
         return originalFaction == currentFaction;
     }
-
 }

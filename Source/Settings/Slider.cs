@@ -45,10 +45,12 @@ public class SliderSetting : Setting
     public void OnValueChanged(string value)
     {
         if (float.TryParse(value, out var value2))
-            Slider.SetValueWithoutNotify(Mathf.Clamp(value2, Option.Min, Option.Max));
+        {
+            value2 = Mathf.Clamp(value2, Option.Min, Option.Max);
+            Slider.SetValueWithoutNotify(value2);
+            Option.Value = value2;
+        }
 
         SettingsAndTestingUI.Instance.Refresh();
     }
-
-    public override bool SetActive() => Option.SetActive(Option.Value) && Option.Page == SettingsAndTestingUI.Instance.Page;
 }

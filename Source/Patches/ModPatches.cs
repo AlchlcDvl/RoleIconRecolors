@@ -449,17 +449,14 @@ public static class VictoryCinematicSwapperPatch
 }
 
 // Did the guys at TMP never think of devs trying to modify the arrow button??? seriously??? the drop-downs look so damn off with the arrow not updating up or down with respect to its selection
-[HarmonyPatch(typeof(TMP_Dropdown))]
+[HarmonyPatch(typeof(TMP_Dropdown), nameof(TMP_Dropdown.Show))]
 public static class DropdownPatch
 {
-    [HarmonyPatch(nameof(TMP_Dropdown.Show))]
-    [HarmonyPatch("ImmediateDestroyDropdownList")]
-    [HarmonyPostfix]
-    private static void ModifyArrow(TMP_Dropdown __instance)
+    public static void Postfix(TMP_Dropdown __instance)
     {
         var parent = __instance.GetComponentInParent<DropdownSetting>();
 
         if (parent)
-            parent.Arrow.sprite = Fancy.Instance.Assets.GetSprite($"DropDown_Arrow{(__instance.IsExpanded ? "Up" : "Down")}");
+            parent.Arrow.sprite = Fancy.Instance.Assets.GetSprite("DropDown_ArrowUp");
     }
 }
