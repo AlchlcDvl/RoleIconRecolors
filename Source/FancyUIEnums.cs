@@ -10,12 +10,12 @@ public enum GameModType : byte
 
 public enum PackType : byte
 {
+    Testing,
     RecoloredUI,
     IconPacks,
     SilhouetteSets,
     MiscRoleCustomisation,
-    CinematicSwapper,
-    Testing
+    CinematicSwapper
 }
 
 public enum ColorType : byte

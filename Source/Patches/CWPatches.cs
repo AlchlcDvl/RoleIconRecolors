@@ -630,10 +630,41 @@ public static class PatchMentionPanel
 {
     public static void Postfix(MentionPanel __instance)
     {
-        __instance.transform.GetChild(0).GetChild(2).GetComponent<Image>().SetImageColor(ColorType.Wood);
-        var template = __instance.transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0);
-        template.GetComponent<Image>().SetImageColor(ColorType.Metal);
-        template.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
+        var root = __instance.transform;
+
+        if (root.childCount > 0)
+        {
+            var first = root.GetChild(0);
+
+            if (first.childCount > 2)
+            {
+                var image = first.GetChild(2).GetComponent<Image>();
+                image?.SetImageColor(ColorType.Wood);
+            }
+
+            if (first.childCount > 0)
+            {
+                var second = first.GetChild(0);
+
+                if (second.childCount > 0)
+                {
+                    var third = second.GetChild(0);
+
+                    if (third.childCount > 0)
+                    {
+                        var template = third.GetChild(0);
+                        var templateImage = template.GetComponent<Image>();
+                        templateImage?.SetImageColor(ColorType.Metal);
+
+                        if (template.childCount > 1)
+                        {
+                            var metalImage = template.GetChild(1).GetComponent<Image>();
+                            metalImage?.SetImageColor(ColorType.Metal);
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
