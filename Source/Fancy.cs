@@ -83,7 +83,8 @@ public class Fancy : BaseMod<Fancy>
         try
         {
             LoadBtos2SpriteSheet();
-        } catch {}
+        }
+        catch { }
     }
 
     public static StringDropdownOption SelectedIconPack;
@@ -194,7 +195,7 @@ public class Fancy : BaseMod<Fancy>
         var filteredFactions = BTOS2Factions.Where(x => x is not (Btos2Faction.Lovers or Btos2Faction.Cannibal or Btos2Faction.None));
         var filteredRoles = BTOS2Roles.Where(x => (int)x is < 57 or > 249 && x is not (Role.STONED or Role.UNKNOWN)).ToList();
 
-        var factions = filteredFactions.ToDictionary(x => x, x => Utils.FactionName(x, Constants.BTOS2Exists() ? GameModType.BTOS2 : GameModType.Vanilla).ToUpperInvariant());
+        var factions = filteredFactions.ToDictionary(x => x, x => Utils.FactionName(x, Constants.BTOS2Exists() ? GameModType.BTOS2 : GameModType.Vanilla, false).ToUpperInvariant());
 
         BTOS2Factions.Do(x => FactionToColorMap[x] = []);
 
@@ -349,7 +350,7 @@ public class Fancy : BaseMod<Fancy>
             (> Btos2Faction.Hawks and < Btos2Faction.Pandora))))
         {
             CinematicMap[faction] = new(
-                $"{Utils.FactionName(faction, GameModType.BTOS2).ToUpper()}_CINEMATIC", GetCinematic(faction), PackType.CinematicSwapper,
+                $"{Utils.FactionName(faction, GameModType.BTOS2, false).ToUpper()}_CINEMATIC", GetCinematic(faction), PackType.CinematicSwapper,
                 setActive: () => (faction < FactionType.UNKNOWN || Constants.BTOS2Exists()) && SelectTestingFaction.Value == faction,
                 useTranslations: true,
                 values: AllowedCinematics);
@@ -380,7 +381,7 @@ public class Fancy : BaseMod<Fancy>
             if (lethal != null)
                 ColorOptions[$"{key}_LETHAL"] = new($"{key}_LETHAL", lethal, PackType.MiscRoleCustomisation, SetActive, uponChanged: ReloadColors);
 
-            bool SetActive() => Utils.FactionName(SelectTestingFaction.Value, stoned: true).ToUpper() == key;
+            bool SetActive() => Utils.FactionName(SelectTestingFaction.Value, true, stoned: true).ToUpper() == key;
         }
 
         ReloadColors();

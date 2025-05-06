@@ -264,11 +264,11 @@ public static class Utils
         _ => "Blank"
     };
 
-    public static string FactionName(FactionType faction, bool allowOverrides, GameModType? mod = null) => FactionName(faction, mod, allowOverrides);
+    public static string FactionName(FactionType faction, bool allowOverrides, GameModType? mod = null, bool stoned = false) => FactionName(faction, mod, allowOverrides, stoned);
 
     public static string FactionName(FactionType faction, GameModType? mod = null, bool allowOverrides = true, bool stoned = false)
     {
-        if (Constants.FactionOverridden() && allowOverrides)
+        if (allowOverrides && Constants.FactionOverridden())
             return Constants.FactionOverride();
 
         try
