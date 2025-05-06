@@ -1,5 +1,3 @@
-using Home.Shared;
-
 namespace FancyUI.UI;
 
 public class SettingsAndTestingUI : UIController
@@ -122,7 +120,7 @@ public class SettingsAndTestingUI : UIController
         DropdownTemplate = transform.EnsureComponent<DropdownSetting>("DropdownTemplate");
         ToggleTemplate = transform.EnsureComponent<ToggleSetting>("ToggleTemplate");
         InputTemplate = transform.EnsureComponent<StringInputSetting>("InputTemplate");
-        var optionParent = SliderTemplate.transform.parent;
+        var optionParent = SliderTemplate!.transform.parent;
 
         var back = transform.FindRecursive("Back").gameObject;
         back.GetComponent<Button>().onClick.AddListener(GoBack);
@@ -132,8 +130,8 @@ public class SettingsAndTestingUI : UIController
 
         var toggleButton = transform.GetComponent<Button>("Toggle")!;
         ToggleImage = toggleButton.targetGraphic as Image;
-        ToggleImage.gameObject.SetActive(Constants.BTOS2Exists());
-        toggleButton!.onClick.AddListener(() => IsBTOS2 = !IsBTOS2);
+        ToggleImage!.gameObject.SetActive(Constants.BTOS2Exists());
+        toggleButton.onClick.AddListener(() => IsBTOS2 = !IsBTOS2);
 
         var filter = transform.FindRecursive("PageFilter");
 
@@ -301,11 +299,11 @@ public class SettingsAndTestingUI : UIController
         {
             option.BoxedSetting.gameObject.SetActive(false);
 
-            if (option.SetActive() && option.Page.IsAny(page, PackType.None))
-            {
-                option.BoxedSetting.Refresh();
-                option.BoxedSetting.gameObject.SetActive(true);
-            }
+            if (!option.SetActive() || !option.Page.IsAny(page, PackType.None))
+                continue;
+
+            option.BoxedSetting.Refresh();
+            option.BoxedSetting.gameObject.SetActive(true);
         }
 
         Utils.UpdateMaterials();

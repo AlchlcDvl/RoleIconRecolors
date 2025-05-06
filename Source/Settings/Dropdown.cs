@@ -15,7 +15,7 @@ public class DropdownSetting : Setting
     public override void Awake()
     {
         base.Awake();
-        Dropdown = transform.GetComponent<TMP_Dropdown>("Dropdown");
+        Dropdown = transform.GetComponent<TMP_Dropdown>("Dropdown")!;
         Arrow = Dropdown.transform.GetComponent<Image>("Arrow");
     }
 

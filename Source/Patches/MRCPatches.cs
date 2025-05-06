@@ -54,7 +54,7 @@ public static class PatchRoleCard
             case (ROLE_MODIFIER)10:
             {
                 var gradient = Btos2Faction.Jackal.GetChangedGradient(role);
-                text += $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.VIPLabel.Value})", gradient)}</size>";
+                text += $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.VipLabel.Value})", gradient)}</size>";
                 break;
             }
             default:
@@ -85,7 +85,7 @@ public static class RoleCardPanelPatches
     {
         var text = __instance.roleDescText.text;
         var header = Utils.GetString("GUI_ROLECARDHEADER_FACTION");
-        var index = text.IndexOf(header);
+        var index = text.IndexOf(header, StringComparison.Ordinal);
 
         if (index < 0)
             return;
@@ -122,7 +122,7 @@ public static class RoleCardPopupPatches2
     {
         var text = __instance.roleDescText.text;
         var header = Utils.GetString("GUI_ROLECARDHEADER_FACTION");
-        var index = text.IndexOf(header);
+        var index = text.IndexOf(header, StringComparison.Ordinal);
 
         if (index < 0)
             return;
@@ -153,20 +153,20 @@ public static class PlayerListPatch
     {
         __instance.playerRole = role;
 
-        if (role is not (0 or (Role)byte.MaxValue))
-        {
-            __instance.playerRole = role;
-            var roleName = Fancy.FactionalRoleNames.Value ? role.ToRoleFactionDisplayString(faction) : role.ToDisplayString();
-            var gradient = faction.GetChangedGradient(role);
+        if (role is 0 or (Role)byte.MaxValue)
+            return false;
 
-            if (role is not (Role.STONED or Role.HIDDEN))
-                __instance.playerRoleText.text = gradient != null ? Utils.ApplyGradient($"({roleName})", gradient) : $"<color={faction.GetFactionColor()}>({roleName})</color>";
-            else
-                __instance.playerRoleText.text = $"<color={role.GetFaction().GetFactionColor()}>({roleName})</color>";
+        __instance.playerRole = role;
+        var roleName = Fancy.FactionalRoleNames.Value ? role.ToRoleFactionDisplayString(faction) : role.ToDisplayString();
+        var gradient = faction.GetChangedGradient(role);
 
-            __instance.playerRoleText.gameObject.SetActive(true);
-            __instance.playerRoleText.enableAutoSizing = false; // Remove when PlayerNotes+ fix is out
-        }
+        if (role is not (Role.STONED or Role.HIDDEN))
+            __instance.playerRoleText.text = gradient != null ? Utils.ApplyGradient($"({roleName})", gradient) : $"<color={faction.GetFactionColor()}>({roleName})</color>";
+        else
+            __instance.playerRoleText.text = $"<color={role.GetFaction().GetFactionColor()}>({roleName})</color>";
+
+        __instance.playerRoleText.gameObject.SetActive(true);
+        __instance.playerRoleText.enableAutoSizing = false; // Remove when PlayerNotes+ fix is out
 
         return false;
     }
@@ -195,9 +195,9 @@ public static class TosCharacterNametagPatch
 [HarmonyPatch(typeof(HomeSceneController), nameof(HomeSceneController.HandleClickPlay))]
 public static class FixStyles
 {
+    private static readonly Type StyleType = typeof(TMP_Style);
     private static readonly FieldInfo StylesField = AccessTools.Field(typeof(TMP_StyleSheet), "m_StyleList");
     private static readonly FieldInfo OpeningDefField = AccessTools.Field(StyleType, "m_OpeningDefinition");
-    private static readonly Type StyleType = typeof(TMP_Style);
 
     public static void Postfix()
     {
@@ -454,10 +454,9 @@ public static class AddTtAndGradients
 
         if (__result.Contains("<color=#B545FF>(Traitor)"))
         {
-            if (gradient != null)
-                __result = __result.Replace("<color=#B545FF>(Traitor)</color>", $"{Utils.ApplyGradient($"({Fancy.CovenTraitorLabel.Value})", gradient)}");
-            else
-                __result = __result.Replace("<color=#B545FF>(Traitor)</color>", $"<style=CovenColor>({Fancy.CovenTraitorLabel.Value})</style>");
+            __result = __result.Replace("<color=#B545FF>(Traitor)</color>", gradient != null
+                ? $"{Utils.ApplyGradient($"({Fancy.CovenTraitorLabel.Value})", gradient)}"
+                : $"<style=CovenColor>({Fancy.CovenTraitorLabel.Value})</style>");
         }
 
         if (!role.IsResolved() && role is not (Role.FAMINE or Role.DEATH or Role.PESTILENCE or Role.WAR))

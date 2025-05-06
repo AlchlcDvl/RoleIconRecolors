@@ -678,7 +678,7 @@ public static class Utils
     // public static void DebugTransformRecursive(this Transform transform)
     // {
     //     transform.DebugSingleTransform();
-
+    //
     //     for (var i = 0; i < transform.childCount; i++)
     //         transform.GetChild(i).DebugTransformRecursive();
     // }
@@ -689,7 +689,7 @@ public static class Utils
 
     public static Gradient CreateGradient(params string[] colors) => CreateGradient([.. colors.Select(x => x.ToColor())]);
 
-    public static Gradient CreateGradient(params Color[] colors)
+    private static Gradient CreateGradient(params Color[] colors)
     {
         var length = colors.Length;
 

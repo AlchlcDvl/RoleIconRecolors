@@ -382,12 +382,12 @@ public static class PatchSettingsController
             var tempHolder = secondChild.GetChild(i);
             tempHolder.GetComponent<Image>().SetImageColor(ColorType.Metal);
 
-            if (i < 3)
-            {
-                var tempSetting = tempHolder.GetChild(1);
-                tempSetting.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
-                tempSetting.GetChild(2).GetComponent<Image>().SetImageColor(ColorType.Metal);
-            }
+            if (i >= 3)
+                continue;
+
+            var tempSetting = tempHolder.GetChild(1);
+            tempSetting.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
+            tempSetting.GetChild(2).GetComponent<Image>().SetImageColor(ColorType.Metal);
         }
 
         settingsGamePanel.transform.GetChild(3).GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
@@ -602,23 +602,34 @@ public static class PatchPlayerPopup
         {
             var tempHolder = buttons.GetChild(i);
 
-            if (i == 2)
-                tempHolder.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wax);
-            else if (i == 3)
-                tempHolder.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
-            else
+            switch (i)
             {
-                var tempButton = tempHolder.GetChild(1).GetChild(0);
-                tempButton.GetComponent<Image>().SetImageColor(ColorType.Metal);
-
-                if (i != 6)
-                    tempButton.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wax);
-
-                if (i == 12)
+                case 2:
                 {
-                    tempButton = tempHolder.GetChild(2).GetChild(0);
+                    tempHolder.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wax);
+                    break;
+                }
+                case 3:
+                {
+                    tempHolder.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
+                    break;
+                }
+                default:
+                {
+                    var tempButton = tempHolder.GetChild(1).GetChild(0);
                     tempButton.GetComponent<Image>().SetImageColor(ColorType.Metal);
-                    tempButton.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wax);
+
+                    if (i != 6)
+                        tempButton.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wax);
+
+                    if (i == 12)
+                    {
+                        tempButton = tempHolder.GetChild(2).GetChild(0);
+                        tempButton.GetComponent<Image>().SetImageColor(ColorType.Metal);
+                        tempButton.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wax);
+                    }
+
+                    break;
                 }
             }
         }
@@ -632,39 +643,35 @@ public static class PatchMentionPanel
     {
         var root = __instance.transform;
 
-        if (root.childCount > 0)
+        if (root.childCount == 0)
+            return;
+
+        var first = root.GetChild(0);
+
+        if (first.childCount > 2)
         {
-            var first = root.GetChild(0);
-
-            if (first.childCount > 2)
-            {
-                var image = first.GetChild(2).GetComponent<Image>();
-                image?.SetImageColor(ColorType.Wood);
-            }
-
-            if (first.childCount > 0)
-            {
-                var second = first.GetChild(0);
-
-                if (second.childCount > 0)
-                {
-                    var third = second.GetChild(0);
-
-                    if (third.childCount > 0)
-                    {
-                        var template = third.GetChild(0);
-                        var templateImage = template.GetComponent<Image>();
-                        templateImage?.SetImageColor(ColorType.Metal);
-
-                        if (template.childCount > 1)
-                        {
-                            var metalImage = template.GetChild(1).GetComponent<Image>();
-                            metalImage?.SetImageColor(ColorType.Metal);
-                        }
-                    }
-                }
-            }
+            var image = first.GetChild(2).GetComponent<Image>();
+            image?.SetImageColor(ColorType.Wood);
         }
+
+        if (first.childCount <= 0)
+            return;
+
+        var second = first.GetChild(0);
+
+        if (second.childCount <= 0)
+            return;
+
+        var third = second.GetChild(0);
+
+        if (third.childCount <= 0)
+            return;
+
+        var template = third.GetChild(0);
+        template.GetComponent<Image>()?.SetImageColor(ColorType.Metal);
+
+        if (template.childCount > 1)
+            template.GetChild(1).GetComponent<Image>()?.SetImageColor(ColorType.Metal);
     }
 }
 
@@ -851,7 +858,7 @@ public static class Tos2GameBrowserControllerPatch
         // The buttons at the bottom have the animator component that resets the material, rip
         __instance.transform.GetComponent<Image>("Refresh").SetImageColor(ColorType.Metal);
         __instance.transform.GetComponent<Image>("Frame").SetImageColor(ColorType.Wood);
-        var nameplate = __instance.transform.GetComponent<Image>("TopGold");
+        var nameplate = __instance.transform.GetComponent<Image>("TopGold")!;
         nameplate.SetImageColor(ColorType.Metal);
         nameplate.GetComponentInChildren<TextMeshProUGUI>().SetGraphicColor(ColorType.Metal);
     }
@@ -950,7 +957,7 @@ public static class GameBrowserRoleDeckPatch
 {
     public static void Postfix(GameBrowserRoleDeck __instance)
     {
-        var baseLeather = __instance.transform.GetComponent<Image>("DeckView");
+        var baseLeather = __instance.transform.GetComponent<Image>("DeckView")!;
         Image metal;
         Image paper;
 

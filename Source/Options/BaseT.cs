@@ -47,7 +47,6 @@ public abstract class Option<TValue, TSetting>(string id, TValue defaultValue, P
         Setting.name = ID;
         Setting.TitleText.SetText(SettingsAndTestingUI.Instance.l10n($"FANCY_{ID}_NAME"));
         Setting.Background.EnsureComponent<HoverEffect>()!.LookupKey = $"FANCY_{ID}_DESC";
-        Setting.BoxedOption = this;
     }
 
     private static void BlankVoid(TValue _) { }

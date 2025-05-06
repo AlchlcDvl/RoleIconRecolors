@@ -1,78 +1,61 @@
-// using Art;
-// using UnityEngine.U2D.Animation;
+using Art;
+using NewModLoading;
+using UnityEngine.U2D.Animation;
 
-// namespace FancyUI.Patches;
+namespace FancyUI.Patches;
 
-// [HarmonyPatch(typeof(RolecardBackground))]
-// public static class SwapSilhouettesPatch
-// {
-//     [HarmonyPatch(nameof(RolecardBackground.SetRole))]
-//     public static void Postfix(RolecardBackground __instance)
-//     {
-//         var animatorTransform = __instance.silhouette.transform.parent.FindRecursive("SilhouetteAnimRend");
-//         var anim = animatorTransform?.GetComponent<CustomRendAnimator>();
+[HarmonyPatch(typeof(RolecardBackground), nameof(RolecardBackground.SetRole))]
+public static class SwapSilhouettesPatches
+{
+    private static SpriteRenderer prefab;
+    private static SpriteRenderer Prefab
+    {
+        get
+        {
+            if (prefab)
+                return prefab;
 
-//         if (!anim)
-//         {
-//             var animRend = UObject.Instantiate(__instance.silhouette.GetComponentInChildren<SpriteRenderer>(true), __instance.silhouette.transform.parent);
-//             animRend.name = "SilhouetteAnimRend";
-//             animRend.GetComponent<SpriteSkin>().Destroy();
-//             animRend.transform.localPosition = new(-0.4f, 6.6f, 0f);
-//             animRend.transform.localScale = new(0.65f, 0.65f, 1f);
-//             anim = animRend.AddComponent<CustomRendAnimator>();
+            // This is a bit of a hack, but it works. We need to get the prefab from the game, but we don't want to use the one in the game.
+            try
+            {
+                var sil = UObject.Instantiate(Service.Game.Cast.GetSilhouette(42), null).DontDestroy(); // 42 = Berserker, the one that actually works lmao
+                sil.transform.SetLayerRecursive(16, [Layers.RimLightingLayer]);
+                sil.gameObject.SetActive(false);
+                return prefab = sil.GetComponentInChildren<SpriteRenderer>(true);
+            }
+            catch
+            {
+                return prefab = null; // Retry as many times as needed
+            }
+        }
+    }
 
-//             var shadow = UObject.Instantiate(__instance.silhouette.transform.GetComponent<SpriteRenderer>("Shadow"), animRend.transform);
-//             shadow.name = "Shadow";
-//             shadow.transform.localPosition = new(-0.8936f, -8.9f, 0f);
-//             shadow.transform.localScale = new(6f, 2f, 1f);
-//         }
+    public static void Postfix(RolecardBackground __instance)
+    {
+        if (!Constants.EnableSwaps())
+            return;
 
-//         anim.SetAnim(Loading.Frames, Fancy.AnimationDuration.Value);
-//         __instance.silhouette.gameObject.SetActive(false);
-//     }
-// }
+        var animatorTransform = __instance.silhouette.transform.parent.Find("SilhouetteAnimRend");
+        var anim = animatorTransform?.GetComponent<CustomRendAnimator>();
 
-// Above code works, below is supposed to "fix" the above code but it doesn't lol
+        if (!anim)
+        {
+            var animRend = UObject.Instantiate(Prefab, __instance.silhouette.transform.parent);
+            animRend.name = "SilhouetteAnimRend";
+            animRend.GetComponent<SpriteSkin>().Destroy();
+            animRend.transform.localPosition = new(-0.4f, 6.6f, 0f);
+            animRend.transform.localScale = new(0.65f, 0.65f, 1f);
 
-// [HarmonyPatch(typeof(RolecardBackground))]
-// public static class SwapSilhouettesPatches
-// {
-//     private static SpriteRenderer Prefab;
+            var shadow = UObject.Instantiate(__instance.silhouette.transform.GetComponent<SpriteRenderer>("Shadow"), animRend.transform);
+            shadow.name = "Shadow";
+            shadow.transform.localPosition = new(-0.8936f, -8.9f, 0f);
+            shadow.transform.localScale = new(6f, 2f, 1f);
 
-//     [HarmonyPatch(nameof(RolecardBackground.Start))]
-//     public static void Postfix()
-//     {
-//         Fancy.Instance.Error("HI");
-//         Prefab ??= Service.Game.Cast.GetSilhouette(42).GetComponentInChildren<SpriteRenderer>(true);
-//     }
+            anim = animRend.EnsureComponent<CustomRendAnimator>();
+        }
 
-//     [HarmonyPatch(nameof(RolecardBackground.SetRole))]
-//     public static void Postfix(RolecardBackground __instance)
-//     {
-//         Fancy.Instance.Error("HI");
-//         var animatorTransform = __instance.silhouette.transform.parent.Find("SilhouetteAnimRend");
-//         CustomRendAnimator anim;
-
-//         if (!animatorTransform)
-//         {
-//             var animRend = UObject.Instantiate(Prefab, __instance.silhouette.transform.parent);
-//             animRend.name = "SilhouetteAnimRend";
-//             animRend.GetComponent<SpriteSkin>().Destroy();
-//             animRend.transform.localPosition = new(-0.4f, 6.6f, 0f);
-//             animRend.transform.localScale = new(0.65f, 0.65f, 1f);
-//             animRend.enabled = true;
-
-//             var shadow = UObject.Instantiate(__instance.silhouette.transform.GetComponent<SpriteRenderer>("Shadow"), animRend.transform);
-//             shadow.name = "Shadow";
-//             shadow.transform.localPosition = new(-0.8936f, -8.9f, 0f);
-//             shadow.transform.localScale = new(6f, 2f, 1f);
-
-//             anim = animRend.EnsureComponent<CustomRendAnimator>();
-//         }
-//         else
-//             anim = animatorTransform.EnsureComponent<CustomRendAnimator>();
-
-//         anim.SetAnim(Loading.Frames, Fancy.AnimationDuration.Value);
-//         __instance.silhouette.gameObject.SetActive(false);
-//     }
-// }
+        anim!.SetAnim(Loading.Frames, Fancy.AnimationDuration.Value);
+        anim.gameObject.SetActive(true);
+        __instance.silhouette.gameObject.SetActive(false);
+    }
+}

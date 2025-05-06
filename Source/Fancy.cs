@@ -123,12 +123,12 @@ public class Fancy : BaseMod<Fancy>
     public static StringInputOption CovenTraitorLabel;
     public static StringInputOption ApocTraitorLabel;
     public static StringInputOption PandoraTraitorLabel;
-    public static StringInputOption VIPLabel;
+    public static StringInputOption VipLabel;
     public static StringInputOption CourtLabel;
     public static StringInputOption JuryLabel;
     public static StringInputOption PirateLabel;
 
-    public static readonly Dictionary<string, ColorOption> ColorOptions = [];
+    private static readonly Dictionary<string, ColorOption> ColorOptions = [];
     public static readonly Dictionary<string, (string Start, string End, string Major, string Middle, string Lethal)> Colors = new()
     {
         { "TOWN", ("#06E00C", "#06E00C", "#06E00C", null, "#06E00C") },
@@ -203,7 +203,7 @@ public class Fancy : BaseMod<Fancy>
         SelectTestingFaction = new("SELECTED_TESTING_FACTION", FactionType.NONE, PackType.None, useTranslations: true, values:
             () => SettingsAndTestingUI.Instance?.IsBTOS2 == true ? [.. filteredFactions.AddItem(FactionType.NONE)] : VanillaFactions);
         SelectTestingRole = new("SELECTED_TESTING_ROLE", Role.ADMIRER, PackType.None, useTranslations: true, values:
-            () => SettingsAndTestingUI.Instance?.IsBTOS2 == true ? BTOS2Roles : VanillaRoles);
+            () => SettingsAndTestingUI.Instance?.IsBTOS2 == true ? [.. filteredRoles] : VanillaRoles);
 
         SelectedIconPack = new("SELECTED_ICON_PACK", "Vanilla", PackType.IconPacks, () => GetPackNames(PackType.IconPacks), onChanged: x => TryLoadingSprites(x, PackType.IconPacks));
         SelectedSilhouetteSet = new("SELECTED_SIL_SET", "Vanilla", PackType.SilhouetteSets, () => GetPackNames(PackType.SilhouetteSets), onChanged: x => TryLoadingSprites(x,
@@ -222,8 +222,7 @@ public class Fancy : BaseMod<Fancy>
         foreach (var (type, name) in colors)
         {
             CustomUIColorsMap[type] = new($"UI_{name}", "#FFFFFF", PackType.RecoloredUI, () => Constants.EnableCustomUI() && SelectColorFilter.Value.IsAny(type, ColorType.All));
-            ColorShadeToggleMap[type] = new($"COLOR_{name}", true, PackType.RecoloredUI, () => Fancy.SelectedUITheme.Value == UITheme.Faction && SelectColorFilter.Value.IsAny(type,
-                ColorType.All));
+            ColorShadeToggleMap[type] = new($"COLOR_{name}", true, PackType.RecoloredUI, () => SelectedUITheme.Value == UITheme.Faction && SelectColorFilter.Value.IsAny(type, ColorType.All));
             ColorShadeMap[type] = new($"{name}_SHADE", 0, PackType.RecoloredUI, -100, 100, true, () => Constants.EnableCustomUI() && SelectColorFilter.Value.IsAny(type, ColorType.All));
 
             foreach (var (faction, factionName) in factions)
@@ -334,7 +333,7 @@ public class Fancy : BaseMod<Fancy>
         CovenTraitorLabel = new("COVEN_TRAITOR_LABEL", "Town Traitor", PackType.MiscRoleCustomisation);
         ApocTraitorLabel = new("APOC_TRAITOR_LABEL", "Town Traitor", PackType.MiscRoleCustomisation);
         PandoraTraitorLabel = new("PANDORA_TRAITOR_LABEL", "Town Traitor", PackType.MiscRoleCustomisation);
-        VIPLabel = new("VIP_LABEL", "VIP", PackType.MiscRoleCustomisation);
+        VipLabel = new("VIP_LABEL", "VIP", PackType.MiscRoleCustomisation);
         CourtLabel = new("COURT_LABEL", "Court", PackType.MiscRoleCustomisation);
         JuryLabel = new("JURY_LABEL", "Jury", PackType.MiscRoleCustomisation);
         PirateLabel = new("PIRATE_LABEL", "Pirate", PackType.MiscRoleCustomisation);
@@ -413,7 +412,7 @@ public class Fancy : BaseMod<Fancy>
         CinematicType.VampireWins,
     ];
 
-    public static void ReloadColors()
+    private static void ReloadColors()
     {
         foreach (var key in Colors.Keys.ToList())
         {
@@ -427,18 +426,11 @@ public class Fancy : BaseMod<Fancy>
         }
     }
 
-    private static string[] GetPackNames(PackType type)
-    {
-        var result = new List<string> { "Vanilla" };
-
-        foreach (var dir in Directory.EnumerateDirectories(Path.Combine(Instance.ModPath, type.ToString())))
-        {
-            if (!dir.ContainsAny("Vanilla", "BTOS2"))
-                result.Add(dir.FancySanitisePath());
-        }
-
-        return [.. result];
-    }
+    private static string[] GetPackNames(PackType type) => [
+        "Vanilla",
+        .. from dir in Directory.EnumerateDirectories(Path.Combine(Instance.ModPath, type.ToString()))
+            where !dir.ContainsAny("Vanilla", "BTOS2")
+            select dir.FancySanitisePath()];
 
     private static string[] GetOptions(GameModType mod, bool mentionStyle)
     {

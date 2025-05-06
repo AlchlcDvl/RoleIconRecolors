@@ -355,8 +355,8 @@ public static class SpecialAbilityPopupNecromancerRetributionistListItemPatch
     public static bool Prefix(SpecialAbilityPopupNecromancerRetributionistListItem __instance, int position, string player_name, Sprite headshot, bool hasChoice1, bool hasChoice2, UIRoleData
         data, Role role, SpecialAbilityPopupNecromancerRetributionist parent)
     {
-        var myRole = Pepper.GetMyRole();
         __instance.parent = parent;
+        var myRole = Pepper.GetMyRole();
         var role2 = Role.NONE;
         var factionType = FactionType.NONE;
 
