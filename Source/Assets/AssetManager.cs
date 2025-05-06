@@ -44,7 +44,7 @@ public static class FancyAssetManager
         if (name.Contains("Blank") || !Constants.EnableIcons() || IconPacks.Count == 0)
             return Blank;
 
-        packName ??= Constants.CurrentPack();
+        packName ??= Fancy.SelectedIconPack.Value;
 
         if (!IconPacks.TryGetValue(packName, out var pack))
         {
@@ -200,7 +200,7 @@ public static class FancyAssetManager
     {
         IconPack pack = null;
         var game = Utils.GetGameType();
-        var diagnostic = $"Uh oh, something happened here\nPack Name: {Constants.CurrentPack()}\nStyle Name: {Constants.CurrentStyle()}\nFaction Override: {Constants.FactionOverride()}\nCustom Numbers: {Constants.CustomNumbers()}";
+        var diagnostic = $"Uh oh, something happened here\nPack Name: {Fancy.SelectedIconPack.Value}\nStyle Name: {Constants.CurrentStyle()}\nFaction Override: {Constants.FactionOverride()}\nCustom Numbers: {Constants.CustomNumbers()}";
 
         if (!CacheDefaults.RoleIcons)
             diagnostic += "\nVanilla Sheet Does Not Exist";
@@ -225,7 +225,7 @@ public static class FancyAssetManager
 
         diagnostic += $"\nCurrently In A {game} Game";
 
-        if (Constants.EnableIcons() && !IconPacks.TryGetValue(Constants.CurrentPack(), out pack))
+        if (Constants.EnableIcons() && !IconPacks.TryGetValue(Fancy.SelectedIconPack.Value, out pack))
             diagnostic += "\nNo Loaded Icon Pack";
         else if (pack == null)
             diagnostic += "\nLoaded Icon Pack Was Null";

@@ -384,7 +384,7 @@ public static class Utils
 
     public static void DumpSprite(Texture2D texture, string fileName = null, string path = null, bool decompress = false, bool skipSetting = false)
     {
-        if (!texture || (!Constants.DumpSheets() && !skipSetting))
+        if (!texture || (!Fancy.DumpSpriteSheets.Value && !skipSetting))
             return;
 
         path ??= Fancy.Instance.ModPath;
@@ -623,7 +623,7 @@ public static class Utils
         if (Constants.AllMaterials.Count == 0)
             return;
 
-        if (Constants.GetMainUIThemeType() == UITheme.Vanilla)
+        if (Fancy.SelectedUITheme.Value == UITheme.Vanilla)
             Constants.AllMaterials[notGuide].Values.Do(x => x.SetFloat(Vanilla, 1));
         else
         {

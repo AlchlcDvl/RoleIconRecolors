@@ -83,7 +83,7 @@ public class SettingsAndTestingUI : UIController
         Instance = this;
 
         Animator = transform.EnsureComponent<CustomImageAnimator>("Animator")!;
-        Animator.SetAnim(Loading.Frames, Constants.AnimationDuration());
+        Animator.SetAnim(Loading.Frames, Fancy.AnimationDuration.Value);
         Animator.AddComponent<HoverEffect>()!.NonLocalizedString = "This Is Your Animator";
 
         var roleCard = transform.FindRecursive("RoleCard");
@@ -144,7 +144,7 @@ public class SettingsAndTestingUI : UIController
         filter.GetComponent<Button>().onClick.AddListener(() =>
         {
             FilterArrow.sprite = Fancy.Instance.Assets.GetSprite("DropDown_ArrowUp");
-            FilterDropdown.SetActive(true);
+            FilterDropdown.SetActive(!FilterDropdown.activeSelf);
         });
 
         FilterDropdown.transform.GetComponent<Button>("RecolouredUI")!.onClick.AddListener(() => Page = PackType.RecoloredUI);
@@ -269,15 +269,15 @@ public class SettingsAndTestingUI : UIController
         Utils.UpdateMaterials(skipFactionCheck: true);
     }
 
-    public void Refresh() 
+    public void Refresh()
     {
-        Animator.SetDuration(Constants.AnimationDuration());
+        Animator.SetDuration(Fancy.AnimationDuration.Value);
         NameText.SetText(DefaultNameText
             .Replace("%num%", $"{Constants.PlayerNumber()}")
             .Replace("%roleName%", Utils.ApplyGradient($"{(Fancy.FactionalRoleNames.Value ? Utils.GetRoleName(Fancy.SelectTestingRole.Value, Fancy.SelectTestingFaction.Value, true) : Utils.GetString($"{(IsBTOS2 ? "BTOS_" : "GUI_")}ROLENAME_{(int)Fancy.SelectTestingRole.Value}"))}", Fancy.SelectTestingFaction.Value.GetChangedGradient(Fancy.SelectTestingRole.Value))));
         NameText.SetGraphicColor(ColorType.Paper);
         RoleText.SetText(DefaultRoleText
-            .Replace("%type%", $"{Utils.FactionName(Constants.GetSelectedFaction(), IsBTOS2 ? GameModType.BTOS2 : GameModType.Vanilla, stoned: true)}")
+            .Replace("%type%", $"{Utils.FactionName(Fancy.SelectTestingFaction.Value, IsBTOS2 ? GameModType.BTOS2 : GameModType.Vanilla, stoned: true)}")
             .Replace("%mod%", IsBTOS2 ? "BTOS" : "")
             .Replace("%roleName%", Utils.ApplyGradient($"{(Fancy.FactionalRoleNames.Value ? Utils.GetRoleName(Fancy.SelectTestingRole.Value, Fancy.SelectTestingFaction.Value) : Utils.GetString($"{(IsBTOS2 ? "BTOS_" : "GUI_")}ROLENAME_{(int)Fancy.SelectTestingRole.Value}"))}", Fancy.SelectTestingFaction.Value.GetChangedGradient(Fancy.SelectTestingRole.Value)))
             .Replace("%roleInt%", $"{(int)Fancy.SelectTestingRole.Value}"));
@@ -301,7 +301,7 @@ public class SettingsAndTestingUI : UIController
         {
             option.BoxedSetting.gameObject.SetActive(false);
 
-            if (option.SetActive() && option.Page == page)
+            if (option.SetActive() && option.Page.IsAny(page, PackType.None))
             {
                 option.BoxedSetting.Refresh();
                 option.BoxedSetting.gameObject.SetActive(true);

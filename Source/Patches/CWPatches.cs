@@ -24,7 +24,7 @@ public static class RoleCardPanelPatch
         __instance.transform.GetChild(10).GetComponent<Image>().SetImageColor(ColorType.Wood);
         __instance.transform.GetChild(20).GetComponentInChildren<Image>().SetImageColor(ColorType.Metal);
 
-        if (Constants.GetMainUIThemeType() == UITheme.Faction)
+        if (Fancy.SelectedUITheme.Value == UITheme.Faction)
         {
             var pooledChat = PooledChatViewSwitcherPatch.Cache;
             var chatInput = ChatInputControllerPatch.Cache;

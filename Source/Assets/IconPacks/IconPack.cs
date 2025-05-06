@@ -12,7 +12,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
 
     public override void Debug()
     {
-        if (!Constants.PackDebug())
+        if (!Fancy.DebugPackLoading.Value)
             return;
 
         Fancy.Instance.Message($"Debugging {Name}");
@@ -413,12 +413,12 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
         icons ??= [];
         icons.TryGetValue(iconName, out var sprite);
 
-        if ((!allowEe && sprite.IsValid()) || (allowEe && URandom.RandomRangeInt(1, 101) > Constants.EasterEggChance()))
+        if ((!allowEe && sprite.IsValid()) || (allowEe && URandom.RandomRangeInt(1, 101) > Fancy.EasterEggChance.Value))
             return sprite ?? Blank;
 
         var sprites = new HashSet<Sprite>();
 
-        if (Constants.AllEasterEggs())
+        if (Fancy.AllEasterEggs.Value)
         {
             GlobalEasterEggs[type].TryGetValue(iconName, out sprites);
             sprites ??= [];

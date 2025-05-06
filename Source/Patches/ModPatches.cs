@@ -41,7 +41,7 @@ public static class ReAddJailorOverlay
         if (!JailorOverlayPrefab)
             JailorOverlayPrefab = GameObject.Find("Hud/JailorElementsUI(Clone)/MainPanel/JailorOverlay").GetComponent<BaseJailorOverlayController>();
 
-        if ((effectsState.bIsJailed && Constants.ShowOverlayWhenJailed()) || (effectsState.bIsJailing && Constants.ShowOverlayAsJailor()))
+        if ((effectsState.bIsJailed && Fancy.ShowOverlayWhenJailed.Value) || (effectsState.bIsJailing && Fancy.ShowOverlayAsJailor.Value))
             JailorOverlayPrefab.Show(); // Show overlay if you are jailing or being jailed while the respective setting is on
     }
 }
@@ -179,7 +179,7 @@ public static class RoleRevealCinematicPlayerPatch
         if (role == Role.NONE)
             return true;
 
-        var showIcons = Constants.IconsInRoleReveal();
+        var showIcons = Fancy.IconsInRoleReveal.Value;
         var skinIcon = showIcons
             ? $"<sprite=\"Cast\" name=\"Skin{__instance.roleRevealCinematic.skinId}\">{Service.Game.Cast.GetSkinName(__instance.roleRevealCinematic.skinId)}"
             : Service.Game.Cast.GetSkinName(__instance.roleRevealCinematic.skinId);

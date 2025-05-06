@@ -3,8 +3,8 @@ namespace FancyUI.Options;
 public class EnumDropdownOption<T> : BaseDropdownOption<T> where T : struct, Enum
 {
     public EnumDropdownOption(string id, T defaultValue, PackType page, Func<string[]> options = null, Func<bool> setActive = null, Func<string, string> mapping = null, Action<T>
-        onChanged = null, bool useTranslations = false, Func<T, string> enumMapping = null, Func<T[]> values = null) : base(id, defaultValue, page, options ?? (() => GetValues(values)),
-        setActive, mapping, onChanged, useTranslations)
+        onChanged = null, bool useTranslations = false, Func<T, string> enumMapping = null, Func<T[]> values = null, Action uponChanged = null) : base(id, defaultValue, page, options ?? (() =>
+        GetValues(values)), setActive, mapping, onChanged, useTranslations, uponChanged)
     {
         if (mapping == null && enumMapping != null)
             mapping = x => enumMapping(Enum.Parse<T>(x));

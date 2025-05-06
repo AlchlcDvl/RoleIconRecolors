@@ -15,7 +15,8 @@ public enum PackType : byte
     IconPacks,
     SilhouetteSets,
     MiscRoleCustomisation,
-    CinematicSwapper
+    CinematicSwapper,
+    None
 }
 
 public enum ColorType : byte

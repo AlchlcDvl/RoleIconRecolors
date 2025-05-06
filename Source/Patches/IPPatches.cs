@@ -244,7 +244,7 @@ public static class PatchAbilityPanelListItems
         var ogfaction = Utils.FactionName(role.GetFactionType(), false);
         var name = Utils.RoleName(role);
         var reg = ogfaction != faction;
-        var ee = Constants.PlayerPanelEasterEggs();
+        var ee = Fancy.PlayerPanelEasterEggs.Value;
 
         switch (overrideType)
         {
@@ -600,7 +600,7 @@ public static class PlayerEffectsServicePatch
         }
 
         var effect = Utils.EffectName(effectType);
-        var ee = Constants.PlayerPanelEasterEggs();
+        var ee = Fancy.PlayerPanelEasterEggs.Value;
         var sprite = GetSprite($"{effect}_Effect", ee);
 
         if (!sprite.IsValid())
@@ -751,7 +751,7 @@ public static class ReplaceTMPSpritesPatch
         if (!Constants.EnableIcons())
             return false;
 
-        var packName = Constants.CurrentPack();
+        var packName = Fancy.SelectedIconPack.Value;
 
         if (IconPacks.TryGetValue(packName, out var pack))
         {

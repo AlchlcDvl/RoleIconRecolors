@@ -27,7 +27,7 @@ public static class SwapSilhouettesPatch
             shadow.transform.localScale = new(6f, 2f, 1f);
         }
 
-        anim.SetAnim(Loading.Frames, Constants.AnimationDuration());
+        anim.SetAnim(Loading.Frames, Fancy.AnimationDuration.Value);
         __instance.silhouette.gameObject.SetActive(false);
     }
 }
@@ -72,7 +72,7 @@ public static class SwapSilhouettesPatch
 //         else
 //             anim = animatorTransform.EnsureComponent<CustomRendAnimator>();
 
-//         anim.SetAnim(Loading.Frames, Constants.AnimationDuration());
+//         anim.SetAnim(Loading.Frames, Fancy.AnimationDuration.Value);
 //         __instance.silhouette.gameObject.SetActive(false);
 //     }
 // }

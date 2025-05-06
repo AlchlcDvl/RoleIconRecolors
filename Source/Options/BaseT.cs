@@ -2,11 +2,11 @@ using NewModLoading;
 
 namespace FancyUI.Options;
 
-public abstract class Option<TValue, TSetting>(string id, TValue defaultValue, PackType page, Func<bool> setActive = null, Action<TValue> onChanged = null) : Option(id, page, setActive) where
-    TSetting : Setting
+public abstract class Option<TValue, TSetting>(string id, TValue defaultValue, PackType page, Func<bool> setActive = null, Action<TValue> onChanged = null, Action uponChanged = null) : Option(id,
+    page, setActive, uponChanged) where TSetting : Setting
 {
     protected Config<TValue> Entry { get; } = Fancy.Instance.Configs!.Bind(id, defaultValue);
-    private Action<TValue> OnChanged { get; } = onChanged ?? (_ => {});
+    private Action<TValue> OnChanged { get; } = onChanged ?? BlankVoid;
 
     private TSetting setting;
     public TSetting Setting
@@ -26,6 +26,7 @@ public abstract class Option<TValue, TSetting>(string id, TValue defaultValue, P
         {
             Entry.Value = value;
             OnChanged(value);
+            UponChanged();
         }
     }
 
@@ -35,6 +36,12 @@ public abstract class Option<TValue, TSetting>(string id, TValue defaultValue, P
         set => Setting = (TSetting)value;
     }
 
+    public override object BoxedValue
+    {
+        get => Value;
+        set => Value = (TValue)value;
+    }
+
     public virtual void OptionCreated()
     {
         Setting.name = ID;
@@ -42,4 +49,10 @@ public abstract class Option<TValue, TSetting>(string id, TValue defaultValue, P
         Setting.Background.EnsureComponent<HoverEffect>()!.LookupKey = $"FANCY_{ID}_DESC";
         Setting.BoxedOption = this;
     }
+
+    private static void BlankVoid(TValue _) { }
+
+    public static implicit operator TValue(Option<TValue, TSetting> option) => option.Value;
+
+    public static implicit operator TSetting(Option<TValue, TSetting> option) => option.setting;
 }
