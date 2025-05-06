@@ -9,9 +9,7 @@ public static class Gradients
         var mod = Utils.GetGameType();
         var middleKey = Utils.FactionName(faction, mod, stoned: true).ToUpper();
         var baseKey = Utils.FactionName(role.GetFactionType(mod), mod, stoned: true).ToUpper();
-
         var startKey = faction == Btos2Faction.Jackal ? "JACKAL" : middleKey;
-
         string end;
 
         if (faction == Btos2Faction.Jackal)

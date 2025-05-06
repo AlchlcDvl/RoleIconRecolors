@@ -697,24 +697,10 @@ public static class Utils
             throw new InvalidOperationException("Colors are needed to create a gradient");
 
         var gradient = new Gradient();
-
-        if (length == 1)
-        {
-            gradient.SetKeys([new(colors[0], 0f), new(colors[0], 1f)],
-            [
-                new(1f, 0f),
-                new(1f, 1f)
-            ]);
-        }
-        else
-        {
-            gradient.SetKeys([.. colors.Select((i, color) => new GradientColorKey(color, (float)i / (colors.Length - 1)))], // Pays to know random ass math (that may or may not be 100% accurate)
-            [
-                new(1f, 0f),
-                new(1f, 1f)
-            ]);
-        }
-
+        gradient.SetKeys(length == 1
+            ? [new(colors[0], 0f), new(colors[0], 1f)]
+            : [.. colors.Select((i, color) => new GradientColorKey(color, (float)i / (colors.Length - 1)))],
+            [new(1f, 0f), new(1f, 1f)]);
         return gradient;
     }
 

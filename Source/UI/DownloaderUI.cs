@@ -195,6 +195,7 @@ public class DownloaderUI : UIController
                 go.EnsureComponent<HoverEffect>()!.NonLocalizedString = packJson.Credits;
 
             PackGOs.Add(go);
+
             go.transform.GetComponent<Image>("Background").SetImageColor(ColorType.Metal);
             button.GetComponent<Image>().SetImageColor(ColorType.Wax);
             link.GetComponent<Image>().SetImageColor(ColorType.Wax);
