@@ -125,20 +125,6 @@ public static class FancyAssetManager
 
         if (!Directory.Exists(btos))
             Directory.CreateDirectory(btos);
-
-        BTOS21 = BetterTOS2.BTOSInfo.assetBundle.LoadAsset<TMP_SpriteAsset>("Roles");
-
-        foreach (var character in BTOS21.spriteGlyphTable)
-        {
-            character.metrics = new()
-            {
-                horizontalBearingX = 0f,
-                horizontalBearingY = 224f
-            };
-        }
-
-        Utils.DumpSprite(BTOS21.spriteSheet as Texture2D, "BTOSRoleIcons", Path.Combine(IPPath, "BTOS2"), true);
-        Fancy.Instance.Assets.RegisterBundle(BetterTOS2.BTOSInfo.assetBundle);
     }
 
     public static string FancySanitisePath(this string path, bool removeIcon = false)
@@ -382,6 +368,20 @@ public static class FancyAssetManager
     {
         if (!Constants.BTOS2Exists())
             return;
+
+        BTOS21 = BetterTOS2.BTOSInfo.assetBundle.LoadAsset<TMP_SpriteAsset>("Roles");
+
+        foreach (var character in BTOS21.spriteGlyphTable)
+        {
+            character.metrics = new()
+            {
+                horizontalBearingX = 0f,
+                horizontalBearingY = 224f
+            };
+        }
+
+        Utils.DumpSprite(BTOS21.spriteSheet as Texture2D, "BTOSRoleIcons", Path.Combine(IPPath, "BTOS2"), true);
+        Fancy.Instance.Assets.RegisterBundle(BetterTOS2.BTOSInfo.assetBundle);
 
         try
         {
