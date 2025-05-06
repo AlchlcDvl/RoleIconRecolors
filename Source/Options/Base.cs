@@ -9,8 +9,8 @@ public abstract class Option
     public Func<bool> SetActive { get; }
     public Action UponChanged { get; }
 
-    public virtual Setting BoxedSetting { get; set; }
-    public virtual object BoxedValue { get; set; }
+    public abstract Setting BoxedSetting { get; set; }
+    public abstract object BoxedValue { get; set; }
 
     protected Option(string id, PackType page, Func<bool> setActive, Action uponChanged)
     {
@@ -20,6 +20,4 @@ public abstract class Option
         UponChanged = uponChanged ?? Blanks.BlankVoid;
         All.Add(this);
     }
-
-    public abstract void Set(string value);
 }

@@ -10,6 +10,4 @@ public abstract class BaseDropdownOption<T>(string id, T defaultValue, PackType 
     public string ValueString => Entry.Value.ToString();
 
     public abstract void SetString(string value);
-
-    public override void Set(string value) => SetString(value);
 }

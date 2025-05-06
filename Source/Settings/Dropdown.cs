@@ -28,7 +28,7 @@ public class DropdownSetting : Setting
     public void OnValueChanged(int index)
     {
         var options = Option.Options();
-        Option.SetString(options[index] ?? options.FirstOrDefault() ?? "Error");
+        Option.SetString(options[index]);
         SettingsAndTestingUI.Instance.Refresh();
     }
 

@@ -4,6 +4,4 @@ public abstract class BaseInputOption<T>(string id, string defaultValue, PackTyp
     null) : Option<string, T>(id, defaultValue, page, setActive, onChanged, uponChanged) where T : Setting
 {
     public string Regex { get; } = regex ?? "";
-
-    public override void Set(string value) => Value = value;
 }
