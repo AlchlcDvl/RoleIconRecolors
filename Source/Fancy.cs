@@ -426,11 +426,13 @@ public class Fancy : BaseMod<Fancy>
         }
     }
 
-    private static string[] GetPackNames(PackType type) => [
+    private static string[] GetPackNames(PackType type) =>
+    [
         "Vanilla",
         .. from dir in Directory.EnumerateDirectories(Path.Combine(Instance.ModPath, type.ToString()))
             where !dir.ContainsAny("Vanilla", "BTOS2")
-            select dir.FancySanitisePath()];
+            select dir.FancySanitisePath()
+    ];
 
     private static string[] GetOptions(GameModType mod, bool mentionStyle)
     {
