@@ -223,7 +223,7 @@ public static class LobbyInfoClassicPanelAndTimerPatch
 [HarmonyPatch(typeof(HudTimeChangePanel), nameof(HudTimeChangePanel.UpdateDayNightNumber))]
 public static class HudTimeChangePanelPatch
 {
-    public static HudTimeChangePanel Cachetab.transform.GetChild(0).GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Wood);;
+    public static HudTimeChangePanel Cache;
 
     public static void Postfix(HudTimeChangePanel __instance)
     {
