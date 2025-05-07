@@ -459,6 +459,13 @@ public static class AddTtAndGradients
                 : $"<style=CovenColor>({Fancy.CovenTraitorLabel.Value})</style>");
         }
 
+        if (__result.Contains("<color=#06E00C>(VIP)"))
+        {
+            __result = __result.Replace("<color=#06E00C>(VIP)</color>", gradient != null
+                ? $"{Utils.ApplyGradient($"({Fancy.VipLabel.Value})", gradient)}"
+                : $"<style=CovenColor>({Fancy.VipLabel.Value})</style>");
+        }
+
         if (!role.IsResolved() && role is not (Role.FAMINE or Role.DEATH or Role.PESTILENCE or Role.WAR))
             return;
 
