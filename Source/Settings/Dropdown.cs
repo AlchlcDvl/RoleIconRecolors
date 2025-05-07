@@ -25,12 +25,7 @@ public class DropdownSetting : Setting
             Dropdown.onValueChanged.AddListener(OnValueChanged);
     }
 
-    public void OnValueChanged(int index)
-    {
-        var options = Option.Options();
-        Option.SetString(options[index]);
-        SettingsAndTestingUI.Instance.Refresh();
-    }
+    public void OnValueChanged(int index) => Option.SetString(Option.Options()[index]);
 
     public override void Refresh()
     {

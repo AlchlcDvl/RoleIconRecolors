@@ -29,23 +29,12 @@ public class ToggleSetting : Setting
             return;
 
         Toggle.SetIsOnWithoutNotify(Option.Value);
+        ValueText.SetText(Option.Value ? "On" : "Off");
+        OnBg.gameObject.SetActive(Option.Value);
+        OffBg.gameObject.SetActive(!Option.Value);
+        Toggle.targetGraphic = Option.Value ? OnBg : OffBg;
         Toggle.onValueChanged.AddListener(OnValueChanged);
     }
 
-    public void OnValueChanged(bool value)
-    {
-        Option.Value = value;
-        SettingsAndTestingUI.Instance.Refresh();
-    }
-
-    public override void Refresh()
-    {
-        if (Option == null)
-            return;
-
-        ValueText.SetText(Toggle.isOn ? "On" : "Off");
-        OnBg.gameObject.SetActive(Toggle.isOn);
-        OffBg.gameObject.SetActive(!Toggle.isOn);
-        Toggle.targetGraphic = Toggle.isOn ? OnBg : OffBg;
-    }
+    public void OnValueChanged(bool value) => Option.Value = value;
 }

@@ -27,6 +27,8 @@ public abstract class Option<TValue, TSetting>(string id, TValue defaultValue, P
             Entry.Value = value;
             OnChanged(value);
             UponChanged();
+            UponValueChanged(value);
+            SettingsAndTestingUI.Instance?.Refresh();
         }
     }
 
@@ -49,6 +51,8 @@ public abstract class Option<TValue, TSetting>(string id, TValue defaultValue, P
         Setting.Background.EnsureComponent<HoverEffect>()!.LookupKey = $"FANCY_{ID}_DESC";
         Setting.BoxedOption = this;
     }
+
+    protected virtual void UponValueChanged(TValue value) { }
 
     private static void BlankVoid(TValue _) { }
 
