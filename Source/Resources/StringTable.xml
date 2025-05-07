@@ -30,49 +30,49 @@
     <Entry key="FANCY_IS_VAMPIRE_MAJOR_DESC">Determines whether or not the Vampire role in BetterTOS2 is considered Major.</Entry>
    
     <Entry key="FANCY_TOWN_CINEMATIC_NAME">Override Town Win Cinematic</Entry>
-    <Entry key="FANCY_TOWN_CINEMATIC_DESC">Determines which victory cinematic Town will use. (Game restart required)</Entry>
+    <Entry key="FANCY_TOWN_CINEMATIC_DESC">Determines which victory cinematic Town will use.</Entry>
 
     <Entry key="FANCY_COVEN_CINEMATIC_NAME">Override Coven Win Cinematic</Entry>
-    <Entry key="FANCY_COVEN_CINEMATIC_DESC">Determines which victory cinematic Coven will use. (Game restart required)</Entry>
+    <Entry key="FANCY_COVEN_CINEMATIC_DESC">Determines which victory cinematic Coven will use.</Entry>
 
     <Entry key="FANCY_SERIALKILLER_CINEMATIC_NAME">Override Serial Killer Win Cinematic</Entry>
-    <Entry key="FANCY_SERIALKILLER_CINEMATIC_DESC">Determines which victory cinematic Serial Killer will use. (Game restart required)</Entry>
+    <Entry key="FANCY_SERIALKILLER_CINEMATIC_DESC">Determines which victory cinematic Serial Killer will use.</Entry>
 
     <Entry key="FANCY_ARSONIST_CINEMATIC_NAME">Override Arsonist Win Cinematic</Entry>
-    <Entry key="FANCY_ARSONIST_CINEMATIC_DESC">Determines which victory cinematic Arsonist will use. (Game restart required)</Entry>
+    <Entry key="FANCY_ARSONIST_CINEMATIC_DESC">Determines which victory cinematic Arsonist will use.</Entry>
 
     <Entry key="FANCY_WEREWOLF_CINEMATIC_NAME">Override Werewolf Win Cinematic</Entry>
-    <Entry key="FANCY_WEREWOLF_CINEMATIC_DESC">Determines which victory cinematic Werewolf will use. (Game restart required)</Entry>
+    <Entry key="FANCY_WEREWOLF_CINEMATIC_DESC">Determines which victory cinematic Werewolf will use.</Entry>
 
     <Entry key="FANCY_SHROUD_CINEMATIC_NAME">Override Shroud Win Cinematic</Entry>
-    <Entry key="FANCY_SHROUD_CINEMATIC_DESC">Determines which victory cinematic Shroud will use. (Game restart required)</Entry>
+    <Entry key="FANCY_SHROUD_CINEMATIC_DESC">Determines which victory cinematic Shroud will use.</Entry>
 
     <Entry key="FANCY_APOCALYPSE_CINEMATIC_NAME">Override Apocalypse Win Cinematic</Entry>
-    <Entry key="FANCY_APOCALYPSE_CINEMATIC_DESC">Determines which victory cinematic Apocalypse will use. (Game restart required)</Entry>
+    <Entry key="FANCY_APOCALYPSE_CINEMATIC_DESC">Determines which victory cinematic Apocalypse will use.</Entry>
 
     <Entry key="FANCY_VAMPIRE_CINEMATIC_NAME">Override Vampire Win Cinematic</Entry>
-    <Entry key="FANCY_VAMPIRE_CINEMATIC_DESC">Determines which victory cinematic Vampire will use. (Game restart required)</Entry>
+    <Entry key="FANCY_VAMPIRE_CINEMATIC_DESC">Determines which victory cinematic Vampire will use.</Entry>
 
     <Entry key="FANCY_JACKAL_CINEMATIC_NAME">Override Jackal Win Cinematic</Entry>
-    <Entry key="FANCY_JACKAL_CINEMATIC_DESC">Determines which victory cinematic Jackal will use. (Game restart required)</Entry>
+    <Entry key="FANCY_JACKAL_CINEMATIC_DESC">Determines which victory cinematic Jackal will use.</Entry>
 
     <Entry key="FANCY_FROGS_CINEMATIC_NAME">Override Frogs Win Cinematic</Entry>
-    <Entry key="FANCY_FROGS_CINEMATIC_DESC">Determines which victory cinematic Frogs will use. (Game restart required)</Entry>
+    <Entry key="FANCY_FROGS_CINEMATIC_DESC">Determines which victory cinematic Frogs will use.</Entry>
 
     <Entry key="FANCY_LIONS_CINEMATIC_NAME">Override Lions Win Cinematic</Entry>
-    <Entry key="FANCY_LIONS_CINEMATIC_DESC">Determines which victory cinematic Lions will use. (Game restart required)</Entry>
+    <Entry key="FANCY_LIONS_CINEMATIC_DESC">Determines which victory cinematic Lions will use.</Entry>
 
     <Entry key="FANCY_HAWKS_CINEMATIC_NAME">Override Hawks Win Cinematic</Entry>
-    <Entry key="FANCY_HAWKS_CINEMATIC_DESC">Determines which victory cinematic Hawks will use. (Game restart required)</Entry>
+    <Entry key="FANCY_HAWKS_CINEMATIC_DESC">Determines which victory cinematic Hawks will use.</Entry>
 
     <Entry key="FANCY_PANDORA_CINEMATIC_NAME">Override Pandora Win Cinematic</Entry>
-    <Entry key="FANCY_PANDORA_CINEMATIC_DESC">Determines which victory cinematic Pandora will use. (Game restart required)</Entry>
+    <Entry key="FANCY_PANDORA_CINEMATIC_DESC">Determines which victory cinematic Pandora will use.</Entry>
 
     <Entry key="FANCY_COMPLIANCE_CINEMATIC_NAME">Override Compliance Win Cinematic</Entry>
-    <Entry key="FANCY_COMPLIANCE_CINEMATIC_DESC">Determines which victory cinematic Compliance will use. (Game restart required)</Entry>
+    <Entry key="FANCY_COMPLIANCE_CINEMATIC_DESC">Determines which victory cinematic Compliance will use.</Entry>
 
     <Entry key="FANCY_LOVERS_CINEMATIC_NAME">Override Lovers Win Cinematic</Entry>
-    <Entry key="FANCY_LOVERS_CINEMATIC_DESC">Determines which victory cinematic Lovers will use. (Game restart required)</Entry>
+    <Entry key="FANCY_LOVERS_CINEMATIC_DESC">Determines which victory cinematic Lovers will use.</Entry>
 
     <Entry key="FANCY_SELECTED_ICON_PACK_NAME">Selected Icon Pack</Entry>
     <Entry key="FANCY_SELECTED_ICON_PACK_DESC">The selected icon will start replacing the visible icons with the images you put in. If it can't find the valid image or pack, it will be replaced by the mod's default files. May require a game restart for the in-text icons to change.\nVanilla - No pack selected.</Entry>
