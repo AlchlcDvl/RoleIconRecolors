@@ -386,6 +386,20 @@ public class Fancy : BaseMod<Fancy>
         ReloadColors();
     }
 
+    private static void ReloadColors()
+    {
+        foreach (var key in Colors.Keys.ToList())
+        {
+            var start  = ColorOptions.TryGetValue($"{key}_START", out var s) ? s.Value : (ColorOptions.TryGetValue($"{key}", out var s2) ? s2.Value : null);
+            var end    = ColorOptions.TryGetValue($"{key}_END", out var e) ? e.Value : null;
+            var major  = ColorOptions.TryGetValue($"{key}_MAJOR", out var m) ? m.Value : null;
+            var middle = ColorOptions.TryGetValue($"{key}_MIDDLE", out var mi) ? mi.Value : null;
+            var lethal = ColorOptions.TryGetValue($"{key}_LETHAL", out var l) ? l.Value : null;
+
+            Colors[key] = (start, end, major, middle, lethal);
+        }
+    }
+
     public static CinematicType GetCinematic(FactionType faction) => faction switch
     {
         FactionType.TOWN => CinematicType.TownWins,
@@ -411,20 +425,6 @@ public class Fancy : BaseMod<Fancy>
         CinematicType.ApocolypseWins,
         CinematicType.VampireWins,
     ];
-
-    private static void ReloadColors()
-    {
-        foreach (var key in Colors.Keys.ToList())
-        {
-            var start  = ColorOptions.TryGetValue($"{key}_START", out var s) ? s.Value : (ColorOptions.TryGetValue($"{key}", out var s2) ? s2.Value : null);
-            var end    = ColorOptions.TryGetValue($"{key}_END", out var e) ? e.Value : null;
-            var major  = ColorOptions.TryGetValue($"{key}_MAJOR", out var m) ? m.Value : null;
-            var middle = ColorOptions.TryGetValue($"{key}_MIDDLE", out var mi) ? mi.Value : null;
-            var lethal = ColorOptions.TryGetValue($"{key}_LETHAL", out var l) ? l.Value : null;
-
-            Colors[key] = (start, end, major, middle, lethal);
-        }
-    }
 
     private static string[] GetPackNames(PackType type) =>
     [
