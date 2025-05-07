@@ -223,7 +223,7 @@ public static class LobbyInfoClassicPanelAndTimerPatch
 [HarmonyPatch(typeof(HudTimeChangePanel), nameof(HudTimeChangePanel.UpdateDayNightNumber))]
 public static class HudTimeChangePanelPatch
 {
-    public static HudTimeChangePanel Cache;
+    public static HudTimeChangePanel Cachetab.transform.GetChild(0).GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Wood);;
 
     public static void Postfix(HudTimeChangePanel __instance)
     {
@@ -298,7 +298,7 @@ public static class PatchLobbyInfo
         var lobbyName = __instance.lobbyDescriptionInput.transform;
         lobbyName.GetComponent<Image>().SetImageColor(ColorType.Wood);
         lobbyName.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
-        lobbyName.GetChild(1).GetChild(2).GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Metal);
+        lobbyName.GetChild(1).GetChild(2).GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Wood);
         var rightSide = __instance.transform.GetChild(0).GetChild(1);
         rightSide.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wood);
         rightSide.GetChild(3).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
