@@ -279,8 +279,8 @@ public static class FancyChatExperimentalBTOS2
 
             if (gradient != null)
             {
-                var text4 = Utils.ApplyGradient($"{gameName}", gradient);
-                text2 = text2.Replace($"<color=#{ColorUtility.ToHtmlStringRGB(Pepper.GetDiscussionPlayerRoleColor(position))}>{gameName}", text4);
+                var text4 = Utils.ApplyGradient($"{gameName}:", gradient);
+                text2 = text2.Replace($"<color=#{ColorUtility.ToHtmlStringRGB(Pepper.GetDiscussionPlayerRoleColor(position))}>{gameName}:", text4);
             }
             else
                 text2 = text2.Replace($"<color=#{text}>", $"<color=#{ColorUtility.ToHtmlStringRGB(Utils.GetPlayerRoleColor(position))}>");
