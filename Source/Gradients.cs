@@ -12,7 +12,7 @@ public static class Gradients
         var startKey = faction == Btos2Faction.Jackal ? "JACKAL" : middleKey;
         string end;
 
-        if (faction == Btos2Faction.Jackal)
+        if (faction == Btos2Faction.Jackal && role != Btos2Role.Jackal)
         {
             end = Fancy.RecruitEndingColor.Value switch
             {
