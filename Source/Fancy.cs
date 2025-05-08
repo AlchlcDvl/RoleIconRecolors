@@ -113,6 +113,7 @@ public class Fancy : BaseMod<Fancy>
 
     public static ToggleOption MajorColors;
     public static ToggleOption LethalColors;
+    public static ColorOption JuryColor;
 
     public static FloatOption GeneralBrightness;
     public static FloatOption GrayscaleAmount;
@@ -156,8 +157,8 @@ public class Fancy : BaseMod<Fancy>
         { "HAWKS", ("#7E4C9C", "#7E4C9C", "#7E4C9C", null, "#7E4C9C") },
         { "LIONS", ("#D19000", "#D19000", "#D19000", null, "#D19000") },
         { "LOVERS", ("#FEA6FA", null, null, null, null) },
-        { "STONED_HIDDEN", ("#9C9A9A", null, null, null, null) },
-        { "JURY", ("#FCCE3B", null, null, null, null) },
+        //{ "JURY", ("#FCCE3B", null, null, null, null) },
+        { "STONED_HIDDEN", ("#9C9A9A", null, null, null, null) }
     };
 
     public static readonly Dictionary<FactionType, EnumDropdownOption<CinematicType>> CinematicMap = [];
@@ -337,6 +338,7 @@ public class Fancy : BaseMod<Fancy>
         VipLabel = new("VIP_LABEL", "VIP", PackType.MiscRoleCustomisation);
         CourtLabel = new("COURT_LABEL", "Court", PackType.MiscRoleCustomisation);
         JuryLabel = new("JURY_LABEL", "Jury", PackType.MiscRoleCustomisation);
+        JuryColor = new("JURY_COLOR", "#FCCE3B", PackType.MiscRoleCustomisation);
         PirateLabel = new("PIRATE_LABEL", "Pirate", PackType.MiscRoleCustomisation);
 
         PlayerNumber = new("PLAYER_NUMBER", 0, PackType.Testing, 0, 15, true, Constants.CustomNumbers);
