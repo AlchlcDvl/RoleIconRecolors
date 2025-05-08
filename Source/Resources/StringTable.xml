@@ -185,6 +185,9 @@
     <Entry key="FANCY_JURY_LABEL_NAME">Jury Label</Entry>
     <Entry key="FANCY_JURY_LABEL_DESC">The text that is shown in chat during court when anyone other than the Judge speaks (BetterTOS2 Games Only).</Entry>
 
+    <Entry key="FANCY_JURY_COLOR_NAME">Jury Color</Entry>
+    <Entry key="FANCY_JURY_COLOR_DESC">The color of the text that is shown in chat during court when anyone other than the Judge speaks (BetterTOS2 Games Only).</Entry>
+
     <Entry key="FANCY_PIRATE_LABEL_NAME">Pirate Label</Entry>
     <Entry key="FANCY_PIRATE_LABEL_DESC">The text that is shown in chat at night when being dueled by the Pirate (BetterTOS2 Games Only).</Entry>
 

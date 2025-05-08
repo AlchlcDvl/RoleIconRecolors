@@ -156,7 +156,8 @@ public class Fancy : BaseMod<Fancy>
         { "HAWKS", ("#7E4C9C", "#7E4C9C", "#7E4C9C", null, "#7E4C9C") },
         { "LIONS", ("#D19000", "#D19000", "#D19000", null, "#D19000") },
         { "LOVERS", ("#FEA6FA", null, null, null, null) },
-        { "STONED_HIDDEN", ("#9C9A9A", null, null, null, null) }
+        { "STONED_HIDDEN", ("#9C9A9A", null, null, null, null) },
+        { "JURY", ("#FCCE3B", null, null, null, null) },
     };
 
     public static readonly Dictionary<FactionType, EnumDropdownOption<CinematicType>> CinematicMap = [];
