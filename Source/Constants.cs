@@ -83,6 +83,8 @@ public static class Constants
 
     public static bool BTOS2Exists() => ModStates.IsEnabled("curtis.tuba.better.tos2");
 
+    public static bool TextEditorExists() => ModStates.IsEnabled("curtis.text.editor");
+
     public static bool IsBTOS2()
     {
         try

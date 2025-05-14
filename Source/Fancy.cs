@@ -325,7 +325,7 @@ public class Fancy : BaseMod<Fancy>
         AllEasterEggs = new("ALL_EE", false, PackType.IconPacks, Constants.EnableIcons);
         PlayerPanelEasterEggs = new("PLAYER_PANEL_EE", false, PackType.IconPacks, Constants.EnableIcons);
 
-        FactionalRoleNames = new("FACTIONAL_ROLE_NAMES", false, PackType.MiscRoleCustomisation);
+        FactionalRoleNames = new("FACTIONAL_ROLE_NAMES", false, PackType.MiscRoleCustomisation, Constants.TextEditorExists);
         MajorColors = new("MAJOR_COLORS", false, PackType.MiscRoleCustomisation);
         LethalColors = new("LETHAL_COLORS", false, PackType.MiscRoleCustomisation);
         RecruitEndingColor = new("RECRUIT_ENDING", RecruitEndType.JackalEnd, PackType.MiscRoleCustomisation, useTranslations: true);
