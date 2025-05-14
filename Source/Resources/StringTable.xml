@@ -2385,10 +2385,10 @@
     <Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_60">Starspawn</Entry>
     <Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_61">Oracle</Entry>
     <Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_62">Warlock</Entry>
-    <Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_63">Famine</Entry>
-    <Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_64">War</Entry>
-    <Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_65">Pestilence</Entry>
-    <Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_66">Death</Entry>
+    <Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_250">Famine</Entry>
+    <Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_251">War</Entry>
+    <Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_252">Pestilence</Entry>
+    <Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_253">Death</Entry>
 
 
     <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_0">None</Entry>
@@ -2454,10 +2454,10 @@
     <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_60">Starspawn</Entry>
     <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_61">Oracle</Entry>
     <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_62">Warlock</Entry>
-    <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_63">Famine</Entry>
-    <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_64">War</Entry>
-    <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_65">Pestilence</Entry>
-    <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_66">Death</Entry>
+    <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_250">Famine</Entry>
+    <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_251">War</Entry>
+    <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_252">Pestilence</Entry>
+    <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_253">Death</Entry>
 
 
     <Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_0">None</Entry>
@@ -2523,10 +2523,10 @@
     <Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_60">Starspawn</Entry>
     <Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_61">Oracle</Entry>
     <Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_62">Warlock</Entry>
-    <Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_63">Famine</Entry>
-    <Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_64">War</Entry>
-    <Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_65">Pestilence</Entry>
-    <Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_66">Death</Entry>
+    <Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_250">Famine</Entry>
+    <Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_251">War</Entry>
+    <Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_252">Pestilence</Entry>
+    <Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_253">Death</Entry>
 
 
     <Entry key="FANCY_SHROUD_BTOS_ROLENAME_0">None</Entry>
@@ -2592,10 +2592,10 @@
     <Entry key="FANCY_SHROUD_BTOS_ROLENAME_60">Starspawn</Entry>
     <Entry key="FANCY_SHROUD_BTOS_ROLENAME_61">Oracle</Entry>
     <Entry key="FANCY_SHROUD_BTOS_ROLENAME_62">Warlock</Entry>
-    <Entry key="FANCY_SHROUD_BTOS_ROLENAME_63">Famine</Entry>
-    <Entry key="FANCY_SHROUD_BTOS_ROLENAME_64">War</Entry>
-    <Entry key="FANCY_SHROUD_BTOS_ROLENAME_65">Pestilence</Entry>
-    <Entry key="FANCY_SHROUD_BTOS_ROLENAME_66">Death</Entry>
+    <Entry key="FANCY_SHROUD_BTOS_ROLENAME_250">Famine</Entry>
+    <Entry key="FANCY_SHROUD_BTOS_ROLENAME_251">War</Entry>
+    <Entry key="FANCY_SHROUD_BTOS_ROLENAME_252">Pestilence</Entry>
+    <Entry key="FANCY_SHROUD_BTOS_ROLENAME_253">Death</Entry>
 
     <Entry key="FANCY_APOCALYPSE_BTOS_ROLENAME_0">None</Entry>
     <Entry key="FANCY_APOCALYPSE_BTOS_ROLENAME_1">Admirer</Entry>
