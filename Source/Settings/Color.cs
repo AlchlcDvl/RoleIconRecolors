@@ -1,12 +1,28 @@
-namespace FancyUI.Settings;
+using UnityEngine;
+using UnityEngine.UI;
 
-public class ColorSetting : BaseInputSetting
+namespace FancyUI.Settings
 {
-    public Image ValueBg { get; set; }
-
-    public override void Awake()
+    public class ColorSetting : BaseInputSetting
     {
-        base.Awake();
-        ValueBg = Input.transform.GetComponent<Image>();
+        public Image ValueBg { get; set; }
+
+        public override void Awake()
+        {
+            base.Awake();
+            ValueBg = Input.transform.GetComponent<Image>();
+        }
+
+        public override void Refresh()
+        {
+            base.Refresh();
+
+            if (BoxedOption is ColorOption colorOption &&
+                ColorUtility.TryParseHtmlString(colorOption.ValueString, out var color))
+            {
+                ValueBg.color = color;
+                Input.SetTextWithoutNotify(colorOption.ValueString);
+            }
+        }
     }
 }
