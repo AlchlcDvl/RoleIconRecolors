@@ -21,7 +21,9 @@ public static class SwapSilhouettesPatches
                 var sil = UObject.Instantiate(Service.Game.Cast.GetSilhouette(42), null).DontDestroy(); // 42 = Berserker, the one that actually works lmao
                 sil.transform.SetLayerRecursive(16, [Layers.RimLightingLayer]);
                 sil.gameObject.SetActive(false);
-                return prefab = sil.GetComponentInChildren<SpriteRenderer>(true);
+                prefab = UObject.Instantiate(sil.GetComponentInChildren<SpriteRenderer>(true), null).DontDestroy();
+                sil.gameObject.Destroy();
+                return prefab;
             }
             catch
             {

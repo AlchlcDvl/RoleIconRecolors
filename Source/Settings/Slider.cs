@@ -19,6 +19,8 @@ public class SliderSetting : BaseInputSetting
 
     public override void Start()
     {
+        base.Start();
+
         if (Option == null)
             return;
 
@@ -27,9 +29,6 @@ public class SliderSetting : BaseInputSetting
         Slider.wholeNumbers = Option.UseWhole;
         Slider.SetValueWithoutNotify(Option.Value);
         Slider.onValueChanged.AddListener(OnValueChanged);
-
-        Input.SetTextWithoutNotify(Option.ValueString);
-        Input.onValueChanged.AddListener(OnValueChanged);
     }
 
     public void OnValueChanged(float value) => Option.Value = value;

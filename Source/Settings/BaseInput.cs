@@ -24,7 +24,7 @@ public abstract class BaseInputSetting : Setting
             return;
 
         Input.SetTextWithoutNotify(BoxedOption2.ValueString);
-        Input.onValueChanged.AddListener(OnValueChanged);
+        Input.onDeselect.AddListener(OnValueChanged);
     }
 
     public void OnValueChanged(string value) => BoxedOption2.ValueString = value;
