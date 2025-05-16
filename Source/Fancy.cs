@@ -328,18 +328,18 @@ public class Fancy : BaseMod<Fancy>
         FactionalRoleNames = new("FACTIONAL_ROLE_NAMES", false, PackType.MiscRoleCustomisation, Constants.TextEditorExists);
         MajorColors = new("MAJOR_COLORS", false, PackType.MiscRoleCustomisation);
         LethalColors = new("LETHAL_COLORS", false, PackType.MiscRoleCustomisation);
-        RecruitEndingColor = new("RECRUIT_ENDING", RecruitEndType.JackalEnd, PackType.MiscRoleCustomisation, useTranslations: true);
+        RecruitEndingColor = new("RECRUIT_ENDING", RecruitEndType.JackalEnd, PackType.MiscRoleCustomisation, useTranslations: true, setActive: Constants.BTOS2Exists);
         RoleCardFactionLabel = new("FACTION_LABEL", FactionLabelOption.Mismatch, PackType.MiscRoleCustomisation, useTranslations: true);
         FactionNameNextToRole = new("FACTION_NEXT_TO_ROLE", FactionLabelOption.Never, PackType.MiscRoleCustomisation, useTranslations: true);
-        RecruitLabel = new("RECRUIT_LABEL", "Recruited", PackType.MiscRoleCustomisation);
+        RecruitLabel = new("RECRUIT_LABEL", "Recruited", PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists);
         CovenTraitorLabel = new("COVEN_TRAITOR_LABEL", "Town Traitor", PackType.MiscRoleCustomisation);
-        ApocTraitorLabel = new("APOC_TRAITOR_LABEL", "Town Traitor", PackType.MiscRoleCustomisation);
-        PandoraTraitorLabel = new("PANDORA_TRAITOR_LABEL", "Town Traitor", PackType.MiscRoleCustomisation);
+        ApocTraitorLabel = new("APOC_TRAITOR_LABEL", "Town Traitor", PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists);
+        PandoraTraitorLabel = new("PANDORA_TRAITOR_LABEL", "Town Traitor", PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists);
         VipLabel = new("VIP_LABEL", "VIP", PackType.MiscRoleCustomisation);
-        CourtLabel = new("COURT_LABEL", "Court", PackType.MiscRoleCustomisation);
-        JuryLabel = new("JURY_LABEL", "Jury", PackType.MiscRoleCustomisation);
-        JuryColor = new("JURY_COLOR", "#FCCE3B", PackType.MiscRoleCustomisation);
-        PirateLabel = new("PIRATE_LABEL", "Pirate", PackType.MiscRoleCustomisation);
+        CourtLabel = new("COURT_LABEL", "Court", PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists);
+        JuryLabel = new("JURY_LABEL", "Jury", PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists);
+        JuryColor = new("JURY_COLOR", "#FCCE3B", PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists);
+        PirateLabel = new("PIRATE_LABEL", "Pirate", PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists);
 
         PlayerNumber = new("PLAYER_NUMBER", 0, PackType.Testing, 0, 15, true, Constants.CustomNumbers);
         DumpSpriteSheets = new("DUMP_SHEETS", false, PackType.Testing);
