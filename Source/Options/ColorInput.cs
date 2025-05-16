@@ -4,4 +4,10 @@ public class ColorOption(string id, string defaultValue, PackType page, Func<boo
     (id, defaultValue, page, "[#a-fA-F0-9]+$", setActive, onChanged, uponChanged)
 {
     protected override void UponValueChanged(string value) => Setting.ValueBg.color = Value.ToColor();
+
+    public override void OptionCreated()
+    {
+        base.OptionCreated();
+        Setting.ValueBg.color = Value.ToColor();
+    }
 }
