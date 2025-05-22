@@ -194,7 +194,7 @@ public class Fancy : BaseMod<Fancy>
             Role.UNKNOWN])];
 
         var colors = GeneralUtils.GetEnumValues<ColorType>()!.Where(x => x != ColorType.All).ToDictionary(x => x, x => x.ToString().ToUpperInvariant());
-        var filteredFactions = BTOS2Factions.Where(x => x is not (Btos2Faction.Lovers or Btos2Faction.Cannibal or Btos2Faction.None));
+        var filteredFactions = BTOS2Factions.Where(x => x is not (Btos2Faction.Cannibal or Btos2Faction.None));
         var filteredRoles = BTOS2Roles.Where(x => (int)x is < 57 or > 249 && x is not (Role.STONED or Role.UNKNOWN)).ToList();
 
         var factions = filteredFactions.ToDictionary(x => x, x => Utils.FactionName(x, Constants.BTOS2Exists() ? GameModType.BTOS2 : GameModType.Vanilla, false).ToUpperInvariant());
