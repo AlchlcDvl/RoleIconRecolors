@@ -194,7 +194,7 @@ public class Fancy : BaseMod<Fancy>
             Role.UNKNOWN])];
 
         var colors = GeneralUtils.GetEnumValues<ColorType>()!.Where(x => x != ColorType.All).ToDictionary(x => x, x => x.ToString().ToUpperInvariant());
-        var filteredFactions = BTOS2Factions.Where(x => x is not (Btos2Faction.Cannibal or Btos2Faction.None));
+        var filteredFactions = BTOS2Factions.Where(x => x is not (Btos2Faction.Cannibal or Btos2Faction.None or Btos2Faction.Lovers));
         var filteredRoles = BTOS2Roles.Where(x => (int)x is < 57 or > 249 && x is not (Role.STONED or Role.UNKNOWN)).ToList();
 
         var factions = filteredFactions.ToDictionary(x => x, x => Utils.FactionName(x, Constants.BTOS2Exists() ? GameModType.BTOS2 : GameModType.Vanilla, false).ToUpperInvariant());
@@ -348,7 +348,7 @@ public class Fancy : BaseMod<Fancy>
         ShowOverlayAsJailor = new("SHOW_TO_JAILOR", false, PackType.Testing);
         IconsInRoleReveal = new("ROLE_REVEAL_ICONS", true, PackType.Testing);
 
-        foreach (var faction in BTOS2Factions.Where(x => x is not (FactionType.NONE or (> FactionType.APOCALYPSE and < FactionType.VAMPIRE) or FactionType.CURSED_SOUL or FactionType.UNKNOWN or Btos2Faction.Lovers or
+        foreach (var faction in BTOS2Factions.Where(x => x is not (FactionType.NONE or (> FactionType.APOCALYPSE and < FactionType.VAMPIRE) or FactionType.CURSED_SOUL or FactionType.UNKNOWN or
             (> Btos2Faction.Hawks and < Btos2Faction.Pandora))))
         {
             CinematicMap[faction] = new(
