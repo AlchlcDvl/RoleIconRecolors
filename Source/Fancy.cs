@@ -348,7 +348,7 @@ public class Fancy : BaseMod<Fancy>
         ShowOverlayAsJailor = new("SHOW_TO_JAILOR", false, PackType.Testing);
         IconsInRoleReveal = new("ROLE_REVEAL_ICONS", true, PackType.Testing);
 
-        foreach (var faction in BTOS2Factions.Where(x => x is not (FactionType.NONE or (> FactionType.APOCALYPSE and < FactionType.VAMPIRE) or FactionType.CURSED_SOUL or FactionType.UNKNOWN or
+        foreach (var faction in BTOS2Factions.Where(x => x is not (FactionType.NONE or (> FactionType.APOCALYPSE and < FactionType.VAMPIRE) or FactionType.CURSED_SOUL or FactionType.UNKNOWN or Btos2Faction.Lovers or
             (> Btos2Faction.Hawks and < Btos2Faction.Pandora))))
         {
             CinematicMap[faction] = new(
