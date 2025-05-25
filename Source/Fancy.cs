@@ -154,8 +154,8 @@ public class Fancy : BaseMod<Fancy>
         { "JUDGE", ("#C77364", "#C93D50", null, null, null) },
         { "STARSPAWN", ("#FCE79A", "#999CFF", null, null, null) },
         { "FROGS", ("#1e49cf", "#1e49cf", "#1e49cf", null, "#1e49cf") },
-        { "HAWKS", ("#7E4C9C", "#7E4C9C", "#7E4C9C", null, "#7E4C9C") },
-        { "LIONS", ("#D19000", "#D19000", "#D19000", null, "#D19000") },
+        { "HAWKS", ("#A81538", "#A81538", "#A81538", null, "#A81538") },
+        { "LIONS", ("#FFC34F", "#FFC34F", "#FFC34F", null, "#FFC34F") },
         { "LOVERS", ("#FEA6FA", null, null, null, null) },
         //{ "JURY", ("#FCCE3B", null, null, null, null) },
         { "STONED_HIDDEN", ("#9C9A9A", null, null, null, null) }
