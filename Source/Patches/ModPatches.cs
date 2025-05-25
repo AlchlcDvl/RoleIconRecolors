@@ -7,6 +7,7 @@ using Mentions;
 using Mentions.Providers;
 using SalemModLoaderUI;
 using Server.Shared.Cinematics.Data;
+using Server.Shared.Extensions;
 using UnityEngine.EventSystems;
 
 namespace FancyUI.Patches;
@@ -524,3 +525,86 @@ public static class FactionWinsStandardCinematicPlayer_SetUpWinners_Patch
         }
     }
 }
+
+// Role bucket header
+[HarmonyPatch(typeof(RoleListPopupController), nameof(RoleListPopupController.Show))]
+public static class RoleListHeaderIcon
+{
+    // Fun Fact: This happened by mistake, but kept it as I liked it.
+    public static void Postfix(RoleListPopupController __instance, Role role)
+    {
+        var roleNameLabel = __instance.RoleNameLabel;
+        roleNameLabel.SetText($"{role.GetTMPSprite()} {role.ToColorizedDisplayString()}");
+    }
+}
+
+// The role list
+[HarmonyPatch(typeof(RoleListItem), nameof(RoleListItem.SetRole))]
+public static class RoleListItemIcon
+{
+    // This happened by mistake as well.
+    public static bool Prefix(RoleListItem __instance, Role role)
+    {
+        __instance.role = role;
+
+        var roleLabel = __instance.roleLabel;
+        var text = role.GetTMPSprite() + role.ToColorizedDisplayString();
+
+        roleLabel.SetText(text);
+        roleLabel.color = role.GetFaction().GetFactionColor().ParseColor();
+
+        return false;
+    }
+}
+
+// The role list panel listings oh my god
+/* [HarmonyPatch(typeof(RandomRoleListItemController), nameof(RandomRoleListItemController.HandleOnRoleDeckBuilderChanged))]
+public static class RoleListPopup
+{
+    public static bool Prefix(RandomRoleListItemController __instance, RoleDeckBuilder roleDeckBuilder)
+    {
+        var banPanel = __instance.BannedPanelGO;
+        var roleData = __instance.m_roleData;
+        var roleName = __instance.RoleNameLabel;
+
+        if (roleDeckBuilder.bannedRoles.Contains(roleData.role))
+        {
+            if (!banPanel.activeSelf)
+            {
+                roleName.SetText("<color=#8C8C8C>" + roleData.role.ToDisplayString() + "</color>");
+                banPanel.SetActive(value: true);
+            }
+        }
+        else if (banPanel.activeSelf)
+        {
+            roleName.SetText(roleData.role.GetTMPSprite() + roleData.role.ToColorizedDisplayString());
+            banPanel.SetActive(value: false);
+        }
+
+        return false;
+    }
+}
+[HarmonyPatch(typeof(RandomRoleListItemController), nameof(RandomRoleListItemController.OnDataSet))]
+public static class RoleListPopupRefresh
+{
+    public static bool Prefix(RandomRoleListItemController __instance)
+    {
+        var banPanel = __instance.BannedPanelGO;
+        var roleData = __instance.m_roleData;
+        var roleName = __instance.RoleNameLabel;
+
+        var bannedRoles = Service.Game.Sim.simulation.roleDeckBuilder.Data.bannedRoles;
+        if (bannedRoles.Contains(roleData.role))
+        {
+            roleName.SetText("<color=#8C8C8C>" + roleData.role.ToDisplayString() + "</color>");
+            banPanel.SetActive(value: true);
+        }
+        else
+        {
+            roleName.SetText(roleData.role.GetTMPSprite() + roleData.role.ToColorizedDisplayString());
+            banPanel.SetActive(value: false);
+        }
+
+        return false;
+    }
+} */
