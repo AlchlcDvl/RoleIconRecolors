@@ -144,7 +144,7 @@ public static class Utils
         Btos2Role.OneTrial => "OneTrial",
         Btos2Role.NecroPass => "NecroPass",
         Btos2Role.Teams => "Teams",
-        Btos2Role.AnonNames => "AnonNames",
+        Btos2Role.AnonNames => "AnonPlayers",
         Btos2Role.WalkingDead => "WalkingDead",
         Btos2Role.Egotist => "Egotist",
         Btos2Role.SpeakingSpirits => "SpeakingSpirits",
