@@ -1251,3 +1251,55 @@ public static class RoleListItemIcon
         return false;
     }
 }
+// The role list panel listings oh my god
+[HarmonyPatch(typeof(RandomRoleListItemController), nameof(RandomRoleListItemController.HandleOnRoleDeckBuilderChanged))]
+public static class RoleListPopupUpdate
+{
+    public static bool Prefix(RandomRoleListItemController __instance, RoleDeckBuilder roleDeckBuilder)
+    {
+        var banPanel = __instance.BannedPanelGO;
+        var roleData = __instance.m_roleData;
+        var roleName = __instance.RoleNameLabel;
+
+        if (roleDeckBuilder.bannedRoles.Contains(roleData.role))
+        {
+            if (!banPanel.activeSelf)
+            {
+                roleName.SetText("<color=#8C8C8C>" + roleData.role.GetTMPSprite() + roleData.role.ToDisplayString() + "</color>");
+                banPanel.SetActive(value: true);
+            }
+        }
+        else if (banPanel.activeSelf)
+        {
+            roleName.SetText(roleData.role.GetTMPSprite() + roleData.role.ToColorizedDisplayString());
+            banPanel.SetActive(value: false);
+        }
+
+        return false;
+    }
+}
+[HarmonyPatch(typeof(RandomRoleListItemController), nameof(RandomRoleListItemController.OnDataSet))]
+public static class RoleListPopupInit
+{
+    public static bool Prefix(RandomRoleListItemController __instance, RoleData roleData)
+    {
+        __instance.m_roleData = roleData;
+
+        var banPanel = __instance.BannedPanelGO;
+        var roleName = __instance.RoleNameLabel;
+
+        var bannedRoles = Service.Game.Sim.simulation.roleDeckBuilder.Data.bannedRoles;
+        if (bannedRoles.Contains(roleData.role))
+        {
+            roleName.SetText("<color=#8C8C8C>" + roleData.role.GetTMPSprite() + roleData.role.ToDisplayString() + "</color>");
+            banPanel.SetActive(value: true);
+        }
+        else
+        {
+            roleName.SetText(roleData.role.GetTMPSprite() + roleData.role.ToColorizedDisplayString());
+            banPanel.SetActive(value: false);
+        }
+
+        return false;
+    }
+} 
