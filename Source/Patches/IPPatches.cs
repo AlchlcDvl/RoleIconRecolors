@@ -1210,3 +1210,38 @@ public static class Tos2GameBrowserListItemPatch
             any.sprite = sprite;
     }
 }
+
+// Role bucket header
+[HarmonyPatch(typeof(RoleListPopupController), nameof(RoleListPopupController.Show))]
+public static class RoleListHeaderIcon
+{
+    // Fun Fact: This happened by mistake, but kept it as I liked it.
+    public static void Postfix(RoleListPopupController __instance, Role role) => __instance.RoleNameLabel.SetText($"{role.GetTMPSprite()} {role.ToColorizedDisplayString()}");
+}
+
+[HarmonyPatch(typeof(RoleListItem), nameof(RoleListItem.SetRole))]
+public static class RoleListItemIcon
+{
+    public static bool Prefix(RoleListItem __instance, Role role)
+    {
+        __instance.role = role;
+
+        var actualFaction = role.GetFactionType();
+        var displayFaction = actualFaction;
+
+        if (Constants.IsPandora() && actualFaction is FactionType.COVEN or FactionType.APOCALYPSE)
+            displayFaction = Btos2Faction.Pandora;
+
+        if (Constants.IsCompliance() && role is Role.SERIALKILLER or Role.SHROUD or Role.WEREWOLF or Role.ARSONIST)
+            displayFaction = Btos2Faction.Compliance;
+
+        var roleIcon = role.GetTMPSprite() + role.ToColorizedDisplayString(displayFaction);
+        var faction = displayFaction == actualFaction && Constants.CurrentStyle() == "Regular"
+            ? "Regular"
+            : Utils.FactionName(displayFaction, false);
+        roleIcon = roleIcon.Replace("RoleIcons\"", $"RoleIcons ({faction})\"");
+        __instance.roleLabel.SetText(roleIcon);
+        __instance.roleLabel.color = role.GetFaction().GetFactionColor().ParseColor();
+        return false;
+    }
+}

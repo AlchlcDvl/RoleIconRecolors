@@ -466,16 +466,9 @@ public static class DropdownPatch
 [HarmonyPatch(typeof(FactionWinsStandardCinematicPlayer), nameof(FactionWinsStandardCinematicPlayer.SetUpWinners))]
 public static class FactionWinsStandardCinematicPlayer_SetUpWinners_Patch
 {
-    [HarmonyPostfix]
     public static void Postfix(FactionWinsStandardCinematicPlayer __instance)
     {
-        if (Service.Game.Sim.info.gameInfo.Data.gamePhase != GamePhase.LOBBY)
-            return;
-
-        var wrappers = Traverse.Create(__instance).Field("silhouetteWrappers").GetValue<List<AnimationWrapper>>();
-        var data = Traverse.Create(__instance).Field("cinematicData").Field("entries").GetValue<IList<FactionWinsCinematicData.Entry>>();
-
-        if (wrappers == null || data == null)
+        if (Service.Game.Sim.info.gameInfo.Data.gamePhase != GamePhase.LOBBY || __instance.silhouetteWrappers == null || __instance.cinematicData.entries == null)
             return;
 
         int[] allowedSilhouettes =
@@ -501,40 +494,21 @@ public static class FactionWinsStandardCinematicPlayer_SetUpWinners_Patch
             240, 250, 251, 252, 253
         ];
 
-        for (var i = 0; i < wrappers.Count; i++)
+        foreach (var wrapper in __instance.silhouetteWrappers.Where(x => x))
         {
-            var wrapper = wrappers[i];
-            if (wrapper != null)
-            {
-                var silhouetteId = 0;
+            var silhouetteId = 0;
 
-                if (Fancy.SelectTestingRole.Value == Role.NONE && !Constants.IsBTOS2())
-                {
-                    silhouetteId = allowedSilhouettes[URandom.Range(0, allowedSilhouettes.Length)];
-                }
-                if (Fancy.SelectTestingRole.Value == Role.NONE && Constants.IsBTOS2())
-                {
-                    silhouetteId = allowedSilhouettesBTOS[URandom.Range(0, allowedSilhouettesBTOS.Length)];
-                }
-                if (Fancy.SelectTestingRole.Value != Role.NONE)
-                {
-                    silhouetteId = (int)Fancy.SelectTestingRole.Value;
-                }
-                wrapper.SwapWithSilhouette(silhouetteId, true);
-            }
+            if (Fancy.SelectTestingRole.Value == Role.NONE && !Constants.IsBTOS2())
+                silhouetteId = allowedSilhouettes.Random();
+
+            if (Fancy.SelectTestingRole.Value == Role.NONE && Constants.IsBTOS2())
+                silhouetteId = allowedSilhouettesBTOS.Random();
+
+            if (Fancy.SelectTestingRole.Value != Role.NONE)
+                silhouetteId = (int)Fancy.SelectTestingRole.Value;
+
+            wrapper.SwapWithSilhouette(silhouetteId, true);
         }
-    }
-}
-
-// Role bucket header
-[HarmonyPatch(typeof(RoleListPopupController), nameof(RoleListPopupController.Show))]
-public static class RoleListHeaderIcon
-{
-    // Fun Fact: This happened by mistake, but kept it as I liked it.
-    public static void Postfix(RoleListPopupController __instance, Role role)
-    {
-        var roleNameLabel = __instance.RoleNameLabel;
-        roleNameLabel.SetText($"{role.GetTMPSprite()} {role.ToColorizedDisplayString()}");
     }
 }
 
@@ -556,45 +530,6 @@ public static class RoleListItemIcon
         return false;
     }
 } */
-
-[HarmonyPatch(typeof(RoleListItem), nameof(RoleListItem.SetRole))]
-public static class RoleListItemIcon
-{
-    public static bool Prefix(RoleListItem __instance, Role role)
-    {
-        __instance.role = role;
-
-        var roleLabel = __instance.roleLabel;
-        var actualFaction = role.GetFactionType();
-        var displayFaction = actualFaction;
-
-        if (Constants.IsPandora() &&
-            (actualFaction == FactionType.COVEN || actualFaction == FactionType.APOCALYPSE))
-        {
-            displayFaction = Btos2Faction.Pandora;
-        }
-
-        if (Constants.IsCompliance() &&
-            (role == Role.SERIALKILLER || role == Role.SHROUD || role == Role.WEREWOLF || role == Role.ARSONIST))
-        {
-            displayFaction = Btos2Faction.Compliance;
-        }
-
-        var roleIcon = role.GetTMPSprite() + role.ToColorizedDisplayString(displayFaction);
-
-        var faction = displayFaction == actualFaction && Constants.CurrentStyle() == "Regular"
-            ? "Regular"
-            : Utils.FactionName(displayFaction, false);
-
-        roleIcon = roleIcon.Replace("RoleIcons\"", $"RoleIcons ({faction})\"");
-
-        roleLabel.SetText(roleIcon);
-        roleLabel.color = role.GetFaction().GetFactionColor().ParseColor();
-
-        return false;
-    }
-}
-
 
 // The role list panel listings oh my god
 /* [HarmonyPatch(typeof(RandomRoleListItemController), nameof(RandomRoleListItemController.HandleOnRoleDeckBuilderChanged))]
