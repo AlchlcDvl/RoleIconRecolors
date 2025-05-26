@@ -134,4 +134,13 @@ public static class Constants
             return false;
         }
     }
+    public static bool IsPandora()
+    {
+        return IsBTOS2() && Service.Game.Sim.simulation.roleDeckBuilder.Data.modifierCards.Contains(Btos2Role.PandorasBox);
+    }
+    public static bool IsCompliance()
+
+    {
+        return IsBTOS2() && Service.Game.Sim.simulation.roleDeckBuilder.Data.modifierCards.Contains(Btos2Role.CompliantKillers);
+    }
 }

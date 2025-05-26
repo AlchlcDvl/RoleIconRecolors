@@ -539,7 +539,7 @@ public static class RoleListHeaderIcon
 }
 
 // The role list
-[HarmonyPatch(typeof(RoleListItem), nameof(RoleListItem.SetRole))]
+/* [HarmonyPatch(typeof(RoleListItem), nameof(RoleListItem.SetRole))]
 public static class RoleListItemIcon
 {
     // This happened by mistake as well.
@@ -555,7 +555,46 @@ public static class RoleListItemIcon
 
         return false;
     }
+} */
+
+[HarmonyPatch(typeof(RoleListItem), nameof(RoleListItem.SetRole))]
+public static class RoleListItemIcon
+{
+    public static bool Prefix(RoleListItem __instance, Role role)
+    {
+        __instance.role = role;
+
+        var roleLabel = __instance.roleLabel;
+        var actualFaction = role.GetFactionType();
+        var displayFaction = actualFaction;
+
+        if (Constants.IsPandora() &&
+            (actualFaction == FactionType.COVEN || actualFaction == FactionType.APOCALYPSE))
+        {
+            displayFaction = Btos2Faction.Pandora;
+        }
+
+        if (Constants.IsCompliance() &&
+            (role == Role.SERIALKILLER || role == Role.SHROUD || role == Role.WEREWOLF || role == Role.ARSONIST))
+        {
+            displayFaction = Btos2Faction.Compliance;
+        }
+
+        var roleIcon = role.GetTMPSprite() + role.ToColorizedDisplayString(displayFaction);
+
+        var faction = displayFaction == actualFaction && Constants.CurrentStyle() == "Regular"
+            ? "Regular"
+            : Utils.FactionName(displayFaction, false);
+
+        roleIcon = roleIcon.Replace("RoleIcons\"", $"RoleIcons ({faction})\"");
+
+        roleLabel.SetText(roleIcon);
+        roleLabel.color = role.GetFaction().GetFactionColor().ParseColor();
+
+        return false;
+    }
 }
+
 
 // The role list panel listings oh my god
 /* [HarmonyPatch(typeof(RandomRoleListItemController), nameof(RandomRoleListItemController.HandleOnRoleDeckBuilderChanged))]
