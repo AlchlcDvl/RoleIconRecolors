@@ -110,6 +110,8 @@ public class Fancy : BaseMod<Fancy>
     public static ToggleOption ShowOverlayAsJailor;
     public static ToggleOption IconsInRoleReveal;
     public static ToggleOption FactionalRoleNames;
+    public static ToggleOption ReplaceNAwithRA;
+    public static ToggleOption GradientBuckets;
 
     public static ToggleOption MajorColors;
     public static ToggleOption LethalColors;
@@ -340,6 +342,8 @@ public class Fancy : BaseMod<Fancy>
         JuryLabel = new("JURY_LABEL", "Jury", PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists);
         JuryColor = new("JURY_COLOR", "#FCCE3B", PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists);
         PirateLabel = new("PIRATE_LABEL", "Pirate", PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists);
+        GradientBuckets = new("GRADIENT_BUCKETS", true, PackType.MiscRoleCustomisation);
+        ReplaceNAwithRA = new("RANDOM_APOC_IN_VANILLA", false, PackType.MiscRoleCustomisation);
 
         PlayerNumber = new("PLAYER_NUMBER", 0, PackType.Testing, 0, 15, true, Constants.CustomNumbers);
         DumpSpriteSheets = new("DUMP_SHEETS", false, PackType.Testing);
