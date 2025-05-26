@@ -578,6 +578,15 @@
     <Entry key="FANCY_43">Pandora</Entry>
     <Entry key="FANCY_44">Compliance</Entry>
     <Entry key="FANCY_250">Lovers</Entry>
+    
+    <Entry key="FANCY_BUCKETS_COVEN">Coven</Entry>
+    <Entry key="FANCY_BUCKETS_APOCALYPSE">Apocalypse</Entry>
+    <Entry key="FANCY_BUCKETS_RANDOM">Random</Entry>
+    <Entry key="FANCY_BUCKETS_COMMON">Common</Entry>
+    <Entry key="FANCY_BUCKETS_KILLING">Killing</Entry>
+    <Entry key="FANCY_BUCKETS_POWER">Power</Entry>
+    <Entry key="FANCY_BUCKETS_UTILITY">Utility</Entry>
+    <Entry key="FANCY_BUCKETS_DECEPTION">Deception</Entry>
 
     <Entry key="FANCY_FIRE">Fire</Entry>
     <Entry key="FANCY_PAPER">Paper</Entry>
