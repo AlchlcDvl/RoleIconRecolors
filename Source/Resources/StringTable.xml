@@ -582,20 +582,21 @@
     <Entry key="FANCY_BUCKETS_TOWN">Coven</Entry>
     <Entry key="FANCY_BUCKETS_COVEN">Coven</Entry>
     <Entry key="FANCY_BUCKETS_NEUTRAL">Neutral</Entry>
-    <Entry key="FANCY_BUCKETS_APOCALYPSE">Apocalypse</Entry>
-    <Entry key="FANCY_BUCKETS_APOCALYPSE">Compliance</Entry>
-    <Entry key="FANCY_BUCKETS_RANDOM">Random</Entry>
-    <Entry key="FANCY_BUCKETS_COMMON">Common</Entry>
-    <Entry key="FANCY_BUCKETS_KILLING">Killing</Entry>
-    <Entry key="FANCY_BUCKETS_POWER">Power</Entry>
-    <Entry key="FANCY_BUCKETS_UTILITY">Utility</Entry>
-    <Entry key="FANCY_BUCKETS_DECEPTION">Deception</Entry>
-    <Entry key="FANCY_BUCKETS_PROTECTIVE">Protective</Entry>
-    <Entry key="FANCY_BUCKETS_SUPPORT">Support</Entry>
-    <Entry key="FANCY_BUCKETS_INVESTIGATIVE">Investigative</Entry>
-    <Entry key="FANCY_BUCKETS_EVIL">Evil</Entry>
-    <Entry key="FANCY_BUCKETS_PARIAH">Pariah</Entry>
-    <Entry key="FANCY_BUCKETS_SPECIAL">Special</Entry>
+    <Entry key="FANCY_BUCKETS_APOCALYPSE_VANILLA"><![CDATA[<color=#1F51FF>]]>Apocalypse<![CDATA[</color>]]></Entry>
+    <Entry key="FANCY_BUCKETS_APOCALYPSE_BTOS">Apocalypse</Entry>
+    <Entry key="FANCY_BUCKETS_COMPLIANCE">Compliance</Entry>
+    <Entry key="FANCY_BUCKETS_RANDOM"><![CDATA[<color=#1F51FF>]]>Random<![CDATA[</color>]]></Entry>
+    <Entry key="FANCY_BUCKETS_COMMON"><![CDATA[<color=#1F51FF>]]>Common<![CDATA[</color>]]></Entry>
+    <Entry key="FANCY_BUCKETS_KILLING"><![CDATA[<color=#1F51FF>]]>Killing<![CDATA[</color>]]></Entry>
+    <Entry key="FANCY_BUCKETS_POWER"><![CDATA[<color=#1F51FF>]]>Power<![CDATA[</color>]]></Entry>
+    <Entry key="FANCY_BUCKETS_UTILITY"><![CDATA[<color=#1F51FF>]]>Utility<![CDATA[</color>]]></Entry>
+    <Entry key="FANCY_BUCKETS_DECEPTION"><![CDATA[<color=#1F51FF>]]>Deception<![CDATA[</color>]]></Entry>
+    <Entry key="FANCY_BUCKETS_PROTECTIVE"><![CDATA[<color=#1F51FF>]]>Protective<![CDATA[</color>]]></Entry>
+    <Entry key="FANCY_BUCKETS_SUPPORT"><![CDATA[<color=#1F51FF>]]>Support<![CDATA[</color>]]></Entry>
+    <Entry key="FANCY_BUCKETS_INVESTIGATIVE"><![CDATA[<color=#1F51FF>]]>Investigative<![CDATA[</color>]]></Entry>
+    <Entry key="FANCY_BUCKETS_EVIL"><![CDATA[<color=#1F51FF>]]>Evil<![CDATA[</color>]]></Entry>
+    <Entry key="FANCY_BUCKETS_PARIAH"><![CDATA[<color=#1F51FF>]]>Pariah<![CDATA[</color>]]></Entry>
+    <Entry key="FANCY_BUCKETS_SPECIAL"><![CDATA[<color=#1F51FF>]]>Special<![CDATA[</color>]]></Entry>
 
     <Entry key="FANCY_FIRE">Fire</Entry>
     <Entry key="FANCY_PAPER">Paper</Entry>
