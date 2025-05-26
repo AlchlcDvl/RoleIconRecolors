@@ -135,7 +135,7 @@ public static class Constants
         }
     }
 
-    public static bool IsPandora() => IsBTOS2() && Service.Game.Sim.simulation.roleDeckBuilder.Data.modifierCards.Contains(Btos2Role.PandorasBox);
+    public static bool IsPandora() => IsBTOS2() && Service.Game?.Sim?.simulation?.roleDeckBuilder?.Data?.modifierCards != null && Service.Game.Sim.simulation.roleDeckBuilder.Data.modifierCards.Contains(Btos2Role.PandorasBox);
 
-    public static bool IsCompliance() => IsBTOS2() && Service.Game.Sim.simulation.roleDeckBuilder.Data.modifierCards.Contains(Btos2Role.CompliantKillers);
+    public static bool IsCompliance() => IsBTOS2() && Service.Game?.Sim?.simulation?.roleDeckBuilder?.Data?.modifierCards != null && Service.Game.Sim.simulation.roleDeckBuilder.Data.modifierCards.Contains(Btos2Role.CompliantKillers);
 }
