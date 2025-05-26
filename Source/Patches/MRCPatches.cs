@@ -9,10 +9,11 @@ using Server.Shared.Extensions;
 
 namespace FancyUI.Patches;
 
-[HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.UpdateTitle))]
+[HarmonyPatch(typeof(RoleCardPanel))]
 public static class PatchRoleCard
 {
-    public static void Postfix(RoleCardPanel __instance)
+    [HarmonyPatch(nameof(RoleCardPanel.UpdateTitle)), HarmonyPostfix]
+    public static void UpdateTitlePostfix(RoleCardPanel __instance)
     {
         var component = __instance.GetComponent<GradientRoleColorController>();
 
@@ -76,12 +77,9 @@ public static class PatchRoleCard
 
         return text;
     }
-}
 
-[HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.OnClickRoleDesc))]
-public static class RoleCardPanelPatches
-{
-    public static void Postfix(RoleCardPanel __instance)
+    [HarmonyPatch(nameof(RoleCardPanel.OnClickRoleDesc)), HarmonyPostfix]
+    public static void OnClickRoleDescPostfix(RoleCardPanel __instance)
     {
         var text = __instance.roleDescText.text;
         var header = Utils.GetString("GUI_ROLECARDHEADER_FACTION");
@@ -109,15 +107,10 @@ public static class RoleCardPanelPatches
     }
 }
 
-[HarmonyPatch(typeof(RoleCardPopupPanel), nameof(RoleCardPopupPanel.SetRole))]
-public static class RoleCardPopupPatches
-{
-    public static void Postfix(Role role, RoleCardPopupPanel __instance) => __instance.roleNameText.text = role.ToColorizedDisplayString();
-}
-
-[HarmonyPatch(typeof(RoleCardPopupPanel), nameof(RoleCardPopupPanel.OnClickRoleDesc))]
+[HarmonyPatch(typeof(RoleCardPopupPanel))]
 public static class RoleCardPopupPatches2
 {
+    [HarmonyPatch(nameof(RoleCardPopupPanel.OnClickRoleDesc))]
     public static void Postfix(RoleCardPopupPanel __instance)
     {
         var text = __instance.roleDescText.text;
@@ -144,6 +137,9 @@ public static class RoleCardPopupPatches2
 
         __instance.roleDescText.text = text[..start] + colored + text[end..];
     }
+
+    [HarmonyPatch(nameof(RoleCardPopupPanel.SetRole))]
+    public static void Postfix(Role role, RoleCardPopupPanel __instance) => __instance.roleNameText.text = role.ToColorizedDisplayString();
 }
 
 [HarmonyPatch(typeof(TosAbilityPanelListItem), nameof(TosAbilityPanelListItem.SetKnownRole))]
@@ -234,25 +230,12 @@ public static class FixStyles
     }
 }
 
-[HarmonyPatch(typeof(ClientRoleExtensions), nameof(ClientRoleExtensions.ToColorizedDisplayString), typeof(Role), typeof(FactionType))]
-public static class AddChangedConversionTags
-{
-    public static void Postfix(ref string __result, Role role, FactionType factionType)
-    {
-        if (!role.IsResolved() && role is not (Role.FAMINE or Role.DEATH or Role.PESTILENCE or Role.WAR))
-            return;
-
-        var text = Fancy.FactionalRoleNames.Value ? role.ToRoleFactionDisplayString(factionType) : role.ToDisplayString();
-        var gradient = factionType.GetChangedGradient(role);
-        __result = gradient != null ? Utils.ApplyGradient(text, gradient) : $"<color={factionType.GetFactionColor()}>{text}</color>";
-    }
-}
-
-[HarmonyPatch(typeof(MentionsProvider), nameof(MentionsProvider.DecodeSpeaker))]
+[HarmonyPatch(typeof(MentionsProvider))]
 public static class FancyChatExperimentalBTOS2
 {
     private static readonly List<int> ExcludedIds = [50, 69, 70, 71];
 
+    [HarmonyPatch(nameof(MentionsProvider.DecodeSpeaker))]
     public static bool Prefix(MentionsProvider __instance, ref string __result, string encodedText, int position, bool isAlive)
     {
         var text = Service.Home.UserService.Settings.ChatNameColor switch // Might replace this with a customizable value (it overrides FancyChat)
@@ -289,21 +272,8 @@ public static class FancyChatExperimentalBTOS2
         __result = __instance.ProcessSpeakerName(text2, position, isAlive);
         return false;
     }
-}
 
-[HarmonyPatch(typeof(ClientRoleExtensions), nameof(ClientRoleExtensions.GetFactionColor))]
-public static class SwapColor
-{
-    public static bool Prefix(ref string __result, FactionType factionType)
-    {
-        __result = Fancy.Colors[Utils.FactionName(factionType, stoned: true).ToUpper()].Start;
-        return false;
-    }
-}
-
-[HarmonyPatch(typeof(MentionsProvider), nameof(MentionsProvider.ProcessSpeakerName))]
-public static class PatchJudge
-{
+    [HarmonyPatch(nameof(MentionsProvider.ProcessSpeakerName))]
     public static void Postfix(string encodedText, int position, ref string __result)
     {
         if (Constants.IsBTOS2())
@@ -446,9 +416,10 @@ public static class PatchCustomWinScreens
     }
 }
 
-[HarmonyPatch(typeof(ClientRoleExtensions), nameof(ClientRoleExtensions.ToColorizedDisplayString), typeof(Role), typeof(FactionType))]
-public static class AddTtAndGradients
+[HarmonyPatch(typeof(ClientRoleExtensions))]
+public static class ClientRoleExtensionsPatches
 {
+    [HarmonyPatch(nameof(ClientRoleExtensions.ToColorizedDisplayString), typeof(Role), typeof(FactionType))]
     public static void Postfix(ref string __result, Role role, FactionType factionType)
     {
         var gradient = factionType.GetChangedGradient(role);
@@ -484,13 +455,16 @@ public static class AddTtAndGradients
 
         __result = newText;
     }
-}
 
-[HarmonyPatch(typeof(ClientRoleExtensions), nameof(ClientRoleExtensions.GetBucketDisplayString))]
-public static class GradientBuckets
-{
-    [HarmonyPostfix]
-    public static void Postfix(ref string __result, ref Role role)
+    [HarmonyPatch(nameof(ClientRoleExtensions.GetFactionColor))]
+    public static bool Prefix(ref string __result, FactionType factionType)
+    {
+        __result = Fancy.Colors[Utils.FactionName(factionType, stoned: true).ToUpper()].Start;
+        return false;
+    }
+
+    [HarmonyPatch(nameof(ClientRoleExtensions.GetBucketDisplayString))]
+    public static void Postfix(ref string __result, Role role)
     {
         if (!Fancy.GradientBuckets.Value)
             return;
@@ -520,38 +494,30 @@ public static class GradientBuckets
                 Btos2Role.TownSupport => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN"), town)} {Utils.GetString("FANCY_BUCKETS_SUPPORT")}",
                 Btos2Role.TownKilling => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN"), townLethal)} {Utils.GetString("FANCY_BUCKETS_KILLING")}",
                 Btos2Role.TownPower => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN"), townMajor)} {Utils.GetString("FANCY_BUCKETS_POWER")}",
-                Btos2Role.RandomCoven =>
-                !Constants.IsPandora() ?
-                $"{Utils.GetString("FANCY_BUCKETS_RANDOM")} {Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN"), coven)}" :
-                $"{Utils.GetString("FANCY_BUCKETS_RANDOM")} {Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN"), pandora)}",
-                Btos2Role.CommonCoven =>
-                !Constants.IsPandora() ?
-                $"{Utils.GetString("FANCY_BUCKETS_COMMON")} {Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN"), coven)}" :
-                $"{Utils.GetString("FANCY_BUCKETS_COMMON")} {Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN"), pandora)}",
-                Btos2Role.CovenPower =>
-                !Constants.IsPandora() ?
-                $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN"), covenMajor)} {Utils.GetString("FANCY_BUCKETS_POWER")}" :
-                $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN"), pandoraMajor)} {Utils.GetString("FANCY_BUCKETS_POWER")}",
-                Btos2Role.CovenKilling =>
-                !Constants.IsPandora() ?
-                $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN"), covenLethal)} {Utils.GetString("FANCY_BUCKETS_KILLING")}" :
-                $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN"), pandoraLethal)} {Utils.GetString("FANCY_BUCKETS_KILLING")}",
-                Btos2Role.CovenUtility =>
-                !Constants.IsPandora() ?
-                $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN"), coven)} {Utils.GetString("FANCY_BUCKETS_UTILITY")}" :
-                $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN"), pandora)} {Utils.GetString("FANCY_BUCKETS_UTILITY")}",
-                Btos2Role.CovenDeception =>
-                !Constants.IsPandora() ?
-                $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN"), coven)} {Utils.GetString("FANCY_BUCKETS_DECEPTION")}" :
-                $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN"), pandora)} {Utils.GetString("FANCY_BUCKETS_DECEPTION")}",
-                Btos2Role.RandomApocalypse =>
-                !Constants.IsPandora() ?
-                $"{Utils.GetString("FANCY_BUCKETS_RANDOM")} {Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_APOCALYPSE_BTOS"), apocalypse)}" :
-                $"{Utils.GetString("FANCY_BUCKETS_RANDOM")} {Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_APOCALYPSE_BTOS"), pandora)}",
-                Btos2Role.NeutralKilling =>
-                !Constants.IsCompliance() ?
-                $"{Utils.GetString("FANCY_BUCKETS_NEUTRAL")} {Utils.GetString("FANCY_BUCKETS_KILLING")}" :
-                $"{Utils.GetString("FANCY_BUCKETS_RANDOM")} {Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COMPLIANCE"), compliance)}",
+                Btos2Role.RandomCoven => !Constants.IsPandora()
+                    ? $"{Utils.GetString("FANCY_BUCKETS_RANDOM")} {Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN"), coven)}"
+                    : $"{Utils.GetString("FANCY_BUCKETS_RANDOM")} {Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN"), pandora)}",
+                Btos2Role.CommonCoven => !Constants.IsPandora()
+                    ? $"{Utils.GetString("FANCY_BUCKETS_COMMON")} {Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN"), coven)}"
+                    : $"{Utils.GetString("FANCY_BUCKETS_COMMON")} {Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN"), pandora)}",
+                Btos2Role.CovenPower => !Constants.IsPandora()
+                    ? $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN"), covenMajor)} {Utils.GetString("FANCY_BUCKETS_POWER")}"
+                    : $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN"), pandoraMajor)} {Utils.GetString("FANCY_BUCKETS_POWER")}",
+                Btos2Role.CovenKilling => !Constants.IsPandora()
+                    ? $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN"), covenLethal)} {Utils.GetString("FANCY_BUCKETS_KILLING")}"
+                    : $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN"), pandoraLethal)} {Utils.GetString("FANCY_BUCKETS_KILLING")}",
+                Btos2Role.CovenUtility => !Constants.IsPandora()
+                    ? $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN"), coven)} {Utils.GetString("FANCY_BUCKETS_UTILITY")}"
+                    : $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN"), pandora)} {Utils.GetString("FANCY_BUCKETS_UTILITY")}",
+                Btos2Role.CovenDeception => !Constants.IsPandora()
+                    ? $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN"), coven)} {Utils.GetString("FANCY_BUCKETS_DECEPTION")}"
+                    : $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN"), pandora)} {Utils.GetString("FANCY_BUCKETS_DECEPTION")}",
+                Btos2Role.RandomApocalypse => !Constants.IsPandora()
+                    ? $"{Utils.GetString("FANCY_BUCKETS_RANDOM")} {Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_APOCALYPSE_BTOS"), apocalypse)}"
+                    : $"{Utils.GetString("FANCY_BUCKETS_RANDOM")} {Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_APOCALYPSE_BTOS"), pandora)}",
+                Btos2Role.NeutralKilling => !Constants.IsCompliance()
+                    ? $"{Utils.GetString("FANCY_BUCKETS_NEUTRAL")} {Utils.GetString("FANCY_BUCKETS_KILLING")}"
+                    : $"{Utils.GetString("FANCY_BUCKETS_RANDOM")} {Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COMPLIANCE"), compliance)}",
                 Btos2Role.NeutralEvil => $"{Utils.GetString("FANCY_BUCKETS_NEUTRAL")} {Utils.GetString("FANCY_BUCKETS_EVIL")}",
                 Btos2Role.NeutralPariah => $"{Utils.GetString("FANCY_BUCKETS_NEUTRAL")} {Utils.GetString("FANCY_BUCKETS_PARIAH")}",
                 Btos2Role.NeutralSpecial => $"{Utils.GetString("FANCY_BUCKETS_NEUTRAL")} {Utils.GetString("FANCY_BUCKETS_SPECIAL")}",
@@ -561,7 +527,7 @@ public static class GradientBuckets
             };
         }
         else
-             {
+        {
             __result = role switch
             {
                 Role.ANY => Utils.GetString("GUI_ROLE_LIST_BUCKET_ANY"),
@@ -578,9 +544,9 @@ public static class GradientBuckets
                 Role.COVEN_KILLING => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN"), covenLethal)} {Utils.GetString("FANCY_BUCKETS_KILLING")}",
                 Role.COVEN_UTILITY => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN"), coven)} {Utils.GetString("FANCY_BUCKETS_UTILITY")}",
                 Role.COVEN_DECEPTION => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN"), coven)} {Utils.GetString("FANCY_BUCKETS_DECEPTION")}",
-                Role.NEUTRAL_APOCALYPSE =>
-                !Fancy.ReplaceNAwithRA.Value ? $"{Utils.GetString("FANCY_BUCKETS_NEUTRAL")} {Utils.GetString("FANCY_BUCKETS_APOCALYPSE_VANILLA")}" :
-                $"{Utils.GetString("FANCY_BUCKETS_RANDOM")} {Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_APOCALYPSE_BTOS"), apocalypse)}",
+                Role.NEUTRAL_APOCALYPSE => !Fancy.ReplaceNAwithRA.Value
+                    ? $"{Utils.GetString("FANCY_BUCKETS_NEUTRAL")} {Utils.GetString("FANCY_BUCKETS_APOCALYPSE_VANILLA")}"
+                    : $"{Utils.GetString("FANCY_BUCKETS_RANDOM")} {Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_APOCALYPSE_BTOS"), apocalypse)}",
                 Role.NEUTRAL_KILLING => $"{Utils.GetString("FANCY_BUCKETS_NEUTRAL")} {Utils.GetString("FANCY_BUCKETS_KILLING")}",
                 Role.NEUTRAL_EVIL => $"{Utils.GetString("FANCY_BUCKETS_NEUTRAL")} {Utils.GetString("FANCY_BUCKETS_EVIL")}",
                 Role.RANDOM_NEUTRAL => $"{Utils.GetString("FANCY_BUCKETS_RANDOM")} {Utils.GetString("FANCY_BUCKETS_NEUTRAL")}",

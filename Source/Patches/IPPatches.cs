@@ -100,13 +100,34 @@ public static class RoleCardFixesAndPatches
     }
 }
 
-[HarmonyPatch(typeof(RoleCardPopupPanel), nameof(RoleCardPopupPanel.SetRoleAndFaction))]
+[HarmonyPatch(typeof(RoleCardPopupPanel))]
 public static class PatchRoleCards
 {
+    [HarmonyPatch(nameof(RoleCardPopupPanel.SetRoleAndFaction))]
     public static void Postfix(RoleCardPopupPanel __instance, Role role, FactionType faction)
     {
         if (Constants.EnableIcons())
             ChangeRoleCard(__instance.roleIcon, __instance.specialAbilityPanel?.useButton?.abilityIcon, __instance.roleInfoButtons, role, faction, true);
+    }
+
+    [HarmonyPatch(nameof(RoleCardPopupPanel.ShowAttackAndDefense))]
+    public static void Postfix(RoleCardPopupPanel __instance, RoleCardData data)
+    {
+        if (!Constants.EnableIcons())
+            return;
+
+        var attack = GetSprite($"Attack{Utils.GetLevel(data.attack, true)}");
+        var icon1 = __instance.transform.Find("AttackIcon").Find("Icon").GetComponent<Image>();
+
+        if (icon1)
+            icon1.sprite = attack.IsValid() ? attack : FancyAssetManager.Attack;
+
+        var eth = __instance.myData.IsEthereal();
+        var defense = GetSprite($"Defense{Utils.GetLevel(eth ? 4 : data.defense, false)}");
+        var icon2 = __instance.transform.Find("DefenseIcon").Find("Icon").GetComponent<Image>();
+
+        if (icon2)
+            icon2.sprite = defense.IsValid() ? defense : (eth ? Ethereal : FancyAssetManager.Defense);
     }
 
     public static void ChangeRoleCard(Image roleIcon, Image specialAbilityPanel, List<BaseAbilityButton> roleInfoButtons, Role role, FactionType faction, bool isGuide = false)
@@ -480,33 +501,11 @@ public static class PatchAttackDefense
     }
 }
 
-[HarmonyPatch(typeof(RoleCardPopupPanel), nameof(RoleCardPopupPanel.ShowAttackAndDefense))]
-public static class PatchAttackDefensePopup
-{
-    public static void Postfix(RoleCardPopupPanel __instance, RoleCardData data)
-    {
-        if (!Constants.EnableIcons())
-            return;
-
-        var attack = GetSprite($"Attack{Utils.GetLevel(data.attack, true)}");
-        var icon1 = __instance.transform.Find("AttackIcon").Find("Icon").GetComponent<Image>();
-
-        if (icon1)
-            icon1.sprite = attack.IsValid() ? attack : FancyAssetManager.Attack;
-
-        var eth = __instance.myData.IsEthereal();
-        var defense = GetSprite($"Defense{Utils.GetLevel(eth ? 4 : data.defense, false)}");
-        var icon2 = __instance.transform.Find("DefenseIcon").Find("Icon").GetComponent<Image>();
-
-        if (icon2)
-            icon2.sprite = defense.IsValid() ? defense : (eth ? Ethereal : FancyAssetManager.Defense);
-    }
-}
-
-[HarmonyPatch(typeof(PlayerPopupController), nameof(PlayerPopupController.SetRoleIcon))]
+[HarmonyPatch(typeof(PlayerPopupController))]
 public static class PlayerPopupControllerPatch
 {
-    public static void Postfix(PlayerPopupController __instance)
+    [HarmonyPatch(nameof(PlayerPopupController.SetRoleIcon)), HarmonyPostfix]
+    public static void SetRoleIconPostfix(PlayerPopupController __instance)
     {
         if (!Constants.EnableIcons() || !Service.Game.Sim.simulation.killRecords.Data.TryFinding(k => k.playerId == __instance.m_discussionPlayerState.position, out var killRecord))
             return;
@@ -523,12 +522,9 @@ public static class PlayerPopupControllerPatch
         if (sprite.IsValid() && __instance.RoleIcon)
             __instance.RoleIcon.sprite = sprite;
     }
-}
 
-[HarmonyPatch(typeof(PlayerPopupController), nameof(PlayerPopupController.InitializeRolePanel))]
-public static class InitialiseRolePanel
-{
-    public static void Postfix(PlayerPopupController __instance)
+    [HarmonyPatch(nameof(PlayerPopupController.InitializeRolePanel)), HarmonyPostfix]
+    public static void InitializeRolePanelPostfix(PlayerPopupController __instance)
     {
         if (!Constants.EnableIcons() || !Pepper.IsGamePhasePlay())
             return;
@@ -610,9 +606,10 @@ public static class PlayerEffectsServicePatch
     }
 }
 
-[HarmonyPatch(typeof(GameSimulation), nameof(GameSimulation.GetRoleIconAndNameInlineString))]
-public static class GetRoleIconAndNameInlineStringPatch
+[HarmonyPatch(typeof(GameSimulation))]
+public static class GetInlinedStringsPatches
 {
+    [HarmonyPatch(typeof(GameSimulation), nameof(GameSimulation.GetRoleIconAndNameInlineString))]
     public static void Postfix(Role role, FactionType factionType, ref string __result)
     {
         if (Constants.EnableIcons())
@@ -621,33 +618,33 @@ public static class GetRoleIconAndNameInlineStringPatch
                 Utils.FactionName(factionType, false))})\"");
         }
     }
-}
 
-[HarmonyPatch(typeof(GameSimulation), nameof(GameSimulation.GetTownTraitorRoleIconAndNameInlineString))]
-public static class GetTownTraitorRoleIconAndNameInlineStringPatch
-{
-    public static void Postfix(ref string __result)
+    [HarmonyPatch(nameof(GameSimulation.GetTownTraitorRoleIconAndNameInlineString)), HarmonyPostfix]
+    public static void GetTownTraitorRoleIconAndNameInlineStringPostfix(ref string __result)
     {
         if (Constants.EnableIcons())
             __result = __result.Replace("RoleIcons\"", "RoleIcons (Coven)\"");
     }
-}
 
-[HarmonyPatch(typeof(GameSimulation), nameof(GameSimulation.GetVIPRoleIconAndNameInlineString))]
-public static class GetVipRoleIconAndNameInlineStringPatch
-{
-    public static void Postfix(ref string __result)
+    [HarmonyPatch(nameof(GameSimulation.GetVIPRoleIconAndNameInlineString)), HarmonyPostfix]
+    public static void GetVIPRoleIconAndNameInlineStringPostfix(ref string __result)
     {
         if (Constants.EnableIcons())
             __result = $"{__result.Replace("RoleIcons\"", "RoleIcons (VIP)\"")} <sprite=\"RoleIcons\" name=\"Role201\">";
     }
 }
 
-[HarmonyPatch(typeof(BaseDecoder))]
+[HarmonyPatch]
 public static class FixDecodingAndEncoding
 {
-    [HarmonyPatch(nameof(BaseDecoder.Decode))]
-    [HarmonyPatch(nameof(BaseDecoder.Encode))]
+    public static IEnumerable<MethodBase> TargetMethods()
+    {
+        var baseType = typeof(BaseDecoder);
+
+        foreach (var type in AccessTools.GetTypesFromAssembly(baseType.Assembly).Where(baseType.IsAssignableFrom))
+            yield return AccessTools.Method(type, "Decode");
+    }
+
     public static void Postfix(ChatLogMessage chatLogMessage, ref string __result)
     {
         if (!Constants.EnableIcons() || chatLogMessage.chatLogEntry is not ChatLogChatMessageEntry entry)

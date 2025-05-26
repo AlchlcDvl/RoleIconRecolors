@@ -1,4 +1,3 @@
-using Cinematics;
 using Cinematics.Players;
 using Home.HomeScene;
 using Home.LoginScene;
@@ -7,7 +6,6 @@ using Mentions;
 using Mentions.Providers;
 using SalemModLoaderUI;
 using Server.Shared.Cinematics.Data;
-using Server.Shared.Extensions;
 using UnityEngine.EventSystems;
 
 namespace FancyUI.Patches;
