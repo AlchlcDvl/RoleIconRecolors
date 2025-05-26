@@ -1240,6 +1240,10 @@ public static class RoleListItemIcon
             ? "Regular"
             : Utils.FactionName(displayFaction, false);
         roleIcon = roleIcon.Replace("RoleIcons\"", $"RoleIcons ({faction})\"");
+
+        if (Constants.IsBTOS2())
+            roleIcon = roleIcon.Replace("\"RoleIcons", "\"BTOSRoleIcons");
+
         __instance.roleLabel.SetText(roleIcon);
         __instance.roleLabel.color = role.GetFaction().GetFactionColor().ParseColor();
         return false;
