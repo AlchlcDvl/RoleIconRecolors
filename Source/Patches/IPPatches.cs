@@ -642,7 +642,12 @@ public static class FixDecodingAndEncoding
         var baseType = typeof(BaseDecoder);
 
         foreach (var type in AccessTools.GetTypesFromAssembly(baseType.Assembly).Where(baseType.IsAssignableFrom))
-            yield return AccessTools.Method(type, "Decode");
+        {
+            var method = AccessTools.Method(type, "Decode");
+
+            if (method != null)
+                yield return method;
+        }
     }
 
     public static void Postfix(ChatLogMessage chatLogMessage, ref string __result)
