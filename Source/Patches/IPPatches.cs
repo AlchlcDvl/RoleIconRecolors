@@ -1237,16 +1237,16 @@ public static class RoleListItemIcon
         if (Constants.IsCompliance() && role is Role.SERIALKILLER or Role.SHROUD or Role.WEREWOLF or Role.ARSONIST)
             displayFaction = Btos2Faction.Compliance;
 
-        var roleIcon = role.GetTMPSprite() + role.ToColorizedDisplayString(displayFaction);
+        var roleText = role.GetTMPSprite() + role.ToColorizedDisplayString(displayFaction);
         var faction = displayFaction == actualFaction && Constants.CurrentStyle() == "Regular"
             ? "Regular"
             : Utils.FactionName(displayFaction, false);
-        roleIcon = roleIcon.Replace("RoleIcons\"", $"RoleIcons ({faction})\"");
+        roleText = roleText.Replace("RoleIcons\"", $"RoleIcons ({faction})\"");
 
         if (Constants.IsBTOS2())
-            roleIcon = roleIcon.Replace("\"RoleIcons", "\"BTOSRoleIcons");
+            roleText = roleText.Replace("\"RoleIcons", "\"BTOSRoleIcons");
 
-        __instance.roleLabel.SetText(roleIcon);
+        __instance.roleLabel.SetText(roleText);
         __instance.roleLabel.color = role.GetFaction().GetFactionColor().ParseColor();
         return false;
     }
@@ -1261,17 +1261,38 @@ public static class RoleListPopupUpdate
         var roleData = __instance.m_roleData;
         var roleName = __instance.RoleNameLabel;
 
+        var actualFaction = roleData.role.GetFactionType();
+        var displayFaction = actualFaction;
+
+        if (Constants.IsPandora() && actualFaction is FactionType.COVEN or FactionType.APOCALYPSE)
+            displayFaction = Btos2Faction.Pandora;
+
+        if (Constants.IsCompliance() && roleData.role is Role.SERIALKILLER or Role.SHROUD or Role.WEREWOLF or Role.ARSONIST)
+            displayFaction = Btos2Faction.Compliance;
+
+        if (roleDeckBuilder.bannedRoles.Contains(roleData.role))
+            displayFaction = FactionType.NONE;
+
+        var roleText = roleData.role.GetTMPSprite() + roleData.role.ToColorizedDisplayString(displayFaction);
+        var faction = displayFaction == actualFaction && Constants.CurrentStyle() == "Regular"
+            ? "Regular"
+            : Utils.FactionName(displayFaction, false);
+        roleText = roleText.Replace("RoleIcons\"", $"RoleIcons ({faction})\"");
+
+        if (Constants.IsBTOS2())
+            roleText = roleText.Replace("\"RoleIcons", "\"BTOSRoleIcons");
+
         if (roleDeckBuilder.bannedRoles.Contains(roleData.role))
         {
             if (!banPanel.activeSelf)
             {
-                roleName.SetText("<color=#8C8C8C>" + roleData.role.GetTMPSprite() + roleData.role.ToDisplayString() + "</color>");
+                roleName.SetText("<color=#8C8C8C>" + roleText + "</color>");
                 banPanel.SetActive(value: true);
             }
         }
         else if (banPanel.activeSelf)
         {
-            roleName.SetText(roleData.role.GetTMPSprite() + roleData.role.ToColorizedDisplayString());
+            roleName.SetText(roleText);
             banPanel.SetActive(value: false);
         }
 
@@ -1288,15 +1309,36 @@ public static class RoleListPopupInit
         var banPanel = __instance.BannedPanelGO;
         var roleName = __instance.RoleNameLabel;
 
+        var actualFaction = roleData.role.GetFactionType();
+        var displayFaction = actualFaction;
+
+        if (Constants.IsPandora() && actualFaction is FactionType.COVEN or FactionType.APOCALYPSE)
+            displayFaction = Btos2Faction.Pandora;
+
+        if (Constants.IsCompliance() && roleData.role is Role.SERIALKILLER or Role.SHROUD or Role.WEREWOLF or Role.ARSONIST)
+            displayFaction = Btos2Faction.Compliance;
+
         var bannedRoles = Service.Game.Sim.simulation.roleDeckBuilder.Data.bannedRoles;
         if (bannedRoles.Contains(roleData.role))
+            displayFaction = FactionType.NONE;
+
+        var roleText = roleData.role.GetTMPSprite() + roleData.role.ToColorizedDisplayString(displayFaction);
+        var faction = displayFaction == actualFaction && Constants.CurrentStyle() == "Regular"
+            ? "Regular"
+            : Utils.FactionName(displayFaction, false);
+        roleText = roleText.Replace("RoleIcons\"", $"RoleIcons ({faction})\"");
+
+        if (Constants.IsBTOS2())
+            roleText = roleText.Replace("\"RoleIcons", "\"BTOSRoleIcons");
+
+        if (bannedRoles.Contains(roleData.role))
         {
-            roleName.SetText("<color=#8C8C8C>" + roleData.role.GetTMPSprite() + roleData.role.ToDisplayString() + "</color>");
+            roleName.SetText("<color=#8C8C8C>" + roleText + "</color>");
             banPanel.SetActive(value: true);
         }
         else
         {
-            roleName.SetText(roleData.role.GetTMPSprite() + roleData.role.ToColorizedDisplayString());
+            roleName.SetText(roleText);
             banPanel.SetActive(value: false);
         }
 
