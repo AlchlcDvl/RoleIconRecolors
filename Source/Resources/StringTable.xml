@@ -173,6 +173,37 @@
     <Entry key="FANCY_RECRUIT_LABEL_NAME">Recruit Label</Entry>
     <Entry key="FANCY_RECRUIT_LABEL_DESC">The text that is shown when the player is recruited by the Jackal.</Entry>
 
+    <Entry key="FANCY_RECRUIT_LABEL_TOWN_NAME">Town Recruit Label</Entry>
+    <Entry key="FANCY_RECRUIT_LABEL_TOWN_DESC">The text that is shown when a Town role is recruited by the Jackal.</Entry>
+
+    <Entry key="FANCY_RECRUIT_LABEL_COVEN_NAME">Coven Recruit Label</Entry>
+    <Entry key="FANCY_RECRUIT_LABEL_COVEN_DESC">The text that is shown when a Coven role is recruited by the Jackal.</Entry>
+
+    <Entry key="FANCY_RECRUIT_LABEL_APOCALYPSE_NAME">Apocalypse Recruit Label</Entry>
+    <Entry key="FANCY_RECRUIT_LABEL_APOCALYPSE_DESC">The text that is shown when an Apocalypse role is recruited by the Jackal.</Entry>
+
+    <Entry key="FANCY_RECRUIT_LABEL_SERIAL_KILLER_NAME">Serial Killer Recruit Label</Entry>
+    <Entry key="FANCY_RECRUIT_LABEL_SERIAL_KILLER_DESC">The text that is shown when the Serial Killer is recruited by the Jackal.</Entry>
+
+    <Entry key="FANCY_RECRUIT_LABEL_ARSONIST_NAME">Arsonist Recruit Label</Entry>
+    <Entry key="FANCY_RECRUIT_LABEL_ARSONIST_DESC">The text that is shown when the Arsonist is recruited by the Jackal.</Entry>
+
+    <Entry key="FANCY_RECRUIT_LABEL_WEREWOLF_NAME">Werewolf Recruit Label</Entry>
+    <Entry key="FANCY_RECRUIT_LABEL_WEREWOLF_DESC">The text that is shown when the Werewolf is recruited by the Jackal.</Entry>
+
+    <Entry key="FANCY_RECRUIT_LABEL_SHROUD_NAME">Shroud Recruit Label</Entry>
+    <Entry key="FANCY_RECRUIT_LABEL_SHROUD_DESC">The text that is shown when the Shroud is recruited by the Jackal.</Entry>
+
+    <Entry key="FANCY_RECRUIT_LABEL_PANDORA_NAME">Pandora Recruit Label</Entry>
+    <Entry key="FANCY_RECRUIT_LABEL_PANDORA_DESC">The text that is shown when a Pandora role is recruited by the Jackal.</Entry>
+
+    <Entry key="FANCY_RECRUIT_LABEL_COMPLIANCE_NAME">Compliance Recruit Label</Entry>
+    <Entry key="FANCY_RECRUIT_LABEL_COMPLIANCE_DESC">The text that is shown when a Compliance role is recruited by the Jackal.</Entry>
+
+    <Entry key="FANCY_RECRUIT_LABEL_CURSEDSOUL_NAME">Cursed Soul Recruit Label</Entry>
+    <Entry key="FANCY_RECRUIT_LABEL_CURSEDSOUL_DESC">The text that is shown when the Cursed Soul is recruited by the Jackal.</Entry>
+
+
     <Entry key="FANCY_TRAITOR_LABEL_NAME">Town Traitor Label</Entry>
     <Entry key="FANCY_TRAITOR_LABEL_DESC">The text that is shown in the role card when the player is a Town Traitor.</Entry>
 
