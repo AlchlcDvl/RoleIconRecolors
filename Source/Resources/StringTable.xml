@@ -14,6 +14,9 @@
     <Entry key="FANCY_FACTION_LABEL_NAME">Faction Label in Role Card</Entry>
     <Entry key="FANCY_FACTION_LABEL_DESC">Determines whether or not the faction label within the role card will be displayed and under what conditions. Mismatch means if the role doesn't belong in the current faction. Conditional means Coven/Apocalypse = Pandora and SK/Arso/WW/Shroud = Compliance. Always and Never are self explanatory. Does not affect the Town Traitor and Recruit Labels.</Entry>
    
+    <Entry key="FANCY_DEAD_CHAT_DESATURATION_NAME">Dead Chat Desaturation</Entry>
+    <Entry key="FANCY_DEAD_CHAT_DESATURATION_DESC">Deterines how desaturated the names of dead players are when you know their roles. Setting to -1 effectively disables this feature.</Entry>
+   
     <Entry key="FANCY_RANDOM_APOC_IN_VANILLA_NAME">Random Apocalypse Over Neutral Apocalypse</Entry>
     <Entry key="FANCY_RANDOM_APOC_IN_VANILLA_DESC">If enabled, the Neutral Apocalypse bucket will be changed to say Random Apocalypse if Gradient Buckets is active.</Entry>
    
