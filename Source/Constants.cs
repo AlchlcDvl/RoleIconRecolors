@@ -71,6 +71,8 @@ public static class Constants
 
     public static float GrayscaleAmount() => Fancy.GrayscaleAmount.Value / 100f;
 
+    public static float DeadChatDesaturation() => Fancy.DeadChatDesaturation.Value / 100f;
+
     public static int PlayerNumber() => (int)Fancy.PlayerNumber.Value;
 
     public static bool FactionOverridden() => FactionOverride() != "None";
