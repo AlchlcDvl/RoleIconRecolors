@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3417027312
+CRC: 597990130
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 26231fca6ba9d1fba4ee7cb4fa6fdd81
+    Hash: 2a21dfcdf35f6c52d06adfd7fcbffe03
   TypeTreeHash:
     serializedVersion: 2
     Hash: 89c7f6d629771a0fed8e491f2a4febe2
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 26231fca6ba9d1fba4ee7cb4fa6fdd81
+    Hash: 2a21dfcdf35f6c52d06adfd7fcbffe03
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -201,6 +201,7 @@ Assets:
 - Assets/Assets/ScrollbarHandle.png
 - Assets/Assets/Banned.png
 - Assets/Assets/MRC.png
+- Assets/Assets/RoleCard_Ability_Main_C.png
 - Assets/Assets/Graveyard_M.png
 - Assets/Assets/ChatBox_FrameDetail.png
 - Assets/Assets/Graveyard_W.png

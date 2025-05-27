@@ -18,8 +18,9 @@ public class SettingsAndTestingUI : UIController
     private TextMeshProUGUI RoleText { get; set; }
     private TextMeshProUGUI NameText { get; set; }
 
+    private SlotCounterHandler SlotCounter { get; set; }
+
     private Image ToggleImage { get; set; }
-    private Image SlotCounter { get; set; }
     // private Image RoleIcon { get; set; }
     // private Image Attack { get; set; }
     // private Image Defense { get; set; }
@@ -64,15 +65,6 @@ public class SettingsAndTestingUI : UIController
         }
     }
 
-    // private static readonly Vector3 SpecialOrEffectButtonPosition = new(0f, -20f, 0f);
-    // private static readonly Vector3[][] ButtonPositions =
-    // [
-    //     [ new(0f, -182f, 0f) ],
-    //     [ new(-24f, -190f, 0f), new(24f, -190f, 0f) ],
-    //     [ new(-45f, -190f, 0f), new(0f, -188f, 0f), new(45f, -190f, 0f) ],
-    //     [ new(-72f, -180f, 0f), new(-24f, -190f, 0f), new(-24f, -190f, 0f), new(72f, -180f, 0f) ]
-    // ];
-
     private const string DefaultRoleText = "<sprite=\"%mod%RoleIcons (%type%)\" name=\"Role%roleInt%\"><b>%roleName%</b>";
     private const string DefaultNameText = "<sprite=\"PlayerNumbers\" name=\"PlayerNumbers_%num%\"><b>Giles Corey %roleName%</b>";
 
@@ -110,7 +102,7 @@ public class SettingsAndTestingUI : UIController
         RoleText = roleCard.GetComponent<TextMeshProUGUI>("Role");
         NameText = transform.GetComponent<TextMeshProUGUI>("NameText");
 
-        SlotCounter = roleCard.GetComponent<Image>("SlotCounter");
+        SlotCounter = roleCard.EnsureComponent<SlotCounterHandler>("SlotCounter");
         // RoleIcon = roleCard.GetComponent<Image>("RoleIcon");
         // Attack = roleCard.GetComponent<Image>("Attack");
         // Defense = roleCard.GetComponent<Image>("Defense");
@@ -153,8 +145,12 @@ public class SettingsAndTestingUI : UIController
         var testing = FilterDropdown.transform.GetComponent<Button>("Testing");
         testing!.onClick.AddListener(() => Page = PackType.Testing);
 
-        Metals.Add(roleCard.GetComponent<Image>("Special"));
-        Metals.Add(roleCard.GetComponent<Image>("Effect"));
+        var special = roleCard.GetComponent<Image>("Special");
+        var effect = roleCard.GetComponent<Image>("Effect");
+        var drop = transform.FindRecursive("Drop");
+
+        Metals.Add(special);
+        Metals.Add(effect);
         Metals.Add(playerList.GetComponent<Image>("Corners"));
         Metals.Add(roleDeck.GetComponent<Image>("Metal"));
         Metals.Add(chat.GetComponent<Image>("Metal"));
@@ -167,11 +163,17 @@ public class SettingsAndTestingUI : UIController
         Metals.Add(transform.GetComponent<Image>("Fill"));
         Metals.Add(specialAbilityPopup.GetComponent<Image>("Ring"));
         Metals.Add(FilterArrow);
+        Metals.Add(special.transform.GetComponent<Image>("Icon"));
+        Metals.Add(effect.transform.GetComponent<Image>("Icon"));
+        Metals.Add(transform.GetComponent<Image>("Chains1"));
+        Metals.Add(transform.GetComponent<Image>("Chains2"));
+        Metals.Add(drop.GetComponent<Image>("Icon1"));
+        Metals.Add(drop.GetComponent<Image>("Icon2"));
+        Metals.AddRange(SlotCounter.GetIconBGs());
 
         Woods.Add(roleCard.GetComponent<Image>("Frame"));
         Woods.Add(Metals[0].transform.GetComponent<Image>("Wood"));
         Woods.Add(Metals[1].transform.GetComponent<Image>("Wood"));
-        Woods.Add(SlotCounter);
         Woods.Add(chat.transform.GetComponent<Image>("WoodFrame"));
         Woods.Add(chat.transform.GetComponent<Image>("WoodDetails1"));
         Woods.Add(chat.transform.GetComponent<Image>("WoodDetails2"));
@@ -181,6 +183,9 @@ public class SettingsAndTestingUI : UIController
         Woods.Add(graveyard.transform.GetComponent<Image>("Wood"));
         Woods.Add(specialAbilityPopup.GetComponent<Image>("Frame"));
         Woods.Add(FilterDropdown.GetComponent<Image>());
+        Woods.Add(drop.GetComponent<Image>("Wood1"));
+        Woods.Add(drop.GetComponent<Image>("Wood2"));
+        Woods.AddRange(SlotCounter.Counters.Select(x => x.GetComponent<Image>()));
 
         Leathers.Add(playerList.GetComponent<Image>("Leather"));
         Leathers.Add(roleDeck.GetComponent<Image>("Leather"));

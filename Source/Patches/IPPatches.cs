@@ -1249,10 +1249,12 @@ public static class RoleListItemIcon
         return false;
     }
 }
+
 // The role list panel listings oh my god
-[HarmonyPatch(typeof(RandomRoleListItemController), nameof(RandomRoleListItemController.HandleOnRoleDeckBuilderChanged))]
+[HarmonyPatch(typeof(RandomRoleListItemController))]
 public static class RoleListPopupUpdate
 {
+    [HarmonyPatch(nameof(RandomRoleListItemController.HandleOnRoleDeckBuilderChanged))]
     public static bool Prefix(RandomRoleListItemController __instance, RoleDeckBuilder roleDeckBuilder)
     {
         var banPanel = __instance.BannedPanelGO;
@@ -1284,21 +1286,19 @@ public static class RoleListPopupUpdate
             if (!banPanel.activeSelf)
             {
                 roleName.SetText("<color=#8C8C8C>" + roleText + "</color>");
-                banPanel.SetActive(value: true);
+                banPanel.SetActive(true);
             }
         }
         else if (banPanel.activeSelf)
         {
             roleName.SetText(roleText);
-            banPanel.SetActive(value: false);
+            banPanel.SetActive(false);
         }
 
         return false;
     }
-}
-[HarmonyPatch(typeof(RandomRoleListItemController), nameof(RandomRoleListItemController.OnDataSet))]
-public static class RoleListPopupInit
-{
+
+    [HarmonyPatch(nameof(RandomRoleListItemController.OnDataSet))]
     public static bool Prefix(RandomRoleListItemController __instance, RoleData roleData)
     {
         __instance.m_roleData = roleData;
@@ -1330,14 +1330,14 @@ public static class RoleListPopupInit
         if (bannedRoles.Contains(roleData.role))
         {
             roleName.SetText("<color=#8C8C8C>" + roleText + "</color>");
-            banPanel.SetActive(value: true);
+            banPanel.SetActive(true);
         }
         else
         {
             roleName.SetText(roleText);
-            banPanel.SetActive(value: false);
+            banPanel.SetActive(false);
         }
 
         return false;
     }
-} 
+}
