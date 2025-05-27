@@ -56,7 +56,23 @@ public static class PatchRoleCard
             case (ROLE_MODIFIER)10:
             {
                 var gradient = Btos2Faction.Jackal.GetChangedGradient(role);
-                text += $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.RecruitLabel.Value})", gradient)}</size>";
+                var mod = Utils.GetGameType();
+                var originalFaction = role.GetFactionType(mod);
+
+                var label = originalFaction switch
+                {
+                    Btos2Faction.Town => Fancy.RecruitLabelTown.Value,
+                    Btos2Faction.Coven => !Constants.IsPandora() ? Fancy.RecruitLabelCoven.Value : Fancy.RecruitLabelPandora.Value,
+                    Btos2Faction.Apocalypse => !Constants.IsPandora() ? Fancy.RecruitLabelApocalypse.Value : Fancy.RecruitLabelPandora.Value,
+                    Btos2Faction.SerialKiller => !Constants.IsCompliance() ? Fancy.RecruitLabelSerialKiller.Value : Fancy.RecruitLabelCompliance.Value,
+                    Btos2Faction.Arsonist => !Constants.IsCompliance() ? Fancy.RecruitLabelArsonist.Value : Fancy.RecruitLabelCompliance.Value,
+                    Btos2Faction.Werewolf => !Constants.IsCompliance() ? Fancy.RecruitLabelWerewolf.Value : Fancy.RecruitLabelCompliance.Value,
+                    Btos2Faction.Shroud => !Constants.IsCompliance() ? Fancy.RecruitLabelShroud.Value : Fancy.RecruitLabelCompliance.Value,
+                    Btos2Faction.CursedSoul => Fancy.RecruitLabelCursedSoul.Value,
+                    _ => Btos2Role.Jackal.ToColorizedDisplayString()
+                };
+
+                text += $"\n<size=85%>{Utils.ApplyGradient($"({label})", gradient)}</size>";
                 break;
             }
             default:
@@ -450,14 +466,31 @@ public static class ClientRoleExtensionsPatches
 
         var text = Fancy.FactionalRoleNames.Value ? role.ToRoleFactionDisplayString(factionType) : role.ToDisplayString();
         var newText = gradient != null ? Utils.ApplyGradient(text, gradient) : $"<color={factionType.GetFactionColor()}>{text}</color>";
+        var factionText = factionType.ToDisplayString();
 
         if (((Fancy.FactionNameNextToRole.Value == FactionLabelOption.Mismatch && role.GetFaction() != factionType) || (Fancy.FactionNameNextToRole.Value == FactionLabelOption.Always) ||
             (Fancy.FactionNameNextToRole.Value == FactionLabelOption.Conditional && !Utils.ConditionalCompliancePandora(role.GetFaction(), factionType))) && !Pepper.IsRoleRevealPhase())
         {
+            if (factionType == Btos2Faction.Jackal)
+            {
+                var originalFaction = role.GetFactionType(Utils.GetGameType());
+                factionText = originalFaction switch
+                {
+                    Btos2Faction.Town => Fancy.RecruitLabelTown.Value,
+                    Btos2Faction.Coven => !Constants.IsPandora() ? Fancy.RecruitLabelCoven.Value : Fancy.RecruitLabelPandora.Value,
+                    Btos2Faction.Apocalypse => !Constants.IsPandora() ? Fancy.RecruitLabelApocalypse.Value : Fancy.RecruitLabelPandora.Value,
+                    Btos2Faction.SerialKiller => !Constants.IsCompliance() ? Fancy.RecruitLabelSerialKiller.Value : Fancy.RecruitLabelCompliance.Value,
+                    Btos2Faction.Arsonist => !Constants.IsCompliance() ? Fancy.RecruitLabelArsonist.Value : Fancy.RecruitLabelCompliance.Value,
+                    Btos2Faction.Werewolf => !Constants.IsCompliance() ? Fancy.RecruitLabelWerewolf.Value : Fancy.RecruitLabelCompliance.Value,
+                    Btos2Faction.Shroud => !Constants.IsCompliance() ? Fancy.RecruitLabelShroud.Value : Fancy.RecruitLabelCompliance.Value,
+                    Btos2Faction.CursedSoul => Fancy.RecruitLabelCursedSoul.Value,
+                    _ => factionType.ToDisplayString()
+                };
+            }
             if (gradient != null)
-                newText += $" {Utils.ApplyGradient($"({factionType.ToDisplayString()})", gradient)}";
+                newText += $" {Utils.ApplyGradient($"({factionText})", gradient)}";
             else
-                newText += $" <color={factionType.GetFactionColor()}>({factionType.ToDisplayString()})</color>";
+                newText += $" <color={factionType.GetFactionColor()}>({factionText})</color>";
         }
 
         __result = newText;
