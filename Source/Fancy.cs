@@ -346,7 +346,7 @@ public class Fancy : BaseMod<Fancy>
         PirateLabel = new("PIRATE_LABEL", "Pirate", PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists);
         GradientBuckets = new("GRADIENT_BUCKETS", true, PackType.MiscRoleCustomisation);
         ReplaceNAwithRA = new("RANDOM_APOC_IN_VANILLA", false, PackType.MiscRoleCustomisation);
-        DeadChatDesaturation = new("DEAD_CHAT_DESATURATION", 50, PackType.RecoloredUI, -1, 100, true);
+        DeadChatDesaturation = new("DEAD_CHAT_DESATURATION", 50, PackType.MiscRoleCustomisation, -1, 100, true);
 
         PlayerNumber = new("PLAYER_NUMBER", 0, PackType.Testing, 0, 15, true, Constants.CustomNumbers);
         DumpSpriteSheets = new("DUMP_SHEETS", false, PackType.Testing);
