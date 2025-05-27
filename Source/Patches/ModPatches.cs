@@ -1,6 +1,7 @@
 using Cinematics.Players;
 using Home.HomeScene;
 using Home.LoginScene;
+using Home.Services;
 using Home.Shared;
 using Mentions;
 using Mentions.Providers;
@@ -510,22 +511,17 @@ public static class FactionWinsStandardCinematicPlayer_SetUpWinners_Patch
     }
 }
 
-// The role list
-/* [HarmonyPatch(typeof(RoleListItem), nameof(RoleListItem.SetRole))]
-public static class RoleListItemIcon
+[HarmonyPatch(typeof(HomeAudioService))]
+public static class CommonCurtisL
 {
-    // This happened by mistake as well.
-    public static bool Prefix(RoleListItem __instance, Role role)
+    [HarmonyPatch("PlayMusic")]
+    [HarmonyPrefix]
+    public static void OverrideMusic(ref string sound, ref bool loop)
     {
-        __instance.role = role;
-
-        var roleLabel = __instance.roleLabel;
-        var text = role.GetTMPSprite() + role.ToColorizedDisplayString();
-
-        roleLabel.SetText(text);
-        roleLabel.color = role.GetFaction().GetFactionColor().ParseColor();
-
-        return false;
+        if (sound == "TribunalIntro" && Fancy.DisableBTOSTribunal.Value)
+        {
+            sound = "Audio/Sfx/CinematicSFX/TribunalCinematic.wav";
+        }
     }
-} */
 
+}

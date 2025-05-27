@@ -112,6 +112,7 @@ public class Fancy : BaseMod<Fancy>
     public static ToggleOption FactionalRoleNames;
     public static ToggleOption ReplaceNAwithRA;
     public static ToggleOption GradientBuckets;
+    public static ToggleOption DisableBTOSTribunal;
 
     public static ToggleOption MajorColors;
     public static ToggleOption LethalColors;
@@ -373,6 +374,7 @@ public class Fancy : BaseMod<Fancy>
         ShowOverlayWhenJailed = new("SHOW_TO_JAILED", true, PackType.Testing);
         ShowOverlayAsJailor = new("SHOW_TO_JAILOR", false, PackType.Testing);
         IconsInRoleReveal = new("ROLE_REVEAL_ICONS", true, PackType.Testing);
+        DisableBTOSTribunal = new("DISABLE_BTOS_TRIBUNAL", true, PackType.Testing);
 
         foreach (var faction in BTOS2Factions.Where(x => x is not (FactionType.NONE or (> FactionType.APOCALYPSE and < FactionType.VAMPIRE) or FactionType.CURSED_SOUL or FactionType.UNKNOWN or
             (> Btos2Faction.Hawks and < Btos2Faction.Pandora))))
