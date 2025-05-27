@@ -664,6 +664,25 @@ public static class Utils
         return color.ShadeColor(shade / 100f);
     }
 
+    public static Color Desaturate(Color color, float amount = 0.5f)
+    {
+        // Convert RGB to HSL
+        Color.RGBToHSV(color, out var h, out var s, out var v);
+        s *= amount;
+        return Color.HSVToRGB(h, Mathf.Clamp01(s), v);
+    }
+
+    public static Gradient Desaturate(Gradient gradient, float amount = 0.5f)
+    {
+        var newGradient = new Gradient();
+        var colorKeys = gradient.colorKeys.Select(k => new GradientColorKey(
+            Desaturate(k.color, amount), k.time)).ToArray();
+        var alphaKeys = gradient.alphaKeys;
+        newGradient.SetKeys(colorKeys, alphaKeys);
+        return newGradient;
+    }
+
+
     // public static bool IsValid(this SilhouetteAnimation anim) => anim != null && anim != Loading;
 
     public static bool GetRoleAndFaction(int pos, out Tuple<Role, FactionType> tuple) => Service.Game.Sim.simulation.knownRolesAndFactions.Data.TryGetValue(pos, out tuple);

@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using Cinematics.Players;
 using Game.Characters;
 using Home.HomeScene;
@@ -246,9 +247,10 @@ public static class FancyChatExperimentalBTOS2
         };
         var text2 = encodedText;
 
-        if (!ExcludedIds.Contains(position) && isAlive)
+        if (!ExcludedIds.Contains(position))
         {
             var isRecruited = Service.Game.Sim.simulation.observations.playerEffects.Any(x => x.Data.effects.Contains((EffectType)100) && x.Data.playerPosition == position);
+            // var isDisconnected = Service.Game.Sim.simulation.observations.playerEffects.Any(x => x.Data.effects.Contains(EffectType.DISCONNECTED));
             var gameName = Pepper.GetDiscussionPlayerByPosition(position).gameName;
             Gradient gradient = null;
 
@@ -258,12 +260,17 @@ public static class FancyChatExperimentalBTOS2
 
                 if (gradient == null || isRecruited)
                     gradient = Btos2Faction.Jackal.GetChangedGradient(playerInfo.Item1);
+
+                if (!isAlive && gradient != null)
+                    gradient = Utils.Desaturate(gradient, 0.5f); // 50% desaturation
             }
 
             if (gradient != null)
             {
                 var text4 = Utils.ApplyGradient($"{gameName}:", gradient);
-                text2 = text2.Replace($"<color=#{ColorUtility.ToHtmlStringRGB(Pepper.GetDiscussionPlayerRoleColor(position))}>{gameName}:", text4);
+                var pattern = $@"<color=#[0-9A-Fa-f]+>{Regex.Escape(gameName)}:";
+                var regex = new Regex(pattern);
+                text2 = regex.Replace(text2, text4);
             }
             else
                 text2 = text2.Replace($"<color=#{text}>", $"<color=#{ColorUtility.ToHtmlStringRGB(Utils.GetPlayerRoleColor(position))}>");
