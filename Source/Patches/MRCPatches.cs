@@ -261,8 +261,8 @@ public static class FancyChatExperimentalBTOS2
                 if (gradient == null || isRecruited)
                     gradient = Btos2Faction.Jackal.GetChangedGradient(playerInfo.Item1);
 
-                if (!isAlive && gradient != null)
-                    gradient = Utils.Desaturate(gradient, 0.5f); // 50% desaturation
+                if (!isAlive && gradient != null && Fancy.DeadChatDesaturation.Value != -1)
+                    gradient = Utils.Desaturate(gradient, Constants.DeadChatDesaturation());
             }
 
             if (gradient != null)

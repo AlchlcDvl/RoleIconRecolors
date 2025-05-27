@@ -1284,13 +1284,13 @@ public static class RoleListPopupUpdate
             if (!banPanel.activeSelf)
             {
                 roleName.SetText("<color=#8C8C8C>" + roleText + "</color>");
-                banPanel.SetActive(value: true);
+                banPanel.SetActive(true);
             }
         }
         else if (banPanel.activeSelf)
         {
             roleName.SetText(roleText);
-            banPanel.SetActive(value: false);
+            banPanel.SetActive(false);
         }
 
         return false;
@@ -1330,12 +1330,12 @@ public static class RoleListPopupInit
         if (bannedRoles.Contains(roleData.role))
         {
             roleName.SetText("<color=#8C8C8C>" + roleText + "</color>");
-            banPanel.SetActive(value: true);
+            banPanel.SetActive(true);
         }
         else
         {
             roleName.SetText(roleText);
-            banPanel.SetActive(value: false);
+            banPanel.SetActive(false);
         }
 
         return false;

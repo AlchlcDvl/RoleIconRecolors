@@ -667,18 +667,16 @@ public static class Utils
     public static Color Desaturate(Color color, float amount = 0.5f)
     {
         // Convert RGB to HSL
-        Color.RGBToHSV(color, out var h, out var s, out var v);
-        s *= amount;
-        return Color.HSVToRGB(h, Mathf.Clamp01(s), v);
+        var hsb = new HsbColor(color);
+        hsb.s = Mathf.Clamp01(hsb.s * amount);
+        return hsb;
     }
 
     public static Gradient Desaturate(Gradient gradient, float amount = 0.5f)
     {
         var newGradient = new Gradient();
-        var colorKeys = gradient.colorKeys.Select(k => new GradientColorKey(
-            Desaturate(k.color, amount), k.time)).ToArray();
-        var alphaKeys = gradient.alphaKeys;
-        newGradient.SetKeys(colorKeys, alphaKeys);
+        var colorKeys = gradient.colorKeys.Select(k => new GradientColorKey(Desaturate(k.color, amount), k.time)).ToArray();
+        newGradient.SetKeys(colorKeys, gradient.alphaKeys);
         return newGradient;
     }
 
