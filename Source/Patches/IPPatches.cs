@@ -947,8 +947,7 @@ public static class MentionsProviderPatches
         if (!__instance.MentionInfos.Contains(item))
             __instance.MentionInfos.Add(item);
 
-        if (Constants.IsBTOS2())
-            encodedText = encodedText.Replace("\"RoleIcons", "\"BTOSRoleIcons");
+        encodedText = encodedText.ReplaceIcons();
 
         __result = encodedText.Replace(mention, text3);
         return false;
@@ -1000,8 +999,7 @@ public static class MakeProperFactionChecksInHeaderAnnouncement
             .Replace("%role%", $"<sprite=\"RoleIcons ({Utils.FactionName(killRecord.playerFaction)})\" name=\"Role{(int)killRecord.playerRole}\">{killRecord.playerRole.ToColorizedDisplayString(killRecord.playerFaction)}")
             .Replace("%name%", Service.Game.Sim.simulation.GetDisplayName(trialData.defendantPosition).ToWhiteNameString());
 
-        if (Constants.IsBTOS2())
-            text = text.Replace("\"RoleIcons", "\"BTOSRoleIcons");
+        text = text.ReplaceIcons();
 
         __instance.AddLine(text);
     }
@@ -1033,8 +1031,7 @@ public static class MakeProperFactionChecksInWdah1
         })
         .Replace("%role%", $"<sprite=\"RoleIcons ({Utils.FactionName(killRecord.playerFaction)})\" name=\"Role{(int)killRecord.playerRole}\">{killRecord.playerRole.ToColorizedDisplayString(killRecord.playerFaction)}");
 
-        if (Constants.IsBTOS2())
-            text = text.Replace("\"RoleIcons", "\"BTOSRoleIcons");
+        text = text.ReplaceIcons();
 
         __instance.AddLine(text, 1f);
         return false;
@@ -1083,6 +1080,8 @@ public static class MakeProperFactionChecksInWdah2
 
                 if (Constants.IsBTOS2())
                     text2 = text2.Replace("\"RoleIcons", "\"BTOSRoleIcons").Replace("106\"", "109\"");
+                else
+                    text2 = text2.Replace("\"BTOSRoleIcons", "\"RoleIcons").Replace("109\"", "106\"");
 
                 __instance.AddLine(text2, Tuning.REVEAL_TIME_PER_ADDL_KILLED_BY_REASON);
             }
@@ -1243,8 +1242,7 @@ public static class RoleListItemIcon
             : Utils.FactionName(displayFaction, false);
         roleText = roleText.Replace("RoleIcons\"", $"RoleIcons ({faction})\"");
 
-        if (Constants.IsBTOS2())
-            roleText = roleText.Replace("\"RoleIcons", "\"BTOSRoleIcons");
+        roleText = roleText.ReplaceIcons();
 
         __instance.roleLabel.SetText(roleText);
         __instance.roleLabel.color = role.GetFaction().GetFactionColor().ParseColor();
@@ -1279,8 +1277,7 @@ public static class RoleListPopupUpdate
             : Utils.FactionName(displayFaction, false);
         roleText = roleText.Replace("RoleIcons\"", $"RoleIcons ({faction})\"");
 
-        if (Constants.IsBTOS2())
-            roleText = roleText.Replace("\"RoleIcons", "\"BTOSRoleIcons");
+        roleText = roleText.ReplaceIcons();
 
         if (roleDeckBuilder.bannedRoles.Contains(roleData.role))
         {
@@ -1328,8 +1325,7 @@ public static class RoleListPopupInit
             : Utils.FactionName(displayFaction, false);
         roleText = roleText.Replace("RoleIcons\"", $"RoleIcons ({faction})\"");
 
-        if (Constants.IsBTOS2())
-            roleText = roleText.Replace("\"RoleIcons", "\"BTOSRoleIcons");
+        roleText = roleText.ReplaceIcons();
 
         if (bannedRoles.Contains(roleData.role))
         {

@@ -790,4 +790,12 @@ public static class Utils
     }
 
     public static string RemoveColorTags(string input) => Regex.Replace(input, "<color=[^>]+>|</color>", "");
+    public static string ReplaceIcons(this string input)
+    {
+        if (Constants.IsBTOS2())
+            return input.Replace("\"RoleIcons", "\"BTOSRoleIcons");
+        else
+            return input.Replace("\"BTOSRoleIcons", "\"RoleIcons");
+
+    }
 }
