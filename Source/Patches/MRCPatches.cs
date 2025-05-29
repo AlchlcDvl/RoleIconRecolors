@@ -631,7 +631,7 @@ public static class KeywordMentionsPatch
 }
 
 [HarmonyPatch(typeof(SharedMentionsProvider), nameof(SharedMentionsProvider.Build))]
-public static class SharedMentionsProvider_Build_Patch
+public static class CommonCurtisL2
 {
     public static bool Prefix(SharedMentionsProvider __instance, RebuildMentionTypesFlag rebuildMentionTypesFlag)
     {
