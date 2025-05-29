@@ -230,6 +230,30 @@
     <Entry key="FANCY_PIRATE_LABEL_NAME">Pirate Label</Entry>
     <Entry key="FANCY_PIRATE_LABEL_DESC">The text that is shown in chat at night when being dueled by the Pirate (BetterTOS2 Games Only).</Entry>
 
+    <Entry key="FANCY_BUCKET_START_NAME">Bucket Start Color</Entry>
+    <Entry key="FANCY_BUCKET_START_DESC">The start color for the blue part of buckets.</Entry>
+
+    <Entry key="FANCY_BUCKET_END_NAME">Town End Color</Entry>
+    <Entry key="FANCY_BUCKET_END_DESC">The end color for the blue part of buckets.</Entry>
+
+    <Entry key="FANCY_KEYWORD_START_NAME">Keyword Start Color</Entry>
+    <Entry key="FANCY_KEYWORD_START_DESC">The start color for keywords.</Entry>
+
+    <Entry key="FANCY_KEYWORD_END_NAME">Keyword End Color</Entry>
+    <Entry key="FANCY_KEYWORD_END_DESC">The end color for keywords.</Entry>
+
+    <Entry key="FANCY_ACHIEVEMENT_START_NAME">Achievement Start Color</Entry>
+    <Entry key="FANCY_ACHIEVEMENT_START_DESC">The start color for achievement keywords.</Entry>
+
+    <Entry key="FANCY_ACHIEVEMENT_END_NAME">Achievement End Color</Entry>
+    <Entry key="FANCY_ACHIEVEMENT_END_DESC">The end color for achievement keywords.</Entry>
+
+    <Entry key="FANCY_NEUTRAL_START_NAME">Neutral Start Color</Entry>
+    <Entry key="FANCY_NEUTRAL_START_DESC">The start color for the Neutral part of Neutral buckets.</Entry>
+
+    <Entry key="FANCY_NEUTRAL_END_NAME">Neutral End Color</Entry>
+    <Entry key="FANCY_NEUTRAL_END_DESC">The end color for the Neutral part of Neutral buckets.</Entry>
+
     <Entry key="FANCY_TOWN_START_NAME">Town Start Color</Entry>
     <Entry key="FANCY_TOWN_START_DESC">The start color for the Town faction.</Entry>
 
@@ -620,22 +644,22 @@
     
     <Entry key="FANCY_BUCKETS_TOWN">Town</Entry>
     <Entry key="FANCY_BUCKETS_COVEN">Coven</Entry>
-    <Entry key="FANCY_BUCKETS_NEUTRAL"><![CDATA[<style="NeutralColor">Neutral</style>]]></Entry>
-    <Entry key="FANCY_BUCKETS_APOCALYPSE_VANILLA"><![CDATA[<color=#1F51FF>]]>Apocalypse<![CDATA[</color>]]></Entry>
+    <Entry key="FANCY_BUCKETS_NEUTRAL">Neutral</Entry>
+    <Entry key="FANCY_BUCKETS_APOCALYPSE_VANILLA">Apocalypse</Entry>
     <Entry key="FANCY_BUCKETS_APOCALYPSE_BTOS">Apocalypse</Entry>
     <Entry key="FANCY_BUCKETS_COMPLIANCE">Compliance</Entry>
-    <Entry key="FANCY_BUCKETS_RANDOM"><![CDATA[<color=#1F51FF>]]>Random<![CDATA[</color>]]></Entry>
-    <Entry key="FANCY_BUCKETS_COMMON"><![CDATA[<color=#1F51FF>]]>Common<![CDATA[</color>]]></Entry>
-    <Entry key="FANCY_BUCKETS_KILLING"><![CDATA[<color=#1F51FF>]]>Killing<![CDATA[</color>]]></Entry>
-    <Entry key="FANCY_BUCKETS_POWER"><![CDATA[<color=#1F51FF>]]>Power<![CDATA[</color>]]></Entry>
-    <Entry key="FANCY_BUCKETS_UTILITY"><![CDATA[<color=#1F51FF>]]>Utility<![CDATA[</color>]]></Entry>
-    <Entry key="FANCY_BUCKETS_DECEPTION"><![CDATA[<color=#1F51FF>]]>Deception<![CDATA[</color>]]></Entry>
-    <Entry key="FANCY_BUCKETS_PROTECTIVE"><![CDATA[<color=#1F51FF>]]>Protective<![CDATA[</color>]]></Entry>
-    <Entry key="FANCY_BUCKETS_SUPPORT"><![CDATA[<color=#1F51FF>]]>Support<![CDATA[</color>]]></Entry>
-    <Entry key="FANCY_BUCKETS_INVESTIGATIVE"><![CDATA[<color=#1F51FF>]]>Investigative<![CDATA[</color>]]></Entry>
-    <Entry key="FANCY_BUCKETS_EVIL"><![CDATA[<color=#1F51FF>]]>Evil<![CDATA[</color>]]></Entry>
-    <Entry key="FANCY_BUCKETS_PARIAH"><![CDATA[<color=#1F51FF>]]>Pariah<![CDATA[</color>]]></Entry>
-    <Entry key="FANCY_BUCKETS_SPECIAL"><![CDATA[<color=#1F51FF>]]>Special<![CDATA[</color>]]></Entry>
+    <Entry key="FANCY_BUCKETS_RANDOM">Random</Entry>
+    <Entry key="FANCY_BUCKETS_COMMON">Common</Entry>
+    <Entry key="FANCY_BUCKETS_KILLING">Killing</Entry>
+    <Entry key="FANCY_BUCKETS_POWER">Power</Entry>
+    <Entry key="FANCY_BUCKETS_UTILITY">Utility</Entry>
+    <Entry key="FANCY_BUCKETS_DECEPTION">Deception</Entry>
+    <Entry key="FANCY_BUCKETS_PROTECTIVE">Protective</Entry>
+    <Entry key="FANCY_BUCKETS_SUPPORT">Support</Entry>
+    <Entry key="FANCY_BUCKETS_INVESTIGATIVE">Investigative</Entry>
+    <Entry key="FANCY_BUCKETS_EVIL">Evil</Entry>
+    <Entry key="FANCY_BUCKETS_PARIAH">Pariah</Entry>
+    <Entry key="FANCY_BUCKETS_SPECIAL">Special</Entry>
 
     <Entry key="FANCY_FIRE">Fire</Entry>
     <Entry key="FANCY_PAPER">Paper</Entry>

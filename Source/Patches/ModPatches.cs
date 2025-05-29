@@ -8,6 +8,7 @@ using Mentions.Providers;
 using SalemModLoaderUI;
 using Server.Shared.Cinematics.Data;
 using UnityEngine.EventSystems;
+using Server.Shared.Extensions;
 
 namespace FancyUI.Patches;
 
@@ -216,12 +217,13 @@ public static class AchievementMentionsPatch
 
         foreach (var achievementId in allAchievementIds)
         {
+            var gradient = Utils.CreateGradient(Fancy.AchievementStart.Value, Fancy.AchievementEnd.Value);
             var title = __instance.l10n($"GUI_ACHIEVEMENT_TITLE_{achievementId}");
             var match = $"~{title}";
             var encodedText = $"[[~{achievementId}]]";
 
             var styledTitle = __instance._useColors
-                ? $"<#FFBE00><b>{title}</b></color>"
+                ? $"<b>{Utils.ApplyGradient($"{title}", gradient)}</b>"
                 : $"<b>{title}</b>";
 
             var richText = $"{__instance.styleTagOpen}{__instance.styleTagFont}<link=\"~{achievementId}\">{styledTitle}</link>{__instance.styleTagClose}";
