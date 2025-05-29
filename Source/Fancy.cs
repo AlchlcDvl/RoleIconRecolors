@@ -118,6 +118,15 @@ public class Fancy : BaseMod<Fancy>
     public static ToggleOption LethalColors;
     public static ColorOption JuryColor;
 
+    public static ColorOption NeutralStart;
+    public static ColorOption NeutralEnd;
+    public static ColorOption BucketStart;
+    public static ColorOption BucketEnd;
+    public static ColorOption KeywordStart;
+    public static ColorOption KeywordEnd;
+    public static ColorOption AchievementStart;
+    public static ColorOption AchievementEnd;
+
     public static FloatOption GeneralBrightness;
     public static FloatOption GrayscaleAmount;
 
@@ -367,6 +376,14 @@ public class Fancy : BaseMod<Fancy>
         GradientBuckets = new("GRADIENT_BUCKETS", true, PackType.MiscRoleCustomisation);
         ReplaceNAwithRA = new("RANDOM_APOC_IN_VANILLA", false, PackType.MiscRoleCustomisation);
         DeadChatDesaturation = new("DEAD_CHAT_DESATURATION", 50, PackType.MiscRoleCustomisation, -1, 100, true);
+        NeutralStart = new("NEUTRAL_START", "#A9A9A9", PackType.MiscRoleCustomisation);
+        NeutralEnd = new("NEUTRAL_END", "#A9A9A9", PackType.MiscRoleCustomisation, setActive: () => GradientBuckets.Value);
+        BucketStart = new("BUCKET_START", "#1F51FF", PackType.MiscRoleCustomisation, setActive: () => GradientBuckets.Value);
+        BucketEnd = new("BUCKET_END", "#1F51FF", PackType.MiscRoleCustomisation, setActive: () => GradientBuckets.Value);
+        KeywordStart = new("KEYWORD_START", "#007AFF", PackType.MiscRoleCustomisation);
+        KeywordEnd = new("KEYWORD_END", "#007AFF", PackType.MiscRoleCustomisation);
+        AchievementStart = new("ACHIEVEMENT_START", "#FFBE00", PackType.MiscRoleCustomisation);
+        AchievementEnd = new("ACHIEVEMENT_END", "#FFBE00", PackType.MiscRoleCustomisation);
 
         PlayerNumber = new("PLAYER_NUMBER", 0, PackType.Testing, 0, 15, true, Constants.CustomNumbers);
         DumpSpriteSheets = new("DUMP_SHEETS", false, PackType.Testing);
