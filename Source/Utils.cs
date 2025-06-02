@@ -815,4 +815,9 @@ public static class Utils
             return input.Replace("\"BTOSRoleIcons", "\"RoleIcons");
 
     }
+    public static string AddFactionToIcon(this string input, string faction)
+    {
+        return input.Replace("RoleIcons\"", $"RoleIcons ({faction})\"");
+
+    }
 }
