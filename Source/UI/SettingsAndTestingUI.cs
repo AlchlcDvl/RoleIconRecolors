@@ -102,7 +102,7 @@ public class SettingsAndTestingUI : UIController
         RoleText = roleCard.GetComponent<TextMeshProUGUI>("Role");
         NameText = transform.GetComponent<TextMeshProUGUI>("NameText");
 
-        SlotCounter = roleCard.EnsureComponent<SlotCounterHandler>("SlotCounter");
+        SlotCounter = roleCard.EnsureComponent<SlotCounterHandler>("SlotCounters");
         // RoleIcon = roleCard.GetComponent<Image>("RoleIcon");
         // Attack = roleCard.GetComponent<Image>("Attack");
         // Defense = roleCard.GetComponent<Image>("Defense");
