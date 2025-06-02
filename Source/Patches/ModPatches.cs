@@ -440,7 +440,7 @@ public static class AddBTOSFactionsToDevMenu
 
     private static void AddCustomFactionEntry(PickFactionContext context, byte id)
     {
-        var factionType = unchecked((FactionType)id);
+        var factionType = (FactionType)id;
         var factionBox = new Box<FactionType>(factionType);
 
         var label = $"<color={factionType.GetFactionColor()}>Faction {id}</color>";
@@ -470,7 +470,7 @@ public static class AddBTOS2RolesToDevMenu
 
     private static void AddCustomRoleEntry(PickRoleContext context, byte roleId)
     {
-        var role = unchecked((Role)roleId);
+        var role = (Role)roleId;
         var roleBox = new Box<Role>(role);
         var label = role.ToColorizedDisplayString();
         var entry = new FlexMenuEntry()
