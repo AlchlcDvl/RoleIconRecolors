@@ -816,4 +816,13 @@ public static class Utils
     }
 
     public static string AddFactionToIcon(this string input, string faction) => input.Replace("RoleIcons\"", $"RoleIcons ({faction})\"");
+
+    public static string GetFactionSprite(this Role role, FactionType factionType, bool replaceIcons = false)
+    {
+        var icon = role.GetTMPSprite();
+        var factionName = FactionName(factionType);
+        var factionIcon = icon.AddFactionToIcon(factionName);
+
+        return replaceIcons ? factionIcon.ReplaceIcons() : factionIcon;
+    }
 }
