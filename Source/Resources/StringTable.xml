@@ -489,9 +489,11 @@
     <Entry key="FANCY_STONED_HIDDEN_NAME">Stoned/Hidden Color</Entry>
     <Entry key="FANCY_STONED_HIDDEN_DESC">The color for Stoned and Hidden.</Entry>
 
-    <Entry key="FANCY_LOVERS_NAME">Lovers Color</Entry>
-    <Entry key="FANCY_LOVERS_DESC">The color used when Lovers win.</Entry>
+    <Entry key="FANCY_LOVERS_START_NAME">Lovers Start Color</Entry>
+    <Entry key="FANCY_LOVERS_START_DESC">The start color used when Lovers win.</Entry>
 
+    <Entry key="FANCY_LOVERS_END_NAME">Lovers End Color</Entry>
+    <Entry key="FANCY_LOVERS_END_DESC">The end color used when Lovers win.</Entry>
 
     <Entry key="FANCY_DUMP_SHEETS_NAME">Dump Sprite Sheets</Entry>
     <Entry key="FANCY_DUMP_SHEETS_DESC">Toggles whether game sprite sheets are dumped so pack debugging is possible.</Entry>

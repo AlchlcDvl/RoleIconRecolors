@@ -163,7 +163,7 @@ public static class Utils
         Btos2Role.Vc => "VC",
         Btos2Role.Lovers => "Lovers",
         Btos2Role.FeelinLucky => "FeelinLucky",
-        _ => "Blank"
+        _ => "Hidden"
     };
 
     private static string VanillaRoleName(Role role) => role switch
@@ -261,7 +261,7 @@ public static class Utils
         Role.ANON_PLAYERS => "AnonPlayers",
         Role.FEELIN_LUCKY => "FeelinLucky",
         Role.HIDDEN => "Hidden",
-        _ => "Blank"
+        _ => "Hidden"
     };
 
     public static string FactionName(FactionType faction, bool allowOverrides, GameModType? mod = null, bool stoned = false) => FactionName(faction, mod, allowOverrides, stoned);
