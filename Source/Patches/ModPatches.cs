@@ -417,7 +417,7 @@ public static class FactionWinsStandardCinematicPlayer_SetUpWinners_Patch
 [HarmonyPatch(typeof(HomeAudioService), nameof(HomeAudioService.PlayMusic))]
 public static class CommonCurtisL
 {
-    public static void Prefix(string sound)
+    public static void Prefix(ref string sound)
     {
         if (sound == "TribunalIntro" && Fancy.DisableBTOSTribunal.Value)
             sound = "Audio/Sfx/CinematicSFX/TribunalCinematic.wav";
@@ -427,20 +427,18 @@ public static class CommonCurtisL
 [HarmonyPatch(typeof(PickFactionContext), nameof(PickFactionContext.Initialize))]
 public static class AddBTOSFactionsToDevMenu
 {
-    static void Postfix(PickFactionContext __instance)
+    public static void Postfix(PickFactionContext __instance)
     {
-        if (Constants.IsBTOS2())
-        {
-            for (var i = 33; i <= 44; i++)
-            {
-                AddCustomFactionEntry(__instance, i);
-            }
+        if (!Constants.IsBTOS2())
+            return;
 
-            AddCustomFactionEntry(__instance, 250);
-        }
+        for (byte i = 33; i < 45; i++)
+            AddCustomFactionEntry(__instance, i);
+
+        AddCustomFactionEntry(__instance, 250);
     }
 
-    static void AddCustomFactionEntry(PickFactionContext context, int id)
+    private static void AddCustomFactionEntry(PickFactionContext context, byte id)
     {
         var factionType = unchecked((FactionType)id);
         var factionBox = new Box<FactionType>(factionType);
@@ -454,26 +452,23 @@ public static class AddBTOSFactionsToDevMenu
         context.AddEntry(entry);
     }
 }
+
 [HarmonyPatch(typeof(PickRoleContext), nameof(PickRoleContext.Initialize))]
 public static class AddBTOS2RolesToDevMenu
 {
-    static void Postfix(PickRoleContext __instance)
+    public static void Postfix(PickRoleContext __instance)
     {
         if (Constants.IsBTOS2())
         {
-            for (var i = (int)Role.ROLE_COUNT; i <= 62; i++)
-            {
+            for (var i = (byte)Role.ROLE_COUNT; i <= 62; i++)
                 AddCustomRoleEntry(__instance, i);
-            }
         }
 
-        foreach (var i in (int[])[240, 241, 250, 251, 252, 253, 254])
-        {
+        foreach (var i in new byte[] { 240, 241, 250, 251, 252, 253, 254 })
             AddCustomRoleEntry(__instance, i);
-        }
     }
 
-    static void AddCustomRoleEntry(PickRoleContext context, int roleId)
+    private static void AddCustomRoleEntry(PickRoleContext context, byte roleId)
     {
         var role = unchecked((Role)roleId);
         var roleBox = new Box<Role>(role);
