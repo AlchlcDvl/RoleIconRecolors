@@ -424,7 +424,7 @@ public static class CommonCurtisL
     }
 }
 
-[HarmonyPatch(typeof(PickFactionContext), nameof(PickFactionContext.Initialize))]Add commentMore actions
+[HarmonyPatch(typeof(PickFactionContext), nameof(PickFactionContext.Initialize))]
 public static class AddBTOSFactionsToDevMenu
 {
     static void Postfix(PickFactionContext __instance)
