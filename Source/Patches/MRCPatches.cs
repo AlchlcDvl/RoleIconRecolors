@@ -8,6 +8,7 @@ using Mentions;
 using Server.Shared.Cinematics;
 using Server.Shared.Cinematics.Data;
 using Server.Shared.Extensions;
+using System.Globalization;
 
 namespace FancyUI.Patches;
 
@@ -279,7 +280,7 @@ public static class FancyChatExperimentalBTOS2
                     gradient = Btos2Faction.Jackal.GetChangedGradient(playerInfo.Item1);
 
                 if (!isAlive && gradient != null && Fancy.DeadChatDesaturation.Value != -1)
-                    gradient = Utils.Desaturate(gradient, Constants.DeadChatDesaturation()));
+                    gradient = Utils.Desaturate(gradient, Constants.DeadChatDesaturation());
             }
 
             if (gradient != null)
@@ -599,13 +600,12 @@ public static class ClientRoleExtensionsPatches
     }
 }
 
-[HarmonyPatch(typeof(SharedMentionsProvider), nameof(SharedMentionsProvider.BuildKeywordMentions))]
-public static class KeywordMentionsPatch
+[HarmonyPatch(typeof(SharedMentionsProvider))]
+public static class KeywordMentionsPatches
 {
+    [HarmonyPatch(nameof(SharedMentionsProvider.BuildKeywordMentions))]
     public static void Postfix(SharedMentionsProvider __instance)
     {
-        var culture = System.Globalization.CultureInfo.InvariantCulture;
-
         foreach (var mentionInfo in __instance.MentionInfos)
         {
             if (mentionInfo.mentionInfoType != MentionInfo.MentionInfoType.KEYWORD)
@@ -613,7 +613,7 @@ public static class KeywordMentionsPatch
 
             var gradient = Utils.CreateGradient(Fancy.KeywordStart.Value, Fancy.KeywordEnd.Value);
             var raw = mentionInfo.humanText.TrimStart(':');
-            var keyword = culture.TextInfo.ToTitleCase(raw);
+            var keyword = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(raw);
 
             var newText = __instance._useColors
                 ? $"<b>{Utils.ApplyGradient(keyword, gradient)}</b>"
@@ -626,11 +626,8 @@ public static class KeywordMentionsPatch
             mentionInfo.hashCode = mentionInfo.richText.ToLower().GetHashCode();
         }
     }
-}
 
-[HarmonyPatch(typeof(SharedMentionsProvider), nameof(SharedMentionsProvider.Build))]
-public static class SharedMentionsProvider_Build_Patch
-{
+    [HarmonyPatch(nameof(SharedMentionsProvider.Build))]
     public static bool Prefix(SharedMentionsProvider __instance, RebuildMentionTypesFlag rebuildMentionTypesFlag)
     {
         var buildRoles = rebuildMentionTypesFlag.HasFlag(RebuildMentionTypesFlag.ROLES);
@@ -678,6 +675,7 @@ public static class SharedMentionsProvider_Build_Patch
         keywordList.Sort((a, b) => string.CompareOrdinal(__instance.l10n(a.KeywordKey), __instance.l10n(b.KeywordKey)));
 
         var priority = 0;
+
         foreach (var keyword in keywordList)
         {
             var localizedText = __instance.l10n(keyword.KeywordKey);
@@ -712,22 +710,16 @@ public static class SharedMentionsProvider_Build_Patch
                 mentionInfo = mentionInfo,
                 priority = priority
             });
-            __instance.MentionTokens.Add(new MentionToken
-            {
-                mentionTokenType = MentionToken.MentionTokenType.KEYWORD,
-                match = match2,
-                mentionInfo = mentionInfo,
-                priority = priority
-            });
 
             priority++;
         }
     }
+
     public static void BuildCustomRoleMentions(SharedMentionsProvider __instance)
     {
-        List<RoleInfo> list = Service.Game.Roles.roleInfos.ShallowCopy();
-        list.Sort((RoleInfo a, RoleInfo b) => string.Compare(a.role.ToDisplayString(), b.role.ToDisplayString(), StringComparison.Ordinal));
-        int num = 0;
+        var list = Service.Game.Roles.roleInfos.ShallowCopy();
+        list.Sort((a, b) => string.CompareOrdinal(a.role.ToDisplayString(), b.role.ToDisplayString()));
+        var num = 0;
 
         foreach (var item in list)
         {
@@ -739,16 +731,16 @@ public static class SharedMentionsProvider_Build_Patch
 
             var role = (int)item.role;
             var text = item.role.ToDisplayString();
-            var text2 = ((item.shortRoleName.Length > 0) ? item.shortRoleName : text);
+            var text2 = item.shortRoleName.Length > 0 ? item.shortRoleName : text;
             var match = "#" + text2;
             var match2 = "#" + text;
             var encodedText = $"[[#{role}]]";
 
             var text3 = (__instance._roleEffects == 1) ? $"<sprite=\"BTOSRoleIcons\" name=\"Role{role}\">" : string.Empty;
-            var text4 = (__instance._useColors ? (item.role.ToColorizedDisplayString() ?? "") : (item.role.ToDisplayString() ?? ""));
+            var text4 = (__instance._useColors ? item.role.ToColorizedDisplayString() : item.role.ToDisplayString()) ?? "";
             var text5 = $"{__instance.styleTagOpen}{__instance.styleTagFont}<link=\"r{role}\">{text3}<b>{text4}</b></link>{__instance.styleTagClose}";
 
-            MentionInfo mentionInfo = new MentionInfo
+            var mentionInfo = new MentionInfo
             {
                 mentionInfoType = MentionInfo.MentionInfoType.ROLE,
                 richText = text5,
@@ -765,15 +757,7 @@ public static class SharedMentionsProvider_Build_Patch
                 mentionInfo = mentionInfo,
                 priority = num
             });
-            __instance.MentionTokens.Add(new MentionToken
-            {
-                mentionTokenType = MentionToken.MentionTokenType.ROLE,
-                match = match2,
-                mentionInfo = mentionInfo,
-                priority = num
-            });
             num++;
         }
     }
-
 }

@@ -8,7 +8,6 @@ using Mentions.Providers;
 using SalemModLoaderUI;
 using Server.Shared.Cinematics.Data;
 using UnityEngine.EventSystems;
-using Server.Shared.Extensions;
 
 namespace FancyUI.Patches;
 
@@ -513,17 +512,12 @@ public static class FactionWinsStandardCinematicPlayer_SetUpWinners_Patch
     }
 }
 
-[HarmonyPatch(typeof(HomeAudioService))]
+[HarmonyPatch(typeof(HomeAudioService), nameof(HomeAudioService.PlayMusic))]
 public static class CommonCurtisL
 {
-    [HarmonyPatch("PlayMusic")]
-    [HarmonyPrefix]
-    public static void OverrideMusic(ref string sound, ref bool loop)
+    public static void Prefix(string sound)
     {
         if (sound == "TribunalIntro" && Fancy.DisableBTOSTribunal.Value)
-        {
             sound = "Audio/Sfx/CinematicSFX/TribunalCinematic.wav";
-        }
     }
-
 }
