@@ -606,44 +606,50 @@ public static class KeywordMentionsPatches
     [HarmonyPatch(nameof(SharedMentionsProvider.BuildKeywordMentions))]
     public static void Postfix(SharedMentionsProvider __instance)
     {
+        if (!__instance._useColors)
+            return; 
+
+        var gradient = Utils.CreateGradient(Fancy.KeywordStart.Value, Fancy.KeywordEnd.Value);
+
         foreach (var mentionInfo in __instance.MentionInfos)
         {
             if (mentionInfo.mentionInfoType != MentionInfo.MentionInfoType.KEYWORD)
                 continue;
 
-            var gradient = Utils.CreateGradient(Fancy.KeywordStart.Value, Fancy.KeywordEnd.Value);
+            if (mentionInfo.richText.Contains("color=") || mentionInfo.richText.Contains("gradient="))
+                continue;
+
             var raw = mentionInfo.humanText.TrimStart(':');
+            if (string.IsNullOrWhiteSpace(raw))
+                continue;
+
             var keyword = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(raw);
-
-            var newText = __instance._useColors
-                ? $"<b>{Utils.ApplyGradient(keyword, gradient)}</b>"
-                : $"<b>{keyword}</b>";
-
+            var newText = $"<b>{Utils.ApplyGradient(keyword, gradient)}</b>";
             var encodedText = mentionInfo.encodedText;
             var keywordId = encodedText.TrimStart('[', ':').TrimEnd(']');
 
             mentionInfo.richText = $"{__instance.styleTagOpen}{__instance.styleTagFont}<link=\"k{keywordId}\">{newText}</link>{__instance.styleTagClose}";
-            mentionInfo.hashCode = mentionInfo.richText.ToLower().GetHashCode();
+            mentionInfo.hashCode = mentionInfo.richText.ToLowerInvariant().GetHashCode();
         }
     }
 
     [HarmonyPatch(nameof(SharedMentionsProvider.Build))]
     public static bool Prefix(SharedMentionsProvider __instance, RebuildMentionTypesFlag rebuildMentionTypesFlag)
     {
-        var buildRoles = rebuildMentionTypesFlag.HasFlag(RebuildMentionTypesFlag.ROLES);
-        var buildKeywords = rebuildMentionTypesFlag.HasFlag(RebuildMentionTypesFlag.KEYWORDS);
-        var buildPlayers = rebuildMentionTypesFlag.HasFlag(RebuildMentionTypesFlag.PLAYERS);
-        var buildPrefixes = rebuildMentionTypesFlag.HasFlag(RebuildMentionTypesFlag.PREFIXES);
-        var buildEmojis = rebuildMentionTypesFlag.HasFlag(RebuildMentionTypesFlag.EMOJIS);
-        var buildAchievements = rebuildMentionTypesFlag.HasFlag(RebuildMentionTypesFlag.ACHIEVEMENTS);
-
         __instance._useColors = Service.Home.UserService.Settings.MentionsUseColorsEnabled;
         __instance._playerEffects = Service.Home.UserService.Settings.MentionsPlayerEffects;
         __instance._roleEffects = Service.Home.UserService.Settings.MentionsRoleEffects;
 
-        __instance.ClearMentions(buildRoles, buildKeywords, buildPlayers, buildPrefixes, buildEmojis, buildAchievements);
+        __instance.ClearMentions(
+            rebuildMentionTypesFlag.HasFlag(RebuildMentionTypesFlag.ROLES),
+            rebuildMentionTypesFlag.HasFlag(RebuildMentionTypesFlag.KEYWORDS),
+            rebuildMentionTypesFlag.HasFlag(RebuildMentionTypesFlag.PLAYERS),
+            rebuildMentionTypesFlag.HasFlag(RebuildMentionTypesFlag.PREFIXES),
+            rebuildMentionTypesFlag.HasFlag(RebuildMentionTypesFlag.EMOJIS),
+            rebuildMentionTypesFlag.HasFlag(RebuildMentionTypesFlag.ACHIEVEMENTS)
+        );
 
-        if (buildRoles)
+        if (rebuildMentionTypesFlag.HasFlag(RebuildMentionTypesFlag.ROLES))
         {
             if (!Constants.IsBTOS2())
                 __instance.BuildRoleMentions();
@@ -651,40 +657,41 @@ public static class KeywordMentionsPatches
                 BuildCustomRoleMentions(__instance);
         }
 
-        if (buildKeywords)
+        if (rebuildMentionTypesFlag.HasFlag(RebuildMentionTypesFlag.KEYWORDS))
             BuildCustomKeywordMentions(__instance);
 
-        if (buildPlayers)
+        if (rebuildMentionTypesFlag.HasFlag(RebuildMentionTypesFlag.PLAYERS))
             __instance.BuildPlayerMentions();
 
-        if (buildPrefixes && !Constants.IsBTOS2())
+        if (rebuildMentionTypesFlag.HasFlag(RebuildMentionTypesFlag.PREFIXES) && !Constants.IsBTOS2())
             __instance.BuildPrefixMentions();
 
-        if (buildEmojis && !Constants.IsBTOS2())
+        if (rebuildMentionTypesFlag.HasFlag(RebuildMentionTypesFlag.EMOJIS) && !Constants.IsBTOS2())
             __instance.BuildEmojiMentions();
 
-        if (buildAchievements && !Constants.IsBTOS2())
+        if (rebuildMentionTypesFlag.HasFlag(RebuildMentionTypesFlag.ACHIEVEMENTS) && !Constants.IsBTOS2())
             __instance.BuildAchievementMentions();
 
         return false;
     }
 
+
     private static void BuildCustomKeywordMentions(SharedMentionsProvider __instance)
     {
-        var keywordList = Service.Game.Keyword.keywordInfo.ShallowCopy<KeywordInfo>();
-        keywordList.Sort((a, b) => string.CompareOrdinal(__instance.l10n(a.KeywordKey), __instance.l10n(b.KeywordKey)));
+        var gradient = __instance._useColors ? Utils.CreateGradient(Fancy.KeywordStart.Value, Fancy.KeywordEnd.Value) : null;
+
+        var keywordList = Service.Game.Keyword.keywordInfo
+            .Select(k => (Keyword: k, Localized: __instance.l10n(k.KeywordKey)))
+            .OrderBy(k => k.Localized, StringComparer.Ordinal)
+            .ToList();
 
         var priority = 0;
-
-        foreach (var keyword in keywordList)
+        foreach (var (keyword, localizedText) in keywordList)
         {
-            var localizedText = __instance.l10n(keyword.KeywordKey);
-            var match1 = ":" + localizedText;
-            var match2 = ":" + localizedText;
+            if (string.IsNullOrWhiteSpace(localizedText))
+                continue;
 
             var encodedText = $"[[:{keyword.KeywordId}]]";
-
-            var gradient = Utils.CreateGradient(Fancy.KeywordStart.Value, Fancy.KeywordEnd.Value);
 
             var coloredText = __instance._useColors
                 ? $"<b>{Utils.ApplyGradient(localizedText, gradient)}</b>"
@@ -697,67 +704,60 @@ public static class KeywordMentionsPatches
                 mentionInfoType = MentionInfo.MentionInfoType.KEYWORD,
                 richText = richText,
                 encodedText = encodedText,
-                hashCode = richText.ToLower().GetHashCode(),
-                humanText = ":" + localizedText.ToLower()
+                hashCode = richText.ToLowerInvariant().GetHashCode(),
+                humanText = ":" + localizedText.ToLowerInvariant()
             };
 
             __instance.MentionInfos.Add(mentionInfo);
-
             __instance.MentionTokens.Add(new MentionToken
             {
                 mentionTokenType = MentionToken.MentionTokenType.KEYWORD,
-                match = match1,
+                match = ":" + localizedText,
                 mentionInfo = mentionInfo,
-                priority = priority
+                priority = priority++
             });
-
-            priority++;
         }
     }
 
     public static void BuildCustomRoleMentions(SharedMentionsProvider __instance)
     {
-        var list = Service.Game.Roles.roleInfos.ShallowCopy();
-        list.Sort((a, b) => string.CompareOrdinal(a.role.ToDisplayString(), b.role.ToDisplayString()));
-        var num = 0;
+        var list = Service.Game.Roles.roleInfos
+            .Where(item => !item.role.IsModifierCard() && item.role != Role.NONE)
+            .OrderBy(item => item.role.ToDisplayString(), StringComparer.Ordinal)
+            .ToList();
+
+        var priority = 0;
 
         foreach (var item in list)
         {
-            if (item.role.IsModifierCard() || item.role == Role.NONE)
-            {
-                num++;
-                continue;
-            }
-
             var role = (int)item.role;
-            var text = item.role.ToDisplayString();
-            var text2 = item.shortRoleName.Length > 0 ? item.shortRoleName : text;
-            var match = "#" + text2;
-            var match2 = "#" + text;
+            var display = item.role.ToDisplayString();
+            var shortName = item.shortRoleName.Length > 0 ? item.shortRoleName : display;
+
             var encodedText = $"[[#{role}]]";
 
-            var text3 = (__instance._roleEffects == 1) ? $"<sprite=\"BTOSRoleIcons\" name=\"Role{role}\">" : string.Empty;
-            var text4 = (__instance._useColors ? item.role.ToColorizedDisplayString() : item.role.ToDisplayString()) ?? "";
-            var text5 = $"{__instance.styleTagOpen}{__instance.styleTagFont}<link=\"r{role}\">{text3}<b>{text4}</b></link>{__instance.styleTagClose}";
+            var sprite = (__instance._roleEffects == 1) ? $"<sprite=\"BTOSRoleIcons\" name=\"Role{role}\">" : "";
+            var name = __instance._useColors ? item.role.ToColorizedDisplayString() : display;
+
+            var richText = $"{__instance.styleTagOpen}{__instance.styleTagFont}<link=\"r{role}\">{sprite}<b>{name}</b></link>{__instance.styleTagClose}";
 
             var mentionInfo = new MentionInfo
             {
                 mentionInfoType = MentionInfo.MentionInfoType.ROLE,
-                richText = text5,
+                richText = richText,
                 encodedText = encodedText,
-                hashCode = text5.ToLower().GetHashCode(),
-                humanText = "#" + text.ToLower()
+                hashCode = richText.ToLowerInvariant().GetHashCode(),
+                humanText = "#" + display.ToLowerInvariant()
             };
 
             __instance.MentionInfos.Add(mentionInfo);
             __instance.MentionTokens.Add(new MentionToken
             {
                 mentionTokenType = MentionToken.MentionTokenType.ROLE,
-                match = match,
+                match = "#" + shortName,
                 mentionInfo = mentionInfo,
-                priority = num
+                priority = priority++
             });
-            num++;
         }
     }
 }

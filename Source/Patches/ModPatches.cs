@@ -113,18 +113,23 @@ public static class AchievementMentionsPatch
 {
     public static bool Prefix(SharedMentionsProvider __instance)
     {
-        var allAchievementIds = Service.Game.Achievement.GetAllAchievementIds();
-        var num = 0;
+        var achievementIds = Service.Game.Achievement.GetAllAchievementIds();
+        var useColors = __instance._useColors;
+        var gradient = useColors ? Utils.CreateGradient(Fancy.AchievementStart.Value, Fancy.AchievementEnd.Value) : null;
 
-        foreach (var achievementId in allAchievementIds)
+        int priority = 0;
+
+        foreach (var achievementId in achievementIds)
         {
-            var gradient = Utils.CreateGradient(Fancy.AchievementStart.Value, Fancy.AchievementEnd.Value);
             var title = __instance.l10n($"GUI_ACHIEVEMENT_TITLE_{achievementId}");
-            var match = $"~{title}";
-            var encodedText = $"[[~{achievementId}]]";
+            if (string.IsNullOrWhiteSpace(title))
+                continue;
 
-            var styledTitle = __instance._useColors
-                ? $"<b>{Utils.ApplyGradient($"{title}", gradient)}</b>"
+            var encodedText = $"[[~{achievementId}]]";
+            var match = $"~{title}";
+
+            var styledTitle = useColors
+                ? $"<b>{Utils.ApplyGradient(title, gradient)}</b>"
                 : $"<b>{title}</b>";
 
             var richText = $"{__instance.styleTagOpen}{__instance.styleTagFont}<link=\"~{achievementId}\">{styledTitle}</link>{__instance.styleTagClose}";
@@ -134,24 +139,21 @@ public static class AchievementMentionsPatch
                 mentionInfoType = MentionInfo.MentionInfoType.ACHIEVEMENT,
                 richText = richText,
                 encodedText = encodedText,
-                hashCode = richText.ToLower().GetHashCode(),
-                humanText = $"~{title.ToLower()}"
+                hashCode = richText.ToLowerInvariant().GetHashCode(),
+                humanText = $"~{title.ToLowerInvariant()}"
             };
 
             __instance.MentionInfos.Add(mentionInfo);
-
-            __instance.MentionTokens.Add(new()
+            __instance.MentionTokens.Add(new MentionToken
             {
                 mentionTokenType = MentionToken.MentionTokenType.ACHIEVEMENT,
                 match = match,
                 mentionInfo = mentionInfo,
-                priority = num
+                priority = priority++
             });
-
-            num++;
         }
 
-        return false; // Skip the original method
+        return false;
     }
 }
 
