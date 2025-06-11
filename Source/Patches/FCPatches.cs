@@ -98,7 +98,7 @@ namespace FancyUI.Patches
 
                 if (isWildling) __result = __result.Replace("<color=#FF0000", "<color=#" + ColorUtility.ToHtmlStringRGB(Fancy.WildlingWhisperColor.Value.ToColor()));
                 else if (isSerialKiller) __result = __result.Replace("<color=#FF0000", "<color=#" + ColorUtility.ToHtmlStringRGB(Fancy.SerialKillerWhisperColor.Value.ToColor()));
-                else __result = __result.Replace("<color=#FF0000", "<color=#" + ColorUtility.ToHtmlStringRGB(Utils.GetPlayerRoleColor(__instance.whispererId)));;
+                else __result = __result.Replace("<color=#FF0000", "<color=#" + ColorUtility.ToHtmlStringRGB(Utils.GetPlayerRoleColor(Pepper.GetMyPosition())));;
             }
         }
     }
