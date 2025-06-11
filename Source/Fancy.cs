@@ -116,7 +116,6 @@ public class Fancy : BaseMod<Fancy>
 
     public static ToggleOption MajorColors;
     public static ToggleOption LethalColors;
-    public static ColorOption JuryColor;
 
     public static ColorOption NeutralStart;
     public static ColorOption NeutralEnd;
@@ -151,6 +150,14 @@ public class Fancy : BaseMod<Fancy>
     public static StringInputOption CourtLabel;
     public static StringInputOption JuryLabel;
     public static StringInputOption PirateLabel;
+
+    public static ColorOption JuryColor;
+    public static ColorOption UnknownColor;
+    public static ColorOption DeadColor;
+    public static ColorOption WhisperColor;
+    public static ColorOption WildlingWhisperColor;
+    public static ColorOption SerialKillerWhisperColor;
+    public static FloatOption ChatBackgroundOpacity;
 
     private static readonly Dictionary<string, ColorOption> ColorOptions = [];
     public static readonly Dictionary<string, (string Start, string End, string Major, string Middle, string Lethal)> Colors = new()
@@ -369,11 +376,16 @@ public class Fancy : BaseMod<Fancy>
         VipLabel = new("VIP_LABEL", "VIP", PackType.MiscRoleCustomisation);
         CourtLabel = new("COURT_LABEL", "Court", PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists);
         JuryLabel = new("JURY_LABEL", "Jury", PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists);
-        JuryColor = new("JURY_COLOR", "#FCCE3B", PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists);
         PirateLabel = new("PIRATE_LABEL", "Pirate", PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists);
-        GradientBuckets = new("GRADIENT_BUCKETS", true, PackType.MiscRoleCustomisation);
-        ReplaceNAwithRA = new("RANDOM_APOC_IN_VANILLA", false, PackType.MiscRoleCustomisation, setActive: () => GradientBuckets.Value == true);
+        JuryColor = new("JURY_COLOR", "#FCCE3B", PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists);
+        UnknownColor = new("UNKNOWN_ROLE", "#b0b0b0", PackType.MiscRoleCustomisation);
+        DeadColor = new("DEAD_CHAT", "#689194", PackType.MiscRoleCustomisation);
         DeadChatDesaturation = new("DEAD_CHAT_DESATURATION", 50, PackType.MiscRoleCustomisation, -1, 100, true);
+        WhisperColor = new("WHISPER", "#AA7CFF", PackType.MiscRoleCustomisation);
+        WildlingWhisperColor = new("WILDLING_WHISPER", "#DD0000", PackType.MiscRoleCustomisation);
+        SerialKillerWhisperColor = new("SERIALKILLER_WHISPER", "#800040", PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists);
+        GradientBuckets = new("GRADIENT_BUCKETS", true, PackType.MiscRoleCustomisation);
+        ReplaceNAwithRA = new("RANDOM_APOC_IN_VANILLA", false, PackType.MiscRoleCustomisation, setActive: () => GradientBuckets.Value);
 
         NeutralStart = new("NEUTRAL_START", "#A9A9A9", PackType.MiscRoleCustomisation);
         NeutralEnd = new("NEUTRAL_END", "#A9A9A9", PackType.MiscRoleCustomisation, setActive: () => GradientBuckets.Value);
@@ -384,7 +396,10 @@ public class Fancy : BaseMod<Fancy>
         AchievementStart = new("ACHIEVEMENT_START", "#FFBE00", PackType.MiscRoleCustomisation);
         AchievementEnd = new("ACHIEVEMENT_END", "#FFBE00", PackType.MiscRoleCustomisation);
 
+
+
         PlayerNumber = new("PLAYER_NUMBER", 0, PackType.Testing, 0, 15, true, Constants.CustomNumbers);
+        ChatBackgroundOpacity = new("CHAT_BACKGROUND", 80, PackType.Testing, 0, 100, true);
         DumpSpriteSheets = new("DUMP_SHEETS", false, PackType.Testing);
         DebugPackLoading = new("DEBUG_LOADING", false, PackType.Testing);
         ShowOverlayWhenJailed = new("SHOW_TO_JAILED", true, PackType.Testing);

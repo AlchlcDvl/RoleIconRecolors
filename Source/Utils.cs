@@ -761,7 +761,7 @@ public static class Utils
     public static Color GetPlayerRoleColor(int pos)
     {
         if (!GetRoleAndFaction(pos, out var tuple) || tuple == null || tuple.Item1 is Role.STONED or Role.HIDDEN)
-            return Fancy.Colors["STONED_HIDDEN"].Start.ToColor();
+            return Fancy.UnknownColor.Value.ToColor();
 
         return tuple.Item2.GetFactionColor().ParseColor();
     }

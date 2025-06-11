@@ -559,6 +559,28 @@
     <Entry key="FANCY_OPEN_LINK">Open Link</Entry>
     <Entry key="FANCY_DOWNLOAD_PACK">Download %pack%</Entry>
 
+    <Entry key="FANCY_WHISPER_NAME">Whisper Color</Entry>
+    <Entry key="FANCY_WHISPER_DESC">The color of whispers.</Entry>
+
+    <Entry key="FANCY_WILDLING_WHISPER_NAME">Wildling Whisper Color</Entry>
+    <Entry key="FANCY_WILDLING_WHISPER_DESC">The color of whispers when you are Wildling.</Entry>
+
+    <Entry key="FANCY_SERIALKILLER_WHISPER_NAME">Serial Killer Whisper Color</Entry>
+    <Entry key="FANCY_SERIALKILLER_WHISPER_DESC">The color of whispers when you are Serial Killer in BetterTOS2.</Entry>
+
+    <Entry key="FANCY_UNKNOWN_ROLE_NAME">Unknown Role Color</Entry>
+    <Entry key="FANCY_UNKNOWN_ROLE_DESC">The color of player names in chat when their role is unknown.</Entry>
+
+    <Entry key="FANCY_DEAD_CHAT_NAME">Dead Chat Color</Entry>
+    <Entry key="FANCY_DEAD_CHAT_DESC">The color of player names in dead chat.</Entry>
+
+    <Entry key="FANCY_CHAT_BACKGROUND_NAME">Chat Background Opacity</Entry>
+    <Entry key="FANCY_CHAT_BACKGROUND_DESC">The opacity of the chat background.</Entry>
+
+
+    <Entry key="FANCY_WILDLING_XIS_WHISPERING_TO_Y" style="whisper_notice">You overhear %name1% whispering to %name2%:</Entry>
+    <Entry key="FANCY_SERIALKILLER_XIS_WHISPERING_TO_Y" style="whisper_notice">You overhear %name1% whispering to %name2%:</Entry>
+
     <Entry key="FANCY_NONE">None</Entry>
     <Entry key="FANCY_TOWN">Town</Entry>
     <Entry key="FANCY_COVEN">Coven</Entry>
