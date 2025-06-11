@@ -294,7 +294,7 @@ public static class FancyChatExperimentalBTOS2
                 text2 = text2.Replace($"<color=#{text}>", $"<color=#{ColorUtility.ToHtmlStringRGB(Utils.GetPlayerRoleColor(position))}>");
         }
 
-        text2.Replace("<color=#8C8C8C>", "<color=#" + Fancy.DeadColor.Value.ToColor() + ">");
+        text2 = text2.Replace("<color=#8C8C8C>", "<color=#" + Fancy.DeadColor.Value.ToColor() + ">");
 
         __result = __instance.ProcessSpeakerName(text2, position, isAlive);
         return false;
