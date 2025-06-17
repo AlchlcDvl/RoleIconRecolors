@@ -976,8 +976,8 @@ public static class MakeProperFactionChecksInHeaderAnnouncement
 {
     public static bool Prefix(HeaderAnnouncements __instance, TrialData trialData, ref IEnumerator __result)
     {
-        if (!Constants.EnableIcons())
-            return true;
+        // if (!Constants.EnableIcons())
+        //     return true;
 
         __result = trialData.trialPhase is TrialPhase.EXECUTION_REVEAL or TrialPhase.HANGMAN_EXECUTION_REVEAL
             ? FixMessage(__instance, trialData)
