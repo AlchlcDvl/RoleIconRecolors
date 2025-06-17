@@ -609,7 +609,7 @@ public static class KeywordMentionsPatches
     public static void Postfix(SharedMentionsProvider __instance)
     {
         if (!__instance._useColors)
-            return; 
+            return;
 
         var gradient = Utils.CreateGradient(Fancy.KeywordStart.Value, Fancy.KeywordEnd.Value);
 
@@ -762,4 +762,48 @@ public static class KeywordMentionsPatches
             });
         }
     }
+
+    [HarmonyPatch(typeof(Home.Utils.StringUtils), nameof(Home.Utils.StringUtils.ReplaceRoleTagWithRoleText))]
+    public static class ReplaceRoleTagWithRoleTextPatch
+    {
+        public static bool Prefix(ref string __result, string str)
+        {
+            if (string.IsNullOrEmpty(str))
+            {
+                Debug.LogWarning("ReplaceRoleTagWithRoleText String is null!");
+                __result = string.Empty;
+                return false;
+            }
+
+            bool modified = false;
+            int index = str.IndexOf("%name_role");
+            while (index > -1)
+            {
+                int endIndex = str.IndexOf("%", index + 1);
+                if (endIndex == -1) break;
+
+                string fullTag = str.Substring(index, endIndex - index + 1);
+                int idStart = index + 10;
+
+                if (int.TryParse(str.Substring(idStart, endIndex - idStart), out int roleId))
+                {
+                    Role role = (Role)roleId;
+                    string colorized = role.ToColorizedDisplayString();
+                    str = str.Replace(fullTag, colorized);
+                    modified = true;
+                }
+
+                index = str.IndexOf("%name_role", index + 1);
+            }
+
+            if (modified)
+            {
+                __result = str;
+                return false; // We handled it
+            }
+
+            return true; // Let original method run
+        }
+    }
+
 }

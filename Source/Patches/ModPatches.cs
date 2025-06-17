@@ -508,3 +508,20 @@ public static class AddBTOS2RolesToDevMenu
         context.AddEntry(entry);
     }
 }
+
+// THIS GOD FOR SAKEN PATCH REFUSES TO DO ANYTHING, SOMEONE FIX THIS SHIT
+// [HarmonyPatch(typeof(TribunalCinematicPlayer), nameof(TribunalCinematicPlayer.Init))]
+// public static class MarshalCinematicFixes
+// {
+//     [HarmonyPostfix]
+//     public static void Postfix(TribunalCinematicPlayer __instance)
+//     {
+//         if (!Constants.IsBTOS2())
+//             return;
+
+//         var text = __instance.roleRevealCinematic.hasRevealed ? Utils.GetString("FANCY_MARSHAL_CINEMATIC_2") : Utils.GetString("FANCY_MARSHAL_CINEMATIC_BTOS");
+//         __instance.silhouetteWrapper.SwapWithSilhouette(56, true);
+//         __instance.textAnimatorPlayer.ShowText(text);
+//         Fancy.Instance.Debug("Jackal begone", true);
+//     }
+// }

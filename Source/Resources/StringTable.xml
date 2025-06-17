@@ -550,6 +550,48 @@
         <![CDATA[<waitfor=5>But secretly, you<waitfor=0.3> are<waitfor=0.3><shake a=0.3> %role%.]]>
     </Entry>
 
+    <Entry key="FANCY_DEPUTY_CINEMATIC">
+        <![CDATA[<shake a=0.3>A %name_role7% has fired their revolver!]]>
+    </Entry>
+
+    <Entry key="FANCY_CONJURER_CINEMATIC">
+        <![CDATA[<shake a=0.3>%name% faces an untimely end!]]>
+    </Entry>
+
+    <Entry key="FANCY_CONJURER_DEFENSE_CINEMATIC">
+        <![CDATA[<shake a=0.3>%name% has defended the attack!]]>
+    </Entry>
+
+    <Entry key="FANCY_MAYOR_CINEMATIC">
+        <![CDATA[<wave a=1>%name% has revealed themself as The %name_role11%!]]>
+    </Entry>
+
+    <Entry key="FANCY_MONARCH_CINEMATIC">
+        <![CDATA[A <wave a=1>%name_role12%</wave> has knighted <wave a=1>%name%</wave>!]]>
+    </Entry>
+
+    <Entry key="FANCY_EXECUTIONER_CINEMATIC">
+        <![CDATA[Torment for %name%!]]>
+    </Entry>
+
+    <Entry key="FANCY_MARSHAL_CINEMATIC">
+      <![CDATA[%name% has revealed themself as the %name_role55% and started a Tribunal!]]>
+    </Entry>
+
+	<Entry key="FANCY_MARSHAL_CINEMATIC_2">
+		<![CDATA[%name% has started a Tribunal!]]>
+	</Entry>
+ 
+    <Entry key="FANCY_MARSHAL_CINEMATIC_BTOS">
+      <![CDATA[%name% has revealed themself as the %name_role56% and started a Tribunal!]]>
+    </Entry>
+
+    <!-- Temporary until patch works -->
+    <Entry key="CINE_TRIBUNAL">
+      <![CDATA[%name% has revealed themself and started a Tribunal!]]>
+    </Entry>
+
+
     <Entry key="FANCY_THEY_WERE_A_ROLE">They were a %role%.</Entry>
 	<Entry key="FANCY_THEY_WERE_AN_ROLE">They were an %role%.</Entry>
     <Entry key="FANCY_THEY_WERE_THE_ROLE">They were the %role%.</Entry>

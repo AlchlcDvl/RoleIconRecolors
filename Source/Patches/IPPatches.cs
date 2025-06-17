@@ -1023,28 +1023,26 @@ public static class MakeProperFactionChecksInWdah1
 {
     public static bool Prefix(WhoDiedAndHowPanel __instance)
     {
-        if (!Constants.EnableIcons())
-            return true;
-
         Debug.Log("WhoDiedAndHowPanel:: HandleSubphaseRole");
+
         __instance.deathNotePanel.canvasGroup.DisableRenderingAndInteraction();
 
-        if (!Service.Game.Sim.simulation.killRecords.Data.TryFinding(k => k.playerId == __instance.currentPlayerNumber, out var killRecord) || killRecord!.killedByReasons.Count < 1)
+        if (!Service.Game.Sim.simulation.killRecords.Data.TryFinding(
+            k => k.playerId == __instance.currentPlayerNumber,
+            out var killRecord) || killRecord!.killedByReasons.Count < 1)
+        {
             return false;
+        }
+
+        var roleText = killRecord.playerRole.ToColorizedDisplayString(killRecord.playerFaction);
+        if (Constants.EnableIcons())
+        {
+            roleText = $"<sprite=\"RoleIcons ({Utils.FactionName(killRecord.playerFaction)})\" name=\"Role{(int)killRecord.playerRole}\">{roleText}";
+        }
 
         var text = Utils.GetString(Utils.GetWdahMessage(killRecord.playerRole, killRecord.playerFaction))
-        .Replace("%role%", $"<sprite=\"RoleIcons ({Utils.FactionName(killRecord.playerFaction)})\" name=\"Role{(int)killRecord.playerRole}\">{killRecord.playerRole.ToColorizedDisplayString(killRecord.playerFaction)}");
-
-        // var text = __instance.l10n(killRecord.playerRole switch
-        // {
-        //     Role.STONED => "GUI_GAME_WHO_DIED_VICTIM_ROLE_STONED",
-        //     Role.HIDDEN => "GUI_GAME_WHO_DIED_VICTIM_ROLE_HIDDEN",
-        //     Role.NONE or Role.UNKNOWN => "GUI_GAME_WHO_DIED_VICTIM_ROLE_UNKNOWN",
-        //     _ => "GUI_GAME_WHO_DIED_VICTIM_ROLE_KNOWN"
-        // })
-        // .Replace("%role%", $"<sprite=\"RoleIcons ({Utils.FactionName(killRecord.playerFaction)})\" name=\"Role{(int)killRecord.playerRole}\">{killRecord.playerRole.ToColorizedDisplayString(killRecord.playerFaction)}");
-
-        text = text.ReplaceIcons();
+            .Replace("%role%", roleText)
+            .ReplaceIcons();
 
         __instance.AddLine(text, 1f);
         return false;
