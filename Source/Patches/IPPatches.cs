@@ -1035,10 +1035,7 @@ public static class MakeProperFactionChecksInWdah1
         }
 
         var roleText = killRecord.playerRole.ToColorizedDisplayString(killRecord.playerFaction);
-        if (Constants.EnableIcons())
-        {
-            roleText = $"<sprite=\"RoleIcons ({Utils.FactionName(killRecord.playerFaction)})\" name=\"Role{(int)killRecord.playerRole}\">{roleText}";
-        }
+        roleText = $"<sprite=\"RoleIcons ({Utils.FactionName(killRecord.playerFaction)})\" name=\"Role{(int)killRecord.playerRole}\">{roleText}";
 
         var text = Utils.GetString(Utils.GetWdahMessage(killRecord.playerRole, killRecord.playerFaction))
             .Replace("%role%", roleText)
