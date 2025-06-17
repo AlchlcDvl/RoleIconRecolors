@@ -83,19 +83,44 @@ public static class RoleRevealCinematicPlayerPatch
             return true;
 
         var showIcons = Fancy.IconsInRoleReveal.Value;
+
         var skinIcon = showIcons
             ? $"<sprite=\"Cast\" name=\"Skin{__instance.roleRevealCinematic.skinId}\">{Service.Game.Cast.GetSkinName(__instance.roleRevealCinematic.skinId)}"
             : Service.Game.Cast.GetSkinName(__instance.roleRevealCinematic.skinId);
+
         var skinText = __instance.l10n("CINE_ROLE_REVEAL_SKIN").Replace("%skin%", skinIcon);
         __instance.skinTextPlayer.ShowText(skinText);
+
         __instance.totalDuration = Tuning.ROLE_REVEAL_TIME;
         __instance.silhouetteWrapper.gameObject.SetActive(true);
         __instance.silhouetteWrapper.SwapWithSilhouette((int)role);
-        var roleIcon = showIcons ? (role.GetTMPSprite() + role.ToColorizedDisplayString(CurrentFaction)) : role.ToColorizedDisplayString(CurrentFaction);
+
+        var roleName = role.ToColorizedDisplayString(CurrentFaction);
+        var roleIcon = showIcons ? (role.GetTMPSprite() + roleName) : roleName;
+
         roleIcon = roleIcon.Replace("RoleIcons\"", $"RoleIcons ({((role.GetFactionType() == CurrentFaction && Constants.CurrentStyle() == "Regular")
             ? "Regular"
             : Utils.FactionName(CurrentFaction, false))})\"");
-        var roleText = __instance.l10n("CINE_ROLE_REVEAL_ROLE").Replace("%role%", roleIcon);
+
+        string roleRevealKey;
+        if (role.IsHorseman())
+        {
+            roleRevealKey = "FANCY_ROLE_REVEAL_ROLE_HORSEMAN";
+        }
+        else if (role.IsUnique() || Constants.IsIndividuality())
+        {
+            roleRevealKey = "FANCY_ROLE_REVEAL_ROLE_UNIQUE";
+        }
+        else if (Utils.StartsWithVowel(roleName))
+        {
+            roleRevealKey = "FANCY_ROLE_REVEAL_ROLE_VOWEL";
+        }
+        else
+        {
+            roleRevealKey = "FANCY_ROLE_REVEAL_ROLE_CONSONANT";
+        }
+
+        var roleText = __instance.l10n(roleRevealKey).Replace("%role%", roleIcon);
         __instance.roleTextPlayer.ShowText(roleText);
 
         if (Pepper.GetCurrentGameType() == GameType.Ranked)
@@ -105,7 +130,8 @@ public static class RoleRevealCinematicPlayerPatch
     }
 
     [HarmonyPatch(nameof(RoleRevealCinematicPlayer.HandleOnMyIdentityChanged))]
-    public static void Prefix(PlayerIdentityData playerIdentity) => CurrentFaction = playerIdentity.faction;
+    public static void Prefix(PlayerIdentityData playerIdentity)
+        => CurrentFaction = playerIdentity.faction;
 }
 
 [HarmonyPatch(typeof(SharedMentionsProvider), nameof(SharedMentionsProvider.BuildAchievementMentions))]

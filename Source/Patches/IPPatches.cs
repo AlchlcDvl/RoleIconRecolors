@@ -985,6 +985,7 @@ public static class MakeProperFactionChecksInHeaderAnnouncement
         return false;
     }
 
+    // I touched it!
     private static IEnumerator FixMessage(HeaderAnnouncements __instance, TrialData trialData)
     {
         __instance.Clear();
@@ -995,14 +996,23 @@ public static class MakeProperFactionChecksInHeaderAnnouncement
             yield break;
         }
 
-        var text = __instance.l10n("GUI_GAME_WHO_DIED_AND_HOW_1_2")
-            .Replace("%role%", $"<sprite=\"RoleIcons ({Utils.FactionName(killRecord.playerFaction)})\" name=\"Role{(int)killRecord.playerRole}\">{killRecord.playerRole.ToColorizedDisplayString(killRecord.playerFaction)}")
-            .Replace("%name%", Service.Game.Sim.simulation.GetDisplayName(trialData.defendantPosition).ToWhiteNameString());
+        var role = killRecord.playerRole;
+        var faction = killRecord.playerFaction;
 
-        text = text.ReplaceIcons();
+        var roleText = role.ToColorizedDisplayString(faction);
+        var icon = $"<sprite=\"RoleIcons ({(Constants.CurrentStyle() == "Regular" && role.GetFactionType() == faction ? "Regular" : Utils.FactionName(faction, false))})\" name=\"Role{(int)role}\">";
+        var display = icon + roleText;
 
-        __instance.AddLine(text);
+        var l10nKey = Utils.GetHangingMessage(role, faction);
+        var formattedLine = __instance.l10n(l10nKey).Replace("%role%", display);
+
+        var name = Service.Game.Sim.simulation.GetDisplayName(trialData.defendantPosition).ToWhiteNameString();
+        formattedLine = formattedLine.Replace("%name%", name);
+        formattedLine = formattedLine.ReplaceIcons();
+
+        __instance.AddLine(formattedLine);
     }
+
 
     [HarmonyReversePatch]
     private static IEnumerator ShowHeaderMessageOriginal(HeaderAnnouncements instance, TrialData trialData) => throw new NotImplementedException();
@@ -1022,14 +1032,17 @@ public static class MakeProperFactionChecksInWdah1
         if (!Service.Game.Sim.simulation.killRecords.Data.TryFinding(k => k.playerId == __instance.currentPlayerNumber, out var killRecord) || killRecord!.killedByReasons.Count < 1)
             return false;
 
-        var text = __instance.l10n(killRecord.playerRole switch
-        {
-            Role.STONED => "GUI_GAME_WHO_DIED_VICTIM_ROLE_STONED",
-            Role.HIDDEN => "GUI_GAME_WHO_DIED_VICTIM_ROLE_HIDDEN",
-            Role.NONE or Role.UNKNOWN => "GUI_GAME_WHO_DIED_VICTIM_ROLE_UNKNOWN",
-            _ => "GUI_GAME_WHO_DIED_VICTIM_ROLE_KNOWN"
-        })
+        var text = Utils.GetString(Utils.GetWdahMessage(killRecord.playerRole, killRecord.playerFaction))
         .Replace("%role%", $"<sprite=\"RoleIcons ({Utils.FactionName(killRecord.playerFaction)})\" name=\"Role{(int)killRecord.playerRole}\">{killRecord.playerRole.ToColorizedDisplayString(killRecord.playerFaction)}");
+
+        // var text = __instance.l10n(killRecord.playerRole switch
+        // {
+        //     Role.STONED => "GUI_GAME_WHO_DIED_VICTIM_ROLE_STONED",
+        //     Role.HIDDEN => "GUI_GAME_WHO_DIED_VICTIM_ROLE_HIDDEN",
+        //     Role.NONE or Role.UNKNOWN => "GUI_GAME_WHO_DIED_VICTIM_ROLE_UNKNOWN",
+        //     _ => "GUI_GAME_WHO_DIED_VICTIM_ROLE_KNOWN"
+        // })
+        // .Replace("%role%", $"<sprite=\"RoleIcons ({Utils.FactionName(killRecord.playerFaction)})\" name=\"Role{(int)killRecord.playerRole}\">{killRecord.playerRole.ToColorizedDisplayString(killRecord.playerFaction)}");
 
         text = text.ReplaceIcons();
 

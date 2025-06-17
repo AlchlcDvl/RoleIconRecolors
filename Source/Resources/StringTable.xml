@@ -531,6 +531,43 @@
     <Entry key="FANCY_SELECT_DISPLAY_NAME">Current Testing Display</Entry>
     <Entry key="FANCY_SELECT_DISPLAY_DESC">Changes which testing display is currently visible.</Entry>
 
+    <Entry key="FANCY_ROLE_REVEAL_ROLE_UNIQUE">
+        <![CDATA[<waitfor=5>But secretly, you<waitfor=0.2> are<waitfor=0.2> the<waitfor=0.2><shake a=0.3> %role%.]]>
+    </Entry>
+
+    <Entry key="FANCY_ROLE_REVEAL_ROLE_VOWEL">
+        <![CDATA[<waitfor=5>But secretly, you<waitfor=0.2> are<waitfor=0.2> an<waitfor=0.2><shake a=0.3> %role%.]]>
+    </Entry>
+
+    <Entry key="FANCY_ROLE_REVEAL_ROLE_CONSONANT">
+        <![CDATA[<waitfor=5>But secretly, you<waitfor=0.2> are<waitfor=0.2> a<waitfor=0.2><shake a=0.3> %role%.]]>
+    </Entry>
+
+    <Entry key="FANCY_ROLE_REVEAL_ROLE_HORSEMAN">
+        <![CDATA[<waitfor=5>But secretly, you<waitfor=0.3> are<waitfor=0.3><shake a=0.3> %role%.]]>
+    </Entry>
+
+    <Entry key="FANCY_THEY_WERE_A_ROLE">They were a %role%.</Entry>
+	<Entry key="FANCY_THEY_WERE_AN_ROLE">They were an %role%.</Entry>
+    <Entry key="FANCY_THEY_WERE_THE_ROLE">They were the %role%.</Entry>
+	<Entry key="FANCY_THEY_WERE_ROLE">They were %role%.</Entry>
+	<Entry key="FANCY_THEY_WERE_STONED">They were %role%.</Entry>
+	<Entry key="FANCY_THEY_WERE_A_HIDDEN_ROLE">They were a %role% role.</Entry>
+
+    <Entry key="FANCY_THEY_WERE_A_ROLE_DAY">They were a %role%.</Entry>
+	<Entry key="FANCY_THEY_WERE_AN_ROLE_DAY">They were an %role%.</Entry>
+    <Entry key="FANCY_THEY_WERE_THE_ROLE_DAY">They were the %role%.</Entry>
+	<Entry key="FANCY_THEY_WERE_ROLE_DAY">They were %role%.</Entry>
+	<Entry key="FANCY_THEY_WERE_STONED_DAY">They were %role%.</Entry>
+	<Entry key="FANCY_THEY_WERE_A_HIDDEN_ROLE_DAY">They were a %role% role.</Entry>
+
+    <Entry key="FANCY_PLAYER_WAS_A_ROLE">%name% was a %role%.</Entry>
+	<Entry key="FANCY_PLAYER_WAS_AN_ROLE">%name% was an %role%.</Entry>
+    <Entry key="FANCY_PLAYER_WAS_THE_ROLE">%name% was the %role%.</Entry>
+	<Entry key="FANCY_PLAYER_WAS_ROLE">%name% was %role%.</Entry>
+	<Entry key="FANCY_PLAYER_WAS_STONED">%name% was %role%.</Entry>
+	<Entry key="FANCY_PLAYER_WAS_A_HIDDEN_ROLE">%name% was a %role% role.</Entry>
+
     <Entry key="FANCY_VANILLA">Vanilla</Entry>
     <Entry key="FANCY_DEFAULT">Default</Entry>
     <Entry key="FANCY_FACTION">Faction</Entry>
@@ -576,7 +613,6 @@
 
     <Entry key="FANCY_CHAT_BACKGROUND_NAME">Chat Background Opacity</Entry>
     <Entry key="FANCY_CHAT_BACKGROUND_DESC">The opacity of the chat background.</Entry>
-
 
     <Entry key="FANCY_WILDLING_XIS_WHISPERING_TO_Y" style="whisper_notice">You overhear %name1% whispering to %name2%:</Entry>
     <Entry key="FANCY_SERIALKILLER_XIS_WHISPERING_TO_Y" style="whisper_notice">You overhear %name1% whispering to %name2%:</Entry>

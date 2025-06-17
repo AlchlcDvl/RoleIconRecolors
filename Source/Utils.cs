@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using Home.Shared;
 using NewModLoading;
+using Server.Shared.Extensions;
 
 namespace FancyUI;
 
@@ -807,6 +808,44 @@ public static class Utils
 
     public static string RemoveColorTags(string input) => Regex.Replace(input, "<color=[^>]+>|</color>", "");
 
+    public static bool StartsWithVowel(string input)
+    {
+        if (string.IsNullOrWhiteSpace(input))
+            return false;
+
+        var stripped = StripFormatting(input).TrimStart();
+
+        if (stripped.Length == 0)
+            return false;
+
+        var firstChar = char.ToUpperInvariant(stripped[0]);
+        return "AEIOU".IndexOf(firstChar) >= 0;
+    }
+
+    private static string StripFormatting(string input)
+    {
+        var sb = new System.Text.StringBuilder();
+        var insideTag = false;
+
+        foreach (var c in input)
+        {
+            if (c == '<')
+            {
+                insideTag = true;
+                continue;
+            }
+            if (c == '>' && insideTag)
+            {
+                insideTag = false;
+                continue;
+            }
+
+            if (!insideTag)
+                sb.Append(c);
+        }
+
+        return sb.ToString();
+    }
     public static string ReplaceIcons(this string input)
     {
         if (Constants.IsBTOS2())
@@ -824,5 +863,106 @@ public static class Utils
         var factionIcon = icon.AddFactionToIcon(factionName);
 
         return replaceIcons ? factionIcon.ReplaceIcons() : factionIcon;
+    }
+
+    private static readonly HashSet<Role> uniqueBTOSRoles =
+    [
+        Btos2Role.Jailor,
+        Btos2Role.Mayor,
+        Btos2Role.Prosecutor,
+        Btos2Role.Monarch,
+        Btos2Role.Marshal,
+        Btos2Role.Vampire,
+        Btos2Role.Jackal,
+        Btos2Role.Banshee,
+        Btos2Role.Conjurer,
+        Btos2Role.CovenLeader,
+        Btos2Role.Dreamweaver,
+        Btos2Role.Enchanter,
+        Btos2Role.Poisoner,
+        Btos2Role.PotionMaster,
+        Btos2Role.Necromancer,
+        Btos2Role.HexMaster,
+        Btos2Role.Witch,
+        Btos2Role.Wildling,
+        Btos2Role.Illusionist,
+        Btos2Role.VoodooMaster,
+        Btos2Role.Jinx,
+        Btos2Role.Ritualist,
+        Btos2Role.Medusa,
+        Btos2Role.Baker,
+        Btos2Role.Berserker,
+        Btos2Role.Plaguebearer,
+        Btos2Role.SoulCollector,
+        Btos2Role.Warlock,
+        Btos2Role.Pirate,
+        Btos2Role.Inquisitor,
+        Btos2Role.Executioner,
+        Btos2Role.Judge,
+        Btos2Role.Auditor,
+        Btos2Role.Starspawn,
+    ];
+
+    public static bool IsUnique(this Role role)
+    {
+        if (Constants.IsBTOS2())
+            return uniqueBTOSRoles.Contains(role);
+
+        return SharedRoleData.uniqueRoles.Contains(role);
+    }
+
+    public static bool IsHorseman(this Role role)
+    {
+        return RoleExtensions.horsemenList.Contains(role);
+    }
+    public static string GetFormattedRoleName(Role role, FactionType faction, bool includeSprite = true)
+    {
+        var sprite = includeSprite
+            ? $"<sprite=\"RoleIcons ({GetStyleForFaction(role, faction)})\" name=\"Role{(int)role}\">"
+            : "";
+
+        return sprite + role.ToColorizedDisplayString(faction);
+    }
+
+    private static string GetStyleForFaction(Role role, FactionType faction)
+    {
+        return (Constants.CurrentStyle() == "Regular" && role.GetFactionType() == faction)
+            ? "Regular"
+            : Utils.FactionName(faction, false);
+    }
+
+    public static string GetHangingMessage(Role role, FactionType faction)
+    {
+        var roleName = StripFormatting(role.ToColorizedDisplayString(faction));
+
+        if (role == Role.STONED)
+            return "FANCY_PLAYER_WAS_STONED";
+        else if (role == Role.HIDDEN)
+            return "FANCY_PLAYER_WAS_A_HIDDEN_ROLE";
+        else if (role.IsHorseman())
+            return "FANCY_PLAYER_WAS_ROLE";
+        else if (role.IsUnique())
+            return "FANCY_PLAYER_WAS_THE_ROLE";
+        else if (StartsWithVowel(roleName))
+            return "FANCY_PLAYER_WAS_AN_ROLE";
+        else
+            return "FANCY_PLAYER_WAS_A_ROLE";
+    }
+    public static string GetWdahMessage(Role role, FactionType faction)
+    {
+        var roleName = StripFormatting(role.ToColorizedDisplayString(faction));
+
+        if (role == Role.STONED)
+            return "FANCY_THEY_WERE_STONED";
+        else if (role == Role.HIDDEN)
+            return "FANCY_THEY_WERE_A_HIDDEN_ROLE";
+        else if (role.IsHorseman())
+            return "FANCY_THEY_WERE_ROLE";
+        else if (role.IsUnique())
+            return "FANCY_THEY_WERE_THE_ROLE";
+        else if (StartsWithVowel(roleName))
+            return "FANCY_THEY_WERE_AN_ROLE";
+        else
+            return "FANCY_THEY_WERE_A_ROLE";
     }
 }
