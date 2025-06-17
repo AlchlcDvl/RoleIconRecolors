@@ -107,7 +107,7 @@ public static class RoleRevealCinematicPlayerPatch
         {
             roleRevealKey = "FANCY_ROLE_REVEAL_ROLE_HORSEMAN";
         }
-        else if (role.IsUnique() || Constants.IsIndividuality())
+        else if ((role.IsUnique() || Constants.IsIndividuality()) && !Fancy.IgnoreUniqueRoleCheck.Value)
         {
             roleRevealKey = "FANCY_ROLE_REVEAL_ROLE_UNIQUE";
         }

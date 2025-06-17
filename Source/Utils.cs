@@ -941,7 +941,7 @@ public static class Utils
             return "FANCY_PLAYER_WAS_A_HIDDEN_ROLE";
         else if (role.IsHorseman())
             return "FANCY_PLAYER_WAS_ROLE";
-        else if (role.IsUnique())
+        else if ((role.IsUnique() || Constants.IsIndividuality()) && !Fancy.IgnoreUniqueRoleCheck.Value)
             return "FANCY_PLAYER_WAS_THE_ROLE";
         else if (StartsWithVowel(roleName))
             return "FANCY_PLAYER_WAS_AN_ROLE";
@@ -958,7 +958,7 @@ public static class Utils
             return "FANCY_THEY_WERE_A_HIDDEN_ROLE";
         else if (role.IsHorseman())
             return "FANCY_THEY_WERE_ROLE";
-        else if (role.IsUnique())
+        else if ((role.IsUnique() || Constants.IsIndividuality()) && !Fancy.IgnoreUniqueRoleCheck.Value)
             return "FANCY_THEY_WERE_THE_ROLE";
         else if (StartsWithVowel(roleName))
             return "FANCY_THEY_WERE_AN_ROLE";

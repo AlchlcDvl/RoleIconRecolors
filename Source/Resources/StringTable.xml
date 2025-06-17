@@ -531,6 +531,9 @@
     <Entry key="FANCY_SELECT_DISPLAY_NAME">Current Testing Display</Entry>
     <Entry key="FANCY_SELECT_DISPLAY_DESC">Changes which testing display is currently visible.</Entry>
 
+    <Entry key="FANCY_IGNORE_UNIQUE_ROLE_CHECK_NAME">Ignore Unique Role Check</Entry>
+    <Entry key="FANCY_IGNORE_UNIQUE_ROLE_CHECK_DESC">If enabled, role reveal and WDAH will not check if the role is unique.</Entry>
+
     <Entry key="FANCY_ROLE_REVEAL_ROLE_UNIQUE">
         <![CDATA[<waitfor=5>But secretly, you<waitfor=0.2> are<waitfor=0.2> the<waitfor=0.2><shake a=0.3> %role%.]]>
     </Entry>
