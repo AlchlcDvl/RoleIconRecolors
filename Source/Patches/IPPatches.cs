@@ -976,9 +976,6 @@ public static class MakeProperFactionChecksInHeaderAnnouncement
 {
     public static bool Prefix(HeaderAnnouncements __instance, TrialData trialData, ref IEnumerator __result)
     {
-        // if (!Constants.EnableIcons())
-        //     return true;
-
         __result = trialData.trialPhase is TrialPhase.EXECUTION_REVEAL or TrialPhase.HANGMAN_EXECUTION_REVEAL
             ? FixMessage(__instance, trialData)
             : ShowHeaderMessageOriginal(__instance, trialData);
@@ -1013,7 +1010,6 @@ public static class MakeProperFactionChecksInHeaderAnnouncement
         __instance.AddLine(formattedLine);
     }
 
-
     [HarmonyReversePatch]
     private static IEnumerator ShowHeaderMessageOriginal(HeaderAnnouncements instance, TrialData trialData) => throw new NotImplementedException();
 }
@@ -1027,15 +1023,13 @@ public static class MakeProperFactionChecksInWdah1
 
         __instance.deathNotePanel.canvasGroup.DisableRenderingAndInteraction();
 
-        if (!Service.Game.Sim.simulation.killRecords.Data.TryFinding(
-            k => k.playerId == __instance.currentPlayerNumber,
-            out var killRecord) || killRecord!.killedByReasons.Count < 1)
-        {
+        if (!Service.Game.Sim.simulation.killRecords.Data.TryFinding(k => k.playerId == __instance.currentPlayerNumber, out var killRecord) || killRecord!.killedByReasons.Count < 1)
             return false;
-        }
 
-        var roleText = killRecord.playerRole.ToColorizedDisplayString(killRecord.playerFaction);
-        roleText = $"<sprite=\"RoleIcons ({Utils.FactionName(killRecord.playerFaction)})\" name=\"Role{(int)killRecord.playerRole}\">{roleText}";
+        var roleText = $"<sprite=\"RoleIcons\" name=\"Role{(int)killRecord.playerRole}\">{killRecord.playerRole.ToColorizedDisplayString(killRecord.playerFaction)}";
+
+        if (Constants.EnableIcons())
+            roleText = roleText.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(killRecord.playerFaction)})\"");
 
         var text = Utils.GetString(Utils.GetWdahMessage(killRecord.playerRole, killRecord.playerFaction))
             .Replace("%role%", roleText)

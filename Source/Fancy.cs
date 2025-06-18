@@ -235,7 +235,7 @@ public class Fancy : BaseMod<Fancy>
         SelectTestingFaction = new("SELECTED_TESTING_FACTION", FactionType.NONE, PackType.None, useTranslations: true, values:
             () => SettingsAndTestingUI.Instance?.IsBTOS2 == true ? [.. filteredFactions.AddItem(FactionType.NONE)] : VanillaFactions);
         SelectTestingRole = new("SELECTED_TESTING_ROLE", Role.ADMIRER, PackType.None, useTranslations: true, values:
-            () => SettingsAndTestingUI.Instance?.IsBTOS2 == true ? BTOS2Roles : VanillaRoles); //  AS it has to be like this unless you wanna make it work with filteredRoles (which it currently does not)
+            () => SettingsAndTestingUI.Instance?.IsBTOS2 == true ? [..filteredRoles] : VanillaRoles); //  AS it has to be like this unless you wanna make it work with filteredRoles (which it currently does not)
 
         SelectedIconPack = new("SELECTED_ICON_PACK", "Vanilla", PackType.IconPacks, () => GetPackNames(PackType.IconPacks), onChanged: x => TryLoadingSprites(x, PackType.IconPacks));
         SelectedSilhouetteSet = new("SELECTED_SIL_SET", "Vanilla", PackType.SilhouetteSets, () => GetPackNames(PackType.SilhouetteSets), onChanged: x => TryLoadingSprites(x,
@@ -397,8 +397,6 @@ public class Fancy : BaseMod<Fancy>
         AchievementStart = new("ACHIEVEMENT_START", "#FFBE00", PackType.MiscRoleCustomisation);
         AchievementEnd = new("ACHIEVEMENT_END", "#FFBE00", PackType.MiscRoleCustomisation);
 
-
-
         PlayerNumber = new("PLAYER_NUMBER", 0, PackType.Testing, 0, 15, true, Constants.CustomNumbers);
         ChatBackgroundOpacity = new("CHAT_BACKGROUND", 80, PackType.Testing, 0, 100, true);
         DumpSpriteSheets = new("DUMP_SHEETS", false, PackType.Testing);
@@ -409,8 +407,8 @@ public class Fancy : BaseMod<Fancy>
         DisableBTOSTribunal = new("DISABLE_BTOS_TRIBUNAL", true, PackType.Testing, setActive: Constants.BTOS2Exists);
         IgnoreUniqueRoleCheck = new("IGNORE_UNIQUE_ROLE_CHECK", false, PackType.Testing);
 
-        foreach (var faction in BTOS2Factions.Where(x => x is not (FactionType.NONE or (> FactionType.APOCALYPSE and < FactionType.VAMPIRE) or FactionType.CURSED_SOUL or FactionType.UNKNOWN or Btos2Faction.Lovers or
-            (> Btos2Faction.Hawks and < Btos2Faction.Pandora))))
+        foreach (var faction in BTOS2Factions.Where(x => x is not (FactionType.NONE or (> FactionType.APOCALYPSE and < FactionType.VAMPIRE) or FactionType.CURSED_SOUL or FactionType.UNKNOWN or
+            Btos2Faction.Lovers or (> Btos2Faction.Hawks and < Btos2Faction.Pandora))))
         {
             CinematicMap[faction] = new(
                 $"{Utils.FactionName(faction, GameModType.BTOS2, false).ToUpper()}_CINEMATIC",
@@ -469,9 +467,8 @@ public class Fancy : BaseMod<Fancy>
 
     private static void ReloadCinematics()
     {
-        foreach (var faction in BTOS2Factions.Where(x => x is not (FactionType.NONE or
-                (> FactionType.APOCALYPSE and < FactionType.VAMPIRE) or FactionType.CURSED_SOUL or
-                FactionType.UNKNOWN or (> Btos2Faction.Hawks and < Btos2Faction.Pandora))))
+        foreach (var faction in BTOS2Factions.Where(x => x is not (FactionType.NONE or (> FactionType.APOCALYPSE and < FactionType.VAMPIRE) or FactionType.CURSED_SOUL or FactionType.UNKNOWN or (>
+            Btos2Faction.Hawks and < Btos2Faction.Pandora))))
         {
             if (CinematicMap.ContainsKey(faction)) continue;
 

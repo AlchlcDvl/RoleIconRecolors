@@ -806,7 +806,7 @@ public static class Utils
         return originalFaction == currentFaction;
     }
 
-    public static string RemoveColorTags(string input) => Regex.Replace(input, "<color=[^>]+>|</color>", "");
+    public static string RemoveColorTags(string input) => Regex.Replace(input, "<color=[^>]+>|<#[^>]+>|</color>", "");
 
     public static bool StartsWithVowel(string input)
     {
@@ -865,7 +865,7 @@ public static class Utils
         return replaceIcons ? factionIcon.ReplaceIcons() : factionIcon;
     }
 
-    private static readonly HashSet<Role> uniqueBTOSRoles =
+    private static readonly HashSet<Role> UniqueBTOSRoles =
     [
         Btos2Role.Jailor,
         Btos2Role.Mayor,
@@ -906,15 +906,13 @@ public static class Utils
     public static bool IsUnique(this Role role)
     {
         if (Constants.IsBTOS2())
-            return uniqueBTOSRoles.Contains(role);
+            return UniqueBTOSRoles.Contains(role);
 
         return SharedRoleData.uniqueRoles.Contains(role);
     }
 
-    public static bool IsHorseman(this Role role)
-    {
-        return RoleExtensions.horsemenList.Contains(role);
-    }
+    public static bool IsHorseman(this Role role) => RoleExtensions.horsemenList.Contains(role);
+
     public static string GetFormattedRoleName(Role role, FactionType faction, bool includeSprite = true)
     {
         var sprite = includeSprite
@@ -928,7 +926,7 @@ public static class Utils
     {
         return (Constants.CurrentStyle() == "Regular" && role.GetFactionType() == faction)
             ? "Regular"
-            : Utils.FactionName(faction, false);
+            : FactionName(faction, false);
     }
 
     public static string GetHangingMessage(Role role, FactionType faction)
@@ -948,6 +946,7 @@ public static class Utils
         else
             return "FANCY_PLAYER_WAS_A_ROLE";
     }
+
     public static string GetWdahMessage(Role role, FactionType faction)
     {
         var roleName = StripFormatting(role.ToColorizedDisplayString(faction));

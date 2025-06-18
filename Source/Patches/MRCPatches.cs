@@ -286,7 +286,7 @@ public static class FancyChatExperimentalBTOS2
             if (gradient != null)
             {
                 var text4 = Utils.ApplyGradient($"{gameName}:", gradient);
-                var pattern = $@"<color=#[0-9A-Fa-f]+>{Regex.Escape(gameName)}:";
+                var pattern = $"<color=#[0-9A-Fa-f]+>{Regex.Escape(gameName)}:";
                 var regex = new Regex(pattern);
                 text2 = regex.Replace(text2, text4);
             }
@@ -294,7 +294,7 @@ public static class FancyChatExperimentalBTOS2
                 text2 = text2.Replace($"<color=#{text}>", $"<color=#{ColorUtility.ToHtmlStringRGB(Utils.GetPlayerRoleColor(position))}>");
         }
 
-        text2 = text2.Replace("<color=#8C8C8C>", "<color=#" + ColorUtility.ToHtmlStringRGB(Fancy.DeadColor.Value.ToColor()) + ">");
+        text2 = text2.Replace("<color=#8C8C8C>", "<color=#" + Fancy.DeadColor.Value + ">");
 
         __result = __instance.ProcessSpeakerName(text2, position, isAlive);
         return false;
@@ -432,15 +432,12 @@ public static class PatchCustomWinScreens
             Service.Home.AudioService.PlayMusic(musicPath, false, AudioController.AudioChannel.Cinematic);
     }
 
-    private static string GetVictoryMusicPath(FactionType faction)
+    private static string GetVictoryMusicPath(FactionType faction) => (Fancy.CinematicMap.TryGetValue(faction, out var setting) ? setting.Value : Fancy.GetCinematic(faction)) switch
     {
-        return (Fancy.CinematicMap.TryGetValue(faction, out var setting) ? setting.Value : Fancy.GetCinematic(faction)) switch
-        {
-            CinematicType.TownWins => "Audio/Music/TownVictory.wav",
-            CinematicType.CovenWins or CinematicType.FactionWins => "Audio/Music/CovenVictory.wav",
-            _ => null
-        };
-    }
+        CinematicType.TownWins => "Audio/Music/TownVictory.wav",
+        CinematicType.CovenWins or CinematicType.FactionWins => "Audio/Music/CovenVictory.wav",
+        _ => null
+    };
 }
 
 [HarmonyPatch(typeof(ClientRoleExtensions))]
@@ -622,6 +619,7 @@ public static class KeywordMentionsPatches
                 continue;
 
             var raw = mentionInfo.humanText.TrimStart(':');
+
             if (string.IsNullOrWhiteSpace(raw))
                 continue;
 
@@ -638,20 +636,20 @@ public static class KeywordMentionsPatches
     [HarmonyPatch(nameof(SharedMentionsProvider.Build))]
     public static bool Prefix(SharedMentionsProvider __instance, RebuildMentionTypesFlag rebuildMentionTypesFlag)
     {
+        var roles = rebuildMentionTypesFlag.HasFlag(RebuildMentionTypesFlag.ROLES);
+        var keywords = rebuildMentionTypesFlag.HasFlag(RebuildMentionTypesFlag.KEYWORDS);
+        var players = rebuildMentionTypesFlag.HasFlag(RebuildMentionTypesFlag.PLAYERS);
+        var prefixes = rebuildMentionTypesFlag.HasFlag(RebuildMentionTypesFlag.PREFIXES);
+        var emojis = rebuildMentionTypesFlag.HasFlag(RebuildMentionTypesFlag.EMOJIS);
+        var achievements = rebuildMentionTypesFlag.HasFlag(RebuildMentionTypesFlag.ACHIEVEMENTS);
+
         __instance._useColors = Service.Home.UserService.Settings.MentionsUseColorsEnabled;
         __instance._playerEffects = Service.Home.UserService.Settings.MentionsPlayerEffects;
         __instance._roleEffects = Service.Home.UserService.Settings.MentionsRoleEffects;
 
-        __instance.ClearMentions(
-            rebuildMentionTypesFlag.HasFlag(RebuildMentionTypesFlag.ROLES),
-            rebuildMentionTypesFlag.HasFlag(RebuildMentionTypesFlag.KEYWORDS),
-            rebuildMentionTypesFlag.HasFlag(RebuildMentionTypesFlag.PLAYERS),
-            rebuildMentionTypesFlag.HasFlag(RebuildMentionTypesFlag.PREFIXES),
-            rebuildMentionTypesFlag.HasFlag(RebuildMentionTypesFlag.EMOJIS),
-            rebuildMentionTypesFlag.HasFlag(RebuildMentionTypesFlag.ACHIEVEMENTS)
-        );
+        __instance.ClearMentions(roles, keywords, players, prefixes, emojis, achievements);
 
-        if (rebuildMentionTypesFlag.HasFlag(RebuildMentionTypesFlag.ROLES))
+        if (roles)
         {
             if (!Constants.IsBTOS2())
                 __instance.BuildRoleMentions();
@@ -659,24 +657,26 @@ public static class KeywordMentionsPatches
                 BuildCustomRoleMentions(__instance);
         }
 
-        if (rebuildMentionTypesFlag.HasFlag(RebuildMentionTypesFlag.KEYWORDS))
+        if (keywords)
             BuildCustomKeywordMentions(__instance);
 
-        if (rebuildMentionTypesFlag.HasFlag(RebuildMentionTypesFlag.PLAYERS))
+        if (players)
             __instance.BuildPlayerMentions();
 
-        if (rebuildMentionTypesFlag.HasFlag(RebuildMentionTypesFlag.PREFIXES) && !Constants.IsBTOS2())
-            __instance.BuildPrefixMentions();
+        if (!Constants.IsBTOS2())
+        {
+            if (prefixes)
+                __instance.BuildPrefixMentions();
 
-        if (rebuildMentionTypesFlag.HasFlag(RebuildMentionTypesFlag.EMOJIS) && !Constants.IsBTOS2())
-            __instance.BuildEmojiMentions();
+            if (emojis)
+                __instance.BuildEmojiMentions();
 
-        if (rebuildMentionTypesFlag.HasFlag(RebuildMentionTypesFlag.ACHIEVEMENTS) && !Constants.IsBTOS2())
-            __instance.BuildAchievementMentions();
+            if (achievements)
+                __instance.BuildAchievementMentions();
+        }
 
         return false;
     }
-
 
     private static void BuildCustomKeywordMentions(SharedMentionsProvider __instance)
     {
@@ -775,20 +775,23 @@ public static class KeywordMentionsPatches
                 return false;
             }
 
-            bool modified = false;
-            int index = str.IndexOf("%name_role");
+            var modified = false;
+            var index = str.IndexOf("%name_role");
+
             while (index > -1)
             {
-                int endIndex = str.IndexOf("%", index + 1);
-                if (endIndex == -1) break;
+                var endIndex = str.IndexOf("%", index + 1);
 
-                string fullTag = str.Substring(index, endIndex - index + 1);
-                int idStart = index + 10;
+                if (endIndex == -1)
+                    break;
 
-                if (int.TryParse(str.Substring(idStart, endIndex - idStart), out int roleId))
+                var fullTag = str.Substring(index, endIndex - index + 1);
+                var idStart = index + 10;
+
+                if (int.TryParse(str[idStart..endIndex], out var roleId))
                 {
-                    Role role = (Role)roleId;
-                    string colorized = role.ToColorizedDisplayString();
+                    var role = (Role)roleId;
+                    var colorized = role.ToColorizedDisplayString();
                     str = str.Replace(fullTag, colorized);
                     modified = true;
                 }
@@ -805,5 +808,4 @@ public static class KeywordMentionsPatches
             return true; // Let original method run
         }
     }
-
 }
