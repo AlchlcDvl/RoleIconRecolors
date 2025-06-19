@@ -766,6 +766,7 @@
     <Entry key="FANCY_BUCKETS_EVIL">Evil</Entry>
     <Entry key="FANCY_BUCKETS_PARIAH">Pariah</Entry>
     <Entry key="FANCY_BUCKETS_SPECIAL">Special</Entry>
+    <Entry key="FANCY_BUCKETS_OUTLIER">Outlier</Entry>
 
     <Entry key="FANCY_FIRE">Fire</Entry>
     <Entry key="FANCY_PAPER">Paper</Entry>
