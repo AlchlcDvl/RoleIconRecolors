@@ -586,11 +586,6 @@
       <![CDATA[%name% has revealed themself as the %name_role56% and started a Tribunal!]]>
     </Entry>
 
-    <!-- Temporary until patch works -->
-    <Entry key="CINE_TRIBUNAL">
-      <![CDATA[%name% has revealed themself and started a Tribunal!]]>
-    </Entry>
-
 
     <Entry key="FANCY_THEY_WERE_A_ROLE">They were a %role%.</Entry>
 	<Entry key="FANCY_THEY_WERE_AN_ROLE">They were an %role%.</Entry>

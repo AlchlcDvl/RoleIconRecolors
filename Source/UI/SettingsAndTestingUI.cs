@@ -169,6 +169,7 @@ public class SettingsAndTestingUI : UIController
         Metals.Add(transform.GetComponent<Image>("Chains2"));
         Metals.Add(drop.GetComponent<Image>("Icon1"));
         Metals.Add(drop.GetComponent<Image>("Icon2"));
+        Metals.Add(transform.Find("Frame").GetComponent<Image>());
         Metals.AddRange(SlotCounter.GetIconBGs());
 
         Woods.Add(roleCard.GetComponent<Image>("Frame"));
