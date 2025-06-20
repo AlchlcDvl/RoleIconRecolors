@@ -443,7 +443,6 @@ public static class CacheDefaults
         Assets.ForEach(key =>
         {
             Debug.Log($"HomeInterfaceService:: Add Sprite Asset {key}");
-            // var asset = (TMP_SpriteAsset)LoadResource.Invoke(__instance, [$"TmpSpriteAssets/{key}.asset"]);
             var asset = __instance.LoadResource<TMP_SpriteAsset>($"TmpSpriteAssets/{key}.asset");
 
             switch (key)
@@ -1045,9 +1044,6 @@ public static class MakeProperFactionChecksInWdah2
 {
     public static bool Prefix(WhoDiedAndHowPanel __instance, float phaseTime)
     {
-        // if (!Constants.EnableIcons())
-        //     return true;
-
         Debug.Log($"HandleSubphaseWhoDied phaseTime = {phaseTime}");
 
         if (__instance.tombstonePanel != null)
@@ -1077,28 +1073,25 @@ public static class MakeProperFactionChecksInWdah2
         {
             for (var i = 0; i < killRecord.killedByReasons.Count; i++)
             {
+                var killedByReason = killRecord.killedByReasons[i];
+                var text2 = __instance.l10n($"FANCY{(i == 0 ? "" : "_ALSO")}_KILLED_BY_REASON_{(int)killedByReason}");
+
+                var coven = Btos2Faction.Coven.GetChangedGradient(Role.DREAMWEAVER);
+                var pandora = Btos2Faction.Pandora.GetChangedGradient(Role.DREAMWEAVER);
+                text2 = text2.Replace("%pandora%", Utils.ApplyGradient(Utils.GetString("BTOS_ROLENAME_222"), pandora));
+                text2 = text2.Replace("%coven%", Utils.ApplyGradient(Utils.GetString("GUI_FACTIONNAME_2"), coven));
+
+                if (Constants.EnableIcons())
                 {
-                    var killedByReason = killRecord.killedByReasons[i];
-                    var text2 = __instance.l10n($"FANCY{(i == 0 ? "" : "_ALSO")}_KILLED_BY_REASON_{(int)killedByReason}");
+                    text2 = text2.Replace("RoleIcons\"", "RoleIcons (Regular)\"");
 
-                    var coven = Btos2Faction.Coven.GetChangedGradient(Role.DREAMWEAVER);
-                    var pandora = Btos2Faction.Pandora.GetChangedGradient(Role.DREAMWEAVER);
-                    text2 = text2.Replace("%pandora%", Utils.ApplyGradient(Utils.GetString("BTOS_ROLENAME_222"), pandora));
-                    text2 = text2.Replace("%coven%", Utils.ApplyGradient(Utils.GetString("GUI_FACTIONNAME_2"), coven));
-
-
-                    if (Constants.EnableIcons())
-                    {
-                        text2 = text2.Replace("RoleIcons\"", "RoleIcons (Regular)\"");
-
-                        if (Constants.IsBTOS2())
-                            text2 = text2.Replace("\"RoleIcons", "\"BTOSRoleIcons").Replace("106\"", "109\"");
-                        else
-                            text2 = text2.Replace("\"BTOSRoleIcons", "\"RoleIcons").Replace("109\"", "106\"");
-                    }
-
-                    __instance.AddLine(text2, Tuning.REVEAL_TIME_PER_ADDL_KILLED_BY_REASON);
+                    if (Constants.IsBTOS2())
+                        text2 = text2.Replace("\"RoleIcons", "\"BTOSRoleIcons").Replace("106\"", "109\"");
+                    else
+                        text2 = text2.Replace("\"BTOSRoleIcons", "\"RoleIcons").Replace("109\"", "106\"");
                 }
+
+                __instance.AddLine(text2, Tuning.REVEAL_TIME_PER_ADDL_KILLED_BY_REASON);
             }
         }
 

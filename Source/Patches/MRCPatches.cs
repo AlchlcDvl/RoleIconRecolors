@@ -762,96 +762,88 @@ public static class KeywordMentionsPatches
             });
         }
     }
+}
 
-    [HarmonyPatch(typeof(Home.Utils.StringUtils), nameof(Home.Utils.StringUtils.ReplaceRoleTagWithRoleText))]
-    public static class ReplaceRoleTagWithRoleTextPatch
+[HarmonyPatch(typeof(Home.Utils.StringUtils), nameof(Home.Utils.StringUtils.ReplaceRoleTagWithRoleText))]
+public static class ReplaceRoleTagWithRoleTextPatch
+{
+    public static bool Prefix(ref string __result, string str)
     {
-        public static bool Prefix(ref string __result, string str)
+        if (string.IsNullOrEmpty(str))
         {
-            if (string.IsNullOrEmpty(str))
-            {
-                Debug.LogWarning("ReplaceRoleTagWithRoleText String is null!");
-                __result = string.Empty;
-                return false;
-            }
-
-            var modified = false;
-            var index = str.IndexOf("%name_role");
-
-            while (index > -1)
-            {
-                var endIndex = str.IndexOf("%", index + 1);
-
-                if (endIndex == -1)
-                    break;
-
-                var fullTag = str.Substring(index, endIndex - index + 1);
-                var idStart = index + 10;
-
-                if (int.TryParse(str[idStart..endIndex], out var roleId))
-                {
-                    var role = (Role)roleId;
-                    var colorized = role.ToColorizedDisplayString();
-                    str = str.Replace(fullTag, colorized);
-                    modified = true;
-                }
-
-                index = str.IndexOf("%name_role", index + 1);
-            }
-
-            if (modified)
-            {
-                __result = str;
-                return false; // We handled it
-            }
-
-            return true; // Let original method run
-        }
-    }
-
-    [HarmonyPatch(typeof(PlayerPopupController), nameof(PlayerPopupController.InitializeKilledByPanel))]
-    public static class KilledByPanelPatch
-    {
-        public static bool Prefix(PlayerPopupController __instance)
-        {
-            if (!Pepper.IsGamePhasePlay() || __instance.m_discussionPlayerState.alive)
-            {
-                __instance.KilledByPanelGO.SetActive(false);
-                return false; 
-            }
-
-            var killRecord = Service.Game.Sim.simulation.killRecords.Data
-                .Find(p => p.playerId == __instance.m_discussionPlayerState.position);
-
-            if (killRecord == null)
-            {
-                __instance.KilledByPanelGO.SetActive(false);
-                return false;
-            }
-
-            var text = Utils.GetString("GUI_PLAYER_POPUP_CAUSE");
-
-            if (killRecord.killedByReasons.Count < 1)
-            {
-                text += " " + Utils.GetString("GUI_CHAT_LOG_UNKNOWN");
-            }
-            else
-            {
-                for (var i = 0; i < killRecord.killedByReasons.Count; i++)
-                {
-                    var killedByReason = killRecord.killedByReasons[i];
-                    var reasonText = Utils.GetString($"FANCY_KILLED_BY_REASON_ROLE_{(int)killedByReason}");
-                    text += (i == 0 ? " " : ", ") + reasonText;
-                }
-            }
-
-            var coven = Btos2Faction.Coven.GetChangedGradient(Role.DREAMWEAVER);
-            var pandora = Btos2Faction.Pandora.GetChangedGradient(Role.DREAMWEAVER);
-            text = text.Replace("%pandora%", Utils.ApplyGradient(Utils.GetString("BTOS_ROLENAME_222"), pandora));
-            text = text.Replace("%coven%", Utils.ApplyGradient(Utils.GetString("GUI_FACTIONNAME_2"), coven));
-
-            __instance.KilledByLabel.SetText(text);
+            Debug.LogWarning("ReplaceRoleTagWithRoleText String is null!");
+            __result = string.Empty;
             return false;
         }
+
+        var modified = false;
+        var index = str.IndexOf("%name_role");
+
+        while (index > -1)
+        {
+            var endIndex = str.IndexOf("%", index + 1);
+
+            if (endIndex == -1)
+                break;
+
+            var fullTag = str.Substring(index, endIndex - index + 1);
+            var idStart = index + 10;
+
+            if (int.TryParse(str[idStart..endIndex], out var roleId))
+            {
+                var role = (Role)roleId;
+                var colorized = role.ToColorizedDisplayString();
+                str = str.Replace(fullTag, colorized);
+                modified = true;
+            }
+
+            index = str.IndexOf("%name_role", index + 1);
+        }
+
+        if (modified)
+            __result = str;
+
+        return !modified;
+    }
+}
+
+[HarmonyPatch(typeof(PlayerPopupController), nameof(PlayerPopupController.InitializeKilledByPanel))]
+public static class KilledByPanelPatch
+{
+    public static bool Prefix(PlayerPopupController __instance)
+    {
+        if (!Pepper.IsGamePhasePlay() || __instance.m_discussionPlayerState.alive)
+        {
+            __instance.KilledByPanelGO.SetActive(false);
+            return false;
+        }
+
+        if (!Service.Game.Sim.simulation.killRecords.Data.TryFinding(p => p.playerId == __instance.m_discussionPlayerState.position, out var killRecord) || killRecord == null)
+        {
+            __instance.KilledByPanelGO.SetActive(false);
+            return false;
+        }
+
+        var text = Utils.GetString("GUI_PLAYER_POPUP_CAUSE");
+
+        if (killRecord.killedByReasons.Count < 1)
+            text += " " + Utils.GetString("GUI_CHAT_LOG_UNKNOWN");
+        else
+        {
+            for (var i = 0; i < killRecord.killedByReasons.Count; i++)
+            {
+                var killedByReason = killRecord.killedByReasons[i];
+                var reasonText = Utils.GetString($"FANCY_KILLED_BY_REASON_ROLE_{(int)killedByReason}");
+                text += (i == 0 ? " " : ", ") + reasonText;
+            }
+        }
+
+        var coven = Btos2Faction.Coven.GetChangedGradient(Role.DREAMWEAVER);
+        var pandora = Btos2Faction.Pandora.GetChangedGradient(Role.DREAMWEAVER);
+        text = text.Replace("%pandora%", Utils.ApplyGradient(Utils.GetString("BTOS_ROLENAME_222"), pandora));
+        text = text.Replace("%coven%", Utils.ApplyGradient(Utils.GetString("GUI_FACTIONNAME_2"), coven));
+
+        __instance.KilledByLabel.SetText(text);
+        return false;
     }
 }
