@@ -388,10 +388,10 @@ public class Fancy : BaseMod<Fancy>
         GradientBuckets = new("GRADIENT_BUCKETS", true, PackType.MiscRoleCustomisation);
         ReplaceNAwithRA = new("RANDOM_APOC_IN_VANILLA", false, PackType.MiscRoleCustomisation, setActive: () => GradientBuckets.Value);
 
-        NeutralStart = new("NEUTRAL_START", "#A9A9A9", PackType.MiscRoleCustomisation);
-        NeutralEnd = new("NEUTRAL_END", "#A9A9A9", PackType.MiscRoleCustomisation, setActive: () => GradientBuckets.Value);
-        BucketStart = new("BUCKET_START", "#1F51FF", PackType.MiscRoleCustomisation, setActive: () => GradientBuckets.Value);
-        BucketEnd = new("BUCKET_END", "#1F51FF", PackType.MiscRoleCustomisation, setActive: () => GradientBuckets.Value);
+        NeutralStart = new("NEUTRAL", "#A9A9A9", PackType.MiscRoleCustomisation);
+        // NeutralEnd = new("NEUTRAL_END", "#A9A9A9", PackType.MiscRoleCustomisation, setActive: () => GradientBuckets.Value);
+        // BucketStart = new("BUCKET_START", "#1F51FF", PackType.MiscRoleCustomisation, setActive: () => GradientBuckets.Value);
+        // BucketEnd = new("BUCKET_END", "#1F51FF", PackType.MiscRoleCustomisation, setActive: () => GradientBuckets.Value);
         KeywordStart = new("KEYWORD_START", "#007AFF", PackType.MiscRoleCustomisation);
         KeywordEnd = new("KEYWORD_END", "#007AFF", PackType.MiscRoleCustomisation);
         AchievementStart = new("ACHIEVEMENT_START", "#FFBE00", PackType.MiscRoleCustomisation);
