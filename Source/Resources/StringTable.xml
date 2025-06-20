@@ -4612,6 +4612,146 @@
 <Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_120">Neutral Special</Entry>
 <Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_121">Common Neutral</Entry>
 
+    <Entry key="FANCY_KILLED_BY_REASON_0">They died of an unknown cause.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_1">They were killed by the <![CDATA[<style="CovenColor"><sprite="RoleIcons" name="Role106">]]>%coven%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_2">They were executed by the <![CDATA[<style="TownColor"><sprite="RoleIcons" name="Role9">]]>%name_role9%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_3">They were shot by a <![CDATA[<style="TownColor"><sprite="RoleIcons" name="Role24">]]>%name_role24%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_4">They were incinerated by an <![CDATA[<style="ArsonistColor"><sprite="RoleIcons" name="Role40">]]>%name_role40%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_5">They were stabbed by a <![CDATA[<style="SerialKillerColor"><sprite="RoleIcons" name="Role48">]]>%name_role48%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_6">They disconnected from life.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_7">They were haunted by a <![CDATA[<style="JesterColor"><sprite="RoleIcons" name="Role45">]]>%name_role45%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_8">They died while defending their target.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_9">They were killed by a <![CDATA[<style="TownColor"><sprite="RoleIcons" name="Role3">]]>%name_role3%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_10">They were shot by a <![CDATA[<style="TownColor"><sprite="RoleIcons" name="Role23">]]>%name_role23%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_11">The hangman executed them for crimes against the town.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_12">They were mauled by a <![CDATA[<style="WerewolfColor"><sprite="RoleIcons" name="Role51">]]>%name_role51%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_13">They were shot by a <![CDATA[<style="TownColor"><sprite="RoleIcons" name="Role7">]]>%name_role7%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_14">They were bitten by a <![CDATA[<style="VampireColor"><sprite="RoleIcons" name="Role52">]]>%name_role52%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_15">They were killed by a <![CDATA[<style="TownColor"><sprite="RoleIcons" name="Role6">]]>%name_role6%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_16">They were killed by a <![CDATA[<style="TownColor"><sprite="RoleIcons" name="Role21">]]>%name_role21%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_17">They were killed by a <![CDATA[<style="CovenColor"><sprite="RoleIcons" name="Role31">]]>%name_role31%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_18">They succumbed to a pestilence.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_19">They were destroyed by a <![CDATA[<style="ApocalypseColor"><sprite="RoleIcons" name="Role42">]]>%name_role42%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_20">They were plundered by a <![CDATA[<style="PirateColor"><sprite="RoleIcons" name="Role46">]]>%name_role46%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_21">They were killed by a <![CDATA[<style="CovenColor"><sprite="RoleIcons" name="Role36">]]>%name_role36%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_22">They were destroyed by <![CDATA[<style="ApocalypseColor"><sprite="RoleIcons" name="Role251">]]>%name_role251%<![CDATA[</style>]]>, Horseman of the Apocalypse.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_23">They were doomed by a <![CDATA[<style="DoomsayerColor"><sprite="RoleIcons" name="Role43">]]>%name_role43%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_24">They were killed by a <![CDATA[<style="ShroudColor"><sprite="RoleIcons" name="Role49">]]>%name_role49%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_25">They were killed by a <![CDATA[<style="CovenColor"><sprite="RoleIcons" name="Role25">]]>%name_role25%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_26">They were killed by a <![CDATA[<style="CovenColor"><sprite="RoleIcons" name="Role34">]]>%name_role34%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_27">They died of a <![CDATA[<style="LoverColor"><sprite="RoleIcons" name="Role1">]]>broken heart<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_28">They visited a <![CDATA[<style="SerialKillerColor"><sprite="RoleIcons" name="Role48">]]>%name_role48%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_29">They were hanged.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_30">They were disintegrated by a <![CDATA[<style="CovenColor"><sprite="RoleIcons" name="Role29">]]>%name_role29%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_31"><![CDATA[<style="ApocalypseColor"><sprite="RoleIcons" name="Role253">]]>%name_role253%<![CDATA[</style>]]> has brought about the Apocalypse killing them.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_32">They killed their own VIP.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_33">They were Prosecuted.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_34">They died of starvation.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_35">They were tormented by an <![CDATA[<style="ExecutionerColor"><sprite="RoleIcons" name="Role44">]]>%name_role44%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_36">They left town.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_37">They died of scurvy.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_38">They were killed by a <![CDATA[<style="TownColor"><sprite="RoleIcons" name="Role22">]]>%name_role22%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_39">They hanged their own Town member.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_40">They were killed by a hidden role.</Entry>
+    <Entry key="FANCY_KILLED_BY_MENTION_73">They were killed by <![CDATA[%pandora%]]>.</Entry>
+    <Entry key="FANCY_KILLED_BY_REASON_70">They were assassinated by a <![CDATA[<sprite="BTOSRoleIcons" name="Role55">%name_role55%]]>.</Entry>
+    <Entry key="FANCY_KILLED_BY_REASON_71">They were a recruit of the <![CDATA[<sprite="BTOSRoleIcons" name="Role55">%name_role55%]]> and have failed their teammate.</Entry>
+    <Entry key="FANCY_KILLED_BY_REASON_72">They were vanquished by an <![CDATA[<sprite="BTOSRoleIcons" name="Role59"><color=#821252>]]>%name_role59%<![CDATA[</color>]]>.</Entry> 
+    <Entry key="FANCY_KILLED_BY_REASON_73">They were killed by <![CDATA[<sprite="BTOSRoleIcons" name="Role222">%pandora%]]>.</Entry>
+
+	<Entry key="FANCY_ALSO_KILLED_BY_REASON_1">They were also killed by the <![CDATA[<style="CovenColor"><sprite="RoleIcons" name="Role106">]]>%coven%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_ALSO_KILLED_BY_REASON_2">They were also executed by the <![CDATA[<style="TownColor"><sprite="RoleIcons" name="Role9">]]>%name_role9%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_ALSO_KILLED_BY_REASON_3">They were also shot by a <![CDATA[<style="TownColor"><sprite="RoleIcons" name="Role24">]]>%name_role24%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_ALSO_KILLED_BY_REASON_4">They were also incinerated by an <![CDATA[<style="ArsonistColor"><sprite="RoleIcons" name="Role40">]]>%name_role40%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_ALSO_KILLED_BY_REASON_5">They were also stabbed by a <![CDATA[<style="SerialKillerColor"><sprite="RoleIcons" name="Role48">]]>%name_role48%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_ALSO_KILLED_BY_REASON_6">They also disconnected from life.</Entry>
+	<Entry key="FANCY_ALSO_KILLED_BY_REASON_7">They were also haunted by a <![CDATA[<style="JesterColor"><sprite="RoleIcons" name="Role45">]]>%name_role45%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_ALSO_KILLED_BY_REASON_8">They also died while defending their target.</Entry>
+	<Entry key="FANCY_ALSO_KILLED_BY_REASON_9">They were also killed by a <![CDATA[<style="TownColor"><sprite="RoleIcons" name="Role3">]]>%name_role3%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_ALSO_KILLED_BY_REASON_10">They were also shot by a <![CDATA[<style="TownColor"><sprite="RoleIcons" name="Role23">]]>%name_role23%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_ALSO_KILLED_BY_REASON_11">The hangman also executed them for crimes against the town.</Entry>
+	<Entry key="FANCY_ALSO_KILLED_BY_REASON_12">They were also mauled by a <![CDATA[<style="WerewolfColor"><sprite="RoleIcons" name="Role51">]]>%name_role51%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_ALSO_KILLED_BY_REASON_13">They were also shot by a <![CDATA[<style="TownColor"><sprite="RoleIcons" name="Role7">]]>%name_role7%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_ALSO_KILLED_BY_REASON_14">They were also bitten by a <![CDATA[<style="VampireColor"><sprite="RoleIcons" name="Role52">]]>%name_role52%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_ALSO_KILLED_BY_REASON_15">They were also killed by a <![CDATA[<style="TownColor"><sprite="RoleIcons" name="Role6">]]>%name_role6%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_ALSO_KILLED_BY_REASON_16">They were also killed by a <![CDATA[<style="TownColor"><sprite="RoleIcons" name="Role21">]]>%name_role21%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_ALSO_KILLED_BY_REASON_17">They were also killed by a <![CDATA[<style="CovenColor"><sprite="RoleIcons" name="Role31">]]>%name_role31%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_ALSO_KILLED_BY_REASON_18">They also succumbed to a pestilence.</Entry>
+	<Entry key="FANCY_ALSO_KILLED_BY_REASON_19">They were also destroyed by a <![CDATA[<style="ApocalypseColor"><sprite="RoleIcons" name="Role42">]]>%name_role42%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_ALSO_KILLED_BY_REASON_20">They also were plundered by a <![CDATA[<style="PirateColor"><sprite="RoleIcons" name="Role46">]]>%name_role46%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_ALSO_KILLED_BY_REASON_21">They were also killed by a <![CDATA[<style="CovenColor"><sprite="RoleIcons" name="Role36">]]>%name_role36%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_ALSO_KILLED_BY_REASON_22">They were also destroyed by <![CDATA[<style="ApocalypseColor"><sprite="RoleIcons" name="Role251">]]>%name_role251%<![CDATA[</style>]]>, Horseman of the Apocalypse.</Entry>
+	<Entry key="FANCY_ALSO_KILLED_BY_REASON_23">They were also doomed by a <![CDATA[<style="DoomsayerColor"><sprite="RoleIcons" name="Role43">]]>%name_role43%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_ALSO_KILLED_BY_REASON_24">They were also killed by a <![CDATA[<style="ShroudColor"><sprite="RoleIcons" name="Role49">]]>%name_role49%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_ALSO_KILLED_BY_REASON_25">They were also killed by a <![CDATA[<style="CovenColor"><sprite="RoleIcons" name="Role25">]]>%name_role25%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_ALSO_KILLED_BY_REASON_26">They were also killed by a <![CDATA[<style="CovenColor"><sprite="RoleIcons" name="Role34">]]>%name_role34%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_ALSO_KILLED_BY_REASON_27">They also died of a <![CDATA[<style="LoverColor"><sprite="RoleIcons" name="Role1">]]>broken heart<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_ALSO_KILLED_BY_REASON_28">They also visited a <![CDATA[<style="SerialKillerColor"><sprite="RoleIcons" name="Role48">]]>%name_role48%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_ALSO_KILLED_BY_REASON_29">They were also hanged.</Entry>
+	<Entry key="FANCY_ALSO_KILLED_BY_REASON_30">They were also disintegrated by a <![CDATA[<style="CovenColor"><sprite="RoleIcons" name="Role29">]]>%name_role29%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_ALSO_KILLED_BY_REASON_31"><![CDATA[<style="ApocalypseColor"><sprite="RoleIcons" name="Role253">]]>%name_role253%<![CDATA[</style>]]> has brought about the Apocalypse killing them.</Entry>
+	<Entry key="FANCY_ALSO_KILLED_BY_REASON_32">They killed their own VIP.</Entry>
+	<Entry key="FANCY_ALSO_KILLED_BY_REASON_33">They were Prosecuted.</Entry>
+	<Entry key="FANCY_ALSO_KILLED_BY_REASON_34">They also died of starvation.</Entry>
+	<Entry key="FANCY_ALSO_KILLED_BY_REASON_35">They were also tormented by an <![CDATA[<style="ExecutionerColor"><sprite="RoleIcons" name="Role44">]]>%name_role44%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_ALSO_KILLED_BY_REASON_36">They also left town.</Entry>
+	<Entry key="FANCY_ALSO_KILLED_BY_REASON_37">They also died of scurvy.</Entry>
+	<Entry key="FANCY_ALSO_KILLED_BY_REASON_38">They were also killed by a <![CDATA[<style="TownColor"><sprite="RoleIcons" name="Role22">]]>%name_role22%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_ALSO_KILLED_BY_REASON_39">They also hanged their own Town member.</Entry>
+	<Entry key="FANCY_ALSO_KILLED_BY_REASON_40">They were also killed by a hidden role.</Entry>
+	<Entry key="FANCY_ALSO_KILLED_BY_REASON_41">They also died of boredom.</Entry>
+    <Entry key="FANCY_ALSO_KILLED_BY_MENTION_73">They were also killed by <![CDATA[%pandora%]]>.</Entry>
+    <Entry key="FANCY_ALSO_KILLED_BY_REASON_70">They were also assassinated by a <![CDATA[<sprite="BTOSRoleIcons" name="Role55">%name_role55%]]>.</Entry>
+    <Entry key="FANCY_ALSO_KILLED_BY_REASON_72">They were also vanquished by an <![CDATA[<sprite="BTOSRoleIcons" name="Role59"><color=#821252>]]>%name_role59%<![CDATA[</color>]]>.</Entry> 
+    <Entry key="FANCY_ALSO_KILLED_BY_REASON_71">They were also a recruit of the <![CDATA[<sprite="BTOSRoleIcons" name="Role55">%name_role55%]]> and have failed their teammate.</Entry>
+    <Entry key="FANCY_ALSO_KILLED_BY_REASON_73">They were also killed by <![CDATA[<sprite="BTOSRoleIcons" name="Role222">%pandora%]]>.</Entry>
+
+	<Entry key="FANCY_KILLED_BY_REASON_ROLE_0">Unknown</Entry>
+    <Entry key="FANCY_KILLED_BY_REASON_ROLE_1"><![CDATA[<style="CovenColor">]]>%coven%<![CDATA[</style>]]></Entry>
+    <Entry key="FANCY_KILLED_BY_REASON_ROLE_2"><![CDATA[<style="TownColor">]]>%name_role9%<![CDATA[</style>]]></Entry>
+    <Entry key="FANCY_KILLED_BY_REASON_ROLE_3"><![CDATA[<style="TownColor">]]>%name_role24%<![CDATA[</style>]]></Entry>
+    <Entry key="FANCY_KILLED_BY_REASON_ROLE_4"><![CDATA[<style="ArsonistColor">]]>%name_role40%<![CDATA[</style>]]></Entry>
+    <Entry key="FANCY_KILLED_BY_REASON_ROLE_5"><![CDATA[<style="SerialKillerColor">]]>%name_role48%<![CDATA[</style>]]></Entry>
+    <Entry key="FANCY_KILLED_BY_REASON_ROLE_6">Disconnected.</Entry>
+    <Entry key="FANCY_KILLED_BY_REASON_ROLE_7"><![CDATA[<style="JesterColor">]]>%name_role45%<![CDATA[</style>]]></Entry>
+    <Entry key="FANCY_KILLED_BY_REASON_ROLE_8">Defending their target.</Entry>
+    <Entry key="FANCY_KILLED_BY_REASON_ROLE_9"><![CDATA[<style="TownColor">]]>%name_role3%<![CDATA[</style>]]></Entry>
+    <Entry key="FANCY_KILLED_BY_REASON_ROLE_10"><![CDATA[<style="TownColor">]]>%name_role23%<![CDATA[</style>]]></Entry>
+    <Entry key="FANCY_KILLED_BY_REASON_ROLE_11">Hangman</Entry>
+    <Entry key="FANCY_KILLED_BY_REASON_ROLE_12"><![CDATA[<style="WerewolfColor">]]>%name_role51%<![CDATA[</style>]]></Entry>
+    <Entry key="FANCY_KILLED_BY_REASON_ROLE_13"><![CDATA[<style="TownColor">]]>%name_role7%<![CDATA[</style>]]></Entry>
+    <Entry key="FANCY_KILLED_BY_REASON_ROLE_14"><![CDATA[<style="VampireColor">]]>Vampire<![CDATA[</style>]]></Entry>
+    <Entry key="FANCY_KILLED_BY_REASON_ROLE_15"><![CDATA[<style="TownColor">]]>%name_role6%<![CDATA[</style>]]></Entry>
+    <Entry key="FANCY_KILLED_BY_REASON_ROLE_16"><![CDATA[<style="TownColor">]]>%name_role21%<![CDATA[</style>]]></Entry>
+    <Entry key="FANCY_KILLED_BY_REASON_ROLE_17"><![CDATA[<style="CovenColor">]]>%name_role31%<![CDATA[</style>]]></Entry>
+    <Entry key="FANCY_KILLED_BY_REASON_ROLE_18"><![CDATA[<style="ApocalypseColor">]]>Pestilence<![CDATA[</style>]]></Entry>
+    <Entry key="FANCY_KILLED_BY_REASON_ROLE_19"><![CDATA[<style="ApocalypseColor">]]>%name_role42%<![CDATA[</style>]]></Entry>
+    <Entry key="FANCY_KILLED_BY_REASON_ROLE_20"><![CDATA[<style="PirateColor">]]>%name_role46%<![CDATA[</style>]]></Entry>
+    <Entry key="FANCY_KILLED_BY_REASON_ROLE_21"><![CDATA[<style="CovenColor">]]>%name_role36%<![CDATA[</style>]]></Entry>
+    <Entry key="FANCY_KILLED_BY_REASON_ROLE_22"><![CDATA[<style="ApocalypseColor">]]>War, Horseman of the Apocalypse<![CDATA[</style>]]></Entry>
+    <Entry key="FANCY_KILLED_BY_REASON_ROLE_23"><![CDATA[<style="DoomsayerColor">]]>%name_role43%<![CDATA[</style>]]></Entry>
+    <Entry key="FANCY_KILLED_BY_REASON_ROLE_24"><![CDATA[<style="ShroudColor">]]>%name_role49%<![CDATA[</style>]]></Entry>
+    <Entry key="FANCY_KILLED_BY_REASON_ROLE_25"><![CDATA[<style="CovenColor">]]>%name_role25%<![CDATA[</style>]]></Entry>
+    <Entry key="FANCY_KILLED_BY_REASON_ROLE_26"><![CDATA[<style="CovenColor">]]>%name_role34%<![CDATA[</style>]]></Entry>
+    <Entry key="FANCY_KILLED_BY_REASON_ROLE_27"><![CDATA[<style="LoverColor">]]>Broken heart<![CDATA[</style>]]></Entry>
+    <Entry key="FANCY_KILLED_BY_REASON_ROLE_28"><![CDATA[<style="SerialKillerColor">]]>%name_role48%<![CDATA[</style>]]></Entry>
+    <Entry key="FANCY_KILLED_BY_REASON_ROLE_29">Hanged</Entry>
+    <Entry key="FANCY_KILLED_BY_REASON_ROLE_30"><![CDATA[<style="CovenColor">]]>%name_role29%<![CDATA[</style>]]>.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_ROLE_31"><![CDATA[<style="ApocalypseColor">]]>Death<![CDATA[</style>]]></Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_ROLE_32">killed their own VIP.</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_ROLE_33">Prosecuted</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_ROLE_34">Starvation</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_ROLE_35"><![CDATA[<style="ExecutionerColor">]]>%name_role44%<![CDATA[</style>]]></Entry>
+    <Entry key="FANCY_KILLED_BY_REASON_ROLE_36">Left Town</Entry>
+	<Entry key="FANCY_KILLED_BY_REASON_ROLE_37">Scurvy</Entry>
+  	<Entry key="FANCY_KILLED_BY_REASON_ROLE_38"><![CDATA[<style="TownColor">]]>%name_role22%<![CDATA[</style>]]></Entry>
+  	<Entry key="FANCY_KILLED_BY_REASON_ROLE_39">Hanged a Town Member</Entry>
+  	<Entry key="FANCY_KILLED_BY_REASON_ROLE_40">Hidden Role</Entry>
+  	<Entry key="FANCY_KILLED_BY_REASON_ROLE_41">Boredom</Entry>
+    <Entry key="FANCY_KILLED_BY_REASON_ROLE_70">%name_role55%</Entry>
+    <Entry key="FANCY_KILLED_BY_REASON_ROLE_71">%name_role55% Lifelink</Entry>
+    <Entry key="FANCY_KILLED_BY_REASON_ROLE_72"><![CDATA[<color=#821252>]]>%name_role59%<![CDATA[</color>]]></Entry>
+    <Entry key="FANCY_KILLED_BY_REASON_ROLE_73"><![CDATA[%pandora%]]></Entry>
 
 
 </StringTable>

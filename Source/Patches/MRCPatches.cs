@@ -363,7 +363,7 @@ public static class PatchDefaultWinScreens
             __instance.m_Animator.SetInteger(State, 2);
         }
 
-        var text = __instance.l10n($"GUI_WINNERS_ARE_{(int)winningFaction}");
+        var text = Utils.GetString($"GUI_WINNERS_ARE_{(int)winningFaction}");
         var gradient = winningFaction.GetChangedGradient(Role.NONE);
 
         if (gradient != null)
@@ -402,7 +402,7 @@ public static class PatchCustomWinScreens
 
         var winningFaction = __instance.cinematicData.winningFaction;
         PlayVictoryMusic(winningFaction);
-        var text2 = __instance.l10n($"GUI_WINNERS_ARE_{(int)winningFaction}");
+        var text2 = Utils.GetString($"GUI_WINNERS_ARE_{(int)winningFaction}");
         var gradient = winningFaction.GetChangedGradient(Role.NONE);
 
         if (gradient != null)
@@ -683,7 +683,7 @@ public static class KeywordMentionsPatches
         var gradient = __instance._useColors ? Utils.CreateGradient(Fancy.KeywordStart.Value, Fancy.KeywordEnd.Value) : null;
 
         var keywordList = Service.Game.Keyword.keywordInfo
-            .Select(k => (Keyword: k, Localized: __instance.l10n(k.KeywordKey)))
+            .Select(k => (Keyword: k, Localized: Utils.GetString(k.KeywordKey)))
             .OrderBy(k => k.Localized, StringComparer.Ordinal)
             .ToList();
 
@@ -806,6 +806,52 @@ public static class KeywordMentionsPatches
             }
 
             return true; // Let original method run
+        }
+    }
+
+    [HarmonyPatch(typeof(PlayerPopupController), nameof(PlayerPopupController.InitializeKilledByPanel))]
+    public static class KilledByPanelPatch
+    {
+        public static bool Prefix(PlayerPopupController __instance)
+        {
+            if (!Pepper.IsGamePhasePlay() || __instance.m_discussionPlayerState.alive)
+            {
+                __instance.KilledByPanelGO.SetActive(false);
+                return false; 
+            }
+
+            var killRecord = Service.Game.Sim.simulation.killRecords.Data
+                .Find(p => p.playerId == __instance.m_discussionPlayerState.position);
+
+            if (killRecord == null)
+            {
+                __instance.KilledByPanelGO.SetActive(false);
+                return false;
+            }
+
+            var text = Utils.GetString("GUI_PLAYER_POPUP_CAUSE");
+
+            if (killRecord.killedByReasons.Count < 1)
+            {
+                text += " " + Utils.GetString("GUI_CHAT_LOG_UNKNOWN");
+            }
+            else
+            {
+                for (var i = 0; i < killRecord.killedByReasons.Count; i++)
+                {
+                    var killedByReason = killRecord.killedByReasons[i];
+                    var reasonText = Utils.GetString($"FANCY_KILLED_BY_REASON_ROLE_{(int)killedByReason}");
+                    text += (i == 0 ? " " : ", ") + reasonText;
+                }
+            }
+
+            var coven = Btos2Faction.Coven.GetChangedGradient(Role.DREAMWEAVER);
+            var pandora = Btos2Faction.Pandora.GetChangedGradient(Role.DREAMWEAVER);
+            text = text.Replace("%pandora%", Utils.ApplyGradient(Utils.GetString("BTOS_ROLENAME_222"), pandora));
+            text = text.Replace("%coven%", Utils.ApplyGradient(Utils.GetString("GUI_FACTIONNAME_2"), coven));
+
+            __instance.KilledByLabel.SetText(text);
+            return false;
         }
     }
 }
