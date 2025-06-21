@@ -225,7 +225,6 @@ public class Fancy : BaseMod<Fancy>
 
         var colors = GeneralUtils.GetEnumValues<ColorType>()!.Where(x => x != ColorType.All).ToDictionary(x => x, x => x.ToString().ToUpperInvariant());
         var filteredFactions = BTOS2Factions.Where(x => x is not (Btos2Faction.Cannibal or Btos2Faction.None or Btos2Faction.Lovers));
-        var filteredRoles = BTOS2Roles.Where(x => (int)x is < 57 or > 249 && x is not (Role.STONED or Role.UNKNOWN)).ToList();
 
         var factions = filteredFactions.ToDictionary(x => x, x => Utils.FactionName(x, Constants.BTOS2Exists() ? GameModType.BTOS2 : GameModType.Vanilla, false).ToUpperInvariant());
 
@@ -235,7 +234,7 @@ public class Fancy : BaseMod<Fancy>
         SelectTestingFaction = new("SELECTED_TESTING_FACTION", FactionType.NONE, PackType.None, useTranslations: true, values:
             () => SettingsAndTestingUI.Instance?.IsBTOS2 == true ? [.. filteredFactions.AddItem(FactionType.NONE)] : VanillaFactions);
         SelectTestingRole = new("SELECTED_TESTING_ROLE", Role.ADMIRER, PackType.None, useTranslations: true, values:
-            () => SettingsAndTestingUI.Instance?.IsBTOS2 == true ? [..filteredRoles] : VanillaRoles); //  AS it has to be like this unless you wanna make it work with filteredRoles (which it currently does not)
+            () => SettingsAndTestingUI.Instance?.IsBTOS2 == true ? BTOS2Roles : VanillaRoles);
 
         SelectedIconPack = new("SELECTED_ICON_PACK", "Vanilla", PackType.IconPacks, () => GetPackNames(PackType.IconPacks), onChanged: x => TryLoadingSprites(x, PackType.IconPacks));
         SelectedSilhouetteSet = new("SELECTED_SIL_SET", "Vanilla", PackType.SilhouetteSets, () => GetPackNames(PackType.SilhouetteSets), onChanged: x => TryLoadingSprites(x,
