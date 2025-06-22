@@ -1044,6 +1044,8 @@ public static class MakeProperFactionChecksInWdah2
 {
     public static bool Prefix(WhoDiedAndHowPanel __instance, float phaseTime)
     {
+        if (!Constants.EnableIcons()) return true;
+
         Debug.Log($"HandleSubphaseWhoDied phaseTime = {phaseTime}");
 
         if (__instance.tombstonePanel != null)
@@ -1078,18 +1080,13 @@ public static class MakeProperFactionChecksInWdah2
 
                 var coven = Btos2Faction.Coven.GetChangedGradient(Role.DREAMWEAVER);
                 var pandora = Btos2Faction.Pandora.GetChangedGradient(Role.DREAMWEAVER);
-                text2 = text2.Replace("%pandora%", Utils.ApplyGradient(Utils.GetString("BTOS_ROLENAME_222"), pandora));
-                text2 = text2.Replace("%coven%", Utils.ApplyGradient(Utils.GetString("GUI_FACTIONNAME_2"), coven));
 
-                if (Constants.EnableIcons())
-                {
-                    text2 = text2.Replace("RoleIcons\"", "RoleIcons (Regular)\"");
+                text2 = text2.Replace("RoleIcons\"", "RoleIcons (Regular)\"");
 
-                    if (Constants.IsBTOS2())
-                        text2 = text2.Replace("\"RoleIcons", "\"BTOSRoleIcons").Replace("106\"", "109\"");
-                    else
-                        text2 = text2.Replace("\"BTOSRoleIcons", "\"RoleIcons").Replace("109\"", "106\"");
-                }
+                if (Constants.IsBTOS2())
+                    text2 = text2.Replace("\"RoleIcons", "\"BTOSRoleIcons").Replace("106\"", "109\"");
+                else
+                    text2 = text2.Replace("\"BTOSRoleIcons", "\"RoleIcons").Replace("109\"", "106\"");
 
                 __instance.AddLine(text2, Tuning.REVEAL_TIME_PER_ADDL_KILLED_BY_REASON);
             }
