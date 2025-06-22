@@ -1070,7 +1070,7 @@ public static class MakeProperFactionChecksInWdah2
         __instance.AddLine(text, Tuning.REVEAL_TIME_PER_ADDL_KILLED_BY_REASON);
 
         if (killRecord == null || killRecord.killedByReasons.Count < 1)
-            __instance.AddLine(__instance.l10n("FANCY_KILLED_BY_REASON_0"), Tuning.REVEAL_TIME_PER_ADDL_KILLED_BY_REASON);
+            __instance.AddLine(__instance.l10n("GUI_GAME_KILLED_BY_REASON_0"), Tuning.REVEAL_TIME_PER_ADDL_KILLED_BY_REASON);
         else
         {
             for (var i = 0; i < killRecord.killedByReasons.Count; i++)
