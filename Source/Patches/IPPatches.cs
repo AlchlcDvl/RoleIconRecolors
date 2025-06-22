@@ -1076,10 +1076,7 @@ public static class MakeProperFactionChecksInWdah2
             for (var i = 0; i < killRecord.killedByReasons.Count; i++)
             {
                 var killedByReason = killRecord.killedByReasons[i];
-                var text2 = __instance.l10n($"FANCY{(i == 0 ? "" : "_ALSO")}_KILLED_BY_REASON_{(int)killedByReason}");
-
-                var coven = Btos2Faction.Coven.GetChangedGradient(Role.DREAMWEAVER);
-                var pandora = Btos2Faction.Pandora.GetChangedGradient(Role.DREAMWEAVER);
+                var text2 = __instance.l10n($"GUI_GAME{(i == 0 ? "" : "_ALSO")}_KILLED_BY_REASON_{(int)killedByReason}");
 
                 text2 = text2.Replace("RoleIcons\"", "RoleIcons (Regular)\"");
 
