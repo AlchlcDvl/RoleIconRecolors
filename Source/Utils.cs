@@ -875,52 +875,6 @@ public static class Utils
         return replaceIcons ? factionIcon.ReplaceIcons() : factionIcon;
     }
 
-    private static readonly HashSet<Role> UniqueBTOSRoles =
-    [
-        Btos2Role.Jailor,
-        Btos2Role.Mayor,
-        Btos2Role.Prosecutor,
-        Btos2Role.Monarch,
-        Btos2Role.Marshal,
-        Btos2Role.Vampire,
-        Btos2Role.Jackal,
-        Btos2Role.Banshee,
-        Btos2Role.Conjurer,
-        Btos2Role.CovenLeader,
-        Btos2Role.Dreamweaver,
-        Btos2Role.Enchanter,
-        Btos2Role.Poisoner,
-        Btos2Role.PotionMaster,
-        Btos2Role.Necromancer,
-        Btos2Role.HexMaster,
-        Btos2Role.Witch,
-        Btos2Role.Wildling,
-        Btos2Role.Illusionist,
-        Btos2Role.VoodooMaster,
-        Btos2Role.Jinx,
-        Btos2Role.Ritualist,
-        Btos2Role.Medusa,
-        Btos2Role.Baker,
-        Btos2Role.Berserker,
-        Btos2Role.Plaguebearer,
-        Btos2Role.SoulCollector,
-        Btos2Role.Warlock,
-        Btos2Role.Pirate,
-        Btos2Role.Inquisitor,
-        Btos2Role.Executioner,
-        Btos2Role.Judge,
-        Btos2Role.Auditor,
-        Btos2Role.Starspawn,
-    ];
-
-    public static bool IsUnique(this Role role)
-    {
-        if (Constants.IsBTOS2())
-            return UniqueBTOSRoles.Contains(role);
-
-        return SharedRoleData.uniqueRoles.Contains(role);
-    }
-
     public static bool IsHorseman(this Role role) => RoleExtensions.horsemenList.Contains(role);
 
     public static string GetFormattedRoleName(Role role, FactionType faction, bool includeSprite = true)
@@ -949,8 +903,6 @@ public static class Utils
             return "FANCY_PLAYER_WAS_A_HIDDEN_ROLE";
         else if (role.IsHorseman())
             return "FANCY_PLAYER_WAS_ROLE";
-        else if ((role.IsUnique() || Constants.IsIndividuality()) && !Fancy.IgnoreUniqueRoleCheck.Value)
-            return "FANCY_PLAYER_WAS_THE_ROLE";
         else if (StartsWithVowel(roleName))
             return "FANCY_PLAYER_WAS_AN_ROLE";
         else
@@ -967,8 +919,6 @@ public static class Utils
             return "FANCY_THEY_WERE_A_HIDDEN_ROLE";
         else if (role.IsHorseman())
             return "FANCY_THEY_WERE_ROLE";
-        else if ((role.IsUnique() || Constants.IsIndividuality()) && !Fancy.IgnoreUniqueRoleCheck.Value)
-            return "FANCY_THEY_WERE_THE_ROLE";
         else if (StartsWithVowel(roleName))
             return "FANCY_THEY_WERE_AN_ROLE";
         else
