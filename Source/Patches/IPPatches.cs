@@ -37,12 +37,20 @@ public static class PatchRoleDeckBuilder
 [HarmonyPatch(typeof(RoleDeckListItem), nameof(RoleDeckListItem.SetData))]
 public static class PatchRoleListPanel
 {
-    public static void Postfix(RoleDeckListItem __instance, Role a_role, bool a_isBan)
+    public static void Postfix(RoleDeckListItem __instance, RoleDeckSlot a_roleDeckSlot, bool a_isBan)
     {
         if (!Constants.EnableIcons())
             return;
 
-        var icon = a_isBan ? GetSprite("Banned") : GetSprite(Utils.RoleName(a_role), Utils.FactionName(a_role.GetFactionType()), false);
+        var a_role = a_roleDeckSlot?.Role1;
+        if (a_role == null)
+            return;
+
+        var role = a_role.Value; 
+
+        var icon = a_isBan
+            ? GetSprite("Banned")
+            : GetSprite(Utils.RoleName(role), Utils.FactionName(role.GetFactionType()), false);
 
         if (__instance.roleImage && icon.IsValid())
             __instance.roleImage.sprite = icon;
@@ -52,12 +60,20 @@ public static class PatchRoleListPanel
 [HarmonyPatch(typeof(GameBrowserRoleDeckListItem), nameof(GameBrowserRoleDeckListItem.SetData))]
 public static class PatchBrowserRoleListPanel
 {
-    public static void Postfix(GameBrowserRoleDeckListItem __instance, Role a_role, bool a_isBan)
+    public static void Postfix(GameBrowserRoleDeckListItem __instance, RoleDeckSlot a_roleDeckSlot, bool a_isBan)
     {
         if (!Constants.EnableIcons())
             return;
 
-        var icon = a_isBan ? GetSprite("Banned") : GetSprite(Utils.RoleName(a_role), Utils.FactionName(a_role.GetFactionType()), false);
+        var a_role = a_roleDeckSlot?.Role1;
+    if (a_role == null)
+        return;
+
+    var role = a_role.Value; 
+
+    var icon = a_isBan
+        ? GetSprite("Banned")
+        : GetSprite(Utils.RoleName(role), Utils.FactionName(role.GetFactionType()), false);
 
         if (__instance.roleImage && icon.IsValid())
             __instance.roleImage.sprite = icon;
@@ -307,7 +323,7 @@ public static class PatchAbilityPanelListItems
 
                 break;
             }
-            case AbilityType.POISONER_POISON or AbilityType.SHROUD or AbilityType.INVESTIGATOR or AbilityType.PIRATE or (AbilityType)30 or (AbilityType)32 or (AbilityType)33:
+            case AbilityType.POISONER_POISON or AbilityType.SHROUD or AbilityType.PIRATE or (AbilityType)30 or (AbilityType)32 or (AbilityType)33:
             {
                 var special = GetSprite(reg, $"{name}_Special", faction, ee);
 

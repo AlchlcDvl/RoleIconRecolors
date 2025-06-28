@@ -30,12 +30,12 @@ public class GradientRoleColorController : MonoBehaviour
             yield return Coroutines.CoPerformTimedAction(Duration, t =>
             {
                 if (Instance?.rolecardBackgroundInstance)
-                    Instance.rolecardBackgroundInstance.SetColor(grad.Evaluate(t));
+                    Instance.rolecardBackgroundInstance.SetColor(grad.Evaluate(t), grad.Evaluate(t));
             });
             yield return Coroutines.CoPerformTimedAction(Duration, t =>
             {
                 if (Instance?.rolecardBackgroundInstance)
-                    Instance.rolecardBackgroundInstance.SetColor(grad.Evaluate(1f - t));
+                    Instance.rolecardBackgroundInstance.SetColor(grad.Evaluate(1f - t), grad.Evaluate(1f - t));
             });
         }
     }

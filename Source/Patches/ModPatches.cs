@@ -107,10 +107,6 @@ public static class RoleRevealCinematicPlayerPatch
         {
             roleRevealKey = "FANCY_ROLE_REVEAL_ROLE_HORSEMAN";
         }
-        else if ((role.IsUnique() || Constants.IsIndividuality()) && !Fancy.IgnoreUniqueRoleCheck.Value)
-        {
-            roleRevealKey = "FANCY_ROLE_REVEAL_ROLE_UNIQUE";
-        }
         else if (Utils.StartsWithVowel(roleName))
         {
             roleRevealKey = "FANCY_ROLE_REVEAL_ROLE_VOWEL";
@@ -122,6 +118,10 @@ public static class RoleRevealCinematicPlayerPatch
 
         var roleText = __instance.l10n(roleRevealKey).Replace("%role%", roleIcon);
         __instance.roleTextPlayer.ShowText(roleText);
+
+        // TODO: Faction Specific Role Blurbs
+        var roleBlurb = role.GetRoleBlurb();
+        __instance.roleBlurbTextPlayer.ShowText(roleBlurb);
 
         if (Pepper.GetCurrentGameType() == GameType.Ranked)
             __instance.playableDirector.Resume();

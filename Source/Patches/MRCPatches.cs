@@ -498,10 +498,26 @@ public static class ClientRoleExtensionsPatches
     }
 
     [HarmonyPatch(nameof(ClientRoleExtensions.GetFactionColor))]
-    public static bool Prefix(ref string __result, FactionType factionType)
+    public static bool PrefixPrimary(ref string __result, FactionType factionType)
     {
         __result = Fancy.Colors[Utils.FactionName(factionType, stoned: true).ToUpper()].Start;
         return false;
+    }
+
+    // idk im just tryna disable this code lol
+    [HarmonyPatch(nameof(ClientRoleExtensions.GetSecondFactionColor))]
+    public static bool PrefixSecondary(ref string __result, FactionType factionType)
+    {
+        __result = Fancy.Colors[Utils.FactionName(factionType, stoned: true).ToUpper()].Start;
+        return false;
+    }
+
+
+    [HarmonyPatch(nameof(ClientRoleExtensions.ApplyFactionColor))]
+    public static void Postfix(ref string __result, string text, FactionType factionType)
+    {
+        var factionColor = factionType.GetFactionColor();
+        __result = "<color=" + factionColor + ">" + text + "</color>";
     }
 
     // [HarmonyPatch(nameof(ClientRoleExtensions.GetBucketDisplayString))]

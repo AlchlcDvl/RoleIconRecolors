@@ -321,158 +321,158 @@ public static class PatchDialogBox
     }
 }
 
-[HarmonyPatch(typeof(SettingsController), nameof(SettingsController.Start))]
-public static class PatchSettingsController
-{
-    public static void Postfix(SettingsController __instance)
-    {
-        var modal = __instance.transform.GetChild(0).GetChild(1);
-        var tabs = modal.GetChild(0);
-        var frame = modal.GetChild(1);
+// [HarmonyPatch(typeof(SettingsController), nameof(SettingsController.Start))]
+// public static class PatchSettingsController
+// {
+//     public static void Postfix(SettingsController __instance)
+//     {
+//         var modal = __instance.transform.GetChild(0).GetChild(1);
+//         var tabs = modal.GetChild(0);
+//         var frame = modal.GetChild(1);
 
-        for (var i = 0; i < 5; i++)
-        {
-            var tempTab = tabs.GetChild(i);
-            tempTab.GetComponent<Image>().SetImageColor(ColorType.Wood);
-            tempTab.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wood);
-        }
+//         for (var i = 0; i < 5; i++)
+//         {
+//             var tempTab = tabs.GetChild(i);
+//             tempTab.GetComponent<Image>().SetImageColor(ColorType.Wood);
+//             tempTab.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wood);
+//         }
 
-        frame.GetComponent<Image>().SetImageColor(ColorType.Wood);
-        frame.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
-        frame.GetChild(1).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
-        var bottomButtons = frame.GetChild(2).GetChild(0);
-        bottomButtons.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
-        bottomButtons.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wood);
-        bottomButtons.GetChild(3).GetComponent<Image>().SetImageColor(ColorType.Wood);
-        bottomButtons.GetChild(4).GetComponent<Image>().SetImageColor(ColorType.Wood);
+//         frame.GetComponent<Image>().SetImageColor(ColorType.Wood);
+//         frame.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
+//         frame.GetChild(1).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
+//         var bottomButtons = frame.GetChild(2).GetChild(0);
+//         bottomButtons.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
+//         bottomButtons.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wood);
+//         bottomButtons.GetChild(3).GetComponent<Image>().SetImageColor(ColorType.Wood);
+//         bottomButtons.GetChild(4).GetComponent<Image>().SetImageColor(ColorType.Wood);
 
-        // Settings Game Panel
-        var settingsGamePanel = __instance.settingsViewPanel.GetComponent<SettingsGamePanel>();
+//         // Settings Game Panel
+//         var settingsGamePanel = __instance.settingsViewPanel.GetComponent<SettingsGamePanel>();
 
-        for (var i = 0; i < 4; i++)
-            settingsGamePanel.transform.GetChild(i).GetComponent<Image>().SetImageColor(ColorType.Wood);
+//         for (var i = 0; i < 4; i++)
+//             settingsGamePanel.transform.GetChild(i).GetComponent<Image>().SetImageColor(ColorType.Wood);
 
-        var firstChild = settingsGamePanel.transform.GetChild(0);
+//         var firstChild = settingsGamePanel.transform.GetChild(0);
 
-        for (var i = 1; i < 7; i++)
-        {
-            var tempHolder = firstChild.GetChild(i);
-            tempHolder.GetComponent<Image>().SetImageColor(ColorType.Metal);
-            var tempSetting = tempHolder.GetChild(1);
-            tempSetting.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
-            tempSetting.GetChild(2).GetComponent<Image>().SetImageColor(ColorType.Metal);
-        }
+//         for (var i = 1; i < 7; i++)
+//         {
+//             var tempHolder = firstChild.GetChild(i);
+//             tempHolder.GetComponent<Image>().SetImageColor(ColorType.Metal);
+//             var tempSetting = tempHolder.GetChild(1);
+//             tempSetting.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
+//             tempSetting.GetChild(2).GetComponent<Image>().SetImageColor(ColorType.Metal);
+//         }
 
-        settingsGamePanel.sliderCinematics.transform.GetComponent<Image>().SetImageColor(ColorType.Metal);
-        var firstChild1 = settingsGamePanel.sliderCinematics.transform.GetChild(1);
-        firstChild1.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Paper);
-        firstChild1.GetChild(1).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Paper);
-        settingsGamePanel.sliderMusic.transform.GetComponent<Image>().SetImageColor(ColorType.Metal);
-        var firstChild2 = settingsGamePanel.sliderMusic.transform.GetChild(1);
-        firstChild2.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Paper);
-        firstChild2.GetChild(1).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Paper);
-        settingsGamePanel.sliderEffects.transform.GetComponent<Image>().SetImageColor(ColorType.Metal);
-        var firstChild3 = settingsGamePanel.sliderEffects.transform.GetChild(1);
-        firstChild3.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Paper);
-        firstChild3.GetChild(1).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Paper);
-        var secondChild = settingsGamePanel.transform.GetChild(2);
+//         settingsGamePanel.sliderCinematics.transform.GetComponent<Image>().SetImageColor(ColorType.Metal);
+//         var firstChild1 = settingsGamePanel.sliderCinematics.transform.GetChild(1);
+//         firstChild1.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Paper);
+//         firstChild1.GetChild(1).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Paper);
+//         settingsGamePanel.sliderMusic.transform.GetComponent<Image>().SetImageColor(ColorType.Metal);
+//         var firstChild2 = settingsGamePanel.sliderMusic.transform.GetChild(1);
+//         firstChild2.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Paper);
+//         firstChild2.GetChild(1).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Paper);
+//         settingsGamePanel.sliderEffects.transform.GetComponent<Image>().SetImageColor(ColorType.Metal);
+//         var firstChild3 = settingsGamePanel.sliderEffects.transform.GetChild(1);
+//         firstChild3.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Paper);
+//         firstChild3.GetChild(1).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Paper);
+//         var secondChild = settingsGamePanel.transform.GetChild(2);
 
-        for (var i = 1; i < 7; i++)
-        {
-            var tempHolder = secondChild.GetChild(i);
-            tempHolder.GetComponent<Image>().SetImageColor(ColorType.Metal);
+//         for (var i = 1; i < 7; i++)
+//         {
+//             var tempHolder = secondChild.GetChild(i);
+//             tempHolder.GetComponent<Image>().SetImageColor(ColorType.Metal);
 
-            if (i >= 3)
-                continue;
+//             if (i >= 3)
+//                 continue;
 
-            var tempSetting = tempHolder.GetChild(1);
-            tempSetting.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
-            tempSetting.GetChild(2).GetComponent<Image>().SetImageColor(ColorType.Metal);
-        }
+//             var tempSetting = tempHolder.GetChild(1);
+//             tempSetting.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
+//             tempSetting.GetChild(2).GetComponent<Image>().SetImageColor(ColorType.Metal);
+//         }
 
-        settingsGamePanel.transform.GetChild(3).GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
+//         settingsGamePanel.transform.GetChild(3).GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
 
-        // Chat Game Panel
-        var chatGamePanel = frame.GetChild(5).GetComponent<ChatGamePanel>();
-        chatGamePanel.transform.GetChild(0).GetChild(1).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
-        var chatOptions = chatGamePanel.transform.GetChild(1);
-        var secondChatChild = chatOptions.GetChild(1);
-        chatOptions.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
-        secondChatChild.GetComponent<Image>().SetImageColor(ColorType.Wood);
-        var firstChatChild = chatOptions.GetChild(0);
+//         // Chat Game Panel
+//         var chatGamePanel = frame.GetChild(5).GetComponent<ChatGamePanel>();
+//         chatGamePanel.transform.GetChild(0).GetChild(1).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
+//         var chatOptions = chatGamePanel.transform.GetChild(1);
+//         var secondChatChild = chatOptions.GetChild(1);
+//         chatOptions.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
+//         secondChatChild.GetComponent<Image>().SetImageColor(ColorType.Wood);
+//         var firstChatChild = chatOptions.GetChild(0);
 
-        for (var i = 1; i < 6; i++)
-        {
-            var tempHolder = firstChatChild.GetChild(i);
-            tempHolder.GetComponent<Image>().SetImageColor(ColorType.Metal);
-            var tempSetting = tempHolder.GetChild(1);
-            tempSetting.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
-            tempSetting.GetChild(2).GetComponent<Image>().SetImageColor(ColorType.Metal);
-        }
+//         for (var i = 1; i < 6; i++)
+//         {
+//             var tempHolder = firstChatChild.GetChild(i);
+//             tempHolder.GetComponent<Image>().SetImageColor(ColorType.Metal);
+//             var tempSetting = tempHolder.GetChild(1);
+//             tempSetting.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
+//             tempSetting.GetChild(2).GetComponent<Image>().SetImageColor(ColorType.Metal);
+//         }
 
-        for (var i = 1; i < 4; i++)
-        {
-            var tempHolder = secondChatChild.GetChild(i);
-            tempHolder.GetComponent<Image>().SetImageColor(ColorType.Metal);
-            var tempSetting = tempHolder.GetChild(1);
-            tempSetting.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
-            tempSetting.GetChild(2).GetComponent<Image>().SetImageColor(ColorType.Metal);
-        }
+//         for (var i = 1; i < 4; i++)
+//         {
+//             var tempHolder = secondChatChild.GetChild(i);
+//             tempHolder.GetComponent<Image>().SetImageColor(ColorType.Metal);
+//             var tempSetting = tempHolder.GetChild(1);
+//             tempSetting.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
+//             tempSetting.GetChild(2).GetComponent<Image>().SetImageColor(ColorType.Metal);
+//         }
 
-        // Binding Game Panel
-        var bindingGamePanel = __instance.bindingsPanel;
-        bindingGamePanel.transform.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wood);
-        var bindingChild = bindingGamePanel.transform.GetChild(2);
-        bindingChild.GetChild(1).GetChild(0).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
-        var bindingLoopChild = bindingGamePanel.transform.GetChild(2).GetChild(0).GetChild(0);
+//         // Binding Game Panel
+//         var bindingGamePanel = __instance.bindingsPanel;
+//         bindingGamePanel.transform.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wood);
+//         var bindingChild = bindingGamePanel.transform.GetChild(2);
+//         bindingChild.GetChild(1).GetChild(0).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
+//         var bindingLoopChild = bindingGamePanel.transform.GetChild(2).GetChild(0).GetChild(0);
 
-        for (var i = 0; i < 27; i++)
-            bindingLoopChild.GetChild(i).GetComponent<Image>().SetImageColor(ColorType.Metal);
+//         for (var i = 0; i < 27; i++)
+//             bindingLoopChild.GetChild(i).GetComponent<Image>().SetImageColor(ColorType.Metal);
 
-        // Game Guide Panel
-        var gameGuidePanel = frame.GetChild(7).GetComponent<GameGuidePanel>();
-        var subBar = gameGuidePanel.transform.GetChild(0).GetChild(0);
-        subBar.GetComponent<Image>().SetImageColor(ColorType.Wood);
+//         // Game Guide Panel
+//         var gameGuidePanel = frame.GetChild(7).GetComponent<GameGuidePanel>();
+//         var subBar = gameGuidePanel.transform.GetChild(0).GetChild(0);
+//         subBar.GetComponent<Image>().SetImageColor(ColorType.Wood);
 
-        for (var i = 0; i < 3; i++)
-            subBar.GetChild(i).GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wood);
+//         for (var i = 0; i < 3; i++)
+//             subBar.GetChild(i).GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wood);
 
-        for (var i = 1; i < 5; i++)
-        {
-            var tempHolder = gameGuidePanel.transform.GetChild(i);
-            tempHolder.GetComponent<Image>().SetImageColor(ColorType.Wood);
-            tempHolder.GetChild(0).GetChild(1).GetChild(0).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
+//         for (var i = 1; i < 5; i++)
+//         {
+//             var tempHolder = gameGuidePanel.transform.GetChild(i);
+//             tempHolder.GetComponent<Image>().SetImageColor(ColorType.Wood);
+//             tempHolder.GetChild(0).GetChild(1).GetChild(0).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
 
-            if (i == 1)
-                tempHolder.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
-        }
+//             if (i == 1)
+//                 tempHolder.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
+//         }
 
-        // Social Game Panel
-        var socialGamePanel = frame.GetChild(8).GetComponent<SocialGamePanel>();
-        var twitch = socialGamePanel.transform.GetChild(0).GetChild(1).GetChild(0).GetChild(0);
-        twitch.GetComponent<Image>().SetImageColor(ColorType.Wood);
-        var firstTwitch = twitch.GetChild(0);
-        firstTwitch.GetComponent<Image>().SetImageColor(ColorType.Metal);
-        var firstTwitchFirst = firstTwitch.GetChild(1);
-        firstTwitchFirst.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
-        firstTwitchFirst.GetChild(2).GetComponent<Image>().SetImageColor(ColorType.Metal);
-        twitch.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
+//         // Social Game Panel
+//         var socialGamePanel = frame.GetChild(8).GetComponent<SocialGamePanel>();
+//         var twitch = socialGamePanel.transform.GetChild(0).GetChild(1).GetChild(0).GetChild(0);
+//         twitch.GetComponent<Image>().SetImageColor(ColorType.Wood);
+//         var firstTwitch = twitch.GetChild(0);
+//         firstTwitch.GetComponent<Image>().SetImageColor(ColorType.Metal);
+//         var firstTwitchFirst = firstTwitch.GetChild(1);
+//         firstTwitchFirst.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
+//         firstTwitchFirst.GetChild(2).GetComponent<Image>().SetImageColor(ColorType.Metal);
+//         twitch.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
 
-        for (var i = 2; i < 5; i++)
-        {
-            var tempHolder = twitch.GetChild(i);
-            tempHolder.GetComponent<Image>().SetImageColor(ColorType.Metal);
-            tempHolder.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
-            tempHolder.GetChild(2).GetComponent<Image>().SetImageColor(ColorType.Wax);
-        }
+//         for (var i = 2; i < 5; i++)
+//         {
+//             var tempHolder = twitch.GetChild(i);
+//             tempHolder.GetComponent<Image>().SetImageColor(ColorType.Metal);
+//             tempHolder.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
+//             tempHolder.GetChild(2).GetComponent<Image>().SetImageColor(ColorType.Wax);
+//         }
 
-        var links = socialGamePanel.transform.GetChild(1).GetChild(0).GetChild(0);
-        links.GetComponent<Image>().SetImageColor(ColorType.Wood);
+//         var links = socialGamePanel.transform.GetChild(1).GetChild(0).GetChild(0);
+//         links.GetComponent<Image>().SetImageColor(ColorType.Wood);
 
-        for (var i = 1; i < 7; i++)
-            links.GetChild(i).GetComponent<Image>().SetImageColor(ColorType.Metal);
-    }
-}
+//         for (var i = 1; i < 7; i++)
+//             links.GetChild(i).GetComponent<Image>().SetImageColor(ColorType.Metal);
+//     }
+// }
 
 [HarmonyPatch(typeof(GameModeChoicePanelController), nameof(GameModeChoicePanelController.Start))]
 public static class PatchGameModeChoices
@@ -675,89 +675,89 @@ public static class PatchMentionPanel
     }
 }
 
-[HarmonyPatch(typeof(CustomizationPanel), nameof(CustomizationPanel.Start))]
-public static class PatchCustomizationPanel
-{
-    public static void Postfix(CustomizationPanel __instance)
-    {
-        // Main Panel
-        foreach (var tab in __instance.tabAnims)
-            tab.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
+// [HarmonyPatch(typeof(CustomizationPanel), nameof(CustomizationPanel.Start))]
+// public static class PatchCustomizationPanel
+// {
+//     public static void Postfix(CustomizationPanel __instance)
+//     {
+//         // Main Panel
+//         foreach (var tab in __instance.tabAnims)
+//             tab.transform.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
 
-        var mainPanel = __instance.transform.GetChild(1);
-        mainPanel.GetChild(1).GetChild(1).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
-        mainPanel.GetChild(2).GetComponent<Image>().SetImageColor(ColorType.Wood);
-        var title = mainPanel.GetChild(4);
-        title.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
-        title.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Metal);
-        title.GetChild(1).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
-        title.GetChild(1).GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
+//         var mainPanel = __instance.transform.GetChild(1);
+//         mainPanel.GetChild(1).GetChild(1).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
+//         mainPanel.GetChild(2).GetComponent<Image>().SetImageColor(ColorType.Wood);
+//         var title = mainPanel.GetChild(4);
+//         title.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
+//         title.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Metal);
+//         title.GetChild(1).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Metal);
+//         title.GetChild(1).GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
 
-        // Tome
-        var tome = __instance.transform.GetChild(0);
-        tome.GetComponent<Image>().SetImageColor(ColorType.Wood);
-        tome.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
-        tome.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
+//         // Tome
+//         var tome = __instance.transform.GetChild(0);
+//         tome.GetComponent<Image>().SetImageColor(ColorType.Wood);
+//         tome.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
+//         tome.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
 
-        for (var i = 2; i < 5; i++)
-            tome.GetChild(i).GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Metal);
+//         for (var i = 2; i < 5; i++)
+//             tome.GetChild(i).GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Metal);
 
-        var buyContainer = tome.GetChild(5);
-        buyContainer.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wax);
-        buyContainer.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wax);
-        tome.GetChild(7).GetComponent<Image>().SetImageColor(ColorType.Wood);
-    }
-}
+//         var buyContainer = tome.GetChild(5);
+//         buyContainer.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wax);
+//         buyContainer.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wax);
+//         tome.GetChild(7).GetComponent<Image>().SetImageColor(ColorType.Wood);
+//     }
+// }
 
-[HarmonyPatch(typeof(RoleSelectionPanel), nameof(RoleSelectionPanel.Start))]
-public static class PatchRoleSelectionPanel
-{
-    public static void Postfix(RoleSelectionPanel __instance)
-    {
-        try
-        {
-            foreach (var tab in __instance.tabInstances)
-            {
-                tab.transform.GetComponent<Image>().SetImageColor(ColorType.Wood);
-                tab.transform.GetChild(0).GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Wood);
-            }
+// [HarmonyPatch(typeof(RoleSelectionPanel), nameof(RoleSelectionPanel.Start))]
+// public static class PatchRoleSelectionPanel
+// {
+//     public static void Postfix(RoleSelectionPanel __instance)
+//     {
+//         try
+//         {
+//             foreach (var tab in __instance.tabInstances)
+//             {
+//                 tab.transform.GetComponent<Image>().SetImageColor(ColorType.Wood);
+//                 tab.transform.GetChild(0).GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Wood);
+//             }
 
-            __instance.transform.GetChild(1).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
-            __instance.helpTipDecks.transform.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
-            __instance.helpTipDecks.transform.GetChild(2).GetComponent<Image>().SetImageColor(ColorType.Metal);
-            __instance.helpTipRoles.transform.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
-            __instance.helpTipRoles.transform.GetChild(2).GetComponent<Image>().SetImageColor(ColorType.Metal);
-            var roles = __instance.transform.GetChild(4);
-            roles.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
-            roles.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wood);
-            var top = roles.GetChild(5);
-            top.GetComponent<Image>().SetImageColor(ColorType.Wood);
-            var title = top.GetChild(0).GetChild(0);
-            title.GetComponent<Image>().SetImageColor(ColorType.Metal);
-            title.GetChild(0).GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Metal);
-            title.GetChild(1).GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Metal);
-            var template = __instance.cardListItemTemplate;
-            var roleTitle = template.transform.GetChild(1);
-            roleTitle.GetComponent<Image>().SetImageColor(ColorType.Metal);
-            roleTitle.GetChild(0).GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Metal);
-            template.transform.GetChild(3).GetComponent<Image>().SetImageColor(ColorType.Wax);
+//             __instance.transform.GetChild(1).GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
+//             __instance.helpTipDecks.transform.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
+//             __instance.helpTipDecks.transform.GetChild(2).GetComponent<Image>().SetImageColor(ColorType.Metal);
+//             __instance.helpTipRoles.transform.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
+//             __instance.helpTipRoles.transform.GetChild(2).GetComponent<Image>().SetImageColor(ColorType.Metal);
+//             var roles = __instance.transform.GetChild(4);
+//             roles.GetChild(0).GetComponent<Image>().SetImageColor(ColorType.Wood);
+//             roles.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wood);
+//             var top = roles.GetChild(5);
+//             top.GetComponent<Image>().SetImageColor(ColorType.Wood);
+//             var title = top.GetChild(0).GetChild(0);
+//             title.GetComponent<Image>().SetImageColor(ColorType.Metal);
+//             title.GetChild(0).GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Metal);
+//             title.GetChild(1).GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Metal);
+//             var template = __instance.cardListItemTemplate;
+//             var roleTitle = template.transform.GetChild(1);
+//             roleTitle.GetComponent<Image>().SetImageColor(ColorType.Metal);
+//             roleTitle.GetChild(0).GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Metal);
+//             template.transform.GetChild(3).GetComponent<Image>().SetImageColor(ColorType.Wax);
 
-            foreach (var cardListItem in __instance.roleCardListItems)
-            {
-                roleTitle = cardListItem.transform.GetChild(1);
-                roleTitle.GetComponent<Image>().SetImageColor(ColorType.Metal);
-                roleTitle.GetChild(0).GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Metal);
-                cardListItem.transform.GetChild(3).GetComponent<Image>().SetImageColor(ColorType.Wax);
-            }
+//             foreach (var cardListItem in __instance.roleCardListItems)
+//             {
+//                 roleTitle = cardListItem.transform.GetChild(1);
+//                 roleTitle.GetComponent<Image>().SetImageColor(ColorType.Metal);
+//                 roleTitle.GetChild(0).GetComponent<TextMeshProUGUI>().SetGraphicColor(ColorType.Metal);
+//                 cardListItem.transform.GetChild(3).GetComponent<Image>().SetImageColor(ColorType.Wax);
+//             }
 
-            __instance.transform.GetChild(5).GetComponent<Image>().SetImageColor(ColorType.Metal);
-        }
-        catch (Exception e)
-        {
-            Debug.LogWarning(e);
-        }
-    }
-}
+//             __instance.transform.GetChild(5).GetComponent<Image>().SetImageColor(ColorType.Metal);
+//         }
+//         catch (Exception e)
+//         {
+//             Debug.LogWarning(e);
+//         }
+//     }
+// }
 
 [HarmonyPatch(typeof(HudRoleListAndGraveyardController))]
 public static class HudRoleListAndGraveyardControllerPatch
