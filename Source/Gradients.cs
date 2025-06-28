@@ -38,7 +38,7 @@ public static class Gradients
 
         var isMajor = Fancy.MajorColors.Value &&
             (role.GetSubAlignment() == SubAlignment.POWER ||
-            role is Role.FAMINE or Role.WAR or Role.PESTILENCE or Role.DEATH);
+            role is Role.FAMINE or Role.WAR or Role.PESTILENCE or Role.DEATH || (!Constants.IsBTOS2() && role is Role.CULTIST or Role.CATALYST) || (Constants.IsBTOS2() && role is Btos2Role.Cultist or Btos2Role.Catalyst));
 
         var isLethal = Fancy.LethalColors.Value &&
             (role.GetSubAlignment() == SubAlignment.KILLING ||

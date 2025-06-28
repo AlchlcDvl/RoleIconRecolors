@@ -457,6 +457,8 @@ public static class Utils
         EffectType.SOCIALITE_GUEST => "Guest",
         EffectType.REAPED or (EffectType)109 => "Reaped",
         EffectType.REVEALED_BY_PMWITCH => "Illuminated",
+        EffectType.BESTOWED or (EffectType)111 => "Bestowed",
+        EffectType.SOVEREIGN => "Sovereign",
 
         // BTOS2
         (EffectType)100 => "Recruit",
@@ -469,7 +471,6 @@ public static class Utils
         (EffectType)107 => "PandoraTownTraitor",
         (EffectType)108 => "Egotist",
         (EffectType)110 => "WarlockCursed",
-        (EffectType)111 => "Bestowed",
         (EffectType)112 => "Sensed",
         _ => "Blank"
     };
@@ -767,6 +768,27 @@ public static class Utils
             factionName += "_BTOS";
 
         return GetString($"FANCY_{factionName}_ROLENAME_{(int)role}");
+    } 
+    public static string ToFactionalRoleBlurb(this Role role, FactionType faction)
+    {
+        if (!Fancy.FactionalRoleBlurbs.Value)
+            return role.ToDisplayString();
+
+        if (role is Role.STONED or Role.HIDDEN or Role.UNKNOWN)
+            faction = FactionType.NONE;
+
+        var factionName = FactionName(faction, GameModType.BTOS2).ToUpper();
+
+        if (factionName == "FACTIONLESS")
+            factionName = "NONE";
+
+        if (Constants.IsBTOS2())
+            factionName += "_BTOS";
+
+        if (SettingsAndTestingUI.Instance?.IsBTOS2 == true)
+            factionName += "_BTOS";
+
+        return GetString($"FANCY_{factionName}_ROLE_BLURB_{(int)role}");
     }
 
     public static Color GetPlayerRoleColor(int pos)

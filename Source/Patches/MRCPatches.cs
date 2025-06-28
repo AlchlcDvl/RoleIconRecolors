@@ -21,7 +21,7 @@ public static class PatchRoleCard
         var component = __instance.GetComponent<GradientRoleColorController>();
 
         if (component != null)
-            UObject.Destroy(component);
+            UObject.Destroy(component); 
 
         __instance.gameObject.AddComponent<GradientRoleColorController>().Instance = __instance.rolecardBG;
         __instance.roleNameText.text = Pepper.GetMyRole().ToChangedDisplayString(Pepper.GetMyFaction(), Service.Game.Sim.simulation.observations.roleCardObservation.Data.modifier);
@@ -440,6 +440,7 @@ public static class PatchCustomWinScreens
     };
 }
 
+
 [HarmonyPatch(typeof(ClientRoleExtensions))]
 public static class ClientRoleExtensionsPatches
 {
@@ -615,6 +616,27 @@ public static class ClientRoleExtensionsPatches
     // }
 }
 
+[HarmonyPatch(typeof(ClientRoleExtensions))]
+public static class ClientRoleExtensionsPatches2
+{
+    [HarmonyPatch(nameof(ClientRoleExtensions.ToColorizedShortenedDisplayString), typeof(Role), typeof(FactionType))]
+    public static void Postfix(ref string __result, Role role, FactionType factionType)
+    {
+        var gradient = factionType.GetChangedGradient(role);
+
+        if (!role.IsResolved() && role is not (Role.FAMINE or Role.DEATH or Role.PESTILENCE or Role.WAR))
+            return;
+
+        var text = role.ToShortenedDisplayString();
+
+        __result = gradient != null
+            ? Utils.ApplyGradient(text, gradient)
+            : $"<color={factionType.GetFactionColor()}>{text}</color>";
+    }
+
+}
+
+
 [HarmonyPatch(typeof(SharedMentionsProvider))]
 public static class KeywordMentionsPatches
 {
@@ -776,6 +798,48 @@ public static class KeywordMentionsPatches
                 mentionInfo = mentionInfo,
                 priority = priority++
             });
+        }
+    }
+    [HarmonyPatch(typeof(Home.Utils.StringUtils), nameof(Home.Utils.StringUtils.ReplaceRoleTagWithRoleText))]
+    public static class ReplaceRoleTagWithRoleTextPatch
+    {
+        public static bool Prefix(ref string __result, string str)
+        {
+            if (string.IsNullOrEmpty(str))
+            {
+                Debug.LogWarning("ReplaceRoleTagWithRoleText String is null!");
+                __result = string.Empty;
+                return false;
+            }
+
+            var modified = false;
+            var index = str.IndexOf("%name_role");
+
+            while (index > -1)
+            {
+                var endIndex = str.IndexOf("%", index + 1);
+
+                if (endIndex == -1)
+                    break;
+
+                var fullTag = str.Substring(index, endIndex - index + 1);
+                var idStart = index + 10;
+
+                if (int.TryParse(str[idStart..endIndex], out var roleId))
+                {
+                    var role = (Role)roleId;
+                    var colorized = role.ToColorizedDisplayString();
+                    str = str.Replace(fullTag, colorized);
+                    modified = true;
+                }
+
+                index = str.IndexOf("%name_role", index + 1);
+            }
+
+            if (modified)
+                __result = str;
+
+            return !modified;
         }
     }
 }

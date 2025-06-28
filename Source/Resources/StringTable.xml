@@ -8,6 +8,9 @@
     <Entry key="FANCY_FACTIONAL_ROLE_NAMES_NAME">Faction-Specific Role Names</Entry>
     <Entry key="FANCY_FACTIONAL_ROLE_NAMES_DESC">Determines whether or not roles will use factional role names, meaning each faction gives each role a unique role name. Requires the Text Editor mod to customize.</Entry>
 
+    <Entry key="FANCY_FACTIONAL_ROLE_BLURBS_NAME">Faction-Specific Role Blurbs</Entry>
+    <Entry key="FANCY_FACTIONAL_ROLE_BLURBS_DESC">Determines whether or not roles will use factional role blurbs, meaning each faction gives each role a unique role blurb. Requires the Text Editor mod to customize.</Entry>
+
     <Entry key="FANCY_FACTION_NEXT_TO_ROLE_NAME">Faction Name Next to Role</Entry>
     <Entry key="FANCY_FACTION_NEXT_TO_ROLE_DESC">Determines whether or not factions will be displayed next to roles as if colors were off in Town of Salem 2's chat settings.</Entry>
 
@@ -24,10 +27,11 @@
     <Entry key="FANCY_GRADIENT_BUCKETS_DESC">If enabled, buckets will make use of gradients.</Entry>
 
     <Entry key="FANCY_MAJOR_COLORS_NAME">Override End Color for Power Roles</Entry>
-    <Entry key="FANCY_MAJOR_COLORS_DESC">Determines whether or not end colors on factions will be overwritten with a separate Major color value when Coven Power, Town Power, or a Horseman of the Apocalypse.</Entry>
+    <Entry key="FANCY_MAJOR_COLORS_DESC">Determines whether or not end colors on factions will be overwritten with a separate Major color value when Coven Power, Town Power, Cultist, Catalyst, or a Horseman of the Apocalypse.</Entry>
 
     <Entry key="FANCY_LETHAL_COLORS_NAME">Override End Color for Killing Roles</Entry>
     <Entry key="FANCY_LETHAL_COLORS_DESC">Determines whether or not end colors on factions will be overwritten with a separate Lethal color value when Coven Power, Town Power, or a Horseman of the Apocalypse.</Entry>
+   
 
     <Entry key="FANCY_RECRUIT_ENDING_NAME">Override Recruit End Color</Entry>
     <Entry key="FANCY_RECRUIT_ENDING_DESC">Determines what color recruits will pull. Jackal means it pulls from the Jackal End Color, Original Start means it pulls from their original faction's Start color, and Original End pulls from their original faction's End color (Major if a Major role with the setting on).</Entry>
@@ -710,16 +714,20 @@
     <Entry key="FANCY_SOCIALITE">Socialite/Banshee</Entry>
     <Entry key="FANCY_MARSHAL">Marshal/Jackal</Entry>
     <Entry key="FANCY_ORACLE">Oracle/Marshal</Entry>
+    <Entry key="FANCY_PILGRIM">Pilgrim/Judge</Entry>
+    <Entry key="FANCY_COVENITE">Covenite/Auditor</Entry>
+    <Entry key="FANCY_CATALYST">Catalyst/Inquisitor</Entry>
+    <Entry key="FANCY_CULTIST">Cultist/Starspawn</Entry>
     <Entry key="FANCY_FAMINE">Famine</Entry>
     <Entry key="FANCY_WAR">War</Entry>
     <Entry key="FANCY_PESTILENCE">Pestilence</Entry>
     <Entry key="FANCY_DEATH">Death</Entry>
     <Entry key="FANCY_ROLE_COUNT">Judge</Entry>
     <Entry key="FANCY_58">Auditor</Entry>
-    <Entry key="FANCY_59">Inquisitor</Entry>
-    <Entry key="FANCY_60">Starspawn</Entry>
-    <Entry key="FANCY_61">Oracle</Entry>
+    <Entry key="FANCY_61">Oracle (BTOS2)</Entry>
     <Entry key="FANCY_62">Warlock</Entry>
+    <Entry key="FANCY_63">Catalyst (BTOS2)</Entry>
+    <Entry key="FANCY_64">Cultist (BTOS2)</Entry>
 
 
     <Entry key="FANCY_33">Jackal</Entry>
@@ -4680,5 +4688,370 @@
 	<Entry key="FANCY_NONE_BTOS_ROLENAME_118">Neutral Outlier</Entry>
 	<Entry key="FANCY_NONE_BTOS_ROLENAME_119">Town Executive</Entry>
 	<Entry key="FANCY_NONE_BTOS_ROLENAME_120">Town Government</Entry>
+
+	<Entry key="FANCY_NONE_ROLE_BLURB_0">You are... nothing. Please report this as a bug if you see this.</Entry> <!--NONE! NOTHING! NOTHING AT ALL!-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_1">You are a hopeless romantic searching for your soulmate.</Entry> <!--Admirer-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_2">You do not remember who you are.</Entry> <!--Amnesiac-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_3">You are a former knight dedicated to protecting the town.</Entry> <!--Bodyguard-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_4">You are a healer providing protection to the town.</Entry> <!--Cleric-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_5">You are an anatomist who uncovers the truth behind a townie's death.</Entry> <!--Coroner-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_6">You are a divine protector skilled in the art of combat</Entry> <!--Crusader-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_7">You are an enforcer of the law who won't hesitate to kill in broad daylight.</Entry> <!--Deputy-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_8">You are a private eye who secretly gathers information.</Entry> <!--Investigator-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_9">You are a prison guard who secretly detains suspects.</Entry> <!--Jailor-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_10">You are an observer who camps outside of houses to gather information.</Entry> <!--Lookout-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_11">You are the leader of the town.</Entry> <!--Mayor-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_12">You are royalty, blessing knighthood upon deserving townies.</Entry> <!--Monarch-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_13">You are a powerful member of the court who ensures that justice prevails.</Entry> <!--Prosecutor-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_14">You are a fortune teller who glimpses into the future.</Entry> <!--Psychic-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_15">You are a mystic who can resurrect the dead.</Entry> <!--Retributionist-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_16">You are able to see into the hearts of townies to find out their intentions.</Entry> <!--Seer-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_17">You are an authoritative figure who can search a townie's possessions.</Entry> <!--Sheriff-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_18">You are a careful person who secretly observes evil activity.</Entry> <!--Spy-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_19">You are a talented bartender who shares beverages with the town.</Entry> <!--Tavern Keeper-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_20">You are a skilled hunter who stalks your prey at night.</Entry> <!--Tracker-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_21">You are an intelligent woodsman with a knack for traps.</Entry> <!--Trapper-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_22">You are a prankster who tricks evildoers into giving you their power.</Entry> <!--Trickster-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_23">You are a war hero who will shoot intruders on sight.</Entry> <!--Veteran-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_24">You are a townie taking justice into your own hands.</Entry> <!--Vigilante-->
+	<Entry key="FANCY_COVEN_ROLE_BLURB_25">You are a summoner who can spawn objects out of thin air.</Entry> <!--Conjurer-->
+	<Entry key="FANCY_COVEN_ROLE_BLURB_26">You are a beacon of knowledge who can teach almost anything.</Entry> <!--Coven Leader-->
+	<Entry key="FANCY_COVEN_ROLE_BLURB_27">You are a nightmare who can invade people's dreams.</Entry> <!--Dreamweaver-->
+	<Entry key="FANCY_COVEN_ROLE_BLURB_28">You are a talented author who can rewrite a townie's story.</Entry> <!--Enchanter-->
+	<Entry key="FANCY_COVEN_ROLE_BLURB_29">You are a powerful spellcaster preparing to disintegrate the town.</Entry> <!--Hex Master-->
+	<Entry key="FANCY_COVEN_ROLE_BLURB_30">You are a talented magician using cheap tricks to fool the town.</Entry> <!--Illusionist-->
+	<Entry key="FANCY_COVEN_ROLE_BLURB_31">You are a bad omen who causes harm to those around you.</Entry> <!--Jinx-->
+	<Entry key="FANCY_COVEN_ROLE_BLURB_32">You are a snake haired monster with a gaze of stone.</Entry> <!--Medusa-->
+	<Entry key="FANCY_COVEN_ROLE_BLURB_33">You are an exile of the underworld who can reanimate the dead.</Entry> <!--Necromancer-->
+	<Entry key="FANCY_COVEN_ROLE_BLURB_34">You are a bartender who brews highly unstable drinks.</Entry> <!--Poisoner-->
+	<Entry key="FANCY_COVEN_ROLE_BLURB_35">You are an alchemist who concocts powerful potions.</Entry> <!--Potion Master-->
+	<Entry key="FANCY_COVEN_ROLE_BLURB_36">You are a sorcerer who sacrifices members of the town to the Old Ones.</Entry> <!--Ritualist-->
+	<Entry key="FANCY_COVEN_ROLE_BLURB_37">You are a dollmaker who silences members of the town.</Entry> <!--Voodoo Master-->
+	<Entry key="FANCY_COVEN_ROLE_BLURB_38">You are a creature of myth who has highly heightened senses.</Entry> <!--Wildling-->
+	<Entry key="FANCY_COVEN_ROLE_BLURB_39">You are a master of puppets who can control the actions of others.</Entry> <!--Witch-->
+	<Entry key="FANCY_ARSONIST_ROLE_BLURB_40">You are a pyromaniac who wants to watch the world burn.</Entry> <!--Arsonist-->
+	<Entry key="FANCY_APOCALYPSE_ROLE_BLURB_41">You are an acolyte of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role250"><style=ApocalypseColor>%name_role250%</style></shake>]]>, destroying the town's food supply.</Entry> <!--Baker-->
+	<Entry key="FANCY_APOCALYPSE_ROLE_BLURB_42">You are an acolyte of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role251"><style=ApocalypseColor>%name_role251%</style></shake>]]>, embodying nothing but raw power.</Entry> <!--Berserker-->
+	<Entry key="FANCY_DOOMSAYER_ROLE_BLURB_43">You are a prophet who must sacrifice members the town to the Old Ones.</Entry> <!--Doomsayer-->
+	<Entry key="FANCY_EXECUTIONER_ROLE_BLURB_44">You are an obsessed hangman who will stop at nothing to execute your target.</Entry> <!--Executioner-->
+	<Entry key="FANCY_JESTER_ROLE_BLURB_45">You are a chaotic spirit who's power can only be unleashed from the gallows.</Entry> <!--Jester-->
+	<Entry key="FANCY_PIRATE_ROLE_BLURB_46"><![CDATA[<shake a=0.3>Yarr!</shake>]]> Swashbuckle the landlubbers and claim ye' treasure!</Entry> <!--Pirate-->
+	<Entry key="FANCY_APOCALYPSE_ROLE_BLURB_47">You are an acolyte of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role252"><style=ApocalypseColor>%name_role252%</style></shake>]]>, infecting the town with a deadly disease.</Entry> <!--Plaguebearer-->
+	<Entry key="FANCY_SERIALKILLER_ROLE_BLURB_48">You are a psychopath who wants everyone in the town to die.</Entry> <!--Serial Killer-->
+	<Entry key="FANCY_SHROUD_ROLE_BLURB_49">You are a phantom who can possess the bodies of townies.</Entry> <!--Shroud-->
+	<Entry key="FANCY_APOCALYPSE_ROLE_BLURB_50">You are an acolyte of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role253"><style=ApocalypseColor>%name_role253%</style></shake>]]>, harvesting the souls of the town.</Entry> <!--Soul Collector-->
+	<Entry key="FANCY_WEREWOLF_ROLE_BLURB_51">You are a regular townie who transforms under the full moon.</Entry> <!--Werewolf-->
+	<Entry key="FANCY_VAMPIRE_ROLE_BLURB_52">You are the harbinger of the Blood Moon.</Entry> <!--Vampire-->
+	<Entry key="FANCY_CURSEDSOUL_ROLE_BLURB_53">You are a wandering spirit, searching for a greater purpose.</Entry> <!--Cursed Soul-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_54">You are a host of the town's most exclusive parties.</Entry> <!--Socialite-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_55">You are the leader of the town's militia.</Entry> <!--Marshal-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_56">You are a guardian of the town, shielding them with your Aegis.</Entry> <!--Oracle-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_57">You are a humble farmer, living a simple life.</Entry> <!--Pilgrim-->
+	<Entry key="FANCY_COVEN_ROLE_BLURB_58">You are a servant of the Necronomicon.</Entry> <!--Covenite-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_59">You are a crazed galvanist overflowing with energy.</Entry> <!--Catalyst-->
+	<Entry key="FANCY_COVEN_ROLE_BLURB_60">You are a master of indoctrination, rewiring minds to serve your will.</Entry> <!--Cultist-->
+
+	<Entry key="FANCY_NONE_BTOS_ROLE_BLURB_0">You are... nothing. Please report this as a bug if you see this.</Entry> <!--NONE! NOTHING! NOTHING AT ALL!-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_1">You are a hopeless romantic searching for your soulmate.</Entry> <!--Admirer-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_2">You do not remember who you are.</Entry> <!--Amnesiac-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_3">You are a former knight dedicated to protecting the town.</Entry> <!--Bodyguard-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_4">You are a healer providing protection to the town.</Entry> <!--Cleric-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_5">You are an anatomist who uncovers the truth behind a townie's death.</Entry> <!--Coroner-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_6">You are a divine protector skilled in the art of protection.</Entry> <!--Crusader-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_7">You are an enforcer of the law who won't hesitate to kill in broad daylight.</Entry> <!--Deputy-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_8">You are a private eye who secretly gathers information.</Entry> <!--Investigator-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_9">You are a prison guard who secretly detains suspects.</Entry> <!--Jailor-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_10">You are an observer who camps outside of houses to gather information.</Entry> <!--Lookout-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_11">You are the leader of the town.</Entry> <!--Mayor-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_12">You are royality, blessing knighthood upon deserving townies.</Entry> <!--Monarch-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_13">You are a powerful member of the court who ensures that justice prevails.</Entry> <!--Prosecutor-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_14">You are a fortune teller who glimpses into the future.</Entry> <!--Psychic-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_15">You are a mystic who can resurrect the dead.</Entry> <!--Retributionist-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_16">You are able to see into the hearts of townies to find out their intentions.</Entry> <!--Seer-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_17">You are an authoritative figure who can search a townie's possessions.</Entry> <!--Sheriff-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_18">You are a careful person who secretly observes evil activity.</Entry> <!--Spy-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_19">You are a talented bartender who shares beverages with the town.</Entry> <!--Tavern Keeper-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_20">You are a skilled hunter who stalks your prey at night.</Entry> <!--Tracker-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_21">You are an intelligent woodsman with a knack for traps.</Entry> <!--Trapper-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_22">You are a prankster who tricks evildoers into giving you their power.</Entry> <!--Trickster-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_23">You are a war hero who will shoot intruders on sight.</Entry> <!--Veteran-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_24">You are a townie taking justice into your own hands.</Entry> <!--Vigilante-->
+	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_25">You are a summoner who can spawn objects out of thin air.</Entry> <!--Conjurer-->
+	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_25">You are a summoner who can spawn objects out of thin air.</Entry> <!--Conjurer-->
+	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_26">You are a beacon of knowledge who can teach almost anything.</Entry> <!--Coven Leader-->
+	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_27">You are a nightmare who can invade people's dreams.</Entry> <!--Dreamweaver-->
+	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_28">You are a talented author who can rewrite a townie's story.</Entry> <!--Enchanter-->
+	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_29">You are a powerful spellcaster preparing to disintegrate the town.</Entry> <!--Hex Master-->
+	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_30">You are a talented magician using cheap tricks to fool the town.</Entry> <!--Illusionist-->
+	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_31">You are a bad omen who causes harm to those around you.</Entry> <!--Jinx-->
+	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_32">You are a snake haired monster with a gaze of stone.</Entry> <!--Medusa-->
+	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_33">You are an exile of the underworld who can reanimate the dead.</Entry> <!--Necromancer-->
+	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_34">You are a bartender who brews highly unstable drinks.</Entry> <!--Poisoner-->
+	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_35">You are an alchemist who concocts powerful potions.</Entry> <!--Potion Master-->
+	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_36">You are a sorcerer who sacrifices members of the town to the Old Ones.</Entry> <!--Ritualist-->
+	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_37">You are a dollmaker who silences members of the town.</Entry> <!--Voodoo Master--> 
+	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_38">You are a creature of myth who has highly heightened senses.</Entry> <!--Wildling-->
+	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_39">You are a master of puppets who can control the actions of others.</Entry> <!--Witch-->
+	<Entry key="FANCY_ARSONIST_BTOS_ROLE_BLURB_40">You are a pyromaniac who wants to watch the world burn.</Entry> <!--Arsonist-->
+	<Entry key="FANCY_APOCALYPSE_BTOS_ROLE_BLURB_41">You are an acolyte of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role250"><style=ApocalypseColor>%name_role250%</style></shake>]]>, destroying the town's food supply.</Entry> <!--Baker-->
+	<Entry key="FANCY_APOCALYPSE_BTOS_ROLE_BLURB_42">You are an acolyte of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role251"><style=ApocalypseColor>%name_role251%</style></shake>]]>, embodying nothing but raw power.</Entry> <!--Berserker-->
+	<Entry key="FANCY_DOOMSAYER_BTOS_ROLE_BLURB_43">You are a prophet who must sacrifice members the town to the Old Ones.</Entry> <!--Doomsayer-->
+	<Entry key="FANCY_EXECUTIONER_BTOS_ROLE_BLURB_44">You are an obsessed hangman who will stop at nothing to execute your target.</Entry> <!--Executioner-->
+	<Entry key="FANCY_JESTER_BTOS_ROLE_BLURB_45">You are a chaotic spirit who's power can only be unleashed from the gallows.</Entry> <!--Jester-->
+	<Entry key="FANCY_PIRATE_BTOS_ROLE_BLURB_46"><![CDATA[<shake a=0.3>Yarr!</shake>]]> Swashbuckle the landlubbers and claim ye' treasure!</Entry> <!--Pirate-->
+	<Entry key="FANCY_APOCALYPSE_BTOS_ROLE_BLURB_47">You are an acolyte of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role252"><style=ApocalypseColor>%name_role252%</style></shake>]]>, infecting the town with a deadly disease.</Entry> <!--Plaguebearer-->
+	<Entry key="FANCY_SERIALKILLER_BTOS_ROLE_BLURB_48">You are a psychopath who wants everyone in the town to die.</Entry> <!--Serial Killer-->
+	<Entry key="FANCY_SHROUD_BTOS_ROLE_BLURB_49">You are a phantom who can possess the bodies of townies.</Entry> <!--Shroud-->
+	<Entry key="FANCY_APOCALYPSE_BTOS_ROLE_BLURB_50">You are an acolyte of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role253"><style=ApocalypseColor>%name_role253%</style></shake>]]>, harvesting the souls of the town.</Entry> <!--Soul Collector-->
+	<Entry key="FANCY_WEREWOLF_BTOS_ROLE_BLURB_51">You are a regular townie who transforms under the full moon.</Entry> <!--Werewolf-->
+	<Entry key="FANCY_VAMPIRE_BTOS_ROLE_BLURB_52">You are the harbinger of the Blood Moon.</Entry> <!--Vampire-->
+	<Entry key="FANCY_CURSEDSOUL_BTOS_ROLE_BLURB_53">You are a wandering spirit, searching for a greater purpose.</Entry> <!--Cursed Soul-->
+	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_54">You are a wailing spirit.</Entry> <!--Banshee-->
+	<Entry key="FANCY_JACKAL_BTOS_ROLE_BLURB_55">You are an outlaw who is looking for recruits in their pursuit against the town.</Entry> <!--Jackal-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_56">You are the leader of the town's militia.</Entry> <!--Marshal-->
+	<Entry key="FANCY_JUDGE_BTOS_ROLE_BLURB_57">You are a corrupt court official who uses their power and connections to manipulate trials.</Entry> <!--Judge-->
+	<Entry key="FANCY_AUDITOR_BTOS_ROLE_BLURB_58">You are a corrupt government tax agent who uses their knowledge and connections for evil.</Entry> <!--Auditor-->
+	<Entry key="FANCY_INQUISITOR_BTOS_ROLE_BLURB_59">You are a missionary who is determined to eradicate those accused of heresy.</Entry> <!--Inquisitor-->
+	<Entry key="FANCY_STARSPAWN_BTOS_ROLE_BLURB_60">You are a cosmic being who isolates and disrupts the town.</Entry> <!--Starspawn-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_61">You are a guardian of the town, shielding them with your Aegis.</Entry> <!--Oracle-->
+	<Entry key="FANCY_APOCALYPSE_BTOS_ROLE_BLURB_62">You are an acolyte of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role253"><style=ApocalypseColor>%name_role253%</style></shake>]]> who curses the Town.</Entry> <!--Warlock-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_63">You are a crazed galvanist overflowing with energy.</Entry> <!--Catalyst-->
+	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_64">You are a master of indoctrination, rewiring minds to serve your will.</Entry> <!--Cultist-->
+	<Entry key="FANCY_APOCALYPSE_BTOS_ROLE_BLURB_250">You are a Horseman of the Apocalypse, spoiling nutrients and inducing malnourishment within the town.</Entry> <!--Famine-->
+	<Entry key="FANCY_APOCALYPSE_BTOS_ROLE_BLURB_251">You are a Horseman of the Apocalypse, causing disorder and conflict throughout the town.</Entry> <!--War-->
+	<Entry key="FANCY_APOCALYPSE_BTOS_ROLE_BLURB_252">You are a Horseman of the Apocalypse, spreading blight and draining strength across the town.</Entry> <!--Pestilence-->
+	<Entry key="FANCY_APOCALYPSE_BTOS_ROLE_BLURB_253">You are a Horseman of the Apocalypse, the angel of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role253"><style=ApocalypseColor>%name_role253%</style></shake>]]>, bringing about the apocalypse throughout the world.</Entry> <!--Death-->
+
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_25">You are a summoner who can spawn objects out of thin air.</Entry> <!--Conjurer-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_25">You are a summoner who can spawn objects out of thin air.</Entry> <!--Conjurer-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_26">You are a beacon of knowledge who can teach almost anything.</Entry> <!--Coven Leader-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_27">You are a nightmare who can invade people's dreams.</Entry> <!--Dreamweaver-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_28">You are a talented author who can rewrite a townie's story.</Entry> <!--Enchanter-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_29">You are a powerful spellcaster preparing to disintegrate the town.</Entry> <!--Hex Master-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_30">You are a talented magician using cheap tricks to fool the town.</Entry> <!--Illusionist-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_31">You are a bad omen who causes harm to those around you.</Entry> <!--Jinx-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_32">You are a snake haired monster with a gaze of stone.</Entry> <!--Medusa-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_33">You are an exile of the underworld who can reanimate the dead.</Entry> <!--Necromancer-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_34">You are a bartender who brews highly unstable drinks.</Entry> <!--Poisoner-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_35">You are an alchemist who concocts powerful potions.</Entry> <!--Potion Master-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_36">You are a sorcerer who sacrifices members of the town to the Old Ones.</Entry> <!--Ritualist-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_37">You are a dollmaker who silences members of the town.</Entry> <!--Voodoo Master-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_38">You are a creature of myth who has highly heightened senses.</Entry> <!--Wildling-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_39">You are a master of puppets who can control the actions of others.</Entry> <!--Witch-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_54">You are a wailing spirit.</Entry> <!--Banshee-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_64">You are a master of indoctrination, rewiring minds to serve your will.</Entry> <!--Cultist-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_41">You are an acolyte of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role250"><style=ApocalypseColor>%name_role250%</style></shake>]]>, destroying the town's food supply.</Entry> <!--Baker-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_42">You are an acolyte of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role251"><style=ApocalypseColor>%name_role251%</style></shake>]]>, embodying nothing but raw power.</Entry> <!--Berserker-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_47">You are an acolyte of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role252"><style=ApocalypseColor>%name_role252%</style></shake>]]>, infecting the town with a deadly disease.</Entry> <!--Plaguebearer-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_50">You are an acolyte of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role253"><style=ApocalypseColor>%name_role253%</style></shake>]]>, harvesting the souls of the town.</Entry> <!--Soul Collector-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_62">You are an acolyte of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role253"><style=ApocalypseColor>%name_role253%</style></shake>]]> who curses the Town.</Entry> <!--Warlock-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_250">You are a Horseman of the Apocalypse, spoiling nutrients and inducing malnourishment within the town.</Entry> <!--Famine-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_251">You are a Horseman of the Apocalypse, causing disorder and conflict throughout the town.</Entry> <!--War-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_252">You are a Horseman of the Apocalypse, spreading blight and draining strength across the town.</Entry> <!--Pestilence-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_253">You are a Horseman of the Apocalypse, the angel of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role253"><style=ApocalypseColor>%name_role253%</style></shake>]]>, bringing about the apocalypse throughout the world.</Entry> <!--Death-->
+
+	<Entry key="FANCY_COMPLIANCE_BTOS_ROLE_BLURB_40">You are a pyromaniac who wants to watch the world burn.</Entry> <!--Arsonist-->
+	<Entry key="FANCY_COMPLIANCE_BTOS_ROLE_BLURB_48">You are a psychopath who wants everyone in the town to die.</Entry> <!--Serial Killer-->
+	<Entry key="FANCY_COMPLIANCE_BTOS_ROLE_BLURB_49">You are a phantom who can possess the bodies of townies.</Entry> <!--Shroud-->
+	<Entry key="FANCY_COMPLIANCE_BTOS_ROLE_BLURB_51">You are a regular townie who transforms under the full moon.</Entry> <!--Werewolf-->
+
+
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_0">You are... nothing. Please report this as a bug if you see this.</Entry> <!--NONE! NOTHING! NOTHING AT ALL!-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_1">You are a hopeless romantic searching for your soulmate.</Entry> <!--Admirer-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_2">You do not remember who you are.</Entry> <!--Amnesiac-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_3">You are a former knight dedicated to protecting the town.</Entry> <!--Bodyguard-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_4">You are a healer providing protection to the town.</Entry> <!--Cleric-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_5">You are an anatomist who uncovers the truth behind a townie's death.</Entry> <!--Coroner-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_6">You are a divine protector skilled in the art of protection.</Entry> <!--Crusader-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_7">You are an enforcer of the law who won't hesitate to kill in broad daylight.</Entry> <!--Deputy-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_8">You are a private eye who secretly gathers information.</Entry> <!--Investigator-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_9">You are a prison guard who secretly detains suspects.</Entry> <!--Jailor-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_10">You are an observer who camps outside of houses to gather information.</Entry> <!--Lookout-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_11">You are the leader of the town.</Entry> <!--Mayor-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_12">You are royality, blessing knighthood upon deserving townies.</Entry> <!--Monarch-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_13">You are a powerful member of the court who ensures that justice prevails.</Entry> <!--Prosecutor-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_14">You are a fortune teller who glimpses into the future.</Entry> <!--Psychic-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_15">You are a mystic who can resurrect the dead.</Entry> <!--Retributionist-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_16">You are able to see into the hearts of townies to find out their intentions.</Entry> <!--Seer-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_17">You are an authoritative figure who can search a townie's possessions.</Entry> <!--Sheriff-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_18">You are a careful person who secretly observes evil activity.</Entry> <!--Spy-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_19">You are a talented bartender who shares beverages with the town.</Entry> <!--Tavern Keeper-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_20">You are a skilled hunter who stalks your prey at night.</Entry> <!--Tracker-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_21">You are an intelligent woodsman with a knack for traps.</Entry> <!--Trapper-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_22">You are a prankster who tricks evildoers into giving you their power.</Entry> <!--Trickster-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_23">You are a war hero who will shoot intruders on sight.</Entry> <!--Veteran-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_24">You are a townie taking justice into your own hands.</Entry> <!--Vigilante-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_25">You are a summoner who can spawn objects out of thin air.</Entry> <!--Conjurer-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_26">You are a beacon of knowledge who can teach almost anything.</Entry> <!--Coven Leader-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_27">You are a nightmare who can invade people's dreams.</Entry> <!--Dreamweaver-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_28">You are a talented author who can rewrite a townie's story.</Entry> <!--Enchanter-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_29">You are a powerful spellcaster preparing to disintegrate the town.</Entry> <!--Hex Master-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_30">You are a talented magician using cheap tricks to fool the town.</Entry> <!--Illusionist-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_31">You are a bad omen who causes harm to those around you.</Entry> <!--Jinx-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_32">You are a snake haired monster with a gaze of stone.</Entry> <!--Medusa-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_33">You are an exile of the underworld who can reanimate the dead.</Entry> <!--Necromancer-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_34">You are a bartender who brews highly unstable drinks.</Entry> <!--Poisoner-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_35">You are an alchemist who concocts powerful potions.</Entry> <!--Potion Master-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_36">You are a sorcerer who sacrifices members of the town to the Old Ones.</Entry> <!--Ritualist-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_37">You are a dollmaker who silences members of the town.</Entry> <!--Voodoo Master-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_38">You are a creature of myth who has highly heightened senses.</Entry> <!--Wildling-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_39">You are a master of puppets who can control the actions of others.</Entry> <!--Witch-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_40">You are a pyromaniac who wants to watch the world burn.</Entry> <!--Arsonist-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_41">You are an acolyte of <![CDATA[<shake a=0.3><style=ApocalypseColor>%name_role250%</style></shake>]]>, destroying the town's food supply.</Entry> <!--Baker-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_42">You are an acolyte of <![CDATA[<shake a=0.3><style=ApocalypseColor>%name_role251%</style></shake>]]>, embodying nothing but raw power.</Entry> <!--Berserker-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_43">You are a prophet who must sacrifice members the town to the Old Ones.</Entry> <!--Doomsayer-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_44">You are an obsessed hangman who will stop at nothing to execute your target.</Entry> <!--Executioner-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_45">You are a chaotic spirit who's power can only be unleashed from the gallows.</Entry> <!--Jester-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_46"><![CDATA[<shake a=0.3>Yarr!</shake>]]> Swashbuckle the landlubbers and claim ye' treasure!</Entry> <!--Pirate-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_47">You are an acolyte of <![CDATA[<shake a=0.3><style=ApocalypseColor>%name_role252%</style></shake>]]>, infecting the town with a deadly disease.</Entry> <!--Plaguebearer-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_48">You are a psychopath who wants everyone in the town to die.</Entry> <!--Serial Killer-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_49">You are a phantom who can possess the bodies of townies.</Entry> <!--Shroud-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_50">You are an acolyte of <![CDATA[<shake a=0.3><style=ApocalypseColor>%name_role253%</style></shake>]]>, harvesting the souls of the town.</Entry> <!--Soul Collector-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_51">You are a regular townie who transforms under the full moon.</Entry> <!--Werewolf-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_52">You are the harbinger of the Blood Moon.</Entry> <!--Vampire-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_53">You are a wandering spirit, searching for a greater purpose.</Entry> <!--Cursed Soul-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_54">You are a wailing spirit.</Entry> <!--Banshee-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_55">You are an outlaw who is looking for recruits in their pursuit against the town.</Entry> <!--Jackal-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_56">You are the leader of the town's militia.</Entry> <!--Marshal-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_57">You are a corrupt court official who uses their power and connections to manipulate trials.</Entry> <!--Judge-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_58">You are a corrupt government tax agent who uses their knowledge and connections for evil.</Entry> <!--Auditor-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_59">You are a missionary who is determined to eradicate those accused of heresy.</Entry> <!--Inquisitor-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_60">You are a cosmic being who isolates and disrupts the town.</Entry> <!--Starspawn-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_61">You are a guardian of the town, shielding them with your Aegis.</Entry> <!--Oracle-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_62">You are an acolyte of <![CDATA[<shake a=0.3><style=ApocalypseColor>%name_role253%</style></shake>]]> who curses the Town.</Entry> <!--Warlock-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_63">You are a crazed galvanist overflowing with energy.</Entry> <!--Catalyst-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_64">You are a master of indoctrination, rewiring minds to serve your will.</Entry> <!--Cultist-->
+
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_0">You are... nothing. Please report this as a bug if you see this.</Entry> <!--NONE! NOTHING! NOTHING AT ALL!-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_1">You are a hopeless romantic searching for your soulmate.</Entry> <!--Admirer-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_2">You do not remember who you are.</Entry> <!--Amnesiac-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_3">You are a former knight dedicated to protecting the town.</Entry> <!--Bodyguard-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_4">You are a healer providing protection to the town.</Entry> <!--Cleric-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_5">You are an anatomist who uncovers the truth behind a townie's death.</Entry> <!--Coroner-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_6">You are a divine protector skilled in the art of protection.</Entry> <!--Crusader-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_7">You are an enforcer of the law who won't hesitate to kill in broad daylight.</Entry> <!--Deputy-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_8">You are a private eye who secretly gathers information.</Entry> <!--Investigator-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_9">You are a prison guard who secretly detains suspects.</Entry> <!--Jailor-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_10">You are an observer who camps outside of houses to gather information.</Entry> <!--Lookout-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_11">You are the leader of the town.</Entry> <!--Mayor-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_12">You are royality, blessing knighthood upon deserving townies.</Entry> <!--Monarch-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_13">You are a powerful member of the court who ensures that justice prevails.</Entry> <!--Prosecutor-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_14">You are a fortune teller who glimpses into the future.</Entry> <!--Psychic-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_15">You are a mystic who can resurrect the dead.</Entry> <!--Retributionist-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_16">You are able to see into the hearts of townies to find out their intentions.</Entry> <!--Seer-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_17">You are an authoritative figure who can search a townie's possessions.</Entry> <!--Sheriff-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_18">You are a careful person who secretly observes evil activity.</Entry> <!--Spy-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_19">You are a talented bartender who shares beverages with the town.</Entry> <!--Tavern Keeper-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_20">You are a skilled hunter who stalks your prey at night.</Entry> <!--Tracker-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_21">You are an intelligent woodsman with a knack for traps.</Entry> <!--Trapper-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_22">You are a prankster who tricks evildoers into giving you their power.</Entry> <!--Trickster-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_23">You are a war hero who will shoot intruders on sight.</Entry> <!--Veteran-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_24">You are a townie taking justice into your own hands.</Entry> <!--Vigilante-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_25">You are a summoner who can spawn objects out of thin air.</Entry> <!--Conjurer-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_26">You are a beacon of knowledge who can teach almost anything.</Entry> <!--Coven Leader-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_27">You are a nightmare who can invade people's dreams.</Entry> <!--Dreamweaver-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_28">You are a talented author who can rewrite a townie's story.</Entry> <!--Enchanter-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_29">You are a powerful spellcaster preparing to disintegrate the town.</Entry> <!--Hex Master-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_30">You are a talented magician using cheap tricks to fool the town.</Entry> <!--Illusionist-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_31">You are a bad omen who causes harm to those around you.</Entry> <!--Jinx-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_32">You are a snake haired monster with a gaze of stone.</Entry> <!--Medusa-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_33">You are an exile of the underworld who can reanimate the dead.</Entry> <!--Necromancer-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_34">You are a bartender who brews highly unstable drinks.</Entry> <!--Poisoner-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_35">You are an alchemist who concocts powerful potions.</Entry> <!--Potion Master-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_36">You are a sorcerer who sacrifices members of the town to the Old Ones.</Entry> <!--Ritualist-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_37">You are a dollmaker who silences members of the town.</Entry> <!--Voodoo Master-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_38">You are a creature of myth who has highly heightened senses.</Entry> <!--Wildling-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_39">You are a master of puppets who can control the actions of others.</Entry> <!--Witch-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_40">You are a pyromaniac who wants to watch the world burn.</Entry> <!--Arsonist-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_41">You are an acolyte of <![CDATA[<shake a=0.3><style=ApocalypseColor>%name_role250%</style></shake>]]>, destroying the town's food supply.</Entry> <!--Baker-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_42">You are an acolyte of <![CDATA[<shake a=0.3><style=ApocalypseColor>%name_role251%</style></shake>]]>, embodying nothing but raw power.</Entry> <!--Berserker-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_43">You are a prophet who must sacrifice members the town to the Old Ones.</Entry> <!--Doomsayer-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_44">You are an obsessed hangman who will stop at nothing to execute your target.</Entry> <!--Executioner-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_45">You are a chaotic spirit who's power can only be unleashed from the gallows.</Entry> <!--Jester-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_46"><![CDATA[<shake a=0.3>Yarr!</shake>]]> Swashbuckle the landlubbers and claim ye' treasure!</Entry> <!--Pirate-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_47">You are an acolyte of <![CDATA[<shake a=0.3><style=ApocalypseColor>%name_role252%</style></shake>]]>, infecting the town with a deadly disease.</Entry> <!--Plaguebearer-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_48">You are a psychopath who wants everyone in the town to die.</Entry> <!--Serial Killer-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_49">You are a phantom who can possess the bodies of townies.</Entry> <!--Shroud-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_50">You are an acolyte of <![CDATA[<shake a=0.3><style=ApocalypseColor>%name_role253%</style></shake>]]>, harvesting the souls of the town.</Entry> <!--Soul Collector-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_51">You are a regular townie who transforms under the full moon.</Entry> <!--Werewolf-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_52">You are the harbinger of the Blood Moon.</Entry> <!--Vampire-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_53">You are a wandering spirit, searching for a greater purpose.</Entry> <!--Cursed Soul-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_54">You are a wailing spirit.</Entry> <!--Banshee-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_55">You are an outlaw who is looking for recruits in their pursuit against the town.</Entry> <!--Jackal-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_56">You are the leader of the town's militia.</Entry> <!--Marshal-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_57">You are a corrupt court official who uses their power and connections to manipulate trials.</Entry> <!--Judge-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_58">You are a corrupt government tax agent who uses their knowledge and connections for evil.</Entry> <!--Auditor-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_59">You are a missionary who is determined to eradicate those accused of heresy.</Entry> <!--Inquisitor-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_60">You are a cosmic being who isolates and disrupts the town.</Entry> <!--Starspawn-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_61">You are a guardian of the town, shielding them with your Aegis.</Entry> <!--Oracle-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_62">You are an acolyte of <![CDATA[<shake a=0.3><style=ApocalypseColor>%name_role253%</style></shake>]]> who curses the Town.</Entry> <!--Warlock-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_63">You are a crazed galvanist overflowing with energy.</Entry> <!--Catalyst-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_64">You are a master of indoctrination, rewiring minds to serve your will.</Entry> <!--Cultist-->
+
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_0">You are... nothing. Please report this as a bug if you see this.</Entry> <!--NONE! NOTHING! NOTHING AT ALL!-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_1">You are a hopeless romantic searching for your soulmate.</Entry> <!--Admirer-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_2">You do not remember who you are.</Entry> <!--Amnesiac-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_3">You are a former knight dedicated to protecting the town.</Entry> <!--Bodyguard-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_4">You are a healer providing protection to the town.</Entry> <!--Cleric-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_5">You are an anatomist who uncovers the truth behind a townie's death.</Entry> <!--Coroner-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_6">You are a divine protector skilled in the art of protection.</Entry> <!--Crusader-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_7">You are an enforcer of the law who won't hesitate to kill in broad daylight.</Entry> <!--Deputy-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_8">You are a private eye who secretly gathers information.</Entry> <!--Investigator-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_9">You are a prison guard who secretly detains suspects.</Entry> <!--Jailor-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_10">You are an observer who camps outside of houses to gather information.</Entry> <!--Lookout-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_11">You are the leader of the town.</Entry> <!--Mayor-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_12">You are royality, blessing knighthood upon deserving townies.</Entry> <!--Monarch-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_13">You are a powerful member of the court who ensures that justice prevails.</Entry> <!--Prosecutor-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_14">You are a fortune teller who glimpses into the future.</Entry> <!--Psychic-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_15">You are a mystic who can resurrect the dead.</Entry> <!--Retributionist-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_16">You are able to see into the hearts of townies to find out their intentions.</Entry> <!--Seer-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_17">You are an authoritative figure who can search a townie's possessions.</Entry> <!--Sheriff-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_18">You are a careful person who secretly observes evil activity.</Entry> <!--Spy-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_19">You are a talented bartender who shares beverages with the town.</Entry> <!--Tavern Keeper-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_20">You are a skilled hunter who stalks your prey at night.</Entry> <!--Tracker-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_21">You are an intelligent woodsman with a knack for traps.</Entry> <!--Trapper-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_22">You are a prankster who tricks evildoers into giving you their power.</Entry> <!--Trickster-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_23">You are a war hero who will shoot intruders on sight.</Entry> <!--Veteran-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_24">You are a townie taking justice into your own hands.</Entry> <!--Vigilante-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_25">You are a summoner who can spawn objects out of thin air.</Entry> <!--Conjurer-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_26">You are a beacon of knowledge who can teach almost anything.</Entry> <!--Coven Leader-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_27">You are a nightmare who can invade people's dreams.</Entry> <!--Dreamweaver-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_28">You are a talented author who can rewrite a townie's story.</Entry> <!--Enchanter-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_29">You are a powerful spellcaster preparing to disintegrate the town.</Entry> <!--Hex Master-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_30">You are a talented magician using cheap tricks to fool the town.</Entry> <!--Illusionist-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_31">You are a bad omen who causes harm to those around you.</Entry> <!--Jinx-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_32">You are a snake haired monster with a gaze of stone.</Entry> <!--Medusa-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_33">You are an exile of the underworld who can reanimate the dead.</Entry> <!--Necromancer-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_34">You are a bartender who brews highly unstable drinks.</Entry> <!--Poisoner-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_35">You are an alchemist who concocts powerful potions.</Entry> <!--Potion Master-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_36">You are a sorcerer who sacrifices members of the town to the Old Ones.</Entry> <!--Ritualist-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_37">You are a dollmaker who silences members of the town.</Entry> <!--Voodoo Master-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_38">You are a creature of myth who has highly heightened senses.</Entry> <!--Wildling-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_39">You are a master of puppets who can control the actions of others.</Entry> <!--Witch-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_40">You are a pyromaniac who wants to watch the world burn.</Entry> <!--Arsonist-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_41">You are an acolyte of <![CDATA[<shake a=0.3><style=ApocalypseColor>%name_role250%</style></shake>]]>, destroying the town's food supply.</Entry> <!--Baker-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_42">You are an acolyte of <![CDATA[<shake a=0.3><style=ApocalypseColor>%name_role251%</style></shake>]]>, embodying nothing but raw power.</Entry> <!--Berserker-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_43">You are a prophet who must sacrifice members the town to the Old Ones.</Entry> <!--Doomsayer-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_44">You are an obsessed hangman who will stop at nothing to execute your target.</Entry> <!--Executioner-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_45">You are a chaotic spirit who's power can only be unleashed from the gallows.</Entry> <!--Jester-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_46"><![CDATA[<shake a=0.3>Yarr!</shake>]]> Swashbuckle the landlubbers and claim ye' treasure!</Entry> <!--Pirate-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_47">You are an acolyte of <![CDATA[<shake a=0.3><style=ApocalypseColor>%name_role252%</style></shake>]]>, infecting the town with a deadly disease.</Entry> <!--Plaguebearer-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_48">You are a psychopath who wants everyone in the town to die.</Entry> <!--Serial Killer-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_49">You are a phantom who can possess the bodies of townies.</Entry> <!--Shroud-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_50">You are an acolyte of <![CDATA[<shake a=0.3><style=ApocalypseColor>%name_role253%</style></shake>]]>, harvesting the souls of the town.</Entry> <!--Soul Collector-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_51">You are a regular townie who transforms under the full moon.</Entry> <!--Werewolf-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_52">You are the harbinger of the Blood Moon.</Entry> <!--Vampire-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_53">You are a wandering spirit, searching for a greater purpose.</Entry> <!--Cursed Soul-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_54">You are a wailing spirit.</Entry> <!--Banshee-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_55">You are an outlaw who is looking for recruits in their pursuit against the town.</Entry> <!--Jackal-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_56">You are the leader of the town's militia.</Entry> <!--Marshal-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_57">You are a corrupt court official who uses their power and connections to manipulate trials.</Entry> <!--Judge-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_58">You are a corrupt government tax agent who uses their knowledge and connections for evil.</Entry> <!--Auditor-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_59">You are a missionary who is determined to eradicate those accused of heresy.</Entry> <!--Inquisitor-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_60">You are a cosmic being who isolates and disrupts the town.</Entry> <!--Starspawn-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_61">You are a guardian of the town, shielding them with your Aegis.</Entry> <!--Oracle-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_62">You are an acolyte of <![CDATA[<shake a=0.3><style=ApocalypseColor>%name_role253%</style></shake>]]> who curses the Town.</Entry> <!--Warlock-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_63">You are a crazed galvanist overflowing with energy.</Entry> <!--Catalyst-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_64">You are a master of indoctrination, rewiring minds to serve your will.</Entry> <!--Cultist-->
 
 </StringTable>

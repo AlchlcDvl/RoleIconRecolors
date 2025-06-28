@@ -110,6 +110,7 @@ public class Fancy : BaseMod<Fancy>
     public static ToggleOption ShowOverlayAsJailor;
     public static ToggleOption IconsInRoleReveal;
     public static ToggleOption FactionalRoleNames;
+    public static ToggleOption FactionalRoleBlurbs;
     public static ToggleOption ReplaceNAwithRA;
     public static ToggleOption GradientBuckets;
     public static ToggleOption DisableBTOSTribunal;
@@ -341,7 +342,7 @@ public class Fancy : BaseMod<Fancy>
                 FactionToColorMap[faction][type] = new($"{factionName}_UI_{name}", color, PackType.RecoloredUI, () => Constants.EnableCustomUI() && Constants.ShowFactionalSettings() &&
                     SelectTestingFaction.Value == faction && SelectColorFilter.Value.IsAny(type, ColorType.All));
             }
-        }
+        } 
 
         GeneralBrightness = new("GENERAL_BRIGHTNESS", 100, PackType.RecoloredUI, 0, 100, true, Constants.EnableCustomUI);
         GrayscaleAmount = new("GRAYSCALE_AMOUNT", 100, PackType.RecoloredUI, 0, 100, true, Constants.EnableCustomUI);
@@ -354,9 +355,10 @@ public class Fancy : BaseMod<Fancy>
         PlayerPanelEasterEggs = new("PLAYER_PANEL_EE", false, PackType.IconPacks, Constants.EnableIcons);
 
         FactionalRoleNames = new("FACTIONAL_ROLE_NAMES", false, PackType.MiscRoleCustomisation, Constants.TextEditorExists);
+        FactionalRoleBlurbs = new("FACTIONAL_ROLE_BLURBS", false, PackType.MiscRoleCustomisation, Constants.TextEditorExists);
         MajorColors = new("MAJOR_COLORS", false, PackType.MiscRoleCustomisation);
         LethalColors = new("LETHAL_COLORS", false, PackType.MiscRoleCustomisation);
-        RecruitEndingColor = new("RECRUIT_ENDING", RecruitEndType.JackalEnd, PackType.MiscRoleCustomisation, useTranslations: true, setActive: Constants.BTOS2Exists);
+        RecruitEndingColor = new("RECRUIT_ENDING", RecruitEndType.JackalEnd, PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists, useTranslations: true);
         RoleCardFactionLabel = new("FACTION_LABEL", FactionLabelOption.Mismatch, PackType.MiscRoleCustomisation, useTranslations: true);
         FactionNameNextToRole = new("FACTION_NEXT_TO_ROLE", FactionLabelOption.Never, PackType.MiscRoleCustomisation, useTranslations: true);
         RecruitLabelTown = new("RECRUIT_LABEL_TOWN", "Recruited", PackType.MiscRoleCustomisation, setActive: () => Constants.BTOS2Exists() && SelectTestingFaction.Value == FactionType.TOWN);
