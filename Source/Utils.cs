@@ -584,8 +584,8 @@ public static class Utils
         ( < 54, Role.CURSED_SOUL, _) => FactionType.CURSED_SOUL,
 
         // BTOS2 specific role checks
-        (_, Btos2Role.Banshee, GameModType.BTOS2) => Btos2Faction.Coven,
-        (_, Btos2Role.Marshal or Btos2Role.Oracle, GameModType.BTOS2) => Btos2Faction.Town,
+        (_, Btos2Role.Banshee or Btos2Role.Cultist, GameModType.BTOS2) => Btos2Faction.Coven,
+        (_, Btos2Role.Marshal or Btos2Role.Oracle or Btos2Role.Catalyst, GameModType.BTOS2) => Btos2Faction.Town,
         (_, Btos2Role.Jackal, GameModType.BTOS2) => Btos2Faction.Jackal,
         (_, Btos2Role.Judge, GameModType.BTOS2) => Btos2Faction.Judge,
         (_, Btos2Role.Auditor, GameModType.BTOS2) => Btos2Faction.Auditor,
@@ -595,6 +595,8 @@ public static class Utils
 
         // Vanilla specific role checks
         ( > 53 and < 57, _, GameModType.Vanilla) => FactionType.TOWN,
+        ( _, Role.PILGRIM or Role.CATALYST, GameModType.Vanilla) => FactionType.TOWN,
+        ( _, Role.COVENITE or Role.CULTIST, GameModType.Vanilla) => FactionType.COVEN,
 
         // Default case
         _ => FactionType.NONE
