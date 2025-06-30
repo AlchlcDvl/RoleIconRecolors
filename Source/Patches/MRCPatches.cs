@@ -9,6 +9,7 @@ using Server.Shared.Cinematics;
 using Server.Shared.Cinematics.Data;
 using Server.Shared.Extensions;
 using System.Globalization;
+using Home.Services;
 
 namespace FancyUI.Patches;
 
@@ -717,22 +718,22 @@ public static class BetterMentions
     }
 }
 
-	// [HarmonyPatch(typeof(SharedMentionsProvider), nameof(SharedMentionsProvider.PreparePlayerMentions))]
-	// public static class PreparePlayerMentionsColor
-	// {
-	// 	public static void Postfix(SharedMentionsProvider __instance, int i)
-	// 	{
-	// 		try
-	// 		{
-	// 			var newValue = Pepper.CheckIfThisIsMe(i) ? "#FF0000" : "#00FF00";
-	// 			var mentionInfo = __instance.MentionInfos.Last();
-	// 			mentionInfo.richText = mentionInfo.richText.Replace("#FCCE3B", newValue);
-	// 			mentionInfo.hashCode = mentionInfo.richText.ToLower().GetHashCode();
-	// 		}
-	// 		catch
-	// 		{ }
-	// 	}
-	// }
+// [HarmonyPatch(typeof(SharedMentionsProvider), nameof(SharedMentionsProvider.PreparePlayerMentions))]
+// public static class PreparePlayerMentionsColor
+// {
+// 	public static void Postfix(SharedMentionsProvider __instance, int i)
+// 	{
+// 		try
+// 		{
+// 			var newValue = Pepper.CheckIfThisIsMe(i) ? "#FF0000" : "#00FF00";
+// 			var mentionInfo = __instance.MentionInfos.Last();
+// 			mentionInfo.richText = mentionInfo.richText.Replace("#FCCE3B", newValue);
+// 			mentionInfo.hashCode = mentionInfo.richText.ToLower().GetHashCode();
+// 		}
+// 		catch
+// 		{ }
+// 	}
+// }
 
 
 [HarmonyPatch(typeof(SharedMentionsProvider))]
@@ -938,6 +939,14 @@ public static class KeywordMentionsPatches
                 __result = str;
 
             return !modified;
+        }
+    }
+    [HarmonyPatch(typeof(HomeLocalizationService), nameof(HomeLocalizationService.GetLocalizedString))]
+    public static class LocalizationManagerPatches
+    {
+        public static void Postfix(ref string __result)
+        {
+            __result = Utils.RemoveStyleTags(__result);
         }
     }
 }

@@ -823,6 +823,19 @@ public static class Utils
 
     public static string GetString(string key) => Service.Home.LocalizationService.GetLocalizedString(key);
 
+    // This exists to "fix" the Vampire leaking bug (they're taking over)
+    // Users will need to adjust some strings, but if we don't do this, we fuck with any instance of Vampire
+    public static string RemoveStyleTags(string input)
+    {
+        if (string.IsNullOrEmpty(input)) return input;
+
+        input = Regex.Replace(input, @"<style\s*=\s*""?.*?""?\s*>", string.Empty);
+        input = Regex.Replace(input, @"</style>", string.Empty);
+
+        return input;
+    }
+
+
     public static bool ConditionalCompliancePandora(FactionType originalFaction, FactionType currentFaction)
     {
         if (currentFaction == (FactionType)43)
