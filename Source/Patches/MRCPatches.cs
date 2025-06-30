@@ -231,8 +231,8 @@ public static class FixStyles
         SetStyle(styles, "JesterColor", Fancy.Colors["JESTER"].Start);
         SetStyle(styles, "PirateColor", Fancy.Colors["PIRATE"].Start);
         SetStyle(styles, "DoomsayerColor", Fancy.Colors["DOOMSAYER"].Start);
-        SetStyle(styles, "VampireColor", Fancy.Colors["VAMPIRE"].Start);
-        SetStyle(styles, "CursedSoulColor", Fancy.Colors["CURSEDSOUL"].Start);
+        // SetStyle(styles, "VampireColor", Fancy.Colors["VAMPIRE"].Start);
+        // SetStyle(styles, "CursedSoulColor", Fancy.Colors["CURSEDSOUL"].Start);
         SetStyle(styles, "NeutralColor", Fancy.NeutralStart.Value);
 
         TMP_Settings.defaultStyleSheet.RefreshStyles();
@@ -941,12 +941,12 @@ public static class KeywordMentionsPatches
             return !modified;
         }
     }
-    [HarmonyPatch(typeof(HomeLocalizationService), nameof(HomeLocalizationService.GetLocalizedString))]
-    public static class LocalizationManagerPatches
-    {
-        public static void Postfix(ref string __result)
-        {
-            __result = Utils.RemoveStyleTags(__result);
-        }
-    }
+    // [HarmonyPatch(typeof(HomeLocalizationService), nameof(HomeLocalizationService.GetLocalizedString))]
+    // public static class LocalizationManagerPatches
+    // {
+    //     public static void Postfix(ref string __result)
+    //     {
+    //         __result = Utils.RemoveStyleTags(__result);
+    //     }
+    // }
 }
