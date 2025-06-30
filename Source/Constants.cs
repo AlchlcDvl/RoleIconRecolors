@@ -86,6 +86,7 @@ public static class Constants
     public static bool EnableCustomUI() => Fancy.SelectedUITheme.Value != UITheme.Vanilla;
 
     public static bool BTOS2Exists() => ModStates.IsEnabled("curtis.tuba.better.tos2");
+    public static bool BetterMentionsExists() => ModStates.IsEnabled("JAN.bettermentions");
 
     public static bool TextEditorExists() => ModStates.IsEnabled("curtis.text.editor");
 

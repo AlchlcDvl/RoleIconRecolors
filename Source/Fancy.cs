@@ -126,6 +126,9 @@ public class Fancy : BaseMod<Fancy>
     public static ColorOption KeywordEnd;
     public static ColorOption AchievementStart;
     public static ColorOption AchievementEnd;
+    public static ColorOption MentionStart;
+    public static ColorOption MentionEnd;
+    public static ToggleOption ColorMentionsWithFaction;
 
     public static FloatOption GeneralBrightness;
     public static FloatOption GrayscaleAmount;
@@ -396,6 +399,9 @@ public class Fancy : BaseMod<Fancy>
         KeywordEnd = new("KEYWORD_END", "#007AFF", PackType.MiscRoleCustomisation);
         AchievementStart = new("ACHIEVEMENT_START", "#FFBE00", PackType.MiscRoleCustomisation);
         AchievementEnd = new("ACHIEVEMENT_END", "#FFBE00", PackType.MiscRoleCustomisation);
+        MentionStart = new("MENTION_START", "#FFCE3B", PackType.MiscRoleCustomisation, setActive: () => !Constants.BetterMentionsExists());
+        MentionEnd = new("MENTION_END", "#FFCE3B", PackType.MiscRoleCustomisation, setActive: () => !Constants.BetterMentionsExists());
+        // ColorMentionsWithFaction = new("FACTIONAL_PLAYER_MENTIONS", true, PackType.MiscRoleCustomisation, setActive: () => !Constants.BetterMentionsExists());
 
         PlayerNumber = new("PLAYER_NUMBER", 0, PackType.Testing, 0, 15, true, Constants.CustomNumbers);
         ChatBackgroundOpacity = new("CHAT_BACKGROUND", 80, PackType.Testing, 0, 100, true);

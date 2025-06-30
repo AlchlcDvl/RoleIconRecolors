@@ -499,15 +499,7 @@ public static class ClientRoleExtensionsPatches
     }
 
     [HarmonyPatch(nameof(ClientRoleExtensions.GetFactionColor))]
-    public static bool PrefixPrimary(ref string __result, FactionType factionType)
-    {
-        __result = Fancy.Colors[Utils.FactionName(factionType, stoned: true).ToUpper()].Start;
-        return false;
-    }
-
-    // idk im just tryna disable this code lol
-    [HarmonyPatch(nameof(ClientRoleExtensions.GetSecondFactionColor))]
-    public static bool PrefixSecondary(ref string __result, FactionType factionType)
+    public static bool Prefix(ref string __result, FactionType factionType)
     {
         __result = Fancy.Colors[Utils.FactionName(factionType, stoned: true).ToUpper()].Start;
         return false;
@@ -616,6 +608,7 @@ public static class ClientRoleExtensionsPatches
     // }
 }
 
+// This is needed because of build conflicts (ClientRoleExtensionsPatches.Postfix & ClientRoleExtensionsPatches.Postfix, for example)
 [HarmonyPatch(typeof(ClientRoleExtensions))]
 public static class ClientRoleExtensionsPatches2
 {
@@ -634,7 +627,112 @@ public static class ClientRoleExtensionsPatches2
             : $"<color={factionType.GetFactionColor()}>{text}</color>";
     }
 
+    [HarmonyPatch(nameof(ClientRoleExtensions.GetSecondFactionColor))]
+    public static bool Prefix(ref string __result, FactionType factionType)
+    {
+        __result = Fancy.Colors[Utils.FactionName(factionType, stoned: true).ToUpper()].Start;
+        return false;
+    }
 }
+// #{ColorUtility.ToHtmlStringRGB(Utils.GetPlayerRoleColor(position))}
+
+[HarmonyPatch(typeof(SharedMentionsProvider), nameof(SharedMentionsProvider.PreparePlayerMentions))]
+public static class BetterMentions
+{
+    public static bool Prefix(
+        SharedMentionsProvider __instance,
+        DiscussionPlayerObservation player,
+        int skinId,
+        int i,
+        MentionInfo.MentionInfoType mentionInfoType,
+        MentionToken.MentionTokenType mentionTokenType)
+    {
+        if (Constants.BetterMentionsExists())
+            return true;
+
+        if (!Pepper.IsLobbyOrPickNamesOrGamePhase())
+            return true;
+
+        var text = string.IsNullOrWhiteSpace(player.Data.gameName)
+            ? player.Data.accountName
+            : player.Data.gameName;
+
+        var match = $"@{i + 1}";
+        var match2 = "@" + text;
+        var encodedText = $"[[@{i + 1}]]";
+        var linkPrefix = (mentionTokenType == MentionToken.MentionTokenType.ACCOUNT) ? "a" : string.Empty;
+
+
+        var gradient = Utils.CreateGradient(Fancy.MentionStart.Value, Fancy.MentionEnd.Value);
+
+        // var faction = Pepper.GetDiscussionPlayerFactionIfKnown(i);
+        // var role = Pepper.GetDiscussionPlayerRoleIfKnown(i);
+        // This code is buggy. Mentions clear themselves when the role and faction becomes known.
+        // if (Fancy.ColorMentionsWithFaction.Value &&
+        //     faction is not FactionType.NONE and not FactionType.UNKNOWN)
+        // {
+        //     gradient = faction.GetChangedGradient(role) ?? gradient;
+        // }
+
+        var textContent = __instance._useColors
+            ? Utils.ApplyGradient(text, gradient)
+            : $"<b>{text}</b>";
+
+        var icon = __instance._playerEffects switch
+        {
+            2 => $"<sprite=\"PlayerNumbers\" name=\"PlayerNumbers_{player.Data.position + 1}\">",
+            1 => $"<sprite=\"Cast\" name=\"Skin{skinId}\">",
+            _ => string.Empty
+        };
+
+        var finalMarkup = $"{__instance.styleTagOpen}{__instance.styleTagFont}<link=\"{linkPrefix}{player.Data.position}\">{icon}{textContent}</link>{__instance.styleTagClose}";
+
+        var mentionInfo = new MentionInfo
+        {
+            mentionInfoType = mentionInfoType,
+            richText = finalMarkup,
+            encodedText = encodedText,
+            hashCode = finalMarkup.ToLower().GetHashCode(),
+            humanText = "@" + text.ToLower()
+        };
+
+        __instance.MentionInfos.Add(mentionInfo);
+
+        __instance.MentionTokens.Add(new MentionToken
+        {
+            mentionTokenType = mentionTokenType,
+            match = match,
+            mentionInfo = mentionInfo,
+            priority = i
+        });
+        __instance.MentionTokens.Add(new MentionToken
+        {
+            mentionTokenType = mentionTokenType,
+            match = match2,
+            mentionInfo = mentionInfo,
+            priority = i
+        });
+
+        return false;
+    }
+}
+
+	// [HarmonyPatch(typeof(SharedMentionsProvider), nameof(SharedMentionsProvider.PreparePlayerMentions))]
+	// public static class PreparePlayerMentionsColor
+	// {
+	// 	public static void Postfix(SharedMentionsProvider __instance, int i)
+	// 	{
+	// 		try
+	// 		{
+	// 			var newValue = Pepper.CheckIfThisIsMe(i) ? "#FF0000" : "#00FF00";
+	// 			var mentionInfo = __instance.MentionInfos.Last();
+	// 			mentionInfo.richText = mentionInfo.richText.Replace("#FCCE3B", newValue);
+	// 			mentionInfo.hashCode = mentionInfo.richText.ToLower().GetHashCode();
+	// 		}
+	// 		catch
+	// 		{ }
+	// 	}
+	// }
 
 
 [HarmonyPatch(typeof(SharedMentionsProvider))]

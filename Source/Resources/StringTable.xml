@@ -247,6 +247,12 @@
     <Entry key="FANCY_KEYWORD_END_NAME">Keyword End Color</Entry>
     <Entry key="FANCY_KEYWORD_END_DESC">The end color for keywords.</Entry>
 
+    <Entry key="FANCY_MENTION_START_NAME">Mention Start Color</Entry>
+    <Entry key="FANCY_MENTION_START_DESC">The start color for mentions.</Entry>
+
+    <Entry key="FANCY_MENTION_END_NAME">Mention End Color</Entry>
+    <Entry key="FANCY_MENTION_END_DESC">The end color for mentions.</Entry>
+
     <Entry key="FANCY_ACHIEVEMENT_START_NAME">Achievement Start Color</Entry>
     <Entry key="FANCY_ACHIEVEMENT_START_DESC">The start color for achievement keywords.</Entry>
 
