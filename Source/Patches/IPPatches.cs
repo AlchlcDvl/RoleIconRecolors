@@ -1097,9 +1097,9 @@ public static class MakeProperFactionChecksInWdah2
                 text2 = text2.Replace("RoleIcons\"", "RoleIcons (Regular)\"");
 
                 if (Constants.IsBTOS2())
-                    text2 = text2.Replace("\"RoleIcons", "\"BTOSRoleIcons").Replace("106\"", "109\"");
+                    text2 = text2.Replace("\"RoleIcons", "\"BTOSRoleIcons").Replace("106\"", "107\"");
                 else
-                    text2 = text2.Replace("\"BTOSRoleIcons", "\"RoleIcons").Replace("109\"", "106\"");
+                    text2 = text2.Replace("\"BTOSRoleIcons", "\"RoleIcons").Replace("107\"", "106\"");
 
                 __instance.AddLine(text2, Tuning.REVEAL_TIME_PER_ADDL_KILLED_BY_REASON);
             }
