@@ -244,17 +244,26 @@
     <Entry key="FANCY_KEYWORD_START_NAME">Keyword Start Color</Entry>
     <Entry key="FANCY_KEYWORD_START_DESC">The start color for keywords.</Entry>
 
+    <Entry key="FANCY_KEYWORD_COLOR_NAME">Keyword Color</Entry>
+    <Entry key="FANCY_KEYWORD_COLOR_DESC">The color for keywords.</Entry>
+
     <Entry key="FANCY_KEYWORD_END_NAME">Keyword End Color</Entry>
     <Entry key="FANCY_KEYWORD_END_DESC">The end color for keywords.</Entry>
 
     <Entry key="FANCY_MENTION_START_NAME">Mention Start Color</Entry>
     <Entry key="FANCY_MENTION_START_DESC">The start color for mentions.</Entry>
 
+    <Entry key="FANCY_MENTION_COLOR_NAME">Mention Color</Entry>
+    <Entry key="FANCY_MENTION_COLOR_DESC">The color for player mentions.</Entry>
+
     <Entry key="FANCY_MENTION_END_NAME">Mention End Color</Entry>
     <Entry key="FANCY_MENTION_END_DESC">The end color for mentions.</Entry>
 
     <Entry key="FANCY_ACHIEVEMENT_START_NAME">Achievement Start Color</Entry>
     <Entry key="FANCY_ACHIEVEMENT_START_DESC">The start color for achievement keywords.</Entry>
+
+    <Entry key="FANCY_ACHIEVEMENT_COLOR_NAME">Achievement Color</Entry>
+    <Entry key="FANCY_ACHIEVEMENT_COLOR_DESC">The color for achievement keywords.</Entry>
 
     <Entry key="FANCY_ACHIEVEMENT_END_NAME">Achievement End Color</Entry>
     <Entry key="FANCY_ACHIEVEMENT_END_DESC">The end color for achievement keywords.</Entry>

@@ -119,15 +119,15 @@ public class Fancy : BaseMod<Fancy>
     public static ToggleOption LethalColors;
 
     public static ColorOption NeutralStart;
-    public static ColorOption NeutralEnd;
+    // public static ColorOption NeutralEnd;
     public static ColorOption BucketStart;
-    public static ColorOption BucketEnd;
+    // public static ColorOption BucketEnd;
     public static ColorOption KeywordStart;
-    public static ColorOption KeywordEnd;
+    // public static ColorOption KeywordEnd;
     public static ColorOption AchievementStart;
-    public static ColorOption AchievementEnd;
+    // public static ColorOption AchievementEnd;
     public static ColorOption MentionStart;
-    public static ColorOption MentionEnd;
+    // public static ColorOption MentionEnd;
     public static ToggleOption ColorMentionsWithFaction;
 
     public static FloatOption GeneralBrightness;
@@ -395,12 +395,12 @@ public class Fancy : BaseMod<Fancy>
         // NeutralEnd = new("NEUTRAL_END", "#A9A9A9", PackType.MiscRoleCustomisation, setActive: () => GradientBuckets.Value);
         // BucketStart = new("BUCKET_START", "#1F51FF", PackType.MiscRoleCustomisation, setActive: () => GradientBuckets.Value);
         // BucketEnd = new("BUCKET_END", "#1F51FF", PackType.MiscRoleCustomisation, setActive: () => GradientBuckets.Value);
-        KeywordStart = new("KEYWORD_START", "#007AFF", PackType.MiscRoleCustomisation);
-        KeywordEnd = new("KEYWORD_END", "#007AFF", PackType.MiscRoleCustomisation);
-        AchievementStart = new("ACHIEVEMENT_START", "#FFBE00", PackType.MiscRoleCustomisation);
-        AchievementEnd = new("ACHIEVEMENT_END", "#FFBE00", PackType.MiscRoleCustomisation);
-        MentionStart = new("MENTION_START", "#FFCE3B", PackType.MiscRoleCustomisation, setActive: () => !Constants.BetterMentionsExists());
-        MentionEnd = new("MENTION_END", "#FFCE3B", PackType.MiscRoleCustomisation, setActive: () => !Constants.BetterMentionsExists());
+        KeywordStart = new("KEYWORD_COLOR", "#007AFF", PackType.MiscRoleCustomisation);
+        // KeywordEnd = new("KEYWORD_END", "#007AFF", PackType.MiscRoleCustomisation);
+        AchievementStart = new("ACHIEVEMENT_COLOR", "#FFBE00", PackType.MiscRoleCustomisation);
+        // AchievementEnd = new("ACHIEVEMENT_END", "#FFBE00", PackType.MiscRoleCustomisation);
+        MentionStart = new("MENTION_COLOR", "#FFCE3B", PackType.MiscRoleCustomisation, setActive: () => !Constants.BetterMentionsExists());
+        // MentionEnd = new("MENTION_END", "#FFCE3B", PackType.MiscRoleCustomisation, setActive: () => !Constants.BetterMentionsExists());
         // ColorMentionsWithFaction = new("FACTIONAL_PLAYER_MENTIONS", true, PackType.MiscRoleCustomisation, setActive: () => !Constants.BetterMentionsExists());
 
         PlayerNumber = new("PLAYER_NUMBER", 0, PackType.Testing, 0, 15, true, Constants.CustomNumbers);

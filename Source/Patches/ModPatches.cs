@@ -141,7 +141,7 @@ public static class AchievementMentionsPatch
     {
         var achievementIds = Service.Game.Achievement.GetAllAchievementIds();
         var useColors = __instance._useColors;
-        var gradient = useColors ? Utils.CreateGradient(Fancy.AchievementStart.Value, Fancy.AchievementEnd.Value) : null;
+        // var gradient = useColors ? Utils.CreateGradient(Fancy.AchievementStart.Value, Fancy.AchievementEnd.Value) : null;
 
         var priority = 0;
 
@@ -151,11 +151,12 @@ public static class AchievementMentionsPatch
             if (string.IsNullOrWhiteSpace(title))
                 continue;
 
+            var color = Fancy.AchievementStart.Value;
             var encodedText = $"[[~{achievementId}]]";
             var match = $"~{title}";
 
             var styledTitle = useColors
-                ? $"<b>{Utils.ApplyGradient(title, gradient)}</b>"
+                ? $"<color={color}><b>{title}</b></color>"
                 : $"<b>{title}</b>";
 
             var richText = $"{__instance.styleTagOpen}{__instance.styleTagFont}<link=\"~{achievementId}\">{styledTitle}</link>{__instance.styleTagClose}";

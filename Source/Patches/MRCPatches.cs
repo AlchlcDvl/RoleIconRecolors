@@ -640,13 +640,11 @@ public static class ClientRoleExtensionsPatches2
 [HarmonyPatch(typeof(SharedMentionsProvider), nameof(SharedMentionsProvider.PreparePlayerMentions))]
 public static class BetterMentions
 {
-    public static bool Prefix(
-        SharedMentionsProvider __instance,
-        DiscussionPlayerObservation player,
-        int skinId,
-        int i,
-        MentionInfo.MentionInfoType mentionInfoType,
-        MentionToken.MentionTokenType mentionTokenType)
+    public static bool Prefix(SharedMentionsProvider __instance, 
+                               DiscussionPlayerObservation player, 
+                               int skinId, int i, 
+                               MentionInfo.MentionInfoType mentionInfoType, 
+                               MentionToken.MentionTokenType mentionTokenType)
     {
         if (Constants.BetterMentionsExists())
             return true;
@@ -654,51 +652,50 @@ public static class BetterMentions
         if (!Pepper.IsLobbyOrPickNamesOrGamePhase())
             return true;
 
+        // Custom version
         var text = string.IsNullOrWhiteSpace(player.Data.gameName)
             ? player.Data.accountName
             : player.Data.gameName;
-
         var match = $"@{i + 1}";
         var match2 = "@" + text;
         var encodedText = $"[[@{i + 1}]]";
-        var linkPrefix = (mentionTokenType == MentionToken.MentionTokenType.ACCOUNT) ? "a" : string.Empty;
+        var text2 = (mentionTokenType == MentionToken.MentionTokenType.ACCOUNT) ? "a" : string.Empty;
 
-
-        var gradient = Utils.CreateGradient(Fancy.MentionStart.Value, Fancy.MentionEnd.Value);
-
+        var color = Fancy.MentionStart.Value;
         // var faction = Pepper.GetDiscussionPlayerFactionIfKnown(i);
-        // var role = Pepper.GetDiscussionPlayerRoleIfKnown(i);
-        // This code is buggy. Mentions clear themselves when the role and faction becomes known.
-        // if (Fancy.ColorMentionsWithFaction.Value &&
-        //     faction is not FactionType.NONE and not FactionType.UNKNOWN)
+        // if (faction is not FactionType.NONE and not FactionType.UNKNOWN)
         // {
-        //     gradient = faction.GetChangedGradient(role) ?? gradient;
+        //     var roleColor = Utils.GetPlayerRoleColor(i);
+        //     var roleColorString = ColorUtility.ToHtmlStringRGB(roleColor);
+        //     if (string.IsNullOrEmpty(roleColorString))
+        //         roleColorString = "FFCE3B";
+        //     color = $"#{roleColorString}";
         // }
+        if (string.IsNullOrEmpty(color))
+            color = "#FFCE3B";
 
-        var textContent = __instance._useColors
-            ? Utils.ApplyGradient(text, gradient)
-            : $"<b>{text}</b>";
+        var text3 = (__instance._useColors
+            ? $"<color={color}><b>{text}</b></color>"
+            : $"<b>{text}</b>");
 
-        var icon = __instance._playerEffects switch
-        {
-            2 => $"<sprite=\"PlayerNumbers\" name=\"PlayerNumbers_{player.Data.position + 1}\">",
-            1 => $"<sprite=\"Cast\" name=\"Skin{skinId}\">",
-            _ => string.Empty
-        };
+        var text4 = (__instance._playerEffects == 2
+            ? $"<sprite=\"PlayerNumbers\" name=\"PlayerNumbers_{player.Data.position + 1}\">"
+            : (__instance._playerEffects == 1
+                ? $"<sprite=\"Cast\" name=\"Skin{skinId}\">"
+                : string.Empty));
 
-        var finalMarkup = $"{__instance.styleTagOpen}{__instance.styleTagFont}<link=\"{linkPrefix}{player.Data.position}\">{icon}{textContent}</link>{__instance.styleTagClose}";
+        var text5 = $"{__instance.styleTagOpen}{__instance.styleTagFont}<link=\"{text2}{player.Data.position}\">{text4}{text3}</link>{__instance.styleTagClose}";
 
-        var mentionInfo = new MentionInfo
+        MentionInfo mentionInfo = new MentionInfo
         {
             mentionInfoType = mentionInfoType,
-            richText = finalMarkup,
+            richText = text5,
             encodedText = encodedText,
-            hashCode = finalMarkup.ToLower().GetHashCode(),
+            hashCode = text5.ToLower().GetHashCode(),
             humanText = "@" + text.ToLower()
         };
 
         __instance.MentionInfos.Add(mentionInfo);
-
         __instance.MentionTokens.Add(new MentionToken
         {
             mentionTokenType = mentionTokenType,
@@ -718,23 +715,6 @@ public static class BetterMentions
     }
 }
 
-// [HarmonyPatch(typeof(SharedMentionsProvider), nameof(SharedMentionsProvider.PreparePlayerMentions))]
-// public static class PreparePlayerMentionsColor
-// {
-// 	public static void Postfix(SharedMentionsProvider __instance, int i)
-// 	{
-// 		try
-// 		{
-// 			var newValue = Pepper.CheckIfThisIsMe(i) ? "#FF0000" : "#00FF00";
-// 			var mentionInfo = __instance.MentionInfos.Last();
-// 			mentionInfo.richText = mentionInfo.richText.Replace("#FCCE3B", newValue);
-// 			mentionInfo.hashCode = mentionInfo.richText.ToLower().GetHashCode();
-// 		}
-// 		catch
-// 		{ }
-// 	}
-// }
-
 
 [HarmonyPatch(typeof(SharedMentionsProvider))]
 public static class KeywordMentionsPatches
@@ -745,7 +725,7 @@ public static class KeywordMentionsPatches
         if (!__instance._useColors)
             return;
 
-        var gradient = Utils.CreateGradient(Fancy.KeywordStart.Value, Fancy.KeywordEnd.Value);
+        // var gradient = Utils.CreateGradient(Fancy.KeywordStart.Value, Fancy.KeywordEnd.Value);
 
         foreach (var mentionInfo in __instance.MentionInfos)
         {
@@ -760,8 +740,9 @@ public static class KeywordMentionsPatches
             if (string.IsNullOrWhiteSpace(raw))
                 continue;
 
+            var color = Fancy.KeywordStart.Value;
             var keyword = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(raw);
-            var newText = $"<b>{Utils.ApplyGradient(keyword, gradient)}</b>";
+            var newText = $"<color={color}><b>{keyword}</b></color>";
             var encodedText = mentionInfo.encodedText;
             var keywordId = encodedText.TrimStart('[', ':').TrimEnd(']');
 
@@ -817,7 +798,7 @@ public static class KeywordMentionsPatches
 
     private static void BuildCustomKeywordMentions(SharedMentionsProvider __instance)
     {
-        var gradient = __instance._useColors ? Utils.CreateGradient(Fancy.KeywordStart.Value, Fancy.KeywordEnd.Value) : null;
+        // var gradient = __instance._useColors ? Utils.CreateGradient(Fancy.KeywordStart.Value, Fancy.KeywordEnd.Value) : null;
 
         var keywordList = Service.Game.Keyword.keywordInfo
             .Select(k => (Keyword: k, Localized: Utils.GetString(k.KeywordKey)))
@@ -832,8 +813,9 @@ public static class KeywordMentionsPatches
 
             var encodedText = $"[[:{keyword.KeywordId}]]";
 
+            var color = Fancy.KeywordStart.Value;
             var coloredText = __instance._useColors
-                ? $"<b>{Utils.ApplyGradient(localizedText, gradient)}</b>"
+                ? $"<color={color}><b>{localizedText}</b></color>"
                 : $"<b>{localizedText}</b>";
 
             var richText = $"{__instance.styleTagOpen}{__instance.styleTagFont}<link=\"k{keyword.KeywordId}\">{coloredText}</link>{__instance.styleTagClose}";
