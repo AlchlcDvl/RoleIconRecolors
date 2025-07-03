@@ -159,7 +159,11 @@ public static class RoleCardPopupPatches2
     }
 
     [HarmonyPatch(nameof(RoleCardPopupPanel.SetRole))]
-    public static void Postfix(Role role, RoleCardPopupPanel __instance) => __instance.roleNameText.text = role.ToColorizedDisplayString();
+    public static void Postfix(Role role, RoleCardPopupPanel __instance) => __instance.roleNameText.text = role.ToColorizedNoLabel(__instance.CurrentFaction);
+
+    [HarmonyPatch(nameof(RoleCardPopupPanel.SetRoleAndFaction))]
+    public static void Postfix(Role role, FactionType faction, RoleCardPopupPanel __instance) => __instance.roleNameText.text = role.ToColorizedNoLabel(faction);
+
 }
 
 [HarmonyPatch(typeof(TosAbilityPanelListItem), nameof(TosAbilityPanelListItem.SetKnownRole))]
@@ -931,4 +935,27 @@ public static class KeywordMentionsPatches
     //         __result = Utils.RemoveStyleTags(__result);
     //     }
     // }
+
+    [HarmonyPatch(typeof(GraveyardItem), nameof(GraveyardItem.SetPlayerPicAndName))]
+    public static class GraveyardItem_SetPlayerPicAndName_Patch
+    {
+        public static void Postfix(GraveyardItem __instance)
+        {
+            var killRecord = __instance._mKillRecord;
+            var faction = killRecord.playerFaction;
+            var role = killRecord.playerRole;
+            var player = (int)killRecord.playerId;
+            var icon = role.GetTMPSprite();
+            icon = icon.Replace("RoleIcons\"", $"RoleIcons ({((role.GetFactionType() == faction && Constants.CurrentStyle() == "Regular")
+                ? "Regular"
+                : Utils.FactionName(faction, false))})\"");
+
+            var name = Service.Game.Sim.simulation.GetPlayerInlineLinkString(player, 1.1) ?? "";
+
+            var text = icon + role.ToColorizedNoLabel(faction);
+
+            var combinedText = $"{name} ({text})";
+            __instance.playerAndRoleLabel.SetText(combinedText);
+        }
+    }
 }

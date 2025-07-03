@@ -421,23 +421,37 @@ public static class FactionWinsStandardCinematicPlayer_SetUpWinners_Patch
 
     public static void Postfix(FactionWinsStandardCinematicPlayer __instance)
     {
-        if (Service.Game.Sim.info.gameInfo.Data.gamePhase != GamePhase.LOBBY || __instance.silhouetteWrappers == null || __instance.cinematicData.entries == null)
+        var gamePhase = Service.Game.Sim.info.gameInfo.Data.gamePhase;
+        if (gamePhase != GamePhase.LOBBY || __instance.silhouetteWrappers == null || __instance.characterWrappers == null || __instance.cinematicData.entries == null)
             return;
+
+        var random = new System.Random();
 
         foreach (var wrapper in __instance.silhouetteWrappers.Where(x => x))
         {
             var silhouetteId = 0;
 
             if (Fancy.SelectTestingRole.Value == Role.NONE && !Constants.IsBTOS2())
-                silhouetteId = AllowedSilhouettes.Random();
+                silhouetteId = AllowedSilhouettes[random.Next(AllowedSilhouettes.Length)];
 
-            if (Fancy.SelectTestingRole.Value == Role.NONE && Constants.IsBTOS2())
-                silhouetteId = AllowedSilhouettesBTOS.Random();
+            else if (Fancy.SelectTestingRole.Value == Role.NONE && Constants.IsBTOS2())
+                silhouetteId = AllowedSilhouettesBTOS[random.Next(AllowedSilhouettesBTOS.Length)];
 
-            if (Fancy.SelectTestingRole.Value != Role.NONE)
+            else if (Fancy.SelectTestingRole.Value != Role.NONE)
                 silhouetteId = (int)Fancy.SelectTestingRole.Value;
 
             wrapper.SwapWithSilhouette(silhouetteId, true);
+        }
+
+        var characterCount = __instance.characterWrappers.Count;
+
+        foreach (var wrapper in __instance.characterWrappers.Where(x => x))
+        {
+            var randomSkinId = random.Next(characterCount);
+
+            const int auraId = 0;
+
+            wrapper.SwapWithCharacter(randomSkinId, shouldUseLayering: true, auraId);
         }
     }
 }

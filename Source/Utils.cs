@@ -959,4 +959,13 @@ public static class Utils
         else
             return "FANCY_THEY_WERE_A_ROLE";
     }
+    public static string ToColorizedNoLabel(this Role role, FactionType faction)
+    {
+        var roleName = Fancy.FactionalRoleNames.Value ? role.ToRoleFactionDisplayString(faction) : role.ToDisplayString();
+        var gradient = faction.GetChangedGradient(role);
+
+        return gradient != null
+            ? ApplyGradient(roleName, gradient)
+            : $"<color={faction.GetFactionColor()}>{roleName}</color>";
+    }
 }
