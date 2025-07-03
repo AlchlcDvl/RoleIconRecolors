@@ -12,7 +12,7 @@ public class Fancy : BaseMod<Fancy>
 
     public override void Start()
     {
-        Instance.Message("Fancying...", true);
+        Message("Fancying...", true);
 
         if (!Directory.Exists(IPPath))
             Directory.CreateDirectory(IPPath);
@@ -46,7 +46,7 @@ public class Fancy : BaseMod<Fancy>
         }
         catch { }
 
-        Instance.Message("Fancy!", true);
+        Message("Fancy!", true);
     }
 
     public override void UponAssetsHandled()
@@ -385,7 +385,7 @@ public class Fancy : BaseMod<Fancy>
         WildlingWhisperColor = new("WILDLING_WHISPER", "#DD0000", PackType.MiscRoleCustomisation);
         SerialKillerWhisperColor = new("SERIALKILLER_WHISPER", "#800040", PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists);
         // GradientBuckets = new("GRADIENT_BUCKETS", true, PackType.MiscRoleCustomisation);
-        ReplaceNAwithRA = new("RANDOM_APOC_IN_VANILLA", false, PackType.MiscRoleCustomisation, setActive: () => GradientBuckets.Value);
+        ReplaceNAwithRA = new("RANDOM_APOC_IN_VANILLA", false, PackType.MiscRoleCustomisation/*, setActive: () => GradientBuckets.Value*/);
 
         NeutralStart = new("NEUTRAL", "#A9A9A9", PackType.MiscRoleCustomisation);
         // NeutralEnd = new("NEUTRAL_END", "#A9A9A9", PackType.MiscRoleCustomisation, setActive: () => GradientBuckets.Value);

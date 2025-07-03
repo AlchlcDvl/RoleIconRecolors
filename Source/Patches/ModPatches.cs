@@ -103,22 +103,15 @@ public static class RoleRevealCinematicPlayerPatch
             : Utils.FactionName(CurrentFaction, false))})\"");
 
         string roleRevealKey;
+
         if (role.IsHorseman())
-        {
             roleRevealKey = "FANCY_ROLE_REVEAL_ROLE_HORSEMAN";
-        }
         else if ((role.IsUnique() || Constants.IsIndividuality()) && !Fancy.IgnoreUniqueRoleCheck.Value)
-        {
             roleRevealKey = "FANCY_ROLE_REVEAL_ROLE_UNIQUE";
-        }
         else if (Utils.StartsWithVowel(roleName))
-        {
             roleRevealKey = "FANCY_ROLE_REVEAL_ROLE_VOWEL";
-        }
         else
-        {
             roleRevealKey = "FANCY_ROLE_REVEAL_ROLE_CONSONANT";
-        }
 
         var roleText = __instance.l10n(roleRevealKey).Replace("%role%", roleIcon);
         __instance.roleTextPlayer.ShowText(roleText);
@@ -381,15 +374,25 @@ public static class VictoryCinematicSwapperPatch
 }
 
 // Did the guys at TMP never think of devs trying to modify the arrow button??? seriously??? the drop-downs look so damn off with the arrow not updating up or down with respect to its selection
-[HarmonyPatch(typeof(TMP_Dropdown), nameof(TMP_Dropdown.Show))]
+[HarmonyPatch(typeof(TMP_Dropdown))]
 public static class DropdownPatch
 {
+    [HarmonyPatch(nameof(TMP_Dropdown.Show))]
     public static void Postfix(TMP_Dropdown __instance)
     {
         var parent = __instance.GetComponentInParent<DropdownSetting>();
 
         if (parent)
             parent.Arrow.sprite = Fancy.Instance.Assets.GetSprite("DropDown_ArrowUp");
+    }
+
+    [HarmonyPatch("ImmediateDestroyDropdownList")]
+    public static void Prefix(TMP_Dropdown __instance)
+    {
+        var parent = __instance.GetComponentInParent<DropdownSetting>();
+
+        if (parent)
+            parent.Arrow.sprite = Fancy.Instance.Assets.GetSprite("DropDown_ArrowDown");
     }
 }
 
@@ -408,13 +411,8 @@ public static class FactionWinsStandardCinematicPlayer_SetUpWinners_Patch
     ];
     private static readonly int[] AllowedSilhouettesBTOS =
     [
-        1,2,3,4,5,6,7,8,9,10,
-        11,12,13,14,15,16,17,18,19,20,
-        21,22,23,24,25,26,27,28,29,30,
-        31,32,33,34,35,36,37,38,39,40,
-        41,42,43,44,45,46,47,48,49,50,
-        51,52,53,54,55,56,57,58,59,60,
-        61,62,
+        ..AllowedSilhouettes,
+        57,58,59,60,61,62,
         240, 250, 251, 252, 253
     ];
 
