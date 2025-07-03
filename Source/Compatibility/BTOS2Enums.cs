@@ -99,9 +99,9 @@ public static class Btos2Role
     public const Role NeutralEvil = (Role)115;
     public const Role NeutralKilling = (Role)116;
     public const Role NeutralPariah = (Role)117;
-    public const Role NeutralOutlier = (Role)128;
-    public const Role TownExecutive = (Role)129;
-    public const Role TownGovernment = (Role)130;
+    public const Role NeutralOutlier = (Role)118;
+    public const Role TownExecutive = (Role)119;
+    public const Role TownGovernment = (Role)120;
 
     // Modifiers
     public const Role Vip = Role.VIP;
