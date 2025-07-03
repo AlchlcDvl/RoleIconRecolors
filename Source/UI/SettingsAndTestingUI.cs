@@ -146,11 +146,9 @@ public class SettingsAndTestingUI : UIController
         testing!.onClick.AddListener(() => Page = PackType.Testing);
 
         var special = roleCard.GetComponent<Image>("Special");
-        var effect = roleCard.GetComponent<Image>("Effect");
         var drop = transform.FindRecursive("Drop");
 
         Metals.Add(special);
-        Metals.Add(effect);
         Metals.Add(playerList.GetComponent<Image>("Corners"));
         Metals.Add(roleDeck.GetComponent<Image>("Metal"));
         Metals.Add(chat.GetComponent<Image>("Metal"));
@@ -164,7 +162,6 @@ public class SettingsAndTestingUI : UIController
         Metals.Add(specialAbilityPopup.GetComponent<Image>("Ring"));
         Metals.Add(FilterArrow);
         Metals.Add(special.transform.GetComponent<Image>("Icon"));
-        Metals.Add(effect.transform.GetComponent<Image>("Icon"));
         Metals.Add(transform.GetComponent<Image>("Chains1"));
         Metals.Add(transform.GetComponent<Image>("Chains2"));
         Metals.Add(drop.GetComponent<Image>("Icon1"));
@@ -174,7 +171,6 @@ public class SettingsAndTestingUI : UIController
 
         Woods.Add(roleCard.GetComponent<Image>("Frame"));
         Woods.Add(Metals[0].transform.GetComponent<Image>("Wood"));
-        Woods.Add(Metals[1].transform.GetComponent<Image>("Wood"));
         Woods.Add(chat.transform.GetComponent<Image>("WoodFrame"));
         Woods.Add(chat.transform.GetComponent<Image>("WoodDetails1"));
         Woods.Add(chat.transform.GetComponent<Image>("WoodDetails2"));

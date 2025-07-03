@@ -770,7 +770,8 @@ public static class Utils
             factionName += "_BTOS";
 
         return GetString($"FANCY_{factionName}_ROLENAME_{(int)role}");
-    } 
+    }
+
     public static string ToFactionalRoleBlurb(this Role role, FactionType faction)
     {
         if (!Fancy.FactionalRoleBlurbs.Value)
@@ -825,14 +826,12 @@ public static class Utils
 
     // public static string RemoveStyleTags(string input)
     // {
-    //     if (string.IsNullOrEmpty(input)) return input;
+    //     if (string.IsNullOrEmpty(input))
+    //         return input;
 
-    //     input = Regex.Replace(input, @"<style\s*=\s*""?.*?""?\s*>", string.Empty);
-    //     input = Regex.Replace(input, @"</style>", string.Empty);
-
+    //     input = Regex.Replace(input, @"<style\s*=\s*""?.*?""?\s*>|</style>", string.Empty);
     //     return input;
     // }
-
 
     public static bool ConditionalCompliancePandora(FactionType originalFaction, FactionType currentFaction)
     {
@@ -891,6 +890,7 @@ public static class Utils
 
         return sb.ToString();
     }
+
     public static string ReplaceIcons(this string input)
     {
         if (Constants.IsBTOS2())
@@ -959,6 +959,7 @@ public static class Utils
         else
             return "FANCY_THEY_WERE_A_ROLE";
     }
+
     public static string ToColorizedNoLabel(this Role role, FactionType faction)
     {
         var roleName = Fancy.FactionalRoleNames.Value ? role.ToRoleFactionDisplayString(faction) : role.ToDisplayString();

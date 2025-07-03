@@ -22,7 +22,7 @@ public static class PatchRoleCard
         var component = __instance.GetComponent<GradientRoleColorController>();
 
         if (component != null)
-            UObject.Destroy(component); 
+            UObject.Destroy(component);
 
         __instance.gameObject.AddComponent<GradientRoleColorController>().Instance = __instance.rolecardBG;
         __instance.roleNameText.text = Pepper.GetMyRole().ToChangedDisplayString(Pepper.GetMyFaction(), Service.Game.Sim.simulation.observations.roleCardObservation.Data.modifier);
@@ -163,7 +163,6 @@ public static class RoleCardPopupPatches2
 
     [HarmonyPatch(nameof(RoleCardPopupPanel.SetRoleAndFaction))]
     public static void Postfix(Role role, FactionType faction, RoleCardPopupPanel __instance) => __instance.roleNameText.text = role.ToColorizedNoLabel(faction);
-
 }
 
 [HarmonyPatch(typeof(TosAbilityPanelListItem), nameof(TosAbilityPanelListItem.SetKnownRole))]
@@ -224,25 +223,25 @@ public static class FixStyles
         if (StylesField.GetValue(TMP_Settings.defaultStyleSheet) is not List<TMP_Style> styles)
             return;
 
-        SetStyle(styles, "TownColor", Fancy.Colors["TOWN"].Start);
-        SetStyle(styles, "CovenColor", Fancy.Colors["COVEN"].Start);
-        SetStyle(styles, "ApocalypseColor", Fancy.Colors["APOCALYPSE"].Start);
-        SetStyle(styles, "SerialKillerColor", Fancy.Colors["SERIALKILLER"].Start);
-        SetStyle(styles, "ArsonistColor", Fancy.Colors["ARSONIST"].Start);
-        SetStyle(styles, "WerewolfColor", Fancy.Colors["WEREWOLF"].Start);
-        SetStyle(styles, "ShroudColor", Fancy.Colors["SHROUD"].Start);
-        SetStyle(styles, "ExecutionerColor", Fancy.Colors["EXECUTIONER"].Start);
-        SetStyle(styles, "JesterColor", Fancy.Colors["JESTER"].Start);
-        SetStyle(styles, "PirateColor", Fancy.Colors["PIRATE"].Start);
-        SetStyle(styles, "DoomsayerColor", Fancy.Colors["DOOMSAYER"].Start);
-        // SetStyle(styles, "VampireColor", Fancy.Colors["VAMPIRE"].Start);
-        // SetStyle(styles, "CursedSoulColor", Fancy.Colors["CURSEDSOUL"].Start);
-        SetStyle(styles, "NeutralColor", Fancy.NeutralStart.Value);
+        styles.SetStyle("TownColor", Fancy.Colors["TOWN"].Start);
+        styles.SetStyle("CovenColor", Fancy.Colors["COVEN"].Start);
+        styles.SetStyle("ApocalypseColor", Fancy.Colors["APOCALYPSE"].Start);
+        styles.SetStyle("SerialKillerColor", Fancy.Colors["SERIALKILLER"].Start);
+        styles.SetStyle("ArsonistColor", Fancy.Colors["ARSONIST"].Start);
+        styles.SetStyle("WerewolfColor", Fancy.Colors["WEREWOLF"].Start);
+        styles.SetStyle("ShroudColor", Fancy.Colors["SHROUD"].Start);
+        styles.SetStyle("ExecutionerColor", Fancy.Colors["EXECUTIONER"].Start);
+        styles.SetStyle("JesterColor", Fancy.Colors["JESTER"].Start);
+        styles.SetStyle("PirateColor", Fancy.Colors["PIRATE"].Start);
+        styles.SetStyle("DoomsayerColor", Fancy.Colors["DOOMSAYER"].Start);
+        // styles.SetStyle("VampireColor", Fancy.Colors["VAMPIRE"].Start);
+        // styles.SetStyle("CursedSoulColor", Fancy.Colors["CURSEDSOUL"].Start);
+        styles.SetStyle("NeutralColor", Fancy.NeutralStart.Value);
 
         TMP_Settings.defaultStyleSheet.RefreshStyles();
     }
 
-    private static void SetStyle(List<TMP_Style> styles, string styleName, string colorValue)
+    private static void SetStyle(this List<TMP_Style> styles, string styleName, string colorValue)
     {
         if (styles.TryFinding(s => s.name == styleName, out var style))
             OpeningDefField.SetValue(style, $"<color={colorValue}>");
@@ -445,7 +444,6 @@ public static class PatchCustomWinScreens
     };
 }
 
-
 [HarmonyPatch(typeof(ClientRoleExtensions))]
 public static class ClientRoleExtensionsPatches
 {
@@ -509,7 +507,6 @@ public static class ClientRoleExtensionsPatches
         __result = Fancy.Colors[Utils.FactionName(factionType, stoned: true).ToUpper()].Start;
         return false;
     }
-
 
     [HarmonyPatch(nameof(ClientRoleExtensions.ApplyFactionColor))]
     public static void Postfix(ref string __result, string text, FactionType factionType)
@@ -611,14 +608,9 @@ public static class ClientRoleExtensionsPatches
     //         };
     //     }
     // }
-}
 
-// This is needed because of build conflicts (ClientRoleExtensionsPatches.Postfix & ClientRoleExtensionsPatches.Postfix, for example)
-[HarmonyPatch(typeof(ClientRoleExtensions))]
-public static class ClientRoleExtensionsPatches2
-{
-    [HarmonyPatch(nameof(ClientRoleExtensions.ToColorizedShortenedDisplayString), typeof(Role), typeof(FactionType))]
-    public static void Postfix(ref string __result, Role role, FactionType factionType)
+    [HarmonyPatch(nameof(ClientRoleExtensions.ToColorizedShortenedDisplayString), typeof(Role), typeof(FactionType)), HarmonyPostfix]
+    public static void ToColorizedShortenedDisplayStringPostfix(ref string __result, Role role, FactionType factionType)
     {
         var gradient = factionType.GetChangedGradient(role);
 
@@ -632,93 +624,18 @@ public static class ClientRoleExtensionsPatches2
             : $"<color={factionType.GetFactionColor()}>{text}</color>";
     }
 
-    [HarmonyPatch(nameof(ClientRoleExtensions.GetSecondFactionColor))]
-    public static bool Prefix(ref string __result, FactionType factionType)
+    [HarmonyPatch(nameof(ClientRoleExtensions.GetSecondFactionColor)), HarmonyPostfix]
+    public static bool GetSecondFactionColorPrefix(ref string __result, FactionType factionType)
     {
         __result = Fancy.Colors[Utils.FactionName(factionType, stoned: true).ToUpper()].Start;
         return false;
     }
 }
+
+// This is needed because of build conflicts (ClientRoleExtensionsPatches.Postfix & ClientRoleExtensionsPatches.Postfix, for example) - Loonie
+// Build conflicts my ass, scroll up - AD
+
 // #{ColorUtility.ToHtmlStringRGB(Utils.GetPlayerRoleColor(position))}
-
-[HarmonyPatch(typeof(SharedMentionsProvider), nameof(SharedMentionsProvider.PreparePlayerMentions))]
-public static class BetterMentions
-{
-    public static bool Prefix(SharedMentionsProvider __instance, 
-                               DiscussionPlayerObservation player, 
-                               int skinId, int i, 
-                               MentionInfo.MentionInfoType mentionInfoType, 
-                               MentionToken.MentionTokenType mentionTokenType)
-    {
-        if (Constants.BetterMentionsExists())
-            return true;
-
-        if (!Pepper.IsLobbyOrPickNamesOrGamePhase())
-            return true;
-
-        // Custom version
-        var text = string.IsNullOrWhiteSpace(player.Data.gameName)
-            ? player.Data.accountName
-            : player.Data.gameName;
-        var match = $"@{i + 1}";
-        var match2 = "@" + text;
-        var encodedText = $"[[@{i + 1}]]";
-        var text2 = (mentionTokenType == MentionToken.MentionTokenType.ACCOUNT) ? "a" : string.Empty;
-
-        var color = Fancy.MentionStart.Value;
-        // var faction = Pepper.GetDiscussionPlayerFactionIfKnown(i);
-        // if (faction is not FactionType.NONE and not FactionType.UNKNOWN)
-        // {
-        //     var roleColor = Utils.GetPlayerRoleColor(i);
-        //     var roleColorString = ColorUtility.ToHtmlStringRGB(roleColor);
-        //     if (string.IsNullOrEmpty(roleColorString))
-        //         roleColorString = "FFCE3B";
-        //     color = $"#{roleColorString}";
-        // }
-        if (string.IsNullOrEmpty(color))
-            color = "#FFCE3B";
-
-        var text3 = (__instance._useColors
-            ? $"<color={color}><b>{text}</b></color>"
-            : $"<b>{text}</b>");
-
-        var text4 = (__instance._playerEffects == 2
-            ? $"<sprite=\"PlayerNumbers\" name=\"PlayerNumbers_{player.Data.position + 1}\">"
-            : (__instance._playerEffects == 1
-                ? $"<sprite=\"Cast\" name=\"Skin{skinId}\">"
-                : string.Empty));
-
-        var text5 = $"{__instance.styleTagOpen}{__instance.styleTagFont}<link=\"{text2}{player.Data.position}\">{text4}{text3}</link>{__instance.styleTagClose}";
-
-        MentionInfo mentionInfo = new MentionInfo
-        {
-            mentionInfoType = mentionInfoType,
-            richText = text5,
-            encodedText = encodedText,
-            hashCode = text5.ToLower().GetHashCode(),
-            humanText = "@" + text.ToLower()
-        };
-
-        __instance.MentionInfos.Add(mentionInfo);
-        __instance.MentionTokens.Add(new MentionToken
-        {
-            mentionTokenType = mentionTokenType,
-            match = match,
-            mentionInfo = mentionInfo,
-            priority = i
-        });
-        __instance.MentionTokens.Add(new MentionToken
-        {
-            mentionTokenType = mentionTokenType,
-            match = match2,
-            mentionInfo = mentionInfo,
-            priority = i
-        });
-
-        return false;
-    }
-}
-
 
 [HarmonyPatch(typeof(SharedMentionsProvider))]
 public static class KeywordMentionsPatches
@@ -810,6 +727,7 @@ public static class KeywordMentionsPatches
             .ToList();
 
         var priority = 0;
+
         foreach (var (keyword, localizedText) in keywordList)
         {
             if (string.IsNullOrWhiteSpace(localizedText))
@@ -885,77 +803,141 @@ public static class KeywordMentionsPatches
             });
         }
     }
-    [HarmonyPatch(typeof(Home.Utils.StringUtils), nameof(Home.Utils.StringUtils.ReplaceRoleTagWithRoleText))]
-    public static class ReplaceRoleTagWithRoleTextPatch
+
+    [HarmonyPatch(nameof(SharedMentionsProvider.PreparePlayerMentions))]
+    public static bool Prefix(SharedMentionsProvider __instance, DiscussionPlayerObservation player, int skinId, int i, MentionInfo.MentionInfoType mentionInfoType,
+        MentionToken.MentionTokenType mentionTokenType)
     {
-        public static bool Prefix(ref string __result, string str)
+        if (Constants.BetterMentionsExists() || !Pepper.IsLobbyOrPickNamesOrGamePhase())
+            return true;
+
+        // Custom version
+        var text = string.IsNullOrWhiteSpace(player.Data.gameName)
+            ? player.Data.accountName
+            : player.Data.gameName;
+        var match = $"@{i + 1}";
+        var encodedText = $"[[@{i + 1}]]";
+        var text2 = (mentionTokenType == MentionToken.MentionTokenType.ACCOUNT) ? "a" : string.Empty;
+
+        var color = Fancy.MentionStart.Value;
+        // var faction = Pepper.GetDiscussionPlayerFactionIfKnown(i);
+        // if (faction is not FactionType.NONE and not FactionType.UNKNOWN)
+        // {
+        //     var roleColor = Utils.GetPlayerRoleColor(i);
+        //     var roleColorString = ColorUtility.ToHtmlStringRGB(roleColor);
+        //     if (string.IsNullOrEmpty(roleColorString))
+        //         roleColorString = "FFCE3B";
+        //     color = $"#{roleColorString}";
+        // }
+        if (string.IsNullOrEmpty(color))
+            color = "#FFCE3B";
+
+        var text3 = __instance._useColors
+            ? $"<color={color}><b>{text}</b></color>"
+            : $"<b>{text}</b>";
+
+        var text4 = __instance._playerEffects == 2
+            ? $"<sprite=\"PlayerNumbers\" name=\"PlayerNumbers_{player.Data.position + 1}\">"
+            : (__instance._playerEffects == 1
+                ? $"<sprite=\"Cast\" name=\"Skin{skinId}\">"
+                : string.Empty);
+
+        var text5 = $"{__instance.styleTagOpen}{__instance.styleTagFont}<link=\"{text2}{player.Data.position}\">{text4}{text3}</link>{__instance.styleTagClose}";
+
+        var mentionInfo = new MentionInfo
         {
-            if (string.IsNullOrEmpty(str))
-            {
-                Debug.LogWarning("ReplaceRoleTagWithRoleText String is null!");
-                __result = string.Empty;
-                return false;
-            }
+            mentionInfoType = mentionInfoType,
+            richText = text5,
+            encodedText = encodedText,
+            hashCode = text5.ToLower().GetHashCode(),
+            humanText = "@" + text.ToLower()
+        };
 
-            var modified = false;
-            var index = str.IndexOf("%name_role");
+        __instance.MentionInfos.Add(mentionInfo);
+        __instance.MentionTokens.Add(new MentionToken
+        {
+            mentionTokenType = mentionTokenType,
+            match = match,
+            mentionInfo = mentionInfo,
+            priority = i
+        });
 
-            while (index > -1)
-            {
-                var endIndex = str.IndexOf("%", index + 1);
-
-                if (endIndex == -1)
-                    break;
-
-                var fullTag = str.Substring(index, endIndex - index + 1);
-                var idStart = index + 10;
-
-                if (int.TryParse(str[idStart..endIndex], out var roleId))
-                {
-                    var role = (Role)roleId;
-                    var colorized = role.ToColorizedDisplayString();
-                    str = str.Replace(fullTag, colorized);
-                    modified = true;
-                }
-
-                index = str.IndexOf("%name_role", index + 1);
-            }
-
-            if (modified)
-                __result = str;
-
-            return !modified;
-        }
+        return false;
     }
-    // [HarmonyPatch(typeof(HomeLocalizationService), nameof(HomeLocalizationService.GetLocalizedString))]
-    // public static class LocalizationManagerPatches
-    // {
-    //     public static void Postfix(ref string __result)
-    //     {
-    //         __result = Utils.RemoveStyleTags(__result);
-    //     }
-    // }
+}
 
-    [HarmonyPatch(typeof(GraveyardItem), nameof(GraveyardItem.SetPlayerPicAndName))]
-    public static class GraveyardItem_SetPlayerPicAndName_Patch
+// Why were these patches nested??
+[HarmonyPatch(typeof(Home.Utils.StringUtils), nameof(Home.Utils.StringUtils.ReplaceRoleTagWithRoleText))]
+public static class ReplaceRoleTagWithRoleTextPatch
+{
+    public static bool Prefix(ref string __result, string str)
     {
-        public static void Postfix(GraveyardItem __instance)
+        if (string.IsNullOrEmpty(str))
         {
-            var killRecord = __instance._mKillRecord;
-            var faction = killRecord.playerFaction;
-            var role = killRecord.playerRole;
-            var player = (int)killRecord.playerId;
-            var icon = role.GetTMPSprite();
-            icon = icon.Replace("RoleIcons\"", $"RoleIcons ({((role.GetFactionType() == faction && Constants.CurrentStyle() == "Regular")
-                ? "Regular"
-                : Utils.FactionName(faction, false))})\"");
-
-            var name = Service.Game.Sim.simulation.GetPlayerInlineLinkString(player, 1.1) ?? "";
-
-            var text = icon + role.ToColorizedNoLabel(faction);
-
-            var combinedText = $"{name} ({text})";
-            __instance.playerAndRoleLabel.SetText(combinedText);
+            Debug.LogWarning("ReplaceRoleTagWithRoleText String is null!");
+            __result = string.Empty;
+            return false;
         }
+
+        var modified = false;
+        var index = str.IndexOf("%name_role");
+
+        while (index > -1)
+        {
+            var endIndex = str.IndexOf("%", index + 1);
+
+            if (endIndex == -1)
+                break;
+
+            var fullTag = str.Substring(index, endIndex - index + 1);
+            var idStart = index + 10;
+
+            if (int.TryParse(str[idStart..endIndex], out var roleId))
+            {
+                var role = (Role)roleId;
+                var colorized = role.ToColorizedDisplayString();
+                str = str.Replace(fullTag, colorized);
+                modified = true;
+            }
+
+            index = str.IndexOf("%name_role", index + 1);
+        }
+
+        if (modified)
+            __result = str;
+
+        return !modified;
+    }
+}
+
+// [HarmonyPatch(typeof(HomeLocalizationService), nameof(HomeLocalizationService.GetLocalizedString))]
+// public static class LocalizationManagerPatches
+// {
+//     public static void Postfix(ref string __result)
+//     {
+//         __result = Utils.RemoveStyleTags(__result);
+//     }
+// }
+
+[HarmonyPatch(typeof(GraveyardItem), nameof(GraveyardItem.SetPlayerPicAndName))]
+public static class GraveyardItem_SetPlayerPicAndName_Patch
+{
+    public static void Postfix(GraveyardItem __instance)
+    {
+        var killRecord = __instance._mKillRecord;
+        var faction = killRecord.playerFaction;
+        var role = killRecord.playerRole;
+        var player = (int)killRecord.playerId;
+        var icon = role.GetTMPSprite();
+        icon = icon.Replace("RoleIcons\"", $"RoleIcons ({((role.GetFactionType() == faction && Constants.CurrentStyle() == "Regular")
+            ? "Regular"
+            : Utils.FactionName(faction, false))})\"");
+
+        var name = Service.Game.Sim.simulation.GetPlayerInlineLinkString(player, 1.1) ?? "";
+
+        var text = icon + role.ToColorizedNoLabel(faction);
+
+        var combinedText = $"{name} ({text})";
+        __instance.playerAndRoleLabel.SetText(combinedText);
     }
 }

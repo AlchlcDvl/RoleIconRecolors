@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3483228777
+CRC: 2437664287
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 4dbffa5f3d611fcff62c986278897b21
+    Hash: b06d13f0f551c9e4166811d7b1c9ae1f
   TypeTreeHash:
     serializedVersion: 2
     Hash: 89c7f6d629771a0fed8e491f2a4febe2
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 4dbffa5f3d611fcff62c986278897b21
+    Hash: b06d13f0f551c9e4166811d7b1c9ae1f
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -187,6 +187,7 @@ Assets:
 - Assets/Assets/Back.png
 - Assets/Assets/ToS2Icon.png
 - Assets/Assets/BToS2Icon.png
+- Assets/Assets/Backing.png
 - Assets/Assets/IconPack.png
 - Assets/Assets/RoleCard_Ability_Main_M.png
 - Assets/Assets/Background_G.png

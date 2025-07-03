@@ -43,10 +43,11 @@ public static class PatchRoleListPanel
             return;
 
         var a_role = a_roleDeckSlot?.Role1;
+
         if (a_role == null)
             return;
 
-        var role = a_role.Value; 
+        var role = a_role.Value;
 
         var icon = a_isBan
             ? GetSprite("Banned")
@@ -66,14 +67,15 @@ public static class PatchBrowserRoleListPanel
             return;
 
         var a_role = a_roleDeckSlot?.Role1;
-    if (a_role == null)
-        return;
 
-    var role = a_role.Value; 
+        if (a_role == null)
+            return;
 
-    var icon = a_isBan
-        ? GetSprite("Banned")
-        : GetSprite(Utils.RoleName(role), Utils.FactionName(role.GetFactionType()), false);
+        var role = a_role.Value;
+
+        var icon = a_isBan
+            ? GetSprite("Banned")
+            : GetSprite(Utils.RoleName(role), Utils.FactionName(role.GetFactionType()), false);
 
         if (__instance.roleImage && icon.IsValid())
             __instance.roleImage.sprite = icon;

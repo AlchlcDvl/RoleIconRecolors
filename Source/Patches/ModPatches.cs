@@ -125,8 +125,7 @@ public static class RoleRevealCinematicPlayerPatch
     }
 
     [HarmonyPatch(nameof(RoleRevealCinematicPlayer.HandleOnMyIdentityChanged))]
-    public static void Prefix(PlayerIdentityData playerIdentity)
-        => CurrentFaction = playerIdentity.faction;
+    public static void Prefix(PlayerIdentityData playerIdentity) => CurrentFaction = playerIdentity.faction;
 }
 
 [HarmonyPatch(typeof(SharedMentionsProvider), nameof(SharedMentionsProvider.BuildAchievementMentions))]
@@ -143,6 +142,7 @@ public static class AchievementMentionsPatch
         foreach (var achievementId in achievementIds)
         {
             var title = __instance.l10n($"GUI_ACHIEVEMENT_TITLE_{achievementId}");
+
             if (string.IsNullOrWhiteSpace(title))
                 continue;
 
@@ -415,29 +415,23 @@ public static class FactionWinsStandardCinematicPlayer_SetUpWinners_Patch
     private static readonly int[] AllowedSilhouettesBTOS =
     [
         ..AllowedSilhouettes,
-        57,58,59,60,61,62,63,64,
-        240, 250, 251, 252, 253
+        61,62,63,64
     ];
 
     public static void Postfix(FactionWinsStandardCinematicPlayer __instance)
     {
         var gamePhase = Service.Game.Sim.info.gameInfo.Data.gamePhase;
+
         if (gamePhase != GamePhase.LOBBY || __instance.silhouetteWrappers == null || __instance.characterWrappers == null || __instance.cinematicData.entries == null)
             return;
-
-        var random = new System.Random();
 
         foreach (var wrapper in __instance.silhouetteWrappers.Where(x => x))
         {
             var silhouetteId = 0;
 
-            if (Fancy.SelectTestingRole.Value == Role.NONE && !Constants.IsBTOS2())
-                silhouetteId = AllowedSilhouettes[random.Next(AllowedSilhouettes.Length)];
-
-            else if (Fancy.SelectTestingRole.Value == Role.NONE && Constants.IsBTOS2())
-                silhouetteId = AllowedSilhouettesBTOS[random.Next(AllowedSilhouettesBTOS.Length)];
-
-            else if (Fancy.SelectTestingRole.Value != Role.NONE)
+            if (Fancy.SelectTestingRole.Value == Role.NONE)
+                silhouetteId = Constants.IsBTOS2() ? AllowedSilhouettesBTOS.Random() : AllowedSilhouettes.Random();
+            else
                 silhouetteId = (int)Fancy.SelectTestingRole.Value;
 
             wrapper.SwapWithSilhouette(silhouetteId, true);
@@ -446,13 +440,7 @@ public static class FactionWinsStandardCinematicPlayer_SetUpWinners_Patch
         var characterCount = __instance.characterWrappers.Count;
 
         foreach (var wrapper in __instance.characterWrappers.Where(x => x))
-        {
-            var randomSkinId = random.Next(characterCount);
-
-            const int auraId = 0;
-
-            wrapper.SwapWithCharacter(randomSkinId, shouldUseLayering: true, auraId);
-        }
+            wrapper.SwapWithCharacter(URandom.RandomRangeInt(0, characterCount), true, 0);
     }
 }
 
@@ -502,7 +490,7 @@ public static class AddBTOS2RolesToDevMenu
     {
         if (Constants.IsBTOS2())
         {
-            for (var i = (byte)Role.ROLE_COUNT; i <= 64; i++)
+            for (var i = (byte)Role.ROLE_COUNT; i < 65; i++)
                 AddCustomRoleEntry(__instance, i);
         }
 
