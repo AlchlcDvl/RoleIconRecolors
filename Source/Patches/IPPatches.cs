@@ -37,12 +37,20 @@ public static class PatchRoleDeckBuilder
 [HarmonyPatch(typeof(RoleDeckListItem), nameof(RoleDeckListItem.SetData))]
 public static class PatchRoleListPanel
 {
-    public static void Postfix(RoleDeckListItem __instance, Role a_role, bool a_isBan)
+    public static void Postfix(RoleDeckListItem __instance, RoleDeckSlot a_roleDeckSlot, bool a_isBan)
     {
         if (!Constants.EnableIcons())
             return;
 
-        var icon = a_isBan ? GetSprite("Banned") : GetSprite(Utils.RoleName(a_role), Utils.FactionName(a_role.GetFactionType()), false);
+        var a_role = a_roleDeckSlot?.Role1;
+        if (a_role == null)
+            return;
+
+        var role = a_role.Value; 
+
+        var icon = a_isBan
+            ? GetSprite("Banned")
+            : GetSprite(Utils.RoleName(role), Utils.FactionName(role.GetFactionType()), false);
 
         if (__instance.roleImage && icon.IsValid())
             __instance.roleImage.sprite = icon;
@@ -52,12 +60,20 @@ public static class PatchRoleListPanel
 [HarmonyPatch(typeof(GameBrowserRoleDeckListItem), nameof(GameBrowserRoleDeckListItem.SetData))]
 public static class PatchBrowserRoleListPanel
 {
-    public static void Postfix(GameBrowserRoleDeckListItem __instance, Role a_role, bool a_isBan)
+    public static void Postfix(GameBrowserRoleDeckListItem __instance, RoleDeckSlot a_roleDeckSlot, bool a_isBan)
     {
         if (!Constants.EnableIcons())
             return;
 
-        var icon = a_isBan ? GetSprite("Banned") : GetSprite(Utils.RoleName(a_role), Utils.FactionName(a_role.GetFactionType()), false);
+        var a_role = a_roleDeckSlot?.Role1;
+    if (a_role == null)
+        return;
+
+    var role = a_role.Value; 
+
+    var icon = a_isBan
+        ? GetSprite("Banned")
+        : GetSprite(Utils.RoleName(role), Utils.FactionName(role.GetFactionType()), false);
 
         if (__instance.roleImage && icon.IsValid())
             __instance.roleImage.sprite = icon;
@@ -122,7 +138,7 @@ public static class PatchRoleCards
         if (icon1)
             icon1.sprite = attack.IsValid() ? attack : FancyAssetManager.Attack;
 
-        var eth = __instance.myData.IsEthereal();
+        var eth = __instance.myData.IsEthereal() || __instance.CurrentFaction == Btos2Faction.Egotist;
         var defense = GetSprite($"Defense{Utils.GetLevel(eth ? 4 : data.defense, false)}");
         var icon2 = __instance.transform.Find("DefenseIcon").Find("Icon").GetComponent<Image>();
 
@@ -307,7 +323,7 @@ public static class PatchAbilityPanelListItems
 
                 break;
             }
-            case AbilityType.POISONER_POISON or AbilityType.SHROUD or AbilityType.INVESTIGATOR or AbilityType.PIRATE or (AbilityType)30 or (AbilityType)32 or (AbilityType)33:
+            case AbilityType.POISONER_POISON or AbilityType.SHROUD or AbilityType.PIRATE or (AbilityType)30 or (AbilityType)32 or (AbilityType)33:
             {
                 var special = GetSprite(reg, $"{name}_Special", faction, ee);
 
@@ -491,7 +507,7 @@ public static class PatchAttackDefense
         if (icon1)
             icon1.sprite = attack.IsValid() ? attack : FancyAssetManager.Attack;
 
-        var eth = __instance.myData.IsEthereal();
+        var eth = __instance.myData.IsEthereal() || __instance.CurrentFaction == Btos2Faction.Egotist;
         var defense = GetSprite($"Defense{Utils.GetLevel(eth ? 4 : data.defense, false)}");
         var icon2 = __instance.transform.Find("DefenseIcon").Find("Icon").GetComponent<Image>();
 
@@ -1044,6 +1060,8 @@ public static class MakeProperFactionChecksInWdah2
 {
     public static bool Prefix(WhoDiedAndHowPanel __instance, float phaseTime)
     {
+        if (!Constants.EnableIcons()) return true;
+
         Debug.Log($"HandleSubphaseWhoDied phaseTime = {phaseTime}");
 
         if (__instance.tombstonePanel != null)
@@ -1068,28 +1086,20 @@ public static class MakeProperFactionChecksInWdah2
         __instance.AddLine(text, Tuning.REVEAL_TIME_PER_ADDL_KILLED_BY_REASON);
 
         if (killRecord == null || killRecord.killedByReasons.Count < 1)
-            __instance.AddLine(__instance.l10n("FANCY_KILLED_BY_REASON_0"), Tuning.REVEAL_TIME_PER_ADDL_KILLED_BY_REASON);
+            __instance.AddLine(__instance.l10n("GUI_GAME_KILLED_BY_REASON_0"), Tuning.REVEAL_TIME_PER_ADDL_KILLED_BY_REASON);
         else
         {
             for (var i = 0; i < killRecord.killedByReasons.Count; i++)
             {
                 var killedByReason = killRecord.killedByReasons[i];
-                var text2 = __instance.l10n($"FANCY{(i == 0 ? "" : "_ALSO")}_KILLED_BY_REASON_{(int)killedByReason}");
+                var text2 = __instance.l10n($"GUI_GAME{(i == 0 ? "" : "_ALSO")}_KILLED_BY_REASON_{(int)killedByReason}");
 
-                var coven = Btos2Faction.Coven.GetChangedGradient(Role.DREAMWEAVER);
-                var pandora = Btos2Faction.Pandora.GetChangedGradient(Role.DREAMWEAVER);
-                text2 = text2.Replace("%pandora%", Utils.ApplyGradient(Utils.GetString("BTOS_ROLENAME_222"), pandora));
-                text2 = text2.Replace("%coven%", Utils.ApplyGradient(Utils.GetString("GUI_FACTIONNAME_2"), coven));
+                text2 = text2.Replace("RoleIcons\"", "RoleIcons (Regular)\"");
 
-                if (Constants.EnableIcons())
-                {
-                    text2 = text2.Replace("RoleIcons\"", "RoleIcons (Regular)\"");
-
-                    if (Constants.IsBTOS2())
-                        text2 = text2.Replace("\"RoleIcons", "\"BTOSRoleIcons").Replace("106\"", "109\"");
-                    else
-                        text2 = text2.Replace("\"BTOSRoleIcons", "\"RoleIcons").Replace("109\"", "106\"");
-                }
+                if (Constants.IsBTOS2())
+                    text2 = text2.Replace("\"RoleIcons", "\"BTOSRoleIcons").Replace("106\"", "107\"");
+                else
+                    text2 = text2.Replace("\"BTOSRoleIcons", "\"RoleIcons").Replace("107\"", "106\"");
 
                 __instance.AddLine(text2, Tuning.REVEAL_TIME_PER_ADDL_KILLED_BY_REASON);
             }

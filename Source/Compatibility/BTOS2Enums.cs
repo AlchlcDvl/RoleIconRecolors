@@ -64,43 +64,44 @@ public static class Btos2Role
     // Special
     public const Role Vampire = Role.VAMPIRE;
     public const Role CursedSoul = Role.CURSED_SOUL;
+    public const Role Catalyst = (Role)63;
+    public const Role Cultist = (Role)64;
 
     // Modded
     public const Role Banshee = Role.SOCIALITE;
     public const Role Jackal = Role.MARSHAL;
     public const Role Marshal = Role.ORACLE;
-    public const Role Judge = Role.ROLE_COUNT;
+    public const Role Judge = (Role)57;
     public const Role Auditor = (Role)58;
     public const Role Inquisitor = (Role)59;
     public const Role Starspawn = (Role)60;
     public const Role Oracle = (Role)61;
     public const Role Warlock = (Role)62;
 
-    public const Role RoleCount = (Role)63;
+    public const Role RoleCount = (Role)65;
 
     // Buckets
-    public const Role TrueAny = Role.RANDOM_TOWN;
-    public const Role Any = Role.TOWN_INVESTIGATIVE;
-    public const Role RandomTown = Role.TOWN_PROTECTIVE;
-    public const Role CommonTown = Role.TOWN_KILLING;
-    public const Role TownInvestigative = Role.TOWN_SUPPORT;
-    public const Role TownPower = Role.TOWN_POWER;
-    public const Role TownProtective = Role.RANDOM_COVEN;
-    public const Role TownKilling = Role.COVEN_KILLING;
-    public const Role TownSupport = Role.COVEN_UTILITY;
-    public const Role RandomCoven = Role.COVEN_DECEPTION;
-    public const Role CommonCoven = Role.COVEN_POWER;
-    public const Role CovenDeception = Role.RANDOM_NEUTRAL;
-    public const Role CovenKilling = Role.NEUTRAL_KILLING;
-    public const Role CovenPower = Role.NEUTRAL_EVIL;
-    public const Role CovenUtility = Role.NEUTRAL_APOCALYPSE;
-    public const Role RandomApocalypse = Role.ANY;
-    public const Role RandomNeutral = (Role)116;
-    public const Role NeutralEvil = (Role)117;
-    public const Role NeutralKilling = (Role)118;
-    public const Role NeutralPariah = (Role)119;
-    public const Role NeutralSpecial = (Role)120;
-    public const Role CommonNeutral = (Role)121;
+    public const Role Any = (Role)100;
+    public const Role RandomTown = (Role)101;
+    public const Role CommonTown = (Role)102;
+    public const Role TownInvestigative = (Role)103;
+    public const Role TownProtective = (Role)104;
+    public const Role TownKilling = (Role)105;
+    public const Role TownSupport = (Role)106;
+    public const Role RandomCoven = (Role)107;
+    public const Role CommonCoven = (Role)108;
+    public const Role CovenDeception = (Role)109;
+    public const Role CovenKilling = (Role)110;
+    public const Role CovenPower = (Role)111;
+    public const Role CovenUtility = (Role)112;
+    public const Role RandomApocalypse = (Role)113;
+    public const Role RandomNeutral = (Role)114;
+    public const Role NeutralEvil = (Role)115;
+    public const Role NeutralKilling = (Role)116;
+    public const Role NeutralPariah = (Role)117;
+    public const Role NeutralOutlier = (Role)118;
+    public const Role TownExecutive = (Role)119;
+    public const Role TownGovernment = (Role)120;
 
     // Modifiers
     public const Role Vip = Role.VIP;
@@ -133,6 +134,8 @@ public static class Btos2Role
     public const Role Lovers = (Role)228;
     public const Role Vc = (Role)229;
     public const Role FeelinLucky = (Role)230;
+    public const Role AllOutliers = (Role)231;
+    public const Role GracePeriod = (Role)232;
 
     // Special part 2
     public const Role Hangman = Role.HANGMAN;

@@ -8,6 +8,9 @@
     <Entry key="FANCY_FACTIONAL_ROLE_NAMES_NAME">Faction-Specific Role Names</Entry>
     <Entry key="FANCY_FACTIONAL_ROLE_NAMES_DESC">Determines whether or not roles will use factional role names, meaning each faction gives each role a unique role name. Requires the Text Editor mod to customize.</Entry>
 
+    <Entry key="FANCY_FACTIONAL_ROLE_BLURBS_NAME">Faction-Specific Role Blurbs</Entry>
+    <Entry key="FANCY_FACTIONAL_ROLE_BLURBS_DESC">Determines whether or not roles will use factional role blurbs, meaning each faction gives each role a unique role blurb. Requires the Text Editor mod to customize.</Entry>
+
     <Entry key="FANCY_FACTION_NEXT_TO_ROLE_NAME">Faction Name Next to Role</Entry>
     <Entry key="FANCY_FACTION_NEXT_TO_ROLE_DESC">Determines whether or not factions will be displayed next to roles as if colors were off in Town of Salem 2's chat settings.</Entry>
 
@@ -24,10 +27,11 @@
     <Entry key="FANCY_GRADIENT_BUCKETS_DESC">If enabled, buckets will make use of gradients.</Entry>
 
     <Entry key="FANCY_MAJOR_COLORS_NAME">Override End Color for Power Roles</Entry>
-    <Entry key="FANCY_MAJOR_COLORS_DESC">Determines whether or not end colors on factions will be overwritten with a separate Major color value when Coven Power, Town Power, or a Horseman of the Apocalypse.</Entry>
+    <Entry key="FANCY_MAJOR_COLORS_DESC">Determines whether or not end colors on factions will be overwritten with a separate Major color value when Coven Power, Town Power, Cultist, Catalyst, or a Horseman of the Apocalypse.</Entry>
 
     <Entry key="FANCY_LETHAL_COLORS_NAME">Override End Color for Killing Roles</Entry>
     <Entry key="FANCY_LETHAL_COLORS_DESC">Determines whether or not end colors on factions will be overwritten with a separate Lethal color value when Coven Power, Town Power, or a Horseman of the Apocalypse.</Entry>
+   
 
     <Entry key="FANCY_RECRUIT_ENDING_NAME">Override Recruit End Color</Entry>
     <Entry key="FANCY_RECRUIT_ENDING_DESC">Determines what color recruits will pull. Jackal means it pulls from the Jackal End Color, Original Start means it pulls from their original faction's Start color, and Original End pulls from their original faction's End color (Major if a Major role with the setting on).</Entry>
@@ -240,11 +244,26 @@
     <Entry key="FANCY_KEYWORD_START_NAME">Keyword Start Color</Entry>
     <Entry key="FANCY_KEYWORD_START_DESC">The start color for keywords.</Entry>
 
+    <Entry key="FANCY_KEYWORD_COLOR_NAME">Keyword Color</Entry>
+    <Entry key="FANCY_KEYWORD_COLOR_DESC">The color for keywords.</Entry>
+
     <Entry key="FANCY_KEYWORD_END_NAME">Keyword End Color</Entry>
     <Entry key="FANCY_KEYWORD_END_DESC">The end color for keywords.</Entry>
 
+    <Entry key="FANCY_MENTION_START_NAME">Mention Start Color</Entry>
+    <Entry key="FANCY_MENTION_START_DESC">The start color for mentions.</Entry>
+
+    <Entry key="FANCY_MENTION_COLOR_NAME">Mention Color</Entry>
+    <Entry key="FANCY_MENTION_COLOR_DESC">The color for player mentions.</Entry>
+
+    <Entry key="FANCY_MENTION_END_NAME">Mention End Color</Entry>
+    <Entry key="FANCY_MENTION_END_DESC">The end color for mentions.</Entry>
+
     <Entry key="FANCY_ACHIEVEMENT_START_NAME">Achievement Start Color</Entry>
     <Entry key="FANCY_ACHIEVEMENT_START_DESC">The start color for achievement keywords.</Entry>
+
+    <Entry key="FANCY_ACHIEVEMENT_COLOR_NAME">Achievement Color</Entry>
+    <Entry key="FANCY_ACHIEVEMENT_COLOR_DESC">The color for achievement keywords.</Entry>
 
     <Entry key="FANCY_ACHIEVEMENT_END_NAME">Achievement End Color</Entry>
     <Entry key="FANCY_ACHIEVEMENT_END_DESC">The end color for achievement keywords.</Entry>
@@ -531,13 +550,6 @@
     <Entry key="FANCY_SELECT_DISPLAY_NAME">Current Testing Display</Entry>
     <Entry key="FANCY_SELECT_DISPLAY_DESC">Changes which testing display is currently visible.</Entry>
 
-    <Entry key="FANCY_IGNORE_UNIQUE_ROLE_CHECK_NAME">Ignore Unique Role Check</Entry>
-    <Entry key="FANCY_IGNORE_UNIQUE_ROLE_CHECK_DESC">If enabled, role reveal and WDAH will not check if the role is unique.</Entry>
-
-    <Entry key="FANCY_ROLE_REVEAL_ROLE_UNIQUE">
-        <![CDATA[<waitfor=5>But secretly, you<waitfor=0.2> are<waitfor=0.2> the<waitfor=0.2><shake a=0.3> %role%.]]>
-    </Entry>
-
     <Entry key="FANCY_ROLE_REVEAL_ROLE_VOWEL">
         <![CDATA[<waitfor=5>But secretly, you<waitfor=0.2> are<waitfor=0.2> an<waitfor=0.2><shake a=0.3> %role%.]]>
     </Entry>
@@ -717,16 +729,20 @@
     <Entry key="FANCY_SOCIALITE">Socialite/Banshee</Entry>
     <Entry key="FANCY_MARSHAL">Marshal/Jackal</Entry>
     <Entry key="FANCY_ORACLE">Oracle/Marshal</Entry>
+    <Entry key="FANCY_PILGRIM">Pilgrim/Judge</Entry>
+    <Entry key="FANCY_COVENITE">Covenite/Auditor</Entry>
+    <Entry key="FANCY_CATALYST">Catalyst/Inquisitor</Entry>
+    <Entry key="FANCY_CULTIST">Cultist/Starspawn</Entry>
     <Entry key="FANCY_FAMINE">Famine</Entry>
     <Entry key="FANCY_WAR">War</Entry>
     <Entry key="FANCY_PESTILENCE">Pestilence</Entry>
     <Entry key="FANCY_DEATH">Death</Entry>
     <Entry key="FANCY_ROLE_COUNT">Judge</Entry>
     <Entry key="FANCY_58">Auditor</Entry>
-    <Entry key="FANCY_59">Inquisitor</Entry>
-    <Entry key="FANCY_60">Starspawn</Entry>
-    <Entry key="FANCY_61">Oracle</Entry>
+    <Entry key="FANCY_61">Oracle (BTOS2)</Entry>
     <Entry key="FANCY_62">Warlock</Entry>
+    <Entry key="FANCY_63">Catalyst (BTOS2)</Entry>
+    <Entry key="FANCY_64">Cultist (BTOS2)</Entry>
 
 
     <Entry key="FANCY_33">Jackal</Entry>
@@ -1195,6 +1211,10 @@
     <Entry key="FANCY_NONE_ROLENAME_54">Socialite</Entry>
     <Entry key="FANCY_NONE_ROLENAME_55">Marshal</Entry>
     <Entry key="FANCY_NONE_ROLENAME_56">Oracle</Entry>
+    <Entry key="FANCY_NONE_ROLENAME_57">Pilgrim</Entry>
+    <Entry key="FANCY_NONE_ROLENAME_58">Covenite</Entry>
+    <Entry key="FANCY_NONE_ROLENAME_59">Catalyst</Entry>
+    <Entry key="FANCY_NONE_ROLENAME_60">Cultist</Entry>
     <Entry key="FANCY_NONE_ROLENAME_250">Famine</Entry>
     <Entry key="FANCY_NONE_ROLENAME_251">War</Entry>
     <Entry key="FANCY_NONE_ROLENAME_252">Pestilence</Entry>
@@ -1258,6 +1278,10 @@
     <Entry key="FANCY_TOWN_ROLENAME_54">Socialite</Entry>
     <Entry key="FANCY_TOWN_ROLENAME_55">Marshal</Entry>
     <Entry key="FANCY_TOWN_ROLENAME_56">Oracle</Entry>
+    <Entry key="FANCY_TOWN_ROLENAME_57">Pilgrim</Entry>
+    <Entry key="FANCY_TOWN_ROLENAME_58">Covenite</Entry>
+    <Entry key="FANCY_TOWN_ROLENAME_59">Catalyst</Entry>
+    <Entry key="FANCY_TOWN_ROLENAME_60">Cultist</Entry>
     <Entry key="FANCY_TOWN_ROLENAME_250">Famine</Entry>
     <Entry key="FANCY_TOWN_ROLENAME_251">War</Entry>
     <Entry key="FANCY_TOWN_ROLENAME_252">Pestilence</Entry>
@@ -1321,6 +1345,10 @@
     <Entry key="FANCY_COVEN_ROLENAME_54">Socialite</Entry>
     <Entry key="FANCY_COVEN_ROLENAME_55">Marshal</Entry>
     <Entry key="FANCY_COVEN_ROLENAME_56">Oracle</Entry>
+    <Entry key="FANCY_COVEN_ROLENAME_57">Pilgrim</Entry>
+    <Entry key="FANCY_COVEN_ROLENAME_58">Covenite</Entry>
+    <Entry key="FANCY_COVEN_ROLENAME_59">Catalyst</Entry>
+    <Entry key="FANCY_COVEN_ROLENAME_60">Cultist</Entry>
     <Entry key="FANCY_COVEN_ROLENAME_250">Famine</Entry>
     <Entry key="FANCY_COVEN_ROLENAME_251">War</Entry>
     <Entry key="FANCY_COVEN_ROLENAME_252">Pestilence</Entry>
@@ -1384,6 +1412,10 @@
     <Entry key="FANCY_SERIALKILLER_ROLENAME_54">Socialite</Entry>
     <Entry key="FANCY_SERIALKILLER_ROLENAME_55">Marshal</Entry>
     <Entry key="FANCY_SERIALKILLER_ROLENAME_56">Oracle</Entry>
+    <Entry key="FANCY_SERIALKILLER_ROLENAME_57">Pilgrim</Entry>
+    <Entry key="FANCY_SERIALKILLER_ROLENAME_58">Covenite</Entry>
+    <Entry key="FANCY_SERIALKILLER_ROLENAME_59">Catalyst</Entry>
+    <Entry key="FANCY_SERIALKILLER_ROLENAME_60">Cultist</Entry>
     <Entry key="FANCY_SERIALKILLER_ROLENAME_250">Famine</Entry>
     <Entry key="FANCY_SERIALKILLER_ROLENAME_251">War</Entry>
     <Entry key="FANCY_SERIALKILLER_ROLENAME_252">Pestilence</Entry>
@@ -1447,6 +1479,10 @@
     <Entry key="FANCY_ARSONIST_ROLENAME_54">Socialite</Entry>
     <Entry key="FANCY_ARSONIST_ROLENAME_55">Marshal</Entry>
     <Entry key="FANCY_ARSONIST_ROLENAME_56">Oracle</Entry>
+    <Entry key="FANCY_ARSONIST_ROLENAME_57">Pilgrim</Entry>
+    <Entry key="FANCY_ARSONIST_ROLENAME_58">Covenite</Entry>
+    <Entry key="FANCY_ARSONIST_ROLENAME_59">Catalyst</Entry>
+    <Entry key="FANCY_ARSONIST_ROLENAME_60">Cultist</Entry>
     <Entry key="FANCY_ARSONIST_ROLENAME_250">Famine</Entry>
     <Entry key="FANCY_ARSONIST_ROLENAME_251">War</Entry>
     <Entry key="FANCY_ARSONIST_ROLENAME_252">Pestilence</Entry>
@@ -1510,6 +1546,10 @@
     <Entry key="FANCY_WEREWOLF_ROLENAME_54">Socialite</Entry>
     <Entry key="FANCY_WEREWOLF_ROLENAME_55">Marshal</Entry>
     <Entry key="FANCY_WEREWOLF_ROLENAME_56">Oracle</Entry>
+    <Entry key="FANCY_WEREWOLF_ROLENAME_57">Pilgrim</Entry>
+    <Entry key="FANCY_WEREWOLF_ROLENAME_58">Covenite</Entry>
+    <Entry key="FANCY_WEREWOLF_ROLENAME_59">Catalyst</Entry>
+    <Entry key="FANCY_WEREWOLF_ROLENAME_60">Cultist</Entry>
     <Entry key="FANCY_WEREWOLF_ROLENAME_250">Famine</Entry>
     <Entry key="FANCY_WEREWOLF_ROLENAME_251">War</Entry>
     <Entry key="FANCY_WEREWOLF_ROLENAME_252">Pestilence</Entry>
@@ -1573,6 +1613,10 @@
     <Entry key="FANCY_SHROUD_ROLENAME_54">Socialite</Entry>
     <Entry key="FANCY_SHROUD_ROLENAME_55">Marshal</Entry>
     <Entry key="FANCY_SHROUD_ROLENAME_56">Oracle</Entry>
+    <Entry key="FANCY_SHROUD_ROLENAME_57">Pilgrim</Entry>
+    <Entry key="FANCY_SHROUD_ROLENAME_58">Covenite</Entry>
+    <Entry key="FANCY_SHROUD_ROLENAME_59">Catalyst</Entry>
+    <Entry key="FANCY_SHROUD_ROLENAME_60">Cultist</Entry>
     <Entry key="FANCY_SHROUD_ROLENAME_250">Famine</Entry>
     <Entry key="FANCY_SHROUD_ROLENAME_251">War</Entry>
     <Entry key="FANCY_SHROUD_ROLENAME_252">Pestilence</Entry>
@@ -1636,6 +1680,10 @@
     <Entry key="FANCY_APOCALYPSE_ROLENAME_54">Socialite</Entry>
     <Entry key="FANCY_APOCALYPSE_ROLENAME_55">Marshal</Entry>
     <Entry key="FANCY_APOCALYPSE_ROLENAME_56">Oracle</Entry>
+    <Entry key="FANCY_APOCALYPSE_ROLENAME_57">Pilgrim</Entry>
+    <Entry key="FANCY_APOCALYPSE_ROLENAME_58">Covenite</Entry>
+    <Entry key="FANCY_APOCALYPSE_ROLENAME_59">Catalyst</Entry>
+    <Entry key="FANCY_APOCALYPSE_ROLENAME_60">Cultist</Entry>
     <Entry key="FANCY_APOCALYPSE_ROLENAME_250">Famine</Entry>
     <Entry key="FANCY_APOCALYPSE_ROLENAME_251">War</Entry>
     <Entry key="FANCY_APOCALYPSE_ROLENAME_252">Pestilence</Entry>
@@ -1699,6 +1747,10 @@
     <Entry key="FANCY_EXECUTIONER_ROLENAME_54">Socialite</Entry>
     <Entry key="FANCY_EXECUTIONER_ROLENAME_55">Marshal</Entry>
     <Entry key="FANCY_EXECUTIONER_ROLENAME_56">Oracle</Entry>
+    <Entry key="FANCY_EXECUTIONER_ROLENAME_57">Pilgrim</Entry>
+    <Entry key="FANCY_EXECUTIONER_ROLENAME_58">Covenite</Entry>
+    <Entry key="FANCY_EXECUTIONER_ROLENAME_59">Catalyst</Entry>
+    <Entry key="FANCY_EXECUTIONER_ROLENAME_60">Cultist</Entry>
     <Entry key="FANCY_EXECUTIONER_ROLENAME_250">Famine</Entry>
     <Entry key="FANCY_EXECUTIONER_ROLENAME_251">War</Entry>
     <Entry key="FANCY_EXECUTIONER_ROLENAME_252">Pestilence</Entry>
@@ -1762,6 +1814,10 @@
     <Entry key="FANCY_JESTER_ROLENAME_54">Socialite</Entry>
     <Entry key="FANCY_JESTER_ROLENAME_55">Marshal</Entry>
     <Entry key="FANCY_JESTER_ROLENAME_56">Oracle</Entry>
+    <Entry key="FANCY_JESTER_ROLENAME_57">Pilgrim</Entry>
+    <Entry key="FANCY_JESTER_ROLENAME_58">Covenite</Entry>
+    <Entry key="FANCY_JESTER_ROLENAME_59">Catalyst</Entry>
+    <Entry key="FANCY_JESTER_ROLENAME_60">Cultist</Entry>
     <Entry key="FANCY_JESTER_ROLENAME_250">Famine</Entry>
     <Entry key="FANCY_JESTER_ROLENAME_251">War</Entry>
     <Entry key="FANCY_JESTER_ROLENAME_252">Pestilence</Entry>
@@ -1825,6 +1881,10 @@
     <Entry key="FANCY_PIRATE_ROLENAME_54">Socialite</Entry>
     <Entry key="FANCY_PIRATE_ROLENAME_55">Marshal</Entry>
     <Entry key="FANCY_PIRATE_ROLENAME_56">Oracle</Entry>
+    <Entry key="FANCY_PIRATE_ROLENAME_57">Pilgrim</Entry>
+    <Entry key="FANCY_PIRATE_ROLENAME_58">Covenite</Entry>
+    <Entry key="FANCY_PIRATE_ROLENAME_59">Catalyst</Entry>
+    <Entry key="FANCY_PIRATE_ROLENAME_60">Cultist</Entry>
     <Entry key="FANCY_PIRATE_ROLENAME_250">Famine</Entry>
     <Entry key="FANCY_PIRATE_ROLENAME_251">War</Entry>
     <Entry key="FANCY_PIRATE_ROLENAME_252">Pestilence</Entry>
@@ -1888,6 +1948,10 @@
     <Entry key="FANCY_DOOMSAYER_ROLENAME_54">Socialite</Entry>
     <Entry key="FANCY_DOOMSAYER_ROLENAME_55">Marshal</Entry>
     <Entry key="FANCY_DOOMSAYER_ROLENAME_56">Oracle</Entry>
+    <Entry key="FANCY_DOOMSAYER_ROLENAME_57">Pilgrim</Entry>
+    <Entry key="FANCY_DOOMSAYER_ROLENAME_58">Covenite</Entry>
+    <Entry key="FANCY_DOOMSAYER_ROLENAME_59">Catalyst</Entry>
+    <Entry key="FANCY_DOOMSAYER_ROLENAME_60">Cultist</Entry>
     <Entry key="FANCY_DOOMSAYER_ROLENAME_250">Famine</Entry>
     <Entry key="FANCY_DOOMSAYER_ROLENAME_251">War</Entry>
     <Entry key="FANCY_DOOMSAYER_ROLENAME_252">Pestilence</Entry>
@@ -1951,6 +2015,10 @@
     <Entry key="FANCY_VAMPIRE_ROLENAME_54">Socialite</Entry>
     <Entry key="FANCY_VAMPIRE_ROLENAME_55">Marshal</Entry>
     <Entry key="FANCY_VAMPIRE_ROLENAME_56">Oracle</Entry>
+    <Entry key="FANCY_VAMPIRE_ROLENAME_57">Pilgrim</Entry>
+    <Entry key="FANCY_VAMPIRE_ROLENAME_58">Covenite</Entry>
+    <Entry key="FANCY_VAMPIRE_ROLENAME_59">Catalyst</Entry>
+    <Entry key="FANCY_VAMPIRE_ROLENAME_60">Cultist</Entry>
     <Entry key="FANCY_VAMPIRE_ROLENAME_250">Famine</Entry>
     <Entry key="FANCY_VAMPIRE_ROLENAME_251">War</Entry>
     <Entry key="FANCY_VAMPIRE_ROLENAME_252">Pestilence</Entry>
@@ -2014,6 +2082,10 @@
     <Entry key="FANCY_CURSEDSOUL_ROLENAME_54">Socialite</Entry>
     <Entry key="FANCY_CURSEDSOUL_ROLENAME_55">Marshal</Entry>
     <Entry key="FANCY_CURSEDSOUL_ROLENAME_56">Oracle</Entry>
+    <Entry key="FANCY_CURSEDSOUL_ROLENAME_57">Pilgrim</Entry>
+    <Entry key="FANCY_CURSEDSOUL_ROLENAME_58">Covenite</Entry>
+    <Entry key="FANCY_CURSEDSOUL_ROLENAME_59">Catalyst</Entry>
+    <Entry key="FANCY_CURSEDSOUL_ROLENAME_60">Cultist</Entry>
     <Entry key="FANCY_CURSEDSOUL_ROLENAME_250">Famine</Entry>
     <Entry key="FANCY_CURSEDSOUL_ROLENAME_251">War</Entry>
     <Entry key="FANCY_CURSEDSOUL_ROLENAME_252">Pestilence</Entry>
@@ -2365,6 +2437,8 @@
     <Entry key="FANCY_NONE_BTOS_ROLENAME_60">Starspawn</Entry>
     <Entry key="FANCY_NONE_BTOS_ROLENAME_61">Oracle</Entry>
     <Entry key="FANCY_NONE_BTOS_ROLENAME_62">Warlock</Entry>
+    <Entry key="FANCY_NONE_BTOS_ROLENAME_63">Catalyst</Entry>
+    <Entry key="FANCY_NONE_BTOS_ROLENAME_64">Cultist</Entry>
     <Entry key="FANCY_NONE_BTOS_ROLENAME_250">Famine</Entry>
     <Entry key="FANCY_NONE_BTOS_ROLENAME_251">War</Entry>
     <Entry key="FANCY_NONE_BTOS_ROLENAME_252">Pestilence</Entry>
@@ -2433,6 +2507,8 @@
     <Entry key="FANCY_TOWN_BTOS_ROLENAME_60">Starspawn</Entry>
     <Entry key="FANCY_TOWN_BTOS_ROLENAME_61">Oracle</Entry>
     <Entry key="FANCY_TOWN_BTOS_ROLENAME_62">Warlock</Entry>
+    <Entry key="FANCY_TOWN_BTOS_ROLENAME_63">Catalyst</Entry>
+    <Entry key="FANCY_TOWN_BTOS_ROLENAME_64">Cultist</Entry>
     <Entry key="FANCY_TOWN_BTOS_ROLENAME_250">Famine</Entry>
     <Entry key="FANCY_TOWN_BTOS_ROLENAME_251">War</Entry>
     <Entry key="FANCY_TOWN_BTOS_ROLENAME_252">Pestilence</Entry>
@@ -2501,6 +2577,8 @@
     <Entry key="FANCY_COVEN_BTOS_ROLENAME_60">Starspawn</Entry>
     <Entry key="FANCY_COVEN_BTOS_ROLENAME_61">Oracle</Entry>
     <Entry key="FANCY_COVEN_BTOS_ROLENAME_62">Warlock</Entry>
+    <Entry key="FANCY_COVEN_BTOS_ROLENAME_63">Catalyst</Entry>
+    <Entry key="FANCY_COVEN_BTOS_ROLENAME_64">Cultist</Entry>
     <Entry key="FANCY_COVEN_BTOS_ROLENAME_250">Famine</Entry>
     <Entry key="FANCY_COVEN_BTOS_ROLENAME_251">War</Entry>
     <Entry key="FANCY_COVEN_BTOS_ROLENAME_252">Pestilence</Entry>
@@ -2569,6 +2647,8 @@
     <Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_60">Starspawn</Entry>
     <Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_61">Oracle</Entry>
     <Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_62">Warlock</Entry>
+    <Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_63">Catalyst</Entry>
+    <Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_64">Cultist</Entry>
     <Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_250">Famine</Entry>
     <Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_251">War</Entry>
     <Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_252">Pestilence</Entry>
@@ -2638,6 +2718,8 @@
     <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_60">Starspawn</Entry>
     <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_61">Oracle</Entry>
     <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_62">Warlock</Entry>
+    <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_63">Catalyst</Entry>
+    <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_64">Cultist</Entry>
     <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_250">Famine</Entry>
     <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_251">War</Entry>
     <Entry key="FANCY_ARSONIST_BTOS_ROLENAME_252">Pestilence</Entry>
@@ -2706,6 +2788,8 @@
     <Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_59">Inquisitor</Entry>
     <Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_60">Starspawn</Entry>
     <Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_61">Oracle</Entry>
+    <Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_63">Catalyst</Entry>
+    <Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_64">Cultist</Entry>
     <Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_62">Warlock</Entry>
     <Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_250">Famine</Entry>
     <Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_251">War</Entry>
@@ -2776,6 +2860,8 @@
     <Entry key="FANCY_SHROUD_BTOS_ROLENAME_60">Starspawn</Entry>
     <Entry key="FANCY_SHROUD_BTOS_ROLENAME_61">Oracle</Entry>
     <Entry key="FANCY_SHROUD_BTOS_ROLENAME_62">Warlock</Entry>
+    <Entry key="FANCY_SHROUD_BTOS_ROLENAME_63">Catalyst</Entry>
+    <Entry key="FANCY_SHROUD_BTOS_ROLENAME_64">Cultist</Entry>
     <Entry key="FANCY_SHROUD_BTOS_ROLENAME_250">Famine</Entry>
     <Entry key="FANCY_SHROUD_BTOS_ROLENAME_251">War</Entry>
     <Entry key="FANCY_SHROUD_BTOS_ROLENAME_252">Pestilence</Entry>
@@ -2844,6 +2930,8 @@
     <Entry key="FANCY_APOCALYPSE_BTOS_ROLENAME_60">Starspawn</Entry>
     <Entry key="FANCY_APOCALYPSE_BTOS_ROLENAME_61">Oracle</Entry>
     <Entry key="FANCY_APOCALYPSE_BTOS_ROLENAME_62">Warlock</Entry>
+    <Entry key="FANCY_APOCALYPSE_BTOS_ROLENAME_63">Catalyst</Entry>
+    <Entry key="FANCY_APOCALYPSE_BTOS_ROLENAME_64">Cultist</Entry>
     <Entry key="FANCY_APOCALYPSE_BTOS_ROLENAME_250">Famine</Entry>
     <Entry key="FANCY_APOCALYPSE_BTOS_ROLENAME_251">War</Entry>
     <Entry key="FANCY_APOCALYPSE_BTOS_ROLENAME_252">Pestilence</Entry>
@@ -2911,6 +2999,8 @@
     <Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_59">Inquisitor</Entry>
     <Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_60">Starspawn</Entry>
     <Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_61">Oracle</Entry>
+    <Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_63">Catalyst</Entry>
+    <Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_64">Cultist</Entry>
     <Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_62">Warlock</Entry>
     <Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_250">Famine</Entry>
     <Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_251">War</Entry>
@@ -2980,6 +3070,8 @@
     <Entry key="FANCY_JESTER_BTOS_ROLENAME_60">Starspawn</Entry>
     <Entry key="FANCY_JESTER_BTOS_ROLENAME_61">Oracle</Entry>
     <Entry key="FANCY_JESTER_BTOS_ROLENAME_62">Warlock</Entry>
+    <Entry key="FANCY_JESTER_BTOS_ROLENAME_63">Catalyst</Entry>
+    <Entry key="FANCY_JESTER_BTOS_ROLENAME_64">Cultist</Entry>
     <Entry key="FANCY_JESTER_BTOS_ROLENAME_250">Famine</Entry>
     <Entry key="FANCY_JESTER_BTOS_ROLENAME_251">War</Entry>
     <Entry key="FANCY_JESTER_BTOS_ROLENAME_252">Pestilence</Entry>
@@ -3048,6 +3140,8 @@
     <Entry key="FANCY_PIRATE_BTOS_ROLENAME_60">Starspawn</Entry>
     <Entry key="FANCY_PIRATE_BTOS_ROLENAME_61">Oracle</Entry>
     <Entry key="FANCY_PIRATE_BTOS_ROLENAME_62">Warlock</Entry>
+    <Entry key="FANCY_PIRATE_BTOS_ROLENAME_63">Catalyst</Entry>
+    <Entry key="FANCY_PIRATE_BTOS_ROLENAME_64">Cultist</Entry>
     <Entry key="FANCY_PIRATE_BTOS_ROLENAME_250">Famine</Entry>
     <Entry key="FANCY_PIRATE_BTOS_ROLENAME_251">War</Entry>
     <Entry key="FANCY_PIRATE_BTOS_ROLENAME_252">Pestilence</Entry>
@@ -3116,6 +3210,8 @@
     <Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_60">Starspawn</Entry>
     <Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_61">Oracle</Entry>
     <Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_62">Warlock</Entry>
+    <Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_63">Catalyst</Entry>
+    <Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_64">Cultist</Entry>
     <Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_250">Famine</Entry>
     <Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_251">War</Entry>
     <Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_252">Pestilence</Entry>
@@ -3185,6 +3281,8 @@
     <Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_60">Starspawn</Entry>
     <Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_61">Oracle</Entry>
     <Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_62">Warlock</Entry>
+    <Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_63">Catalyst</Entry>
+    <Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_64">Cultist</Entry>
     <Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_250">Famine</Entry>
     <Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_251">War</Entry>
     <Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_252">Pestilence</Entry>
@@ -3253,6 +3351,8 @@
     <Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_60">Starspawn</Entry>
     <Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_61">Oracle</Entry>
     <Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_62">Warlock</Entry>
+    <Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_63">Catalyst</Entry>
+    <Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_64">Cultist</Entry>
     <Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_250">Famine</Entry>
     <Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_251">War</Entry>
     <Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_252">Pestilence</Entry>
@@ -3321,6 +3421,8 @@
     <Entry key="FANCY_JACKAL_BTOS_ROLENAME_60">Starspawn</Entry>
     <Entry key="FANCY_JACKAL_BTOS_ROLENAME_61">Oracle</Entry>
     <Entry key="FANCY_JACKAL_BTOS_ROLENAME_62">Warlock</Entry>
+    <Entry key="FANCY_JACKAL_BTOS_ROLENAME_63">Catalyst</Entry>
+    <Entry key="FANCY_JACKAL_BTOS_ROLENAME_64">Cultist</Entry>
     <Entry key="FANCY_JACKAL_BTOS_ROLENAME_250">Famine</Entry>
     <Entry key="FANCY_JACKAL_BTOS_ROLENAME_251">War</Entry>
     <Entry key="FANCY_JACKAL_BTOS_ROLENAME_252">Pestilence</Entry>
@@ -3389,6 +3491,8 @@
     <Entry key="FANCY_FROGS_BTOS_ROLENAME_60">Starspawn</Entry>
     <Entry key="FANCY_FROGS_BTOS_ROLENAME_61">Oracle</Entry>
     <Entry key="FANCY_FROGS_BTOS_ROLENAME_62">Warlock</Entry>
+    <Entry key="FANCY_FROGS_BTOS_ROLENAME_63">Catalyst</Entry>
+    <Entry key="FANCY_FROGS_BTOS_ROLENAME_64">Cultist</Entry>
     <Entry key="FANCY_FROGS_BTOS_ROLENAME_250">Famine</Entry>
     <Entry key="FANCY_FROGS_BTOS_ROLENAME_251">War</Entry>
     <Entry key="FANCY_FROGS_BTOS_ROLENAME_252">Pestilence</Entry>
@@ -3457,6 +3561,8 @@
     <Entry key="FANCY_LIONS_BTOS_ROLENAME_60">Starspawn</Entry>
     <Entry key="FANCY_LIONS_BTOS_ROLENAME_61">Oracle</Entry>
     <Entry key="FANCY_LIONS_BTOS_ROLENAME_62">Warlock</Entry>
+    <Entry key="FANCY_LIONS_BTOS_ROLENAME_63">Catalyst</Entry>
+    <Entry key="FANCY_LIONS_BTOS_ROLENAME_64">Cultist</Entry>
     <Entry key="FANCY_LIONS_BTOS_ROLENAME_250">Famine</Entry>
     <Entry key="FANCY_LIONS_BTOS_ROLENAME_251">War</Entry>
     <Entry key="FANCY_LIONS_BTOS_ROLENAME_252">Pestilence</Entry>
@@ -3525,6 +3631,8 @@
     <Entry key="FANCY_HAWKS_BTOS_ROLENAME_60">Starspawn</Entry>
     <Entry key="FANCY_HAWKS_BTOS_ROLENAME_61">Oracle</Entry>
     <Entry key="FANCY_HAWKS_BTOS_ROLENAME_62">Warlock</Entry>
+    <Entry key="FANCY_HAWKS_BTOS_ROLENAME_63">Catalyst</Entry>
+    <Entry key="FANCY_HAWKS_BTOS_ROLENAME_64">Cultist</Entry>
     <Entry key="FANCY_HAWKS_BTOS_ROLENAME_250">Famine</Entry>
     <Entry key="FANCY_HAWKS_BTOS_ROLENAME_251">War</Entry>
     <Entry key="FANCY_HAWKS_BTOS_ROLENAME_252">Pestilence</Entry>
@@ -3593,6 +3701,8 @@
     <Entry key="FANCY_JUDGE_BTOS_ROLENAME_60">Starspawn</Entry>
     <Entry key="FANCY_JUDGE_BTOS_ROLENAME_61">Oracle</Entry>
     <Entry key="FANCY_JUDGE_BTOS_ROLENAME_62">Warlock</Entry>
+    <Entry key="FANCY_JUDGE_BTOS_ROLENAME_63">Catalyst</Entry>
+    <Entry key="FANCY_JUDGE_BTOS_ROLENAME_64">Cultist</Entry>
     <Entry key="FANCY_JUDGE_BTOS_ROLENAME_250">Famine</Entry>
     <Entry key="FANCY_JUDGE_BTOS_ROLENAME_251">War</Entry>
     <Entry key="FANCY_JUDGE_BTOS_ROLENAME_252">Pestilence</Entry>
@@ -3661,6 +3771,8 @@
     <Entry key="FANCY_AUDITOR_BTOS_ROLENAME_60">Starspawn</Entry>
     <Entry key="FANCY_AUDITOR_BTOS_ROLENAME_61">Oracle</Entry>
     <Entry key="FANCY_AUDITOR_BTOS_ROLENAME_62">Warlock</Entry>
+    <Entry key="FANCY_AUDITOR_BTOS_ROLENAME_63">Catalyst</Entry>
+    <Entry key="FANCY_AUDITOR_BTOS_ROLENAME_64">Cultist</Entry>
     <Entry key="FANCY_AUDITOR_BTOS_ROLENAME_250">Famine</Entry>
     <Entry key="FANCY_AUDITOR_BTOS_ROLENAME_251">War</Entry>
     <Entry key="FANCY_AUDITOR_BTOS_ROLENAME_252">Pestilence</Entry>
@@ -3729,6 +3841,8 @@
     <Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_60">Starspawn</Entry>
     <Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_61">Oracle</Entry>
     <Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_62">Warlock</Entry>
+    <Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_63">Catalyst</Entry>
+    <Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_64">Cultist</Entry>
     <Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_250">Famine</Entry>
     <Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_251">War</Entry>
     <Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_252">Pestilence</Entry>
@@ -3796,6 +3910,8 @@
     <Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_59">Inquisitor</Entry>
     <Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_60">Starspawn</Entry>
     <Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_61">Oracle</Entry>
+    <Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_63">Catalyst</Entry>
+    <Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_64">Cultist</Entry>
     <Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_62">Warlock</Entry>
     <Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_250">Famine</Entry>
     <Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_251">War</Entry>
@@ -3865,6 +3981,8 @@
     <Entry key="FANCY_EGOTIST_BTOS_ROLENAME_60">Starspawn</Entry>
     <Entry key="FANCY_EGOTIST_BTOS_ROLENAME_61">Oracle</Entry>
     <Entry key="FANCY_EGOTIST_BTOS_ROLENAME_62">Warlock</Entry>
+    <Entry key="FANCY_EGOTIST_BTOS_ROLENAME_63">Catalyst</Entry>
+    <Entry key="FANCY_EGOTIST_BTOS_ROLENAME_64">Cultist</Entry>
     <Entry key="FANCY_EGOTIST_BTOS_ROLENAME_250">Famine</Entry>
     <Entry key="FANCY_EGOTIST_BTOS_ROLENAME_251">War</Entry>
     <Entry key="FANCY_EGOTIST_BTOS_ROLENAME_252">Pestilence</Entry>
@@ -3933,6 +4051,8 @@
     <Entry key="FANCY_PANDORA_BTOS_ROLENAME_60">Starspawn</Entry>
     <Entry key="FANCY_PANDORA_BTOS_ROLENAME_61">Oracle</Entry>
     <Entry key="FANCY_PANDORA_BTOS_ROLENAME_62">Warlock</Entry>
+    <Entry key="FANCY_PANDORA_BTOS_ROLENAME_63">Catalyst</Entry>
+    <Entry key="FANCY_PANDORA_BTOS_ROLENAME_64">Cultist</Entry>
     <Entry key="FANCY_PANDORA_BTOS_ROLENAME_250">Famine</Entry>
     <Entry key="FANCY_PANDORA_BTOS_ROLENAME_251">War</Entry>
     <Entry key="FANCY_PANDORA_BTOS_ROLENAME_252">Pestilence</Entry>
@@ -4001,6 +4121,8 @@
     <Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_60">Starspawn</Entry>
     <Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_61">Oracle</Entry>
     <Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_62">Warlock</Entry>
+    <Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_63">Catalyst</Entry>
+    <Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_64">Cultist</Entry>
     <Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_250">Famine</Entry>
     <Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_251">War</Entry>
     <Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_252">Pestilence</Entry>
@@ -4032,719 +4154,919 @@
     <Entry key="FANCY_PANDORA_BTOS_ROLENAME_241">Hidden</Entry>
     <Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_241">Hidden</Entry>
 
-    <Entry key="FANCY_NONE_BTOS_ROLENAME_100">True Any</Entry>
-	<Entry key="FANCY_NONE_BTOS_ROLENAME_101">Any</Entry>
-	<Entry key="FANCY_NONE_BTOS_ROLENAME_102">Random Town</Entry>
-	<Entry key="FANCY_NONE_BTOS_ROLENAME_103">Common Town</Entry>
-	<Entry key="FANCY_NONE_BTOS_ROLENAME_104">Town Investigative</Entry>
-	<Entry key="FANCY_NONE_BTOS_ROLENAME_105">Town Power</Entry>
-	<Entry key="FANCY_NONE_BTOS_ROLENAME_106">Town Protective</Entry>
-	<Entry key="FANCY_NONE_BTOS_ROLENAME_107">Town Killing</Entry>
-	<Entry key="FANCY_NONE_BTOS_ROLENAME_108">Town Support</Entry>
-	<Entry key="FANCY_NONE_BTOS_ROLENAME_109">Random Coven</Entry>
-	<Entry key="FANCY_NONE_BTOS_ROLENAME_110">Common Coven</Entry>
-	<Entry key="FANCY_NONE_BTOS_ROLENAME_111">Coven Deception</Entry>
-	<Entry key="FANCY_NONE_BTOS_ROLENAME_112">Coven Killing</Entry>
-	<Entry key="FANCY_NONE_BTOS_ROLENAME_113">Coven Power</Entry>
-	<Entry key="FANCY_NONE_BTOS_ROLENAME_114">Coven Utility</Entry>
-	<Entry key="FANCY_NONE_BTOS_ROLENAME_115">Random Apocalypse</Entry>
-	<Entry key="FANCY_NONE_BTOS_ROLENAME_116">Random Neutral</Entry>
-	<Entry key="FANCY_NONE_BTOS_ROLENAME_117">Neutral Evil</Entry>
-	<Entry key="FANCY_NONE_BTOS_ROLENAME_118">Neutral Killing</Entry>
-	<Entry key="FANCY_NONE_BTOS_ROLENAME_119">Neutral Pariah</Entry>
-	<Entry key="FANCY_NONE_BTOS_ROLENAME_120">Neutral Special</Entry>
-	<Entry key="FANCY_NONE_BTOS_ROLENAME_121">Common Neutral</Entry>
+	<Entry key="FANCY_TOWN_BTOS_ROLENAME_100">Any</Entry>
+	<Entry key="FANCY_TOWN_BTOS_ROLENAME_101">Random Town</Entry>
+	<Entry key="FANCY_TOWN_BTOS_ROLENAME_102">Common Town</Entry>
+	<Entry key="FANCY_TOWN_BTOS_ROLENAME_103">Town Investigative</Entry>
+	<Entry key="FANCY_TOWN_BTOS_ROLENAME_104">Town Protective</Entry>
+	<Entry key="FANCY_TOWN_BTOS_ROLENAME_105">Town Killing</Entry>
+	<Entry key="FANCY_TOWN_BTOS_ROLENAME_106">Town Support</Entry>
+	<Entry key="FANCY_TOWN_BTOS_ROLENAME_107">Random Coven</Entry>
+	<Entry key="FANCY_TOWN_BTOS_ROLENAME_108">Common Coven</Entry>
+	<Entry key="FANCY_TOWN_BTOS_ROLENAME_109">Coven Deception</Entry>
+	<Entry key="FANCY_TOWN_BTOS_ROLENAME_110">Coven Killing</Entry>
+	<Entry key="FANCY_TOWN_BTOS_ROLENAME_111">Coven Power</Entry>
+	<Entry key="FANCY_TOWN_BTOS_ROLENAME_112">Coven Utility</Entry>
+	<Entry key="FANCY_TOWN_BTOS_ROLENAME_113">Random Apocalypse</Entry>
+	<Entry key="FANCY_TOWN_BTOS_ROLENAME_114">Random Neutral</Entry>
+	<Entry key="FANCY_TOWN_BTOS_ROLENAME_115">Neutral Evil</Entry>
+	<Entry key="FANCY_TOWN_BTOS_ROLENAME_116">Neutral Killing</Entry>
+	<Entry key="FANCY_TOWN_BTOS_ROLENAME_117">Neutral Pariah</Entry>
+	<Entry key="FANCY_TOWN_BTOS_ROLENAME_118">Neutral Outlier</Entry>
+	<Entry key="FANCY_TOWN_BTOS_ROLENAME_119">Town Executive</Entry>
+	<Entry key="FANCY_TOWN_BTOS_ROLENAME_120">Town Government</Entry>
 
-<Entry key="FANCY_TOWN_BTOS_ROLENAME_100">True Any</Entry>
-<Entry key="FANCY_TOWN_BTOS_ROLENAME_101">Any</Entry>
-<Entry key="FANCY_TOWN_BTOS_ROLENAME_102">Random Town</Entry>
-<Entry key="FANCY_TOWN_BTOS_ROLENAME_103">Common Town</Entry>
-<Entry key="FANCY_TOWN_BTOS_ROLENAME_104">Town Investigative</Entry>
-<Entry key="FANCY_TOWN_BTOS_ROLENAME_105">Town Power</Entry>
-<Entry key="FANCY_TOWN_BTOS_ROLENAME_106">Town Protective</Entry>
-<Entry key="FANCY_TOWN_BTOS_ROLENAME_107">Town Killing</Entry>
-<Entry key="FANCY_TOWN_BTOS_ROLENAME_108">Town Support</Entry>
-<Entry key="FANCY_TOWN_BTOS_ROLENAME_109">Random Coven</Entry>
-<Entry key="FANCY_TOWN_BTOS_ROLENAME_110">Common Coven</Entry>
-<Entry key="FANCY_TOWN_BTOS_ROLENAME_111">Coven Deception</Entry>
-<Entry key="FANCY_TOWN_BTOS_ROLENAME_112">Coven Killing</Entry>
-<Entry key="FANCY_TOWN_BTOS_ROLENAME_113">Coven Power</Entry>
-<Entry key="FANCY_TOWN_BTOS_ROLENAME_114">Coven Utility</Entry>
-<Entry key="FANCY_TOWN_BTOS_ROLENAME_115">Random Apocalypse</Entry>
-<Entry key="FANCY_TOWN_BTOS_ROLENAME_116">Random Neutral</Entry>
-<Entry key="FANCY_TOWN_BTOS_ROLENAME_117">Neutral Evil</Entry>
-<Entry key="FANCY_TOWN_BTOS_ROLENAME_118">Neutral Killing</Entry>
-<Entry key="FANCY_TOWN_BTOS_ROLENAME_119">Neutral Pariah</Entry>
-<Entry key="FANCY_TOWN_BTOS_ROLENAME_120">Neutral Special</Entry>
-<Entry key="FANCY_TOWN_BTOS_ROLENAME_121">Common Neutral</Entry>
+	<Entry key="FANCY_COVEN_BTOS_ROLENAME_100">Any</Entry>
+	<Entry key="FANCY_COVEN_BTOS_ROLENAME_101">Random Town</Entry>
+	<Entry key="FANCY_COVEN_BTOS_ROLENAME_102">Common Town</Entry>
+	<Entry key="FANCY_COVEN_BTOS_ROLENAME_103">Town Investigative</Entry>
+	<Entry key="FANCY_COVEN_BTOS_ROLENAME_104">Town Protective</Entry>
+	<Entry key="FANCY_COVEN_BTOS_ROLENAME_105">Town Killing</Entry>
+	<Entry key="FANCY_COVEN_BTOS_ROLENAME_106">Town Support</Entry>
+	<Entry key="FANCY_COVEN_BTOS_ROLENAME_107">Random Coven</Entry>
+	<Entry key="FANCY_COVEN_BTOS_ROLENAME_108">Common Coven</Entry>
+	<Entry key="FANCY_COVEN_BTOS_ROLENAME_109">Coven Deception</Entry>
+	<Entry key="FANCY_COVEN_BTOS_ROLENAME_110">Coven Killing</Entry>
+	<Entry key="FANCY_COVEN_BTOS_ROLENAME_111">Coven Power</Entry>
+	<Entry key="FANCY_COVEN_BTOS_ROLENAME_112">Coven Utility</Entry>
+	<Entry key="FANCY_COVEN_BTOS_ROLENAME_113">Random Apocalypse</Entry>
+	<Entry key="FANCY_COVEN_BTOS_ROLENAME_114">Random Neutral</Entry>
+	<Entry key="FANCY_COVEN_BTOS_ROLENAME_115">Neutral Evil</Entry>
+	<Entry key="FANCY_COVEN_BTOS_ROLENAME_116">Neutral Killing</Entry>
+	<Entry key="FANCY_COVEN_BTOS_ROLENAME_117">Neutral Pariah</Entry>
+	<Entry key="FANCY_COVEN_BTOS_ROLENAME_118">Neutral Outlier</Entry>
+	<Entry key="FANCY_COVEN_BTOS_ROLENAME_119">Town Executive</Entry>
+	<Entry key="FANCY_COVEN_BTOS_ROLENAME_120">Town Government</Entry>
 
-<Entry key="FANCY_COVEN_BTOS_ROLENAME_100">True Any</Entry>
-<Entry key="FANCY_COVEN_BTOS_ROLENAME_101">Any</Entry>
-<Entry key="FANCY_COVEN_BTOS_ROLENAME_102">Random Town</Entry>
-<Entry key="FANCY_COVEN_BTOS_ROLENAME_103">Common Town</Entry>
-<Entry key="FANCY_COVEN_BTOS_ROLENAME_104">Town Investigative</Entry>
-<Entry key="FANCY_COVEN_BTOS_ROLENAME_105">Town Power</Entry>
-<Entry key="FANCY_COVEN_BTOS_ROLENAME_106">Town Protective</Entry>
-<Entry key="FANCY_COVEN_BTOS_ROLENAME_107">Town Killing</Entry>
-<Entry key="FANCY_COVEN_BTOS_ROLENAME_108">Town Support</Entry>
-<Entry key="FANCY_COVEN_BTOS_ROLENAME_109">Random Coven</Entry>
-<Entry key="FANCY_COVEN_BTOS_ROLENAME_110">Common Coven</Entry>
-<Entry key="FANCY_COVEN_BTOS_ROLENAME_111">Coven Deception</Entry>
-<Entry key="FANCY_COVEN_BTOS_ROLENAME_112">Coven Killing</Entry>
-<Entry key="FANCY_COVEN_BTOS_ROLENAME_113">Coven Power</Entry>
-<Entry key="FANCY_COVEN_BTOS_ROLENAME_114">Coven Utility</Entry>
-<Entry key="FANCY_COVEN_BTOS_ROLENAME_115">Random Apocalypse</Entry>
-<Entry key="FANCY_COVEN_BTOS_ROLENAME_116">Random Neutral</Entry>
-<Entry key="FANCY_COVEN_BTOS_ROLENAME_117">Neutral Evil</Entry>
-<Entry key="FANCY_COVEN_BTOS_ROLENAME_118">Neutral Killing</Entry>
-<Entry key="FANCY_COVEN_BTOS_ROLENAME_119">Neutral Pariah</Entry>
-<Entry key="FANCY_COVEN_BTOS_ROLENAME_120">Neutral Special</Entry>
-<Entry key="FANCY_COVEN_BTOS_ROLENAME_121">Common Neutral</Entry>
+	<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_100">Any</Entry>
+	<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_101">Random Town</Entry>
+	<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_102">Common Town</Entry>
+	<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_103">Town Investigative</Entry>
+	<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_104">Town Protective</Entry>
+	<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_105">Town Killing</Entry>
+	<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_106">Town Support</Entry>
+	<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_107">Random Coven</Entry>
+	<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_108">Common Coven</Entry>
+	<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_109">Coven Deception</Entry>
+	<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_110">Coven Killing</Entry>
+	<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_111">Coven Power</Entry>
+	<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_112">Coven Utility</Entry>
+	<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_113">Random Apocalypse</Entry>
+	<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_114">Random Neutral</Entry>
+	<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_115">Neutral Evil</Entry>
+	<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_116">Neutral Killing</Entry>
+	<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_117">Neutral Pariah</Entry>
+	<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_118">Neutral Outlier</Entry>
+	<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_119">Town Executive</Entry>
+	<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_120">Town Government</Entry>
 
-<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_100">True Any</Entry>
-<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_101">Any</Entry>
-<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_102">Random Town</Entry>
-<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_103">Common Town</Entry>
-<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_104">Town Investigative</Entry>
-<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_105">Town Power</Entry>
-<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_106">Town Protective</Entry>
-<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_107">Town Killing</Entry>
-<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_108">Town Support</Entry>
-<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_109">Random Coven</Entry>
-<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_110">Common Coven</Entry>
-<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_111">Coven Deception</Entry>
-<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_112">Coven Killing</Entry>
-<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_113">Coven Power</Entry>
-<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_114">Coven Utility</Entry>
-<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_115">Random Apocalypse</Entry>
-<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_116">Random Neutral</Entry>
-<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_117">Neutral Evil</Entry>
-<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_118">Neutral Killing</Entry>
-<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_119">Neutral Pariah</Entry>
-<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_120">Neutral Special</Entry>
-<Entry key="FANCY_SERIALKILLER_BTOS_ROLENAME_121">Common Neutral</Entry>
+	<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_100">Any</Entry>
+	<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_101">Random Town</Entry>
+	<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_102">Common Town</Entry>
+	<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_103">Town Investigative</Entry>
+	<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_104">Town Protective</Entry>
+	<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_105">Town Killing</Entry>
+	<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_106">Town Support</Entry>
+	<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_107">Random Coven</Entry>
+	<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_108">Common Coven</Entry>
+	<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_109">Coven Deception</Entry>
+	<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_110">Coven Killing</Entry>
+	<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_111">Coven Power</Entry>
+	<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_112">Coven Utility</Entry>
+	<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_113">Random Apocalypse</Entry>
+	<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_114">Random Neutral</Entry>
+	<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_115">Neutral Evil</Entry>
+	<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_116">Neutral Killing</Entry>
+	<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_117">Neutral Pariah</Entry>
+	<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_118">Neutral Outlier</Entry>
+	<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_119">Town Executive</Entry>
+	<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_120">Town Government</Entry>
 
-<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_100">True Any</Entry>
-<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_101">Any</Entry>
-<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_102">Random Town</Entry>
-<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_103">Common Town</Entry>
-<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_104">Town Investigative</Entry>
-<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_105">Town Power</Entry>
-<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_106">Town Protective</Entry>
-<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_107">Town Killing</Entry>
-<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_108">Town Support</Entry>
-<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_109">Random Coven</Entry>
-<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_110">Common Coven</Entry>
-<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_111">Coven Deception</Entry>
-<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_112">Coven Killing</Entry>
-<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_113">Coven Power</Entry>
-<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_114">Coven Utility</Entry>
-<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_115">Random Apocalypse</Entry>
-<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_116">Random Neutral</Entry>
-<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_117">Neutral Evil</Entry>
-<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_118">Neutral Killing</Entry>
-<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_119">Neutral Pariah</Entry>
-<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_120">Neutral Special</Entry>
-<Entry key="FANCY_ARSONIST_BTOS_ROLENAME_121">Common Neutral</Entry>
+	<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_100">Any</Entry>
+	<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_101">Random Town</Entry>
+	<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_102">Common Town</Entry>
+	<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_103">Town Investigative</Entry>
+	<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_104">Town Protective</Entry>
+	<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_105">Town Killing</Entry>
+	<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_106">Town Support</Entry>
+	<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_107">Random Coven</Entry>
+	<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_108">Common Coven</Entry>
+	<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_109">Coven Deception</Entry>
+	<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_110">Coven Killing</Entry>
+	<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_111">Coven Power</Entry>
+	<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_112">Coven Utility</Entry>
+	<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_113">Random Apocalypse</Entry>
+	<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_114">Random Neutral</Entry>
+	<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_115">Neutral Evil</Entry>
+	<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_116">Neutral Killing</Entry>
+	<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_117">Neutral Pariah</Entry>
+	<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_118">Neutral Outlier</Entry>
+	<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_119">Town Executive</Entry>
+	<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_120">Town Government</Entry>
 
-<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_100">True Any</Entry>
-<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_101">Any</Entry>
-<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_102">Random Town</Entry>
-<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_103">Common Town</Entry>
-<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_104">Town Investigative</Entry>
-<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_105">Town Power</Entry>
-<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_106">Town Protective</Entry>
-<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_107">Town Killing</Entry>
-<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_108">Town Support</Entry>
-<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_109">Random Coven</Entry>
-<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_110">Common Coven</Entry>
-<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_111">Coven Deception</Entry>
-<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_112">Coven Killing</Entry>
-<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_113">Coven Power</Entry>
-<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_114">Coven Utility</Entry>
-<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_115">Random Apocalypse</Entry>
-<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_116">Random Neutral</Entry>
-<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_117">Neutral Evil</Entry>
-<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_118">Neutral Killing</Entry>
-<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_119">Neutral Pariah</Entry>
-<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_120">Neutral Special</Entry>
-<Entry key="FANCY_WEREWOLF_BTOS_ROLENAME_121">Common Neutral</Entry>
+	<Entry key="FANCY_SHROUD_BTOS_ROLENAME_100">Any</Entry>
+	<Entry key="FANCY_SHROUD_BTOS_ROLENAME_101">Random Town</Entry>
+	<Entry key="FANCY_SHROUD_BTOS_ROLENAME_102">Common Town</Entry>
+	<Entry key="FANCY_SHROUD_BTOS_ROLENAME_103">Town Investigative</Entry>
+	<Entry key="FANCY_SHROUD_BTOS_ROLENAME_104">Town Protective</Entry>
+	<Entry key="FANCY_SHROUD_BTOS_ROLENAME_105">Town Killing</Entry>
+	<Entry key="FANCY_SHROUD_BTOS_ROLENAME_106">Town Support</Entry>
+	<Entry key="FANCY_SHROUD_BTOS_ROLENAME_107">Random Coven</Entry>
+	<Entry key="FANCY_SHROUD_BTOS_ROLENAME_108">Common Coven</Entry>
+	<Entry key="FANCY_SHROUD_BTOS_ROLENAME_109">Coven Deception</Entry>
+	<Entry key="FANCY_SHROUD_BTOS_ROLENAME_110">Coven Killing</Entry>
+	<Entry key="FANCY_SHROUD_BTOS_ROLENAME_111">Coven Power</Entry>
+	<Entry key="FANCY_SHROUD_BTOS_ROLENAME_112">Coven Utility</Entry>
+	<Entry key="FANCY_SHROUD_BTOS_ROLENAME_113">Random Apocalypse</Entry>
+	<Entry key="FANCY_SHROUD_BTOS_ROLENAME_114">Random Neutral</Entry>
+	<Entry key="FANCY_SHROUD_BTOS_ROLENAME_115">Neutral Evil</Entry>
+	<Entry key="FANCY_SHROUD_BTOS_ROLENAME_116">Neutral Killing</Entry>
+	<Entry key="FANCY_SHROUD_BTOS_ROLENAME_117">Neutral Pariah</Entry>
+	<Entry key="FANCY_SHROUD_BTOS_ROLENAME_118">Neutral Outlier</Entry>
+	<Entry key="FANCY_SHROUD_BTOS_ROLENAME_119">Town Executive</Entry>
+	<Entry key="FANCY_SHROUD_BTOS_ROLENAME_120">Town Government</Entry>
 
-<Entry key="FANCY_SHROUD_BTOS_ROLENAME_100">True Any</Entry>
-<Entry key="FANCY_SHROUD_BTOS_ROLENAME_101">Any</Entry>
-<Entry key="FANCY_SHROUD_BTOS_ROLENAME_102">Random Town</Entry>
-<Entry key="FANCY_SHROUD_BTOS_ROLENAME_103">Common Town</Entry>
-<Entry key="FANCY_SHROUD_BTOS_ROLENAME_104">Town Investigative</Entry>
-<Entry key="FANCY_SHROUD_BTOS_ROLENAME_105">Town Power</Entry>
-<Entry key="FANCY_SHROUD_BTOS_ROLENAME_106">Town Protective</Entry>
-<Entry key="FANCY_SHROUD_BTOS_ROLENAME_107">Town Killing</Entry>
-<Entry key="FANCY_SHROUD_BTOS_ROLENAME_108">Town Support</Entry>
-<Entry key="FANCY_SHROUD_BTOS_ROLENAME_109">Random Coven</Entry>
-<Entry key="FANCY_SHROUD_BTOS_ROLENAME_110">Common Coven</Entry>
-<Entry key="FANCY_SHROUD_BTOS_ROLENAME_111">Coven Deception</Entry>
-<Entry key="FANCY_SHROUD_BTOS_ROLENAME_112">Coven Killing</Entry>
-<Entry key="FANCY_SHROUD_BTOS_ROLENAME_113">Coven Power</Entry>
-<Entry key="FANCY_SHROUD_BTOS_ROLENAME_114">Coven Utility</Entry>
-<Entry key="FANCY_SHROUD_BTOS_ROLENAME_115">Random Apocalypse</Entry>
-<Entry key="FANCY_SHROUD_BTOS_ROLENAME_116">Random Neutral</Entry>
-<Entry key="FANCY_SHROUD_BTOS_ROLENAME_117">Neutral Evil</Entry>
-<Entry key="FANCY_SHROUD_BTOS_ROLENAME_118">Neutral Killing</Entry>
-<Entry key="FANCY_SHROUD_BTOS_ROLENAME_119">Neutral Pariah</Entry>
-<Entry key="FANCY_SHROUD_BTOS_ROLENAME_120">Neutral Special</Entry>
-<Entry key="FANCY_SHROUD_BTOS_ROLENAME_121">Common Neutral</Entry>
+	<Entry key="FANCY_APOCALYPSE_BTOS_ROLENAME_100">Any</Entry>
+	<Entry key="FANCY_APOCALYPSE_BTOS_ROLENAME_101">Random Town</Entry>
+	<Entry key="FANCY_APOCALYPSE_BTOS_ROLENAME_102">Common Town</Entry>
+	<Entry key="FANCY_APOCALYPSE_BTOS_ROLENAME_103">Town Investigative</Entry>
+	<Entry key="FANCY_APOCALYPSE_BTOS_ROLENAME_104">Town Protective</Entry>
+	<Entry key="FANCY_APOCALYPSE_BTOS_ROLENAME_105">Town Killing</Entry>
+	<Entry key="FANCY_APOCALYPSE_BTOS_ROLENAME_106">Town Support</Entry>
+	<Entry key="FANCY_APOCALYPSE_BTOS_ROLENAME_107">Random Coven</Entry>
+	<Entry key="FANCY_APOCALYPSE_BTOS_ROLENAME_108">Common Coven</Entry>
+	<Entry key="FANCY_APOCALYPSE_BTOS_ROLENAME_109">Coven Deception</Entry>
+	<Entry key="FANCY_APOCALYPSE_BTOS_ROLENAME_110">Coven Killing</Entry>
+	<Entry key="FANCY_APOCALYPSE_BTOS_ROLENAME_111">Coven Power</Entry>
+	<Entry key="FANCY_APOCALYPSE_BTOS_ROLENAME_112">Coven Utility</Entry>
+	<Entry key="FANCY_APOCALYPSE_BTOS_ROLENAME_113">Random Apocalypse</Entry>
+	<Entry key="FANCY_APOCALYPSE_BTOS_ROLENAME_114">Random Neutral</Entry>
+	<Entry key="FANCY_APOCALYPSE_BTOS_ROLENAME_115">Neutral Evil</Entry>
+	<Entry key="FANCY_APOCALYPSE_BTOS_ROLENAME_116">Neutral Killing</Entry>
+	<Entry key="FANCY_APOCALYPSE_BTOS_ROLENAME_117">Neutral Pariah</Entry>
+	<Entry key="FANCY_APOCALYPSE_BTOS_ROLENAME_118">Neutral Outlier</Entry>
+	<Entry key="FANCY_APOCALYPSE_BTOS_ROLENAME_119">Town Executive</Entry>
+	<Entry key="FANCY_APOCALYPSE_BTOS_ROLENAME_120">Town Government</Entry>
 
-<Entry key="FANCY_APOCALPYSE_BTOS_ROLENAME_100">True Any</Entry>
-<Entry key="FANCY_APOCALPYSE_BTOS_ROLENAME_101">Any</Entry>
-<Entry key="FANCY_APOCALPYSE_BTOS_ROLENAME_102">Random Town</Entry>
-<Entry key="FANCY_APOCALPYSE_BTOS_ROLENAME_103">Common Town</Entry>
-<Entry key="FANCY_APOCALPYSE_BTOS_ROLENAME_104">Town Investigative</Entry>
-<Entry key="FANCY_APOCALPYSE_BTOS_ROLENAME_105">Town Power</Entry>
-<Entry key="FANCY_APOCALPYSE_BTOS_ROLENAME_106">Town Protective</Entry>
-<Entry key="FANCY_APOCALPYSE_BTOS_ROLENAME_107">Town Killing</Entry>
-<Entry key="FANCY_APOCALPYSE_BTOS_ROLENAME_108">Town Support</Entry>
-<Entry key="FANCY_APOCALPYSE_BTOS_ROLENAME_109">Random Coven</Entry>
-<Entry key="FANCY_APOCALPYSE_BTOS_ROLENAME_110">Common Coven</Entry>
-<Entry key="FANCY_APOCALPYSE_BTOS_ROLENAME_111">Coven Deception</Entry>
-<Entry key="FANCY_APOCALPYSE_BTOS_ROLENAME_112">Coven Killing</Entry>
-<Entry key="FANCY_APOCALPYSE_BTOS_ROLENAME_113">Coven Power</Entry>
-<Entry key="FANCY_APOCALPYSE_BTOS_ROLENAME_114">Coven Utility</Entry>
-<Entry key="FANCY_APOCALPYSE_BTOS_ROLENAME_115">Random Apocalypse</Entry>
-<Entry key="FANCY_APOCALPYSE_BTOS_ROLENAME_116">Random Neutral</Entry>
-<Entry key="FANCY_APOCALPYSE_BTOS_ROLENAME_117">Neutral Evil</Entry>
-<Entry key="FANCY_APOCALPYSE_BTOS_ROLENAME_118">Neutral Killing</Entry>
-<Entry key="FANCY_APOCALPYSE_BTOS_ROLENAME_119">Neutral Pariah</Entry>
-<Entry key="FANCY_APOCALPYSE_BTOS_ROLENAME_120">Neutral Special</Entry>
-<Entry key="FANCY_APOCALPYSE_BTOS_ROLENAME_121">Common Neutral</Entry>
+	<Entry key="FANCY_JESTER_BTOS_ROLENAME_100">Any</Entry>
+	<Entry key="FANCY_JESTER_BTOS_ROLENAME_101">Random Town</Entry>
+	<Entry key="FANCY_JESTER_BTOS_ROLENAME_102">Common Town</Entry>
+	<Entry key="FANCY_JESTER_BTOS_ROLENAME_103">Town Investigative</Entry>
+	<Entry key="FANCY_JESTER_BTOS_ROLENAME_104">Town Protective</Entry>
+	<Entry key="FANCY_JESTER_BTOS_ROLENAME_105">Town Killing</Entry>
+	<Entry key="FANCY_JESTER_BTOS_ROLENAME_106">Town Support</Entry>
+	<Entry key="FANCY_JESTER_BTOS_ROLENAME_107">Random Coven</Entry>
+	<Entry key="FANCY_JESTER_BTOS_ROLENAME_108">Common Coven</Entry>
+	<Entry key="FANCY_JESTER_BTOS_ROLENAME_109">Coven Deception</Entry>
+	<Entry key="FANCY_JESTER_BTOS_ROLENAME_110">Coven Killing</Entry>
+	<Entry key="FANCY_JESTER_BTOS_ROLENAME_111">Coven Power</Entry>
+	<Entry key="FANCY_JESTER_BTOS_ROLENAME_112">Coven Utility</Entry>
+	<Entry key="FANCY_JESTER_BTOS_ROLENAME_113">Random Apocalypse</Entry>
+	<Entry key="FANCY_JESTER_BTOS_ROLENAME_114">Random Neutral</Entry>
+	<Entry key="FANCY_JESTER_BTOS_ROLENAME_115">Neutral Evil</Entry>
+	<Entry key="FANCY_JESTER_BTOS_ROLENAME_116">Neutral Killing</Entry>
+	<Entry key="FANCY_JESTER_BTOS_ROLENAME_117">Neutral Pariah</Entry>
+	<Entry key="FANCY_JESTER_BTOS_ROLENAME_118">Neutral Outlier</Entry>
+	<Entry key="FANCY_JESTER_BTOS_ROLENAME_119">Town Executive</Entry>
+	<Entry key="FANCY_JESTER_BTOS_ROLENAME_120">Town Government</Entry>
 
-<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_100">True Any</Entry>
-<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_101">Any</Entry>
-<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_102">Random Town</Entry>
-<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_103">Common Town</Entry>
-<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_104">Town Investigative</Entry>
-<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_105">Town Power</Entry>
-<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_106">Town Protective</Entry>
-<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_107">Town Killing</Entry>
-<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_108">Town Support</Entry>
-<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_109">Random Coven</Entry>
-<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_110">Common Coven</Entry>
-<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_111">Coven Deception</Entry>
-<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_112">Coven Killing</Entry>
-<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_113">Coven Power</Entry>
-<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_114">Coven Utility</Entry>
-<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_115">Random Apocalypse</Entry>
-<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_116">Random Neutral</Entry>
-<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_117">Neutral Evil</Entry>
-<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_118">Neutral Killing</Entry>
-<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_119">Neutral Pariah</Entry>
-<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_120">Neutral Special</Entry>
-<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_121">Common Neutral</Entry>
+	<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_100">Any</Entry>
+	<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_101">Random Town</Entry>
+	<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_102">Common Town</Entry>
+	<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_103">Town Investigative</Entry>
+	<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_104">Town Protective</Entry>
+	<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_105">Town Killing</Entry>
+	<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_106">Town Support</Entry>
+	<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_107">Random Coven</Entry>
+	<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_108">Common Coven</Entry>
+	<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_109">Coven Deception</Entry>
+	<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_110">Coven Killing</Entry>
+	<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_111">Coven Power</Entry>
+	<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_112">Coven Utility</Entry>
+	<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_113">Random Apocalypse</Entry>
+	<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_114">Random Neutral</Entry>
+	<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_115">Neutral Evil</Entry>
+	<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_116">Neutral Killing</Entry>
+	<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_117">Neutral Pariah</Entry>
+	<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_118">Neutral Outlier</Entry>
+	<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_119">Town Executive</Entry>
+	<Entry key="FANCY_EXECUTIONER_BTOS_ROLENAME_120">Town Government</Entry>
 
-<Entry key="FANCY_JESTER_BTOS_ROLENAME_100">True Any</Entry>
-<Entry key="FANCY_JESTER_BTOS_ROLENAME_101">Any</Entry>
-<Entry key="FANCY_JESTER_BTOS_ROLENAME_102">Random Town</Entry>
-<Entry key="FANCY_JESTER_BTOS_ROLENAME_103">Common Town</Entry>
-<Entry key="FANCY_JESTER_BTOS_ROLENAME_104">Town Investigative</Entry>
-<Entry key="FANCY_JESTER_BTOS_ROLENAME_105">Town Power</Entry>
-<Entry key="FANCY_JESTER_BTOS_ROLENAME_106">Town Protective</Entry>
-<Entry key="FANCY_JESTER_BTOS_ROLENAME_107">Town Killing</Entry>
-<Entry key="FANCY_JESTER_BTOS_ROLENAME_108">Town Support</Entry>
-<Entry key="FANCY_JESTER_BTOS_ROLENAME_109">Random Coven</Entry>
-<Entry key="FANCY_JESTER_BTOS_ROLENAME_110">Common Coven</Entry>
-<Entry key="FANCY_JESTER_BTOS_ROLENAME_111">Coven Deception</Entry>
-<Entry key="FANCY_JESTER_BTOS_ROLENAME_112">Coven Killing</Entry>
-<Entry key="FANCY_JESTER_BTOS_ROLENAME_113">Coven Power</Entry>
-<Entry key="FANCY_JESTER_BTOS_ROLENAME_114">Coven Utility</Entry>
-<Entry key="FANCY_JESTER_BTOS_ROLENAME_115">Random Apocalypse</Entry>
-<Entry key="FANCY_JESTER_BTOS_ROLENAME_116">Random Neutral</Entry>
-<Entry key="FANCY_JESTER_BTOS_ROLENAME_117">Neutral Evil</Entry>
-<Entry key="FANCY_JESTER_BTOS_ROLENAME_118">Neutral Killing</Entry>
-<Entry key="FANCY_JESTER_BTOS_ROLENAME_119">Neutral Pariah</Entry>
-<Entry key="FANCY_JESTER_BTOS_ROLENAME_120">Neutral Special</Entry>
-<Entry key="FANCY_JESTER_BTOS_ROLENAME_121">Common Neutral</Entry>
+	<Entry key="FANCY_PIRATE_BTOS_ROLENAME_100">Any</Entry>
+	<Entry key="FANCY_PIRATE_BTOS_ROLENAME_101">Random Town</Entry>
+	<Entry key="FANCY_PIRATE_BTOS_ROLENAME_102">Common Town</Entry>
+	<Entry key="FANCY_PIRATE_BTOS_ROLENAME_103">Town Investigative</Entry>
+	<Entry key="FANCY_PIRATE_BTOS_ROLENAME_104">Town Protective</Entry>
+	<Entry key="FANCY_PIRATE_BTOS_ROLENAME_105">Town Killing</Entry>
+	<Entry key="FANCY_PIRATE_BTOS_ROLENAME_106">Town Support</Entry>
+	<Entry key="FANCY_PIRATE_BTOS_ROLENAME_107">Random Coven</Entry>
+	<Entry key="FANCY_PIRATE_BTOS_ROLENAME_108">Common Coven</Entry>
+	<Entry key="FANCY_PIRATE_BTOS_ROLENAME_109">Coven Deception</Entry>
+	<Entry key="FANCY_PIRATE_BTOS_ROLENAME_110">Coven Killing</Entry>
+	<Entry key="FANCY_PIRATE_BTOS_ROLENAME_111">Coven Power</Entry>
+	<Entry key="FANCY_PIRATE_BTOS_ROLENAME_112">Coven Utility</Entry>
+	<Entry key="FANCY_PIRATE_BTOS_ROLENAME_113">Random Apocalypse</Entry>
+	<Entry key="FANCY_PIRATE_BTOS_ROLENAME_114">Random Neutral</Entry>
+	<Entry key="FANCY_PIRATE_BTOS_ROLENAME_115">Neutral Evil</Entry>
+	<Entry key="FANCY_PIRATE_BTOS_ROLENAME_116">Neutral Killing</Entry>
+	<Entry key="FANCY_PIRATE_BTOS_ROLENAME_117">Neutral Pariah</Entry>
+	<Entry key="FANCY_PIRATE_BTOS_ROLENAME_118">Neutral Outlier</Entry>
+	<Entry key="FANCY_PIRATE_BTOS_ROLENAME_119">Town Executive</Entry>
+	<Entry key="FANCY_PIRATE_BTOS_ROLENAME_120">Town Government</Entry>
 
-<Entry key="FANCY_PIRATE_BTOS_ROLENAME_100">True Any</Entry>
-<Entry key="FANCY_PIRATE_BTOS_ROLENAME_101">Any</Entry>
-<Entry key="FANCY_PIRATE_BTOS_ROLENAME_102">Random Town</Entry>
-<Entry key="FANCY_PIRATE_BTOS_ROLENAME_103">Common Town</Entry>
-<Entry key="FANCY_PIRATE_BTOS_ROLENAME_104">Town Investigative</Entry>
-<Entry key="FANCY_PIRATE_BTOS_ROLENAME_105">Town Power</Entry>
-<Entry key="FANCY_PIRATE_BTOS_ROLENAME_106">Town Protective</Entry>
-<Entry key="FANCY_PIRATE_BTOS_ROLENAME_107">Town Killing</Entry>
-<Entry key="FANCY_PIRATE_BTOS_ROLENAME_108">Town Support</Entry>
-<Entry key="FANCY_PIRATE_BTOS_ROLENAME_109">Random Coven</Entry>
-<Entry key="FANCY_PIRATE_BTOS_ROLENAME_110">Common Coven</Entry>
-<Entry key="FANCY_PIRATE_BTOS_ROLENAME_111">Coven Deception</Entry>
-<Entry key="FANCY_PIRATE_BTOS_ROLENAME_112">Coven Killing</Entry>
-<Entry key="FANCY_PIRATE_BTOS_ROLENAME_113">Coven Power</Entry>
-<Entry key="FANCY_PIRATE_BTOS_ROLENAME_114">Coven Utility</Entry>
-<Entry key="FANCY_PIRATE_BTOS_ROLENAME_115">Random Apocalypse</Entry>
-<Entry key="FANCY_PIRATE_BTOS_ROLENAME_116">Random Neutral</Entry>
-<Entry key="FANCY_PIRATE_BTOS_ROLENAME_117">Neutral Evil</Entry>
-<Entry key="FANCY_PIRATE_BTOS_ROLENAME_118">Neutral Killing</Entry>
-<Entry key="FANCY_PIRATE_BTOS_ROLENAME_119">Neutral Pariah</Entry>
-<Entry key="FANCY_PIRATE_BTOS_ROLENAME_120">Neutral Special</Entry>
-<Entry key="FANCY_PIRATE_BTOS_ROLENAME_121">Common Neutral</Entry>
+	<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_100">Any</Entry>
+	<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_101">Random Town</Entry>
+	<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_102">Common Town</Entry>
+	<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_103">Town Investigative</Entry>
+	<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_104">Town Protective</Entry>
+	<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_105">Town Killing</Entry>
+	<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_106">Town Support</Entry>
+	<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_107">Random Coven</Entry>
+	<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_108">Common Coven</Entry>
+	<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_109">Coven Deception</Entry>
+	<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_110">Coven Killing</Entry>
+	<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_111">Coven Power</Entry>
+	<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_112">Coven Utility</Entry>
+	<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_113">Random Apocalypse</Entry>
+	<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_114">Random Neutral</Entry>
+	<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_115">Neutral Evil</Entry>
+	<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_116">Neutral Killing</Entry>
+	<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_117">Neutral Pariah</Entry>
+	<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_118">Neutral Outlier</Entry>
+	<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_119">Town Executive</Entry>
+	<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_120">Town Government</Entry>
 
-<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_100">True Any</Entry>
-<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_101">Any</Entry>
-<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_102">Random Town</Entry>
-<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_103">Common Town</Entry>
-<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_104">Town Investigative</Entry>
-<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_105">Town Power</Entry>
-<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_106">Town Protective</Entry>
-<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_107">Town Killing</Entry>
-<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_108">Town Support</Entry>
-<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_109">Random Coven</Entry>
-<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_110">Common Coven</Entry>
-<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_111">Coven Deception</Entry>
-<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_112">Coven Killing</Entry>
-<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_113">Coven Power</Entry>
-<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_114">Coven Utility</Entry>
-<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_115">Random Apocalypse</Entry>
-<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_116">Random Neutral</Entry>
-<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_117">Neutral Evil</Entry>
-<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_118">Neutral Killing</Entry>
-<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_119">Neutral Pariah</Entry>
-<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_120">Neutral Special</Entry>
-<Entry key="FANCY_DOOMSAYER_BTOS_ROLENAME_121">Common Neutral</Entry>
+	<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_100">Any</Entry>
+	<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_101">Random Town</Entry>
+	<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_102">Common Town</Entry>
+	<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_103">Town Investigative</Entry>
+	<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_104">Town Protective</Entry>
+	<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_105">Town Killing</Entry>
+	<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_106">Town Support</Entry>
+	<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_107">Random Coven</Entry>
+	<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_108">Common Coven</Entry>
+	<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_109">Coven Deception</Entry>
+	<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_110">Coven Killing</Entry>
+	<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_111">Coven Power</Entry>
+	<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_112">Coven Utility</Entry>
+	<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_113">Random Apocalypse</Entry>
+	<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_114">Random Neutral</Entry>
+	<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_115">Neutral Evil</Entry>
+	<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_116">Neutral Killing</Entry>
+	<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_117">Neutral Pariah</Entry>
+	<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_118">Neutral Outlier</Entry>
+	<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_119">Town Executive</Entry>
+	<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_120">Town Government</Entry>
 
-<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_100">True Any</Entry>
-<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_101">Any</Entry>
-<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_102">Random Town</Entry>
-<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_103">Common Town</Entry>
-<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_104">Town Investigative</Entry>
-<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_105">Town Power</Entry>
-<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_106">Town Protective</Entry>
-<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_107">Town Killing</Entry>
-<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_108">Town Support</Entry>
-<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_109">Random Coven</Entry>
-<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_110">Common Coven</Entry>
-<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_111">Coven Deception</Entry>
-<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_112">Coven Killing</Entry>
-<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_113">Coven Power</Entry>
-<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_114">Coven Utility</Entry>
-<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_115">Random Apocalypse</Entry>
-<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_116">Random Neutral</Entry>
-<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_117">Neutral Evil</Entry>
-<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_118">Neutral Killing</Entry>
-<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_119">Neutral Pariah</Entry>
-<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_120">Neutral Special</Entry>
-<Entry key="FANCY_VAMPIRE_BTOS_ROLENAME_121">Common Neutral</Entry>
+	<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_100">Any</Entry>
+	<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_101">Random Town</Entry>
+	<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_102">Common Town</Entry>
+	<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_103">Town Investigative</Entry>
+	<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_104">Town Protective</Entry>
+	<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_105">Town Killing</Entry>
+	<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_106">Town Support</Entry>
+	<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_107">Random Coven</Entry>
+	<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_108">Common Coven</Entry>
+	<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_109">Coven Deception</Entry>
+	<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_110">Coven Killing</Entry>
+	<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_111">Coven Power</Entry>
+	<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_112">Coven Utility</Entry>
+	<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_113">Random Apocalypse</Entry>
+	<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_114">Random Neutral</Entry>
+	<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_115">Neutral Evil</Entry>
+	<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_116">Neutral Killing</Entry>
+	<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_117">Neutral Pariah</Entry>
+	<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_118">Neutral Outlier</Entry>
+	<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_119">Town Executive</Entry>
+	<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_120">Town Government</Entry>
 
-<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_100">True Any</Entry>
-<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_101">Any</Entry>
-<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_102">Random Town</Entry>
-<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_103">Common Town</Entry>
-<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_104">Town Investigative</Entry>
-<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_105">Town Power</Entry>
-<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_106">Town Protective</Entry>
-<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_107">Town Killing</Entry>
-<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_108">Town Support</Entry>
-<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_109">Random Coven</Entry>
-<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_110">Common Coven</Entry>
-<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_111">Coven Deception</Entry>
-<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_112">Coven Killing</Entry>
-<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_113">Coven Power</Entry>
-<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_114">Coven Utility</Entry>
-<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_115">Random Apocalypse</Entry>
-<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_116">Random Neutral</Entry>
-<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_117">Neutral Evil</Entry>
-<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_118">Neutral Killing</Entry>
-<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_119">Neutral Pariah</Entry>
-<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_120">Neutral Special</Entry>
-<Entry key="FANCY_CURSEDSOUL_BTOS_ROLENAME_121">Common Neutral</Entry>
+	<Entry key="FANCY_JACKAL_BTOS_ROLENAME_100">Any</Entry>
+	<Entry key="FANCY_JACKAL_BTOS_ROLENAME_101">Random Town</Entry>
+	<Entry key="FANCY_JACKAL_BTOS_ROLENAME_102">Common Town</Entry>
+	<Entry key="FANCY_JACKAL_BTOS_ROLENAME_103">Town Investigative</Entry>
+	<Entry key="FANCY_JACKAL_BTOS_ROLENAME_104">Town Protective</Entry>
+	<Entry key="FANCY_JACKAL_BTOS_ROLENAME_105">Town Killing</Entry>
+	<Entry key="FANCY_JACKAL_BTOS_ROLENAME_106">Town Support</Entry>
+	<Entry key="FANCY_JACKAL_BTOS_ROLENAME_107">Random Coven</Entry>
+	<Entry key="FANCY_JACKAL_BTOS_ROLENAME_108">Common Coven</Entry>
+	<Entry key="FANCY_JACKAL_BTOS_ROLENAME_109">Coven Deception</Entry>
+	<Entry key="FANCY_JACKAL_BTOS_ROLENAME_110">Coven Killing</Entry>
+	<Entry key="FANCY_JACKAL_BTOS_ROLENAME_111">Coven Power</Entry>
+	<Entry key="FANCY_JACKAL_BTOS_ROLENAME_112">Coven Utility</Entry>
+	<Entry key="FANCY_JACKAL_BTOS_ROLENAME_113">Random Apocalypse</Entry>
+	<Entry key="FANCY_JACKAL_BTOS_ROLENAME_114">Random Neutral</Entry>
+	<Entry key="FANCY_JACKAL_BTOS_ROLENAME_115">Neutral Evil</Entry>
+	<Entry key="FANCY_JACKAL_BTOS_ROLENAME_116">Neutral Killing</Entry>
+	<Entry key="FANCY_JACKAL_BTOS_ROLENAME_117">Neutral Pariah</Entry>
+	<Entry key="FANCY_JACKAL_BTOS_ROLENAME_118">Neutral Outlier</Entry>
+	<Entry key="FANCY_JACKAL_BTOS_ROLENAME_119">Town Executive</Entry>
+	<Entry key="FANCY_JACKAL_BTOS_ROLENAME_120">Town Government</Entry>
 
-<Entry key="FANCY_JACKAL_BTOS_ROLENAME_100">True Any</Entry>
-<Entry key="FANCY_JACKAL_BTOS_ROLENAME_101">Any</Entry>
-<Entry key="FANCY_JACKAL_BTOS_ROLENAME_102">Random Town</Entry>
-<Entry key="FANCY_JACKAL_BTOS_ROLENAME_103">Common Town</Entry>
-<Entry key="FANCY_JACKAL_BTOS_ROLENAME_104">Town Investigative</Entry>
-<Entry key="FANCY_JACKAL_BTOS_ROLENAME_105">Town Power</Entry>
-<Entry key="FANCY_JACKAL_BTOS_ROLENAME_106">Town Protective</Entry>
-<Entry key="FANCY_JACKAL_BTOS_ROLENAME_107">Town Killing</Entry>
-<Entry key="FANCY_JACKAL_BTOS_ROLENAME_108">Town Support</Entry>
-<Entry key="FANCY_JACKAL_BTOS_ROLENAME_109">Random Coven</Entry>
-<Entry key="FANCY_JACKAL_BTOS_ROLENAME_110">Common Coven</Entry>
-<Entry key="FANCY_JACKAL_BTOS_ROLENAME_111">Coven Deception</Entry>
-<Entry key="FANCY_JACKAL_BTOS_ROLENAME_112">Coven Killing</Entry>
-<Entry key="FANCY_JACKAL_BTOS_ROLENAME_113">Coven Power</Entry>
-<Entry key="FANCY_JACKAL_BTOS_ROLENAME_114">Coven Utility</Entry>
-<Entry key="FANCY_JACKAL_BTOS_ROLENAME_115">Random Apocalypse</Entry>
-<Entry key="FANCY_JACKAL_BTOS_ROLENAME_116">Random Neutral</Entry>
-<Entry key="FANCY_JACKAL_BTOS_ROLENAME_117">Neutral Evil</Entry>
-<Entry key="FANCY_JACKAL_BTOS_ROLENAME_118">Neutral Killing</Entry>
-<Entry key="FANCY_JACKAL_BTOS_ROLENAME_119">Neutral Pariah</Entry>
-<Entry key="FANCY_JACKAL_BTOS_ROLENAME_120">Neutral Special</Entry>
-<Entry key="FANCY_JACKAL_BTOS_ROLENAME_121">Common Neutral</Entry>
+	<Entry key="FANCY_FROGS_BTOS_ROLENAME_100">Any</Entry>
+	<Entry key="FANCY_FROGS_BTOS_ROLENAME_101">Random Town</Entry>
+	<Entry key="FANCY_FROGS_BTOS_ROLENAME_102">Common Town</Entry>
+	<Entry key="FANCY_FROGS_BTOS_ROLENAME_103">Town Investigative</Entry>
+	<Entry key="FANCY_FROGS_BTOS_ROLENAME_104">Town Protective</Entry>
+	<Entry key="FANCY_FROGS_BTOS_ROLENAME_105">Town Killing</Entry>
+	<Entry key="FANCY_FROGS_BTOS_ROLENAME_106">Town Support</Entry>
+	<Entry key="FANCY_FROGS_BTOS_ROLENAME_107">Random Coven</Entry>
+	<Entry key="FANCY_FROGS_BTOS_ROLENAME_108">Common Coven</Entry>
+	<Entry key="FANCY_FROGS_BTOS_ROLENAME_109">Coven Deception</Entry>
+	<Entry key="FANCY_FROGS_BTOS_ROLENAME_110">Coven Killing</Entry>
+	<Entry key="FANCY_FROGS_BTOS_ROLENAME_111">Coven Power</Entry>
+	<Entry key="FANCY_FROGS_BTOS_ROLENAME_112">Coven Utility</Entry>
+	<Entry key="FANCY_FROGS_BTOS_ROLENAME_113">Random Apocalypse</Entry>
+	<Entry key="FANCY_FROGS_BTOS_ROLENAME_114">Random Neutral</Entry>
+	<Entry key="FANCY_FROGS_BTOS_ROLENAME_115">Neutral Evil</Entry>
+	<Entry key="FANCY_FROGS_BTOS_ROLENAME_116">Neutral Killing</Entry>
+	<Entry key="FANCY_FROGS_BTOS_ROLENAME_117">Neutral Pariah</Entry>
+	<Entry key="FANCY_FROGS_BTOS_ROLENAME_118">Neutral Outlier</Entry>
+	<Entry key="FANCY_FROGS_BTOS_ROLENAME_119">Town Executive</Entry>
+	<Entry key="FANCY_FROGS_BTOS_ROLENAME_120">Town Government</Entry>
 
-<Entry key="FANCY_FROGS_BTOS_ROLENAME_100">True Any</Entry>
-<Entry key="FANCY_FROGS_BTOS_ROLENAME_101">Any</Entry>
-<Entry key="FANCY_FROGS_BTOS_ROLENAME_102">Random Town</Entry>
-<Entry key="FANCY_FROGS_BTOS_ROLENAME_103">Common Town</Entry>
-<Entry key="FANCY_FROGS_BTOS_ROLENAME_104">Town Investigative</Entry>
-<Entry key="FANCY_FROGS_BTOS_ROLENAME_105">Town Power</Entry>
-<Entry key="FANCY_FROGS_BTOS_ROLENAME_106">Town Protective</Entry>
-<Entry key="FANCY_FROGS_BTOS_ROLENAME_107">Town Killing</Entry>
-<Entry key="FANCY_FROGS_BTOS_ROLENAME_108">Town Support</Entry>
-<Entry key="FANCY_FROGS_BTOS_ROLENAME_109">Random Coven</Entry>
-<Entry key="FANCY_FROGS_BTOS_ROLENAME_110">Common Coven</Entry>
-<Entry key="FANCY_FROGS_BTOS_ROLENAME_111">Coven Deception</Entry>
-<Entry key="FANCY_FROGS_BTOS_ROLENAME_112">Coven Killing</Entry>
-<Entry key="FANCY_FROGS_BTOS_ROLENAME_113">Coven Power</Entry>
-<Entry key="FANCY_FROGS_BTOS_ROLENAME_114">Coven Utility</Entry>
-<Entry key="FANCY_FROGS_BTOS_ROLENAME_115">Random Apocalypse</Entry>
-<Entry key="FANCY_FROGS_BTOS_ROLENAME_116">Random Neutral</Entry>
-<Entry key="FANCY_FROGS_BTOS_ROLENAME_117">Neutral Evil</Entry>
-<Entry key="FANCY_FROGS_BTOS_ROLENAME_118">Neutral Killing</Entry>
-<Entry key="FANCY_FROGS_BTOS_ROLENAME_119">Neutral Pariah</Entry>
-<Entry key="FANCY_FROGS_BTOS_ROLENAME_120">Neutral Special</Entry>
-<Entry key="FANCY_FROGS_BTOS_ROLENAME_121">Common Neutral</Entry>
+	<Entry key="FANCY_LIONS_BTOS_ROLENAME_100">Any</Entry>
+	<Entry key="FANCY_LIONS_BTOS_ROLENAME_101">Random Town</Entry>
+	<Entry key="FANCY_LIONS_BTOS_ROLENAME_102">Common Town</Entry>
+	<Entry key="FANCY_LIONS_BTOS_ROLENAME_103">Town Investigative</Entry>
+	<Entry key="FANCY_LIONS_BTOS_ROLENAME_104">Town Protective</Entry>
+	<Entry key="FANCY_LIONS_BTOS_ROLENAME_105">Town Killing</Entry>
+	<Entry key="FANCY_LIONS_BTOS_ROLENAME_106">Town Support</Entry>
+	<Entry key="FANCY_LIONS_BTOS_ROLENAME_107">Random Coven</Entry>
+	<Entry key="FANCY_LIONS_BTOS_ROLENAME_108">Common Coven</Entry>
+	<Entry key="FANCY_LIONS_BTOS_ROLENAME_109">Coven Deception</Entry>
+	<Entry key="FANCY_LIONS_BTOS_ROLENAME_110">Coven Killing</Entry>
+	<Entry key="FANCY_LIONS_BTOS_ROLENAME_111">Coven Power</Entry>
+	<Entry key="FANCY_LIONS_BTOS_ROLENAME_112">Coven Utility</Entry>
+	<Entry key="FANCY_LIONS_BTOS_ROLENAME_113">Random Apocalypse</Entry>
+	<Entry key="FANCY_LIONS_BTOS_ROLENAME_114">Random Neutral</Entry>
+	<Entry key="FANCY_LIONS_BTOS_ROLENAME_115">Neutral Evil</Entry>
+	<Entry key="FANCY_LIONS_BTOS_ROLENAME_116">Neutral Killing</Entry>
+	<Entry key="FANCY_LIONS_BTOS_ROLENAME_117">Neutral Pariah</Entry>
+	<Entry key="FANCY_LIONS_BTOS_ROLENAME_118">Neutral Outlier</Entry>
+	<Entry key="FANCY_LIONS_BTOS_ROLENAME_119">Town Executive</Entry>
+	<Entry key="FANCY_LIONS_BTOS_ROLENAME_120">Town Government</Entry>
 
-<Entry key="FANCY_LIONS_BTOS_ROLENAME_100">True Any</Entry>
-<Entry key="FANCY_LIONS_BTOS_ROLENAME_101">Any</Entry>
-<Entry key="FANCY_LIONS_BTOS_ROLENAME_102">Random Town</Entry>
-<Entry key="FANCY_LIONS_BTOS_ROLENAME_103">Common Town</Entry>
-<Entry key="FANCY_LIONS_BTOS_ROLENAME_104">Town Investigative</Entry>
-<Entry key="FANCY_LIONS_BTOS_ROLENAME_105">Town Power</Entry>
-<Entry key="FANCY_LIONS_BTOS_ROLENAME_106">Town Protective</Entry>
-<Entry key="FANCY_LIONS_BTOS_ROLENAME_107">Town Killing</Entry>
-<Entry key="FANCY_LIONS_BTOS_ROLENAME_108">Town Support</Entry>
-<Entry key="FANCY_LIONS_BTOS_ROLENAME_109">Random Coven</Entry>
-<Entry key="FANCY_LIONS_BTOS_ROLENAME_110">Common Coven</Entry>
-<Entry key="FANCY_LIONS_BTOS_ROLENAME_111">Coven Deception</Entry>
-<Entry key="FANCY_LIONS_BTOS_ROLENAME_112">Coven Killing</Entry>
-<Entry key="FANCY_LIONS_BTOS_ROLENAME_113">Coven Power</Entry>
-<Entry key="FANCY_LIONS_BTOS_ROLENAME_114">Coven Utility</Entry>
-<Entry key="FANCY_LIONS_BTOS_ROLENAME_115">Random Apocalypse</Entry>
-<Entry key="FANCY_LIONS_BTOS_ROLENAME_116">Random Neutral</Entry>
-<Entry key="FANCY_LIONS_BTOS_ROLENAME_117">Neutral Evil</Entry>
-<Entry key="FANCY_LIONS_BTOS_ROLENAME_118">Neutral Killing</Entry>
-<Entry key="FANCY_LIONS_BTOS_ROLENAME_119">Neutral Pariah</Entry>
-<Entry key="FANCY_LIONS_BTOS_ROLENAME_120">Neutral Special</Entry>
-<Entry key="FANCY_LIONS_BTOS_ROLENAME_121">Common Neutral</Entry>
+	<Entry key="FANCY_HAWKS_BTOS_ROLENAME_100">Any</Entry>
+	<Entry key="FANCY_HAWKS_BTOS_ROLENAME_101">Random Town</Entry>
+	<Entry key="FANCY_HAWKS_BTOS_ROLENAME_102">Common Town</Entry>
+	<Entry key="FANCY_HAWKS_BTOS_ROLENAME_103">Town Investigative</Entry>
+	<Entry key="FANCY_HAWKS_BTOS_ROLENAME_104">Town Protective</Entry>
+	<Entry key="FANCY_HAWKS_BTOS_ROLENAME_105">Town Killing</Entry>
+	<Entry key="FANCY_HAWKS_BTOS_ROLENAME_106">Town Support</Entry>
+	<Entry key="FANCY_HAWKS_BTOS_ROLENAME_107">Random Coven</Entry>
+	<Entry key="FANCY_HAWKS_BTOS_ROLENAME_108">Common Coven</Entry>
+	<Entry key="FANCY_HAWKS_BTOS_ROLENAME_109">Coven Deception</Entry>
+	<Entry key="FANCY_HAWKS_BTOS_ROLENAME_110">Coven Killing</Entry>
+	<Entry key="FANCY_HAWKS_BTOS_ROLENAME_111">Coven Power</Entry>
+	<Entry key="FANCY_HAWKS_BTOS_ROLENAME_112">Coven Utility</Entry>
+	<Entry key="FANCY_HAWKS_BTOS_ROLENAME_113">Random Apocalypse</Entry>
+	<Entry key="FANCY_HAWKS_BTOS_ROLENAME_114">Random Neutral</Entry>
+	<Entry key="FANCY_HAWKS_BTOS_ROLENAME_115">Neutral Evil</Entry>
+	<Entry key="FANCY_HAWKS_BTOS_ROLENAME_116">Neutral Killing</Entry>
+	<Entry key="FANCY_HAWKS_BTOS_ROLENAME_117">Neutral Pariah</Entry>
+	<Entry key="FANCY_HAWKS_BTOS_ROLENAME_118">Neutral Outlier</Entry>
+	<Entry key="FANCY_HAWKS_BTOS_ROLENAME_119">Town Executive</Entry>
+	<Entry key="FANCY_HAWKS_BTOS_ROLENAME_120">Town Government</Entry>
 
-<Entry key="FANCY_HAWKS_BTOS_ROLENAME_100">True Any</Entry>
-<Entry key="FANCY_HAWKS_BTOS_ROLENAME_101">Any</Entry>
-<Entry key="FANCY_HAWKS_BTOS_ROLENAME_102">Random Town</Entry>
-<Entry key="FANCY_HAWKS_BTOS_ROLENAME_103">Common Town</Entry>
-<Entry key="FANCY_HAWKS_BTOS_ROLENAME_104">Town Investigative</Entry>
-<Entry key="FANCY_HAWKS_BTOS_ROLENAME_105">Town Power</Entry>
-<Entry key="FANCY_HAWKS_BTOS_ROLENAME_106">Town Protective</Entry>
-<Entry key="FANCY_HAWKS_BTOS_ROLENAME_107">Town Killing</Entry>
-<Entry key="FANCY_HAWKS_BTOS_ROLENAME_108">Town Support</Entry>
-<Entry key="FANCY_HAWKS_BTOS_ROLENAME_109">Random Coven</Entry>
-<Entry key="FANCY_HAWKS_BTOS_ROLENAME_110">Common Coven</Entry>
-<Entry key="FANCY_HAWKS_BTOS_ROLENAME_111">Coven Deception</Entry>
-<Entry key="FANCY_HAWKS_BTOS_ROLENAME_112">Coven Killing</Entry>
-<Entry key="FANCY_HAWKS_BTOS_ROLENAME_113">Coven Power</Entry>
-<Entry key="FANCY_HAWKS_BTOS_ROLENAME_114">Coven Utility</Entry>
-<Entry key="FANCY_HAWKS_BTOS_ROLENAME_115">Random Apocalypse</Entry>
-<Entry key="FANCY_HAWKS_BTOS_ROLENAME_116">Random Neutral</Entry>
-<Entry key="FANCY_HAWKS_BTOS_ROLENAME_117">Neutral Evil</Entry>
-<Entry key="FANCY_HAWKS_BTOS_ROLENAME_118">Neutral Killing</Entry>
-<Entry key="FANCY_HAWKS_BTOS_ROLENAME_119">Neutral Pariah</Entry>
-<Entry key="FANCY_HAWKS_BTOS_ROLENAME_120">Neutral Special</Entry>
-<Entry key="FANCY_HAWKS_BTOS_ROLENAME_121">Common Neutral</Entry>
+	<Entry key="FANCY_JUDGE_BTOS_ROLENAME_100">Any</Entry>
+	<Entry key="FANCY_JUDGE_BTOS_ROLENAME_101">Random Town</Entry>
+	<Entry key="FANCY_JUDGE_BTOS_ROLENAME_102">Common Town</Entry>
+	<Entry key="FANCY_JUDGE_BTOS_ROLENAME_103">Town Investigative</Entry>
+	<Entry key="FANCY_JUDGE_BTOS_ROLENAME_104">Town Protective</Entry>
+	<Entry key="FANCY_JUDGE_BTOS_ROLENAME_105">Town Killing</Entry>
+	<Entry key="FANCY_JUDGE_BTOS_ROLENAME_106">Town Support</Entry>
+	<Entry key="FANCY_JUDGE_BTOS_ROLENAME_107">Random Coven</Entry>
+	<Entry key="FANCY_JUDGE_BTOS_ROLENAME_108">Common Coven</Entry>
+	<Entry key="FANCY_JUDGE_BTOS_ROLENAME_109">Coven Deception</Entry>
+	<Entry key="FANCY_JUDGE_BTOS_ROLENAME_110">Coven Killing</Entry>
+	<Entry key="FANCY_JUDGE_BTOS_ROLENAME_111">Coven Power</Entry>
+	<Entry key="FANCY_JUDGE_BTOS_ROLENAME_112">Coven Utility</Entry>
+	<Entry key="FANCY_JUDGE_BTOS_ROLENAME_113">Random Apocalypse</Entry>
+	<Entry key="FANCY_JUDGE_BTOS_ROLENAME_114">Random Neutral</Entry>
+	<Entry key="FANCY_JUDGE_BTOS_ROLENAME_115">Neutral Evil</Entry>
+	<Entry key="FANCY_JUDGE_BTOS_ROLENAME_116">Neutral Killing</Entry>
+	<Entry key="FANCY_JUDGE_BTOS_ROLENAME_117">Neutral Pariah</Entry>
+	<Entry key="FANCY_JUDGE_BTOS_ROLENAME_118">Neutral Outlier</Entry>
+	<Entry key="FANCY_JUDGE_BTOS_ROLENAME_119">Town Executive</Entry>
+	<Entry key="FANCY_JUDGE_BTOS_ROLENAME_120">Town Government</Entry>
 
-<Entry key="FANCY_JUDGE_BTOS_ROLENAME_100">True Any</Entry>
-<Entry key="FANCY_JUDGE_BTOS_ROLENAME_101">Any</Entry>
-<Entry key="FANCY_JUDGE_BTOS_ROLENAME_102">Random Town</Entry>
-<Entry key="FANCY_JUDGE_BTOS_ROLENAME_103">Common Town</Entry>
-<Entry key="FANCY_JUDGE_BTOS_ROLENAME_104">Town Investigative</Entry>
-<Entry key="FANCY_JUDGE_BTOS_ROLENAME_105">Town Power</Entry>
-<Entry key="FANCY_JUDGE_BTOS_ROLENAME_106">Town Protective</Entry>
-<Entry key="FANCY_JUDGE_BTOS_ROLENAME_107">Town Killing</Entry>
-<Entry key="FANCY_JUDGE_BTOS_ROLENAME_108">Town Support</Entry>
-<Entry key="FANCY_JUDGE_BTOS_ROLENAME_109">Random Coven</Entry>
-<Entry key="FANCY_JUDGE_BTOS_ROLENAME_110">Common Coven</Entry>
-<Entry key="FANCY_JUDGE_BTOS_ROLENAME_111">Coven Deception</Entry>
-<Entry key="FANCY_JUDGE_BTOS_ROLENAME_112">Coven Killing</Entry>
-<Entry key="FANCY_JUDGE_BTOS_ROLENAME_113">Coven Power</Entry>
-<Entry key="FANCY_JUDGE_BTOS_ROLENAME_114">Coven Utility</Entry>
-<Entry key="FANCY_JUDGE_BTOS_ROLENAME_115">Random Apocalypse</Entry>
-<Entry key="FANCY_JUDGE_BTOS_ROLENAME_116">Random Neutral</Entry>
-<Entry key="FANCY_JUDGE_BTOS_ROLENAME_117">Neutral Evil</Entry>
-<Entry key="FANCY_JUDGE_BTOS_ROLENAME_118">Neutral Killing</Entry>
-<Entry key="FANCY_JUDGE_BTOS_ROLENAME_119">Neutral Pariah</Entry>
-<Entry key="FANCY_JUDGE_BTOS_ROLENAME_120">Neutral Special</Entry>
-<Entry key="FANCY_JUDGE_BTOS_ROLENAME_121">Common Neutral</Entry>
+	<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_100">Any</Entry>
+	<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_101">Random Town</Entry>
+	<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_102">Common Town</Entry>
+	<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_103">Town Investigative</Entry>
+	<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_104">Town Protective</Entry>
+	<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_105">Town Killing</Entry>
+	<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_106">Town Support</Entry>
+	<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_107">Random Coven</Entry>
+	<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_108">Common Coven</Entry>
+	<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_109">Coven Deception</Entry>
+	<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_110">Coven Killing</Entry>
+	<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_111">Coven Power</Entry>
+	<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_112">Coven Utility</Entry>
+	<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_113">Random Apocalypse</Entry>
+	<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_114">Random Neutral</Entry>
+	<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_115">Neutral Evil</Entry>
+	<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_116">Neutral Killing</Entry>
+	<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_117">Neutral Pariah</Entry>
+	<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_118">Neutral Outlier</Entry>
+	<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_119">Town Executive</Entry>
+	<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_120">Town Government</Entry>
 
-<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_100">True Any</Entry>
-<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_101">Any</Entry>
-<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_102">Random Town</Entry>
-<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_103">Common Town</Entry>
-<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_104">Town Investigative</Entry>
-<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_105">Town Power</Entry>
-<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_106">Town Protective</Entry>
-<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_107">Town Killing</Entry>
-<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_108">Town Support</Entry>
-<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_109">Random Coven</Entry>
-<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_110">Common Coven</Entry>
-<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_111">Coven Deception</Entry>
-<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_112">Coven Killing</Entry>
-<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_113">Coven Power</Entry>
-<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_114">Coven Utility</Entry>
-<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_115">Random Apocalypse</Entry>
-<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_116">Random Neutral</Entry>
-<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_117">Neutral Evil</Entry>
-<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_118">Neutral Killing</Entry>
-<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_119">Neutral Pariah</Entry>
-<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_120">Neutral Special</Entry>
-<Entry key="FANCY_AUDITOR_BTOS_ROLENAME_121">Common Neutral</Entry>
+	<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_100">Any</Entry>
+	<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_101">Random Town</Entry>
+	<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_102">Common Town</Entry>
+	<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_103">Town Investigative</Entry>
+	<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_104">Town Protective</Entry>
+	<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_105">Town Killing</Entry>
+	<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_106">Town Support</Entry>
+	<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_107">Random Coven</Entry>
+	<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_108">Common Coven</Entry>
+	<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_109">Coven Deception</Entry>
+	<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_110">Coven Killing</Entry>
+	<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_111">Coven Power</Entry>
+	<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_112">Coven Utility</Entry>
+	<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_113">Random Apocalypse</Entry>
+	<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_114">Random Neutral</Entry>
+	<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_115">Neutral Evil</Entry>
+	<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_116">Neutral Killing</Entry>
+	<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_117">Neutral Pariah</Entry>
+	<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_118">Neutral Outlier</Entry>
+	<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_119">Town Executive</Entry>
+	<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_120">Town Government</Entry>
 
-<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_100">True Any</Entry>
-<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_101">Any</Entry>
-<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_102">Random Town</Entry>
-<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_103">Common Town</Entry>
-<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_104">Town Investigative</Entry>
-<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_105">Town Power</Entry>
-<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_106">Town Protective</Entry>
-<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_107">Town Killing</Entry>
-<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_108">Town Support</Entry>
-<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_109">Random Coven</Entry>
-<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_110">Common Coven</Entry>
-<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_111">Coven Deception</Entry>
-<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_112">Coven Killing</Entry>
-<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_113">Coven Power</Entry>
-<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_114">Coven Utility</Entry>
-<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_115">Random Apocalypse</Entry>
-<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_116">Random Neutral</Entry>
-<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_117">Neutral Evil</Entry>
-<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_118">Neutral Killing</Entry>
-<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_119">Neutral Pariah</Entry>
-<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_120">Neutral Special</Entry>
-<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_121">Common Neutral</Entry>
+	<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_100">Any</Entry>
+	<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_101">Random Town</Entry>
+	<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_102">Common Town</Entry>
+	<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_103">Town Investigative</Entry>
+	<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_104">Town Protective</Entry>
+	<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_105">Town Killing</Entry>
+	<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_106">Town Support</Entry>
+	<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_107">Random Coven</Entry>
+	<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_108">Common Coven</Entry>
+	<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_109">Coven Deception</Entry>
+	<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_110">Coven Killing</Entry>
+	<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_111">Coven Power</Entry>
+	<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_112">Coven Utility</Entry>
+	<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_113">Random Apocalypse</Entry>
+	<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_114">Random Neutral</Entry>
+	<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_115">Neutral Evil</Entry>
+	<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_116">Neutral Killing</Entry>
+	<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_117">Neutral Pariah</Entry>
+	<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_118">Neutral Outlier</Entry>
+	<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_119">Town Executive</Entry>
+	<Entry key="FANCY_INQUISITOR_BTOS_ROLENAME_120">Town Government</Entry>
 
-<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_100">True Any</Entry>
-<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_101">Any</Entry>
-<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_102">Random Town</Entry>
-<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_103">Common Town</Entry>
-<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_104">Town Investigative</Entry>
-<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_105">Town Power</Entry>
-<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_106">Town Protective</Entry>
-<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_107">Town Killing</Entry>
-<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_108">Town Support</Entry>
-<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_109">Random Coven</Entry>
-<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_110">Common Coven</Entry>
-<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_111">Coven Deception</Entry>
-<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_112">Coven Killing</Entry>
-<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_113">Coven Power</Entry>
-<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_114">Coven Utility</Entry>
-<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_115">Random Apocalypse</Entry>
-<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_116">Random Neutral</Entry>
-<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_117">Neutral Evil</Entry>
-<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_118">Neutral Killing</Entry>
-<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_119">Neutral Pariah</Entry>
-<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_120">Neutral Special</Entry>
-<Entry key="FANCY_STARSPAWN_BTOS_ROLENAME_121">Common Neutral</Entry>
+	<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_100">Any</Entry>
+	<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_101">Random Town</Entry>
+	<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_102">Common Town</Entry>
+	<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_103">Town Investigative</Entry>
+	<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_104">Town Protective</Entry>
+	<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_105">Town Killing</Entry>
+	<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_106">Town Support</Entry>
+	<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_107">Random Coven</Entry>
+	<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_108">Common Coven</Entry>
+	<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_109">Coven Deception</Entry>
+	<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_110">Coven Killing</Entry>
+	<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_111">Coven Power</Entry>
+	<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_112">Coven Utility</Entry>
+	<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_113">Random Apocalypse</Entry>
+	<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_114">Random Neutral</Entry>
+	<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_115">Neutral Evil</Entry>
+	<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_116">Neutral Killing</Entry>
+	<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_117">Neutral Pariah</Entry>
+	<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_118">Neutral Outlier</Entry>
+	<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_119">Town Executive</Entry>
+	<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_120">Town Government</Entry>
 
-<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_100">True Any</Entry>
-<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_101">Any</Entry>
-<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_102">Random Town</Entry>
-<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_103">Common Town</Entry>
-<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_104">Town Investigative</Entry>
-<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_105">Town Power</Entry>
-<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_106">Town Protective</Entry>
-<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_107">Town Killing</Entry>
-<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_108">Town Support</Entry>
-<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_109">Random Coven</Entry>
-<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_110">Common Coven</Entry>
-<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_111">Coven Deception</Entry>
-<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_112">Coven Killing</Entry>
-<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_113">Coven Power</Entry>
-<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_114">Coven Utility</Entry>
-<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_115">Random Apocalypse</Entry>
-<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_116">Random Neutral</Entry>
-<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_117">Neutral Evil</Entry>
-<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_118">Neutral Killing</Entry>
-<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_119">Neutral Pariah</Entry>
-<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_120">Neutral Special</Entry>
-<Entry key="FANCY_EGOTIST_BTOS_ROLENAME_121">Common Neutral</Entry>
+	<Entry key="FANCY_PANDORA_BTOS_ROLENAME_100">Any</Entry>
+	<Entry key="FANCY_PANDORA_BTOS_ROLENAME_101">Random Town</Entry>
+	<Entry key="FANCY_PANDORA_BTOS_ROLENAME_102">Common Town</Entry>
+	<Entry key="FANCY_PANDORA_BTOS_ROLENAME_103">Town Investigative</Entry>
+	<Entry key="FANCY_PANDORA_BTOS_ROLENAME_104">Town Protective</Entry>
+	<Entry key="FANCY_PANDORA_BTOS_ROLENAME_105">Town Killing</Entry>
+	<Entry key="FANCY_PANDORA_BTOS_ROLENAME_106">Town Support</Entry>
+	<Entry key="FANCY_PANDORA_BTOS_ROLENAME_107">Random Coven</Entry>
+	<Entry key="FANCY_PANDORA_BTOS_ROLENAME_108">Common Coven</Entry>
+	<Entry key="FANCY_PANDORA_BTOS_ROLENAME_109">Coven Deception</Entry>
+	<Entry key="FANCY_PANDORA_BTOS_ROLENAME_110">Coven Killing</Entry>
+	<Entry key="FANCY_PANDORA_BTOS_ROLENAME_111">Coven Power</Entry>
+	<Entry key="FANCY_PANDORA_BTOS_ROLENAME_112">Coven Utility</Entry>
+	<Entry key="FANCY_PANDORA_BTOS_ROLENAME_113">Random Apocalypse</Entry>
+	<Entry key="FANCY_PANDORA_BTOS_ROLENAME_114">Random Neutral</Entry>
+	<Entry key="FANCY_PANDORA_BTOS_ROLENAME_115">Neutral Evil</Entry>
+	<Entry key="FANCY_PANDORA_BTOS_ROLENAME_116">Neutral Killing</Entry>
+	<Entry key="FANCY_PANDORA_BTOS_ROLENAME_117">Neutral Pariah</Entry>
+	<Entry key="FANCY_PANDORA_BTOS_ROLENAME_118">Neutral Outlier</Entry>
+	<Entry key="FANCY_PANDORA_BTOS_ROLENAME_119">Town Executive</Entry>
+	<Entry key="FANCY_PANDORA_BTOS_ROLENAME_120">Town Government</Entry>
 
-<Entry key="FANCY_PANDORA_BTOS_ROLENAME_100">True Any</Entry>
-<Entry key="FANCY_PANDORA_BTOS_ROLENAME_101">Any</Entry>
-<Entry key="FANCY_PANDORA_BTOS_ROLENAME_102">Random Town</Entry>
-<Entry key="FANCY_PANDORA_BTOS_ROLENAME_103">Common Town</Entry>
-<Entry key="FANCY_PANDORA_BTOS_ROLENAME_104">Town Investigative</Entry>
-<Entry key="FANCY_PANDORA_BTOS_ROLENAME_105">Town Power</Entry>
-<Entry key="FANCY_PANDORA_BTOS_ROLENAME_106">Town Protective</Entry>
-<Entry key="FANCY_PANDORA_BTOS_ROLENAME_107">Town Killing</Entry>
-<Entry key="FANCY_PANDORA_BTOS_ROLENAME_108">Town Support</Entry>
-<Entry key="FANCY_PANDORA_BTOS_ROLENAME_109">Random Coven</Entry>
-<Entry key="FANCY_PANDORA_BTOS_ROLENAME_110">Common Coven</Entry>
-<Entry key="FANCY_PANDORA_BTOS_ROLENAME_111">Coven Deception</Entry>
-<Entry key="FANCY_PANDORA_BTOS_ROLENAME_112">Coven Killing</Entry>
-<Entry key="FANCY_PANDORA_BTOS_ROLENAME_113">Coven Power</Entry>
-<Entry key="FANCY_PANDORA_BTOS_ROLENAME_114">Coven Utility</Entry>
-<Entry key="FANCY_PANDORA_BTOS_ROLENAME_115">Random Apocalypse</Entry>
-<Entry key="FANCY_PANDORA_BTOS_ROLENAME_116">Random Neutral</Entry>
-<Entry key="FANCY_PANDORA_BTOS_ROLENAME_117">Neutral Evil</Entry>
-<Entry key="FANCY_PANDORA_BTOS_ROLENAME_118">Neutral Killing</Entry>
-<Entry key="FANCY_PANDORA_BTOS_ROLENAME_119">Neutral Pariah</Entry>
-<Entry key="FANCY_PANDORA_BTOS_ROLENAME_120">Neutral Special</Entry>
-<Entry key="FANCY_PANDORA_BTOS_ROLENAME_121">Common Neutral</Entry>
+	<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_100">Any</Entry>
+	<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_101">Random Town</Entry>
+	<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_102">Common Town</Entry>
+	<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_103">Town Investigative</Entry>
+	<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_104">Town Protective</Entry>
+	<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_105">Town Killing</Entry>
+	<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_106">Town Support</Entry>
+	<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_107">Random Coven</Entry>
+	<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_108">Common Coven</Entry>
+	<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_109">Coven Deception</Entry>
+	<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_110">Coven Killing</Entry>
+	<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_111">Coven Power</Entry>
+	<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_112">Coven Utility</Entry>
+	<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_113">Random Apocalypse</Entry>
+	<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_114">Random Neutral</Entry>
+	<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_115">Neutral Evil</Entry>
+	<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_116">Neutral Killing</Entry>
+	<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_117">Neutral Pariah</Entry>
+	<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_118">Neutral Outlier</Entry>
+	<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_119">Town Executive</Entry>
+	<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_120">Town Government</Entry>
 
-<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_100">True Any</Entry>
-<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_101">Any</Entry>
-<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_102">Random Town</Entry>
-<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_103">Common Town</Entry>
-<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_104">Town Investigative</Entry>
-<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_105">Town Power</Entry>
-<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_106">Town Protective</Entry>
-<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_107">Town Killing</Entry>
-<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_108">Town Support</Entry>
-<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_109">Random Coven</Entry>
-<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_110">Common Coven</Entry>
-<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_111">Coven Deception</Entry>
-<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_112">Coven Killing</Entry>
-<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_113">Coven Power</Entry>
-<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_114">Coven Utility</Entry>
-<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_115">Random Apocalypse</Entry>
-<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_116">Random Neutral</Entry>
-<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_117">Neutral Evil</Entry>
-<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_118">Neutral Killing</Entry>
-<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_119">Neutral Pariah</Entry>
-<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_120">Neutral Special</Entry>
-<Entry key="FANCY_COMPLIANCE_BTOS_ROLENAME_121">Common Neutral</Entry>
+	<Entry key="FANCY_NONE_BTOS_ROLENAME_100">Any</Entry>
+	<Entry key="FANCY_NONE_BTOS_ROLENAME_101">Random Town</Entry>
+	<Entry key="FANCY_NONE_BTOS_ROLENAME_102">Common Town</Entry>
+	<Entry key="FANCY_NONE_BTOS_ROLENAME_103">Town Investigative</Entry>
+	<Entry key="FANCY_NONE_BTOS_ROLENAME_104">Town Protective</Entry>
+	<Entry key="FANCY_NONE_BTOS_ROLENAME_105">Town Killing</Entry>
+	<Entry key="FANCY_NONE_BTOS_ROLENAME_106">Town Support</Entry>
+	<Entry key="FANCY_NONE_BTOS_ROLENAME_107">Random Coven</Entry>
+	<Entry key="FANCY_NONE_BTOS_ROLENAME_108">Common Coven</Entry>
+	<Entry key="FANCY_NONE_BTOS_ROLENAME_109">Coven Deception</Entry>
+	<Entry key="FANCY_NONE_BTOS_ROLENAME_110">Coven Killing</Entry>
+	<Entry key="FANCY_NONE_BTOS_ROLENAME_111">Coven Power</Entry>
+	<Entry key="FANCY_NONE_BTOS_ROLENAME_112">Coven Utility</Entry>
+	<Entry key="FANCY_NONE_BTOS_ROLENAME_113">Random Apocalypse</Entry>
+	<Entry key="FANCY_NONE_BTOS_ROLENAME_114">Random Neutral</Entry>
+	<Entry key="FANCY_NONE_BTOS_ROLENAME_115">Neutral Evil</Entry>
+	<Entry key="FANCY_NONE_BTOS_ROLENAME_116">Neutral Killing</Entry>
+	<Entry key="FANCY_NONE_BTOS_ROLENAME_117">Neutral Pariah</Entry>
+	<Entry key="FANCY_NONE_BTOS_ROLENAME_118">Neutral Outlier</Entry>
+	<Entry key="FANCY_NONE_BTOS_ROLENAME_119">Town Executive</Entry>
+	<Entry key="FANCY_NONE_BTOS_ROLENAME_120">Town Government</Entry>
 
-    <Entry key="FANCY_KILLED_BY_REASON_0">They died of an unknown cause.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_1">They were killed by the <![CDATA[<style="CovenColor"><sprite="RoleIcons" name="Role106">]]>%coven%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_2">They were executed by the <![CDATA[<style="TownColor"><sprite="RoleIcons" name="Role9">]]>%name_role9%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_3">They were shot by a <![CDATA[<style="TownColor"><sprite="RoleIcons" name="Role24">]]>%name_role24%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_4">They were incinerated by an <![CDATA[<style="ArsonistColor"><sprite="RoleIcons" name="Role40">]]>%name_role40%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_5">They were stabbed by a <![CDATA[<style="SerialKillerColor"><sprite="RoleIcons" name="Role48">]]>%name_role48%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_6">They disconnected from life.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_7">They were haunted by a <![CDATA[<style="JesterColor"><sprite="RoleIcons" name="Role45">]]>%name_role45%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_8">They died while defending their target.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_9">They were killed by a <![CDATA[<style="TownColor"><sprite="RoleIcons" name="Role3">]]>%name_role3%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_10">They were shot by a <![CDATA[<style="TownColor"><sprite="RoleIcons" name="Role23">]]>%name_role23%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_11">The hangman executed them for crimes against the town.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_12">They were mauled by a <![CDATA[<style="WerewolfColor"><sprite="RoleIcons" name="Role51">]]>%name_role51%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_13">They were shot by a <![CDATA[<style="TownColor"><sprite="RoleIcons" name="Role7">]]>%name_role7%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_14">They were bitten by a <![CDATA[<style="VampireColor"><sprite="RoleIcons" name="Role52">]]>%name_role52%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_15">They were killed by a <![CDATA[<style="TownColor"><sprite="RoleIcons" name="Role6">]]>%name_role6%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_16">They were killed by a <![CDATA[<style="TownColor"><sprite="RoleIcons" name="Role21">]]>%name_role21%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_17">They were killed by a <![CDATA[<style="CovenColor"><sprite="RoleIcons" name="Role31">]]>%name_role31%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_18">They succumbed to a pestilence.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_19">They were destroyed by a <![CDATA[<style="ApocalypseColor"><sprite="RoleIcons" name="Role42">]]>%name_role42%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_20">They were plundered by a <![CDATA[<style="PirateColor"><sprite="RoleIcons" name="Role46">]]>%name_role46%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_21">They were killed by a <![CDATA[<style="CovenColor"><sprite="RoleIcons" name="Role36">]]>%name_role36%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_22">They were destroyed by <![CDATA[<style="ApocalypseColor"><sprite="RoleIcons" name="Role251">]]>%name_role251%<![CDATA[</style>]]>, Horseman of the Apocalypse.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_23">They were doomed by a <![CDATA[<style="DoomsayerColor"><sprite="RoleIcons" name="Role43">]]>%name_role43%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_24">They were killed by a <![CDATA[<style="ShroudColor"><sprite="RoleIcons" name="Role49">]]>%name_role49%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_25">They were killed by a <![CDATA[<style="CovenColor"><sprite="RoleIcons" name="Role25">]]>%name_role25%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_26">They were killed by a <![CDATA[<style="CovenColor"><sprite="RoleIcons" name="Role34">]]>%name_role34%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_27">They died of a <![CDATA[<style="LoverColor"><sprite="RoleIcons" name="Role1">]]>broken heart<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_28">They visited a <![CDATA[<style="SerialKillerColor"><sprite="RoleIcons" name="Role48">]]>%name_role48%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_29">They were hanged.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_30">They were disintegrated by a <![CDATA[<style="CovenColor"><sprite="RoleIcons" name="Role29">]]>%name_role29%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_31"><![CDATA[<style="ApocalypseColor"><sprite="RoleIcons" name="Role253">]]>%name_role253%<![CDATA[</style>]]> has brought about the Apocalypse killing them.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_32">They killed their own VIP.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_33">They were Prosecuted.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_34">They died of starvation.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_35">They were tormented by an <![CDATA[<style="ExecutionerColor"><sprite="RoleIcons" name="Role44">]]>%name_role44%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_36">They left town.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_37">They died of scurvy.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_38">They were killed by a <![CDATA[<style="TownColor"><sprite="RoleIcons" name="Role22">]]>%name_role22%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_39">They hanged their own Town member.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_40">They were killed by a hidden role.</Entry>
-    <Entry key="FANCY_KILLED_BY_MENTION_73">They were killed by <![CDATA[%pandora%]]>.</Entry>
-    <Entry key="FANCY_KILLED_BY_REASON_70">They were assassinated by a <![CDATA[<sprite="BTOSRoleIcons" name="Role55">%name_role55%]]>.</Entry>
-    <Entry key="FANCY_KILLED_BY_REASON_71">They were a recruit of the <![CDATA[<sprite="BTOSRoleIcons" name="Role55">%name_role55%]]> and have failed their teammate.</Entry>
-    <Entry key="FANCY_KILLED_BY_REASON_72">They were vanquished by an <![CDATA[<sprite="BTOSRoleIcons" name="Role59"><color=#821252>]]>%name_role59%<![CDATA[</color>]]>.</Entry>
-    <Entry key="FANCY_KILLED_BY_REASON_73">They were killed by <![CDATA[<sprite="BTOSRoleIcons" name="Role222">%pandora%]]>.</Entry>
+	<Entry key="FANCY_NONE_ROLE_BLURB_0">You are... nothing. Please report this as a bug if you see this.</Entry> <!--NONE! NOTHING! NOTHING AT ALL!-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_1">You are a hopeless romantic searching for your soulmate.</Entry> <!--Admirer-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_2">You do not remember who you are.</Entry> <!--Amnesiac-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_3">You are a former knight dedicated to protecting the town.</Entry> <!--Bodyguard-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_4">You are a healer providing protection to the town.</Entry> <!--Cleric-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_5">You are an anatomist who uncovers the truth behind a townie's death.</Entry> <!--Coroner-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_6">You are a divine protector skilled in the art of combat</Entry> <!--Crusader-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_7">You are an enforcer of the law who won't hesitate to kill in broad daylight.</Entry> <!--Deputy-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_8">You are a private eye who secretly gathers information.</Entry> <!--Investigator-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_9">You are a prison guard who secretly detains suspects.</Entry> <!--Jailor-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_10">You are an observer who camps outside of houses to gather information.</Entry> <!--Lookout-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_11">You are the leader of the town.</Entry> <!--Mayor-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_12">You are royalty, blessing knighthood upon deserving townies.</Entry> <!--Monarch-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_13">You are a powerful member of the court who ensures that justice prevails.</Entry> <!--Prosecutor-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_14">You are a fortune teller who glimpses into the future.</Entry> <!--Psychic-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_15">You are a mystic who can resurrect the dead.</Entry> <!--Retributionist-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_16">You are able to see into the hearts of townies to find out their intentions.</Entry> <!--Seer-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_17">You are an authoritative figure who can search a townie's possessions.</Entry> <!--Sheriff-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_18">You are a careful person who secretly observes evil activity.</Entry> <!--Spy-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_19">You are a talented bartender who shares beverages with the town.</Entry> <!--Tavern Keeper-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_20">You are a skilled hunter who stalks your prey at night.</Entry> <!--Tracker-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_21">You are an intelligent woodsman with a knack for traps.</Entry> <!--Trapper-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_22">You are a prankster who tricks evildoers into giving you their power.</Entry> <!--Trickster-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_23">You are a war hero who will shoot intruders on sight.</Entry> <!--Veteran-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_24">You are a townie taking justice into your own hands.</Entry> <!--Vigilante-->
+	<Entry key="FANCY_COVEN_ROLE_BLURB_25">You are a summoner who can spawn objects out of thin air.</Entry> <!--Conjurer-->
+	<Entry key="FANCY_COVEN_ROLE_BLURB_26">You are a beacon of knowledge who can teach almost anything.</Entry> <!--Coven Leader-->
+	<Entry key="FANCY_COVEN_ROLE_BLURB_27">You are a nightmare who can invade people's dreams.</Entry> <!--Dreamweaver-->
+	<Entry key="FANCY_COVEN_ROLE_BLURB_28">You are a talented author who can rewrite a townie's story.</Entry> <!--Enchanter-->
+	<Entry key="FANCY_COVEN_ROLE_BLURB_29">You are a powerful spellcaster preparing to disintegrate the town.</Entry> <!--Hex Master-->
+	<Entry key="FANCY_COVEN_ROLE_BLURB_30">You are a talented magician using cheap tricks to fool the town.</Entry> <!--Illusionist-->
+	<Entry key="FANCY_COVEN_ROLE_BLURB_31">You are a bad omen who causes harm to those around you.</Entry> <!--Jinx-->
+	<Entry key="FANCY_COVEN_ROLE_BLURB_32">You are a snake haired monster with a gaze of stone.</Entry> <!--Medusa-->
+	<Entry key="FANCY_COVEN_ROLE_BLURB_33">You are an exile of the underworld who can reanimate the dead.</Entry> <!--Necromancer-->
+	<Entry key="FANCY_COVEN_ROLE_BLURB_34">You are a bartender who brews highly unstable drinks.</Entry> <!--Poisoner-->
+	<Entry key="FANCY_COVEN_ROLE_BLURB_35">You are an alchemist who concocts powerful potions.</Entry> <!--Potion Master-->
+	<Entry key="FANCY_COVEN_ROLE_BLURB_36">You are a sorcerer who sacrifices members of the town to the Old Ones.</Entry> <!--Ritualist-->
+	<Entry key="FANCY_COVEN_ROLE_BLURB_37">You are a dollmaker who silences members of the town.</Entry> <!--Voodoo Master-->
+	<Entry key="FANCY_COVEN_ROLE_BLURB_38">You are a creature of myth who has highly heightened senses.</Entry> <!--Wildling-->
+	<Entry key="FANCY_COVEN_ROLE_BLURB_39">You are a master of puppets who can control the actions of others.</Entry> <!--Witch-->
+	<Entry key="FANCY_ARSONIST_ROLE_BLURB_40">You are a pyromaniac who wants to watch the world burn.</Entry> <!--Arsonist-->
+	<Entry key="FANCY_APOCALYPSE_ROLE_BLURB_41">You are an acolyte of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role250"><style=ApocalypseColor>%name_role250%</style></shake>]]>, destroying the town's food supply.</Entry> <!--Baker-->
+	<Entry key="FANCY_APOCALYPSE_ROLE_BLURB_42">You are an acolyte of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role251"><style=ApocalypseColor>%name_role251%</style></shake>]]>, embodying nothing but raw power.</Entry> <!--Berserker-->
+	<Entry key="FANCY_DOOMSAYER_ROLE_BLURB_43">You are a prophet who must sacrifice members the town to the Old Ones.</Entry> <!--Doomsayer-->
+	<Entry key="FANCY_EXECUTIONER_ROLE_BLURB_44">You are an obsessed hangman who will stop at nothing to execute your target.</Entry> <!--Executioner-->
+	<Entry key="FANCY_JESTER_ROLE_BLURB_45">You are a chaotic spirit who's power can only be unleashed from the gallows.</Entry> <!--Jester-->
+	<Entry key="FANCY_PIRATE_ROLE_BLURB_46"><![CDATA[<shake a=0.3>Yarr!</shake>]]> Swashbuckle the landlubbers and claim ye' treasure!</Entry> <!--Pirate-->
+	<Entry key="FANCY_APOCALYPSE_ROLE_BLURB_47">You are an acolyte of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role252"><style=ApocalypseColor>%name_role252%</style></shake>]]>, infecting the town with a deadly disease.</Entry> <!--Plaguebearer-->
+	<Entry key="FANCY_SERIALKILLER_ROLE_BLURB_48">You are a psychopath who wants everyone in the town to die.</Entry> <!--Serial Killer-->
+	<Entry key="FANCY_SHROUD_ROLE_BLURB_49">You are a phantom who can possess the bodies of townies.</Entry> <!--Shroud-->
+	<Entry key="FANCY_APOCALYPSE_ROLE_BLURB_50">You are an acolyte of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role253"><style=ApocalypseColor>%name_role253%</style></shake>]]>, harvesting the souls of the town.</Entry> <!--Soul Collector-->
+	<Entry key="FANCY_WEREWOLF_ROLE_BLURB_51">You are a regular townie who transforms under the full moon.</Entry> <!--Werewolf-->
+	<Entry key="FANCY_VAMPIRE_ROLE_BLURB_52">You are the harbinger of the Blood Moon.</Entry> <!--Vampire-->
+	<Entry key="FANCY_CURSEDSOUL_ROLE_BLURB_53">You are a wandering spirit, searching for a greater purpose.</Entry> <!--Cursed Soul-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_54">You are a host of the town's most exclusive parties.</Entry> <!--Socialite-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_55">You are the leader of the town's militia.</Entry> <!--Marshal-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_56">You are a guardian of the town, shielding them with your Aegis.</Entry> <!--Oracle-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_57">You are a humble farmer, living a simple life.</Entry> <!--Pilgrim-->
+	<Entry key="FANCY_COVEN_ROLE_BLURB_58">You are a servant of the Necronomicon.</Entry> <!--Covenite-->
+	<Entry key="FANCY_TOWN_ROLE_BLURB_59">You are a crazed galvanist overflowing with energy.</Entry> <!--Catalyst-->
+	<Entry key="FANCY_COVEN_ROLE_BLURB_60">You are a master of indoctrination, rewiring minds to serve your will.</Entry> <!--Cultist-->
 
-	<Entry key="FANCY_ALSO_KILLED_BY_REASON_1">They were also killed by the <![CDATA[<style="CovenColor"><sprite="RoleIcons" name="Role106">]]>%coven%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_ALSO_KILLED_BY_REASON_2">They were also executed by the <![CDATA[<style="TownColor"><sprite="RoleIcons" name="Role9">]]>%name_role9%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_ALSO_KILLED_BY_REASON_3">They were also shot by a <![CDATA[<style="TownColor"><sprite="RoleIcons" name="Role24">]]>%name_role24%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_ALSO_KILLED_BY_REASON_4">They were also incinerated by an <![CDATA[<style="ArsonistColor"><sprite="RoleIcons" name="Role40">]]>%name_role40%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_ALSO_KILLED_BY_REASON_5">They were also stabbed by a <![CDATA[<style="SerialKillerColor"><sprite="RoleIcons" name="Role48">]]>%name_role48%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_ALSO_KILLED_BY_REASON_6">They also disconnected from life.</Entry>
-	<Entry key="FANCY_ALSO_KILLED_BY_REASON_7">They were also haunted by a <![CDATA[<style="JesterColor"><sprite="RoleIcons" name="Role45">]]>%name_role45%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_ALSO_KILLED_BY_REASON_8">They also died while defending their target.</Entry>
-	<Entry key="FANCY_ALSO_KILLED_BY_REASON_9">They were also killed by a <![CDATA[<style="TownColor"><sprite="RoleIcons" name="Role3">]]>%name_role3%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_ALSO_KILLED_BY_REASON_10">They were also shot by a <![CDATA[<style="TownColor"><sprite="RoleIcons" name="Role23">]]>%name_role23%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_ALSO_KILLED_BY_REASON_11">The hangman also executed them for crimes against the town.</Entry>
-	<Entry key="FANCY_ALSO_KILLED_BY_REASON_12">They were also mauled by a <![CDATA[<style="WerewolfColor"><sprite="RoleIcons" name="Role51">]]>%name_role51%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_ALSO_KILLED_BY_REASON_13">They were also shot by a <![CDATA[<style="TownColor"><sprite="RoleIcons" name="Role7">]]>%name_role7%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_ALSO_KILLED_BY_REASON_14">They were also bitten by a <![CDATA[<style="VampireColor"><sprite="RoleIcons" name="Role52">]]>%name_role52%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_ALSO_KILLED_BY_REASON_15">They were also killed by a <![CDATA[<style="TownColor"><sprite="RoleIcons" name="Role6">]]>%name_role6%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_ALSO_KILLED_BY_REASON_16">They were also killed by a <![CDATA[<style="TownColor"><sprite="RoleIcons" name="Role21">]]>%name_role21%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_ALSO_KILLED_BY_REASON_17">They were also killed by a <![CDATA[<style="CovenColor"><sprite="RoleIcons" name="Role31">]]>%name_role31%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_ALSO_KILLED_BY_REASON_18">They also succumbed to a pestilence.</Entry>
-	<Entry key="FANCY_ALSO_KILLED_BY_REASON_19">They were also destroyed by a <![CDATA[<style="ApocalypseColor"><sprite="RoleIcons" name="Role42">]]>%name_role42%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_ALSO_KILLED_BY_REASON_20">They also were plundered by a <![CDATA[<style="PirateColor"><sprite="RoleIcons" name="Role46">]]>%name_role46%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_ALSO_KILLED_BY_REASON_21">They were also killed by a <![CDATA[<style="CovenColor"><sprite="RoleIcons" name="Role36">]]>%name_role36%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_ALSO_KILLED_BY_REASON_22">They were also destroyed by <![CDATA[<style="ApocalypseColor"><sprite="RoleIcons" name="Role251">]]>%name_role251%<![CDATA[</style>]]>, Horseman of the Apocalypse.</Entry>
-	<Entry key="FANCY_ALSO_KILLED_BY_REASON_23">They were also doomed by a <![CDATA[<style="DoomsayerColor"><sprite="RoleIcons" name="Role43">]]>%name_role43%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_ALSO_KILLED_BY_REASON_24">They were also killed by a <![CDATA[<style="ShroudColor"><sprite="RoleIcons" name="Role49">]]>%name_role49%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_ALSO_KILLED_BY_REASON_25">They were also killed by a <![CDATA[<style="CovenColor"><sprite="RoleIcons" name="Role25">]]>%name_role25%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_ALSO_KILLED_BY_REASON_26">They were also killed by a <![CDATA[<style="CovenColor"><sprite="RoleIcons" name="Role34">]]>%name_role34%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_ALSO_KILLED_BY_REASON_27">They also died of a <![CDATA[<style="LoverColor"><sprite="RoleIcons" name="Role1">]]>broken heart<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_ALSO_KILLED_BY_REASON_28">They also visited a <![CDATA[<style="SerialKillerColor"><sprite="RoleIcons" name="Role48">]]>%name_role48%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_ALSO_KILLED_BY_REASON_29">They were also hanged.</Entry>
-	<Entry key="FANCY_ALSO_KILLED_BY_REASON_30">They were also disintegrated by a <![CDATA[<style="CovenColor"><sprite="RoleIcons" name="Role29">]]>%name_role29%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_ALSO_KILLED_BY_REASON_31"><![CDATA[<style="ApocalypseColor"><sprite="RoleIcons" name="Role253">]]>%name_role253%<![CDATA[</style>]]> has brought about the Apocalypse killing them.</Entry>
-	<Entry key="FANCY_ALSO_KILLED_BY_REASON_32">They killed their own VIP.</Entry>
-	<Entry key="FANCY_ALSO_KILLED_BY_REASON_33">They were Prosecuted.</Entry>
-	<Entry key="FANCY_ALSO_KILLED_BY_REASON_34">They also died of starvation.</Entry>
-	<Entry key="FANCY_ALSO_KILLED_BY_REASON_35">They were also tormented by an <![CDATA[<style="ExecutionerColor"><sprite="RoleIcons" name="Role44">]]>%name_role44%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_ALSO_KILLED_BY_REASON_36">They also left town.</Entry>
-	<Entry key="FANCY_ALSO_KILLED_BY_REASON_37">They also died of scurvy.</Entry>
-	<Entry key="FANCY_ALSO_KILLED_BY_REASON_38">They were also killed by a <![CDATA[<style="TownColor"><sprite="RoleIcons" name="Role22">]]>%name_role22%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_ALSO_KILLED_BY_REASON_39">They also hanged their own Town member.</Entry>
-	<Entry key="FANCY_ALSO_KILLED_BY_REASON_40">They were also killed by a hidden role.</Entry>
-	<Entry key="FANCY_ALSO_KILLED_BY_REASON_41">They also died of boredom.</Entry>
-    <Entry key="FANCY_ALSO_KILLED_BY_MENTION_73">They were also killed by <![CDATA[%pandora%]]>.</Entry>
-    <Entry key="FANCY_ALSO_KILLED_BY_REASON_70">They were also assassinated by a <![CDATA[<sprite="BTOSRoleIcons" name="Role55">%name_role55%]]>.</Entry>
-    <Entry key="FANCY_ALSO_KILLED_BY_REASON_72">They were also vanquished by an <![CDATA[<sprite="BTOSRoleIcons" name="Role59"><color=#821252>]]>%name_role59%<![CDATA[</color>]]>.</Entry>
-    <Entry key="FANCY_ALSO_KILLED_BY_REASON_71">They were also a recruit of the <![CDATA[<sprite="BTOSRoleIcons" name="Role55">%name_role55%]]> and have failed their teammate.</Entry>
-    <Entry key="FANCY_ALSO_KILLED_BY_REASON_73">They were also killed by <![CDATA[<sprite="BTOSRoleIcons" name="Role222">%pandora%]]>.</Entry>
+	<Entry key="FANCY_NONE_BTOS_ROLE_BLURB_0">You are... nothing. Please report this as a bug if you see this.</Entry> <!--NONE! NOTHING! NOTHING AT ALL!-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_1">You are a hopeless romantic searching for your soulmate.</Entry> <!--Admirer-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_2">You do not remember who you are.</Entry> <!--Amnesiac-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_3">You are a former knight dedicated to protecting the town.</Entry> <!--Bodyguard-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_4">You are a healer providing protection to the town.</Entry> <!--Cleric-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_5">You are an anatomist who uncovers the truth behind a townie's death.</Entry> <!--Coroner-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_6">You are a divine protector skilled in the art of protection.</Entry> <!--Crusader-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_7">You are an enforcer of the law who won't hesitate to kill in broad daylight.</Entry> <!--Deputy-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_8">You are a private eye who secretly gathers information.</Entry> <!--Investigator-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_9">You are a prison guard who secretly detains suspects.</Entry> <!--Jailor-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_10">You are an observer who camps outside of houses to gather information.</Entry> <!--Lookout-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_11">You are the leader of the town.</Entry> <!--Mayor-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_12">You are royality, blessing knighthood upon deserving townies.</Entry> <!--Monarch-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_13">You are a powerful member of the court who ensures that justice prevails.</Entry> <!--Prosecutor-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_14">You are a fortune teller who glimpses into the future.</Entry> <!--Psychic-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_15">You are a mystic who can resurrect the dead.</Entry> <!--Retributionist-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_16">You are able to see into the hearts of townies to find out their intentions.</Entry> <!--Seer-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_17">You are an authoritative figure who can search a townie's possessions.</Entry> <!--Sheriff-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_18">You are a careful person who secretly observes evil activity.</Entry> <!--Spy-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_19">You are a talented bartender who shares beverages with the town.</Entry> <!--Tavern Keeper-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_20">You are a skilled hunter who stalks your prey at night.</Entry> <!--Tracker-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_21">You are an intelligent woodsman with a knack for traps.</Entry> <!--Trapper-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_22">You are a prankster who tricks evildoers into giving you their power.</Entry> <!--Trickster-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_23">You are a war hero who will shoot intruders on sight.</Entry> <!--Veteran-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_24">You are a townie taking justice into your own hands.</Entry> <!--Vigilante-->
+	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_25">You are a summoner who can spawn objects out of thin air.</Entry> <!--Conjurer-->
+	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_25">You are a summoner who can spawn objects out of thin air.</Entry> <!--Conjurer-->
+	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_26">You are a beacon of knowledge who can teach almost anything.</Entry> <!--Coven Leader-->
+	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_27">You are a nightmare who can invade people's dreams.</Entry> <!--Dreamweaver-->
+	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_28">You are a talented author who can rewrite a townie's story.</Entry> <!--Enchanter-->
+	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_29">You are a powerful spellcaster preparing to disintegrate the town.</Entry> <!--Hex Master-->
+	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_30">You are a talented magician using cheap tricks to fool the town.</Entry> <!--Illusionist-->
+	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_31">You are a bad omen who causes harm to those around you.</Entry> <!--Jinx-->
+	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_32">You are a snake haired monster with a gaze of stone.</Entry> <!--Medusa-->
+	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_33">You are an exile of the underworld who can reanimate the dead.</Entry> <!--Necromancer-->
+	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_34">You are a bartender who brews highly unstable drinks.</Entry> <!--Poisoner-->
+	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_35">You are an alchemist who concocts powerful potions.</Entry> <!--Potion Master-->
+	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_36">You are a sorcerer who sacrifices members of the town to the Old Ones.</Entry> <!--Ritualist-->
+	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_37">You are a dollmaker who silences members of the town.</Entry> <!--Voodoo Master--> 
+	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_38">You are a creature of myth who has highly heightened senses.</Entry> <!--Wildling-->
+	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_39">You are a master of puppets who can control the actions of others.</Entry> <!--Witch-->
+	<Entry key="FANCY_ARSONIST_BTOS_ROLE_BLURB_40">You are a pyromaniac who wants to watch the world burn.</Entry> <!--Arsonist-->
+	<Entry key="FANCY_APOCALYPSE_BTOS_ROLE_BLURB_41">You are an acolyte of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role250"><style=ApocalypseColor>%name_role250%</style></shake>]]>, destroying the town's food supply.</Entry> <!--Baker-->
+	<Entry key="FANCY_APOCALYPSE_BTOS_ROLE_BLURB_42">You are an acolyte of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role251"><style=ApocalypseColor>%name_role251%</style></shake>]]>, embodying nothing but raw power.</Entry> <!--Berserker-->
+	<Entry key="FANCY_DOOMSAYER_BTOS_ROLE_BLURB_43">You are a prophet who must sacrifice members the town to the Old Ones.</Entry> <!--Doomsayer-->
+	<Entry key="FANCY_EXECUTIONER_BTOS_ROLE_BLURB_44">You are an obsessed hangman who will stop at nothing to execute your target.</Entry> <!--Executioner-->
+	<Entry key="FANCY_JESTER_BTOS_ROLE_BLURB_45">You are a chaotic spirit who's power can only be unleashed from the gallows.</Entry> <!--Jester-->
+	<Entry key="FANCY_PIRATE_BTOS_ROLE_BLURB_46"><![CDATA[<shake a=0.3>Yarr!</shake>]]> Swashbuckle the landlubbers and claim ye' treasure!</Entry> <!--Pirate-->
+	<Entry key="FANCY_APOCALYPSE_BTOS_ROLE_BLURB_47">You are an acolyte of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role252"><style=ApocalypseColor>%name_role252%</style></shake>]]>, infecting the town with a deadly disease.</Entry> <!--Plaguebearer-->
+	<Entry key="FANCY_SERIALKILLER_BTOS_ROLE_BLURB_48">You are a psychopath who wants everyone in the town to die.</Entry> <!--Serial Killer-->
+	<Entry key="FANCY_SHROUD_BTOS_ROLE_BLURB_49">You are a phantom who can possess the bodies of townies.</Entry> <!--Shroud-->
+	<Entry key="FANCY_APOCALYPSE_BTOS_ROLE_BLURB_50">You are an acolyte of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role253"><style=ApocalypseColor>%name_role253%</style></shake>]]>, harvesting the souls of the town.</Entry> <!--Soul Collector-->
+	<Entry key="FANCY_WEREWOLF_BTOS_ROLE_BLURB_51">You are a regular townie who transforms under the full moon.</Entry> <!--Werewolf-->
+	<Entry key="FANCY_VAMPIRE_BTOS_ROLE_BLURB_52">You are the harbinger of the Blood Moon.</Entry> <!--Vampire-->
+	<Entry key="FANCY_CURSEDSOUL_BTOS_ROLE_BLURB_53">You are a wandering spirit, searching for a greater purpose.</Entry> <!--Cursed Soul-->
+	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_54">You are a wailing spirit.</Entry> <!--Banshee-->
+	<Entry key="FANCY_JACKAL_BTOS_ROLE_BLURB_55">You are an outlaw who is looking for recruits in their pursuit against the town.</Entry> <!--Jackal-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_56">You are the leader of the town's militia.</Entry> <!--Marshal-->
+	<Entry key="FANCY_JUDGE_BTOS_ROLE_BLURB_57">You are a corrupt court official who uses their power and connections to manipulate trials.</Entry> <!--Judge-->
+	<Entry key="FANCY_AUDITOR_BTOS_ROLE_BLURB_58">You are a corrupt government tax agent who uses their knowledge and connections for evil.</Entry> <!--Auditor-->
+	<Entry key="FANCY_INQUISITOR_BTOS_ROLE_BLURB_59">You are a missionary who is determined to eradicate those accused of heresy.</Entry> <!--Inquisitor-->
+	<Entry key="FANCY_STARSPAWN_BTOS_ROLE_BLURB_60">You are a cosmic being who isolates and disrupts the town.</Entry> <!--Starspawn-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_61">You are a guardian of the town, shielding them with your Aegis.</Entry> <!--Oracle-->
+	<Entry key="FANCY_APOCALYPSE_BTOS_ROLE_BLURB_62">You are an acolyte of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role253"><style=ApocalypseColor>%name_role253%</style></shake>]]> who curses the Town.</Entry> <!--Warlock-->
+	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_63">You are a crazed galvanist overflowing with energy.</Entry> <!--Catalyst-->
+	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_64">You are a master of indoctrination, rewiring minds to serve your will.</Entry> <!--Cultist-->
+	<Entry key="FANCY_APOCALYPSE_BTOS_ROLE_BLURB_250">You are a Horseman of the Apocalypse, spoiling nutrients and inducing malnourishment within the town.</Entry> <!--Famine-->
+	<Entry key="FANCY_APOCALYPSE_BTOS_ROLE_BLURB_251">You are a Horseman of the Apocalypse, causing disorder and conflict throughout the town.</Entry> <!--War-->
+	<Entry key="FANCY_APOCALYPSE_BTOS_ROLE_BLURB_252">You are a Horseman of the Apocalypse, spreading blight and draining strength across the town.</Entry> <!--Pestilence-->
+	<Entry key="FANCY_APOCALYPSE_BTOS_ROLE_BLURB_253">You are a Horseman of the Apocalypse, the angel of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role253"><style=ApocalypseColor>%name_role253%</style></shake>]]>, bringing about the apocalypse throughout the world.</Entry> <!--Death-->
 
-	<Entry key="FANCY_KILLED_BY_REASON_ROLE_0">Unknown</Entry>
-    <Entry key="FANCY_KILLED_BY_REASON_ROLE_1"><![CDATA[<style="CovenColor">]]>%coven%<![CDATA[</style>]]></Entry>
-    <Entry key="FANCY_KILLED_BY_REASON_ROLE_2"><![CDATA[<style="TownColor">]]>%name_role9%<![CDATA[</style>]]></Entry>
-    <Entry key="FANCY_KILLED_BY_REASON_ROLE_3"><![CDATA[<style="TownColor">]]>%name_role24%<![CDATA[</style>]]></Entry>
-    <Entry key="FANCY_KILLED_BY_REASON_ROLE_4"><![CDATA[<style="ArsonistColor">]]>%name_role40%<![CDATA[</style>]]></Entry>
-    <Entry key="FANCY_KILLED_BY_REASON_ROLE_5"><![CDATA[<style="SerialKillerColor">]]>%name_role48%<![CDATA[</style>]]></Entry>
-    <Entry key="FANCY_KILLED_BY_REASON_ROLE_6">Disconnected.</Entry>
-    <Entry key="FANCY_KILLED_BY_REASON_ROLE_7"><![CDATA[<style="JesterColor">]]>%name_role45%<![CDATA[</style>]]></Entry>
-    <Entry key="FANCY_KILLED_BY_REASON_ROLE_8">Defending their target.</Entry>
-    <Entry key="FANCY_KILLED_BY_REASON_ROLE_9"><![CDATA[<style="TownColor">]]>%name_role3%<![CDATA[</style>]]></Entry>
-    <Entry key="FANCY_KILLED_BY_REASON_ROLE_10"><![CDATA[<style="TownColor">]]>%name_role23%<![CDATA[</style>]]></Entry>
-    <Entry key="FANCY_KILLED_BY_REASON_ROLE_11">Hangman</Entry>
-    <Entry key="FANCY_KILLED_BY_REASON_ROLE_12"><![CDATA[<style="WerewolfColor">]]>%name_role51%<![CDATA[</style>]]></Entry>
-    <Entry key="FANCY_KILLED_BY_REASON_ROLE_13"><![CDATA[<style="TownColor">]]>%name_role7%<![CDATA[</style>]]></Entry>
-    <Entry key="FANCY_KILLED_BY_REASON_ROLE_14"><![CDATA[<style="VampireColor">]]>Vampire<![CDATA[</style>]]></Entry>
-    <Entry key="FANCY_KILLED_BY_REASON_ROLE_15"><![CDATA[<style="TownColor">]]>%name_role6%<![CDATA[</style>]]></Entry>
-    <Entry key="FANCY_KILLED_BY_REASON_ROLE_16"><![CDATA[<style="TownColor">]]>%name_role21%<![CDATA[</style>]]></Entry>
-    <Entry key="FANCY_KILLED_BY_REASON_ROLE_17"><![CDATA[<style="CovenColor">]]>%name_role31%<![CDATA[</style>]]></Entry>
-    <Entry key="FANCY_KILLED_BY_REASON_ROLE_18"><![CDATA[<style="ApocalypseColor">]]>Pestilence<![CDATA[</style>]]></Entry>
-    <Entry key="FANCY_KILLED_BY_REASON_ROLE_19"><![CDATA[<style="ApocalypseColor">]]>%name_role42%<![CDATA[</style>]]></Entry>
-    <Entry key="FANCY_KILLED_BY_REASON_ROLE_20"><![CDATA[<style="PirateColor">]]>%name_role46%<![CDATA[</style>]]></Entry>
-    <Entry key="FANCY_KILLED_BY_REASON_ROLE_21"><![CDATA[<style="CovenColor">]]>%name_role36%<![CDATA[</style>]]></Entry>
-    <Entry key="FANCY_KILLED_BY_REASON_ROLE_22"><![CDATA[<style="ApocalypseColor">]]>War, Horseman of the Apocalypse<![CDATA[</style>]]></Entry>
-    <Entry key="FANCY_KILLED_BY_REASON_ROLE_23"><![CDATA[<style="DoomsayerColor">]]>%name_role43%<![CDATA[</style>]]></Entry>
-    <Entry key="FANCY_KILLED_BY_REASON_ROLE_24"><![CDATA[<style="ShroudColor">]]>%name_role49%<![CDATA[</style>]]></Entry>
-    <Entry key="FANCY_KILLED_BY_REASON_ROLE_25"><![CDATA[<style="CovenColor">]]>%name_role25%<![CDATA[</style>]]></Entry>
-    <Entry key="FANCY_KILLED_BY_REASON_ROLE_26"><![CDATA[<style="CovenColor">]]>%name_role34%<![CDATA[</style>]]></Entry>
-    <Entry key="FANCY_KILLED_BY_REASON_ROLE_27"><![CDATA[<style="LoverColor">]]>Broken heart<![CDATA[</style>]]></Entry>
-    <Entry key="FANCY_KILLED_BY_REASON_ROLE_28"><![CDATA[<style="SerialKillerColor">]]>%name_role48%<![CDATA[</style>]]></Entry>
-    <Entry key="FANCY_KILLED_BY_REASON_ROLE_29">Hanged</Entry>
-    <Entry key="FANCY_KILLED_BY_REASON_ROLE_30"><![CDATA[<style="CovenColor">]]>%name_role29%<![CDATA[</style>]]>.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_ROLE_31"><![CDATA[<style="ApocalypseColor">]]>Death<![CDATA[</style>]]></Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_ROLE_32">killed their own VIP.</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_ROLE_33">Prosecuted</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_ROLE_34">Starvation</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_ROLE_35"><![CDATA[<style="ExecutionerColor">]]>%name_role44%<![CDATA[</style>]]></Entry>
-    <Entry key="FANCY_KILLED_BY_REASON_ROLE_36">Left Town</Entry>
-	<Entry key="FANCY_KILLED_BY_REASON_ROLE_37">Scurvy</Entry>
-  	<Entry key="FANCY_KILLED_BY_REASON_ROLE_38"><![CDATA[<style="TownColor">]]>%name_role22%<![CDATA[</style>]]></Entry>
-  	<Entry key="FANCY_KILLED_BY_REASON_ROLE_39">Hanged a Town Member</Entry>
-  	<Entry key="FANCY_KILLED_BY_REASON_ROLE_40">Hidden Role</Entry>
-  	<Entry key="FANCY_KILLED_BY_REASON_ROLE_41">Boredom</Entry>
-    <Entry key="FANCY_KILLED_BY_REASON_ROLE_70">%name_role55%</Entry>
-    <Entry key="FANCY_KILLED_BY_REASON_ROLE_71">%name_role55% Lifelink</Entry>
-    <Entry key="FANCY_KILLED_BY_REASON_ROLE_72"><![CDATA[<color=#821252>]]>%name_role59%<![CDATA[</color>]]></Entry>
-    <Entry key="FANCY_KILLED_BY_REASON_ROLE_73"><![CDATA[%pandora%]]></Entry>
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_25">You are a summoner who can spawn objects out of thin air.</Entry> <!--Conjurer-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_25">You are a summoner who can spawn objects out of thin air.</Entry> <!--Conjurer-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_26">You are a beacon of knowledge who can teach almost anything.</Entry> <!--Coven Leader-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_27">You are a nightmare who can invade people's dreams.</Entry> <!--Dreamweaver-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_28">You are a talented author who can rewrite a townie's story.</Entry> <!--Enchanter-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_29">You are a powerful spellcaster preparing to disintegrate the town.</Entry> <!--Hex Master-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_30">You are a talented magician using cheap tricks to fool the town.</Entry> <!--Illusionist-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_31">You are a bad omen who causes harm to those around you.</Entry> <!--Jinx-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_32">You are a snake haired monster with a gaze of stone.</Entry> <!--Medusa-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_33">You are an exile of the underworld who can reanimate the dead.</Entry> <!--Necromancer-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_34">You are a bartender who brews highly unstable drinks.</Entry> <!--Poisoner-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_35">You are an alchemist who concocts powerful potions.</Entry> <!--Potion Master-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_36">You are a sorcerer who sacrifices members of the town to the Old Ones.</Entry> <!--Ritualist-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_37">You are a dollmaker who silences members of the town.</Entry> <!--Voodoo Master-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_38">You are a creature of myth who has highly heightened senses.</Entry> <!--Wildling-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_39">You are a master of puppets who can control the actions of others.</Entry> <!--Witch-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_54">You are a wailing spirit.</Entry> <!--Banshee-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_64">You are a master of indoctrination, rewiring minds to serve your will.</Entry> <!--Cultist-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_41">You are an acolyte of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role250"><style=ApocalypseColor>%name_role250%</style></shake>]]>, destroying the town's food supply.</Entry> <!--Baker-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_42">You are an acolyte of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role251"><style=ApocalypseColor>%name_role251%</style></shake>]]>, embodying nothing but raw power.</Entry> <!--Berserker-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_47">You are an acolyte of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role252"><style=ApocalypseColor>%name_role252%</style></shake>]]>, infecting the town with a deadly disease.</Entry> <!--Plaguebearer-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_50">You are an acolyte of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role253"><style=ApocalypseColor>%name_role253%</style></shake>]]>, harvesting the souls of the town.</Entry> <!--Soul Collector-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_62">You are an acolyte of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role253"><style=ApocalypseColor>%name_role253%</style></shake>]]> who curses the Town.</Entry> <!--Warlock-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_250">You are a Horseman of the Apocalypse, spoiling nutrients and inducing malnourishment within the town.</Entry> <!--Famine-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_251">You are a Horseman of the Apocalypse, causing disorder and conflict throughout the town.</Entry> <!--War-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_252">You are a Horseman of the Apocalypse, spreading blight and draining strength across the town.</Entry> <!--Pestilence-->
+	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_253">You are a Horseman of the Apocalypse, the angel of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role253"><style=ApocalypseColor>%name_role253%</style></shake>]]>, bringing about the apocalypse throughout the world.</Entry> <!--Death-->
+
+	<Entry key="FANCY_COMPLIANCE_BTOS_ROLE_BLURB_40">You are a pyromaniac who wants to watch the world burn.</Entry> <!--Arsonist-->
+	<Entry key="FANCY_COMPLIANCE_BTOS_ROLE_BLURB_48">You are a psychopath who wants everyone in the town to die.</Entry> <!--Serial Killer-->
+	<Entry key="FANCY_COMPLIANCE_BTOS_ROLE_BLURB_49">You are a phantom who can possess the bodies of townies.</Entry> <!--Shroud-->
+	<Entry key="FANCY_COMPLIANCE_BTOS_ROLE_BLURB_51">You are a regular townie who transforms under the full moon.</Entry> <!--Werewolf-->
+
+
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_0">You are... nothing. Please report this as a bug if you see this.</Entry> <!--NONE! NOTHING! NOTHING AT ALL!-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_1">You are a hopeless romantic searching for your soulmate.</Entry> <!--Admirer-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_2">You do not remember who you are.</Entry> <!--Amnesiac-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_3">You are a former knight dedicated to protecting the town.</Entry> <!--Bodyguard-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_4">You are a healer providing protection to the town.</Entry> <!--Cleric-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_5">You are an anatomist who uncovers the truth behind a townie's death.</Entry> <!--Coroner-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_6">You are a divine protector skilled in the art of protection.</Entry> <!--Crusader-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_7">You are an enforcer of the law who won't hesitate to kill in broad daylight.</Entry> <!--Deputy-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_8">You are a private eye who secretly gathers information.</Entry> <!--Investigator-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_9">You are a prison guard who secretly detains suspects.</Entry> <!--Jailor-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_10">You are an observer who camps outside of houses to gather information.</Entry> <!--Lookout-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_11">You are the leader of the town.</Entry> <!--Mayor-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_12">You are royality, blessing knighthood upon deserving townies.</Entry> <!--Monarch-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_13">You are a powerful member of the court who ensures that justice prevails.</Entry> <!--Prosecutor-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_14">You are a fortune teller who glimpses into the future.</Entry> <!--Psychic-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_15">You are a mystic who can resurrect the dead.</Entry> <!--Retributionist-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_16">You are able to see into the hearts of townies to find out their intentions.</Entry> <!--Seer-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_17">You are an authoritative figure who can search a townie's possessions.</Entry> <!--Sheriff-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_18">You are a careful person who secretly observes evil activity.</Entry> <!--Spy-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_19">You are a talented bartender who shares beverages with the town.</Entry> <!--Tavern Keeper-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_20">You are a skilled hunter who stalks your prey at night.</Entry> <!--Tracker-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_21">You are an intelligent woodsman with a knack for traps.</Entry> <!--Trapper-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_22">You are a prankster who tricks evildoers into giving you their power.</Entry> <!--Trickster-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_23">You are a war hero who will shoot intruders on sight.</Entry> <!--Veteran-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_24">You are a townie taking justice into your own hands.</Entry> <!--Vigilante-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_25">You are a summoner who can spawn objects out of thin air.</Entry> <!--Conjurer-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_26">You are a beacon of knowledge who can teach almost anything.</Entry> <!--Coven Leader-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_27">You are a nightmare who can invade people's dreams.</Entry> <!--Dreamweaver-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_28">You are a talented author who can rewrite a townie's story.</Entry> <!--Enchanter-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_29">You are a powerful spellcaster preparing to disintegrate the town.</Entry> <!--Hex Master-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_30">You are a talented magician using cheap tricks to fool the town.</Entry> <!--Illusionist-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_31">You are a bad omen who causes harm to those around you.</Entry> <!--Jinx-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_32">You are a snake haired monster with a gaze of stone.</Entry> <!--Medusa-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_33">You are an exile of the underworld who can reanimate the dead.</Entry> <!--Necromancer-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_34">You are a bartender who brews highly unstable drinks.</Entry> <!--Poisoner-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_35">You are an alchemist who concocts powerful potions.</Entry> <!--Potion Master-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_36">You are a sorcerer who sacrifices members of the town to the Old Ones.</Entry> <!--Ritualist-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_37">You are a dollmaker who silences members of the town.</Entry> <!--Voodoo Master-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_38">You are a creature of myth who has highly heightened senses.</Entry> <!--Wildling-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_39">You are a master of puppets who can control the actions of others.</Entry> <!--Witch-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_40">You are a pyromaniac who wants to watch the world burn.</Entry> <!--Arsonist-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_41">You are an acolyte of <![CDATA[<shake a=0.3><style=ApocalypseColor>%name_role250%</style></shake>]]>, destroying the town's food supply.</Entry> <!--Baker-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_42">You are an acolyte of <![CDATA[<shake a=0.3><style=ApocalypseColor>%name_role251%</style></shake>]]>, embodying nothing but raw power.</Entry> <!--Berserker-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_43">You are a prophet who must sacrifice members the town to the Old Ones.</Entry> <!--Doomsayer-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_44">You are an obsessed hangman who will stop at nothing to execute your target.</Entry> <!--Executioner-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_45">You are a chaotic spirit who's power can only be unleashed from the gallows.</Entry> <!--Jester-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_46"><![CDATA[<shake a=0.3>Yarr!</shake>]]> Swashbuckle the landlubbers and claim ye' treasure!</Entry> <!--Pirate-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_47">You are an acolyte of <![CDATA[<shake a=0.3><style=ApocalypseColor>%name_role252%</style></shake>]]>, infecting the town with a deadly disease.</Entry> <!--Plaguebearer-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_48">You are a psychopath who wants everyone in the town to die.</Entry> <!--Serial Killer-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_49">You are a phantom who can possess the bodies of townies.</Entry> <!--Shroud-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_50">You are an acolyte of <![CDATA[<shake a=0.3><style=ApocalypseColor>%name_role253%</style></shake>]]>, harvesting the souls of the town.</Entry> <!--Soul Collector-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_51">You are a regular townie who transforms under the full moon.</Entry> <!--Werewolf-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_52">You are the harbinger of the Blood Moon.</Entry> <!--Vampire-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_53">You are a wandering spirit, searching for a greater purpose.</Entry> <!--Cursed Soul-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_54">You are a wailing spirit.</Entry> <!--Banshee-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_55">You are an outlaw who is looking for recruits in their pursuit against the town.</Entry> <!--Jackal-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_56">You are the leader of the town's militia.</Entry> <!--Marshal-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_57">You are a corrupt court official who uses their power and connections to manipulate trials.</Entry> <!--Judge-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_58">You are a corrupt government tax agent who uses their knowledge and connections for evil.</Entry> <!--Auditor-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_59">You are a missionary who is determined to eradicate those accused of heresy.</Entry> <!--Inquisitor-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_60">You are a cosmic being who isolates and disrupts the town.</Entry> <!--Starspawn-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_61">You are a guardian of the town, shielding them with your Aegis.</Entry> <!--Oracle-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_62">You are an acolyte of <![CDATA[<shake a=0.3><style=ApocalypseColor>%name_role253%</style></shake>]]> who curses the Town.</Entry> <!--Warlock-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_63">You are a crazed galvanist overflowing with energy.</Entry> <!--Catalyst-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_64">You are a master of indoctrination, rewiring minds to serve your will.</Entry> <!--Cultist-->
+
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_0">You are... nothing. Please report this as a bug if you see this.</Entry> <!--NONE! NOTHING! NOTHING AT ALL!-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_1">You are a hopeless romantic searching for your soulmate.</Entry> <!--Admirer-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_2">You do not remember who you are.</Entry> <!--Amnesiac-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_3">You are a former knight dedicated to protecting the town.</Entry> <!--Bodyguard-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_4">You are a healer providing protection to the town.</Entry> <!--Cleric-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_5">You are an anatomist who uncovers the truth behind a townie's death.</Entry> <!--Coroner-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_6">You are a divine protector skilled in the art of protection.</Entry> <!--Crusader-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_7">You are an enforcer of the law who won't hesitate to kill in broad daylight.</Entry> <!--Deputy-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_8">You are a private eye who secretly gathers information.</Entry> <!--Investigator-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_9">You are a prison guard who secretly detains suspects.</Entry> <!--Jailor-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_10">You are an observer who camps outside of houses to gather information.</Entry> <!--Lookout-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_11">You are the leader of the town.</Entry> <!--Mayor-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_12">You are royality, blessing knighthood upon deserving townies.</Entry> <!--Monarch-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_13">You are a powerful member of the court who ensures that justice prevails.</Entry> <!--Prosecutor-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_14">You are a fortune teller who glimpses into the future.</Entry> <!--Psychic-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_15">You are a mystic who can resurrect the dead.</Entry> <!--Retributionist-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_16">You are able to see into the hearts of townies to find out their intentions.</Entry> <!--Seer-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_17">You are an authoritative figure who can search a townie's possessions.</Entry> <!--Sheriff-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_18">You are a careful person who secretly observes evil activity.</Entry> <!--Spy-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_19">You are a talented bartender who shares beverages with the town.</Entry> <!--Tavern Keeper-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_20">You are a skilled hunter who stalks your prey at night.</Entry> <!--Tracker-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_21">You are an intelligent woodsman with a knack for traps.</Entry> <!--Trapper-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_22">You are a prankster who tricks evildoers into giving you their power.</Entry> <!--Trickster-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_23">You are a war hero who will shoot intruders on sight.</Entry> <!--Veteran-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_24">You are a townie taking justice into your own hands.</Entry> <!--Vigilante-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_25">You are a summoner who can spawn objects out of thin air.</Entry> <!--Conjurer-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_26">You are a beacon of knowledge who can teach almost anything.</Entry> <!--Coven Leader-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_27">You are a nightmare who can invade people's dreams.</Entry> <!--Dreamweaver-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_28">You are a talented author who can rewrite a townie's story.</Entry> <!--Enchanter-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_29">You are a powerful spellcaster preparing to disintegrate the town.</Entry> <!--Hex Master-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_30">You are a talented magician using cheap tricks to fool the town.</Entry> <!--Illusionist-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_31">You are a bad omen who causes harm to those around you.</Entry> <!--Jinx-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_32">You are a snake haired monster with a gaze of stone.</Entry> <!--Medusa-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_33">You are an exile of the underworld who can reanimate the dead.</Entry> <!--Necromancer-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_34">You are a bartender who brews highly unstable drinks.</Entry> <!--Poisoner-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_35">You are an alchemist who concocts powerful potions.</Entry> <!--Potion Master-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_36">You are a sorcerer who sacrifices members of the town to the Old Ones.</Entry> <!--Ritualist-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_37">You are a dollmaker who silences members of the town.</Entry> <!--Voodoo Master-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_38">You are a creature of myth who has highly heightened senses.</Entry> <!--Wildling-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_39">You are a master of puppets who can control the actions of others.</Entry> <!--Witch-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_40">You are a pyromaniac who wants to watch the world burn.</Entry> <!--Arsonist-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_41">You are an acolyte of <![CDATA[<shake a=0.3><style=ApocalypseColor>%name_role250%</style></shake>]]>, destroying the town's food supply.</Entry> <!--Baker-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_42">You are an acolyte of <![CDATA[<shake a=0.3><style=ApocalypseColor>%name_role251%</style></shake>]]>, embodying nothing but raw power.</Entry> <!--Berserker-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_43">You are a prophet who must sacrifice members the town to the Old Ones.</Entry> <!--Doomsayer-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_44">You are an obsessed hangman who will stop at nothing to execute your target.</Entry> <!--Executioner-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_45">You are a chaotic spirit who's power can only be unleashed from the gallows.</Entry> <!--Jester-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_46"><![CDATA[<shake a=0.3>Yarr!</shake>]]> Swashbuckle the landlubbers and claim ye' treasure!</Entry> <!--Pirate-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_47">You are an acolyte of <![CDATA[<shake a=0.3><style=ApocalypseColor>%name_role252%</style></shake>]]>, infecting the town with a deadly disease.</Entry> <!--Plaguebearer-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_48">You are a psychopath who wants everyone in the town to die.</Entry> <!--Serial Killer-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_49">You are a phantom who can possess the bodies of townies.</Entry> <!--Shroud-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_50">You are an acolyte of <![CDATA[<shake a=0.3><style=ApocalypseColor>%name_role253%</style></shake>]]>, harvesting the souls of the town.</Entry> <!--Soul Collector-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_51">You are a regular townie who transforms under the full moon.</Entry> <!--Werewolf-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_52">You are the harbinger of the Blood Moon.</Entry> <!--Vampire-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_53">You are a wandering spirit, searching for a greater purpose.</Entry> <!--Cursed Soul-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_54">You are a wailing spirit.</Entry> <!--Banshee-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_55">You are an outlaw who is looking for recruits in their pursuit against the town.</Entry> <!--Jackal-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_56">You are the leader of the town's militia.</Entry> <!--Marshal-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_57">You are a corrupt court official who uses their power and connections to manipulate trials.</Entry> <!--Judge-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_58">You are a corrupt government tax agent who uses their knowledge and connections for evil.</Entry> <!--Auditor-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_59">You are a missionary who is determined to eradicate those accused of heresy.</Entry> <!--Inquisitor-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_60">You are a cosmic being who isolates and disrupts the town.</Entry> <!--Starspawn-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_61">You are a guardian of the town, shielding them with your Aegis.</Entry> <!--Oracle-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_62">You are an acolyte of <![CDATA[<shake a=0.3><style=ApocalypseColor>%name_role253%</style></shake>]]> who curses the Town.</Entry> <!--Warlock-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_63">You are a crazed galvanist overflowing with energy.</Entry> <!--Catalyst-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_64">You are a master of indoctrination, rewiring minds to serve your will.</Entry> <!--Cultist-->
+
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_0">You are... nothing. Please report this as a bug if you see this.</Entry> <!--NONE! NOTHING! NOTHING AT ALL!-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_1">You are a hopeless romantic searching for your soulmate.</Entry> <!--Admirer-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_2">You do not remember who you are.</Entry> <!--Amnesiac-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_3">You are a former knight dedicated to protecting the town.</Entry> <!--Bodyguard-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_4">You are a healer providing protection to the town.</Entry> <!--Cleric-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_5">You are an anatomist who uncovers the truth behind a townie's death.</Entry> <!--Coroner-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_6">You are a divine protector skilled in the art of protection.</Entry> <!--Crusader-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_7">You are an enforcer of the law who won't hesitate to kill in broad daylight.</Entry> <!--Deputy-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_8">You are a private eye who secretly gathers information.</Entry> <!--Investigator-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_9">You are a prison guard who secretly detains suspects.</Entry> <!--Jailor-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_10">You are an observer who camps outside of houses to gather information.</Entry> <!--Lookout-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_11">You are the leader of the town.</Entry> <!--Mayor-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_12">You are royality, blessing knighthood upon deserving townies.</Entry> <!--Monarch-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_13">You are a powerful member of the court who ensures that justice prevails.</Entry> <!--Prosecutor-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_14">You are a fortune teller who glimpses into the future.</Entry> <!--Psychic-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_15">You are a mystic who can resurrect the dead.</Entry> <!--Retributionist-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_16">You are able to see into the hearts of townies to find out their intentions.</Entry> <!--Seer-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_17">You are an authoritative figure who can search a townie's possessions.</Entry> <!--Sheriff-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_18">You are a careful person who secretly observes evil activity.</Entry> <!--Spy-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_19">You are a talented bartender who shares beverages with the town.</Entry> <!--Tavern Keeper-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_20">You are a skilled hunter who stalks your prey at night.</Entry> <!--Tracker-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_21">You are an intelligent woodsman with a knack for traps.</Entry> <!--Trapper-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_22">You are a prankster who tricks evildoers into giving you their power.</Entry> <!--Trickster-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_23">You are a war hero who will shoot intruders on sight.</Entry> <!--Veteran-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_24">You are a townie taking justice into your own hands.</Entry> <!--Vigilante-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_25">You are a summoner who can spawn objects out of thin air.</Entry> <!--Conjurer-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_26">You are a beacon of knowledge who can teach almost anything.</Entry> <!--Coven Leader-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_27">You are a nightmare who can invade people's dreams.</Entry> <!--Dreamweaver-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_28">You are a talented author who can rewrite a townie's story.</Entry> <!--Enchanter-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_29">You are a powerful spellcaster preparing to disintegrate the town.</Entry> <!--Hex Master-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_30">You are a talented magician using cheap tricks to fool the town.</Entry> <!--Illusionist-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_31">You are a bad omen who causes harm to those around you.</Entry> <!--Jinx-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_32">You are a snake haired monster with a gaze of stone.</Entry> <!--Medusa-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_33">You are an exile of the underworld who can reanimate the dead.</Entry> <!--Necromancer-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_34">You are a bartender who brews highly unstable drinks.</Entry> <!--Poisoner-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_35">You are an alchemist who concocts powerful potions.</Entry> <!--Potion Master-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_36">You are a sorcerer who sacrifices members of the town to the Old Ones.</Entry> <!--Ritualist-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_37">You are a dollmaker who silences members of the town.</Entry> <!--Voodoo Master-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_38">You are a creature of myth who has highly heightened senses.</Entry> <!--Wildling-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_39">You are a master of puppets who can control the actions of others.</Entry> <!--Witch-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_40">You are a pyromaniac who wants to watch the world burn.</Entry> <!--Arsonist-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_41">You are an acolyte of <![CDATA[<shake a=0.3><style=ApocalypseColor>%name_role250%</style></shake>]]>, destroying the town's food supply.</Entry> <!--Baker-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_42">You are an acolyte of <![CDATA[<shake a=0.3><style=ApocalypseColor>%name_role251%</style></shake>]]>, embodying nothing but raw power.</Entry> <!--Berserker-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_43">You are a prophet who must sacrifice members the town to the Old Ones.</Entry> <!--Doomsayer-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_44">You are an obsessed hangman who will stop at nothing to execute your target.</Entry> <!--Executioner-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_45">You are a chaotic spirit who's power can only be unleashed from the gallows.</Entry> <!--Jester-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_46"><![CDATA[<shake a=0.3>Yarr!</shake>]]> Swashbuckle the landlubbers and claim ye' treasure!</Entry> <!--Pirate-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_47">You are an acolyte of <![CDATA[<shake a=0.3><style=ApocalypseColor>%name_role252%</style></shake>]]>, infecting the town with a deadly disease.</Entry> <!--Plaguebearer-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_48">You are a psychopath who wants everyone in the town to die.</Entry> <!--Serial Killer-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_49">You are a phantom who can possess the bodies of townies.</Entry> <!--Shroud-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_50">You are an acolyte of <![CDATA[<shake a=0.3><style=ApocalypseColor>%name_role253%</style></shake>]]>, harvesting the souls of the town.</Entry> <!--Soul Collector-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_51">You are a regular townie who transforms under the full moon.</Entry> <!--Werewolf-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_52">You are the harbinger of the Blood Moon.</Entry> <!--Vampire-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_53">You are a wandering spirit, searching for a greater purpose.</Entry> <!--Cursed Soul-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_54">You are a wailing spirit.</Entry> <!--Banshee-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_55">You are an outlaw who is looking for recruits in their pursuit against the town.</Entry> <!--Jackal-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_56">You are the leader of the town's militia.</Entry> <!--Marshal-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_57">You are a corrupt court official who uses their power and connections to manipulate trials.</Entry> <!--Judge-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_58">You are a corrupt government tax agent who uses their knowledge and connections for evil.</Entry> <!--Auditor-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_59">You are a missionary who is determined to eradicate those accused of heresy.</Entry> <!--Inquisitor-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_60">You are a cosmic being who isolates and disrupts the town.</Entry> <!--Starspawn-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_61">You are a guardian of the town, shielding them with your Aegis.</Entry> <!--Oracle-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_62">You are an acolyte of <![CDATA[<shake a=0.3><style=ApocalypseColor>%name_role253%</style></shake>]]> who curses the Town.</Entry> <!--Warlock-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_63">You are a crazed galvanist overflowing with energy.</Entry> <!--Catalyst-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_64">You are a master of indoctrination, rewiring minds to serve your will.</Entry> <!--Cultist-->
+
 </StringTable>

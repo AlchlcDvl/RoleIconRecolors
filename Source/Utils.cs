@@ -110,6 +110,8 @@ public static class Utils
         Btos2Role.Oracle => "Oracle",
         Btos2Role.Warlock => "Warlock",
         Btos2Role.Vampire => "Vampire",
+        Btos2Role.Catalyst => "Catalyst",
+        Btos2Role.Cultist => "Cultist",
         Btos2Role.Stoned => "Stoned",
         Btos2Role.RandomTown => "Town",
         Btos2Role.RandomCoven => "Coven",
@@ -118,20 +120,20 @@ public static class Utils
         Btos2Role.TownProtective => "TownProtective",
         Btos2Role.TownKilling => "TownKilling",
         Btos2Role.TownSupport => "TownSupport",
-        Btos2Role.TownPower => "TownPower",
         Btos2Role.CovenKilling => "CovenKilling",
         Btos2Role.CovenUtility => "CovenUtility",
         Btos2Role.CovenDeception => "CovenDeception",
         Btos2Role.CovenPower => "CovenPower",
         Btos2Role.NeutralKilling => "NeutralKilling",
         Btos2Role.NeutralEvil => "NeutralEvil",
-        Btos2Role.TrueAny => "TrueAny",
         Btos2Role.CommonCoven => "CommonCoven",
         Btos2Role.CommonTown => "CommonTown",
         Btos2Role.RandomApocalypse => "RandomApocalypse",
         Btos2Role.NeutralPariah => "NeutralPariah",
-        Btos2Role.NeutralSpecial => "NeutralSpecial",
+        Btos2Role.NeutralOutlier => "NeutralOutlier",
         Btos2Role.Any => "Any",
+        Btos2Role.TownExecutive => "TownExecutive",
+        Btos2Role.TownGovernment => "TownGovernment",
         Btos2Role.CovenTownTraitor => "CovenTownTraitor",
         Btos2Role.ApocTownTraitor => "ApocTownTraitor",
         Btos2Role.PerfectTown => "PerfectTown",
@@ -160,10 +162,11 @@ public static class Utils
         Btos2Role.CovenVip => "CovenVIP",
         Btos2Role.SecretWhispers => "SecretWhispers",
         Btos2Role.Hidden => "Hidden",
-        Btos2Role.CommonNeutral => "CommonNeutral",
         Btos2Role.Vc => "VC",
         Btos2Role.Lovers => "Lovers",
         Btos2Role.FeelinLucky => "FeelinLucky",
+        Btos2Role.GracePeriod => "GracePeriod",
+        Btos2Role.AllOutliers => "AllOutliers",
         _ => "Blank"
     };
 
@@ -229,6 +232,10 @@ public static class Utils
         Role.DEATH => "Death",
         Role.CURSED_SOUL => "CursedSoul",
         Role.VAMPIRE => "Vampire",
+        Role.PILGRIM => "Pilgrim",
+        Role.COVENITE => "Covenite",
+        Role.CATALYST => "Catalyst",
+        Role.CULTIST => "Cultist",
         Role.STONED => "Stoned",
         Role.RANDOM_TOWN => "Town",
         Role.RANDOM_COVEN => "Coven",
@@ -261,6 +268,9 @@ public static class Utils
         Role.FOUR_HORSEMEN => "4Horsemen",
         Role.ANON_PLAYERS => "AnonPlayers",
         Role.FEELIN_LUCKY => "FeelinLucky",
+        Role.ELECTION => "Election",
+        Role.NO_NIGHT_ONE_KILLS => "GracePeriod",
+        Role.ALL_OUTLIERS => "AllOutliers",
         Role.HIDDEN => "Hidden",
         _ => "Blank"
     };
@@ -447,6 +457,8 @@ public static class Utils
         EffectType.SOCIALITE_GUEST => "Guest",
         EffectType.REAPED or (EffectType)109 => "Reaped",
         EffectType.REVEALED_BY_PMWITCH => "Illuminated",
+        EffectType.BESTOWED or (EffectType)111 => "Bestowed",
+        EffectType.SOVEREIGN => "Sovereign",
 
         // BTOS2
         (EffectType)100 => "Recruit",
@@ -459,7 +471,6 @@ public static class Utils
         (EffectType)107 => "PandoraTownTraitor",
         (EffectType)108 => "Egotist",
         (EffectType)110 => "WarlockCursed",
-        (EffectType)111 => "Bestowed",
         (EffectType)112 => "Sensed",
         _ => "Blank"
     };
@@ -573,8 +584,8 @@ public static class Utils
         ( < 54, Role.CURSED_SOUL, _) => FactionType.CURSED_SOUL,
 
         // BTOS2 specific role checks
-        (_, Btos2Role.Banshee, GameModType.BTOS2) => Btos2Faction.Coven,
-        (_, Btos2Role.Marshal or Btos2Role.Oracle, GameModType.BTOS2) => Btos2Faction.Town,
+        (_, Btos2Role.Banshee or Btos2Role.Cultist, GameModType.BTOS2) => Btos2Faction.Coven,
+        (_, Btos2Role.Marshal or Btos2Role.Oracle or Btos2Role.Catalyst, GameModType.BTOS2) => Btos2Faction.Town,
         (_, Btos2Role.Jackal, GameModType.BTOS2) => Btos2Faction.Jackal,
         (_, Btos2Role.Judge, GameModType.BTOS2) => Btos2Faction.Judge,
         (_, Btos2Role.Auditor, GameModType.BTOS2) => Btos2Faction.Auditor,
@@ -584,6 +595,8 @@ public static class Utils
 
         // Vanilla specific role checks
         ( > 53 and < 57, _, GameModType.Vanilla) => FactionType.TOWN,
+        ( _, Role.PILGRIM or Role.CATALYST, GameModType.Vanilla) => FactionType.TOWN,
+        ( _, Role.COVENITE or Role.CULTIST, GameModType.Vanilla) => FactionType.COVEN,
 
         // Default case
         _ => FactionType.NONE
@@ -757,6 +770,27 @@ public static class Utils
             factionName += "_BTOS";
 
         return GetString($"FANCY_{factionName}_ROLENAME_{(int)role}");
+    } 
+    public static string ToFactionalRoleBlurb(this Role role, FactionType faction)
+    {
+        if (!Fancy.FactionalRoleBlurbs.Value)
+            return role.ToDisplayString();
+
+        if (role is Role.STONED or Role.HIDDEN or Role.UNKNOWN)
+            faction = FactionType.NONE;
+
+        var factionName = FactionName(faction, GameModType.BTOS2).ToUpper();
+
+        if (factionName == "FACTIONLESS")
+            factionName = "NONE";
+
+        if (Constants.IsBTOS2())
+            factionName += "_BTOS";
+
+        if (SettingsAndTestingUI.Instance?.IsBTOS2 == true)
+            factionName += "_BTOS";
+
+        return GetString($"FANCY_{factionName}_ROLE_BLURB_{(int)role}");
     }
 
     public static Color GetPlayerRoleColor(int pos)
@@ -788,6 +822,17 @@ public static class Utils
     }
 
     public static string GetString(string key) => Service.Home.LocalizationService.GetLocalizedString(key);
+
+    // public static string RemoveStyleTags(string input)
+    // {
+    //     if (string.IsNullOrEmpty(input)) return input;
+
+    //     input = Regex.Replace(input, @"<style\s*=\s*""?.*?""?\s*>", string.Empty);
+    //     input = Regex.Replace(input, @"</style>", string.Empty);
+
+    //     return input;
+    // }
+
 
     public static bool ConditionalCompliancePandora(FactionType originalFaction, FactionType currentFaction)
     {
@@ -865,52 +910,6 @@ public static class Utils
         return replaceIcons ? factionIcon.ReplaceIcons() : factionIcon;
     }
 
-    private static readonly HashSet<Role> UniqueBTOSRoles =
-    [
-        Btos2Role.Jailor,
-        Btos2Role.Mayor,
-        Btos2Role.Prosecutor,
-        Btos2Role.Monarch,
-        Btos2Role.Marshal,
-        Btos2Role.Vampire,
-        Btos2Role.Jackal,
-        Btos2Role.Banshee,
-        Btos2Role.Conjurer,
-        Btos2Role.CovenLeader,
-        Btos2Role.Dreamweaver,
-        Btos2Role.Enchanter,
-        Btos2Role.Poisoner,
-        Btos2Role.PotionMaster,
-        Btos2Role.Necromancer,
-        Btos2Role.HexMaster,
-        Btos2Role.Witch,
-        Btos2Role.Wildling,
-        Btos2Role.Illusionist,
-        Btos2Role.VoodooMaster,
-        Btos2Role.Jinx,
-        Btos2Role.Ritualist,
-        Btos2Role.Medusa,
-        Btos2Role.Baker,
-        Btos2Role.Berserker,
-        Btos2Role.Plaguebearer,
-        Btos2Role.SoulCollector,
-        Btos2Role.Warlock,
-        Btos2Role.Pirate,
-        Btos2Role.Inquisitor,
-        Btos2Role.Executioner,
-        Btos2Role.Judge,
-        Btos2Role.Auditor,
-        Btos2Role.Starspawn,
-    ];
-
-    public static bool IsUnique(this Role role)
-    {
-        if (Constants.IsBTOS2())
-            return UniqueBTOSRoles.Contains(role);
-
-        return SharedRoleData.uniqueRoles.Contains(role);
-    }
-
     public static bool IsHorseman(this Role role) => RoleExtensions.horsemenList.Contains(role);
 
     public static string GetFormattedRoleName(Role role, FactionType faction, bool includeSprite = true)
@@ -939,8 +938,6 @@ public static class Utils
             return "FANCY_PLAYER_WAS_A_HIDDEN_ROLE";
         else if (role.IsHorseman())
             return "FANCY_PLAYER_WAS_ROLE";
-        else if ((role.IsUnique() || Constants.IsIndividuality()) && !Fancy.IgnoreUniqueRoleCheck.Value)
-            return "FANCY_PLAYER_WAS_THE_ROLE";
         else if (StartsWithVowel(roleName))
             return "FANCY_PLAYER_WAS_AN_ROLE";
         else
@@ -957,11 +954,18 @@ public static class Utils
             return "FANCY_THEY_WERE_A_HIDDEN_ROLE";
         else if (role.IsHorseman())
             return "FANCY_THEY_WERE_ROLE";
-        else if ((role.IsUnique() || Constants.IsIndividuality()) && !Fancy.IgnoreUniqueRoleCheck.Value)
-            return "FANCY_THEY_WERE_THE_ROLE";
         else if (StartsWithVowel(roleName))
             return "FANCY_THEY_WERE_AN_ROLE";
         else
             return "FANCY_THEY_WERE_A_ROLE";
+    }
+    public static string ToColorizedNoLabel(this Role role, FactionType faction)
+    {
+        var roleName = Fancy.FactionalRoleNames.Value ? role.ToRoleFactionDisplayString(faction) : role.ToDisplayString();
+        var gradient = faction.GetChangedGradient(role);
+
+        return gradient != null
+            ? ApplyGradient(roleName, gradient)
+            : $"<color={faction.GetFactionColor()}>{roleName}</color>";
     }
 }

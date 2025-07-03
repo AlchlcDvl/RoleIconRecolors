@@ -106,8 +106,6 @@ public static class RoleRevealCinematicPlayerPatch
 
         if (role.IsHorseman())
             roleRevealKey = "FANCY_ROLE_REVEAL_ROLE_HORSEMAN";
-        else if ((role.IsUnique() || Constants.IsIndividuality()) && !Fancy.IgnoreUniqueRoleCheck.Value)
-            roleRevealKey = "FANCY_ROLE_REVEAL_ROLE_UNIQUE";
         else if (Utils.StartsWithVowel(roleName))
             roleRevealKey = "FANCY_ROLE_REVEAL_ROLE_VOWEL";
         else
@@ -115,6 +113,10 @@ public static class RoleRevealCinematicPlayerPatch
 
         var roleText = __instance.l10n(roleRevealKey).Replace("%role%", roleIcon);
         __instance.roleTextPlayer.ShowText(roleText);
+
+        // TODO: Faction Specific Role Blurbs
+        var roleBlurb = Fancy.FactionalRoleBlurbs ? role.ToFactionalRoleBlurb(CurrentFaction) : role.GetRoleBlurb();
+        __instance.roleBlurbTextPlayer.ShowText(roleBlurb);
 
         if (Pepper.GetCurrentGameType() == GameType.Ranked)
             __instance.playableDirector.Resume();
@@ -134,7 +136,7 @@ public static class AchievementMentionsPatch
     {
         var achievementIds = Service.Game.Achievement.GetAllAchievementIds();
         var useColors = __instance._useColors;
-        var gradient = useColors ? Utils.CreateGradient(Fancy.AchievementStart.Value, Fancy.AchievementEnd.Value) : null;
+        // var gradient = useColors ? Utils.CreateGradient(Fancy.AchievementStart.Value, Fancy.AchievementEnd.Value) : null;
 
         var priority = 0;
 
@@ -144,11 +146,12 @@ public static class AchievementMentionsPatch
             if (string.IsNullOrWhiteSpace(title))
                 continue;
 
+            var color = Fancy.AchievementStart.Value;
             var encodedText = $"[[~{achievementId}]]";
             var match = $"~{title}";
 
             var styledTitle = useColors
-                ? $"<b>{Utils.ApplyGradient(title, gradient)}</b>"
+                ? $"<color={color}><b>{title}</b></color>"
                 : $"<b>{title}</b>";
 
             var richText = $"{__instance.styleTagOpen}{__instance.styleTagFont}<link=\"~{achievementId}\">{styledTitle}</link>{__instance.styleTagClose}";
@@ -406,35 +409,49 @@ public static class FactionWinsStandardCinematicPlayer_SetUpWinners_Patch
         21,22,23,24,25,26,27,28,29,30,
         31,32,33,34,35,36,37,38,39,40,
         41,42,43,44,45,46,47,48,49,50,
-        51,52,53,54,55,56,
+        51,52,53,54,55,56,57,58,59,60,
         240, 250, 251, 252, 253
     ];
     private static readonly int[] AllowedSilhouettesBTOS =
     [
         ..AllowedSilhouettes,
-        57,58,59,60,61,62,
+        57,58,59,60,61,62,63,64,
         240, 250, 251, 252, 253
     ];
 
     public static void Postfix(FactionWinsStandardCinematicPlayer __instance)
     {
-        if (Service.Game.Sim.info.gameInfo.Data.gamePhase != GamePhase.LOBBY || __instance.silhouetteWrappers == null || __instance.cinematicData.entries == null)
+        var gamePhase = Service.Game.Sim.info.gameInfo.Data.gamePhase;
+        if (gamePhase != GamePhase.LOBBY || __instance.silhouetteWrappers == null || __instance.characterWrappers == null || __instance.cinematicData.entries == null)
             return;
+
+        var random = new System.Random();
 
         foreach (var wrapper in __instance.silhouetteWrappers.Where(x => x))
         {
             var silhouetteId = 0;
 
             if (Fancy.SelectTestingRole.Value == Role.NONE && !Constants.IsBTOS2())
-                silhouetteId = AllowedSilhouettes.Random();
+                silhouetteId = AllowedSilhouettes[random.Next(AllowedSilhouettes.Length)];
 
-            if (Fancy.SelectTestingRole.Value == Role.NONE && Constants.IsBTOS2())
-                silhouetteId = AllowedSilhouettesBTOS.Random();
+            else if (Fancy.SelectTestingRole.Value == Role.NONE && Constants.IsBTOS2())
+                silhouetteId = AllowedSilhouettesBTOS[random.Next(AllowedSilhouettesBTOS.Length)];
 
-            if (Fancy.SelectTestingRole.Value != Role.NONE)
+            else if (Fancy.SelectTestingRole.Value != Role.NONE)
                 silhouetteId = (int)Fancy.SelectTestingRole.Value;
 
             wrapper.SwapWithSilhouette(silhouetteId, true);
+        }
+
+        var characterCount = __instance.characterWrappers.Count;
+
+        foreach (var wrapper in __instance.characterWrappers.Where(x => x))
+        {
+            var randomSkinId = random.Next(characterCount);
+
+            const int auraId = 0;
+
+            wrapper.SwapWithCharacter(randomSkinId, shouldUseLayering: true, auraId);
         }
     }
 }
@@ -485,7 +502,7 @@ public static class AddBTOS2RolesToDevMenu
     {
         if (Constants.IsBTOS2())
         {
-            for (var i = (byte)Role.ROLE_COUNT; i <= 62; i++)
+            for (var i = (byte)Role.ROLE_COUNT; i <= 64; i++)
                 AddCustomRoleEntry(__instance, i);
         }
 

@@ -110,22 +110,25 @@ public class Fancy : BaseMod<Fancy>
     public static ToggleOption ShowOverlayAsJailor;
     public static ToggleOption IconsInRoleReveal;
     public static ToggleOption FactionalRoleNames;
+    public static ToggleOption FactionalRoleBlurbs;
     public static ToggleOption ReplaceNAwithRA;
     public static ToggleOption GradientBuckets;
     public static ToggleOption DisableBTOSTribunal;
-    public static ToggleOption IgnoreUniqueRoleCheck;
 
     public static ToggleOption MajorColors;
     public static ToggleOption LethalColors;
 
     public static ColorOption NeutralStart;
-    public static ColorOption NeutralEnd;
+    // public static ColorOption NeutralEnd;
     public static ColorOption BucketStart;
-    public static ColorOption BucketEnd;
+    // public static ColorOption BucketEnd;
     public static ColorOption KeywordStart;
-    public static ColorOption KeywordEnd;
+    // public static ColorOption KeywordEnd;
     public static ColorOption AchievementStart;
-    public static ColorOption AchievementEnd;
+    // public static ColorOption AchievementEnd;
+    public static ColorOption MentionStart;
+    // public static ColorOption MentionEnd;
+    public static ToggleOption ColorMentionsWithFaction;
 
     public static FloatOption GeneralBrightness;
     public static FloatOption GrayscaleAmount;
@@ -355,9 +358,10 @@ public class Fancy : BaseMod<Fancy>
         PlayerPanelEasterEggs = new("PLAYER_PANEL_EE", false, PackType.IconPacks, Constants.EnableIcons);
 
         FactionalRoleNames = new("FACTIONAL_ROLE_NAMES", false, PackType.MiscRoleCustomisation, Constants.TextEditorExists);
+        FactionalRoleBlurbs = new("FACTIONAL_ROLE_BLURBS", false, PackType.MiscRoleCustomisation, Constants.TextEditorExists);
         MajorColors = new("MAJOR_COLORS", false, PackType.MiscRoleCustomisation);
         LethalColors = new("LETHAL_COLORS", false, PackType.MiscRoleCustomisation);
-        RecruitEndingColor = new("RECRUIT_ENDING", RecruitEndType.JackalEnd, PackType.MiscRoleCustomisation, useTranslations: true, setActive: Constants.BTOS2Exists);
+        RecruitEndingColor = new("RECRUIT_ENDING", RecruitEndType.JackalEnd, PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists, useTranslations: true);
         RoleCardFactionLabel = new("FACTION_LABEL", FactionLabelOption.Mismatch, PackType.MiscRoleCustomisation, useTranslations: true);
         FactionNameNextToRole = new("FACTION_NEXT_TO_ROLE", FactionLabelOption.Never, PackType.MiscRoleCustomisation, useTranslations: true);
         RecruitLabelTown = new("RECRUIT_LABEL_TOWN", "Recruited", PackType.MiscRoleCustomisation, setActive: () => Constants.BTOS2Exists() && SelectTestingFaction.Value == FactionType.TOWN);
@@ -385,16 +389,19 @@ public class Fancy : BaseMod<Fancy>
         WildlingWhisperColor = new("WILDLING_WHISPER", "#DD0000", PackType.MiscRoleCustomisation);
         SerialKillerWhisperColor = new("SERIALKILLER_WHISPER", "#800040", PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists);
         // GradientBuckets = new("GRADIENT_BUCKETS", true, PackType.MiscRoleCustomisation);
-        ReplaceNAwithRA = new("RANDOM_APOC_IN_VANILLA", false, PackType.MiscRoleCustomisation/*, setActive: () => GradientBuckets.Value*/);
+        // ReplaceNAwithRA = new("RANDOM_APOC_IN_VANILLA", false, PackType.MiscRoleCustomisation, setActive: () => GradientBuckets.Value);
 
         NeutralStart = new("NEUTRAL", "#A9A9A9", PackType.MiscRoleCustomisation);
         // NeutralEnd = new("NEUTRAL_END", "#A9A9A9", PackType.MiscRoleCustomisation, setActive: () => GradientBuckets.Value);
         // BucketStart = new("BUCKET_START", "#1F51FF", PackType.MiscRoleCustomisation, setActive: () => GradientBuckets.Value);
         // BucketEnd = new("BUCKET_END", "#1F51FF", PackType.MiscRoleCustomisation, setActive: () => GradientBuckets.Value);
-        KeywordStart = new("KEYWORD_START", "#007AFF", PackType.MiscRoleCustomisation);
-        KeywordEnd = new("KEYWORD_END", "#007AFF", PackType.MiscRoleCustomisation);
-        AchievementStart = new("ACHIEVEMENT_START", "#FFBE00", PackType.MiscRoleCustomisation);
-        AchievementEnd = new("ACHIEVEMENT_END", "#FFBE00", PackType.MiscRoleCustomisation);
+        KeywordStart = new("KEYWORD_COLOR", "#007AFF", PackType.MiscRoleCustomisation);
+        // KeywordEnd = new("KEYWORD_END", "#007AFF", PackType.MiscRoleCustomisation);
+        AchievementStart = new("ACHIEVEMENT_COLOR", "#FFBE00", PackType.MiscRoleCustomisation);
+        // AchievementEnd = new("ACHIEVEMENT_END", "#FFBE00", PackType.MiscRoleCustomisation);
+        MentionStart = new("MENTION_COLOR", "#FFCE3B", PackType.MiscRoleCustomisation, setActive: () => !Constants.BetterMentionsExists());
+        // MentionEnd = new("MENTION_END", "#FFCE3B", PackType.MiscRoleCustomisation, setActive: () => !Constants.BetterMentionsExists());
+        // ColorMentionsWithFaction = new("FACTIONAL_PLAYER_MENTIONS", true, PackType.MiscRoleCustomisation, setActive: () => !Constants.BetterMentionsExists());
 
         PlayerNumber = new("PLAYER_NUMBER", 0, PackType.Testing, 0, 15, true, Constants.CustomNumbers);
         ChatBackgroundOpacity = new("CHAT_BACKGROUND", 80, PackType.Testing, 0, 100, true);
@@ -404,7 +411,6 @@ public class Fancy : BaseMod<Fancy>
         ShowOverlayAsJailor = new("SHOW_TO_JAILOR", false, PackType.Testing);
         IconsInRoleReveal = new("ROLE_REVEAL_ICONS", true, PackType.Testing);
         DisableBTOSTribunal = new("DISABLE_BTOS_TRIBUNAL", true, PackType.Testing, setActive: Constants.BTOS2Exists);
-        IgnoreUniqueRoleCheck = new("IGNORE_UNIQUE_ROLE_CHECK", false, PackType.Testing);
 
         foreach (var faction in BTOS2Factions.Where(x => x is not (FactionType.NONE or (> FactionType.APOCALYPSE and < FactionType.VAMPIRE) or FactionType.CURSED_SOUL or FactionType.UNKNOWN or
             Btos2Faction.Lovers or (> Btos2Faction.Hawks and < Btos2Faction.Pandora))))
