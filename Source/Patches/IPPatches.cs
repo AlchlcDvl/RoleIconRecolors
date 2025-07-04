@@ -1167,6 +1167,43 @@ public static class PatchNecroRetMenuItem
     }
 }
 
+[HarmonyPatch(typeof(SpecialAbilityPopupGenericDualTarget), nameof(SpecialAbilityPopupGenericDualTarget.Start))]
+public static class PatchDualAbilityMenu
+{
+    public static void Postfix(SpecialAbilityPopupGenericDualTarget __instance)
+    {
+        if (!Constants.EnableIcons())
+            return;
+
+        var sprite = GetSprite(Utils.RoleName(Pepper.GetMyRole()), Utils.FactionName(Pepper.GetMyFaction()));
+
+        if (sprite.IsValid() && __instance.roleIcon)
+            __instance.roleIcon.sprite = sprite;
+    }
+}
+
+[HarmonyPatch(typeof(SpecialAbilityPopupGenericDualTargetListItem), nameof(SpecialAbilityPopupGenericDualTargetListItem.SetData))]
+public static class PatchDualAbilityMenuItem
+{
+    public static void Postfix(SpecialAbilityPopupGenericDualTargetListItem __instance, int position)
+    {
+        if (!Constants.EnableIcons() || !Utils.GetRoleAndFaction(position, out var tuple))
+            return;
+
+        var role = Utils.RoleName(Pepper.GetMyRole());
+        var faction = Utils.FactionName(Pepper.GetMyFaction());
+        var sprite = GetSprite($"{role}_Special", faction, false);
+
+        if (sprite.IsValid() && __instance.choiceSprite)
+            __instance.choiceSprite.sprite = sprite;
+
+        var sprite2 = GetSprite($"{role}_Ability_2", faction, false);
+
+        if (sprite2.IsValid() && __instance.choice2Sprite)
+            __instance.choice2Sprite.sprite = sprite2;
+    }
+}
+
 [HarmonyPatch(typeof(PirateProgressLevelElement), nameof(PirateProgressLevelElement.SetData), typeof(Role), typeof(Role), typeof(Role), typeof(bool), typeof(bool), typeof(bool))]
 public static class PatchPirateMenu
 {

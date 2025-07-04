@@ -344,6 +344,72 @@ public static class SpecialAbilityPopupNecromancerRetributionistListItemPatch
     }
 }
 
+[HarmonyPatch(typeof(SpecialAbilityPopupGenericDualTargetListItem), nameof(SpecialAbilityPopupGenericDualTargetListItem.SetData))]
+public static class PatchSpecialAbilityPopupGenericDualTargetListItem
+{
+    public static bool Prefix(
+        SpecialAbilityPopupGenericDualTargetListItem __instance, int position, string player_name, Sprite headshot, bool hasChoice1, bool hasChoice2, UIRoleData
+        data, Role role, SpecialAbilityPopupGenericDualTarget parent)
+    {
+        __instance.parent = parent;
+
+        var myRole = Pepper.GetMyRole();
+        var role2 = Role.NONE;
+        var factionType = FactionType.NONE;
+
+        if (Utils.GetRoleAndFaction(position, out var tuple))
+        {
+            role2 = tuple.Item1;
+            factionType = tuple.Item2;
+        }
+
+        var roleText = "";
+        var gradient = factionType.GetChangedGradient(role2);
+        if (role2 != Role.NONE)
+            roleText = Fancy.FactionalRoleNames.Value
+                ? Utils.GetRoleName(role2, factionType, true)
+                : $"({role2.ToDisplayString()})";
+
+        var text = $"{player_name} {Utils.ApplyGradient(roleText, gradient)}";
+        __instance.playerName.SetText(text);
+
+        __instance.playerHeadshot.sprite = headshot;
+        __instance.characterPosition = position;
+        __instance.playerNumber.text = $"{__instance.characterPosition + 1}.";
+
+        var uiRoleDataInstance = data.roleDataList.Find(d => d.role == myRole);
+        if (uiRoleDataInstance != null)
+        {
+            __instance.choiceText.text = __instance.l10n($"GUI_ROLE_SPECIAL_ABILITY_VERB_{(int)myRole}");
+            __instance.choiceSprite.sprite = uiRoleDataInstance.specialAbilityIcon;
+            __instance.choice2Text.text = __instance.l10n($"GUI_ROLE_SPECIAL_ABILITY_VERB_{(int)myRole}");
+            __instance.choice2Sprite.sprite = uiRoleDataInstance.specialAbilityIcon;
+        }
+
+        __instance.choiceButton.gameObject.SetActive(hasChoice1 && !__instance.selected2);
+        __instance.choice2Button.gameObject.SetActive(hasChoice2 && !__instance.selected1);
+
+        if (!hasChoice1)
+        {
+            __instance.selected1 = false;
+            __instance.choiceButton.Deselect();
+        }
+
+        if (!hasChoice2)
+        {
+            __instance.selected2 = false;
+            __instance.choice2Button.Deselect();
+        }
+
+        if (EventSystem.current.currentSelectedGameObject != __instance.gpSelectable.gameObject)
+            __instance.GPSelectExit();
+        else
+            __instance.GPSelectEnter();
+
+        return false;
+    }
+}
+
 [HarmonyPatch(typeof(Pepper), nameof(Pepper.GetMyFaction))]
 public static class FixMyFaction
 {
