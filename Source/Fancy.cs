@@ -223,7 +223,7 @@ public class Fancy : BaseMod<Fancy>
         VanillaFactions = [.. GeneralUtils.GetEnumValues<FactionType>()!.Except([FactionType.UNKNOWN])];
         BTOS2Factions = [.. AccessTools.GetDeclaredFields(typeof(Btos2Faction)).Select(x => (FactionType)x.GetRawConstantValue())];
         VanillaRoles = [.. GeneralUtils.GetEnumValues<Role>()!.Where(role => (byte)role is < 57 or > 250).Except([Role.STONED, Role.UNKNOWN])];
-        BTOS2Roles = [.. AccessTools.GetDeclaredFields(typeof(Btos2Role)).Select(x => (Role)x.GetRawConstantValue()).Where(role => (byte)role is < 63 or > 249).Except([Role.STONED,
+        BTOS2Roles = [.. AccessTools.GetDeclaredFields(typeof(Btos2Role)).Select(x => (Role)x.GetRawConstantValue()).Where(role => (byte)role is < 65 or > 249).Except([Role.STONED,
             Role.UNKNOWN])];
 
         var colors = GeneralUtils.GetEnumValues<ColorType>()!.Where(x => x != ColorType.All).ToDictionary(x => x, x => x.ToString().ToUpperInvariant());
