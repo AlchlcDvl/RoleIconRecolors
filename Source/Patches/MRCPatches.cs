@@ -10,6 +10,7 @@ using Server.Shared.Cinematics.Data;
 using Server.Shared.Extensions;
 using System.Globalization;
 using Home.Services;
+using Game.Simulation;
 
 namespace FancyUI.Patches;
 
@@ -452,18 +453,12 @@ public static class ClientRoleExtensionsPatches
     {
         var gradient = factionType.GetChangedGradient(role);
 
+        // Pretty sure this got removed from vanilla but I don't know for sure
         if (__result.Contains("<color=#B545FF>(Traitor)"))
         {
             __result = __result.Replace("<color=#B545FF>(Traitor)</color>", gradient != null
                 ? $"{Utils.ApplyGradient($"({Fancy.CovenTraitorLabel.Value})", gradient)}"
                 : $"<style=CovenColor>({Fancy.CovenTraitorLabel.Value})</style>");
-        }
-
-        if (__result.Contains("<color=#06E00C>(VIP)"))
-        {
-            __result = __result.Replace("<color=#06E00C>(VIP)</color>", gradient != null
-                ? $"{Utils.ApplyGradient($"({Fancy.VipLabel.Value})", gradient)}"
-                : $"<style=TownColor>({Fancy.VipLabel.Value})</style>");
         }
 
         if (!role.IsResolved() && role is not (Role.FAMINE or Role.DEATH or Role.PESTILENCE or Role.WAR))
@@ -939,5 +934,16 @@ public static class GraveyardItem_SetPlayerPicAndName_Patch
 
         var combinedText = $"{name} ({text})";
         __instance.playerAndRoleLabel.SetText(combinedText);
+    }
+}
+
+[HarmonyPatch(typeof(GameSimulation))]
+public static class GameSimPatches
+{
+    [HarmonyPatch(nameof(GameSimulation.GetVIPText)), HarmonyPostfix]
+    public static void VIPTextPostfix(ref string __result)
+    {
+        var gradient = FactionType.TOWN.GetChangedGradient(Role.ADMIRER);
+        __result = $" {Utils.ApplyGradient($"({Fancy.VipLabel.Value})", gradient)}";
     }
 }
