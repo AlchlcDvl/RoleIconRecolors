@@ -14,7 +14,7 @@ public static class Utils
     private static readonly string[] CommonSkippableNames = [ "Admirer_Ability_1", "Amnesiac_Ability", "Arsonist_Ability", "Attributes", "Berserker_Ability", "Bodyguard_Ability", "Catalyst_Ability",
         "Cleric_Ability", "Coroner_Ability", "Crusader_Ability", "CursedSoul_Ability", "Death_Ability", "Dreamweaver_Ability", "Enchanter_Ability", "Famine_Ability", "HexMaster_Ability",
         "Illusionist_Ability", "Investigator_Ability", "Jailor_Ability", "Jester_Ability", "Jinx_Ability", "Lookout_Ability", "Medusa_Ability", "Monarch_Ability", "Seer_Ability_1",
-        "Pestilence_Ability", "Plaguebearer_Ability", "Poisoner_Ability1", "Poisoner_Ability_2", "PotionMaster_Ability_1", "PotionMaster_Ability_2", "Psychic_Ability", "War_Ability_1", "Werewolf_Ability_2",
+        "Pestilence_Ability", "Plaguebearer_Ability", "Poisoner_Ability_1", "Poisoner_Ability_2", "PotionMaster_Ability_1", "PotionMaster_Ability_2", "Psychic_Ability", "War_Ability_1", "Werewolf_Ability_2",
         "Seer_Ability_2", "SerialKiller_Ability", "Sheriff_Ability", "Shroud_Ability", "SoulCollector_Ability", "Trickster_Ability_1", "Trickster_Ability_2", "Spy_Ability", "Wildling_Ability",
         "TavernKeeper_Ability", "Tracker_Ability", "Trapper_Ability", "Vampire_Ability_1", "Vampire_Ability_2", "Vigilante_Ability", "VoodooMaster_Ability", "War_Ability_2", "Witch_Ability_1", "Witch_Ability_2",
         "Werewolf_Ability_1" ];
