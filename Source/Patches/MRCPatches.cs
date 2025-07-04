@@ -624,7 +624,7 @@ public static class ClientRoleExtensionsPatches
             : $"<color={factionType.GetFactionColor()}>{text}</color>";
     }
 
-    [HarmonyPatch(nameof(ClientRoleExtensions.GetSecondFactionColor)), HarmonyPostfix]
+    [HarmonyPatch(nameof(ClientRoleExtensions.GetSecondFactionColor)), HarmonyPrefix]
     public static bool GetSecondFactionColorPrefix(ref string __result, FactionType factionType)
     {
         __result = Fancy.Colors[Utils.FactionName(factionType, stoned: true).ToUpper()].Start;
