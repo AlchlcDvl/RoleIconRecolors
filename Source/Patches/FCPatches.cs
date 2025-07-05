@@ -45,7 +45,7 @@ public static class FancyChatWhispers
         var isWildling = myRole == Role.WILDLING;
         var isSerialKiller = myRole == Role.SERIALKILLER && Constants.IsBTOS2();
 
-        if (!(myPosition == __instance.whispererId || myPosition == __instance.whispereeId) && (isWildling || isSerialKiller))
+        if (!(myPosition == __instance.whispererId || myPosition == __instance.whispereeId) && (isWildling || isSerialKiller) && Pepper.AmIAlive())
         {
             string xToY;
             Color color;
