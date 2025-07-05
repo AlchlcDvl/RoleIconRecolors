@@ -503,10 +503,10 @@ public static class FactionWinsStandardCinematicPlayer_SetUpWinners_Patch
             wrapper.SwapWithSilhouette(silhouetteId, true);
         }
 
-        var characterCount = __instance.characterWrappers.Count;
+        // var characterCount = __instance.characterWrappers.Count;
 
         foreach (var wrapper in __instance.characterWrappers.Where(x => x))
-            wrapper.SwapWithCharacter(URandom.RandomRangeInt(0, characterCount), true, 0);
+            wrapper.SwapWithCharacter(URandom.RandomRangeInt(0, 86), true, 0);
     }
 }
 
