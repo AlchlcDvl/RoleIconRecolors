@@ -4829,7 +4829,7 @@
 	<Entry key="FANCY_JUDGE_BTOS_ROLE_BLURB_57">You are a corrupt court official who uses their power and connections to manipulate trials.</Entry> <!--Judge-->
 	<Entry key="FANCY_AUDITOR_BTOS_ROLE_BLURB_58">You are a corrupt government tax agent who uses their knowledge and connections for evil.</Entry> <!--Auditor-->
 	<Entry key="FANCY_INQUISITOR_BTOS_ROLE_BLURB_59">You are a missionary who is determined to eradicate those accused of heresy.</Entry> <!--Inquisitor-->
-	<Entry key="FANCY_STARSPAWN_BTOS_ROLE_BLURB_60">You are a cosmic being who isolates and disrupts the town.</Entry> <!--Starspawn-->
+	<Entry key="FANCY_STARSPAWN_BTOS_ROLE_BLURB_60">You are a cosmic being who has the power to stop anything at will.</Entry> <!--Starspawn-->
 	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_61">You are a guardian of the town, shielding them with your Aegis.</Entry> <!--Oracle-->
 	<Entry key="FANCY_APOCALYPSE_BTOS_ROLE_BLURB_62">You are an acolyte of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role253"><style=ApocalypseColor>%name_role253%</style></shake>]]> who curses the Town.</Entry> <!--Warlock-->
 	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_63">You are a crazed galvanist overflowing with energy.</Entry> <!--Catalyst-->
@@ -4933,7 +4933,7 @@
 	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_57">You are a corrupt court official who uses their power and connections to manipulate trials.</Entry> <!--Judge-->
 	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_58">You are a corrupt government tax agent who uses their knowledge and connections for evil.</Entry> <!--Auditor-->
 	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_59">You are a missionary who is determined to eradicate those accused of heresy.</Entry> <!--Inquisitor-->
-	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_60">You are a cosmic being who isolates and disrupts the town.</Entry> <!--Starspawn-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_60">You are a cosmic being who has the power to stop anything at will.</Entry> <!--Starspawn-->
 	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_61">You are a guardian of the town, shielding them with your Aegis.</Entry> <!--Oracle-->
 	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_62">You are an acolyte of <![CDATA[<shake a=0.3><style=ApocalypseColor>%name_role253%</style></shake>]]> who curses the Town.</Entry> <!--Warlock-->
 	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_63">You are a crazed galvanist overflowing with energy.</Entry> <!--Catalyst-->
@@ -4999,7 +4999,7 @@
 	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_57">You are a corrupt court official who uses their power and connections to manipulate trials.</Entry> <!--Judge-->
 	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_58">You are a corrupt government tax agent who uses their knowledge and connections for evil.</Entry> <!--Auditor-->
 	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_59">You are a missionary who is determined to eradicate those accused of heresy.</Entry> <!--Inquisitor-->
-	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_60">You are a cosmic being who isolates and disrupts the town.</Entry> <!--Starspawn-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_60">You are a cosmic being who has the power to stop anything at will.</Entry> <!--Starspawn-->
 	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_61">You are a guardian of the town, shielding them with your Aegis.</Entry> <!--Oracle-->
 	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_62">You are an acolyte of <![CDATA[<shake a=0.3><style=ApocalypseColor>%name_role253%</style></shake>]]> who curses the Town.</Entry> <!--Warlock-->
 	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_63">You are a crazed galvanist overflowing with energy.</Entry> <!--Catalyst-->
@@ -5065,7 +5065,7 @@
 	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_57">You are a corrupt court official who uses their power and connections to manipulate trials.</Entry> <!--Judge-->
 	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_58">You are a corrupt government tax agent who uses their knowledge and connections for evil.</Entry> <!--Auditor-->
 	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_59">You are a missionary who is determined to eradicate those accused of heresy.</Entry> <!--Inquisitor-->
-	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_60">You are a cosmic being who isolates and disrupts the town.</Entry> <!--Starspawn-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_60">You are a cosmic being who has the power to stop anything at will.</Entry> <!--Starspawn-->
 	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_61">You are a guardian of the town, shielding them with your Aegis.</Entry> <!--Oracle-->
 	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_62">You are an acolyte of <![CDATA[<shake a=0.3><style=ApocalypseColor>%name_role253%</style></shake>]]> who curses the Town.</Entry> <!--Warlock-->
 	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_63">You are a crazed galvanist overflowing with energy.</Entry> <!--Catalyst-->
