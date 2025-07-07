@@ -368,13 +368,13 @@ public static class PatchDefaultWinScreens
             __instance.m_Animator.SetInteger(State, 2);
         }
 
-        var text = Utils.GetString($"GUI_WINNERS_ARE_{(int)winningFaction}");
+        var text = Utils.GetString($"FANCY_WINNERS_ARE_{(int)winningFaction}");
         var gradient = winningFaction.GetChangedGradient(Role.NONE);
 
         if (gradient != null)
         {
             __instance.leftImage.color = Utils.GetFactionStartingColor(winningFaction);
-            __instance.rightImage.color = Utils.GetFactionEndingColor(winningFaction);
+            __instance.rightImage.color = Fancy.VerticalGradients.Value ? Utils.GetFactionStartingColor(winningFaction) : Utils.GetFactionEndingColor(winningFaction);
             __instance.textAnimatorPlayer.ShowText(Utils.ApplyGradient(text, gradient));
         }
         else
@@ -407,7 +407,7 @@ public static class PatchCustomWinScreens
 
         var winningFaction = __instance.cinematicData.winningFaction;
         PlayVictoryMusic(winningFaction);
-        var text2 = Utils.GetString($"GUI_WINNERS_ARE_{(int)winningFaction}");
+        var text2 = Utils.GetString($"FANCY_WINNERS_ARE_{(int)winningFaction}");
         var gradient = winningFaction.GetChangedGradient(Role.NONE);
 
         if (gradient != null)
@@ -422,7 +422,13 @@ public static class PatchCustomWinScreens
                 continue;
 
             if (child.TryGetComponent<Image>(out var image))
+            {
+                if (Fancy.VerticalGradients.Value)
+                image.color = Utils.GetFactionStartingColor(winningFaction);
+                else
                 image.color = child.name == "Filigree_R" ? Utils.GetFactionEndingColor(winningFaction) : Utils.GetFactionStartingColor(winningFaction);
+            }
+                
         }
 
         __instance.SetUpWinners();

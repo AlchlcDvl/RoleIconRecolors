@@ -5071,4 +5071,33 @@
 	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_63">You are a crazed galvanist overflowing with energy.</Entry> <!--Catalyst-->
 	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_64">You are a master of indoctrination, rewiring minds to serve your will.</Entry> <!--Cultist-->
 
+    <Entry key="FANCY_WINNERS_ARE_0">Match Draw!</Entry>
+    <Entry key="FANCY_WINNERS_ARE_1">Townies Win!</Entry>
+    <Entry key="FANCY_WINNERS_ARE_2">Coven Wins!</Entry>
+    <Entry key="FANCY_WINNERS_ARE_3">Serial Killers Win!</Entry>
+    <Entry key="FANCY_WINNERS_ARE_4">Arsonists Win!</Entry>
+    <Entry key="FANCY_WINNERS_ARE_5">Werewolves Win!</Entry>
+    <Entry key="FANCY_WINNERS_ARE_6">Shrouds Win!</Entry>
+	<Entry key="FANCY_WINNERS_ARE_7">Apocalypse Wins!</Entry>
+    <Entry key="FANCY_WINNERS_ARE_8">Executioners Win!</Entry>
+    <Entry key="FANCY_WINNERS_ARE_9">Jesters Win!</Entry>
+    <Entry key="FANCY_WINNERS_ARE_10">Pirates Win!</Entry>
+    <Entry key="FANCY_WINNERS_ARE_11">Doomsayers Win!</Entry>
+    <Entry key="FANCY_WINNERS_ARE_12">Vampires Win!</Entry>
+	<Entry key="FANCY_WINNERS_ARE_13">Cursed Souls Win!</Entry>
+	<Entry key="FANCY_WINNERS_ARE_14">Unknown Wins!</Entry>
+	<Entry key="FANCY_WINNERS_ARE_33">Jackals Win!</Entry>
+	<Entry key="FANCY_WINNERS_ARE_34">Frogs Win!</Entry>
+	<Entry key="FANCY_WINNERS_ARE_35">Lions Win!</Entry>
+	<Entry key="FANCY_WINNERS_ARE_36">Hawks Win!</Entry>
+	<Entry key="FANCY_WINNERS_ARE_37">Cannibals Win!</Entry>
+	<Entry key="FANCY_WINNERS_ARE_38">Judges Win!</Entry>
+	<Entry key="FANCY_WINNERS_ARE_39">Auditors Win!</Entry>
+	<Entry key="FANCY_WINNERS_ARE_40">Inquisitors Win!</Entry>
+	<Entry key="FANCY_WINNERS_ARE_41">Starspawns Win!</Entry>
+	<Entry key="FANCY_WINNERS_ARE_42">Egotists Win!</Entry>
+	<Entry key="FANCY_WINNERS_ARE_43">Pandora Wins!</Entry>
+	<Entry key="FANCY_WINNERS_ARE_44">The Compliance Wins!</Entry>
+	<Entry key="FANCY_WINNERS_ARE_250">Lovers Win!</Entry>
+
 </StringTable>
