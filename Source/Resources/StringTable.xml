@@ -31,7 +31,9 @@
 
     <Entry key="FANCY_LETHAL_COLORS_NAME">Override End Color for Killing Roles</Entry>
     <Entry key="FANCY_LETHAL_COLORS_DESC">Determines whether or not end colors on factions will be overwritten with a separate Lethal color value when Coven Power, Town Power, or a Horseman of the Apocalypse.</Entry>
-   
+
+    <Entry key="FANCY_VERTICAL_GRADIENTS_NAME">Vertical Gradients</Entry>
+    <Entry key="FANCY_VERTICAL_GRADIENTS_DESC">Determines whether or not gradients should be vertical (like Vanilla's gradients) or horziontal (like BToS2's gradients).</Entry>
 
     <Entry key="FANCY_RECRUIT_ENDING_NAME">Override Recruit End Color</Entry>
     <Entry key="FANCY_RECRUIT_ENDING_DESC">Determines what color recruits will pull. Jackal means it pulls from the Jackal End Color, Original Start means it pulls from their original faction's Start color, and Original End pulls from their original faction's End color (Major if a Major role with the setting on).</Entry>

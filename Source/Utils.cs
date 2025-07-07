@@ -737,12 +737,16 @@ public static class Utils
 
     public static string ApplyGradient(string text, Gradient gradient)
     {
-        var text2 = "";
+        if (!Fancy.VerticalGradients.Value)
+        {
+            var text2 = "";
 
-        for (var i = 0; i < text.Length; i++)
-            text2 += $"<#{gradient.Evaluate((float)i / text.Length).ToHtmlStringRGBA()}>{text[i]}</color>";
+            for (var i = 0; i < text.Length; i++)
+                text2 += $"<#{gradient.Evaluate((float)i / text.Length).ToHtmlStringRGBA()}>{text[i]}</color>";
 
-        return text2;
+            return text2;
+        }
+        return "<gradient=\"" + Gradients.GetVerticalGradientKey(gradient) + "\">" + text + "</gradient>";
     }
 
     private static Color ShadeColor(this Color color, float strength = 0f)

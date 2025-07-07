@@ -51,4 +51,23 @@ public static class Gradients
                 ? lethalVal
                 : endVal;
     }
+
+    public static string GetVerticalGradientKey(Gradient gradient)
+    {
+        foreach (KeyValuePair<Gradient, string> kvp in verticalGradients)
+            if (kvp.Key.Equals(gradient))
+                return kvp.Value;
+        string name = "FancyGradient" + (verticalGradients.Count + 1);
+        int hashCode = TMP_TextUtilities.GetHashCode(name);
+        Color color1 = gradient.Evaluate(0f);
+        Color color2 = gradient.Evaluate(1f);
+        TMP_ColorGradient colorGradient = new(color1, color1, color2, color2);
+        colorGradient.name = name;
+        colorGradient.colorMode = ColorMode.VerticalGradient;
+        MaterialReferenceManager.AddColorGradientPreset(hashCode, colorGradient);
+        verticalGradients.Add(gradient, name);
+        return name;
+    }
+
+    public static Dictionary<Gradient, string> verticalGradients = new Dictionary<Gradient, string>();
 }

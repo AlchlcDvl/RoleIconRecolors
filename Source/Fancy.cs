@@ -117,6 +117,7 @@ public class Fancy : BaseMod<Fancy>
 
     public static ToggleOption MajorColors;
     public static ToggleOption LethalColors;
+    public static ToggleOption VerticalGradients;
 
     public static ColorOption NeutralStart;
     // public static ColorOption NeutralEnd;
@@ -361,6 +362,7 @@ public class Fancy : BaseMod<Fancy>
         FactionalRoleBlurbs = new("FACTIONAL_ROLE_BLURBS", false, PackType.MiscRoleCustomisation, Constants.TextEditorExists);
         MajorColors = new("MAJOR_COLORS", false, PackType.MiscRoleCustomisation);
         LethalColors = new("LETHAL_COLORS", false, PackType.MiscRoleCustomisation);
+        VerticalGradients = new("VERTICAL_GRADIENTS", false, PackType.MiscRoleCustomisation);
         RecruitEndingColor = new("RECRUIT_ENDING", RecruitEndType.JackalEnd, PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists, useTranslations: true);
         RoleCardFactionLabel = new("FACTION_LABEL", FactionLabelOption.Mismatch, PackType.MiscRoleCustomisation, useTranslations: true);
         FactionNameNextToRole = new("FACTION_NEXT_TO_ROLE", FactionLabelOption.Never, PackType.MiscRoleCustomisation, useTranslations: true);
