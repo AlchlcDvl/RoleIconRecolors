@@ -171,7 +171,7 @@ public class Fancy : BaseMod<Fancy>
         { "TOWN", ("#06E00C", "#06E00C", "#06E00C", null, "#06E00C") },
         { "COVEN", ("#B545FF", "#B545FF", "#B545FF", null, "#B545FF") },
         { "APOCALYPSE", ("#FF004E", "#FF004E", "#FF004E", null, "#FF004E") },
-        { "VAMPIRE", ("#A22929", "#A22929", "#A22929", null, "#A22929") },
+        { "VAMPIRE", ("#ff0000", "#6A1B1B", "#6A1B1B", null, "#6A1B1B") },
         { "CURSEDSOUL", ("#4FFF9F", "#B54FFF", "#4FFF9F", null, "#4FFF9F") },
         { "PANDORA", ("#B545FF", "#FF004E", "#FF004E", null, "#FF004E") },
         { "COMPLIANCE", ("#2D44B5", "#FC9F32", "#FC9F32", "#AE1B1E", null) },
@@ -363,7 +363,7 @@ public class Fancy : BaseMod<Fancy>
         FactionalRoleBlurbs = new("FACTIONAL_ROLE_BLURBS", false, PackType.MiscRoleCustomisation, Constants.TextEditorExists);
         MajorColors = new("MAJOR_COLORS", false, PackType.MiscRoleCustomisation);
         LethalColors = new("LETHAL_COLORS", false, PackType.MiscRoleCustomisation);
-        VerticalGradients = new("VERTICAL_GRADIENTS", false, PackType.MiscRoleCustomisation);
+        VerticalGradients = new("VERTICAL_GRADIENTS", true, PackType.MiscRoleCustomisation);
         RecruitEndingColor = new("RECRUIT_ENDING", RecruitEndType.JackalEnd, PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists, useTranslations: true);
         RoleCardFactionLabel = new("FACTION_LABEL", FactionLabelOption.Mismatch, PackType.MiscRoleCustomisation, useTranslations: true);
         FactionNameNextToRole = new("FACTION_NEXT_TO_ROLE", FactionLabelOption.Never, PackType.MiscRoleCustomisation, useTranslations: true);
