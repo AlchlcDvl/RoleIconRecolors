@@ -1,16 +1,17 @@
 using Cinematics.Players;
+using FlexMenu;
+using Game.DevMenu;
 using Home.HomeScene;
 using Home.LoginScene;
+using Home.Services;
 using Home.Shared;
 using Mentions;
-using Home.Services;
 using Mentions.Providers;
 using SalemModLoaderUI;
 using Server.Shared.Cinematics.Data;
-using UnityEngine.EventSystems;
-using FlexMenu;
-using Game.DevMenu;
 using Server.Shared.Collections;
+using Server.Shared.Extensions;
+using UnityEngine.EventSystems;
 
 namespace FancyUI.Patches;
 
@@ -176,6 +177,59 @@ public static class AchievementMentionsPatch
         }
 
         return false;
+    }
+}
+
+[HarmonyPatch(typeof(ClientRoleExtensions), nameof(ClientRoleExtensions.ToColorizedDisplayString), [typeof(Role), typeof(FactionType)])]
+public static class ModifierFactionPatch
+{
+    public static bool Prefix(ref string __result, Role role, FactionType factionType)
+    {
+        if (role.IsModifierCard() && Fancy.ModifierFactions.Value)
+        {
+            FactionType modifierFaction = FactionType.NONE;
+            if (Constants.IsBTOS2())
+                modifierFaction = (role) switch
+                {
+                    Btos2Role.Vip => Btos2Faction.Town,
+                    Btos2Role.CovenTownTraitor => Btos2Faction.Coven,
+                    Btos2Role.GhostTown => Btos2Faction.Shroud,
+                    Btos2Role.PerfectTown => Btos2Faction.Town,
+                    Btos2Role.AnonVoting => Btos2Faction.Judge,
+                    Btos2Role.OneTrial => Btos2Faction.Executioner,
+                    Btos2Role.ApocTownTraitor => Btos2Faction.Apocalypse,
+                    Btos2Role.NecroPass => Btos2Faction.Coven,
+                    Btos2Role.Egotist => Btos2Faction.Egotist,
+                    Btos2Role.SpeakingSpirits => Btos2Faction.CursedSoul,
+                    Btos2Role.CompliantKillers => Btos2Faction.Compliance,
+                    Btos2Role.PandorasBox => Btos2Faction.Pandora,
+                    Btos2Role.CovenVip => Btos2Faction.Coven,
+                    Btos2Role.Lovers => Btos2Faction.Lovers,
+                    Btos2Role.FeelinLucky => Btos2Faction.Jester,
+                    Btos2Role.AllOutliers => Btos2Faction.CursedSoul,
+                    _ => FactionType.NONE
+                };
+            else
+                modifierFaction = (role) switch
+                {
+                    Role.VIP => FactionType.TOWN,
+                    Role.TOWN_TRAITOR => FactionType.COVEN,
+                    Role.GHOST_TOWN => FactionType.SHROUD,
+                    Role.NO_TOWN_HANGED => FactionType.TOWN,
+                    Role.ONE_TRIAL_PER_DAY => FactionType.EXECUTIONER,
+                    Role.FOUR_HORSEMEN => FactionType.APOCALYPSE,
+                    Role.ALL_OUTLIERS => FactionType.CURSED_SOUL,
+                    Role.ELECTION => FactionType.TOWN,
+                    Role.FEELIN_LUCKY => FactionType.JESTER,
+                    _ => FactionType.NONE
+                };
+            if (modifierFaction != FactionType.NONE)
+            {
+                __result = Utils.ApplyGradient(role.ToDisplayString(), Gradients.GetChangedGradient(modifierFaction, role));
+                return false;
+            }
+        }
+        return true;
     }
 }
 
