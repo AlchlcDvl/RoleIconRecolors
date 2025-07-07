@@ -829,14 +829,17 @@ public static class Utils
 
     public static string GetString(string key) => Service.Home.LocalizationService.GetLocalizedString(key);
 
-    // public static string RemoveStyleTags(string input)
-    // {
-    //     if (string.IsNullOrEmpty(input))
-    //         return input;
+    public static string RemoveVanillaGradientStyleTags(string input)
+    {
+        if (string.IsNullOrEmpty(input))
+            return input;
 
-    //     input = Regex.Replace(input, @"<style\s*=\s*""?.*?""?\s*>|</style>", string.Empty);
-    //     return input;
-    // }
+        return Regex.Replace(
+            input,
+            @"<style\s*=\s*""?(VampireColor|CursedSoulColor)""?\s*>(.*?)</style>",
+            "$2",
+            RegexOptions.Singleline);
+    }
 
     public static bool ConditionalCompliancePandora(FactionType originalFaction, FactionType currentFaction)
     {
@@ -855,7 +858,7 @@ public static class Utils
         return originalFaction == currentFaction;
     }
 
-    public static string RemoveColorTags(string input) => Regex.Replace(input, "<color=[^>]+>|<#[^>]+>|</color>", "");
+    public static string RemoveColorTags(this string input) => Regex.Replace(input, "<color=[^>]+>|<#[^>]+>|</color>", "");
 
     public static bool StartsWithVowel(string input)
     {

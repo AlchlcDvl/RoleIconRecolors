@@ -17,6 +17,9 @@
     <Entry key="FANCY_FACTION_LABEL_NAME">Faction Label in Role Card</Entry>
     <Entry key="FANCY_FACTION_LABEL_DESC">Determines whether or not the faction label within the role card will be displayed and under what conditions. Mismatch means if the role doesn't belong in the current faction. Conditional means Coven/Apocalypse = Pandora and SK/Arso/WW/Shroud = Compliance. Always and Never are self explanatory. Does not affect the Town Traitor and Recruit Labels.</Entry>
 
+    <Entry key="FANCY_MODIFIER_FACTIONS_NAME">Modifier Factions</Entry>
+    <Entry key="FANCY_MODIFIER_FACTIONS_DESC">Gives some modifiers a faction to display as, instead of every modifier being white.</Entry>
+
     <Entry key="FANCY_RANDOM_APOC_IN_VANILLA_NAME">Random Apocalypse Over Neutral Apocalypse</Entry>
     <Entry key="FANCY_RANDOM_APOC_IN_VANILLA_DESC">If enabled, the Neutral Apocalypse bucket will be changed to say Random Apocalypse if Gradient Buckets is active.</Entry>
 
@@ -376,7 +379,7 @@
     <Entry key="FANCY_COMPLIANCE_START_DESC">The start color for the Compliance faction.</Entry>
 
     <Entry key="FANCY_COMPLIANCE_MIDDLE_NAME">Compliance Middle Color</Entry>
-    <Entry key="FANCY_COMPLIANCE_MIDDLE_DESC">The middle color for the Compliance faction.</Entry>
+    <Entry key="FANCY_COMPLIANCE_MIDDLE_DESC">The middle color for the Compliance faction. This setting does nothing if Vertical Gradients is active!</Entry>
 
     <Entry key="FANCY_COMPLIANCE_END_NAME">Compliance End Color</Entry>
     <Entry key="FANCY_COMPLIANCE_END_DESC">The end color for the Compliance faction.</Entry>
@@ -533,9 +536,6 @@
 
     <Entry key="FANCY_ROLE_REVEAL_ICONS_NAME">Fancy Up Role Reveal Cinematic</Entry>
     <Entry key="FANCY_ROLE_REVEAL_ICONS_DESC">Shows the character head shot and role icon at their respective locations during the role reveal cinematic.</Entry>
-
-    <Entry key="FANCY_MODIFIER_FACTIONS_NAME">Modifier Factions</Entry>
-    <Entry key="FANCY_MODIFIER_FACTIONS_DESC">Gives some modifiers a faction to display as, instead of every modifier being white.</Entry>
 
     <Entry key="FANCY_SELECTED_TESTING_FACTION_NAME">Testing Faction</Entry>
     <Entry key="FANCY_SELECTED_TESTING_FACTION_DESC">Modifies the testing UI as per the selected faction as if you were that faction in game.</Entry>
@@ -767,8 +767,7 @@
     <Entry key="FANCY_BUCKETS_TOWN">Town</Entry>
     <Entry key="FANCY_BUCKETS_COVEN">Coven</Entry>
     <Entry key="FANCY_BUCKETS_NEUTRAL">Neutral</Entry>
-    <Entry key="FANCY_BUCKETS_APOCALYPSE_VANILLA">Apocalypse</Entry>
-    <Entry key="FANCY_BUCKETS_APOCALYPSE_BTOS">Apocalypse</Entry>
+    <Entry key="FANCY_BUCKETS_APOCALYPSE">Apocalypse</Entry>
     <Entry key="FANCY_BUCKETS_COMPLIANCE">Compliance</Entry>
     <Entry key="FANCY_BUCKETS_RANDOM">Random</Entry>
     <Entry key="FANCY_BUCKETS_COMMON">Common</Entry>
@@ -783,6 +782,30 @@
     <Entry key="FANCY_BUCKETS_PARIAH">Pariah</Entry>
     <Entry key="FANCY_BUCKETS_SPECIAL">Special</Entry>
     <Entry key="FANCY_BUCKETS_OUTLIER">Outlier</Entry>
+    <Entry key="FANCY_BUCKETS_EXECUTIVE">Executive</Entry>
+    <Entry key="FANCY_BUCKETS_GOVERNMENT">Government</Entry>
+    <Entry key="FANCY_BUCKETS_ACOLYTE">Acolyte</Entry>
+
+    <Entry key="FANCY_BUCKETS_TOWN_SHORT">T</Entry>
+    <Entry key="FANCY_BUCKETS_COVEN_SHORT">C</Entry>
+    <Entry key="FANCY_BUCKETS_NEUTRAL_SHORT">N</Entry>
+    <Entry key="FANCY_BUCKETS_APOCALYPSE_SHORT">A</Entry>
+    <Entry key="FANCY_BUCKETS_COMPLIANCE_SHORT">Comp</Entry>
+    <Entry key="FANCY_BUCKETS_RANDOM_SHORT">R</Entry>
+    <Entry key="FANCY_BUCKETS_COMMON_SHORT">C</Entry>
+    <Entry key="FANCY_BUCKETS_KILLING_SHORT">K</Entry>
+    <Entry key="FANCY_BUCKETS_POWER_SHORT">Pow</Entry>
+    <Entry key="FANCY_BUCKETS_UTILITY_SHORT">U</Entry>
+    <Entry key="FANCY_BUCKETS_DECEPTION_SHORT">D</Entry>
+    <Entry key="FANCY_BUCKETS_PROTECTIVE_SHORT">P</Entry>
+    <Entry key="FANCY_BUCKETS_SUPPORT_SHORT">S</Entry>
+    <Entry key="FANCY_BUCKETS_INVESTIGATIVE_SHORT">I</Entry>
+    <Entry key="FANCY_BUCKETS_EVIL_SHORT">E</Entry>
+    <Entry key="FANCY_BUCKETS_PARIAH_SHORT">P</Entry>
+    <Entry key="FANCY_BUCKETS_SPECIAL_SHORT">Spec</Entry>
+    <Entry key="FANCY_BUCKETS_OUTLIER_SHORT">O</Entry>
+    <Entry key="FANCY_BUCKETS_EXECUTIVE_SHORT">E</Entry>
+    <Entry key="FANCY_BUCKETS_GOVERNMENT_SHORT">G</Entry>
 
     <Entry key="FANCY_FIRE">Fire</Entry>
     <Entry key="FANCY_PAPER">Paper</Entry>
@@ -5073,34 +5096,5 @@
 	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_62">You are an acolyte of <![CDATA[<shake a=0.3><style=ApocalypseColor>%name_role253%</style></shake>]]> who curses the Town.</Entry> <!--Warlock-->
 	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_63">You are a crazed galvanist overflowing with energy.</Entry> <!--Catalyst-->
 	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_64">You are a master of indoctrination, rewiring minds to serve your will.</Entry> <!--Cultist-->
-
-    <Entry key="FANCY_WINNERS_ARE_0">Match Draw!</Entry>
-    <Entry key="FANCY_WINNERS_ARE_1">Townies Win!</Entry>
-    <Entry key="FANCY_WINNERS_ARE_2">Coven Wins!</Entry>
-    <Entry key="FANCY_WINNERS_ARE_3">Serial Killers Win!</Entry>
-    <Entry key="FANCY_WINNERS_ARE_4">Arsonists Win!</Entry>
-    <Entry key="FANCY_WINNERS_ARE_5">Werewolves Win!</Entry>
-    <Entry key="FANCY_WINNERS_ARE_6">Shrouds Win!</Entry>
-	<Entry key="FANCY_WINNERS_ARE_7">Apocalypse Wins!</Entry>
-    <Entry key="FANCY_WINNERS_ARE_8">Executioners Win!</Entry>
-    <Entry key="FANCY_WINNERS_ARE_9">Jesters Win!</Entry>
-    <Entry key="FANCY_WINNERS_ARE_10">Pirates Win!</Entry>
-    <Entry key="FANCY_WINNERS_ARE_11">Doomsayers Win!</Entry>
-    <Entry key="FANCY_WINNERS_ARE_12">Vampires Win!</Entry>
-	<Entry key="FANCY_WINNERS_ARE_13">Cursed Souls Win!</Entry>
-	<Entry key="FANCY_WINNERS_ARE_14">Unknown Wins!</Entry>
-	<Entry key="FANCY_WINNERS_ARE_33">Jackals Win!</Entry>
-	<Entry key="FANCY_WINNERS_ARE_34">Frogs Win!</Entry>
-	<Entry key="FANCY_WINNERS_ARE_35">Lions Win!</Entry>
-	<Entry key="FANCY_WINNERS_ARE_36">Hawks Win!</Entry>
-	<Entry key="FANCY_WINNERS_ARE_37">Cannibals Win!</Entry>
-	<Entry key="FANCY_WINNERS_ARE_38">Judges Win!</Entry>
-	<Entry key="FANCY_WINNERS_ARE_39">Auditors Win!</Entry>
-	<Entry key="FANCY_WINNERS_ARE_40">Inquisitors Win!</Entry>
-	<Entry key="FANCY_WINNERS_ARE_41">Starspawns Win!</Entry>
-	<Entry key="FANCY_WINNERS_ARE_42">Egotists Win!</Entry>
-	<Entry key="FANCY_WINNERS_ARE_43">Pandora Wins!</Entry>
-	<Entry key="FANCY_WINNERS_ARE_44">The Compliance Wins!</Entry>
-	<Entry key="FANCY_WINNERS_ARE_250">Lovers Win!</Entry>
 
 </StringTable>
