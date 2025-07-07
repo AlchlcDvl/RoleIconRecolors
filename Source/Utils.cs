@@ -746,7 +746,7 @@ public static class Utils
 
             return text2;
         }
-        return "<gradient=\"" + Gradients.GetVerticalGradientKey(gradient) + "\">" + text + "</gradient>";
+        return "<color=#FFFFFFFF><gradient=\"" + Gradients.GetVerticalGradientKey(gradient) + "\">" + text + "</gradient></color>";
     }
 
     private static Color ShadeColor(this Color color, float strength = 0f)
