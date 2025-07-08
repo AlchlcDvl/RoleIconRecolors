@@ -96,7 +96,7 @@ public static class RoleRevealCinematicPlayerPatch
         __instance.silhouetteWrapper.gameObject.SetActive(true);
         __instance.silhouetteWrapper.SwapWithSilhouette((int)role);
 
-        var roleName = role.ToColorizedDisplayString(CurrentFaction);
+        var roleName = role.ToColorizedNoLabel(CurrentFaction);
         var roleIcon = showIcons ? (role.GetTMPSprite() + roleName) : roleName;
 
         roleIcon = roleIcon.Replace("RoleIcons\"", $"RoleIcons ({((role.GetFactionType() == CurrentFaction && Constants.CurrentStyle() == "Regular")
