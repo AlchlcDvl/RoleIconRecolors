@@ -11,6 +11,11 @@ using Server.Shared.Extensions;
 using System.Globalization;
 using Home.Services;
 using Game.Simulation;
+using Game.Chat.Decoders;
+using Server.Shared.Messages;
+using Mentions.UI;
+using Server.Shared.State.Chat;
+using Shared.Chat;
 
 namespace FancyUI.Patches;
 
@@ -1057,6 +1062,8 @@ public static class ReplaceRoleTagWithRoleTextPatch
         }
 
         var modified = false;
+
+        // Handle %name_role
         var index = str.IndexOf("%name_role");
 
         while (index > -1)
@@ -1080,12 +1087,37 @@ public static class ReplaceRoleTagWithRoleTextPatch
             index = str.IndexOf("%name_role", index + 1);
         }
 
+        // Handle %name_faction
+        index = str.IndexOf("%name_faction");
+
+        while (index > -1)
+        {
+            var endIndex = str.IndexOf("%", index + 1);
+
+            if (endIndex == -1)
+                break;
+
+            var fullTag = str.Substring(index, endIndex - index + 1);
+            var idStart = index + 13;
+
+            if (int.TryParse(str[idStart..endIndex], out var factionId))
+            {
+                var faction = (FactionType)factionId;
+                var colorized = Utils.ApplyGradient(faction.ToDisplayString(), faction.GetChangedGradient(Role.DREAMWEAVER));
+                str = str.Replace(fullTag, colorized);
+                modified = true;
+            }
+
+            index = str.IndexOf("%name_faction", index + 1);
+        }
+
         if (modified)
             __result = str;
 
         return !modified;
     }
 }
+
 
 [HarmonyPatch(typeof(HomeLocalizationService), nameof(HomeLocalizationService.GetLocalizedString))]
 public static class LocalizationManagerPatches
@@ -1127,5 +1159,65 @@ public static class GameSimPatches
     {
         var gradient = FactionType.TOWN.GetChangedGradient(Role.ADMIRER);
         __result = $" {Utils.ApplyGradient($"({Fancy.VipLabel.Value})", gradient)}";
+    }
+}
+
+[HarmonyPatch(typeof(WhoDiedDecoder), nameof(WhoDiedDecoder.Encode))]
+public static class WdahChatPatch
+{
+    public static bool Prefix(ChatLogMessage chatLogMessage, MentionPanel mentionPanel, GamePhase chatPhase, UIController uiController, List<HudChatStyle> chatStyles, ChatWindowType chatWindowType, ref string __result)
+    {
+        if (chatLogMessage?.chatLogEntry is ChatLogWhoDiedEntry entry && entry.killRecord != null)
+        {
+            var killRecord = entry.killRecord;
+            var playerName = Utils.BuildPlayerTag(killRecord);
+
+            if (entry.subphase == WhoDiedAndHowSubphase.WhoDied)
+            {
+                __result = killRecord.isDay
+                    ? uiController.l10n("GUI_XDIED_TODAY").Replace("%name%", playerName)
+                    : uiController.l10n("GUI_XDIED_LAST_NIGHT").Replace("%name%", playerName);
+            }
+            else if (entry.subphase == WhoDiedAndHowSubphase.Role)
+            {
+                var roleName = Utils.BuildRoleText(killRecord);
+                var key = Utils.GetHangingMessage(killRecord.playerRole, killRecord.playerFaction);
+
+                __result = uiController.l10n(key).Replace("%name%", playerName).Replace("%role%", roleName);
+            }
+            else
+            {
+                Debug.LogWarning($"Invalid SubPhase {entry.subphase} in WhoDiedDecoder");
+                __result = string.Empty;
+            }
+            return false;
+        }
+
+        Debug.LogWarning("Unable to encode invalid ChatLogWhoDiedEntry.");
+        __result = string.Empty;
+        return false;
+    }
+}
+
+[HarmonyPatch(typeof(WhoDiedRoleDecoder), nameof(WhoDiedRoleDecoder.Encode))]
+public static class WdahChatPatch2
+{
+    public static bool Prefix(ChatLogMessage chatLogMessage, MentionPanel mentionPanel, GamePhase chatPhase, UIController uiController, List<HudChatStyle> chatStyles, ChatWindowType chatWindowType, ref string __result)
+    {
+        if (chatLogMessage?.chatLogEntry is ChatLogWhoDiedEntry entry && entry.killRecord != null)
+            {
+                var killRecord = entry.killRecord;
+                var playerName = Utils.BuildPlayerTag(killRecord);
+                var roleName = Utils.BuildRoleText(killRecord);
+                var key = Utils.GetHangingMessage(killRecord.playerRole, killRecord.playerFaction);
+
+                __result = uiController.l10n(key).Replace("%name%", playerName).Replace("%role%", roleName);
+
+                return false;
+            }
+
+        Debug.LogWarning("Unable to encode invalid ChatLogWhoDiedEntry.");
+        __result = string.Empty;
+        return false;
     }
 }

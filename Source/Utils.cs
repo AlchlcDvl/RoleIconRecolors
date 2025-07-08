@@ -977,4 +977,25 @@ public static class Utils
             ? ApplyGradient(roleName, gradient)
             : $"<color={faction.GetFactionColor()}>{roleName}</color>";
     }
+
+    public static string BuildPlayerTag(KillRecord killRecord)
+            => $"[[@{killRecord.playerId + 1}]]";
+
+    public static string BuildHiddenRoleTag(KillRecord killRecord)
+    {
+        if (killRecord.hiddenPlayerRole != Role.NONE && killRecord.hiddenPlayerRole != Role.HIDDEN)
+        {
+            return $"[[#{(int)killRecord.hiddenPlayerRole},{(int)killRecord.hiddenPlayerFaction}]]";
+        }
+        return null;
+    }
+
+    public static string BuildRoleText(KillRecord killRecord)
+    {
+        var text = $"[[#{(int)killRecord.playerRole},{(int)killRecord.playerFaction}]]";
+        var hidden = BuildHiddenRoleTag(killRecord);
+        if (hidden != null)
+            text += $" ({hidden})";
+        return text;
+    }
 }
