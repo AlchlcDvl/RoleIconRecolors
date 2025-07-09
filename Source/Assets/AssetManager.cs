@@ -339,7 +339,7 @@ public static class FancyAssetManager
             var dict = new Dictionary<string, string>();
             var sprites = new List<Sprite>();
 
-            for (var i = 1; i < 7; i++)
+            for (var i = 1; i < 11; i++)
             {
                 var sprite = Fancy.Instance.Assets.GetSprite($"Emoji{i}") ?? Blank;
 
