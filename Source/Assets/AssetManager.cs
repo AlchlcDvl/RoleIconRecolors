@@ -1,6 +1,8 @@
 using FancyUI.Assets.IconPacks;
 using FancyUI.Assets.SilhouetteSwapper;
 using NewModLoading;
+using SalemModLoader;
+using UnityEngine.TextCore;
 
 namespace FancyUI.Assets;
 
@@ -296,7 +298,7 @@ public static class FancyAssetManager
                     Fancy.Instance.Warning($"NO VANILLA ICON FOR {name}?!");
             }
 
-            Vanilla1 = AssetManager.BuildGlyphs(sprites, "RoleIcons", index.Item1);
+            Vanilla1 = FancyAssetManager.BuildGlyphs(sprites, "RoleIcons", index.Item1, 384f, 384f, 0f, 300f, 390f);
             Utils.DumpSprite(Vanilla1.spriteSheet as Texture2D, "RoleIcons_Modified", Path.Combine(IPPath, "Vanilla"));
         }
         catch (Exception e)
@@ -325,7 +327,7 @@ public static class FancyAssetManager
                 dict.Add($"PlayerNumbers_{i}", $"PlayerNumbers_{i}");
             }
 
-            Vanilla2 = AssetManager.BuildGlyphs(sprites, "PlayerNumbers", dict);
+            Vanilla2 = FancyAssetManager.BuildGlyphs(sprites, "PlayerNumbers", dict, 128f, 128f, 0f, 105f, 150f);
             Utils.DumpSprite(Vanilla2.spriteSheet as Texture2D, "PlayerNumbers_Modified", Path.Combine(IPPath, "Vanilla"));
         }
         catch (Exception e)
@@ -354,7 +356,7 @@ public static class FancyAssetManager
                 dict.Add($"Emoji{i}", $"Emoji{i}");
             }
 
-            Vanilla3 = AssetManager.BuildGlyphs(sprites, "Emoji", dict);
+            Vanilla3 = FancyAssetManager.BuildGlyphs(sprites, "Emoji", dict, 384f, 384f, 0f, 300f, 390f);
             Utils.DumpSprite(Vanilla3.spriteSheet as Texture2D, "Emoji_Modified", Path.Combine(IPPath, "Vanilla"));
         }
         catch (Exception e)
@@ -405,7 +407,7 @@ public static class FancyAssetManager
                     Fancy.Instance.Warning($"NO BTOS2 ICON FOR {name}?!");
             }
 
-            BTOS22 = AssetManager.BuildGlyphs(sprites, "BTOSRoleIcons", index.Item1);
+            BTOS22 = FancyAssetManager.BuildGlyphs(sprites, "BTOSRoleIcons", index.Item1, 256f, 256f, 0f, 224f, 256f);
             Utils.DumpSprite(BTOS22.spriteSheet as Texture2D, "BTOS2RoleIcons_Modified", Path.Combine(IPPath, "BTOS2"));
         }
         catch (Exception e)
@@ -413,5 +415,59 @@ public static class FancyAssetManager
             Fancy.Instance.Error($"Unable to create modified btos role icons sheet because:\n{e}");
             BTOS22 = null;
         }
+    }
+    public static TMP_SpriteAsset BuildGlyphs(IEnumerable<Sprite> sprites, string spriteAssetName, Dictionary<string, string> index, float metricsWidth, float metricsHeight, float metricsHBX, float metricsHBY, float metricsHA)
+    {
+        Texture2D[] array = sprites.Select((Sprite x) => x.texture).ToArray();
+        TMP_SpriteAsset tMP_SpriteAsset = ScriptableObject.CreateInstance<TMP_SpriteAsset>();
+        Texture2D texture2D = new Texture2D(4096, 4096, TextureFormat.RGBA32, false)
+        {
+            name = spriteAssetName,
+            filterMode = FilterMode.Trilinear,
+            anisoLevel = 4,
+            mipMapBias = -2
+        };
+        Rect[] array2 = texture2D.PackTextures(array, 2, 4096);
+        for (int i = 0; i < array2.Length; i++)
+        {
+            Rect rect = array2[i];
+            TMP_SpriteGlyph tMP_SpriteGlyph = new TMP_SpriteGlyph
+            {
+                glyphRect = new GlyphRect
+                {
+                    x = (int)(rect.x * (float)texture2D.width),
+                    y = (int)(rect.y * (float)texture2D.height),
+                    width = (int)(rect.width * (float)texture2D.width),
+                    height = (int)(rect.height * (float)texture2D.height)
+                },
+                metrics = new GlyphMetrics
+                {
+                    width = metricsWidth,
+                    height = metricsHeight,
+                    horizontalBearingX = metricsHBX,
+                    horizontalBearingY = metricsHBY,
+                    horizontalAdvance = metricsHA
+                },
+                index = (uint)i,
+                sprite = sprites.ElementAtOrDefault(i),
+                scale = 1f
+            };
+            tMP_SpriteAsset.spriteGlyphTable.Add(tMP_SpriteGlyph);
+            tMP_SpriteAsset.spriteCharacterTable.Add(new TMP_SpriteCharacter(0u, tMP_SpriteAsset, tMP_SpriteGlyph)
+            {
+                name = index[tMP_SpriteGlyph.sprite.name],
+                glyphIndex = (uint)i,
+                scale = 1f
+            });
+        }
+
+        tMP_SpriteAsset.name = spriteAssetName;
+        tMP_SpriteAsset.material = new Material(Shader.Find("TextMeshPro/Sprite"));
+        Launch.TmpVersion.SetValue(tMP_SpriteAsset, "1.1.0");
+        tMP_SpriteAsset.spriteSheet = texture2D;
+        tMP_SpriteAsset.UpdateLookupTables();
+        tMP_SpriteAsset.hashCode = TMP_TextUtilities.GetSimpleHashCode(tMP_SpriteAsset.name);
+        tMP_SpriteAsset.material.SetTexture(ShaderUtilities.ID_MainTex, tMP_SpriteAsset.spriteSheet);
+        return tMP_SpriteAsset.DontDestroy();
     }
 }

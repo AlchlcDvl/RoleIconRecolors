@@ -7,12 +7,15 @@ using Home.Services;
 using Home.Shared;
 using Mentions;
 using Mentions.Providers;
+using NewModLoading;
+using SalemModLoader;
 using SalemModLoaderUI;
 using Server.Shared.Cinematics.Data;
 using Server.Shared.Collections;
 using Server.Shared.Extensions;
 using Server.Shared.State;
 using UnityEngine.EventSystems;
+using UnityEngine.TextCore;
 
 namespace FancyUI.Patches;
 

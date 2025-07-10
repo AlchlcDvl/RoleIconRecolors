@@ -230,7 +230,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                     dict.Add($"PlayerNumbers_{i}", $"PlayerNumbers_{i}");
                 }
 
-                PlayerNumbers = AssetManager.BuildGlyphs(sprites, $"PlayerNumbers ({Name})", dict);
+                PlayerNumbers = FancyAssetManager.BuildGlyphs(sprites, $"PlayerNumbers ({Name})", dict, 128f, 128f, 0f, 105f, 150f);
                 Utils.DumpSprite(PlayerNumbers.spriteSheet as Texture2D, "PlayerNumbers", Path.Combine(PackPath, "PlayerNumbers"));
             }
             catch (Exception e)
@@ -266,7 +266,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                     dict.Add($"Emoji{i}", $"Emoji{i}");
                 }
 
-                Emojis = AssetManager.BuildGlyphs(sprites, $"Emojis ({Name})", dict);
+                Emojis = FancyAssetManager.BuildGlyphs(sprites, $"Emojis ({Name})", dict, 384f, 384f, 0f, 300f, 390f);
                 Utils.DumpSprite(PlayerNumbers.spriteSheet as Texture2D, "Emojis", Path.Combine(PackPath, "Emojis"));
             }
             catch (Exception e)
@@ -397,8 +397,11 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
             else
                 Fancy.Instance.Warning($"NO {mod.ToUpper()} ICON FOR {name2}?!");
         }
-
-        return AssetManager.BuildGlyphs(sprites, $"{mod}RoleIcons ({Name}, {style})", index.Item1);
+        float metricsWidth = mod == "BTOS" ? 256f : 384f;
+        float metricsHeight = metricsWidth;
+        float metricsHBY = mod == "BTOS" ? 224f : 300f;
+        float metricsHA = mod == "BTOS" ? 256f : 390f;
+        return FancyAssetManager.BuildGlyphs(sprites, $"{mod}RoleIcons ({Name}, {style})", index.Item1, metricsWidth, metricsHeight, 0f, metricsHBY, metricsHA);
     }
 
     public Sprite GetSprite(string iconName, bool allowEe, string type)
