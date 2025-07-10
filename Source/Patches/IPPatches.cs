@@ -48,6 +48,11 @@ public static class PatchRoleListPanel
             return;
 
         var role = a_role.Value;
+        var factionType = role.GetFactionType();
+        if (Constants.IsPandora() && (factionType == FactionType.COVEN || factionType == FactionType.APOCALYPSE))
+            factionType = Btos2Faction.Pandora;
+        if (Constants.IsCompliance() && role.IsNeutralKilling())
+            factionType = Btos2Faction.Compliance;
 
         var icon = a_isBan
             ? GetSprite("Banned")
