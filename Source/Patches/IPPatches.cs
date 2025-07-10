@@ -56,7 +56,7 @@ public static class PatchRoleListPanel
 
         var icon = a_isBan
             ? GetSprite("Banned")
-            : GetSprite(Utils.RoleName(role), Utils.FactionName(role.GetFactionType()), false);
+            : GetSprite(Utils.RoleName(role), Utils.FactionName(factionType), false);
 
         if (__instance.roleImage && icon.IsValid())
             __instance.roleImage.sprite = icon;
