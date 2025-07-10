@@ -947,6 +947,28 @@ public static class RoleDeckPanelControllerPatch
     [HarmonyPatch(nameof(RoleDeckPanelController.AdjustSizeBasedOnRolesAdded)), HarmonyPostfix]
     public static void AdjustSizeBasedOnRolesAddedPostfix(RoleDeckPanelController __instance)
     {
+        if (__instance.roleDeckListItems.Count < 10)
+            return;
+        RectTransform component = __instance.deckView.GetComponent<RectTransform>();
+        RectTransform viewport = __instance.deckView.transform.GetChild(3).GetChild(0) as RectTransform;
+        RectMask2D bitchAssMask = viewport.GetComponent<RectMask2D>();
+        int i = 0;
+        int num2 = 0;
+        float num3 = 0f;
+        float ySize = __instance.startTop;
+        RoleDeckListItem lastActiveDeckItem = __instance.deckListItemTemplate;
+        for (i = __instance.roleDeckListItems.Count - 1; !lastActiveDeckItem.isActiveAndEnabled && i > -1; i--)
+            lastActiveDeckItem = __instance.roleDeckListItems[i];
+        if (-lastActiveDeckItem.transform.localPosition.y + 50 > viewport.rect.yMax)
+            for (int num = 1; ySize + viewport.rect.yMax < -lastActiveDeckItem.transform.localPosition.y + 50 && ySize < 720f; num++)
+            {
+                num2 = num * 40;
+                num3 = (float)num * 0.04f;
+                ySize = Mathf.Min(__instance.startTop + (float)num2, 720f);
+            }
+        component.offsetMax = new Vector2(component.offsetMax.x, ySize);
+        bitchAssMask.padding = new Vector4(0f, -ySize, 0f, 0f);
+        __instance.scaler.matchWidthOrHeight = 0.5f + num3;
         if (MetalTransform && PaperTransform)
             MetalTransform.offsetMax = PaperTransform.offsetMax = __instance.deckView.GetComponent<RectTransform>().offsetMax;
     }

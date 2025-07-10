@@ -766,6 +766,8 @@ public static class PandoraAndComplianceListItemPatch
         return false;
     }
 }
+
+
 // THIS GOD FOR SAKEN PATCH REFUSES TO DO ANYTHING, SOMEONE FIX THIS SHIT
 // [HarmonyPatch(typeof(TribunalCinematicPlayer), nameof(TribunalCinematicPlayer.Init))]
 // public static class MarshalCinematicFixes
