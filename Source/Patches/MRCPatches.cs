@@ -1,3 +1,4 @@
+using System.Data;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using Cinematics.Players;
@@ -15,6 +16,7 @@ using Server.Shared.Cinematics;
 using Server.Shared.Cinematics.Data;
 using Server.Shared.Extensions;
 using Server.Shared.Messages;
+using Server.Shared.State;
 using Server.Shared.State.Chat;
 using Shared.Chat;
 
@@ -989,15 +991,53 @@ public static class KeywordMentionsPatches
     }
     private static void BuildFactionMentions(SharedMentionsProvider __instance)
     {
-        var list = new List<FactionType>()
-        {
-            FactionType.TOWN, FactionType.COVEN, FactionType.SERIALKILLER, FactionType.ARSONIST, FactionType.WEREWOLF, FactionType.SHROUD, FactionType.APOCALYPSE, FactionType.EXECUTIONER, FactionType.JESTER, FactionType.PIRATE, FactionType.DOOMSAYER, FactionType.VAMPIRE, FactionType.CURSED_SOUL
-        };
-        if (Constants.IsBTOS2())
-            list.AddRange(new List<FactionType>()
+        Dictionary<FactionType, Role> dict;
+        if (!Constants.IsBTOS2())
+            dict = new()
             {
-                Btos2Faction.Jackal, Btos2Faction.Frogs, Btos2Faction.Lions, Btos2Faction.Hawks, Btos2Faction.Judge, Btos2Faction.Auditor, Btos2Faction.Inquisitor, Btos2Faction.Starspawn, Btos2Faction.Egotist, Btos2Faction.Pandora, Btos2Faction.Compliance
-            });
+                { FactionType.TOWN, Role.RANDOM_TOWN },
+                { FactionType.COVEN, Role.RANDOM_COVEN },
+                { FactionType.SERIALKILLER, Role.SERIALKILLER },
+                { FactionType.ARSONIST, Role.ARSONIST },
+                { FactionType.WEREWOLF, Role.WEREWOLF },
+                { FactionType.SHROUD, Role.SHROUD },
+                { FactionType.APOCALYPSE, Role.NEUTRAL_APOCALYPSE },
+                { FactionType.EXECUTIONER, Role.EXECUTIONER },
+                { FactionType.JESTER, Role.JESTER },
+                { FactionType.PIRATE, Role.PIRATE },
+                { FactionType.DOOMSAYER, Role.DOOMSAYER },
+                { FactionType.VAMPIRE, Role.VAMPIRE },
+                { FactionType.CURSED_SOUL, Role.CURSED_SOUL }
+            };
+
+        else
+            dict = new()
+            {
+                { FactionType.TOWN, Btos2Role.RandomTown },
+                { FactionType.COVEN, Btos2Role.RandomCoven },
+                { FactionType.SERIALKILLER, Btos2Role.SerialKiller },
+                { FactionType.ARSONIST, Btos2Role.Arsonist },
+                { FactionType.WEREWOLF, Btos2Role.Werewolf },
+                { FactionType.SHROUD, Btos2Role.Shroud },
+                { FactionType.APOCALYPSE, Btos2Role.RandomApocalypse },
+                { FactionType.EXECUTIONER, Btos2Role.Executioner },
+                { FactionType.JESTER, Btos2Role.Jester },
+                { FactionType.PIRATE, Btos2Role.Pirate },
+                { FactionType.DOOMSAYER, Btos2Role.Doomsayer },
+                { FactionType.VAMPIRE, Btos2Role.Vampire },
+                { FactionType.CURSED_SOUL, Btos2Role.CursedSoul },
+                { Btos2Faction.Jackal, Btos2Role.Jackal },
+                { Btos2Faction.Frogs, Btos2Role.Teams },
+                { Btos2Faction.Lions, Btos2Role.Teams },
+                { Btos2Faction.Hawks, Btos2Role.Teams },
+                { Btos2Faction.Judge, Btos2Role.Judge },
+                { Btos2Faction.Auditor, Btos2Role.Auditor },
+                { Btos2Faction.Inquisitor, Btos2Role.Inquisitor },
+                { Btos2Faction.Starspawn, Btos2Role.Starspawn },
+                { Btos2Faction.Egotist, Btos2Role.Egotist },
+                { Btos2Faction.Pandora, Btos2Role.PandorasBox },
+                { Btos2Faction.Compliance, Btos2Role.CompliantKillers }
+            };
         var shortNames = new Dictionary<FactionType, string>
         {
             { FactionType.COVEN, "TT" },
@@ -1007,6 +1047,9 @@ public static class KeywordMentionsPatches
             { FactionType.VAMPIRE, "CONVERTED" },
             { FactionType.CURSED_SOUL, "CS" },
             { Btos2Faction.Jackal, "RECRUITED" },
+            { Btos2Faction.Frogs, "BLUE" },
+            { Btos2Faction.Lions, "YELLOW" },
+            { Btos2Faction.Hawks, "RED" },
             { Btos2Faction.Starspawn, "SS" },
             { Btos2Faction.Egotist, "EGOTOWNIE" },
             { Btos2Faction.Pandora, "PTT" },
@@ -1014,13 +1057,19 @@ public static class KeywordMentionsPatches
         };
         var priority = 0;
 
-        foreach (var item in list)
+        foreach (var kvp in dict)
         {
+            var item = kvp.Key;
+            var roleIcon = kvp.Value.GetTMPSprite();
+            roleIcon = roleIcon.Replace("RoleIcons\"", $"RoleIcons ({((kvp.Value.GetFactionType() == item && Constants.CurrentStyle() == "Regular")
+            ? "Regular"
+            : Utils.FactionName(item, false))})\"");
             var faction = (int)item;
             var display = item.ToDisplayString();
             var shortName = shortNames.ContainsKey(item) ? shortNames.GetValue(item) : display;
             var encodedText = $"{faction}";
             var name = __instance._useColors ? Utils.ApplyGradient(item.ToDisplayString(), item.GetChangedGradient(Constants.IsBTOS2() ? Btos2Role.Jackal : Role.DREAMWEAVER)) : display;
+            name = __instance._roleEffects == 1 ? roleIcon + name : name;
 
             var richText = $"{__instance.styleTagOpen}{__instance.styleTagFont}<b>{name}</b>{__instance.styleTagClose}";
 
@@ -1054,6 +1103,14 @@ public static class KeywordMentionsPatches
                 {
                     mentionTokenType = (MentionToken.MentionTokenType)10,
                     match = "$CTT",
+                    mentionInfo = mentionInfo,
+                    priority = priority++
+                });
+            if (faction > 33 && faction < 37)
+                __instance.MentionTokens.Add(new MentionToken
+                {
+                    mentionTokenType = (MentionToken.MentionTokenType)10,
+                    match = "$TEAMS",
                     mentionInfo = mentionInfo,
                     priority = priority++
                 });
@@ -1119,6 +1176,16 @@ public static class KeywordMentionsPatches
         });
 
         return false;
+    }
+
+    [HarmonyPatch(nameof(SharedMentionsProvider.ClearMentions))]
+    public static void Postfix(SharedMentionsProvider __instance, ref bool rebuildRoles, ref bool rebuildKeywords, ref bool rebuildPlayers, ref bool rebuildPrefixes, ref bool rebuildEmojis, ref bool rebuildAchievements)
+    {
+        if (rebuildRoles)
+        {
+            __instance.MentionTokens.RemoveAll((MentionToken m) => m.mentionTokenType == (MentionToken.MentionTokenType)10);
+            __instance.MentionInfos.RemoveAll((MentionInfo m) => m.mentionInfoType == (MentionInfo.MentionInfoType)10);
+        }
     }
 }
 

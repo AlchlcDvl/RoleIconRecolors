@@ -1021,8 +1021,12 @@ public static class MentionsProviderPatches
             }
             encodedValue = encodedMatch.Value + "," + candidate.encodedText + "]]";
             string finalValue = __instance.DecodeText(encodedValue);
+            if (!__instance._matchInfo.endsWithSubmissionCharacter && !__instance._matchInfo.followedBySubmissionCharacter && !__instance._matchInfo.endsWithPunctuationCharacter && !__instance._matchInfo.followedByPunctuationCharacter)
+                finalValue += " ";
             __instance._matchInfo.fullText = fullText.Replace(value + __instance._matchInfo.matchString, finalValue);
-            __instance._matchInfo.stringPosition = __instance._matchInfo.stringPosition + (finalValue.Length - (value + __instance._matchInfo.matchString).Length);
+            __instance._matchInfo.stringPosition = __instance._matchInfo.stringPosition
+                                                   + (finalValue.Length - (value + __instance._matchInfo.matchString).Length)
+                                                   + ((__instance._matchInfo.followedBySubmissionCharacter || __instance._matchInfo.endsWithSubmissionCharacter || __instance._matchInfo.followedByPunctuationCharacter || __instance._matchInfo.endsWithPunctuationCharacter) ? 1 : 0);
             __instance._candidates.Clear();
             return false;
         }
