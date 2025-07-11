@@ -987,9 +987,50 @@ public static class MentionsProviderPatches
             __result = __result.Replace("RoleIcons\"", "RoleIcons (Regular)\"");
     }
 
-    [HarmonyPatch(nameof(MentionsProvider.Start))] // Achievements mentions
+    [HarmonyPatch(nameof(MentionsProvider.Start))] // Achievement and faction mentions
     // ReSharper disable once InconsistentNaming
-    public static void Prefix(ref HashSet<char> ___ExpansionTokens) => ___ExpansionTokens.Add('~');
+    public static void Prefix(ref HashSet<char> ___ExpansionTokens)
+    {
+        ___ExpansionTokens.Add('~');
+        ___ExpansionTokens.Add('$');
+    }
+
+    [HarmonyPatch(nameof(MentionsProvider.ExpandCandidate),
+    [
+        typeof(MentionInfo)
+    ])]
+    public static bool Prefix(MentionsProvider __instance, ref MentionInfo candidate)
+    {
+        if (candidate.mentionInfoType == (MentionInfo.MentionInfoType)10)
+        {
+            string fullText = __instance._matchInfo.fullText;
+            string trimmed = __instance._matchInfo.stringPosition == fullText.Length ? fullText : fullText.Remove(__instance._matchInfo.stringPosition);
+            Match match = FactionalRoleRegex.Match(trimmed);
+            if (!match.Success)
+            {
+                __instance._candidates.Clear();
+                return false;
+            }
+            string value = match.Value + ">";
+            string encodedValue = __instance.EncodeText(value);
+            Match encodedMatch = EncodedRoleRegex.Match(encodedValue);
+            if (!encodedMatch.Success)
+            {
+                __instance._candidates.Clear();
+                return false;
+            }
+            encodedValue = encodedMatch.Value + "," + candidate.encodedText + "]]";
+            string finalValue = __instance.DecodeText(encodedValue);
+            __instance._matchInfo.fullText = fullText.Replace(value + __instance._matchInfo.matchString, finalValue);
+            __instance._matchInfo.stringPosition = __instance._matchInfo.stringPosition + (finalValue.Length - (value + __instance._matchInfo.matchString).Length);
+            __instance._candidates.Clear();
+            return false;
+        }
+        return true;
+    }
+
+    public static Regex FactionalRoleRegex = new Regex(@"<style=(Mention|MentionMono)>(.*?)</style(?=>\$)", RegexOptions.RightToLeft);
+    public static Regex EncodedRoleRegex = new Regex(@"\[\[#\d+");
 }
 
 // This whole class is a mess but DO NOT TOUCH
