@@ -997,27 +997,13 @@ public static class KeywordMentionsPatches
             {
                 Btos2Faction.Jackal, Btos2Faction.Frogs, Btos2Faction.Lions, Btos2Faction.Hawks, Btos2Faction.Judge, Btos2Faction.Auditor, Btos2Faction.Inquisitor, Btos2Faction.Starspawn, Btos2Faction.Egotist, Btos2Faction.Pandora, Btos2Faction.Compliance
             });
-        var shortNames = new Dictionary<FactionType, string>
-        {
-            { FactionType.COVEN, "TT" },
-            { FactionType.SERIALKILLER, "SK" },
-            { FactionType.WEREWOLF, "WW" },
-            { FactionType.APOCALYPSE, "ATT" },
-            { FactionType.VAMPIRE, "CONVERTED" },
-            { FactionType.CURSED_SOUL, "CS" },
-            { Btos2Faction.Jackal, "RECRUITED" },
-            { Btos2Faction.Starspawn, "SS" },
-            { Btos2Faction.Egotist, "EGOTOWNIE" },
-            { Btos2Faction.Pandora, "PTT" },
-            { Btos2Faction.Compliance, "COMKILLERS" }
-        };
         var priority = 0;
 
         foreach (var item in list)
         {
             var faction = (int)item;
             var display = item.ToDisplayString();
-            var shortName = shortNames.ContainsKey(item) ? shortNames.GetValue(item) : display;
+            var shortName = display;
             var encodedText = $"{faction}";
             var name = __instance._useColors ? Utils.ApplyGradient(item.ToDisplayString(), item.GetChangedGradient(Constants.IsBTOS2() ? Btos2Role.Jackal : Role.DREAMWEAVER)) : display;
 
@@ -1029,14 +1015,14 @@ public static class KeywordMentionsPatches
                 richText = richText,
                 encodedText = encodedText,
                 hashCode = richText.ToLowerInvariant().GetHashCode(),
-                humanText = ">$" + display.ToLowerInvariant()
+                humanText = "$" + display.ToLowerInvariant()
             };
 
             __instance.MentionInfos.Add(mentionInfo);
             __instance.MentionTokens.Add(new MentionToken
             {
                 mentionTokenType = (MentionToken.MentionTokenType)10,
-                match = ">$" + shortName,
+                match = "$" + shortName,
                 mentionInfo = mentionInfo,
                 priority = priority++
             });
