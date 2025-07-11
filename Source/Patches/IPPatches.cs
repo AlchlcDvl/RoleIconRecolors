@@ -134,18 +134,16 @@ public static class PatchRoleCards
     }
 
     [HarmonyPatch(nameof(RoleCardPopupPanel.ShowAttackAndDefense))]
+    [HarmonyPriority(0)]
     public static void Postfix(RoleCardPopupPanel __instance, RoleCardData data)
     {
-        if (!Constants.EnableIcons())
-            return;
-
         var attack = GetSprite($"Attack{Utils.GetLevel(data.attack, true)}");
         var icon1 = __instance.transform.Find("AttackIcon").Find("Icon").GetComponent<Image>();
 
         if (icon1)
             icon1.sprite = attack.IsValid() ? attack : FancyAssetManager.Attack;
 
-        var eth = __instance.myData.IsEthereal() || __instance.CurrentFaction == Btos2Faction.Egotist;
+        var eth = __instance.CurrentFaction > Btos2Faction.Hawks && __instance.CurrentFaction < Btos2Faction.Pandora && __instance.CurrentFaction != Btos2Faction.Inquisitor;
         var defense = GetSprite($"Defense{Utils.GetLevel(eth ? 4 : data.defense, false)}");
         var icon2 = __instance.transform.Find("DefenseIcon").Find("Icon").GetComponent<Image>();
 

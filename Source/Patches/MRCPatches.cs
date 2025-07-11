@@ -287,6 +287,75 @@ public static class RoleCardPopupPatches2
 
     [HarmonyPatch(nameof(RoleCardPopupPanel.SetRoleAndFaction))]
     public static void Postfix(Role role, FactionType faction, RoleCardPopupPanel __instance) => __instance.roleNameText.text = role.ToColorizedNoLabel(faction);
+
+    [HarmonyPatch(nameof(RoleCardPopupPanel.ShowAttackAndDefense)), HarmonyPrefix]
+    public static bool Prefix(RoleCardPopupPanel __instance, RoleCardData data)
+    {
+        if (Service.Game.Sim.simulation.roleDeckBuilder.Data.modifierCards.Contains(Role.FEELIN_LUCKY) || Constants.IsBTOS2() && Service.Game.Sim.simulation.roleDeckBuilder.Data.modifierCards.Contains(Btos2Role.FeelinLucky))
+            return true;
+        int defense = -1;
+        Role role = __instance.CurrentRole;
+        int faction = (int)__instance.CurrentFaction;
+        if (faction == 33)
+            faction = (int)__instance.CurrentRole.GetFaction();
+        if (faction > 0 && faction < 3 || faction > 42)
+            defense = 0;
+        if (faction > 2 && faction < 34 || faction == 33 && role == Btos2Role.Jackal || (role == Role.CULTIST || Constants.IsBTOS2() && role == Btos2Role.Cultist) && data.specialAbilityRemaining != 0 || faction == 40)
+            defense = 1;
+        if (Utils.IsHorseman(role) || data.defense == 3)
+            defense = 3;
+        if (faction > 37 && faction < 43 && faction != 40)
+            defense = 4;
+        if (faction == 33 && role != Btos2Role.Jackal || faction > 33 && faction < 37)
+            defense = data.defense;
+        float num = 0f;
+        float num2 = 0f;
+        if (data.attack == 1)
+        {
+            num = 0.33f;
+        }
+        else if (data.attack == 2)
+        {
+            num = 0.66f;
+        }
+        else if (data.attack == 3)
+        {
+            num = 1f;
+        }
+        if (defense == 1)
+        {
+            num2 = 0.33f;
+        }
+        else if (defense == 2 || defense == 4)
+        {
+            num2 = 0.66f;
+        }
+        else if (defense == 3)
+        {
+            num2 = 1f;
+        }
+        __instance.attackIcon.fillAmount = num;
+        __instance.attackGlow.fillAmount = num;
+        if (__instance.tabAtkFillImage)
+        {
+            __instance.tabAtkFillImage.fillAmount = num;
+        }
+        if (__instance.tabAtkGlowImage)
+        {
+            __instance.tabAtkGlowImage.fillAmount = num;
+        }
+        __instance.defenseIcon.fillAmount = num2;
+        __instance.defenseGlow.fillAmount = num2;
+        if (__instance.tabDefFillImage)
+        {
+            __instance.tabDefFillImage.fillAmount = num2;
+        }
+        if (__instance.tabDefGlowImage)
+        {
+            __instance.tabDefGlowImage.fillAmount = num2;
+        }
+        return false;
+    }
 }
 
 [HarmonyPatch(typeof(TosAbilityPanelListItem), nameof(TosAbilityPanelListItem.SetKnownRole))]
