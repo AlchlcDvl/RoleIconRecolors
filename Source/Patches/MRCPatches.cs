@@ -40,25 +40,45 @@ public static class PatchRoleCard
     [HarmonyPatch(nameof(RoleCardPanel.GetSubAlignment)), HarmonyPrefix]
     public static bool Prefix(RoleCardPanel __instance, ref string __result)
     {
-        if (!Fancy.GradientBuckets.Value) 
+        if (!Fancy.GradientBuckets.Value)
             return true;
-
         var role = __instance.CurrentRole;
         var faction = __instance.CurrentFaction;
         var alignment = role.GetAlignment();
         var subAlignment = role.GetSubAlignment();
-        var gradient = Utils.CreateGradient(Fancy.BucketStart.Value, Fancy.BucketEnd.Value);
-        var text = string.Empty;
-
-        if (Constants.IsBTOS2())
+        var factionID = (int)faction;
+        bool useNeutralGradient = false;
+        var neutralGradient = Utils.CreateGradient(Fancy.NeutralStart.Value, Fancy.NeutralEnd.Value);
+        var subAlignGradient = Utils.CreateGradient(Fancy.BucketStart.Value, Fancy.BucketEnd.Value);
+        string displayString = "";
+        if (role is Role.DEATH or Role.PESTILENCE or Role.WAR or Role.FAMINE)
         {
-            if (role is Role.DEATH or Role.PESTILENCE or Role.WAR or Role.FAMINE)
-            {
-                __result = string.Empty;
-                return false;
-            }
+            __result = string.Empty;
+            return false;
         }
-
+        var acolyte = role switch
+        {
+            Role.BERSERKER => Role.WAR.ToColorizedNoLabel(faction),
+            Role.BAKER => Role.FAMINE.ToColorizedNoLabel(faction),
+            Role.PLAGUEBEARER => Role.PESTILENCE.ToColorizedNoLabel(faction),
+            Role.SOULCOLLECTOR or Btos2Role.Warlock => Role.DEATH.ToColorizedNoLabel(faction),
+            _ => string.Empty
+        };
+        if (!string.IsNullOrEmpty(acolyte))
+        {
+            __result = $"{acolyte} {Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_ACOLYTE"), subAlignGradient)}";
+            return false;
+        }
+        if (factionID > 2 && factionID < 12 && factionID != 7 || factionID > 37 && factionID < 42)
+        {
+            useNeutralGradient = true;
+            displayString = RoleAlignment.NEUTRAL.ToDisplayString();
+        }
+        else if (factionID == 13)
+            displayString = Utils.GetString("FANCY_BUCKETS_CURSEDSOUL");
+        else
+            displayString = faction.ToDisplayString();
+        var text = string.Empty;
         if (subAlignment.IsInvalid())
         {
             if (alignment.IsInvalid())
@@ -66,31 +86,10 @@ public static class PatchRoleCard
                 __result = string.Empty;
                 return false;
             }
-
             __result = alignment.ToColorizedDisplayString();
             return false;
         }
-
-        text = Utils.ApplyGradient(role.GetFaction() == faction ? alignment.ToDisplayString() : faction.ToDisplayString(), faction.GetChangedGradient(role)) + " " + Utils.ApplyGradient(subAlignment.ToDisplayString(), gradient);
-
-        if (Constants.IsBTOS2())
-        {
-            var acolyte = role switch
-            {
-                Role.BERSERKER => Role.WAR.ToColorizedNoLabel(faction),
-                Role.BAKER => Role.FAMINE.ToColorizedNoLabel(faction),
-                Role.PLAGUEBEARER => Role.PESTILENCE.ToColorizedNoLabel(faction),
-                Role.SOULCOLLECTOR or Btos2Role.Warlock => Role.DEATH.ToColorizedNoLabel(faction),
-                _ => string.Empty
-            };
-
-            if (!string.IsNullOrEmpty(acolyte))
-            {
-                __result = $"{acolyte} {Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_ACOLYTE"), gradient)}";
-                return false;
-            }
-        }
-
+        text = Utils.ApplyGradient(displayString, useNeutralGradient ? neutralGradient : faction.GetChangedGradient(role)) + " " + Utils.ApplyGradient(subAlignment.ToDisplayString(), subAlignGradient);
         __result = text;
         return false;
     }
@@ -192,8 +191,6 @@ public static class PatchRoleCard
 
         __instance.roleDescText.text = text[..start] + colored + text[end..];
     }
-
-    
 }
 
 [HarmonyPatch(typeof(RoleCardPopupPanel))]
@@ -232,23 +229,43 @@ public static class RoleCardPopupPatches2
     {
         if (!Fancy.GradientBuckets.Value) 
             return true;
-            
         var role = __instance.CurrentRole;
         var faction = __instance.CurrentFaction;
         var alignment = role.GetAlignment();
         var subAlignment = role.GetSubAlignment();
-        var gradient = Utils.CreateGradient(Fancy.BucketStart.Value, Fancy.BucketEnd.Value);
-        var text = string.Empty;
-
-        if (Constants.IsBTOS2())
+        var factionID = (int)faction;
+        bool useNeutralGradient = false;
+        var neutralGradient = Utils.CreateGradient(Fancy.NeutralStart.Value, Fancy.NeutralEnd.Value);
+        var subAlignGradient = Utils.CreateGradient(Fancy.BucketStart.Value, Fancy.BucketEnd.Value);
+        string displayString = "";
+        if (role is Role.DEATH or Role.PESTILENCE or Role.WAR or Role.FAMINE)
         {
-            if (role is Role.DEATH or Role.PESTILENCE or Role.WAR or Role.FAMINE)
-            {
-                __result = string.Empty;
-                return false;
-            }
+            __result = string.Empty;
+            return false;
         }
-
+        var acolyte = role switch
+        {
+            Role.BERSERKER => Role.WAR.ToColorizedNoLabel(faction),
+            Role.BAKER => Role.FAMINE.ToColorizedNoLabel(faction),
+            Role.PLAGUEBEARER => Role.PESTILENCE.ToColorizedNoLabel(faction),
+            Role.SOULCOLLECTOR or Btos2Role.Warlock => Role.DEATH.ToColorizedNoLabel(faction),
+            _ => string.Empty
+        };
+        if (!string.IsNullOrEmpty(acolyte))
+        {
+            __result = $"{acolyte} {Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_ACOLYTE"), subAlignGradient)}";
+            return false;
+        }
+        if (factionID > 2 && factionID < 12 && factionID != 7 || factionID > 37 && factionID < 42)
+        {
+            useNeutralGradient = true;
+            displayString = RoleAlignment.NEUTRAL.ToDisplayString();
+        }
+        else if (factionID == 13)
+            displayString = Utils.GetString("FANCY_BUCKETS_CURSEDSOUL");
+        else
+            displayString = faction.ToDisplayString();
+        var text = string.Empty;
         if (subAlignment.IsInvalid())
         {
             if (alignment.IsInvalid())
@@ -256,31 +273,10 @@ public static class RoleCardPopupPatches2
                 __result = string.Empty;
                 return false;
             }
-
             __result = alignment.ToColorizedDisplayString();
             return false;
         }
-
-        text = Utils.ApplyGradient(role.GetFaction() == faction ? alignment.ToDisplayString() : faction.ToDisplayString(), faction.GetChangedGradient(role)) + " " + Utils.ApplyGradient(subAlignment.ToDisplayString(), gradient);
-
-        if (Constants.IsBTOS2())
-        {
-            var acolyte = role switch
-            {
-                Role.BERSERKER => Role.WAR.ToColorizedNoLabel(faction),
-                Role.BAKER => Role.FAMINE.ToColorizedNoLabel(faction),
-                Role.PLAGUEBEARER => Role.PESTILENCE.ToColorizedNoLabel(faction),
-                Role.SOULCOLLECTOR or Btos2Role.Warlock => Role.DEATH.ToColorizedNoLabel(faction),
-                _ => string.Empty
-            };
-
-            if (!string.IsNullOrEmpty(acolyte))
-            {
-                __result = $"{acolyte} {Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_ACOLYTE"), gradient)}";
-                return false;
-            }
-        }
-
+        text = Utils.ApplyGradient(displayString, useNeutralGradient ? neutralGradient : faction.GetChangedGradient(role)) + " " + Utils.ApplyGradient(subAlignment.ToDisplayString(), subAlignGradient);
         __result = text;
         return false;
     }
