@@ -1,19 +1,20 @@
+using System.Globalization;
 using System.Text.RegularExpressions;
 using Cinematics.Players;
 using Game.Characters;
+using Game.Chat;
+using Game.Chat.Decoders;
+using Game.Simulation;
 using Home.HomeScene;
+using Home.Services;
 using Home.Shared;
-using Mentions.Providers;
 using Mentions;
+using Mentions.Providers;
+using Mentions.UI;
 using Server.Shared.Cinematics;
 using Server.Shared.Cinematics.Data;
 using Server.Shared.Extensions;
-using System.Globalization;
-using Home.Services;
-using Game.Simulation;
-using Game.Chat.Decoders;
 using Server.Shared.Messages;
-using Mentions.UI;
 using Server.Shared.State.Chat;
 using Shared.Chat;
 
@@ -1292,5 +1293,56 @@ public static class WdahChatPatch2
         Debug.LogWarning("Unable to encode invalid ChatLogWhoDiedEntry.");
         __result = string.Empty;
         return false;
+    }
+}
+
+[HarmonyPatch(typeof(HudGameMessagePoolItem), nameof(HudGameMessagePoolItem.Validate))]
+public static class LeaveTownFactionPatch
+{
+    public static void Postfix(HudGameMessagePoolItem __instance)
+    {
+        ChatLogGameMessageEntry chatLogGameMessageEntry = __instance._chatLogMessage.chatLogEntry as ChatLogGameMessageEntry;
+        if (chatLogGameMessageEntry.messageId == GameFeedbackMessage.LEFT_TOWN)
+            leaveTownItems.Add(__instance);
+    }
+    public static void FixLeaveTownMessages(KillRecord killRecord)
+    {
+        foreach (HudGameMessagePoolItem __instance in leaveTownItems)
+        {
+            ChatLogGameMessageEntry chatLogGameMessageEntry = __instance._chatLogMessage.chatLogEntry as ChatLogGameMessageEntry;
+            if (killRecord.playerId != chatLogGameMessageEntry.playerNumber1)
+                continue;
+            string text = __instance.l10n(Constants.IsBTOS2() ? "BTOS_GAME_304" : "GAME_304");
+            text = text.Replace("%name%", string.Format("[[@{0}]]", chatLogGameMessageEntry.playerNumber1 + 1));
+            Tuple<Role, FactionType> tuple = new(killRecord.playerRole, killRecord.playerFaction);
+            text = text.Replace("%role%", string.Format("[[#{0},{1}]]", (int)tuple.Item1, (int)tuple.Item2));
+            text = __instance.mentionPanel.mentionsProvider.DecodeText(text);
+            __instance.textField.SetText(text);
+            string style = __instance.l10nStyle(Constants.IsBTOS2() ? "BTOS_GAME_304" : "GAME_304", "");
+            string text2 = __instance.l10nStyle(text, "");
+            if (!string.IsNullOrEmpty(text2))
+            {
+                __instance.SetChatStyle(text2);
+            }
+            else
+            {
+                __instance.ChatColor = __instance._chatColor;
+            }
+            __instance.SetBounds(text);
+        }
+
+        leaveTownItems.Clear();
+    }
+
+    public static List<HudGameMessagePoolItem> leaveTownItems = new();
+}
+
+[HarmonyPatch(typeof(HudGraveyardPanel), nameof(HudGraveyardPanel.CreateGraveyardItem))]
+public static class LeaveTownFactionPatch2
+{
+    public static void Postfix(KillRecord killRecord)
+    {
+        if (killRecord.killedByReasons.Contains(KilledByReason.LEAVING_TOWN))
+            LeaveTownFactionPatch.FixLeaveTownMessages(killRecord);
     }
 }
