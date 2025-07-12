@@ -1195,6 +1195,7 @@ public static class KeywordMentionsPatches
             ? player.Data.accountName
             : player.Data.gameName;
         var match = $"@{i + 1}";
+        var match2 = "@" + text;
         var encodedText = $"[[@{i + 1}]]";
         var text2 = (mentionTokenType == MentionToken.MentionTokenType.ACCOUNT) ? "a" : string.Empty;
         var gradient = Utils.CreateGradient(Fancy.MentionStart.Value, Fancy.MentionEnd.Value);
@@ -1238,6 +1239,13 @@ public static class KeywordMentionsPatches
         {
             mentionTokenType = mentionTokenType,
             match = match,
+            mentionInfo = mentionInfo,
+            priority = i
+        });
+        __instance.MentionTokens.Add(new MentionToken
+        {
+            mentionTokenType = mentionTokenType,
+            match = match2,
             mentionInfo = mentionInfo,
             priority = i
         });
