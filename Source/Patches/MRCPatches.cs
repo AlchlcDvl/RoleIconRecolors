@@ -1517,3 +1517,60 @@ public static class LeaveTownFactionPatch2
             LeaveTownFactionPatch.FixLeaveTownMessages(killRecord);
     }
 }
+
+[HarmonyPatch(typeof(GameMessageDecoder), nameof(GameMessageDecoder.Encode))]
+public static class FactionSpecificPotionMasterResults
+{
+    private static readonly HashSet<int> BaseAllowedMessageIds =
+    [
+        5, 7, 13, 15, 16, 21, 28, 393, 394
+    ];
+
+    private static readonly HashSet<int> BTOS2AllowedMessageIds =
+    [
+        1010, 1012, 1018, 1020, 1022, 1027, 1030, 1072, 1090, 1091, 1099
+    ];
+
+    public static void Postfix(ChatLogMessage chatLogMessage, UIController uiController, ref string __result)
+    {
+        if (chatLogMessage?.chatLogEntry is not ChatLogGameMessageEntry entry)
+            return;
+
+        if (entry.gameMessageType == ChatLogGameMessageType.SPY)
+            return;
+
+        var id = (int)entry.messageId;
+        // var role = Pepper.GetMyRole();
+
+        var inRange = id is >= 134 and <= 188;
+        var inList = Constants.IsBTOS2()
+            ? BTOS2AllowedMessageIds.Contains(id)
+            : BaseAllowedMessageIds.Contains(id);
+
+        if (inRange || inList)
+        {
+            if (entry.role1 != Role.NONE && entry.faction1 != FactionType.NONE)
+            {
+                var newKey = $"FANCY_REVEAL_{(int)entry.role1}_{(int)entry.faction1}";
+
+                if (uiController.l10nStringExists(newKey))
+                {
+                    __result = uiController.l10n(newKey);
+
+                    if (entry.playerNumber1 >= 0)
+                    {
+                        __result = __result.Replace("%number%", $"{entry.playerNumber1}");
+                        __result = __result.Replace("%name%", $"[[@{entry.playerNumber1 + 1}]]");
+                    }
+                    if (entry.role1 != Role.NONE)
+                    {
+                        if (entry.faction1 != FactionType.NONE)
+                            __result = __result.Replace("%role%", $"[[#{(int)entry.role1},{(int)entry.faction1}]]");
+                        else
+                            __result = __result.Replace("%role%", $"[[#{(int)entry.role1}]]");
+                    }
+                }
+            }
+        }
+    }
+}
