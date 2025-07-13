@@ -1551,7 +1551,7 @@ public static class FactionSpecificPotionMasterResults
         {
             if (entry.role1 != Role.NONE && entry.faction1 != FactionType.NONE)
             {
-                var newKey = $"FANCY_REVEAL_{(int)entry.role1}_{(int)entry.faction1}";
+                var newKey = Constants.IsBTOS2() ? $"FANCY_BTOS_REVEAL_{(int)entry.role1}_{(int)entry.faction1}" : $"FANCY_REVEAL_{(int)entry.role1}_{(int)entry.faction1}";
 
                 if (uiController.l10nStringExists(newKey))
                 {
