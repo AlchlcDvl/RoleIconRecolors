@@ -2,6 +2,7 @@ using FancyUI.Assets.IconPacks;
 using FancyUI.Assets.SilhouetteSwapper;
 using NewModLoading;
 using SalemModLoader;
+using SML;
 using UnityEngine.TextCore;
 
 namespace FancyUI.Assets;

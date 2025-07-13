@@ -144,7 +144,8 @@ public static class PatchRoleCards
             icon1.sprite = attack.IsValid() ? attack : FancyAssetManager.Attack;
 
         var eth = __instance.CurrentFaction > Btos2Faction.Hawks && __instance.CurrentFaction < Btos2Faction.Pandora && __instance.CurrentFaction != Btos2Faction.Inquisitor;
-        var defense = GetSprite($"Defense{Utils.GetLevel(eth ? 4 : data.defense, false)}");
+        var defenseAmount = __instance.defenseGlow.fillAmount * 3.0303030303f;
+        var defense = GetSprite($"Defense{Utils.GetLevel(eth ? 4 : (int)defenseAmount, false)}");
         var icon2 = __instance.transform.Find("DefenseIcon").Find("Icon").GetComponent<Image>();
 
         if (icon2)
@@ -951,7 +952,8 @@ public static class MentionsProviderPatches
         var role = (Role)result;
         var factionType = (FactionType)result2;
         var text = __instance._useColors ? role.ToColorizedDisplayString(factionType) : role.ToRoleFactionDisplayString(factionType);
-        var text2 = __instance._roleEffects ? $"<sprite=\"RoleIcons ({Utils.FactionName(factionType)})\" name=\"Role{(int)role}\">" : "";
+        var roleIconsString = Constants.IsBTOS2() ? "BTOSRoleIcons" : "RoleIcons";
+        var text2 = __instance._roleEffects ? $"<sprite=\"{roleIconsString} ({Utils.FactionName(factionType)})\" name=\"Role{(int)role}\">" : "";
         var text3 = $"{__instance.styleTagOpen}{__instance.styleTagFont}<link=\"r{(int)role},{(int)factionType}\">{text2}<b>{text}</b></link>{__instance.styleTagClose}";
         var item = new MentionInfo
         {
@@ -1062,7 +1064,8 @@ public static class MakeProperFactionChecksInHeaderAnnouncement
         var faction = killRecord.playerFaction;
 
         var roleText = role.ToColorizedDisplayString(faction);
-        var icon = $"<sprite=\"RoleIcons ({(Constants.CurrentStyle() == "Regular" && role.GetFactionType() == faction ? "Regular" : Utils.FactionName(faction, false))})\" name=\"Role{(int)role}\">";
+        var roleIconsString = Constants.IsBTOS2() ? "BTOSRoleIcons" : "RoleIcons";
+        var icon = $"<sprite=\"{roleIconsString} ({(Constants.CurrentStyle() == "Regular" && role.GetFactionType() == faction ? "Regular" : Utils.FactionName(faction, false))})\" name=\"Role{(int)role}\">";
         var display = icon + roleText;
 
         var l10nKey = Utils.GetHangingMessage(role, faction);
@@ -1091,7 +1094,8 @@ public static class MakeProperFactionChecksInWdah1
         if (!Service.Game.Sim.simulation.killRecords.Data.TryFinding(k => k.playerId == __instance.currentPlayerNumber, out var killRecord) || killRecord!.killedByReasons.Count < 1)
             return false;
 
-        var roleText = $"<sprite=\"RoleIcons\" name=\"Role{(int)killRecord.playerRole}\">{killRecord.playerRole.ToColorizedDisplayString(killRecord.playerFaction)}";
+        var roleIconsString = Constants.IsBTOS2() ? "BTOSRoleIcons" : "RoleIcons";
+        var roleText = $"<sprite=\"{roleIconsString}\" name=\"Role{(int)killRecord.playerRole}\">{killRecord.playerRole.ToColorizedDisplayString(killRecord.playerFaction)}";
 
         if (Constants.EnableIcons())
             roleText = roleText.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(killRecord.playerFaction)})\"");

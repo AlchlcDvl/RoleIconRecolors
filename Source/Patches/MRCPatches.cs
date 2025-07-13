@@ -300,7 +300,7 @@ public static class RoleCardPopupPatches2
             faction = (int)__instance.CurrentRole.GetFaction();
         if (faction > 0 && faction < 3 || faction > 42)
             defense = 0;
-        if (faction > 2 && faction < 34 || faction == 33 && role == Btos2Role.Jackal || (role == Role.CULTIST || Constants.IsBTOS2() && role == Btos2Role.Cultist) && data.specialAbilityRemaining != 0 || faction == 40)
+        if (faction > 2 && faction < 34 || faction == 33 && role == Btos2Role.Jackal || role == Role.CULTIST || role == Role.COVENLEADER || Constants.IsBTOS2() && role == Btos2Role.Cultist || faction == 40)
             defense = 1;
         if (Utils.IsHorseman(role) || data.defense == 3)
             defense = 3;
