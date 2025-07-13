@@ -1315,7 +1315,7 @@ public static class ReplaceRoleTagWithRoleTextPatch
                 if (int.TryParse(content, out var roleId))
                 {
                     var role = (Role)roleId;
-                    var colorized = role.ToColorizedNoLabel();
+                    var colorized = role.ToColorizedNoLabel(role.GetFaction());
                     str = str.Replace(fullTag, colorized);
                     modified = true;
                 }
