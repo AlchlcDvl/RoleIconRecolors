@@ -1279,31 +1279,52 @@ public static class ReplaceRoleTagWithRoleTextPatch
 
         var modified = false;
 
-        // Handle %name_role
+        // Handle %name_roleX% and %name_roleX_Y%
         var index = str.IndexOf("%name_role");
 
         while (index > -1)
         {
             var endIndex = str.IndexOf("%", index + 1);
-
             if (endIndex == -1)
                 break;
 
             var fullTag = str.Substring(index, endIndex - index + 1);
-            var idStart = index + 10;
+            var content = fullTag[10..^1]; // Between %name_role and %
 
-            if (int.TryParse(str[idStart..endIndex], out var roleId))
+            if (content.Contains("_"))
             {
-                var role = (Role)roleId;
-                var colorized = role.ToColorizedDisplayString();
-                str = str.Replace(fullTag, colorized);
-                modified = true;
+                // New format: roleX_Y
+                var parts = content.Split('_');
+                if (parts.Length == 2
+                    && int.TryParse(parts[0], out var roleId)
+                    && int.TryParse(parts[1], out var factionId))
+                {
+                    var role = (Role)roleId;
+                    var faction = (FactionType)factionId;
+
+                    // Use the overload with faction
+                    var colorized = role.ToColorizedNoLabel(faction);
+
+                    str = str.Replace(fullTag, colorized);
+                    modified = true;
+                }
+            }
+            else
+            {
+                // Old format: roleX
+                if (int.TryParse(content, out var roleId))
+                {
+                    var role = (Role)roleId;
+                    var colorized = role.ToColorizedNoLabel();
+                    str = str.Replace(fullTag, colorized);
+                    modified = true;
+                }
             }
 
             index = str.IndexOf("%name_role", index + 1);
         }
 
-        // Handle %name_faction
+        // Handle %name_factionX%
         index = str.IndexOf("%name_faction");
 
         while (index > -1)
@@ -1319,7 +1340,10 @@ public static class ReplaceRoleTagWithRoleTextPatch
             if (int.TryParse(str[idStart..endIndex], out var factionId))
             {
                 var faction = (FactionType)factionId;
-                var colorized = Utils.ApplyGradient(faction.ToDisplayString(), faction.GetChangedGradient(Role.DREAMWEAVER));
+                var colorized = Utils.ApplyGradient(
+                    faction.ToDisplayString(),
+                    faction.GetChangedGradient(Role.DREAMWEAVER)
+                );
                 str = str.Replace(fullTag, colorized);
                 modified = true;
             }
