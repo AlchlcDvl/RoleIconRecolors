@@ -914,7 +914,7 @@ public static class KeywordMentionsPatches
 
             var color = Fancy.KeywordStart.Value;
             var keyword = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(raw);
-            var newText = Utils.ApplyGradient($"<b>{keyword}</b>", gradient);
+            var newText = $"<b>{Utils.ApplyGradient($"{keyword}", gradient)}</b>";
             // var newText = $"<color={color}><b>{keyword}</b></color>";
             var encodedText = mentionInfo.encodedText;
             var keywordId = encodedText.TrimStart('[', ':').TrimEnd(']');
@@ -990,7 +990,7 @@ public static class KeywordMentionsPatches
 
             var color = Fancy.KeywordStart.Value;
             var coloredText = __instance._useColors
-                ? Utils.ApplyGradient($"<b>{localizedText}</b>", gradient)
+                ? $"<b>{Utils.ApplyGradient($"{localizedText}", gradient)}</b>"
                 : $"<b>{localizedText}</b>";
 
             var richText = $"{__instance.styleTagOpen}{__instance.styleTagFont}<link=\"k{keyword.KeywordId}\">{coloredText}</link>{__instance.styleTagClose}";
@@ -1214,7 +1214,7 @@ public static class KeywordMentionsPatches
             color = "#FFCE3B";
 
         var text3 = __instance._useColors
-            ? Utils.ApplyGradient($"<b>{text}</b>", gradient)
+            ? $"<b>{Utils.ApplyGradient($"{text}", gradient)}</b>"
             : $"<b>{text}</b>";
 
         var text4 = __instance._playerEffects == 2

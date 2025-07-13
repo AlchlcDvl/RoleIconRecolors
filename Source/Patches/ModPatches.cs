@@ -157,7 +157,7 @@ public static class AchievementMentionsPatch
             var match = $"~{title}";
 
             var styledTitle = useColors
-                ? Utils.ApplyGradient($"<b>{title}</b>", gradient)
+                ? $"<b>{Utils.ApplyGradient($"{title}", gradient)}</b>"
                 : $"<b>{title}</b>";
 
             var richText = $"{__instance.styleTagOpen}{__instance.styleTagFont}<link=\"~{achievementId}\">{styledTitle}</link>{__instance.styleTagClose}";
