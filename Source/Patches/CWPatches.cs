@@ -4,6 +4,7 @@ using Home.Common.Dialog;
 using Home.Common.Settings;
 using Home.Interface;
 using Home.Shared;
+using Mentions.Providers;
 using Mentions.UI;
 
 namespace FancyUI.Patches;
@@ -197,6 +198,8 @@ public static class ChatInputControllerPatch
 {
     public static ChatInputController Cache;
 
+    public static ChatMentionsProvider mentionsProvider;
+
     public static void Postfix(ChatInputController __instance)
     {
         Cache = __instance;
@@ -204,7 +207,7 @@ public static class ChatInputControllerPatch
         __instance.chatInputText.SetGraphicColor(ColorType.Paper);
         __instance.chatInput.textComponent.SetGraphicColor(ColorType.Paper);
         __instance.chatInput.placeholder.SetGraphicColor(ColorType.Paper);
-
+        mentionsProvider = __instance.chatInput.mentionPanel.mentionsProvider as ChatMentionsProvider;
         try
         {
             __instance.parchmentBackgroundImage.transform.GetChild(2).GetChild(2).GetComponent<Image>().SetImageColor(ColorType.Wax);
@@ -942,6 +945,10 @@ public static class RoleDeckPanelControllerPatch
 
         if (sprite.IsValid() && any)
             any.sprite = sprite;
+
+        pand = Constants.IsPandora();
+        comk = Constants.IsCompliance();
+        __instance.AdjustSizeBasedOnRolesAdded();
     }
 
     [HarmonyPatch(nameof(RoleDeckPanelController.AdjustSizeBasedOnRolesAdded)), HarmonyPostfix]
@@ -971,7 +978,17 @@ public static class RoleDeckPanelControllerPatch
         __instance.scaler.matchWidthOrHeight = 0.5f + num3;
         if (MetalTransform && PaperTransform)
             MetalTransform.offsetMax = PaperTransform.offsetMax = __instance.deckView.GetComponent<RectTransform>().offsetMax;
+        if (pand != Constants.IsPandora() || comk != Constants.IsCompliance())
+        {
+            pand = Constants.IsPandora();
+            comk = Constants.IsCompliance();
+            if (ChatInputControllerPatch.mentionsProvider != null)
+                ChatInputControllerPatch.mentionsProvider.RebuildAndUpdateCandidates(Mentions.RebuildMentionTypesFlag.ROLES);
+        }
     }
+
+    public static bool pand = false;
+    public static bool comk = false;
 }
 
 [HarmonyPatch(typeof(GameBrowserRoleDeck), nameof(GameBrowserRoleDeck.Start))]
