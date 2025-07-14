@@ -5,7 +5,7 @@ using UnityEngine.Networking;
 
 namespace FancyUI.UI;
 
-public class DownloaderUI : UIController
+public sealed class DownloaderUI : UIController
 {
     private const string Repo = "https://raw.githubusercontent.com/AlchlcDvl/RoleIconRecolors/main";
     private static readonly Dictionary<string, bool> Running = [];
@@ -168,7 +168,7 @@ public class DownloaderUI : UIController
             RepoOwner = RepoOwner.text,
             Branch = BranchName.text,
         };
-        packJson.SetDefaults();
+        packJson.SetDefaults(default);
         return packJson;
     }
 
@@ -246,7 +246,6 @@ public class DownloaderUI : UIController
             Packs.AddRange(array);
         }
 
-        Packs.ForEach(x => x.SetDefaults());
         HandlerRunning = false;
     }
 

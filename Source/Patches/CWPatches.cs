@@ -1,7 +1,5 @@
 using Game.Achievements;
-using Game.Interface.Customization;
 using Home.Common.Dialog;
-using Home.Common.Settings;
 using Home.Interface;
 using Home.Shared;
 using Mentions.Providers;
@@ -197,8 +195,7 @@ public static class PooledChatViewSwitcherPatch
 public static class ChatInputControllerPatch
 {
     public static ChatInputController Cache;
-
-    public static ChatMentionsProvider mentionsProvider;
+    public static ChatMentionsProvider MentionsProvider;
 
     public static void Postfix(ChatInputController __instance)
     {
@@ -207,7 +204,8 @@ public static class ChatInputControllerPatch
         __instance.chatInputText.SetGraphicColor(ColorType.Paper);
         __instance.chatInput.textComponent.SetGraphicColor(ColorType.Paper);
         __instance.chatInput.placeholder.SetGraphicColor(ColorType.Paper);
-        mentionsProvider = __instance.chatInput.mentionPanel.mentionsProvider as ChatMentionsProvider;
+        MentionsProvider = __instance.chatInput.mentionPanel.mentionsProvider as ChatMentionsProvider;
+
         try
         {
             __instance.parchmentBackgroundImage.transform.GetChild(2).GetChild(2).GetComponent<Image>().SetImageColor(ColorType.Wax);
@@ -873,6 +871,9 @@ public static class RoleDeckPanelControllerPatch
     private static RectTransform MetalTransform;
     private static RectTransform PaperTransform;
 
+    public static bool Pandora;
+    public static bool Compliance;
+
     [HarmonyPatch(nameof(RoleDeckPanelController.Start)), HarmonyPostfix]
     public static void StartPostfix(RoleDeckPanelController __instance)
     {
@@ -946,8 +947,8 @@ public static class RoleDeckPanelControllerPatch
         if (sprite.IsValid() && any)
             any.sprite = sprite;
 
-        pand = Constants.IsPandora();
-        comk = Constants.IsCompliance();
+        Pandora = Constants.IsPandora();
+        Compliance = Constants.IsCompliance();
         __instance.AdjustSizeBasedOnRolesAdded();
     }
 
@@ -956,39 +957,46 @@ public static class RoleDeckPanelControllerPatch
     {
         if (__instance.roleDeckListItems.Count < 10)
             return;
-        RectTransform component = __instance.deckView.GetComponent<RectTransform>();
-        RectTransform viewport = __instance.deckView.transform.GetChild(3).GetChild(0) as RectTransform;
-        RectMask2D bitchAssMask = viewport.GetComponent<RectMask2D>();
-        int i = 0;
-        int num2 = 0;
-        float num3 = 0f;
-        float ySize = __instance.startTop;
-        RoleDeckListItem lastActiveDeckItem = __instance.deckListItemTemplate;
-        for (i = __instance.roleDeckListItems.Count - 1; !lastActiveDeckItem.isActiveAndEnabled && i > -1; i--)
+
+        var component = __instance.deckView.GetComponent<RectTransform>();
+        var viewport = __instance.deckView.transform.GetChild(3).GetChild(0) as RectTransform;
+        var bitchAssMask = viewport.GetComponent<RectMask2D>();
+        var num3 = 0f;
+        var ySize = __instance.startTop;
+        var lastActiveDeckItem = __instance.deckListItemTemplate;
+
+        for (var i = __instance.roleDeckListItems.Count - 1; !lastActiveDeckItem.isActiveAndEnabled && i > -1; i--)
             lastActiveDeckItem = __instance.roleDeckListItems[i];
+
         if (-lastActiveDeckItem.transform.localPosition.y + 50 > viewport.rect.yMax)
-            for (int num = 1; ySize + viewport.rect.yMax < -lastActiveDeckItem.transform.localPosition.y + 50 && ySize < 720f; num++)
+        {
+            for (var num = 1; ySize + viewport.rect.yMax < -lastActiveDeckItem.transform.localPosition.y + 50 && ySize < 720f; num++)
             {
-                num2 = num * 40;
-                num3 = (float)num * 0.04f;
+                var num2 = num * 40;
+                num3 = num * 0.04f;
                 ySize = Mathf.Min(__instance.startTop + (float)num2, 720f);
             }
+        }
+
         component.offsetMax = new Vector2(component.offsetMax.x, ySize);
         bitchAssMask.padding = new Vector4(0f, -ySize, 0f, 0f);
         __instance.scaler.matchWidthOrHeight = 0.5f + num3;
+
         if (MetalTransform && PaperTransform)
             MetalTransform.offsetMax = PaperTransform.offsetMax = __instance.deckView.GetComponent<RectTransform>().offsetMax;
-        if (pand != Constants.IsPandora() || comk != Constants.IsCompliance())
-        {
-            pand = Constants.IsPandora();
-            comk = Constants.IsCompliance();
-            if (ChatInputControllerPatch.mentionsProvider != null)
-                ChatInputControllerPatch.mentionsProvider.RebuildAndUpdateCandidates(Mentions.RebuildMentionTypesFlag.ROLES);
-        }
-    }
 
-    public static bool pand = false;
-    public static bool comk = false;
+        var pand = Constants.IsPandora();
+        var comp = Constants.IsCompliance();
+
+        if (Pandora == pand && Compliance == comp)
+            return;
+
+        Pandora = pand;
+        Compliance = comp;
+
+        if (ChatInputControllerPatch.MentionsProvider)
+            ChatInputControllerPatch.MentionsProvider.RebuildAndUpdateCandidates(Mentions.RebuildMentionTypesFlag.ROLES);
+    }
 }
 
 [HarmonyPatch(typeof(GameBrowserRoleDeck), nameof(GameBrowserRoleDeck.Start))]

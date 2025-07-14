@@ -1,6 +1,6 @@
 namespace FancyUI.UI;
 
-public class SettingsAndTestingUI : UIController
+public sealed class SettingsAndTestingUI : UIController
 {
     public static SettingsAndTestingUI Instance { get; private set; }
 

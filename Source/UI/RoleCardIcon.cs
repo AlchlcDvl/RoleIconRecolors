@@ -1,6 +1,6 @@
 // namespace FancyUI.UI;
 
-// public class RoleCardIcon : UIController
+// public sealed class RoleCardIcon : UIController
 // {
 //     public Image Background { get; set; }
 //     public Image Icon { get; set; }

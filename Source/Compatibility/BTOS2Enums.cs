@@ -179,3 +179,10 @@ public static class Btos2Faction
     public const FactionType Compliance = (FactionType)44;
     public const FactionType Lovers = (FactionType)250;
 }
+
+public static class Btos2RoleAlignment
+{
+    public const RoleAlignment Apocalypse = (RoleAlignment)17;
+    public const RoleAlignment Pandora = (RoleAlignment)100;
+    public const RoleAlignment Compliance = (RoleAlignment)101;
+}

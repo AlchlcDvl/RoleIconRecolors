@@ -3,7 +3,7 @@ using NewModLoading;
 
 namespace FancyUI;
 
-public class Fancy : BaseMod<Fancy>
+public sealed class Fancy : BaseMod<Fancy>
 {
     public override string Name => "Fancy UI";
     public override string HarmonyId => "alchlcsystm.fancy.ui";
@@ -56,22 +56,22 @@ public class Fancy : BaseMod<Fancy>
         FancyAssetManager.Defense = Assets.GetSprite("Defense");
         Ethereal = Assets.GetSprite("Ethereal");
         MenuButton.FancyMenu.Icon = Assets.GetSprite("Thumbnail");
-        FancyAssetManager.Attack.texture.anisoLevel = 4;
-        FancyAssetManager.Defense.texture.anisoLevel = 4;
-        Ethereal.texture.anisoLevel = 4;
-        FancyAssetManager.Attack.texture.mipMapBias = -2;
-        FancyAssetManager.Defense.texture.mipMapBias = -2;
-        Ethereal.texture.mipMapBias = -2;
 
-        Grayscale = Assets.GetMaterial("GrayscaleMaterial");
+        Blank.ImproveSprite();
+        FancyAssetManager.Attack.ImproveSprite();
+        FancyAssetManager.Defense.ImproveSprite();
+        Ethereal.ImproveSprite();
+        MenuButton.FancyMenu.Icon.ImproveSprite();
+
+        var grayscale = Assets.Get<Shader>("GrayscaleMaterial");
 
         var normalMats = Constants.AllMaterials[true] = [];
         var guideMats = Constants.AllMaterials[false] = [];
 
         foreach (var type in GeneralUtils.GetEnumValues<ColorType>()!.Where(x => x != ColorType.All))
         {
-            normalMats[type] = new(Grayscale);
-            guideMats[type] = new(Grayscale);
+            normalMats[type] = new(grayscale);
+            guideMats[type] = new(grayscale);
         }
 
         Utils.UpdateMaterials();

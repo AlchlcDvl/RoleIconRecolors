@@ -2,7 +2,7 @@ using NewModLoading;
 
 namespace FancyUI.Assets.IconPacks;
 
-public class IconPack(string name) : Pack(name, PackType.IconPacks)
+public sealed class IconPack(string name) : Pack(name, PackType.IconPacks)
 {
     public Dictionary<GameModType, IconAssets> Assets { get; } = [];
     private Dictionary<string, Sprite> NumberSprites { get; } = [];
@@ -136,6 +136,8 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                                     if (!sprite.IsValid())
                                         continue;
 
+                                    sprite.ImproveSprite();
+
                                     if (!easterEggs.TryGetValue(name, out var icons))
                                         easterEggs[name] = icons = [];
 
@@ -168,8 +170,11 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                             {
                                 var sprite = AssetManager.LoadSpriteFromDisk(file);
 
-                                if (sprite.IsValid())
-                                    icons3[file.FancySanitisePath(true)] = sprite;
+                                if (!sprite.IsValid())
+                                    continue;
+
+                                sprite.ImproveSprite();
+                                icons3[file.FancySanitisePath(true)] = sprite;
                             }
                         }
                     }
@@ -189,8 +194,11 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                         {
                             var sprite = AssetManager.LoadSpriteFromDisk(file);
 
-                            if (sprite.IsValid())
-                                dict[file.FancySanitisePath(true)] = sprite;
+                            if (!sprite.IsValid())
+                                continue;
+
+                            sprite.ImproveSprite();
+                            dict[file.FancySanitisePath(true)] = sprite;
                         }
                     }
                 }
@@ -219,6 +227,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                     if (sprite.IsValid())
                     {
                         sprite.name = sprite.texture.name = $"PlayerNumbers_{i}";
+                        sprite.ImproveSprite();
                         sprites.Add(sprite);
                     }
                     else
@@ -230,7 +239,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                     dict.Add($"PlayerNumbers_{i}", $"PlayerNumbers_{i}");
                 }
 
-                PlayerNumbers = FancyAssetManager.BuildGlyphs(sprites, $"PlayerNumbers ({Name})", dict, 128f, 128f, 0f, 105f, 150f);
+                PlayerNumbers = BuildGlyphs(sprites, $"PlayerNumbers ({Name})", dict, 128f, 128f, 0f, 105f, 150f);
                 Utils.DumpSprite(PlayerNumbers.spriteSheet as Texture2D, "PlayerNumbers", Path.Combine(PackPath, "PlayerNumbers"));
             }
             catch (Exception e)
@@ -255,6 +264,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                     if (sprite.IsValid())
                     {
                         sprite.name = sprite.texture.name = $"Emoji{i}";
+                        sprite.ImproveSprite();
                         sprites.Add(sprite);
                     }
                     else
@@ -266,7 +276,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                     dict.Add($"Emoji{i}", $"Emoji{i}");
                 }
 
-                Emojis = FancyAssetManager.BuildGlyphs(sprites, $"Emojis ({Name})", dict, 384f, 384f, 0f, 300f, 390f);
+                Emojis = BuildGlyphs(sprites, $"Emojis ({Name})", dict, 384f, 384f, 0f, 300f, 390f);
                 Utils.DumpSprite(PlayerNumbers.spriteSheet as Texture2D, "Emojis", Path.Combine(PackPath, "Emojis"));
             }
             catch (Exception e)

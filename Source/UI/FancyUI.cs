@@ -2,7 +2,7 @@ using Home.Shared;
 
 namespace FancyUI.UI;
 
-public class FancyUI : UIController
+public sealed class FancyUI : UIController
 {
     private static TMP_FontAsset GameFont { get; set; }
     private static Material GameFontMaterial { get; set; }

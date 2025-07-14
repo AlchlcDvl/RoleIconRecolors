@@ -54,22 +54,22 @@ public static class Gradients
 
     public static string GetVerticalGradientKey(Gradient gradient)
     {
-        foreach (var kvp in verticalGradients)
-            if (kvp.Key.Equals(gradient))
-                return kvp.Value;
-        var name = "FancyGradient" + (verticalGradients.Count + 1);
+        if (VerticalGradients.TryGetValue(gradient, out var value))
+            return value;
+
+        var name = "FancyGradient" + (VerticalGradients.Count + 1);
         var hashCode = TMP_TextUtilities.GetHashCode(name);
         var color1 = gradient.Evaluate(0f);
         var color2 = gradient.Evaluate(1f);
-        TMP_ColorGradient colorGradient = new(color1, color1, color2, color2)
+        var colorGradient = new TMP_ColorGradient(color1, color1, color2, color2)
         {
             name = name,
             colorMode = ColorMode.VerticalGradient
         };
         MaterialReferenceManager.AddColorGradientPreset(hashCode, colorGradient);
-        verticalGradients.Add(gradient, name);
+        VerticalGradients.Add(gradient, name);
         return name;
     }
 
-    public static Dictionary<Gradient, string> verticalGradients = [];
+    private static readonly Dictionary<Gradient, string> VerticalGradients = [];
 }

@@ -1,6 +1,6 @@
 namespace FancyUI.Settings;
 
-public class ColorSetting : BaseInputSetting
+public sealed class ColorSetting : BaseInputSetting
 {
     public Image ValueBg { get; set; }
 
