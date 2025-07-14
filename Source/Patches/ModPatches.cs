@@ -644,7 +644,7 @@ public static class PandoraAndComplianceRoleSlotsPatch
             return;
 
         var list = new List<RoleDeckSlot>();
-        var alignmentOrder = new[]
+        var alignments = new[]
         {
             RoleAlignment.TOWN,
             Btos2RoleAlignment.Pandora,
@@ -653,11 +653,10 @@ public static class PandoraAndComplianceRoleSlotsPatch
             Btos2RoleAlignment.Apocalypse,
             RoleAlignment.NEUTRAL
         };
-
         var isPandora = Constants.IsPandora();
         var isCompliance = Constants.IsCompliance();
 
-        foreach (var alignment in alignmentOrder)
+        foreach (var alignment in alignments)
         {
             if (isPandora && (alignment == RoleAlignment.COVEN || alignment == Btos2RoleAlignment.Apocalypse))
                 continue;
@@ -667,23 +666,23 @@ public static class PandoraAndComplianceRoleSlotsPatch
 
             list.AddRange(__instance.GetPredicateRoleSlots(r => r switch
             {
-                { Role1: var role1 } when role1.IsResolved() && !r.Role2.IsResolved() => singleRolePredicate(r),
-                { Role1: var role1, Role2: var role2 } when role1.IsResolved() && role2.IsResolved() => twoRolePredicate(r),
-                { Role1: var role1, Role2: var role2 } when role1.IsBucket() && role2.IsResolved() => twoRolePredicate(r),
-                { Role1: var role1, Role2: var role2 } when role1.IsBucket() && role2.IsBucket() => twoRolePredicate(r),
-                { Role1: var role1 } when r.IsBucket() && role1.GetRoleBucket().subAlignment != SubAlignment.ANY => singleRolePredicate(r),
-                { Role1: var role1 } when r.IsBucket() && role1.GetRoleBucket().subAlignment == SubAlignment.ANY => singleRolePredicate(r),
+                { Role1: var role1 } when role1.IsResolved() && !r.Role2.IsResolved() => SingleRolePredicate(r),
+                { Role1: var role1, Role2: var role2 } when role1.IsResolved() && role2.IsResolved() => TwoRolePredicate(r),
+                { Role1: var role1, Role2: var role2 } when role1.IsBucket() && role2.IsResolved() => TwoRolePredicate(r),
+                { Role1: var role1, Role2: var role2 } when role1.IsBucket() && role2.IsBucket() => TwoRolePredicate(r),
+                { Role1: var role1 } when r.IsBucket() && role1.GetRoleBucket().subAlignment != SubAlignment.ANY => SingleRolePredicate(r),
+                { Role1: var role1 } when r.IsBucket() && role1.GetRoleBucket().subAlignment == SubAlignment.ANY => SingleRolePredicate(r),
                 _ => false
             }));
 
             if (currentAlignmentIsCompliance)
                 list.AddRange(__instance.GetPredicateRoleSlots(r => r.Role1 == Btos2Role.NeutralKilling));
 
-            bool singleRolePredicate(RoleDeckSlot r) =>
+            bool SingleRolePredicate(RoleDeckSlot r) =>
                 !IsNeutralExclusion(r, alignment, isCompliance) &&
                 MatchesAlignmentConditions(r.Role1, alignment, currentAlignmentIsPandora, currentAlignmentIsCompliance);
 
-            bool twoRolePredicate(RoleDeckSlot r) =>
+            bool TwoRolePredicate(RoleDeckSlot r) =>
                 !IsNeutralExclusion(r, alignment, isCompliance) &&
                 MatchesAlignmentConditions(r.Role1, alignment, currentAlignmentIsPandora, currentAlignmentIsCompliance) &&
                 MatchesAlignmentConditions(r.Role2, alignment, currentAlignmentIsPandora, currentAlignmentIsCompliance);
