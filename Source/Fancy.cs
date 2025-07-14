@@ -63,7 +63,7 @@ public sealed class Fancy : BaseMod<Fancy>
         Ethereal.ImproveSprite();
         MenuButton.FancyMenu.Icon.ImproveSprite();
 
-        var grayscale = Assets.Get<Shader>("GrayscaleMaterial");
+        var grayscale = Assets.Get<Shader>("GrayscaleShader");
 
         var normalMats = Constants.AllMaterials[true] = [];
         var guideMats = Constants.AllMaterials[false] = [];
@@ -485,7 +485,8 @@ public sealed class Fancy : BaseMod<Fancy>
         foreach (var faction in BTOS2Factions.Where(x => x is not (FactionType.NONE or (> FactionType.APOCALYPSE and < FactionType.VAMPIRE) or FactionType.CURSED_SOUL or FactionType.UNKNOWN or (>
             Btos2Faction.Hawks and < Btos2Faction.Pandora))))
         {
-            if (CinematicMap.ContainsKey(faction)) continue;
+            if (CinematicMap.ContainsKey(faction))
+                continue;
 
             CinematicMap[faction] = new(
                 $"{Utils.FactionName(faction, GameModType.BTOS2, false).ToUpper()}_CINEMATIC",
