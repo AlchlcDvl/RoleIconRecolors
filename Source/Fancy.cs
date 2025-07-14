@@ -178,7 +178,7 @@ public sealed class Fancy : BaseMod<Fancy>
         { "COVEN", ("#B545FF", "#B545FF", "#B545FF", null, "#B545FF") },
         { "APOCALYPSE", ("#FF004E", "#FF004E", "#FF004E", null, "#FF004E") },
         { "VAMPIRE", ("#ff0000", "#6A1B1B", "#6A1B1B", null, "#6A1B1B") },
-        { "CURSEDSOUL", ("#4FFF9F", "#B54FFF", "#4FFF9F", null, "#4FFF9F") },
+        { "CURSEDSOUL", ("#B54FFF", "#4FFF9F", "#4FFF9F", null, "#4FFF9F") },
         { "PANDORA", ("#B545FF", "#FF004E", "#FF004E", null, "#FF004E") },
         { "COMPLIANCE", ("#2D44B5", "#FC9F32", "#FC9F32", "#AE1B1E", null) },
         { "SERIALKILLER", ("#1D4DFC", "#1D4DFC", "#1D4DFC", null, null) },
