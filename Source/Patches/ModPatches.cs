@@ -695,18 +695,12 @@ public static class PandoraAndComplianceRoleSlotsPatch
 
         __result = list;
 
-        bool MatchesAlignmentConditions(Role role, RoleAlignment currentAlignment, bool isPandoraMode, bool isComplianceMode)
-        {
-            return role.GetAlignment() == currentAlignment ||
-                    (isPandoraMode && (role.GetAlignment() == RoleAlignment.COVEN || role.GetAlignment() == Btos2RoleAlignment.Apocalypse)) ||
-                    (isComplianceMode && role.IsNeutralKilling());
-        }
+        bool MatchesAlignmentConditions(Role role, RoleAlignment currentAlignment, bool isPandoraMode, bool isComplianceMode) => role.GetAlignment() == currentAlignment ||
+            (isPandoraMode && (role.GetAlignment() == RoleAlignment.COVEN || role.GetAlignment() == Btos2RoleAlignment.Apocalypse)) ||
+            (isComplianceMode && role.IsNeutralKilling());
 
-        bool IsNeutralExclusion(RoleDeckSlot slot, RoleAlignment currentAlignment, bool isComplianceMode)
-        {
-            return currentAlignment == RoleAlignment.NEUTRAL && isComplianceMode &&
-                    (slot.Role1.IsNeutralKilling() || slot.Role2.IsNeutralKilling());
-        }
+        bool IsNeutralExclusion(RoleDeckSlot slot, RoleAlignment currentAlignment, bool isComplianceMode) => currentAlignment == RoleAlignment.NEUTRAL && isComplianceMode &&
+            (slot.Role1.IsNeutralKilling() || slot.Role2.IsNeutralKilling());
 
         bool FinalCombinedRolePredicate(RoleDeckSlot r) =>
             r.Role1.GetAlignment() != r.Role2.GetAlignment() &&
