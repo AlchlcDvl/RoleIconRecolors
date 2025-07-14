@@ -309,7 +309,7 @@ public static class RoleCardPopupPatches2
         if (faction == 33)
             faction = (int)__instance.CurrentRole.GetFaction();
 
-        if (faction > 0 && faction < 3 || faction > 42)
+        if ((faction > 0 && faction < 3) || faction > 42)
             defense = 0;
 
         if ((faction > 2 && faction < 34) || (faction == 33 && role == Btos2Role.Jackal) || role == Role.CULTIST || role == Role.COVENLEADER || (Constants.IsBTOS2() && role == Btos2Role.Cultist) || faction == 40)
@@ -321,7 +321,7 @@ public static class RoleCardPopupPatches2
         if (faction > 37 && faction < 43 && faction != 40)
             defense = 4;
 
-        if (faction == 33 && role != Btos2Role.Jackal || faction > 33 && faction < 37)
+        if ((faction == 33 && role != Btos2Role.Jackal) || (faction > 33 && faction < 37))
             defense = data.defense;
 
         var num = data.attack / 3f;

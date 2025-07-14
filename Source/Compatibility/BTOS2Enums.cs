@@ -186,3 +186,57 @@ public static class Btos2RoleAlignment
     public const RoleAlignment Pandora = (RoleAlignment)100;
     public const RoleAlignment Compliance = (RoleAlignment)101;
 }
+
+public static class Btos2EffectType
+{
+    public const EffectType None = EffectType.NONE;
+    public const EffectType ExecutionerTarget = EffectType.EXECUTIONER_TARGET;
+    public const EffectType Hexed = EffectType.HEXED;
+    public const EffectType Knighted = EffectType.KNIGHTED;
+    public const EffectType RevealedMayor = EffectType.REVEALED_MAYOR;
+    public const EffectType Disconnected = EffectType.DISCONNECTED;
+    public const EffectType Connecting = EffectType.CONNECTING;
+    public const EffectType Lover = EffectType.LOVER;
+    public const EffectType Doused = EffectType.DOUSED;
+    public const EffectType Plagued = EffectType.PLAGUED;
+    public const EffectType Necronomicon = EffectType.NECRONOMICON;
+    public const EffectType Stoned = EffectType.STONED;
+    public const EffectType Trapped = EffectType.TRAPPED;
+    public const EffectType Bread = EffectType.BREAD;
+    public const EffectType Hangover = EffectType.HANGOVER;
+    public const EffectType Silenced = EffectType.VOODOOED;
+    public const EffectType Dreamwove = EffectType.DREAMWOVE;
+    public const EffectType Insomnia = EffectType.INSANE;
+    public const EffectType Vip = EffectType.VIP;
+    public const EffectType Bug = EffectType.BUG;
+    public const EffectType Scent = EffectType.SCENT_TRACK;
+    public const EffectType Pestilence = EffectType.PESTILENCE;
+    public const EffectType RevealedMarshal = EffectType.REVEALED_MARSHAL;
+    public const EffectType SocialiteGuest = EffectType.SOCIALITE_GUEST;
+    public const EffectType VanillaReaped = EffectType.REAPED;
+    public const EffectType Illuminated = EffectType.REVEALED_BY_PMWITCH;
+    public const EffectType Sovereign = EffectType.SOVEREIGN;
+    public const EffectType VanillaBestowed = EffectType.BESTOWED;
+
+    public const EffectType Recruit = (EffectType)100;
+    public const EffectType Deaf = (EffectType)101;
+    public const EffectType CovenTownTraitor = (EffectType)102;
+    public const EffectType ApocTownTraitor = (EffectType)103;
+    public const EffectType Audited = (EffectType)104;
+    public const EffectType Enchanted = (EffectType)105;
+    public const EffectType Accompanied = (EffectType)106;
+    public const EffectType PandoraTownTraitor = (EffectType)107;
+    public const EffectType Egotist = (EffectType)108;
+    public const EffectType BtosReaped = (EffectType)109;
+    public const EffectType Cursed = (EffectType)110;
+    public const EffectType BtosBestowed = (EffectType)111;
+    public const EffectType Sensed = (EffectType)112;
+}
+
+public static class Btos2RoleModifier
+{
+    public const ROLE_MODIFIER None = ROLE_MODIFIER.NONE;
+    public const ROLE_MODIFIER Vip = ROLE_MODIFIER.VIP;
+    public const ROLE_MODIFIER TownTraitor = ROLE_MODIFIER.TRAITOR;
+    public const ROLE_MODIFIER Recruit = (ROLE_MODIFIER)10;
+}
