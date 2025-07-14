@@ -687,7 +687,9 @@ public static class ClientRoleExtensionsPatches
     [HarmonyPatch(nameof(ClientRoleExtensions.GetFactionColor))]
     public static bool Prefix(ref string __result, FactionType factionType)
     {
-        __result = Fancy.Colors[Utils.FactionName(factionType, stoned: true).ToUpper()].Start;
+        var name = Utils.GetFactionKey(factionType);
+
+        __result = Fancy.Colors[name].Start;
         return false;
     }
 
@@ -862,7 +864,9 @@ public static class ClientRoleExtensionsPatches
     [HarmonyPatch(nameof(ClientRoleExtensions.GetSecondFactionColor)), HarmonyPrefix]
     public static bool GetSecondFactionColorPrefix(ref string __result, FactionType factionType)
     {
-        __result = Fancy.Colors[Utils.FactionName(factionType, stoned: true).ToUpper()].Start;
+        var name = Utils.GetFactionKey(factionType);
+
+        __result = Fancy.Colors[name].Start;
         return false;
     }
 }

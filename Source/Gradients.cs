@@ -4,10 +4,10 @@ namespace FancyUI;
 
 public static class Gradients
 {
-    public static Gradient GetChangedGradient(this FactionType faction, Role role)
+    public static Gradient GetChangedGradient(this FactionType faction, Role role, bool isTesting = false)
     {
         var mod = Utils.GetGameType();
-        var middleKey = Utils.FactionName(faction, mod, stoned: true).ToUpper();
+        var middleKey = isTesting ? Utils.GetFactionTestingKey(faction) : Utils.GetFactionKey(faction);
         var baseKey = Utils.FactionName(role.GetFactionType(mod), mod, stoned: true).ToUpper();
         var startKey = faction == Btos2Faction.Jackal ? "JACKAL" : middleKey;
         string end;

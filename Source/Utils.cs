@@ -8,7 +8,7 @@ namespace FancyUI;
 
 public static class Utils
 {
-	// Note: This may need to be tweaked to account for role cards being different in game (e.g. Admirer, Vigilante, Werewolf)
+    // Note: This may need to be tweaked to account for role cards being different in game (e.g. Admirer, Vigilante, Werewolf)
     private static readonly string[] VanillaSkippableNames = ["Baker_Ability", "Pirate_Ability_1", "Pirate_Ability_2", "Socialite_Ability"];
     private static readonly string[] BTOS2SkippableNames = [ "Baker_Ability_1", "Baker_Ability_2", "Jackal_Ability", "Auditor_Ability_1", "Auditor_Ability_2", "Inquisitor_Ability_1",
         "Inquisitor_Ability_2", "Banshee_Ability", "Judge_Ability", "Warlock_Ability", "Wildling_Ability_2", "Starspawn_Ability", "Necromancer_Ability_2" ];
@@ -595,8 +595,8 @@ public static class Utils
 
         // Vanilla specific role checks
         ( > 53 and < 57, _, GameModType.Vanilla) => FactionType.TOWN,
-        ( _, Role.PILGRIM or Role.CATALYST, GameModType.Vanilla) => FactionType.TOWN,
-        ( _, Role.COVENITE or Role.CULTIST, GameModType.Vanilla) => FactionType.COVEN,
+        (_, Role.PILGRIM or Role.CATALYST, GameModType.Vanilla) => FactionType.TOWN,
+        (_, Role.COVENITE or Role.CULTIST, GameModType.Vanilla) => FactionType.COVEN,
 
         // Default case
         _ => FactionType.NONE
@@ -817,16 +817,21 @@ public static class Utils
         return roleName;
     }
 
-    public static Color GetFactionStartingColor(FactionType faction) => Fancy.Colors[FactionName(faction, stoned: true).ToUpper()].Start.ToColor();
+    public static Color GetFactionStartingColor(FactionType faction)
+    {
+        var name = Utils.GetFactionKey(faction);
+
+        return Fancy.Colors[name].Start.ToColor();
+    }
 
     public static Color GetFactionEndingColor(FactionType faction)
     {
-        var name = FactionName(faction, stoned: true);
+        var name = Utils.GetFactionKey(faction);
 
-        // Explicit fallback to start color for STONED_HIDDEN
-        return name == "Stoned_Hidden" ? Fancy.Colors["STONED_HIDDEN"].Start.ToColor() : Fancy.Colors[name.ToUpper()].End.ToColor();
+        return name == "STONED_HIDDEN"
+            ? Fancy.Colors["STONED_HIDDEN"].Start.ToColor()
+            : Fancy.Colors[name].End.ToColor();
     }
-
     public static string GetString(string key) => Service.Home.LocalizationService.GetLocalizedString(key);
 
     public static string RemoveVanillaGradientStyleTags(string input)
@@ -998,5 +1003,18 @@ public static class Utils
             text += $" ({hidden})";
 
         return text;
+    }
+
+    public static string GetFactionKey(FactionType faction)
+    {
+        return faction == FactionType.CURSED_SOUL && !Constants.IsBTOS2()
+            ? "WANDERINGSOULS"
+            : FactionName(faction, stoned: true).ToUpper();
+    }
+    public static string GetFactionTestingKey(FactionType faction)
+    {
+        return faction == FactionType.CURSED_SOUL && SettingsAndTestingUI.Instance?.IsBTOS2 == false
+            ? "WANDERINGSOULS"
+            : FactionName(faction, stoned: true).ToUpper();
     }
 }

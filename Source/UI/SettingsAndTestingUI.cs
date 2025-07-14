@@ -274,12 +274,12 @@ public sealed class SettingsAndTestingUI : UIController
         Animator.SetDuration(Fancy.AnimationDuration.Value);
         NameText.SetText(DefaultNameText
             .Replace("%num%", $"{Constants.PlayerNumber()}")
-            .Replace("%roleName%", Utils.ApplyGradient($"({(Fancy.FactionalRoleNames.Value ? Utils.GetRoleName(Fancy.SelectTestingRole.Value, Fancy.SelectTestingFaction.Value, true) : Utils.GetString($"{(IsBTOS2 ? "BTOS_" : "GUI_")}ROLENAME_{(int)Fancy.SelectTestingRole.Value}"))})", Fancy.SelectTestingFaction.Value.GetChangedGradient(Fancy.SelectTestingRole.Value))));
+            .Replace("%roleName%", Utils.ApplyGradient($"({(Fancy.FactionalRoleNames.Value ? Utils.GetRoleName(Fancy.SelectTestingRole.Value, Fancy.SelectTestingFaction.Value, true) : Utils.GetString($"{(IsBTOS2 ? "BTOS_" : "GUI_")}ROLENAME_{(int)Fancy.SelectTestingRole.Value}"))})", Fancy.SelectTestingFaction.Value.GetChangedGradient(Fancy.SelectTestingRole.Value, true))));
         NameText.SetGraphicColor(ColorType.Paper);
         RoleText.SetText(DefaultRoleText
             .Replace("%type%", $"{Utils.FactionName(Fancy.SelectTestingFaction.Value, IsBTOS2 ? GameModType.BTOS2 : GameModType.Vanilla, stoned: true)}")
             .Replace("%mod%", IsBTOS2 ? "BTOS" : "")
-            .Replace("%roleName%", Utils.ApplyGradient($"{(Fancy.FactionalRoleNames.Value ? Utils.GetRoleName(Fancy.SelectTestingRole.Value, Fancy.SelectTestingFaction.Value) : Utils.GetString($"{(IsBTOS2 ? "BTOS_" : "GUI_")}ROLENAME_{(int)Fancy.SelectTestingRole.Value}"))}", Fancy.SelectTestingFaction.Value.GetChangedGradient(Fancy.SelectTestingRole.Value)))
+            .Replace("%roleName%", Utils.ApplyGradient($"{(Fancy.FactionalRoleNames.Value ? Utils.GetRoleName(Fancy.SelectTestingRole.Value, Fancy.SelectTestingFaction.Value) : Utils.GetString($"{(IsBTOS2 ? "BTOS_" : "GUI_")}ROLENAME_{(int)Fancy.SelectTestingRole.Value}"))}", Fancy.SelectTestingFaction.Value.GetChangedGradient(Fancy.SelectTestingRole.Value, true)))
             .Replace("%roleInt%", $"{(int)Fancy.SelectTestingRole.Value}"));
         Displays.ForEach((x, y) => y.SetActive(Fancy.SelectDisplay.Value == x));
         // Icons.ForEach(x => x.UpdateIcon(Fancy.SelectTestingRole.Value));

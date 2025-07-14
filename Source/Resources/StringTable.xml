@@ -459,6 +459,18 @@
     <Entry key="FANCY_CURSEDSOUL_LETHAL_NAME">Cursed Soul Lethal Color</Entry>
     <Entry key="FANCY_CURSEDSOUL_LETHAL_DESC">The lethal ending color for the Cursed Soul faction.</Entry>
 
+    <Entry key="FANCY_WANDERINGSOULS_START_NAME">Wandering Souls Start Color</Entry>
+    <Entry key="FANCY_WANDERINGSOULS_START_DESC">The start color for the Wandering Souls faction.</Entry>
+
+    <Entry key="FANCY_WANDERINGSOULS_END_NAME">Wandering Souls End Color</Entry>
+    <Entry key="FANCY_WANDERINGSOULS_END_DESC">The end color for the Wandering Souls faction.</Entry>
+
+    <Entry key="FANCY_WANDERINGSOULS_MAJOR_NAME">Wandering Souls Major Color</Entry>
+    <Entry key="FANCY_WANDERINGSOULS_MAJOR_DESC">The major ending color for the Wandering Souls faction.</Entry>
+
+    <Entry key="FANCY_WANDERINGSOULS_LETHAL_NAME">Wandering Souls Lethal Color</Entry>
+    <Entry key="FANCY_WANDERINGSOULS_LETHAL_DESC">The lethal ending color for the Wandering Souls faction.</Entry>
+
     <Entry key="FANCY_JESTER_START_NAME">Jester Start Color</Entry>
     <Entry key="FANCY_JESTER_START_DESC">The start color for the Jester faction.</Entry>
 

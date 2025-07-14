@@ -179,6 +179,7 @@ public sealed class Fancy : BaseMod<Fancy>
         { "APOCALYPSE", ("#FF004E", "#FF004E", "#FF004E", null, "#FF004E") },
         { "VAMPIRE", ("#ff0000", "#6A1B1B", "#6A1B1B", null, "#6A1B1B") },
         { "CURSEDSOUL", ("#B54FFF", "#4FFF9F", "#4FFF9F", null, "#4FFF9F") },
+        { "WANDERINGSOULS", ("#B24CFF", "#FFB24C", "#FFB24C", null, "#FFB24C") },
         { "PANDORA", ("#B545FF", "#FF004E", "#FF004E", null, "#FF004E") },
         { "COMPLIANCE", ("#2D44B5", "#FC9F32", "#FC9F32", "#AE1B1E", null) },
         { "SERIALKILLER", ("#1D4DFC", "#1D4DFC", "#1D4DFC", null, null) },
@@ -448,7 +449,7 @@ public sealed class Fancy : BaseMod<Fancy>
 
             ColorOptions[$"{key}_START"] = new($"{key}_START", start, PackType.MiscRoleCustomisation, SetActive, uponChanged: ReloadColors);
 
-            if (middle != null)
+            if (middle != null && !VerticalGradients.Value)
                 ColorOptions[$"{key}_MIDDLE"] = new($"{key}_MIDDLE", middle, PackType.MiscRoleCustomisation, SetActive, uponChanged: ReloadColors);
 
             if (end != null)
@@ -460,7 +461,22 @@ public sealed class Fancy : BaseMod<Fancy>
             if (lethal != null)
                 ColorOptions[$"{key}_LETHAL"] = new($"{key}_LETHAL", lethal, PackType.MiscRoleCustomisation, SetActive, uponChanged: ReloadColors);
 
-            bool SetActive() => Utils.FactionName(SelectTestingFaction.Value, true, stoned: true).ToUpper() == key;
+            bool SetActive()
+            {
+                var isBTOS2 = SettingsAndTestingUI.Instance?.IsBTOS2 == true;
+                var activeKey = Utils.FactionName(SelectTestingFaction.Value, true, stoned: true).ToUpper();
+
+                if (key == "WANDERINGSOULS")
+                    return !isBTOS2 && activeKey == "CURSEDSOUL";
+
+                if (key == "CURSEDSOUL")
+                    return isBTOS2 && activeKey == "CURSEDSOUL";
+
+                if (key == "LOVERS")
+                    return isBTOS2;
+
+                return key == activeKey;
+            }
         }
 
         ReloadColors();
