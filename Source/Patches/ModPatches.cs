@@ -648,30 +648,30 @@ public static class PandoraAndComplianceRoleSlotsPatch
         RoleAlignment[] array = new RoleAlignment[]
         {
                 RoleAlignment.TOWN,
-                (RoleAlignment)100,
-                (RoleAlignment)101,
+                Btos2RoleAlignment.Pandora,
+                Btos2RoleAlignment.Compliance,
                 RoleAlignment.COVEN,
-                (RoleAlignment)17,
+                Btos2RoleAlignment.Apocalypse,
                 RoleAlignment.NEUTRAL
         };
         for (int i = 0; i < array.Length; i++)
         {
             RoleAlignment alignment = array[i];
-            bool pandora = alignment == (RoleAlignment)100 && Constants.IsPandora();
-            bool compliance = alignment == (RoleAlignment)101 && Constants.IsCompliance();
-            if (Constants.IsPandora() && (alignment == RoleAlignment.COVEN || alignment == (RoleAlignment)17))
+            bool pandora = alignment == Btos2RoleAlignment.Pandora && Constants.IsPandora();
+            bool compliance = alignment == Btos2RoleAlignment.Compliance && Constants.IsCompliance();
+            if (Constants.IsPandora() && (alignment == RoleAlignment.COVEN || alignment == Btos2RoleAlignment.Apocalypse))
                 continue;
-            list.AddRange(__instance.GetPredicateRoleSlots((RoleDeckSlot r) => r.IsResolved() && !(alignment == RoleAlignment.NEUTRAL && (r.Role1.IsNeutralKilling() || r.Role1 == Btos2Role.NeutralKilling) && Constants.IsCompliance()) && (r.Role1.GetAlignment() == alignment || pandora && (r.Role1.GetAlignment() == RoleAlignment.COVEN || r.Role1.GetAlignment() == (RoleAlignment)17) || compliance && r.Role1.IsNeutralKilling())));
-            list.AddRange(__instance.GetPredicateRoleSlots((RoleDeckSlot r) => r.Role1.IsResolved() && r.Role2.IsResolved() && !(alignment == RoleAlignment.NEUTRAL && (r.Role1.IsNeutralKilling() || r.Role2.IsNeutralKilling()) && Constants.IsCompliance()) && (r.Role1.GetAlignment() == alignment || pandora && (r.Role1.GetAlignment() == RoleAlignment.COVEN || r.Role1.GetAlignment() == (RoleAlignment)17) || compliance && r.Role1.IsNeutralKilling()) && (r.Role2.GetAlignment() == alignment || pandora && (r.Role2.GetAlignment() == RoleAlignment.COVEN || r.Role2.GetAlignment() == (RoleAlignment)17) || compliance && r.Role2.IsNeutralKilling())));
-            list.AddRange(__instance.GetPredicateRoleSlots((RoleDeckSlot r) => r.Role1.IsBucket() && r.Role2.IsResolved() && !(alignment == RoleAlignment.NEUTRAL && (r.Role1.IsNeutralKilling() || r.Role2.IsNeutralKilling()) && Constants.IsCompliance()) && (r.Role1.GetAlignment() == alignment || pandora && (r.Role1.GetAlignment() == RoleAlignment.COVEN || r.Role1.GetAlignment() == (RoleAlignment)17) || compliance && r.Role1.IsNeutralKilling()) && (r.Role2.GetAlignment() == alignment || pandora && (r.Role2.GetAlignment() == RoleAlignment.COVEN || r.Role2.GetAlignment() == (RoleAlignment)17) || compliance && r.Role2.IsNeutralKilling())));
-            list.AddRange(__instance.GetPredicateRoleSlots((RoleDeckSlot r) => r.Role1.IsBucket() && r.Role2.IsBucket() && !(alignment == RoleAlignment.NEUTRAL && (r.Role1.IsNeutralKilling() || r.Role2.IsNeutralKilling()) && Constants.IsCompliance()) && (r.Role1.GetAlignment() == alignment || pandora && (r.Role1.GetAlignment() == RoleAlignment.COVEN || r.Role1.GetAlignment() == (RoleAlignment)17) || compliance && r.Role1.IsNeutralKilling()) && (r.Role2.GetAlignment() == alignment || pandora && (r.Role2.GetAlignment() == RoleAlignment.COVEN || r.Role2.GetAlignment() == (RoleAlignment)17) || compliance && r.Role2.IsNeutralKilling())));
-            list.AddRange(__instance.GetPredicateRoleSlots((RoleDeckSlot r) => r.IsBucket() && !(alignment == RoleAlignment.NEUTRAL && (r.Role1.IsNeutralKilling() || r.Role1 == Btos2Role.NeutralKilling) && Constants.IsCompliance()) && (r.Role1.GetAlignment() == alignment || pandora && (r.Role1.GetAlignment() == RoleAlignment.COVEN || r.Role1.GetAlignment() == (RoleAlignment)17) || compliance && r.Role1.IsNeutralKilling()) && r.Role1.GetRoleBucket().subAlignment != SubAlignment.ANY));
-            list.AddRange(__instance.GetPredicateRoleSlots((RoleDeckSlot r) => r.IsBucket() && !(alignment == RoleAlignment.NEUTRAL && (r.Role1.IsNeutralKilling() || r.Role1 == Btos2Role.NeutralKilling) && Constants.IsCompliance()) && (r.Role1.GetAlignment() == alignment || pandora && (r.Role1.GetAlignment() == RoleAlignment.COVEN || r.Role1.GetAlignment() == (RoleAlignment)17) || compliance && r.Role1.IsNeutralKilling()) && r.Role1.GetRoleBucket().subAlignment == SubAlignment.ANY));
+            list.AddRange(__instance.GetPredicateRoleSlots((RoleDeckSlot r) => r.IsResolved() && !(alignment == RoleAlignment.NEUTRAL && (r.Role1.IsNeutralKilling() || r.Role1 == Btos2Role.NeutralKilling) && Constants.IsCompliance()) && (r.Role1.GetAlignment() == alignment || pandora && (r.Role1.GetAlignment() == RoleAlignment.COVEN || r.Role1.GetAlignment() == Btos2RoleAlignment.Apocalypse) || compliance && r.Role1.IsNeutralKilling())));
+            list.AddRange(__instance.GetPredicateRoleSlots((RoleDeckSlot r) => r.Role1.IsResolved() && r.Role2.IsResolved() && !(alignment == RoleAlignment.NEUTRAL && (r.Role1.IsNeutralKilling() || r.Role2.IsNeutralKilling()) && Constants.IsCompliance()) && (r.Role1.GetAlignment() == alignment || pandora && (r.Role1.GetAlignment() == RoleAlignment.COVEN || r.Role1.GetAlignment() == Btos2RoleAlignment.Apocalypse) || compliance && r.Role1.IsNeutralKilling()) && (r.Role2.GetAlignment() == alignment || pandora && (r.Role2.GetAlignment() == RoleAlignment.COVEN || r.Role2.GetAlignment() == Btos2RoleAlignment.Apocalypse) || compliance && r.Role2.IsNeutralKilling())));
+            list.AddRange(__instance.GetPredicateRoleSlots((RoleDeckSlot r) => r.Role1.IsBucket() && r.Role2.IsResolved() && !(alignment == RoleAlignment.NEUTRAL && (r.Role1.IsNeutralKilling() || r.Role2.IsNeutralKilling()) && Constants.IsCompliance()) && (r.Role1.GetAlignment() == alignment || pandora && (r.Role1.GetAlignment() == RoleAlignment.COVEN || r.Role1.GetAlignment() == Btos2RoleAlignment.Apocalypse) || compliance && r.Role1.IsNeutralKilling()) && (r.Role2.GetAlignment() == alignment || pandora && (r.Role2.GetAlignment() == RoleAlignment.COVEN || r.Role2.GetAlignment() == Btos2RoleAlignment.Apocalypse) || compliance && r.Role2.IsNeutralKilling())));
+            list.AddRange(__instance.GetPredicateRoleSlots((RoleDeckSlot r) => r.Role1.IsBucket() && r.Role2.IsBucket() && !(alignment == RoleAlignment.NEUTRAL && (r.Role1.IsNeutralKilling() || r.Role2.IsNeutralKilling()) && Constants.IsCompliance()) && (r.Role1.GetAlignment() == alignment || pandora && (r.Role1.GetAlignment() == RoleAlignment.COVEN || r.Role1.GetAlignment() == Btos2RoleAlignment.Apocalypse) || compliance && r.Role1.IsNeutralKilling()) && (r.Role2.GetAlignment() == alignment || pandora && (r.Role2.GetAlignment() == RoleAlignment.COVEN || r.Role2.GetAlignment() == Btos2RoleAlignment.Apocalypse) || compliance && r.Role2.IsNeutralKilling())));
+            list.AddRange(__instance.GetPredicateRoleSlots((RoleDeckSlot r) => r.IsBucket() && !(alignment == RoleAlignment.NEUTRAL && (r.Role1.IsNeutralKilling() || r.Role1 == Btos2Role.NeutralKilling) && Constants.IsCompliance()) && (r.Role1.GetAlignment() == alignment || pandora && (r.Role1.GetAlignment() == RoleAlignment.COVEN || r.Role1.GetAlignment() == Btos2RoleAlignment.Apocalypse) || compliance && r.Role1.IsNeutralKilling()) && r.Role1.GetRoleBucket().subAlignment != SubAlignment.ANY));
+            list.AddRange(__instance.GetPredicateRoleSlots((RoleDeckSlot r) => r.IsBucket() && !(alignment == RoleAlignment.NEUTRAL && (r.Role1.IsNeutralKilling() || r.Role1 == Btos2Role.NeutralKilling) && Constants.IsCompliance()) && (r.Role1.GetAlignment() == alignment || pandora && (r.Role1.GetAlignment() == RoleAlignment.COVEN || r.Role1.GetAlignment() == Btos2RoleAlignment.Apocalypse) || compliance && r.Role1.IsNeutralKilling()) && r.Role1.GetRoleBucket().subAlignment == SubAlignment.ANY));
             list.AddRange(__instance.GetPredicateRoleSlots((RoleDeckSlot r) => compliance && r.Role1 == Btos2Role.NeutralKilling));
         }
-        list.AddRange(__instance.GetPredicateRoleSlots((RoleDeckSlot r) => r.Role1.IsResolved() && r.Role2.IsResolved() && r.Role1.GetAlignment() != r.Role2.GetAlignment() && (!Constants.IsPandora() || !(r.Role1.GetAlignment() == RoleAlignment.COVEN && r.Role2.GetAlignment() == (RoleAlignment)17 || r.Role2.GetAlignment() == RoleAlignment.COVEN && r.Role1.GetAlignment() == (RoleAlignment)17)) && (!Constants.IsCompliance() || !(r.Role1.IsNeutralKilling() && r.Role2.IsNeutralKilling()))));
-        list.AddRange(__instance.GetPredicateRoleSlots((RoleDeckSlot r) => r.Role1.IsBucket() && r.Role2.IsResolved() && r.Role1.GetAlignment() != r.Role2.GetAlignment() && (!Constants.IsPandora() || !(r.Role1.GetAlignment() == RoleAlignment.COVEN && r.Role2.GetAlignment() == (RoleAlignment)17 || r.Role2.GetAlignment() == RoleAlignment.COVEN && r.Role1.GetAlignment() == (RoleAlignment)17)) && (!Constants.IsCompliance() || !(r.Role1.IsNeutralKilling() && r.Role2.IsNeutralKilling()))));
-        list.AddRange(__instance.GetPredicateRoleSlots((RoleDeckSlot r) => r.Role1.IsBucket() && r.Role2.IsBucket() && r.Role1.GetAlignment() != r.Role2.GetAlignment() && (!Constants.IsPandora() || !(r.Role1.GetAlignment() == RoleAlignment.COVEN && r.Role2.GetAlignment() == (RoleAlignment)17 || r.Role2.GetAlignment() == RoleAlignment.COVEN && r.Role1.GetAlignment() == (RoleAlignment)17)) && (!Constants.IsCompliance() || !(r.Role1.IsNeutralKilling() && r.Role2.IsNeutralKilling()))));
+        list.AddRange(__instance.GetPredicateRoleSlots((RoleDeckSlot r) => r.Role1.IsResolved() && r.Role2.IsResolved() && r.Role1.GetAlignment() != r.Role2.GetAlignment() && (!Constants.IsPandora() || !(r.Role1.GetAlignment() == RoleAlignment.COVEN && r.Role2.GetAlignment() == Btos2RoleAlignment.Apocalypse || r.Role2.GetAlignment() == RoleAlignment.COVEN && r.Role1.GetAlignment() == Btos2RoleAlignment.Apocalypse)) && (!Constants.IsCompliance() || !(r.Role1.IsNeutralKilling() && r.Role2.IsNeutralKilling()))));
+        list.AddRange(__instance.GetPredicateRoleSlots((RoleDeckSlot r) => r.Role1.IsBucket() && r.Role2.IsResolved() && r.Role1.GetAlignment() != r.Role2.GetAlignment() && (!Constants.IsPandora() || !(r.Role1.GetAlignment() == RoleAlignment.COVEN && r.Role2.GetAlignment() == Btos2RoleAlignment.Apocalypse || r.Role2.GetAlignment() == RoleAlignment.COVEN && r.Role1.GetAlignment() == Btos2RoleAlignment.Apocalypse)) && (!Constants.IsCompliance() || !(r.Role1.IsNeutralKilling() && r.Role2.IsNeutralKilling()))));
+        list.AddRange(__instance.GetPredicateRoleSlots((RoleDeckSlot r) => r.Role1.IsBucket() && r.Role2.IsBucket() && r.Role1.GetAlignment() != r.Role2.GetAlignment() && (!Constants.IsPandora() || !(r.Role1.GetAlignment() == RoleAlignment.COVEN && r.Role2.GetAlignment() == Btos2RoleAlignment.Apocalypse || r.Role2.GetAlignment() == RoleAlignment.COVEN && r.Role1.GetAlignment() == Btos2RoleAlignment.Apocalypse)) && (!Constants.IsCompliance() || !(r.Role1.IsNeutralKilling() && r.Role2.IsNeutralKilling()))));
         list.AddRange(__instance.GetPredicateRoleSlots((RoleDeckSlot r) => r.IsBucket() && r.Role1.GetAlignment() == RoleAlignment.ANY));
         __result = list;
     }
@@ -688,17 +688,17 @@ public static class PandoraAndComplianceDeckSlotPatch
         RoleAlignment role2Alignment = __instance.Role2.GetAlignment();
         if (Constants.IsPandora())
         {
-            if (role1Alignment == RoleAlignment.COVEN || role1Alignment == (RoleAlignment)17)
-                role1Alignment = (RoleAlignment)100;
-            if (role2Alignment == RoleAlignment.COVEN || role2Alignment == (RoleAlignment)17)
-                role2Alignment = (RoleAlignment)100;
+            if (role1Alignment == RoleAlignment.COVEN || role1Alignment == Btos2RoleAlignment.Apocalypse)
+                role1Alignment = Btos2RoleAlignment.Pandora;
+            if (role2Alignment == RoleAlignment.COVEN || role2Alignment == Btos2RoleAlignment.Apocalypse)
+                role2Alignment = Btos2RoleAlignment.Pandora;
         }
         if (Constants.IsCompliance())
         {
             if (__instance.Role1.IsNeutralKilling() || __instance.Role1 == Btos2Role.NeutralKilling)
-                role1Alignment = (RoleAlignment)101;
+                role1Alignment = Btos2RoleAlignment.Compliance;
             if (__instance.Role2.IsNeutralKilling() || __instance.Role1 == Btos2Role.NeutralKilling)
-                role2Alignment = (RoleAlignment)101;
+                role2Alignment = Btos2RoleAlignment.Compliance;
         }
         if (!__instance.IsDualBucket() || role1Alignment == role2Alignment)
         {
