@@ -20,6 +20,9 @@
     <Entry key="FANCY_MODIFIER_FACTIONS_NAME">Modifier Factions</Entry>
     <Entry key="FANCY_MODIFIER_FACTIONS_DESC">Gives some modifiers a faction to display as, instead of every modifier being white.</Entry>
 
+    <Entry key="FANCY_TALL_ROLE_DECK_NAME">Tall Role Deck</Entry>
+    <Entry key="FANCY_TALL_ROLE_DECK_DESC">Makes the Custom role deck as tall as it can be without going off-screen.</Entry>
+
     <Entry key="FANCY_RANDOM_APOC_IN_VANILLA_NAME">Random Apocalypse Over Neutral Apocalypse</Entry>
     <Entry key="FANCY_RANDOM_APOC_IN_VANILLA_DESC">If enabled, the Neutral Apocalypse bucket will be changed to say Random Apocalypse if Gradient Buckets is active.</Entry>
 
