@@ -410,8 +410,8 @@ public sealed class Fancy : BaseMod<Fancy>
         KeywordEnd = new("KEYWORD_END", "#007AFF", PackType.MiscRoleCustomisation);
         AchievementStart = new("ACHIEVEMENT_START", "#FFBE00", PackType.MiscRoleCustomisation);
         AchievementEnd = new("ACHIEVEMENT_END", "#FFBE00", PackType.MiscRoleCustomisation);
-        MentionStart = new("MENTION_START", "#FFCE3B", PackType.MiscRoleCustomisation, setActive: () => !Constants.BetterMentionsExists());
-        MentionEnd = new("MENTION_END", "#FFCE3B", PackType.MiscRoleCustomisation, setActive: () => !Constants.BetterMentionsExists());
+        // MentionStart = new("MENTION_START", "#FFCE3B", PackType.MiscRoleCustomisation, setActive: () => !Constants.BetterMentionsExists());
+        // MentionEnd = new("MENTION_END", "#FFCE3B", PackType.MiscRoleCustomisation, setActive: () => !Constants.BetterMentionsExists());
         // ColorMentionsWithFaction = new("FACTIONAL_PLAYER_MENTIONS", true, PackType.MiscRoleCustomisation, setActive: () => !Constants.BetterMentionsExists());
 
         TallRoleDeck = new("TALL_ROLE_DECK", false, PackType.Testing);
