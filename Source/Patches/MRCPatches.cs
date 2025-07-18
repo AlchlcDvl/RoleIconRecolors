@@ -1043,6 +1043,13 @@ public static class KeywordMentionsPatches
             __instance.MentionTokens.Add(new MentionToken
             {
                 mentionTokenType = MentionToken.MentionTokenType.ROLE,
+                match = "#" + display,
+                mentionInfo = mentionInfo,
+                priority = priority++
+            });
+            __instance.MentionTokens.Add(new MentionToken
+            {
+                mentionTokenType = MentionToken.MentionTokenType.ROLE,
                 match = "#" + shortName,
                 mentionInfo = mentionInfo,
                 priority = priority++
