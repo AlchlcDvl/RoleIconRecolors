@@ -1016,7 +1016,7 @@ public static class KeywordMentionsPatches
         {
             var role = (int)item.role;
             var display = item.role.ToDisplayString();
-            var shortName = item.shortRoleName.Length > 0 ? item.shortRoleName : display;
+            var shortName = item.role.ToShortenedDisplayString();
 
             var endFaction = (item.role.GetFaction() == FactionType.COVEN || item.role.GetFaction() == FactionType.APOCALYPSE) && Constants.IsPandora() ? Btos2Faction.Pandora : (item.role.IsNeutralKilling() && Constants.IsCompliance() ? Btos2Faction.Compliance : item.role.GetFaction());
             var endFactionText = (int)endFaction > 42 ? "," + (int)endFaction : string.Empty;
