@@ -1203,14 +1203,13 @@ public static class PatchNecroRetMenuItem
         var role = Utils.RoleName(tuple.Item1);
         var faction = Utils.FactionName(tuple.Item2);
         var sprite = GetSprite(role, faction);
+        var myrole = Pepper.GetMyRole();
+        var myfaction = Utils.FactionName(Pepper.GetMyFaction());
 
         if (sprite.IsValid() && __instance.choiceSprite)
             __instance.choiceSprite.sprite = sprite;
 
-        var sprite2 = GetSprite($"{role}_{(role is "Deputy" or "Conjurer" ? "Special" : "Ability")}", faction, false);
-
-        if (!sprite2.IsValid())
-            sprite2 = GetSprite($"{role}_Ability_1", faction, false);
+        var sprite2 = GetSprite($"{myrole}_Ability_3", myfaction, false);
 
         if (sprite2.IsValid() && __instance.choice2Sprite)
             __instance.choice2Sprite.sprite = sprite2;
