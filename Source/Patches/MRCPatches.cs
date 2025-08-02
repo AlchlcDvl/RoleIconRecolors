@@ -1029,19 +1029,14 @@ public static class KeywordMentionsPatches
         {
             var role = (int)item.role;
             var display = item.role.ToDisplayString();
-            var shortName = item.shortRoleName.Length > 0 ? item.shortRoleName : display;
-
-            var endFaction = (item.role.GetFaction() == FactionType.COVEN || item.role.GetFaction() == FactionType.APOCALYPSE) && Constants.IsPandora() ? Btos2Faction.Pandora : (item.role.IsNeutralKilling() && Constants.IsCompliance() ? Btos2Faction.Compliance : item.role.GetFaction());
-            var endFactionText = (int)endFaction > 42 ? "," + (int)endFaction : string.Empty;
-
-            var encodedText = $"[[#{role}{endFactionText}]]";
+            var shortName = item.role.ToShortenedDisplayString();
+            
+            var encodedText = $"[[#{role}]]";
 
             var sprite = (__instance._roleEffects == 1) ? $"<sprite=\"BTOSRoleIcons\" name=\"Role{role}\">" : "";
-            if (endFactionText != string.Empty && __instance._roleEffects == 1)
-                sprite = sprite.Replace("RoleIcons\"", $"RoleIcons ({((item.role.GetFactionType() == endFaction && Constants.CurrentStyle() == "Regular") ? "Regular" : Utils.FactionName(endFaction, false))})\"");
-            var name = __instance._useColors ? item.role.ToColorizedDisplayString(endFaction) : display;
+            var name = __instance._useColors ? item.role.ToColorizedDisplayString() : display;
 
-            var richText = $"{__instance.styleTagOpen}{__instance.styleTagFont}<link=\"r{role}{endFactionText}\">{sprite}<b>{name}</b></link>{__instance.styleTagClose}";
+            var richText = $"{__instance.styleTagOpen}{__instance.styleTagFont}<link=\"r{role}\">{sprite}<b>{name}</b></link>{__instance.styleTagClose}";
 
             var mentionInfo = new MentionInfo
             {
