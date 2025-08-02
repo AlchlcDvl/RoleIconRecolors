@@ -195,7 +195,6 @@ public static class PooledChatViewSwitcherPatch
 public static class ChatInputControllerPatch
 {
     public static ChatInputController Cache;
-    public static ChatMentionsProvider MentionsProvider;
 
     public static void Postfix(ChatInputController __instance)
     {
@@ -204,7 +203,6 @@ public static class ChatInputControllerPatch
         __instance.chatInputText.SetGraphicColor(ColorType.Paper);
         __instance.chatInput.textComponent.SetGraphicColor(ColorType.Paper);
         __instance.chatInput.placeholder.SetGraphicColor(ColorType.Paper);
-        MentionsProvider = __instance.chatInput.mentionPanel.mentionsProvider as ChatMentionsProvider;
 
         try
         {
@@ -946,9 +944,7 @@ public static class RoleDeckPanelControllerPatch
 
         if (sprite.IsValid() && any)
             any.sprite = sprite;
-
-        Pandora = Constants.IsPandora();
-        Compliance = Constants.IsCompliance();
+        
         __instance.AdjustSizeBasedOnRolesAdded();
     }
 
@@ -989,18 +985,6 @@ public static void AdjustSizeBasedOnRolesAddedPostfix(RoleDeckPanelController __
 
     if (MetalTransform && PaperTransform)
         MetalTransform.offsetMax = PaperTransform.offsetMax = component.offsetMax;
-
-    var pand = Constants.IsPandora();
-    var comp = Constants.IsCompliance();
-
-    if (Pandora == pand && Compliance == comp)
-        return;
-
-    Pandora = pand;
-    Compliance = comp;
-
-    if (ChatInputControllerPatch.MentionsProvider)
-        ChatInputControllerPatch.MentionsProvider.RebuildAndUpdateCandidates(Mentions.RebuildMentionTypesFlag.ROLES);
 }
 
 }
