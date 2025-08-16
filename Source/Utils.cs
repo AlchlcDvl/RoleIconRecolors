@@ -459,6 +459,7 @@ public static class Utils
         EffectType.REVEALED_BY_PMWITCH => "Illuminated",
         EffectType.BESTOWED or (EffectType)111 => "Bestowed",
         EffectType.SOVEREIGN => "Sovereign",
+        EffectType.STONED => "Petrified",
 
         // BTOS2
         (EffectType)100 => "Recruit",
