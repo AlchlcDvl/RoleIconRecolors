@@ -934,7 +934,7 @@ public static class KeywordMentionsPatches
                 __instance.BuildRoleMentions();
             else
                 BuildCustomRoleMentions(__instance);
-            BuildFactionMentions(__instance);
+            // BuildFactionMentions(__instance);
         }
 
         if (keywords)
@@ -1193,7 +1193,7 @@ public static class KeywordMentionsPatches
         }
     }
 
-    /* [HarmonyPatch(nameof(SharedMentionsProvider.PreparePlayerMentions))]
+    [HarmonyPatch(nameof(SharedMentionsProvider.PreparePlayerMentions))]
     public static bool Prefix(SharedMentionsProvider __instance, DiscussionPlayerObservation player, int skinId, int i, MentionInfo.MentionInfoType mentionInfoType,
         MentionToken.MentionTokenType mentionTokenType)
     {
@@ -1260,7 +1260,7 @@ public static class KeywordMentionsPatches
         });
 
         return false;
-    } */
+    }
 
     [HarmonyPatch(nameof(SharedMentionsProvider.ClearMentions))]
     public static void Postfix(SharedMentionsProvider __instance, bool rebuildRoles)

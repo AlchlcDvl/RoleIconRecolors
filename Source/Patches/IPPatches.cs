@@ -979,59 +979,59 @@ public static class MentionsProviderPatches
             __result = __result.Replace("RoleIcons\"", "RoleIcons (Regular)\"");
     }
 
-    [HarmonyPatch(nameof(MentionsProvider.Start))] // Achievement and faction mentions
+    [HarmonyPatch(nameof(MentionsProvider.Start))] // Achievement  mentions
     // ReSharper disable once InconsistentNaming
     public static void Prefix(ref HashSet<char> ___ExpansionTokens)
     {
         ___ExpansionTokens.Add('~');
-        ___ExpansionTokens.Add('$');
+        // ___ExpansionTokens.Add('$');
     }
 
-    [HarmonyPatch(nameof(MentionsProvider.ExpandCandidate), typeof(MentionInfo))]
-    public static bool Prefix(MentionsProvider __instance, MentionInfo candidate)
-    {
-        if (candidate.mentionInfoType != (MentionInfo.MentionInfoType)10)
-            return true;
+    // [HarmonyPatch(nameof(MentionsProvider.ExpandCandidate), typeof(MentionInfo))]
+    // public static bool Prefix(MentionsProvider __instance, MentionInfo candidate)
+    // {
+    //     if (candidate.mentionInfoType != (MentionInfo.MentionInfoType)10)
+    //         return true;
 
-        var fullText = __instance._matchInfo.fullText;
-        var trimmed = __instance._matchInfo.stringPosition == fullText.Length ? fullText : fullText.Remove(__instance._matchInfo.stringPosition);
-        var match = FactionalRoleRegex.Match(trimmed);
+    //     var fullText = __instance._matchInfo.fullText;
+    //     var trimmed = __instance._matchInfo.stringPosition == fullText.Length ? fullText : fullText.Remove(__instance._matchInfo.stringPosition);
+    //     var match = FactionalRoleRegex.Match(trimmed);
 
-        if (!match.Success)
-        {
-            __instance._candidates.Clear();
-            return false;
-        }
+    //     if (!match.Success)
+    //     {
+    //         __instance._candidates.Clear();
+    //         return false;
+    //     }
 
-        var value = match.Value + ">";
-        var encodedValue = __instance.EncodeText(value);
-        var encodedMatch = EncodedRoleRegex.Match(encodedValue);
+    //     var value = match.Value + ">";
+    //     var encodedValue = __instance.EncodeText(value);
+    //     var encodedMatch = EncodedRoleRegex.Match(encodedValue);
 
-        if (!encodedMatch.Success)
-        {
-            __instance._candidates.Clear();
-            return false;
-        }
+    //     if (!encodedMatch.Success)
+    //     {
+    //         __instance._candidates.Clear();
+    //         return false;
+    //     }
 
-        encodedValue = encodedMatch.Value + "," + candidate.encodedText + "]]";
-        var finalValue = __instance.DecodeText(encodedValue);
+    //     encodedValue = encodedMatch.Value + "," + candidate.encodedText + "]]";
+    //     var finalValue = __instance.DecodeText(encodedValue);
 
-        if (!__instance._matchInfo.endsWithSubmissionCharacter && !__instance._matchInfo.followedBySubmissionCharacter && !__instance._matchInfo.endsWithPunctuationCharacter &&
-            !__instance._matchInfo.followedByPunctuationCharacter)
-        {
-            finalValue += " ";
-        }
+    //     if (!__instance._matchInfo.endsWithSubmissionCharacter && !__instance._matchInfo.followedBySubmissionCharacter && !__instance._matchInfo.endsWithPunctuationCharacter &&
+    //         !__instance._matchInfo.followedByPunctuationCharacter)
+    //     {
+    //         finalValue += " ";
+    //     }
 
-        __instance._matchInfo.fullText = fullText.Replace(value + __instance._matchInfo.matchString, finalValue);
-        __instance._matchInfo.stringPosition = __instance._matchInfo.stringPosition
-                                                + (finalValue.Length - (value + __instance._matchInfo.matchString).Length)
-                                                + ((__instance._matchInfo.followedBySubmissionCharacter || __instance._matchInfo.endsWithSubmissionCharacter || __instance._matchInfo.followedByPunctuationCharacter || __instance._matchInfo.endsWithPunctuationCharacter) ? 1 : 0);
-        __instance._candidates.Clear();
-        return false;
-    }
+    //     __instance._matchInfo.fullText = fullText.Replace(value + __instance._matchInfo.matchString, finalValue);
+    //     __instance._matchInfo.stringPosition = __instance._matchInfo.stringPosition
+    //                                             + (finalValue.Length - (value + __instance._matchInfo.matchString).Length)
+    //                                             + ((__instance._matchInfo.followedBySubmissionCharacter || __instance._matchInfo.endsWithSubmissionCharacter || __instance._matchInfo.followedByPunctuationCharacter || __instance._matchInfo.endsWithPunctuationCharacter) ? 1 : 0);
+    //     __instance._candidates.Clear();
+    //     return false;
+    // }
 
-    public static Regex FactionalRoleRegex = new(@"<style=(Mention|MentionMono)>(.*?)</style(?=>\$)", RegexOptions.RightToLeft);
-    public static Regex EncodedRoleRegex = new(@"\[\[#\d+");
+    // public static Regex FactionalRoleRegex = new(@"<style=(Mention|MentionMono)>(.*?)</style(?=>\$)", RegexOptions.RightToLeft);
+    // public static Regex EncodedRoleRegex = new(@"\[\[#\d+");
 }
 
 // This whole class is a mess but DO NOT TOUCH
