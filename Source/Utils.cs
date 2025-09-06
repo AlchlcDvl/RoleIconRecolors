@@ -1012,6 +1012,7 @@ public static class Utils
             ? "WANDERINGSOULS"
             : FactionName(faction, stoned: true).ToUpper();
     }
+
     public static string GetFactionTestingKey(FactionType faction)
     {
         return faction == FactionType.CURSED_SOUL && SettingsAndTestingUI.Instance?.IsBTOS2 == false

@@ -944,49 +944,48 @@ public static class RoleDeckPanelControllerPatch
 
         if (sprite.IsValid() && any)
             any.sprite = sprite;
-        
+
         __instance.AdjustSizeBasedOnRolesAdded();
     }
 
     [HarmonyPatch(nameof(RoleDeckPanelController.AdjustSizeBasedOnRolesAdded)), HarmonyPostfix]
-public static void AdjustSizeBasedOnRolesAddedPostfix(RoleDeckPanelController __instance)
-{
-    if (__instance.roleDeckListItems.Count < 10 && !Fancy.TallRoleDeck.Value)
-        return;
-
-    var component = __instance.deckView.GetComponent<RectTransform>();
-    var viewport = __instance.deckView.transform.GetChild(3).GetChild(0) as RectTransform;
-    var bitchAssMask = viewport.GetComponent<RectMask2D>();
-    var num3 = 0f;
-    var ySize = __instance.startTop;
-    var lastActiveDeckItem = __instance.deckListItemTemplate;
-
-    for (var i = __instance.roleDeckListItems.Count - 1; !lastActiveDeckItem.isActiveAndEnabled && i > -1; i--)
-        lastActiveDeckItem = __instance.roleDeckListItems[i];
-
-    if (Fancy.TallRoleDeck.Value)
+    public static void AdjustSizeBasedOnRolesAddedPostfix(RoleDeckPanelController __instance)
     {
-        ySize = 720f;
-    }
-    else if (-lastActiveDeckItem.transform.localPosition.y + 50 > viewport.rect.yMax)
-    {
-        for (var num = 1; ySize + viewport.rect.yMax < -lastActiveDeckItem.transform.localPosition.y + 50 && ySize < 720f; num++)
+        if (__instance.roleDeckListItems.Count < 10 && !Fancy.TallRoleDeck.Value)
+            return;
+
+        var component = __instance.deckView.GetComponent<RectTransform>();
+        var viewport = __instance.deckView.transform.GetChild(3).GetChild(0) as RectTransform;
+        var bitchAssMask = viewport.GetComponent<RectMask2D>();
+        var num3 = 0f;
+        var ySize = __instance.startTop;
+        var lastActiveDeckItem = __instance.deckListItemTemplate;
+
+        for (var i = __instance.roleDeckListItems.Count - 1; !lastActiveDeckItem.isActiveAndEnabled && i > -1; i--)
+            lastActiveDeckItem = __instance.roleDeckListItems[i];
+
+        if (Fancy.TallRoleDeck.Value)
         {
-            var num2 = num * 40;
-            num3 = num * 0.04f;
-            ySize = Mathf.Min(__instance.startTop + num2, 720f);
+            ySize = 720f;
         }
+        else if (-lastActiveDeckItem.transform.localPosition.y + 50 > viewport.rect.yMax)
+        {
+            for (var num = 1; ySize + viewport.rect.yMax < -lastActiveDeckItem.transform.localPosition.y + 50 && ySize < 720f; num++)
+            {
+                var num2 = num * 40;
+                num3 = num * 0.04f;
+                ySize = Mathf.Min(__instance.startTop + num2, 720f);
+            }
+        }
+
+        component.offsetMax = new Vector2(component.offsetMax.x, ySize);
+        bitchAssMask.padding = new Vector4(0f, -ySize, 0f, 0f);
+
+        __instance.scaler.matchWidthOrHeight = Fancy.TallRoleDeck.Value ? 1f : 0.5f + num3;
+
+        if (MetalTransform && PaperTransform)
+            MetalTransform.offsetMax = PaperTransform.offsetMax = component.offsetMax;
     }
-
-    component.offsetMax = new Vector2(component.offsetMax.x, ySize);
-    bitchAssMask.padding = new Vector4(0f, -ySize, 0f, 0f);
-
-    __instance.scaler.matchWidthOrHeight = Fancy.TallRoleDeck.Value ? 1f : 0.5f + num3;
-
-    if (MetalTransform && PaperTransform)
-        MetalTransform.offsetMax = PaperTransform.offsetMax = component.offsetMax;
-}
-
 }
 
 [HarmonyPatch(typeof(GameBrowserRoleDeck), nameof(GameBrowserRoleDeck.Start))]
