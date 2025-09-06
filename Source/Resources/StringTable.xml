@@ -4836,7 +4836,6 @@
 	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_23">You are a war hero who will shoot intruders on sight.</Entry> <!--Veteran-->
 	<Entry key="FANCY_TOWN_BTOS_ROLE_BLURB_24">You are a townie taking justice into your own hands.</Entry> <!--Vigilante-->
 	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_25">You are a summoner who can spawn objects out of thin air.</Entry> <!--Conjurer-->
-	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_25">You are a summoner who can spawn objects out of thin air.</Entry> <!--Conjurer-->
 	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_26">You are a beacon of knowledge who can teach almost anything.</Entry> <!--Coven Leader-->
 	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_27">You are a nightmare who can invade people's dreams.</Entry> <!--Dreamweaver-->
 	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_28">You are a talented author who can rewrite a townie's story.</Entry> <!--Enchanter-->
@@ -4848,7 +4847,7 @@
 	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_34">You are a bartender who brews highly unstable drinks.</Entry> <!--Poisoner-->
 	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_35">You are an alchemist who concocts powerful potions.</Entry> <!--Potion Master-->
 	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_36">You are a sorcerer who sacrifices members of the town to the Old Ones.</Entry> <!--Ritualist-->
-	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_37">You are a dollmaker who silences members of the town.</Entry> <!--Voodoo Master--> 
+	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_37">You are a dollmaker who silences members of the town.</Entry> <!--Voodoo Master-->
 	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_38">You are a creature of myth who has highly heightened senses.</Entry> <!--Wildling-->
 	<Entry key="FANCY_COVEN_BTOS_ROLE_BLURB_39">You are a master of puppets who can control the actions of others.</Entry> <!--Witch-->
 	<Entry key="FANCY_ARSONIST_BTOS_ROLE_BLURB_40">You are a pyromaniac who wants to watch the world burn.</Entry> <!--Arsonist-->
@@ -4881,7 +4880,6 @@
 	<Entry key="FANCY_APOCALYPSE_BTOS_ROLE_BLURB_252">You are a Horseman of the Apocalypse, spreading blight and draining strength across the town.</Entry> <!--Pestilence-->
 	<Entry key="FANCY_APOCALYPSE_BTOS_ROLE_BLURB_253">You are a Horseman of the Apocalypse, the angel of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role253"><style=ApocalypseColor>%name_role253%</style></shake>]]>, bringing about the apocalypse throughout the world.</Entry> <!--Death-->
 
-	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_25">You are a summoner who can spawn objects out of thin air.</Entry> <!--Conjurer-->
 	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_25">You are a summoner who can spawn objects out of thin air.</Entry> <!--Conjurer-->
 	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_26">You are a beacon of knowledge who can teach almost anything.</Entry> <!--Coven Leader-->
 	<Entry key="FANCY_PANDORA_BTOS_ROLE_BLURB_27">You are a nightmare who can invade people's dreams.</Entry> <!--Dreamweaver-->
