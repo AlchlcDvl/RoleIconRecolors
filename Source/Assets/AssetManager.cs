@@ -415,6 +415,7 @@ public static class FancyAssetManager
             BTOS22 = null;
         }
     }
+
     public static TMP_SpriteAsset BuildGlyphs(List<Sprite> sprites, string spriteAssetName, Dictionary<string, string> index, float metricsWidth, float metricsHeight, float metricsHBX,
         float metricsHBY, float metricsHA)
     {

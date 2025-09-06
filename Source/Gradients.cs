@@ -61,11 +61,13 @@ public static class Gradients
         var hashCode = TMP_TextUtilities.GetHashCode(name);
         var color1 = gradient.Evaluate(0f);
         var color2 = gradient.Evaluate(1f);
-        var colorGradient = new TMP_ColorGradient(color1, color1, color2, color2)
-        {
-            name = name,
-            colorMode = ColorMode.VerticalGradient
-        };
+        var colorGradient = ScriptableObject.CreateInstance<TMP_ColorGradient>();
+        colorGradient.name = name;
+        colorGradient.colorMode = ColorMode.VerticalGradient;
+        colorGradient.topLeft = color1;
+        colorGradient.topRight = color1;
+        colorGradient.bottomLeft = color2;
+        colorGradient.bottomRight = color2;
         MaterialReferenceManager.AddColorGradientPreset(hashCode, colorGradient);
         VerticalGradients.Add(gradient, name);
         return name;
