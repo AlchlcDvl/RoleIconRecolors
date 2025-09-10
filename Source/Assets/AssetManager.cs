@@ -2,7 +2,6 @@ using FancyUI.Assets.IconPacks;
 using FancyUI.Assets.SilhouetteSwapper;
 using NewModLoading;
 using SalemModLoader;
-using SML;
 using UnityEngine.TextCore;
 
 namespace FancyUI.Assets;
@@ -98,8 +97,7 @@ public static class FancyAssetManager
                 if (!sprite.IsValid())
                     sprite = pack.GetSprite(name, allowEe, "Factionless");
             }
-            sprite.texture.anisoLevel = 4;
-            sprite.texture.mipMapBias = -2;
+
             return sprite ?? Blank;
         }
         catch (Exception e)

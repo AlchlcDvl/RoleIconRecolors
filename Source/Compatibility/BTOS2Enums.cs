@@ -179,18 +179,3 @@ public static class Btos2Faction
     public const FactionType Compliance = (FactionType)44;
     public const FactionType Lovers = (FactionType)250;
 }
-
-public static class Btos2RoleAlignment
-{
-    public const RoleAlignment None = RoleAlignment.NONE;
-    public const RoleAlignment Town = RoleAlignment.TOWN;
-    public const RoleAlignment Coven = RoleAlignment.COVEN;
-    public const RoleAlignment Neutral = RoleAlignment.NEUTRAL;
-    public const RoleAlignment Any = RoleAlignment.ANY;
-    public const RoleAlignment Vampire = RoleAlignment.VAMPIRE;
-    public const RoleAlignment CursedSoul = RoleAlignment.CURSED_SOUL;
-    public const RoleAlignment Unknown = RoleAlignment.UNKNOWN;
-    public const RoleAlignment Apocalypse = (RoleAlignment)17;
-    public const RoleAlignment Pandora = (RoleAlignment)100;
-    public const RoleAlignment Compliance = (RoleAlignment)101;
-}

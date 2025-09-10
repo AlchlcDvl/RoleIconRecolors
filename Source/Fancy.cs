@@ -56,12 +56,6 @@ public class Fancy : BaseMod<Fancy>
         FancyAssetManager.Defense = Assets.GetSprite("Defense");
         Ethereal = Assets.GetSprite("Ethereal");
         MenuButton.FancyMenu.Icon = Assets.GetSprite("Thumbnail");
-        FancyAssetManager.Attack.texture.anisoLevel = 4;
-        FancyAssetManager.Defense.texture.anisoLevel = 4;
-        Ethereal.texture.anisoLevel = 4;
-        FancyAssetManager.Attack.texture.mipMapBias = -2;
-        FancyAssetManager.Defense.texture.mipMapBias = -2;
-        Ethereal.texture.mipMapBias = -2;
 
         Grayscale = Assets.GetMaterial("GrayscaleMaterial");
 

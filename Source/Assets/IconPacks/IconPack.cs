@@ -337,6 +337,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
     {
         if (type == GameModType.BTOS2 && !Constants.BTOS2Exists())
             return null;
+
         var sprites = new List<Sprite>();
 
         foreach (var (role, roleInt) in index.Item2)

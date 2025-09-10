@@ -134,18 +134,19 @@ public static class PatchRoleCards
     }
 
     [HarmonyPatch(nameof(RoleCardPopupPanel.ShowAttackAndDefense))]
-    [HarmonyPriority(0)]
     public static void Postfix(RoleCardPopupPanel __instance, RoleCardData data)
     {
+        if (!Constants.EnableIcons())
+            return;
+
         var attack = GetSprite($"Attack{Utils.GetLevel(data.attack, true)}");
         var icon1 = __instance.transform.Find("AttackIcon").Find("Icon").GetComponent<Image>();
 
         if (icon1)
             icon1.sprite = attack.IsValid() ? attack : FancyAssetManager.Attack;
 
-        var eth = __instance.CurrentFaction > Btos2Faction.Hawks && __instance.CurrentFaction < Btos2Faction.Pandora && __instance.CurrentFaction != Btos2Faction.Inquisitor;
-        var defenseAmount = __instance.defenseGlow.fillAmount * 3.0303030303f;
-        var defense = GetSprite($"Defense{Utils.GetLevel(eth ? 4 : (int)defenseAmount, false)}");
+        var eth = __instance.myData.IsEthereal() || __instance.CurrentFaction == Btos2Faction.Egotist;
+        var defense = GetSprite($"Defense{Utils.GetLevel(eth ? 4 : data.defense, false)}");
         var icon2 = __instance.transform.Find("DefenseIcon").Find("Icon").GetComponent<Image>();
 
         if (icon2)
@@ -952,8 +953,7 @@ public static class MentionsProviderPatches
         var role = (Role)result;
         var factionType = (FactionType)result2;
         var text = __instance._useColors ? role.ToColorizedDisplayString(factionType) : role.ToRoleFactionDisplayString(factionType);
-        var roleIconsString = Constants.IsBTOS2() ? "BTOSRoleIcons" : "RoleIcons";
-        var text2 = __instance._roleEffects ? $"<sprite=\"{roleIconsString} ({Utils.FactionName(factionType)})\" name=\"Role{(int)role}\">" : "";
+        var text2 = __instance._roleEffects ? $"<sprite=\"RoleIcons ({Utils.FactionName(factionType)})\" name=\"Role{(int)role}\">" : "";
         var text3 = $"{__instance.styleTagOpen}{__instance.styleTagFont}<link=\"r{(int)role},{(int)factionType}\">{text2}<b>{text}</b></link>{__instance.styleTagClose}";
         var item = new MentionInfo
         {
@@ -987,54 +987,9 @@ public static class MentionsProviderPatches
             __result = __result.Replace("RoleIcons\"", "RoleIcons (Regular)\"");
     }
 
-    [HarmonyPatch(nameof(MentionsProvider.Start))] // Achievement and faction mentions
+    [HarmonyPatch(nameof(MentionsProvider.Start))] // Achievements mentions
     // ReSharper disable once InconsistentNaming
-    public static void Prefix(ref HashSet<char> ___ExpansionTokens)
-    {
-        ___ExpansionTokens.Add('~');
-        ___ExpansionTokens.Add('$');
-    }
-
-    [HarmonyPatch(nameof(MentionsProvider.ExpandCandidate),
-    [
-        typeof(MentionInfo)
-    ])]
-    public static bool Prefix(MentionsProvider __instance, ref MentionInfo candidate)
-    {
-        if (candidate.mentionInfoType == (MentionInfo.MentionInfoType)10)
-        {
-            string fullText = __instance._matchInfo.fullText;
-            string trimmed = __instance._matchInfo.stringPosition == fullText.Length ? fullText : fullText.Remove(__instance._matchInfo.stringPosition);
-            Match match = FactionalRoleRegex.Match(trimmed);
-            if (!match.Success)
-            {
-                __instance._candidates.Clear();
-                return false;
-            }
-            string value = match.Value + ">";
-            string encodedValue = __instance.EncodeText(value);
-            Match encodedMatch = EncodedRoleRegex.Match(encodedValue);
-            if (!encodedMatch.Success)
-            {
-                __instance._candidates.Clear();
-                return false;
-            }
-            encodedValue = encodedMatch.Value + "," + candidate.encodedText + "]]";
-            string finalValue = __instance.DecodeText(encodedValue);
-            if (!__instance._matchInfo.endsWithSubmissionCharacter && !__instance._matchInfo.followedBySubmissionCharacter && !__instance._matchInfo.endsWithPunctuationCharacter && !__instance._matchInfo.followedByPunctuationCharacter)
-                finalValue += " ";
-            __instance._matchInfo.fullText = fullText.Replace(value + __instance._matchInfo.matchString, finalValue);
-            __instance._matchInfo.stringPosition = __instance._matchInfo.stringPosition
-                                                   + (finalValue.Length - (value + __instance._matchInfo.matchString).Length)
-                                                   + ((__instance._matchInfo.followedBySubmissionCharacter || __instance._matchInfo.endsWithSubmissionCharacter || __instance._matchInfo.followedByPunctuationCharacter || __instance._matchInfo.endsWithPunctuationCharacter) ? 1 : 0);
-            __instance._candidates.Clear();
-            return false;
-        }
-        return true;
-    }
-
-    public static Regex FactionalRoleRegex = new Regex(@"<style=(Mention|MentionMono)>(.*?)</style(?=>\$)", RegexOptions.RightToLeft);
-    public static Regex EncodedRoleRegex = new Regex(@"\[\[#\d+");
+    public static void Prefix(ref HashSet<char> ___ExpansionTokens) => ___ExpansionTokens.Add('~');
 }
 
 // This whole class is a mess but DO NOT TOUCH
@@ -1064,8 +1019,7 @@ public static class MakeProperFactionChecksInHeaderAnnouncement
         var faction = killRecord.playerFaction;
 
         var roleText = role.ToColorizedDisplayString(faction);
-        var roleIconsString = Constants.IsBTOS2() ? "BTOSRoleIcons" : "RoleIcons";
-        var icon = $"<sprite=\"{roleIconsString} ({(Constants.CurrentStyle() == "Regular" && role.GetFactionType() == faction ? "Regular" : Utils.FactionName(faction, false))})\" name=\"Role{(int)role}\">";
+        var icon = $"<sprite=\"RoleIcons ({(Constants.CurrentStyle() == "Regular" && role.GetFactionType() == faction ? "Regular" : Utils.FactionName(faction, false))})\" name=\"Role{(int)role}\">";
         var display = icon + roleText;
 
         var l10nKey = Utils.GetHangingMessage(role, faction);
@@ -1094,8 +1048,7 @@ public static class MakeProperFactionChecksInWdah1
         if (!Service.Game.Sim.simulation.killRecords.Data.TryFinding(k => k.playerId == __instance.currentPlayerNumber, out var killRecord) || killRecord!.killedByReasons.Count < 1)
             return false;
 
-        var roleIconsString = Constants.IsBTOS2() ? "BTOSRoleIcons" : "RoleIcons";
-        var roleText = $"<sprite=\"{roleIconsString}\" name=\"Role{(int)killRecord.playerRole}\">{killRecord.playerRole.ToColorizedDisplayString(killRecord.playerFaction)}";
+        var roleText = $"<sprite=\"RoleIcons\" name=\"Role{(int)killRecord.playerRole}\">{killRecord.playerRole.ToColorizedDisplayString(killRecord.playerFaction)}";
 
         if (Constants.EnableIcons())
             roleText = roleText.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(killRecord.playerFaction)})\"");
@@ -1195,25 +1148,24 @@ public static class PatchNecroRetMenu
 }
 
 [HarmonyPatch(typeof(SpecialAbilityPopupNecromancerRetributionistListItem), nameof(SpecialAbilityPopupNecromancerRetributionistListItem.SetData))]
-[HarmonyPatch(typeof(SpecialAbilityPopupNecromancerRetributionistListItem), nameof(SpecialAbilityPopupNecromancerRetributionistListItem.SetData))]
 public static class PatchNecroRetMenuItem
 {
-    public static void Postfix(SpecialAbilityPopupNecromancerRetributionistListItem __instance, Role role)
+    public static void Postfix(SpecialAbilityPopupNecromancerRetributionistListItem __instance, int position)
     {
-        if (!Constants.EnableIcons())
+        if (!Constants.EnableIcons() || !Utils.GetRoleAndFaction(position, out var tuple))
             return;
 
-        var corpse = Utils.RoleName(role);
-        var faction = Utils.FactionName(role.GetFaction());
-        var sprite = GetSprite(corpse, faction);
+        var role = Utils.RoleName(tuple.Item1);
+        var faction = Utils.FactionName(tuple.Item2);
+        var sprite = GetSprite(role, faction);
 
         if (sprite.IsValid() && __instance.choiceSprite)
             __instance.choiceSprite.sprite = sprite;
 
-        var sprite2 = GetSprite($"{corpse}_{(corpse is "Deputy" or "Conjurer" ? "Special" : "Ability")}", faction, false);
+        var sprite2 = GetSprite($"{role}_{(role is "Deputy" or "Conjurer" ? "Special" : "Ability")}", faction, false);
 
         if (!sprite2.IsValid())
-            sprite2 = GetSprite($"{corpse}_Ability_1", faction, false);
+            sprite2 = GetSprite($"{role}_Ability_1", faction, false);
 
         if (sprite2.IsValid() && __instance.choice2Sprite)
             __instance.choice2Sprite.sprite = sprite2;

@@ -1,6 +1,5 @@
 using Cinematics.Players;
 using FlexMenu;
-using Game.Characters;
 using Game.DevMenu;
 using Home.HomeScene;
 using Home.LoginScene;
@@ -157,7 +156,7 @@ public static class AchievementMentionsPatch
             var match = $"~{title}";
 
             var styledTitle = useColors
-                ? $"<b>{Utils.ApplyGradient($"{title}", gradient)}</b>"
+                ? Utils.ApplyGradient($"<b>{title}</b>", gradient)
                 : $"<b>{title}</b>";
 
             var richText = $"{__instance.styleTagOpen}{__instance.styleTagFont}<link=\"~{achievementId}\">{styledTitle}</link>{__instance.styleTagClose}";
@@ -770,30 +769,18 @@ public static class PandoraAndComplianceListItemPatch
 
 
 // THIS GOD FOR SAKEN PATCH REFUSES TO DO ANYTHING, SOMEONE FIX THIS SHIT
+// [HarmonyPatch(typeof(TribunalCinematicPlayer), nameof(TribunalCinematicPlayer.Init))]
+// public static class MarshalCinematicFixes
+// {
+//     [HarmonyPostfix]
+//     public static void Postfix(TribunalCinematicPlayer __instance)
+//     {
+//         if (!Constants.IsBTOS2())
+//             return;
 
-/* HEY LOONIE
-NEXT TIME YOU WANT A FUCKING MULTI-LINE COMMENT
-DO IT LIKE THIS PLEASE 
-- synapsium synapperson XIV */
-
-[HarmonyPatch(typeof(TribunalCinematicPlayer), nameof(TribunalCinematicPlayer.CommonSetup))]
-public static class MarshalCinematicFixes
-{
-    [HarmonyPostfix]
-    public static void Postfix(TribunalCinematicPlayer __instance)
-    {
-        if (!Constants.IsBTOS2())
-            return;
-
-        int playerPosition = __instance.roleRevealCinematic.playerPosition;
-        TosCharacter characterByPosition = Service.Game.Cast.GetCharacterByPosition(playerPosition);
-        if (characterByPosition != null)
-        {
-            characterByPosition.characterSprite.SetColor(Color.clear);
-        }
-        string playerName = Service.Game.Cast.GetPlayerName(playerPosition, false);
-        string text = (__instance.roleRevealCinematic.hasRevealed ? Utils.GetString("FANCY_MARSHAL_CINEMATIC_2") : Utils.GetString("FANCY_MARSHAL_CINEMATIC_BTOS")).Replace("%name%", playerName);
-        // __instance.silhouetteWrapper.SwapWithSilhouette(56, true);
-        __instance.textAnimatorPlayer.ShowText(text);
-    }
-}
+//         var text = __instance.roleRevealCinematic.hasRevealed ? Utils.GetString("FANCY_MARSHAL_CINEMATIC_2") : Utils.GetString("FANCY_MARSHAL_CINEMATIC_BTOS");
+//         __instance.silhouetteWrapper.SwapWithSilhouette(56, true);
+//         __instance.textAnimatorPlayer.ShowText(text);
+//         Fancy.Instance.Debug("Jackal begone", true);
+//     }
+// }
