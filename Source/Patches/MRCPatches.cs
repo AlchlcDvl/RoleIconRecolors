@@ -1,19 +1,22 @@
+using System.Data;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using Cinematics.Players;
 using Game.Characters;
+using Game.Chat;
+using Game.Chat.Decoders;
+using Game.Simulation;
 using Home.HomeScene;
+using Home.Services;
 using Home.Shared;
-using Mentions.Providers;
 using Mentions;
+using Mentions.Providers;
+using Mentions.UI;
 using Server.Shared.Cinematics;
 using Server.Shared.Cinematics.Data;
 using Server.Shared.Extensions;
-using System.Globalization;
-using Home.Services;
-using Game.Simulation;
-using Game.Chat.Decoders;
 using Server.Shared.Messages;
-using Mentions.UI;
+using Server.Shared.State;
 using Server.Shared.State.Chat;
 using Shared.Chat;
 
@@ -37,25 +40,45 @@ public static class PatchRoleCard
     [HarmonyPatch(nameof(RoleCardPanel.GetSubAlignment)), HarmonyPrefix]
     public static bool Prefix(RoleCardPanel __instance, ref string __result)
     {
-        if (!Fancy.GradientBuckets.Value) 
+        if (!Fancy.GradientBuckets.Value)
             return true;
-
         var role = __instance.CurrentRole;
         var faction = __instance.CurrentFaction;
         var alignment = role.GetAlignment();
         var subAlignment = role.GetSubAlignment();
-        var gradient = Utils.CreateGradient(Fancy.BucketStart.Value, Fancy.BucketEnd.Value);
-        var text = string.Empty;
-
-        if (Constants.IsBTOS2())
+        var factionID = (int)faction;
+        bool useNeutralGradient = false;
+        var neutralGradient = Utils.CreateGradient(Fancy.NeutralStart.Value, Fancy.NeutralEnd.Value);
+        var subAlignGradient = Utils.CreateGradient(Fancy.BucketStart.Value, Fancy.BucketEnd.Value);
+        string displayString = "";
+        if (role is Role.DEATH or Role.PESTILENCE or Role.WAR or Role.FAMINE)
         {
-            if (role is Role.DEATH or Role.PESTILENCE or Role.WAR or Role.FAMINE)
-            {
-                __result = string.Empty;
-                return false;
-            }
+            __result = string.Empty;
+            return false;
         }
-
+        var acolyte = role switch
+        {
+            Role.BERSERKER => Role.WAR.ToColorizedNoLabel(faction),
+            Role.BAKER => Role.FAMINE.ToColorizedNoLabel(faction),
+            Role.PLAGUEBEARER => Role.PESTILENCE.ToColorizedNoLabel(faction),
+            Role.SOULCOLLECTOR or Btos2Role.Warlock => Role.DEATH.ToColorizedNoLabel(faction),
+            _ => string.Empty
+        };
+        if (!string.IsNullOrEmpty(acolyte))
+        {
+            __result = $"{acolyte} {Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_ACOLYTE"), subAlignGradient)}";
+            return false;
+        }
+        if (factionID > 2 && factionID < 12 && factionID != 7 || factionID > 37 && factionID < 42)
+        {
+            useNeutralGradient = true;
+            displayString = RoleAlignment.NEUTRAL.ToDisplayString();
+        }
+        else if (factionID == 13)
+            displayString = Utils.GetString("FANCY_BUCKETS_CURSEDSOUL");
+        else
+            displayString = faction.ToDisplayString();
+        var text = string.Empty;
         if (subAlignment.IsInvalid())
         {
             if (alignment.IsInvalid())
@@ -63,31 +86,10 @@ public static class PatchRoleCard
                 __result = string.Empty;
                 return false;
             }
-
             __result = alignment.ToColorizedDisplayString();
             return false;
         }
-
-        text = Utils.ApplyGradient(role.GetFaction() == faction ? alignment.ToDisplayString() : faction.ToDisplayString(), faction.GetChangedGradient(role)) + " " + Utils.ApplyGradient(subAlignment.ToDisplayString(), gradient);
-
-        if (Constants.IsBTOS2())
-        {
-            var acolyte = role switch
-            {
-                Role.BERSERKER => Role.WAR.ToColorizedNoLabel(faction),
-                Role.BAKER => Role.FAMINE.ToColorizedNoLabel(faction),
-                Role.PLAGUEBEARER => Role.PESTILENCE.ToColorizedNoLabel(faction),
-                Role.SOULCOLLECTOR or Btos2Role.Warlock => Role.DEATH.ToColorizedNoLabel(faction),
-                _ => string.Empty
-            };
-
-            if (!string.IsNullOrEmpty(acolyte))
-            {
-                __result = $"{acolyte} {Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_ACOLYTE"), gradient)}";
-                return false;
-            }
-        }
-
+        text = Utils.ApplyGradient(displayString, useNeutralGradient ? neutralGradient : faction.GetChangedGradient(role)) + " " + Utils.ApplyGradient(subAlignment.ToDisplayString(), subAlignGradient);
         __result = text;
         return false;
     }
@@ -189,8 +191,6 @@ public static class PatchRoleCard
 
         __instance.roleDescText.text = text[..start] + colored + text[end..];
     }
-
-    
 }
 
 [HarmonyPatch(typeof(RoleCardPopupPanel))]
@@ -229,23 +229,43 @@ public static class RoleCardPopupPatches2
     {
         if (!Fancy.GradientBuckets.Value) 
             return true;
-            
         var role = __instance.CurrentRole;
         var faction = __instance.CurrentFaction;
         var alignment = role.GetAlignment();
         var subAlignment = role.GetSubAlignment();
-        var gradient = Utils.CreateGradient(Fancy.BucketStart.Value, Fancy.BucketEnd.Value);
-        var text = string.Empty;
-
-        if (Constants.IsBTOS2())
+        var factionID = (int)faction;
+        bool useNeutralGradient = false;
+        var neutralGradient = Utils.CreateGradient(Fancy.NeutralStart.Value, Fancy.NeutralEnd.Value);
+        var subAlignGradient = Utils.CreateGradient(Fancy.BucketStart.Value, Fancy.BucketEnd.Value);
+        string displayString = "";
+        if (role is Role.DEATH or Role.PESTILENCE or Role.WAR or Role.FAMINE)
         {
-            if (role is Role.DEATH or Role.PESTILENCE or Role.WAR or Role.FAMINE)
-            {
-                __result = string.Empty;
-                return false;
-            }
+            __result = string.Empty;
+            return false;
         }
-
+        var acolyte = role switch
+        {
+            Role.BERSERKER => Role.WAR.ToColorizedNoLabel(faction),
+            Role.BAKER => Role.FAMINE.ToColorizedNoLabel(faction),
+            Role.PLAGUEBEARER => Role.PESTILENCE.ToColorizedNoLabel(faction),
+            Role.SOULCOLLECTOR or Btos2Role.Warlock => Role.DEATH.ToColorizedNoLabel(faction),
+            _ => string.Empty
+        };
+        if (!string.IsNullOrEmpty(acolyte))
+        {
+            __result = $"{acolyte} {Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_ACOLYTE"), subAlignGradient)}";
+            return false;
+        }
+        if (factionID > 2 && factionID < 12 && factionID != 7 || factionID > 37 && factionID < 42)
+        {
+            useNeutralGradient = true;
+            displayString = RoleAlignment.NEUTRAL.ToDisplayString();
+        }
+        else if (factionID == 13)
+            displayString = Utils.GetString("FANCY_BUCKETS_CURSEDSOUL");
+        else
+            displayString = faction.ToDisplayString();
+        var text = string.Empty;
         if (subAlignment.IsInvalid())
         {
             if (alignment.IsInvalid())
@@ -253,31 +273,10 @@ public static class RoleCardPopupPatches2
                 __result = string.Empty;
                 return false;
             }
-
             __result = alignment.ToColorizedDisplayString();
             return false;
         }
-
-        text = Utils.ApplyGradient(role.GetFaction() == faction ? alignment.ToDisplayString() : faction.ToDisplayString(), faction.GetChangedGradient(role)) + " " + Utils.ApplyGradient(subAlignment.ToDisplayString(), gradient);
-
-        if (Constants.IsBTOS2())
-        {
-            var acolyte = role switch
-            {
-                Role.BERSERKER => Role.WAR.ToColorizedNoLabel(faction),
-                Role.BAKER => Role.FAMINE.ToColorizedNoLabel(faction),
-                Role.PLAGUEBEARER => Role.PESTILENCE.ToColorizedNoLabel(faction),
-                Role.SOULCOLLECTOR or Btos2Role.Warlock => Role.DEATH.ToColorizedNoLabel(faction),
-                _ => string.Empty
-            };
-
-            if (!string.IsNullOrEmpty(acolyte))
-            {
-                __result = $"{acolyte} {Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_ACOLYTE"), gradient)}";
-                return false;
-            }
-        }
-
+        text = Utils.ApplyGradient(displayString, useNeutralGradient ? neutralGradient : faction.GetChangedGradient(role)) + " " + Utils.ApplyGradient(subAlignment.ToDisplayString(), subAlignGradient);
         __result = text;
         return false;
     }
@@ -288,6 +287,75 @@ public static class RoleCardPopupPatches2
 
     [HarmonyPatch(nameof(RoleCardPopupPanel.SetRoleAndFaction))]
     public static void Postfix(Role role, FactionType faction, RoleCardPopupPanel __instance) => __instance.roleNameText.text = role.ToColorizedNoLabel(faction);
+
+    [HarmonyPatch(nameof(RoleCardPopupPanel.ShowAttackAndDefense)), HarmonyPrefix]
+    public static bool Prefix(RoleCardPopupPanel __instance, RoleCardData data)
+    {
+        if (Service.Game.Sim.simulation.roleDeckBuilder.Data.modifierCards.Contains(Role.FEELIN_LUCKY) || Constants.IsBTOS2() && Service.Game.Sim.simulation.roleDeckBuilder.Data.modifierCards.Contains(Btos2Role.FeelinLucky))
+            return true;
+        int defense = -1;
+        Role role = __instance.CurrentRole;
+        int faction = (int)__instance.CurrentFaction;
+        if (faction == 33)
+            faction = (int)__instance.CurrentRole.GetFaction();
+        if (faction > 0 && faction < 3 || faction > 42)
+            defense = 0;
+        if (faction > 2 && faction < 34 || faction == 33 && role == Btos2Role.Jackal || role == Role.CULTIST || role == Role.COVENLEADER || Constants.IsBTOS2() && role == Btos2Role.Cultist || faction == 40)
+            defense = 1;
+        if (Utils.IsHorseman(role) || data.defense == 3)
+            defense = 3;
+        if (faction > 37 && faction < 43 && faction != 40)
+            defense = 4;
+        if (faction == 33 && role != Btos2Role.Jackal || faction > 33 && faction < 37)
+            defense = data.defense;
+        float num = 0f;
+        float num2 = 0f;
+        if (data.attack == 1)
+        {
+            num = 0.33f;
+        }
+        else if (data.attack == 2)
+        {
+            num = 0.66f;
+        }
+        else if (data.attack == 3)
+        {
+            num = 1f;
+        }
+        if (defense == 1)
+        {
+            num2 = 0.33f;
+        }
+        else if (defense == 2 || defense == 4)
+        {
+            num2 = 0.66f;
+        }
+        else if (defense == 3)
+        {
+            num2 = 1f;
+        }
+        __instance.attackIcon.fillAmount = num;
+        __instance.attackGlow.fillAmount = num;
+        if (__instance.tabAtkFillImage)
+        {
+            __instance.tabAtkFillImage.fillAmount = num;
+        }
+        if (__instance.tabAtkGlowImage)
+        {
+            __instance.tabAtkGlowImage.fillAmount = num;
+        }
+        __instance.defenseIcon.fillAmount = num2;
+        __instance.defenseGlow.fillAmount = num2;
+        if (__instance.tabDefFillImage)
+        {
+            __instance.tabDefFillImage.fillAmount = num2;
+        }
+        if (__instance.tabDefGlowImage)
+        {
+            __instance.tabDefGlowImage.fillAmount = num2;
+        }
+        return false;
+    }
 }
 
 [HarmonyPatch(typeof(TosAbilityPanelListItem), nameof(TosAbilityPanelListItem.SetKnownRole))]
@@ -438,7 +506,9 @@ public static class FancyChatExperimentalBTOS2
         __result = position switch
         {
             70 => $"<link=\"r57\"><sprite=\"BTOSRoleIcons\" name=\"Role57\"><indent=1.1em><b>{Utils.ApplyGradient(Fancy.CourtLabel.Value, Fancy.Colors["JUDGE"].Start, Fancy.Colors["JUDGE"].End)}:</b> </link>{encodedText.Replace("????: </color>", "").Replace("white", "#FFFF00")}",
-            69 => encodedText.Replace("????:", $"<sprite=\"BTOSRoleIcons\" name=\"Role16\"> <color=#{ColorUtility.ToHtmlStringRGB(Fancy.JuryColor.Value.ToColor())}>{Fancy.JuryLabel.Value}:</color>"),
+            69 => encodedText.Replace("????:", $"<color=#{ColorUtility.ToHtmlStringRGB(Fancy.JuryColor.Value.ToColor())}>{Fancy.JuryLabel.Value}:</color>"),
+            // I decided to remove the Seer icon from Jury messages for the scenario of which an Icon Pack's Seer icon does not fit Jury. An example is replacing Seer with TOS1 Medium.
+            // 69 => encodedText.Replace("????:", $"<sprite=\"BTOSRoleIcons\" name=\"Role16\"> <color=#{ColorUtility.ToHtmlStringRGB(Fancy.JuryColor.Value.ToColor())}>{Fancy.JuryLabel.Value}:</color>"),
 
             71 => $"<link=\"r46\"><sprite=\"BTOSRoleIcons\" name=\"Role46\"><indent=1.1em><b>{Utils.ApplyGradient(Fancy.PirateLabel.Value, Fancy.Colors["PIRATE"].Start, Fancy.Colors["PIRATE"].End)}:</b> </link>{encodedText.Replace("????: </color>", "").Replace("white", "#ECC23E")}",
             _ => __result
@@ -844,7 +914,7 @@ public static class KeywordMentionsPatches
 
             var color = Fancy.KeywordStart.Value;
             var keyword = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(raw);
-            var newText = Utils.ApplyGradient($"<b>{keyword}</b>", gradient);
+            var newText = $"<b>{Utils.ApplyGradient($"{keyword}", gradient)}</b>";
             // var newText = $"<color={color}><b>{keyword}</b></color>";
             var encodedText = mentionInfo.encodedText;
             var keywordId = encodedText.TrimStart('[', ':').TrimEnd(']');
@@ -876,6 +946,7 @@ public static class KeywordMentionsPatches
                 __instance.BuildRoleMentions();
             else
                 BuildCustomRoleMentions(__instance);
+            BuildFactionMentions(__instance);
         }
 
         if (keywords)
@@ -919,7 +990,7 @@ public static class KeywordMentionsPatches
 
             var color = Fancy.KeywordStart.Value;
             var coloredText = __instance._useColors
-                ? Utils.ApplyGradient($"<b>{localizedText}</b>", gradient)
+                ? $"<b>{Utils.ApplyGradient($"{localizedText}", gradient)}</b>"
                 : $"<b>{localizedText}</b>";
 
             var richText = $"{__instance.styleTagOpen}{__instance.styleTagFont}<link=\"k{keyword.KeywordId}\">{coloredText}</link>{__instance.styleTagClose}";
@@ -959,12 +1030,17 @@ public static class KeywordMentionsPatches
             var display = item.role.ToDisplayString();
             var shortName = item.shortRoleName.Length > 0 ? item.shortRoleName : display;
 
-            var encodedText = $"[[#{role}]]";
+            var endFaction = (item.role.GetFaction() == FactionType.COVEN || item.role.GetFaction() == FactionType.APOCALYPSE) && Constants.IsPandora() ? Btos2Faction.Pandora : (item.role.IsNeutralKilling() && Constants.IsCompliance() ? Btos2Faction.Compliance : item.role.GetFaction());
+            var endFactionText = (int)endFaction > 42 ? "," + (int)endFaction : string.Empty;
+
+            var encodedText = $"[[#{role}{endFactionText}]]";
 
             var sprite = (__instance._roleEffects == 1) ? $"<sprite=\"BTOSRoleIcons\" name=\"Role{role}\">" : "";
-            var name = __instance._useColors ? item.role.ToColorizedDisplayString() : display;
+            if (endFactionText != string.Empty && __instance._roleEffects == 1)
+                sprite = sprite.Replace("RoleIcons\"", $"RoleIcons ({((item.role.GetFactionType() == endFaction && Constants.CurrentStyle() == "Regular") ? "Regular" : Utils.FactionName(endFaction, false))})\"");
+            var name = __instance._useColors ? item.role.ToColorizedDisplayString(endFaction) : display;
 
-            var richText = $"{__instance.styleTagOpen}{__instance.styleTagFont}<link=\"r{role}\">{sprite}<b>{name}</b></link>{__instance.styleTagClose}";
+            var richText = $"{__instance.styleTagOpen}{__instance.styleTagFont}<link=\"r{role}{endFactionText}\">{sprite}<b>{name}</b></link>{__instance.styleTagClose}";
 
             var mentionInfo = new MentionInfo
             {
@@ -985,6 +1061,133 @@ public static class KeywordMentionsPatches
             });
         }
     }
+    private static void BuildFactionMentions(SharedMentionsProvider __instance)
+    {
+        Dictionary<FactionType, Role> dict;
+        if (!Constants.IsBTOS2())
+            dict = new()
+            {
+                { FactionType.TOWN, Role.RANDOM_TOWN },
+                { FactionType.COVEN, Role.RANDOM_COVEN },
+                { FactionType.SERIALKILLER, Role.SERIALKILLER },
+                { FactionType.ARSONIST, Role.ARSONIST },
+                { FactionType.WEREWOLF, Role.WEREWOLF },
+                { FactionType.SHROUD, Role.SHROUD },
+                { FactionType.APOCALYPSE, Role.NEUTRAL_APOCALYPSE },
+                { FactionType.EXECUTIONER, Role.EXECUTIONER },
+                { FactionType.JESTER, Role.JESTER },
+                { FactionType.PIRATE, Role.PIRATE },
+                { FactionType.DOOMSAYER, Role.DOOMSAYER },
+                { FactionType.VAMPIRE, Role.VAMPIRE },
+                { FactionType.CURSED_SOUL, Role.CURSED_SOUL }
+            };
+
+        else
+            dict = new()
+            {
+                { FactionType.TOWN, Btos2Role.RandomTown },
+                { FactionType.COVEN, Btos2Role.RandomCoven },
+                { FactionType.SERIALKILLER, Btos2Role.SerialKiller },
+                { FactionType.ARSONIST, Btos2Role.Arsonist },
+                { FactionType.WEREWOLF, Btos2Role.Werewolf },
+                { FactionType.SHROUD, Btos2Role.Shroud },
+                { FactionType.APOCALYPSE, Btos2Role.RandomApocalypse },
+                { FactionType.EXECUTIONER, Btos2Role.Executioner },
+                { FactionType.JESTER, Btos2Role.Jester },
+                { FactionType.PIRATE, Btos2Role.Pirate },
+                { FactionType.DOOMSAYER, Btos2Role.Doomsayer },
+                { FactionType.VAMPIRE, Btos2Role.Vampire },
+                { FactionType.CURSED_SOUL, Btos2Role.CursedSoul },
+                { Btos2Faction.Jackal, Btos2Role.Jackal },
+                { Btos2Faction.Frogs, Btos2Role.Teams },
+                { Btos2Faction.Lions, Btos2Role.Teams },
+                { Btos2Faction.Hawks, Btos2Role.Teams },
+                { Btos2Faction.Judge, Btos2Role.Judge },
+                { Btos2Faction.Auditor, Btos2Role.Auditor },
+                { Btos2Faction.Inquisitor, Btos2Role.Inquisitor },
+                { Btos2Faction.Starspawn, Btos2Role.Starspawn },
+                { Btos2Faction.Egotist, Btos2Role.Egotist },
+                { Btos2Faction.Pandora, Btos2Role.PandorasBox },
+                { Btos2Faction.Compliance, Btos2Role.CompliantKillers }
+            };
+        var shortNames = new Dictionary<FactionType, string>
+        {
+            { FactionType.COVEN, "TT" },
+            { FactionType.SERIALKILLER, "SK" },
+            { FactionType.WEREWOLF, "WW" },
+            { FactionType.APOCALYPSE, "ATT" },
+            { FactionType.VAMPIRE, "CONVERTED" },
+            { FactionType.CURSED_SOUL, "CS" },
+            { Btos2Faction.Jackal, "RECRUITED" },
+            { Btos2Faction.Frogs, "BLUE" },
+            { Btos2Faction.Lions, "YELLOW" },
+            { Btos2Faction.Hawks, "RED" },
+            { Btos2Faction.Starspawn, "SS" },
+            { Btos2Faction.Egotist, "EGOTOWNIE" },
+            { Btos2Faction.Pandora, "PTT" },
+            { Btos2Faction.Compliance, "COMKILLERS" }
+        };
+        var priority = 0;
+
+        foreach (var kvp in dict)
+        {
+            var item = kvp.Key;
+            var roleIcon = kvp.Value.GetTMPSprite();
+            roleIcon = roleIcon.Replace("RoleIcons\"", $"RoleIcons ({((kvp.Value.GetFactionType() == item && Constants.CurrentStyle() == "Regular")
+            ? "Regular"
+            : Utils.FactionName(item, false))})\"");
+            var faction = (int)item;
+            var display = item.ToDisplayString();
+            var shortName = shortNames.ContainsKey(item) ? shortNames.GetValue(item) : display;
+            var encodedText = $"{faction}";
+            var name = __instance._useColors ? Utils.ApplyGradient(item.ToDisplayString(), item.GetChangedGradient(Constants.IsBTOS2() ? Btos2Role.Jackal : Role.DREAMWEAVER)) : display;
+            name = __instance._roleEffects == 1 ? roleIcon + name : name;
+
+            var richText = $"{__instance.styleTagOpen}{__instance.styleTagFont}<b>{name}</b>{__instance.styleTagClose}";
+
+            var mentionInfo = new MentionInfo
+            {
+                mentionInfoType = (MentionInfo.MentionInfoType)10,
+                richText = richText,
+                encodedText = encodedText,
+                hashCode = richText.ToLowerInvariant().GetHashCode(),
+                humanText = "$" + display.ToLowerInvariant()
+            };
+
+            __instance.MentionInfos.Add(mentionInfo);
+            __instance.MentionTokens.Add(new MentionToken
+            {
+                mentionTokenType = (MentionToken.MentionTokenType)10,
+                match = "$" + display,
+                mentionInfo = mentionInfo,
+                priority = priority++
+            });
+            if (shortName != display)
+                __instance.MentionTokens.Add(new MentionToken
+                {
+                    mentionTokenType = (MentionToken.MentionTokenType)10,
+                    match = "$" + shortName,
+                    mentionInfo = mentionInfo,
+                    priority = priority++
+                });
+            if (item == FactionType.COVEN)
+                __instance.MentionTokens.Add(new MentionToken
+                {
+                    mentionTokenType = (MentionToken.MentionTokenType)10,
+                    match = "$CTT",
+                    mentionInfo = mentionInfo,
+                    priority = priority++
+                });
+            if (faction > 33 && faction < 37)
+                __instance.MentionTokens.Add(new MentionToken
+                {
+                    mentionTokenType = (MentionToken.MentionTokenType)10,
+                    match = "$TEAMS",
+                    mentionInfo = mentionInfo,
+                    priority = priority++
+                });
+        }
+    }
 
     [HarmonyPatch(nameof(SharedMentionsProvider.PreparePlayerMentions))]
     public static bool Prefix(SharedMentionsProvider __instance, DiscussionPlayerObservation player, int skinId, int i, MentionInfo.MentionInfoType mentionInfoType,
@@ -997,6 +1200,7 @@ public static class KeywordMentionsPatches
             ? player.Data.accountName
             : player.Data.gameName;
         var match = $"@{i + 1}";
+        var match2 = "@" + text;
         var encodedText = $"[[@{i + 1}]]";
         var text2 = (mentionTokenType == MentionToken.MentionTokenType.ACCOUNT) ? "a" : string.Empty;
         var gradient = Utils.CreateGradient(Fancy.MentionStart.Value, Fancy.MentionEnd.Value);
@@ -1015,7 +1219,7 @@ public static class KeywordMentionsPatches
             color = "#FFCE3B";
 
         var text3 = __instance._useColors
-            ? Utils.ApplyGradient($"<b>{text}</b>", gradient)
+            ? $"<b>{Utils.ApplyGradient($"{text}", gradient)}</b>"
             : $"<b>{text}</b>";
 
         var text4 = __instance._playerEffects == 2
@@ -1043,8 +1247,25 @@ public static class KeywordMentionsPatches
             mentionInfo = mentionInfo,
             priority = i
         });
+        __instance.MentionTokens.Add(new MentionToken
+        {
+            mentionTokenType = mentionTokenType,
+            match = match2,
+            mentionInfo = mentionInfo,
+            priority = i
+        });
 
         return false;
+    }
+
+    [HarmonyPatch(nameof(SharedMentionsProvider.ClearMentions))]
+    public static void Postfix(SharedMentionsProvider __instance, ref bool rebuildRoles, ref bool rebuildKeywords, ref bool rebuildPlayers, ref bool rebuildPrefixes, ref bool rebuildEmojis, ref bool rebuildAchievements)
+    {
+        if (rebuildRoles)
+        {
+            __instance.MentionTokens.RemoveAll((MentionToken m) => m.mentionTokenType == (MentionToken.MentionTokenType)10);
+            __instance.MentionInfos.RemoveAll((MentionInfo m) => m.mentionInfoType == (MentionInfo.MentionInfoType)10);
+        }
     }
 }
 
@@ -1063,31 +1284,52 @@ public static class ReplaceRoleTagWithRoleTextPatch
 
         var modified = false;
 
-        // Handle %name_role
+        // Handle %name_roleX% and %name_roleX_Y%
         var index = str.IndexOf("%name_role");
 
         while (index > -1)
         {
             var endIndex = str.IndexOf("%", index + 1);
-
             if (endIndex == -1)
                 break;
 
             var fullTag = str.Substring(index, endIndex - index + 1);
-            var idStart = index + 10;
+            var content = fullTag[10..^1]; // Between %name_role and %
 
-            if (int.TryParse(str[idStart..endIndex], out var roleId))
+            if (content.Contains("_"))
             {
-                var role = (Role)roleId;
-                var colorized = role.ToColorizedDisplayString();
-                str = str.Replace(fullTag, colorized);
-                modified = true;
+                // New format: roleX_Y
+                var parts = content.Split('_');
+                if (parts.Length == 2
+                    && int.TryParse(parts[0], out var roleId)
+                    && int.TryParse(parts[1], out var factionId))
+                {
+                    var role = (Role)roleId;
+                    var faction = (FactionType)factionId;
+
+                    // Use the overload with faction
+                    var colorized = role.ToColorizedNoLabel(faction);
+
+                    str = str.Replace(fullTag, colorized);
+                    modified = true;
+                }
+            }
+            else
+            {
+                // Old format: roleX
+                if (int.TryParse(content, out var roleId))
+                {
+                    var role = (Role)roleId;
+                    var colorized = role.ToColorizedNoLabel(role.GetFaction());
+                    str = str.Replace(fullTag, colorized);
+                    modified = true;
+                }
             }
 
             index = str.IndexOf("%name_role", index + 1);
         }
 
-        // Handle %name_faction
+        // Handle %name_factionX%
         index = str.IndexOf("%name_faction");
 
         while (index > -1)
@@ -1103,7 +1345,10 @@ public static class ReplaceRoleTagWithRoleTextPatch
             if (int.TryParse(str[idStart..endIndex], out var factionId))
             {
                 var faction = (FactionType)factionId;
-                var colorized = Utils.ApplyGradient(faction.ToDisplayString(), faction.GetChangedGradient(Role.DREAMWEAVER));
+                var colorized = Utils.ApplyGradient(
+                    faction.ToDisplayString(),
+                    faction.GetChangedGradient(Role.DREAMWEAVER)
+                );
                 str = str.Replace(fullTag, colorized);
                 modified = true;
             }
@@ -1219,5 +1464,113 @@ public static class WdahChatPatch2
         Debug.LogWarning("Unable to encode invalid ChatLogWhoDiedEntry.");
         __result = string.Empty;
         return false;
+    }
+}
+
+[HarmonyPatch(typeof(HudGameMessagePoolItem), nameof(HudGameMessagePoolItem.Validate))]
+public static class LeaveTownFactionPatch
+{
+    public static void Postfix(HudGameMessagePoolItem __instance)
+    {
+        ChatLogGameMessageEntry chatLogGameMessageEntry = __instance._chatLogMessage.chatLogEntry as ChatLogGameMessageEntry;
+        if (chatLogGameMessageEntry.messageId == GameFeedbackMessage.LEFT_TOWN)
+            leaveTownItems.Add(__instance);
+    }
+    public static void FixLeaveTownMessages(KillRecord killRecord)
+    {
+        foreach (HudGameMessagePoolItem __instance in leaveTownItems)
+        {
+            ChatLogGameMessageEntry chatLogGameMessageEntry = __instance._chatLogMessage.chatLogEntry as ChatLogGameMessageEntry;
+            if (killRecord.playerId != chatLogGameMessageEntry.playerNumber1)
+                continue;
+            string text = __instance.l10n(Constants.IsBTOS2() ? "BTOS_GAME_304" : "GAME_304");
+            text = text.Replace("%name%", string.Format("[[@{0}]]", chatLogGameMessageEntry.playerNumber1 + 1));
+            Tuple<Role, FactionType> tuple = new(killRecord.playerRole, killRecord.playerFaction);
+            text = text.Replace("%role%", string.Format("[[#{0},{1}]]", (int)tuple.Item1, (int)tuple.Item2));
+            text = __instance.mentionPanel.mentionsProvider.DecodeText(text);
+            __instance.textField.SetText(text);
+            string style = __instance.l10nStyle(Constants.IsBTOS2() ? "BTOS_GAME_304" : "GAME_304", "");
+            string text2 = __instance.l10nStyle(text, "");
+            if (!string.IsNullOrEmpty(text2))
+            {
+                __instance.SetChatStyle(text2);
+            }
+            else
+            {
+                __instance.ChatColor = __instance._chatColor;
+            }
+            __instance.SetBounds(text);
+        }
+
+        leaveTownItems.Clear();
+    }
+
+    public static List<HudGameMessagePoolItem> leaveTownItems = new();
+}
+
+[HarmonyPatch(typeof(HudGraveyardPanel), nameof(HudGraveyardPanel.CreateGraveyardItem))]
+public static class LeaveTownFactionPatch2
+{
+    public static void Postfix(KillRecord killRecord)
+    {
+        if (killRecord.killedByReasons.Contains(KilledByReason.LEAVING_TOWN))
+            LeaveTownFactionPatch.FixLeaveTownMessages(killRecord);
+    }
+}
+
+[HarmonyPatch(typeof(GameMessageDecoder), nameof(GameMessageDecoder.Encode))]
+public static class FactionSpecificPotionMasterResults
+{
+    private static readonly HashSet<int> BaseAllowedMessageIds =
+    [
+        5, 7, 13, 15, 16, 21, 28, 393, 394
+    ];
+
+    private static readonly HashSet<int> BTOS2AllowedMessageIds =
+    [
+        1010, 1012, 1018, 1020, 1022, 1027, 1030, 1072, 1090, 1091, 1099
+    ];
+
+    public static void Postfix(ChatLogMessage chatLogMessage, UIController uiController, ref string __result)
+    {
+        if (chatLogMessage?.chatLogEntry is not ChatLogGameMessageEntry entry)
+            return;
+
+        if (entry.gameMessageType == ChatLogGameMessageType.SPY)
+            return;
+
+        var id = (int)entry.messageId;
+        // var role = Pepper.GetMyRole();
+
+        var inRange = id is >= 134 and <= 188;
+        var inList = Constants.IsBTOS2()
+            ? BTOS2AllowedMessageIds.Contains(id)
+            : BaseAllowedMessageIds.Contains(id);
+
+        if (inRange || inList)
+        {
+            if (entry.role1 != Role.NONE && entry.faction1 != FactionType.NONE)
+            {
+                var newKey = Constants.IsBTOS2() ? $"FANCY_BTOS_REVEAL_{(int)entry.role1}_{(int)entry.faction1}" : $"FANCY_REVEAL_{(int)entry.role1}_{(int)entry.faction1}";
+
+                if (uiController.l10nStringExists(newKey))
+                {
+                    __result = uiController.l10n(newKey);
+
+                    if (entry.playerNumber1 >= 0)
+                    {
+                        __result = __result.Replace("%number%", $"{entry.playerNumber1}");
+                        __result = __result.Replace("%name%", $"[[@{entry.playerNumber1 + 1}]]");
+                    }
+                    if (entry.role1 != Role.NONE)
+                    {
+                        if (entry.faction1 != FactionType.NONE)
+                            __result = __result.Replace("%role%", $"[[#{(int)entry.role1},{(int)entry.faction1}]]");
+                        else
+                            __result = __result.Replace("%role%", $"[[#{(int)entry.role1}]]");
+                    }
+                }
+            }
+        }
     }
 }

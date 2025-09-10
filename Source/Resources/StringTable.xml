@@ -33,7 +33,7 @@
     <Entry key="FANCY_MAJOR_COLORS_DESC">Determines whether or not end colors on factions will be overwritten with a separate Major color value when Coven Power, Town Power, Cultist, Catalyst, or a Horseman of the Apocalypse.</Entry>
 
     <Entry key="FANCY_LETHAL_COLORS_NAME">Override End Color for Killing Roles</Entry>
-    <Entry key="FANCY_LETHAL_COLORS_DESC">Determines whether or not end colors on factions will be overwritten with a separate Lethal color value when Coven Power, Town Power, or a Horseman of the Apocalypse.</Entry>
+    <Entry key="FANCY_LETHAL_COLORS_DESC">Determines whether or not end colors on factions will be overwritten with a separate Lethal color value when Coven Killing, Town Killing, or a Berserker. Jailor is also included if the above setting is disabled.</Entry>
 
     <Entry key="FANCY_VERTICAL_GRADIENTS_NAME">Vertical Gradients</Entry>
     <Entry key="FANCY_VERTICAL_GRADIENTS_DESC">Determines whether or not gradients should be vertical (like Vanilla's gradients) or horziontal (like BToS2's gradients).</Entry>
@@ -768,6 +768,7 @@
     <Entry key="FANCY_BUCKETS_COVEN">Coven</Entry>
     <Entry key="FANCY_BUCKETS_NEUTRAL">Neutral</Entry>
     <Entry key="FANCY_BUCKETS_APOCALYPSE">Apocalypse</Entry>
+    <Entry key="FANCY_BUCKETS_CURSEDSOUL">Cursed</Entry>
     <Entry key="FANCY_BUCKETS_COMPLIANCE">Compliance</Entry>
     <Entry key="FANCY_BUCKETS_RANDOM">Random</Entry>
     <Entry key="FANCY_BUCKETS_COMMON">Common</Entry>
