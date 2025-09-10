@@ -734,9 +734,6 @@
     <Entry key="FANCY_WILDLING_XIS_WHISPERING_TO_Y" style="whisper_notice">You overhear %name1% whispering to %name2%:</Entry>
     <Entry key="FANCY_SERIALKILLER_XIS_WHISPERING_TO_Y" style="whisper_notice">You overhear %name1% whispering to %name2%:</Entry>
 
-    <Entry key="FANCY_KILLVARIANT_0" style="whisper_notice">%name% was brutually murdered last night.</Entry>
-    <Entry key="FANCY_KILLVARIANT_1" style="whisper_notice">%name% was slaughtered last night.</Entry>
-
     <Entry key="FANCY_NONE">None</Entry>
     <Entry key="FANCY_TOWN">Town</Entry>
     <Entry key="FANCY_COVEN">Coven</Entry>
