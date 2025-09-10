@@ -190,11 +190,13 @@ public static class ModifierFactionPatch
 {
     public static bool Prefix(ref string __result, Role role, FactionType factionType)
     {
+        var any = Utils.CreateGradient(Fancy.AnyStart.Value, Fancy.AnyEnd.Value);
+
         if (role.IsModifierCard() && Fancy.ModifierFactions.Value)
         {
-            FactionType modifierFaction = FactionType.NONE;
+            FactionType modifierFaction;
             if (Constants.IsBTOS2())
-                modifierFaction = (role) switch
+                modifierFaction = role switch
                 {
                     Btos2Role.Vip => Btos2Faction.Town,
                     Btos2Role.CovenTownTraitor => Btos2Faction.Coven,
@@ -215,7 +217,7 @@ public static class ModifierFactionPatch
                     _ => FactionType.NONE
                 };
             else
-                modifierFaction = (role) switch
+                modifierFaction = role switch
                 {
                     Role.VIP => FactionType.TOWN,
                     Role.TOWN_TRAITOR => FactionType.COVEN,
@@ -231,6 +233,11 @@ public static class ModifierFactionPatch
             if (modifierFaction != FactionType.NONE)
             {
                 __result = Utils.ApplyGradient(role.ToDisplayString(), Gradients.GetChangedGradient(modifierFaction, role));
+                return false;
+            }
+            else
+            {
+                __result = Utils.ApplyGradient(role.ToDisplayString(), any);
                 return false;
             }
         }

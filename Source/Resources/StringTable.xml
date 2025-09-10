@@ -249,6 +249,12 @@
     <Entry key="FANCY_BUCKET_END_NAME">Bucket End Color</Entry>
     <Entry key="FANCY_BUCKET_END_DESC">The end color for the blue part of buckets.</Entry>
 
+    <Entry key="FANCY_ANY_START_NAME">Any Start Color</Entry>
+    <Entry key="FANCY_ANY_START_DESC">The start color for the Any bucket.</Entry>
+
+    <Entry key="FANCY_ANY_END_NAME">Any End Color</Entry>
+    <Entry key="FANCY_ANY_END_DESC">The end color for the Any bucket.</Entry>
+
     <Entry key="FANCY_KEYWORD_START_NAME">Keyword Start Color</Entry>
     <Entry key="FANCY_KEYWORD_START_DESC">The start color for keywords.</Entry>
 

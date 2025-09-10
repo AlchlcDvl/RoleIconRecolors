@@ -729,12 +729,13 @@ public static class ClientRoleExtensionsPatches
         var compliance = Btos2Faction.Compliance.GetChangedGradient(Role.SERIALKILLER);
         var bucket = Utils.CreateGradient(Fancy.BucketStart.Value, Fancy.BucketEnd.Value);
         var neutral = Utils.CreateGradient(Fancy.NeutralStart.Value, Fancy.NeutralEnd.Value);
+        var any = Utils.CreateGradient(Fancy.AnyStart.Value, Fancy.AnyEnd.Value);
 
         if (Constants.IsBTOS2())
         {
             __result = role switch
             {
-                Btos2Role.Any => Utils.GetString("BTOS_SUBALIGNMENTNAME_1"),
+                Btos2Role.Any => $"{Utils.ApplyGradient(Utils.GetString("BTOS_SUBALIGNMENTNAME_1"), any)}",
                 Btos2Role.RandomTown => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_RANDOM"), bucket)} {Utils.ApplyGradient(Utils.GetString("BTOS_ALIGNMENTNAME_1"), town)}",
                 Btos2Role.CommonTown => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COMMON"), bucket)} {Utils.ApplyGradient(Utils.GetString("BTOS_ALIGNMENTNAME_1"), town)}",
                 Btos2Role.TownInvestigative => $"{Utils.ApplyGradient(Utils.GetString("BTOS_ALIGNMENTNAME_1"), town)} {Utils.ApplyGradient(Utils.GetString("BTOS_SUBALIGNMENTNAME_5"), bucket)}",
@@ -750,11 +751,11 @@ public static class ClientRoleExtensionsPatches
                 Btos2Role.CovenUtility => $"{Utils.ApplyGradient(Utils.GetString("BTOS_ALIGNMENTNAME_2"), coven)} {Utils.ApplyGradient(Utils.GetString("BTOS_SUBALIGNMENTNAME_8"), bucket)}",
                 Btos2Role.CovenDeception => $"{Utils.ApplyGradient(Utils.GetString("BTOS_ALIGNMENTNAME_2"), coven)} {Utils.ApplyGradient(Utils.GetString("BTOS_SUBALIGNMENTNAME_7"), bucket)}",
                 Btos2Role.RandomApocalypse => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_RANDOM"), bucket)} {Utils.ApplyGradient(Utils.GetString("BTOS_ALIGNMENTNAME_17"), apocalypse)}",
-                Btos2Role.NeutralKilling => $"{Utils.ApplyGradient(Utils.GetString("BTOS_ALIGNMENTNAME_2"), neutral)} {Utils.ApplyGradient(Utils.GetString("BTOS_SUBALIGNMENTNAME_6"), bucket)}",
-                Btos2Role.NeutralEvil => $"{Utils.ApplyGradient(Utils.GetString("BTOS_ALIGNMENTNAME_2"), neutral)} {Utils.ApplyGradient(Utils.GetString("BTOS_SUBALIGNMENTNAME_10"), bucket)}",
-                Btos2Role.NeutralPariah => $"{Utils.ApplyGradient(Utils.GetString("BTOS_ALIGNMENTNAME_2"), neutral)} {Utils.ApplyGradient(Utils.GetString("BTOS_SUBALIGNMENTNAME_34"), bucket)}",
-                Btos2Role.NeutralOutlier => $"{Utils.ApplyGradient(Utils.GetString("BTOS_ALIGNMENTNAME_2"), neutral)} {Utils.ApplyGradient(Utils.GetString("BTOS_SUBALIGNMENTNAME_33"), bucket)}",
-                Btos2Role.RandomNeutral => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_RANDOM"), bucket)} {Utils.ApplyGradient(Utils.GetString("BTOS_ALIGNMENTNAME_2"), neutral)}",
+                Btos2Role.NeutralKilling => $"{Utils.ApplyGradient(Utils.GetString("BTOS_ALIGNMENTNAME_3"), neutral)} {Utils.ApplyGradient(Utils.GetString("BTOS_SUBALIGNMENTNAME_6"), bucket)}",
+                Btos2Role.NeutralEvil => $"{Utils.ApplyGradient(Utils.GetString("BTOS_ALIGNMENTNAME_3"), neutral)} {Utils.ApplyGradient(Utils.GetString("BTOS_SUBALIGNMENTNAME_10"), bucket)}",
+                Btos2Role.NeutralPariah => $"{Utils.ApplyGradient(Utils.GetString("BTOS_ALIGNMENTNAME_3"), neutral)} {Utils.ApplyGradient(Utils.GetString("BTOS_SUBALIGNMENTNAME_34"), bucket)}",
+                Btos2Role.NeutralOutlier => $"{Utils.ApplyGradient(Utils.GetString("BTOS_ALIGNMENTNAME_3"), neutral)} {Utils.ApplyGradient(Utils.GetString("BTOS_SUBALIGNMENTNAME_33"), bucket)}",
+                Btos2Role.RandomNeutral => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_RANDOM"), bucket)} {Utils.ApplyGradient(Utils.GetString("BTOS_ALIGNMENTNAME_3"), neutral)}",
                 _ => string.Empty,
             };
         }
@@ -762,7 +763,7 @@ public static class ClientRoleExtensionsPatches
         {
             __result = role switch
             {
-                Role.ANY => Utils.GetString("GUI_SUBALIGNMENTNAME_1"),
+                Role.ANY => $"{Utils.ApplyGradient(Utils.GetString("GUI_SUBALIGNMENTNAME_1"), any)}",
                 Role.RANDOM_TOWN => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_RANDOM"), bucket)} {Utils.ApplyGradient(Utils.GetString("GUI_ALIGNMENTNAME_1"), town)}",
                 Role.COMMON_TOWN => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COMMON"), bucket)} {Utils.ApplyGradient(Utils.GetString("GUI_ALIGNMENTNAME_1"), town)}",
                 Role.TOWN_INVESTIGATIVE => $"{Utils.ApplyGradient(Utils.GetString("GUI_ALIGNMENTNAME_1"), town)} {Utils.ApplyGradient(Utils.GetString("GUI_SUBALIGNMENTNAME_5"), bucket)}",
