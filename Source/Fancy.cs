@@ -142,6 +142,7 @@ public class Fancy : BaseMod<Fancy>
     public static FloatOption GrayscaleAmount;
 
     public static FloatOption DeadChatDesaturation;
+    public static ToggleOption TallRoleDeck;
 
     public static FloatOption PlayerNumber;
 
@@ -412,6 +413,7 @@ public class Fancy : BaseMod<Fancy>
         MentionEnd = new("MENTION_END", "#FFCE3B", PackType.MiscRoleCustomisation, setActive: () => !Constants.BetterMentionsExists());
         // ColorMentionsWithFaction = new("FACTIONAL_PLAYER_MENTIONS", true, PackType.MiscRoleCustomisation, setActive: () => !Constants.BetterMentionsExists());
 
+        TallRoleDeck = new("TALL_ROLE_DECK", false, PackType.Testing);
         PlayerNumber = new("PLAYER_NUMBER", 0, PackType.Testing, 0, 15, true, Constants.CustomNumbers);
         ChatBackgroundOpacity = new("CHAT_BACKGROUND", 80, PackType.Testing, 0, 100, true);
         DumpSpriteSheets = new("DUMP_SHEETS", false, PackType.Testing);

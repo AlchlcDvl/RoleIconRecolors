@@ -2,6 +2,9 @@
     <Entry key="FANCY_">Something</Entry>
     <Entry key="FANCY_SOMETHING">Something</Entry>
 
+    <Entry key="FANCY_TALL_ROLE_DECK_NAME">Tall Role Deck</Entry>
+    <Entry key="FANCY_TALL_ROLE_DECK_DESC">Makes the Custom role deck as tall as it can be without going off-screen.</Entry>
+
     <Entry key="FANCY_CUSTOM_NUMBERS_NAME">Use Custom Numbers</Entry>
     <Entry key="FANCY_CUSTOM_NUMBERS_DESC">Select whether you want to use the icon pack's rendition of player numbers or the game's. May require a game restart.</Entry>
 
