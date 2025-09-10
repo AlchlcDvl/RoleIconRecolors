@@ -1195,7 +1195,6 @@ public static class PatchNecroRetMenu
 }
 
 [HarmonyPatch(typeof(SpecialAbilityPopupNecromancerRetributionistListItem), nameof(SpecialAbilityPopupNecromancerRetributionistListItem.SetData))]
-[HarmonyPatch(typeof(SpecialAbilityPopupNecromancerRetributionistListItem), nameof(SpecialAbilityPopupNecromancerRetributionistListItem.SetData))]
 public static class PatchNecroRetMenuItem
 {
      public static void Postfix(SpecialAbilityPopupNecromancerRetributionistListItem __instance, int position)

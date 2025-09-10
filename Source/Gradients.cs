@@ -34,11 +34,15 @@ public static class Gradients
 
     private static string GetEndColor(string key, Role role)
     {
-        var (_, endVal, majorVal, _, lethalVal) = Fancy.Colors[key];
+        var (_, endVal, majorVal, _, lethalVal, horsemanVal) = Fancy.Colors[key];
 
         var isMajor = Fancy.MajorColors.Value &&
-            (role.GetSubAlignment() == SubAlignment.POWER || (Constants.IsBTOS2() && role.GetSubAlignment() is (SubAlignment)37 or (SubAlignment)38) || role is Role.FAMINE or Role.WAR or
-            Role.PESTILENCE or Role.DEATH || (Constants.IsBTOS2() ? (role is Btos2Role.Cultist or Btos2Role.Catalyst) : (role is Role.CULTIST or Role.CATALYST)));
+            (role.GetSubAlignment() == SubAlignment.POWER || (Constants.IsBTOS2() && role.GetSubAlignment() is (SubAlignment)37 or (SubAlignment)38)
+            || (Constants.IsBTOS2() ? (role is Btos2Role.Cultist or Btos2Role.Catalyst) : (role is Role.CULTIST or Role.CATALYST)));
+
+        var isHorseman = Fancy.HorsemenColors.Value &&
+            (role is Role.FAMINE or Role.WAR or
+            Role.PESTILENCE or Role.DEATH);
 
         var isLethal = Fancy.LethalColors.Value &&
             (role.GetSubAlignment() == SubAlignment.KILLING ||
@@ -47,6 +51,8 @@ public static class Gradients
 
         return isMajor && majorVal != null
             ? majorVal
+            : isHorseman && horsemanVal != null
+            ? horsemanVal
             : isLethal && lethalVal != null
                 ? lethalVal
                 : endVal;

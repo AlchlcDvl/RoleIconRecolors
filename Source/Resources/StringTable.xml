@@ -33,10 +33,13 @@
     <Entry key="FANCY_GRADIENT_BUCKETS_DESC">If enabled, buckets will make use of gradients.</Entry>
 
     <Entry key="FANCY_MAJOR_COLORS_NAME">Override End Color for Power Roles</Entry>
-    <Entry key="FANCY_MAJOR_COLORS_DESC">Determines whether or not end colors on factions will be overwritten with a separate Major color value when Coven Power, Town Power, Cultist, Catalyst, or a Horseman of the Apocalypse.</Entry>
+    <Entry key="FANCY_MAJOR_COLORS_DESC">Determines whether or not end colors on factions will be overwritten with a separate Major color value when Coven Power, Town Power, Cultist, or Catalyst.</Entry>
 
     <Entry key="FANCY_LETHAL_COLORS_NAME">Override End Color for Killing Roles</Entry>
     <Entry key="FANCY_LETHAL_COLORS_DESC">Determines whether or not end colors on factions will be overwritten with a separate Lethal color value when Coven Killing, Town Killing, or a Berserker. Jailor is also included if the above setting is disabled.</Entry>
+
+    <Entry key="FANCY_HORSEMAN_COLORS_NAME">Override End Color for Horsemen</Entry>
+    <Entry key="FANCY_HORSEMAN_COLORS_DESC">Determines whether or not end colors on factions will be overwritten with a separate Horseman color value when role is a Horseman of the Apocalypse.</Entry>
 
     <Entry key="FANCY_VERTICAL_GRADIENTS_NAME">Vertical Gradients</Entry>
     <Entry key="FANCY_VERTICAL_GRADIENTS_DESC">Determines whether or not gradients should be vertical (like Vanilla's gradients) or horziontal (like BToS2's gradients).</Entry>
@@ -300,6 +303,9 @@
     <Entry key="FANCY_TOWN_LETHAL_NAME">Town Lethal Color</Entry>
     <Entry key="FANCY_TOWN_LETHAL_DESC">The lethal ending color for the Town faction.</Entry>
 
+    <Entry key="FANCY_TOWN_HORSEMAN_NAME">Town Horseman Color</Entry>
+    <Entry key="FANCY_TOWN_HORSEMAN_DESC">The horseman ending color for the Town faction.</Entry>
+
     <Entry key="FANCY_COVEN_START_NAME">Coven Start Color</Entry>
     <Entry key="FANCY_COVEN_START_DESC">The start color for the Coven faction.</Entry>
 
@@ -311,6 +317,9 @@
 
     <Entry key="FANCY_COVEN_LETHAL_NAME">Coven Lethal Color</Entry>
     <Entry key="FANCY_COVEN_LETHAL_DESC">The lethal ending color for the Coven faction.</Entry>
+
+    <Entry key="FANCY_COVEN_HORSEMAN_NAME">Coven Horseman Color</Entry>
+    <Entry key="FANCY_COVEN_HORSEMAN_DESC">The horseman ending color for the Coven faction.</Entry>
 
     <Entry key="FANCY_APOCALYPSE_START_NAME">Apocalypse Start Color</Entry>
     <Entry key="FANCY_APOCALYPSE_START_DESC">The start color for the Apocalypse faction.</Entry>
@@ -324,6 +333,9 @@
     <Entry key="FANCY_APOCALYPSE_LETHAL_NAME">Apocalypse Lethal Color</Entry>
     <Entry key="FANCY_APOCALYPSE_LETHAL_DESC">The lethal ending color for the Apocalypse faction.</Entry>
 
+    <Entry key="FANCY_APOCALYPSE_HORSEMAN_NAME">Apocalypse Horseman Color</Entry>
+    <Entry key="FANCY_APOCALYPSE_HORSEMAN_DESC">The horseman ending color for the Apocalypse faction.</Entry>
+
     <Entry key="FANCY_SERIALKILLER_START_NAME">Serial Killer Start Color</Entry>
     <Entry key="FANCY_SERIALKILLER_START_DESC">The start color for the Serial Killer faction.</Entry>
 
@@ -332,6 +344,9 @@
 
     <Entry key="FANCY_SERIALKILLER_MAJOR_NAME">Serial Killer Major Color</Entry>
     <Entry key="FANCY_SERIALKILLER_MAJOR_DESC">The major ending color for the Serial Killer faction.</Entry>
+
+    <Entry key="FANCY_SERIALKILLER_HORSEMAN_NAME">Serial Killer Horseman Color</Entry>
+    <Entry key="FANCY_SERIALKILLER_HORSEMAN_DESC">The horseman ending color for the Serial Killer faction.</Entry>
 
     <Entry key="FANCY_ARSONIST_START_NAME">Arsonist Start Color</Entry>
     <Entry key="FANCY_ARSONIST_START_DESC">The start color for the Arsonist faction.</Entry>
@@ -342,6 +357,9 @@
     <Entry key="FANCY_ARSONIST_MAJOR_NAME">Arsonist Major Color</Entry>
     <Entry key="FANCY_ARSONIST_MAJOR_DESC">The major ending color for the Arsonist faction.</Entry>
 
+    <Entry key="FANCY_ARSONIST_HORSEMAN_NAME">Arsonist Horseman Color</Entry>
+    <Entry key="FANCY_ARSONIST_HORSEMAN_DESC">The horseman ending color for the Arsonist faction.</Entry>
+
     <Entry key="FANCY_WEREWOLF_START_NAME">Werewolf Start Color</Entry>
     <Entry key="FANCY_WEREWOLF_START_DESC">The start color for the Werewolf faction.</Entry>
 
@@ -350,6 +368,9 @@
 
     <Entry key="FANCY_WEREWOLF_MAJOR_NAME">Werewolf Major Color</Entry>
     <Entry key="FANCY_WEREWOLF_MAJOR_DESC">The major ending color for the Werewolf faction.</Entry>
+
+    <Entry key="FANCY_WEREWOLF_HORSEMAN_NAME">Werewolf Horseman Color</Entry>
+    <Entry key="FANCY_WEREWOLF_HORSEMAN_DESC">The horseman ending color for the Werewolf faction.</Entry>
 
     <Entry key="FANCY_SHROUD_START_NAME">Shroud Start Color</Entry>
     <Entry key="FANCY_SHROUD_START_DESC">The start color for the Shroud faction.</Entry>
@@ -360,6 +381,9 @@
     <Entry key="FANCY_SHROUD_MAJOR_NAME">Shroud Major Color</Entry>
     <Entry key="FANCY_SHROUD_MAJOR_DESC">The major ending color for the Shroud faction.</Entry>
 
+    <Entry key="FANCY_SHROUD_HORSEMAN_NAME">Shroud Horseman Color</Entry>
+    <Entry key="FANCY_SHROUD_HORSEMAN_DESC">The horseman ending color for the Shroud faction.</Entry>
+
     <Entry key="FANCY_JACKAL_START_NAME">Jackal Start Color</Entry>
     <Entry key="FANCY_JACKAL_START_DESC">The start color for the Jackal faction.</Entry>
 
@@ -368,6 +392,9 @@
 
     <Entry key="FANCY_JACKAL_MAJOR_NAME">Jackal Major Color</Entry>
     <Entry key="FANCY_JACKAL_MAJOR_DESC">The major ending color for the Jackal faction.</Entry>
+
+    <Entry key="FANCY_JACKAL_HORSEMAN_NAME">Jackal Horseman Color</Entry>
+    <Entry key="FANCY_JACKAL_HORSEMAN_DESC">The horseman ending color for the Jackal faction.</Entry>
 
     <Entry key="FANCY_JACKAL_LETHAL_NAME">Jackal Lethal Color</Entry>
     <Entry key="FANCY_JACKAL_LETHAL_DESC">The lethal ending color for the Jackal faction.</Entry>
@@ -380,6 +407,9 @@
 
     <Entry key="FANCY_PANDORA_MAJOR_NAME">Pandora Major Color</Entry>
     <Entry key="FANCY_PANDORA_MAJOR_DESC">The major ending color for the Pandora faction.</Entry>
+
+    <Entry key="FANCY_PANDORA_HORSEMAN_NAME">Pandora Horseman Color</Entry>
+    <Entry key="FANCY_PANDORA_HORSEMAN_DESC">The horseman ending color for the Pandora faction.</Entry>
 
     <Entry key="FANCY_PANDORA_LETHAL_NAME">Pandora Lethal Color</Entry>
     <Entry key="FANCY_PANDORA_LETHAL_DESC">The lethal ending color for the Pandora faction.</Entry>
@@ -396,6 +426,9 @@
     <Entry key="FANCY_COMPLIANCE_MAJOR_NAME">Compliance Major Color</Entry>
     <Entry key="FANCY_COMPLIANCE_MAJOR_DESC">The major ending color for the Compliance faction.</Entry>
 
+    <Entry key="FANCY_COMPLIANCE_HORSEMAN_NAME">Compliance Horseman Color</Entry>
+    <Entry key="FANCY_COMPLIANCE_HORSEMAN_DESC">The horseman ending color for the Compliance faction.</Entry>
+
     <Entry key="FANCY_FROGS_START_NAME">Frogs Start Color</Entry>
     <Entry key="FANCY_FROGS_START_DESC">The start color for the Frogs faction.</Entry>
 
@@ -404,6 +437,9 @@
 
     <Entry key="FANCY_FROGS_MAJOR_NAME">Frogs Major Color</Entry>
     <Entry key="FANCY_FROGS_MAJOR_DESC">The major ending color for the Frogs faction.</Entry>
+
+    <Entry key="FANCY_FROGS_HORSEMAN_NAME">Frogs Horseman Color</Entry>
+    <Entry key="FANCY_FROGS_HORSEMAN_DESC">The horseman ending color for the Frogs faction.</Entry>
 
     <Entry key="FANCY_FROGS_LETHAL_NAME">Frogs Lethal Color</Entry>
     <Entry key="FANCY_FROGS_LETHAL_DESC">The lethal ending color for the Frogs faction.</Entry>
@@ -417,6 +453,9 @@
     <Entry key="FANCY_HAWKS_MAJOR_NAME">Hawks Major Color</Entry>
     <Entry key="FANCY_HAWKS_MAJOR_DESC">The major ending color for the Hawks faction.</Entry>
 
+    <Entry key="FANCY_HAWKS_HORSEMAN_NAME">Hawks Horseman Color</Entry>
+    <Entry key="FANCY_HAWKS_HORSEMAN_DESC">The horseman ending color for the Hawks faction.</Entry>
+
     <Entry key="FANCY_HAWKS_LETHAL_NAME">Hawks Lethal Color</Entry>
     <Entry key="FANCY_HAWKS_LETHAL_DESC">The lethal ending color for the Hawks faction.</Entry>
 
@@ -428,6 +467,9 @@
 
     <Entry key="FANCY_LIONS_MAJOR_NAME">Lions Major Color</Entry>
     <Entry key="FANCY_LIONS_MAJOR_DESC">The major ending color for the Lions faction.</Entry>
+
+    <Entry key="FANCY_LIONS_HORSEMAN_NAME">Lions Horseman Color</Entry>
+    <Entry key="FANCY_LIONS_HORSEMAN_DESC">The horseman ending color for the Lions faction.</Entry>
 
     <Entry key="FANCY_LIONS_LETHAL_NAME">Lions Lethal Color</Entry>
     <Entry key="FANCY_LIONS_LETHAL_DESC">The lethal ending color for the Lions faction.</Entry>
@@ -441,6 +483,9 @@
     <Entry key="FANCY_EGOTIST_MAJOR_NAME">Egotist Major Color</Entry>
     <Entry key="FANCY_EGOTIST_MAJOR_DESC">The major ending color for the Egotist faction.</Entry>
 
+    <Entry key="FANCY_EGOTIST_HORSEMAN_NAME">Egotist Horseman Color</Entry>
+    <Entry key="FANCY_EGOTIST_HORSEMAN_DESC">The horseman ending color for the Egotist faction.</Entry>
+
     <Entry key="FANCY_EGOTIST_LETHAL_NAME">Egotist Lethal Color</Entry>
     <Entry key="FANCY_EGOTIST_LETHAL_DESC">The lethal ending color for the Egotist faction.</Entry>
 
@@ -453,6 +498,9 @@
     <Entry key="FANCY_VAMPIRE_MAJOR_NAME">Vampire Major Color</Entry>
     <Entry key="FANCY_VAMPIRE_MAJOR_DESC">The major ending color for the Vampire faction.</Entry>
 
+    <Entry key="FANCY_VAMPIRE_HORSEMAN_NAME">Vampire Horseman Color</Entry>
+    <Entry key="FANCY_VAMPIRE_HORSEMAN_DESC">The horseman ending color for the Vampire faction.</Entry>
+
     <Entry key="FANCY_VAMPIRE_LETHAL_NAME">Vampire Lethal Color</Entry>
     <Entry key="FANCY_VAMPIRE_LETHAL_DESC">The lethal ending color for the Vampire faction.</Entry>
 
@@ -464,6 +512,9 @@
 
     <Entry key="FANCY_CURSEDSOUL_MAJOR_NAME">Cursed Soul Major Color</Entry>
     <Entry key="FANCY_CURSEDSOUL_MAJOR_DESC">The major ending color for the Cursed Soul faction.</Entry>
+
+    <Entry key="FANCY_CURSEDSOUL_HORSEMAN_NAME">Cursed Soul Horseman Color</Entry>
+    <Entry key="FANCY_CURSEDSOUL_HORSEMAN_DESC">The horseman ending color for the Cursed Soul faction.</Entry>
 
     <Entry key="FANCY_CURSEDSOUL_LETHAL_NAME">Cursed Soul Lethal Color</Entry>
     <Entry key="FANCY_CURSEDSOUL_LETHAL_DESC">The lethal ending color for the Cursed Soul faction.</Entry>
@@ -682,6 +733,9 @@
 
     <Entry key="FANCY_WILDLING_XIS_WHISPERING_TO_Y" style="whisper_notice">You overhear %name1% whispering to %name2%:</Entry>
     <Entry key="FANCY_SERIALKILLER_XIS_WHISPERING_TO_Y" style="whisper_notice">You overhear %name1% whispering to %name2%:</Entry>
+
+    <Entry key="FANCY_KILLVARIANT_0" style="whisper_notice">%name% was brutually murdered last night.</Entry>
+    <Entry key="FANCY_KILLVARIANT_1" style="whisper_notice">%name% was slaughtered last night.</Entry>
 
     <Entry key="FANCY_NONE">None</Entry>
     <Entry key="FANCY_TOWN">Town</Entry>

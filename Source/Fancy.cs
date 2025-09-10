@@ -124,6 +124,7 @@ public class Fancy : BaseMod<Fancy>
 
     public static ToggleOption MajorColors;
     public static ToggleOption LethalColors;
+    public static ToggleOption HorsemenColors;
     public static ToggleOption VerticalGradients;
 
     public static ColorOption NeutralStart;
@@ -175,34 +176,34 @@ public class Fancy : BaseMod<Fancy>
     public static FloatOption ChatBackgroundOpacity;
 
     private static readonly Dictionary<string, ColorOption> ColorOptions = [];
-    public static readonly Dictionary<string, (string Start, string End, string Major, string Middle, string Lethal)> Colors = new()
+    public static readonly Dictionary<string, (string Start, string End, string Major, string Middle, string Lethal, string Horsemen)> Colors = new()
     {
-        { "TOWN", ("#06E00C", "#06E00C", "#06E00C", null, "#06E00C") },
-        { "COVEN", ("#B545FF", "#B545FF", "#B545FF", null, "#B545FF") },
-        { "APOCALYPSE", ("#FF004E", "#FF004E", "#FF004E", null, "#FF004E") },
-        { "VAMPIRE", ("#ff0000", "#6A1B1B", "#6A1B1B", null, "#6A1B1B") },
-        { "CURSEDSOUL", ("#4FFF9F", "#B54FFF", "#4FFF9F", null, "#4FFF9F") },
-        { "PANDORA", ("#B545FF", "#FF004E", "#FF004E", null, "#FF004E") },
-        { "COMPLIANCE", ("#2D44B5", "#FC9F32", "#FC9F32", "#AE1B1E", null) },
-        { "SERIALKILLER", ("#1D4DFC", "#1D4DFC", "#1D4DFC", null, null) },
-        { "ARSONIST", ("#DB7601", "#DB7601", "#DB7601", null, null) },
-        { "WEREWOLF", ("#9D7038", "#9D7038", "#9D7038", null, null) },
-        { "SHROUD", ("#6699FF", "#6699FF", "#6699FF", null, null) },
-        { "JACKAL", ("#404040", "#D0D0D0", "#D0D0D0", null, "#D0D0D0") },
-        { "EGOTIST", ("#359f3f", "#3f359f", "#3f359f", null, "#3f359f") },
-        { "JESTER", ("#F5A6D4", "#F5A6D4", null, null, null) },
-        { "EXECUTIONER", ("#949797", "#949797", null, null, null) },
-        { "DOOMSAYER", ("#00CC99", "#00CC99", null, null, null) },
-        { "PIRATE", ("#ECC23E", "#ECC23E", null, null, null) },
-        { "INQUISITOR", ("#821252", "#821252", null, null, null) },
-        { "AUDITOR", ("#AEBA87", "#E8FCC5", null, null, null) },
-        { "JUDGE", ("#C77364", "#C93D50", null, null, null) },
-        { "STARSPAWN", ("#FCE79A", "#999CFF", null, null, null) },
-        { "FROGS", ("#1e49cf", "#1e49cf", "#1e49cf", null, "#1e49cf") },
-        { "HAWKS", ("#A81538", "#A81538", "#A81538", null, "#A81538") },
-        { "LIONS", ("#FFC34F", "#FFC34F", "#FFC34F", null, "#FFC34F") },
-        { "LOVERS", ("#FEA6FA", "#FEA6FA", null, null, null) },
-        { "STONED_HIDDEN", ("#9C9A9A", null, null, null, null) }
+        { "TOWN", ("#06E00C", "#06E00C", "#06E00C", null, "#06E00C", "#06E00C") },
+        { "COVEN", ("#B545FF", "#B545FF", "#B545FF", null, "#B545FF", "#B545FF") },
+        { "APOCALYPSE", ("#FF004E", "#FF004E", "#FF004E", null, "#FF004E", "#FF004E") },
+        { "VAMPIRE", ("#ff0000", "#6A1B1B", "#6A1B1B", null, "#6A1B1B", "#6A1B1B") },
+        { "CURSEDSOUL", ("#4FFF9F", "#B54FFF", "#4FFF9F", null, "#4FFF9F", "#4FFF9F") },
+        { "PANDORA", ("#B545FF", "#FF004E", "#FF004E", null, "#FF004E", "#FF004E") },
+        { "COMPLIANCE", ("#2D44B5", "#FC9F32", "#FC9F32", "#AE1B1E", null, "#AE1B1E") },
+        { "SERIALKILLER", ("#1D4DFC", "#1D4DFC", "#1D4DFC", null, null, "#1D4DFC") },
+        { "ARSONIST", ("#DB7601", "#DB7601", "#DB7601", null, null, "#DB7601") },
+        { "WEREWOLF", ("#9D7038", "#9D7038", "#9D7038", null, null, "#9D7038") },
+        { "SHROUD", ("#6699FF", "#6699FF", "#6699FF", null, null, "#6699FF") },
+        { "JACKAL", ("#404040", "#D0D0D0", "#D0D0D0", null, "#D0D0D0", "#D0D0D0") },
+        { "EGOTIST", ("#359f3f", "#3f359f", "#3f359f", null, "#3f359f", "#3f359f") },
+        { "JESTER", ("#F5A6D4", "#F5A6D4", null, null, null, null) },
+        { "EXECUTIONER", ("#949797", "#949797", null, null, null, null) },
+        { "DOOMSAYER", ("#00CC99", "#00CC99", null, null, null, null) },
+        { "PIRATE", ("#ECC23E", "#ECC23E", null, null, null, null) },
+        { "INQUISITOR", ("#821252", "#821252", null, null, null, null) },
+        { "AUDITOR", ("#AEBA87", "#E8FCC5", null, null, null, null) },
+        { "JUDGE", ("#C77364", "#C93D50", null, null, null, null) },
+        { "STARSPAWN", ("#FCE79A", "#999CFF", null, null, null, null) },
+        { "FROGS", ("#1e49cf", "#1e49cf", "#1e49cf", null, "#1e49cf", "#1e49cf") },
+        { "HAWKS", ("#A81538", "#A81538", "#A81538", null, "#A81538", "#A81538") },
+        { "LIONS", ("#FFC34F", "#FFC34F", "#FFC34F", null, "#FFC34F", "#FFC34F") },
+        { "LOVERS", ("#FEA6FA", "#FEA6FA", null, null, null, null) },
+        { "STONED_HIDDEN", ("#9C9A9A", null, null, null, null, null) }
     };
 
     public static readonly Dictionary<FactionType, EnumDropdownOption<CinematicType>> CinematicMap = [];
@@ -371,6 +372,7 @@ public class Fancy : BaseMod<Fancy>
         FactionalRoleNames = new("FACTIONAL_ROLE_NAMES", false, PackType.MiscRoleCustomisation, Constants.TextEditorExists);
         FactionalRoleBlurbs = new("FACTIONAL_ROLE_BLURBS", false, PackType.MiscRoleCustomisation, Constants.TextEditorExists);
         MajorColors = new("MAJOR_COLORS", false, PackType.MiscRoleCustomisation);
+        HorsemenColors = new("HORSEMAN_COLORS", false, PackType.MiscRoleCustomisation);
         LethalColors = new("LETHAL_COLORS", false, PackType.MiscRoleCustomisation);
         VerticalGradients = new("VERTICAL_GRADIENTS", true, PackType.MiscRoleCustomisation);
         RecruitEndingColor = new("RECRUIT_ENDING", RecruitEndType.JackalEnd, PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists, useTranslations: true);
@@ -441,7 +443,7 @@ public class Fancy : BaseMod<Fancy>
                 uponChanged: ReloadCinematics);
         }
 
-        foreach (var (key, (start, end, major, middle, lethal)) in Colors)
+        foreach (var (key, (start, end, major, middle, lethal, horseman)) in Colors)
         {
             if (start == null)
                 continue;
@@ -463,6 +465,9 @@ public class Fancy : BaseMod<Fancy>
             if (major != null)
                 ColorOptions[$"{key}_MAJOR"] = new($"{key}_MAJOR", major, PackType.MiscRoleCustomisation, SetActive, uponChanged: ReloadColors);
 
+            if (horseman != null)
+                ColorOptions[$"{key}_HORSEMAN"] = new($"{key}_HORSEMAN", horseman, PackType.MiscRoleCustomisation, SetActive, uponChanged: ReloadColors);
+
             if (lethal != null)
                 ColorOptions[$"{key}_LETHAL"] = new($"{key}_LETHAL", lethal, PackType.MiscRoleCustomisation, SetActive, uponChanged: ReloadColors);
 
@@ -480,9 +485,10 @@ public class Fancy : BaseMod<Fancy>
             var end    = ColorOptions.TryGetValue($"{key}_END", out var e) ? e.Value : null;
             var major  = ColorOptions.TryGetValue($"{key}_MAJOR", out var m) ? m.Value : null;
             var middle = ColorOptions.TryGetValue($"{key}_MIDDLE", out var mi) ? mi.Value : null;
+            var horseman = ColorOptions.TryGetValue($"{key}_HORSEMAN", out var h) ? h.Value : null;
             var lethal = ColorOptions.TryGetValue($"{key}_LETHAL", out var l) ? l.Value : null;
 
-            Colors[key] = (start, end, major, middle, lethal);
+            Colors[key] = (start, end, major, middle, lethal, horseman);
         }
     }
 
