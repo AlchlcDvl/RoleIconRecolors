@@ -562,6 +562,8 @@ public static class FactionWinsStandardCinematicPlayer_SetUpWinners_Patch
             wrapper.SwapWithSilhouette(silhouetteId, true);
         }
 
+        // var characterCount = __instance.characterWrappers.Count;
+
         foreach (var wrapper in __instance.characterWrappers.Where(x => x))
             wrapper.SwapWithCharacter(URandom.RandomRangeInt(0, 86), true, 0);
     }
@@ -637,76 +639,41 @@ public static class AddBTOS2RolesToDevMenu
 [HarmonyPatch(typeof(RoleDeckBuilder), nameof(RoleDeckBuilder.GetSortedRoleSlots))]
 public static class PandoraAndComplianceRoleSlotsPatch
 {
-    [HarmonyPriority(Priority.Last)]
+    [HarmonyPriority(0)]
     public static void Postfix(RoleDeckBuilder __instance, ref List<RoleDeckSlot> __result)
     {
         if (!Constants.IsBTOS2())
             return;
-
-        var list = new List<RoleDeckSlot>();
-        var alignments = new[]
+        List<RoleDeckSlot> list = new List<RoleDeckSlot>();
+        RoleAlignment[] array = new RoleAlignment[]
         {
-            RoleAlignment.TOWN,
-            Btos2RoleAlignment.Pandora,
-            Btos2RoleAlignment.Compliance,
-            RoleAlignment.COVEN,
-            Btos2RoleAlignment.Apocalypse,
-            RoleAlignment.NEUTRAL
+                RoleAlignment.TOWN,
+                (RoleAlignment)100,
+                (RoleAlignment)101,
+                RoleAlignment.COVEN,
+                (RoleAlignment)17,
+                RoleAlignment.NEUTRAL
         };
-        var isPandora = Constants.IsPandora();
-        var isCompliance = Constants.IsCompliance();
-
-        foreach (var alignment in alignments)
+        for (int i = 0; i < array.Length; i++)
         {
-            if (isPandora && (alignment == RoleAlignment.COVEN || alignment == Btos2RoleAlignment.Apocalypse))
+            RoleAlignment alignment = array[i];
+            bool pandora = alignment == (RoleAlignment)100 && Constants.IsPandora();
+            bool compliance = alignment == (RoleAlignment)101 && Constants.IsCompliance();
+            if (Constants.IsPandora() && (alignment == RoleAlignment.COVEN || alignment == (RoleAlignment)17))
                 continue;
-
-            var currentAlignmentIsPandora = alignment == Btos2RoleAlignment.Pandora && isPandora;
-            var currentAlignmentIsCompliance = alignment == Btos2RoleAlignment.Compliance && isCompliance;
-
-            list.AddRange(__instance.GetPredicateRoleSlots(r => r switch
-            {
-                { Role1: var role1 } when role1.IsResolved() && !r.Role2.IsResolved() => SingleRolePredicate(r),
-                { Role1: var role1, Role2: var role2 } when role1.IsResolved() && role2.IsResolved() => TwoRolePredicate(r),
-                { Role1: var role1, Role2: var role2 } when role1.IsBucket() && role2.IsResolved() => TwoRolePredicate(r),
-                { Role1: var role1, Role2: var role2 } when role1.IsBucket() && role2.IsBucket() => TwoRolePredicate(r),
-                { Role1: var role1 } when r.IsBucket() && role1.GetRoleBucket().subAlignment != SubAlignment.ANY => SingleRolePredicate(r),
-                { Role1: var role1 } when r.IsBucket() && role1.GetRoleBucket().subAlignment == SubAlignment.ANY => SingleRolePredicate(r),
-                _ => false
-            }));
-
-            if (currentAlignmentIsCompliance)
-                list.AddRange(__instance.GetPredicateRoleSlots(r => r.Role1 == Btos2Role.NeutralKilling));
-
-            bool SingleRolePredicate(RoleDeckSlot r) =>
-                !IsNeutralExclusion(r, alignment, isCompliance) &&
-                MatchesAlignmentConditions(r.Role1, alignment, currentAlignmentIsPandora, currentAlignmentIsCompliance);
-
-            bool TwoRolePredicate(RoleDeckSlot r) =>
-                !IsNeutralExclusion(r, alignment, isCompliance) &&
-                MatchesAlignmentConditions(r.Role1, alignment, currentAlignmentIsPandora, currentAlignmentIsCompliance) &&
-                MatchesAlignmentConditions(r.Role2, alignment, currentAlignmentIsPandora, currentAlignmentIsCompliance);
+            list.AddRange(__instance.GetPredicateRoleSlots((RoleDeckSlot r) => r.IsResolved() && !(alignment == RoleAlignment.NEUTRAL && (r.Role1.IsNeutralKilling() || r.Role1 == Btos2Role.NeutralKilling) && Constants.IsCompliance()) && (r.Role1.GetAlignment() == alignment || pandora && (r.Role1.GetAlignment() == RoleAlignment.COVEN || r.Role1.GetAlignment() == (RoleAlignment)17) || compliance && r.Role1.IsNeutralKilling())));
+            list.AddRange(__instance.GetPredicateRoleSlots((RoleDeckSlot r) => r.Role1.IsResolved() && r.Role2.IsResolved() && !(alignment == RoleAlignment.NEUTRAL && (r.Role1.IsNeutralKilling() || r.Role2.IsNeutralKilling()) && Constants.IsCompliance()) && (r.Role1.GetAlignment() == alignment || pandora && (r.Role1.GetAlignment() == RoleAlignment.COVEN || r.Role1.GetAlignment() == (RoleAlignment)17) || compliance && r.Role1.IsNeutralKilling()) && (r.Role2.GetAlignment() == alignment || pandora && (r.Role2.GetAlignment() == RoleAlignment.COVEN || r.Role2.GetAlignment() == (RoleAlignment)17) || compliance && r.Role2.IsNeutralKilling())));
+            list.AddRange(__instance.GetPredicateRoleSlots((RoleDeckSlot r) => r.Role1.IsBucket() && r.Role2.IsResolved() && !(alignment == RoleAlignment.NEUTRAL && (r.Role1.IsNeutralKilling() || r.Role2.IsNeutralKilling()) && Constants.IsCompliance()) && (r.Role1.GetAlignment() == alignment || pandora && (r.Role1.GetAlignment() == RoleAlignment.COVEN || r.Role1.GetAlignment() == (RoleAlignment)17) || compliance && r.Role1.IsNeutralKilling()) && (r.Role2.GetAlignment() == alignment || pandora && (r.Role2.GetAlignment() == RoleAlignment.COVEN || r.Role2.GetAlignment() == (RoleAlignment)17) || compliance && r.Role2.IsNeutralKilling())));
+            list.AddRange(__instance.GetPredicateRoleSlots((RoleDeckSlot r) => r.Role1.IsBucket() && r.Role2.IsBucket() && !(alignment == RoleAlignment.NEUTRAL && (r.Role1.IsNeutralKilling() || r.Role2.IsNeutralKilling()) && Constants.IsCompliance()) && (r.Role1.GetAlignment() == alignment || pandora && (r.Role1.GetAlignment() == RoleAlignment.COVEN || r.Role1.GetAlignment() == (RoleAlignment)17) || compliance && r.Role1.IsNeutralKilling()) && (r.Role2.GetAlignment() == alignment || pandora && (r.Role2.GetAlignment() == RoleAlignment.COVEN || r.Role2.GetAlignment() == (RoleAlignment)17) || compliance && r.Role2.IsNeutralKilling())));
+            list.AddRange(__instance.GetPredicateRoleSlots((RoleDeckSlot r) => r.IsBucket() && !(alignment == RoleAlignment.NEUTRAL && (r.Role1.IsNeutralKilling() || r.Role1 == Btos2Role.NeutralKilling) && Constants.IsCompliance()) && (r.Role1.GetAlignment() == alignment || pandora && (r.Role1.GetAlignment() == RoleAlignment.COVEN || r.Role1.GetAlignment() == (RoleAlignment)17) || compliance && r.Role1.IsNeutralKilling()) && r.Role1.GetRoleBucket().subAlignment != SubAlignment.ANY));
+            list.AddRange(__instance.GetPredicateRoleSlots((RoleDeckSlot r) => r.IsBucket() && !(alignment == RoleAlignment.NEUTRAL && (r.Role1.IsNeutralKilling() || r.Role1 == Btos2Role.NeutralKilling) && Constants.IsCompliance()) && (r.Role1.GetAlignment() == alignment || pandora && (r.Role1.GetAlignment() == RoleAlignment.COVEN || r.Role1.GetAlignment() == (RoleAlignment)17) || compliance && r.Role1.IsNeutralKilling()) && r.Role1.GetRoleBucket().subAlignment == SubAlignment.ANY));
+            list.AddRange(__instance.GetPredicateRoleSlots((RoleDeckSlot r) => compliance && r.Role1 == Btos2Role.NeutralKilling));
         }
-
-        list.AddRange(__instance.GetPredicateRoleSlots(r => r.Role1.IsResolved() && r.Role2.IsResolved() && FinalCombinedRolePredicate(r)));
-        list.AddRange(__instance.GetPredicateRoleSlots(r => r.Role1.IsBucket() && r.Role2.IsResolved() && FinalCombinedRolePredicate(r)));
-        list.AddRange(__instance.GetPredicateRoleSlots(r => r.Role1.IsBucket() && r.Role2.IsBucket() && FinalCombinedRolePredicate(r)));
-        list.AddRange(__instance.GetPredicateRoleSlots(r => r.IsBucket() && r.Role1.GetAlignment() == RoleAlignment.ANY));
-
+        list.AddRange(__instance.GetPredicateRoleSlots((RoleDeckSlot r) => r.Role1.IsResolved() && r.Role2.IsResolved() && r.Role1.GetAlignment() != r.Role2.GetAlignment() && (!Constants.IsPandora() || !(r.Role1.GetAlignment() == RoleAlignment.COVEN && r.Role2.GetAlignment() == (RoleAlignment)17 || r.Role2.GetAlignment() == RoleAlignment.COVEN && r.Role1.GetAlignment() == (RoleAlignment)17)) && (!Constants.IsCompliance() || !(r.Role1.IsNeutralKilling() && r.Role2.IsNeutralKilling()))));
+        list.AddRange(__instance.GetPredicateRoleSlots((RoleDeckSlot r) => r.Role1.IsBucket() && r.Role2.IsResolved() && r.Role1.GetAlignment() != r.Role2.GetAlignment() && (!Constants.IsPandora() || !(r.Role1.GetAlignment() == RoleAlignment.COVEN && r.Role2.GetAlignment() == (RoleAlignment)17 || r.Role2.GetAlignment() == RoleAlignment.COVEN && r.Role1.GetAlignment() == (RoleAlignment)17)) && (!Constants.IsCompliance() || !(r.Role1.IsNeutralKilling() && r.Role2.IsNeutralKilling()))));
+        list.AddRange(__instance.GetPredicateRoleSlots((RoleDeckSlot r) => r.Role1.IsBucket() && r.Role2.IsBucket() && r.Role1.GetAlignment() != r.Role2.GetAlignment() && (!Constants.IsPandora() || !(r.Role1.GetAlignment() == RoleAlignment.COVEN && r.Role2.GetAlignment() == (RoleAlignment)17 || r.Role2.GetAlignment() == RoleAlignment.COVEN && r.Role1.GetAlignment() == (RoleAlignment)17)) && (!Constants.IsCompliance() || !(r.Role1.IsNeutralKilling() && r.Role2.IsNeutralKilling()))));
+        list.AddRange(__instance.GetPredicateRoleSlots((RoleDeckSlot r) => r.IsBucket() && r.Role1.GetAlignment() == RoleAlignment.ANY));
         __result = list;
-
-        bool MatchesAlignmentConditions(Role role, RoleAlignment currentAlignment, bool isPandoraMode, bool isComplianceMode) => role.GetAlignment() == currentAlignment ||
-            (isPandoraMode && (role.GetAlignment() == RoleAlignment.COVEN || role.GetAlignment() == Btos2RoleAlignment.Apocalypse)) ||
-            (isComplianceMode && role.IsNeutralKilling());
-
-        bool IsNeutralExclusion(RoleDeckSlot slot, RoleAlignment currentAlignment, bool isComplianceMode) => currentAlignment == RoleAlignment.NEUTRAL && isComplianceMode &&
-            (slot.Role1.IsNeutralKilling() || slot.Role2.IsNeutralKilling());
-
-        bool FinalCombinedRolePredicate(RoleDeckSlot r) =>
-            r.Role1.GetAlignment() != r.Role2.GetAlignment() &&
-            (!isPandora || !((r.Role1.GetAlignment() == RoleAlignment.COVEN && r.Role2.GetAlignment() == Btos2RoleAlignment.Apocalypse) ||
-                (r.Role2.GetAlignment() == RoleAlignment.COVEN && r.Role1.GetAlignment() == Btos2RoleAlignment.Apocalypse))) &&
-            (!isCompliance || !(r.Role1.IsNeutralKilling() && r.Role2.IsNeutralKilling()));
     }
 }
 
@@ -717,29 +684,28 @@ public static class PandoraAndComplianceDeckSlotPatch
     {
         if (!Constants.IsBTOS2())
             return true;
-
-        var role1Alignment = __instance.Role1.GetAlignment();
-        var role2Alignment = __instance.Role2.GetAlignment();
-
+        RoleAlignment role1Alignment = __instance.Role1.GetAlignment();
+        RoleAlignment role2Alignment = __instance.Role2.GetAlignment();
         if (Constants.IsPandora())
         {
-            if (role1Alignment is RoleAlignment.COVEN or Btos2RoleAlignment.Apocalypse)
-                role1Alignment = Btos2RoleAlignment.Pandora;
-
-            if (role2Alignment is RoleAlignment.COVEN or Btos2RoleAlignment.Apocalypse)
-                role2Alignment = Btos2RoleAlignment.Pandora;
+            if (role1Alignment == RoleAlignment.COVEN || role1Alignment == (RoleAlignment)17)
+                role1Alignment = (RoleAlignment)100;
+            if (role2Alignment == RoleAlignment.COVEN || role2Alignment == (RoleAlignment)17)
+                role2Alignment = (RoleAlignment)100;
         }
-
         if (Constants.IsCompliance())
         {
             if (__instance.Role1.IsNeutralKilling() || __instance.Role1 == Btos2Role.NeutralKilling)
-                role1Alignment = Btos2RoleAlignment.Compliance;
-
+                role1Alignment = (RoleAlignment)101;
             if (__instance.Role2.IsNeutralKilling() || __instance.Role1 == Btos2Role.NeutralKilling)
-                role2Alignment = Btos2RoleAlignment.Compliance;
+                role2Alignment = (RoleAlignment)101;
         }
-
-        __result = !__instance.IsDualBucket() || role1Alignment == role2Alignment ? role1Alignment : RoleAlignment.ANY;
+        if (!__instance.IsDualBucket() || role1Alignment == role2Alignment)
+        {
+            __result = role1Alignment;
+            return false;
+        }
+        __result = RoleAlignment.ANY;
         return false;
     }
 }
@@ -747,11 +713,10 @@ public static class PandoraAndComplianceDeckSlotPatch
 [HarmonyPatch(typeof(RoleDeckListItem), nameof(RoleDeckListItem.SetData))]
 public static class PandoraAndComplianceListItemPatch
 {
-    public static bool Prefix(RoleDeckListItem __instance, RoleDeckSlot a_roleDeckSlot, RoleDeckPanelController parent, bool a_isBan)
+    public static bool Prefix(RoleDeckListItem __instance, RoleDeckSlot a_roleDeckSlot, RoleDeckPanelController parent, bool a_isBan = false)
     {
         if (!Constants.IsBTOS2())
             return true;
-
         __instance.Reset();
         __instance._parentPanel = parent;
         __instance.background.SetActive(false);
@@ -760,43 +725,42 @@ public static class PandoraAndComplianceListItemPatch
         __instance.role2 = a_roleDeckSlot.Role2;
         __instance.isBan = a_isBan;
         Debug.Log(string.Format("Setting Deck Slot {0} + {1}", __instance.role, __instance.role2));
-        var factionType1 = __instance.role.GetFaction();
-        var factionType2 = __instance.role2.GetFaction();
-        var isPandora = Constants.IsPandora();
-        var isCompliance = Constants.IsCompliance();
-
-        if (isPandora && factionType1 is FactionType.COVEN or FactionType.APOCALYPSE)
+        FactionType factionType1 = __instance.role.GetFaction();
+        FactionType factionType2 = __instance.role2.GetFaction();
+        if (Constants.IsPandora() && (factionType1 == FactionType.COVEN || factionType1 == FactionType.APOCALYPSE))
             factionType1 = Btos2Faction.Pandora;
-
-        if (isPandora && factionType2 is FactionType.COVEN or FactionType.APOCALYPSE)
+        if (Constants.IsPandora() && (factionType2 == FactionType.COVEN || factionType2 == FactionType.APOCALYPSE))
             factionType2 = Btos2Faction.Pandora;
-
-        if (isCompliance && __instance.role.IsNeutralKilling())
+        if (Constants.IsCompliance() && __instance.role.IsNeutralKilling())
             factionType1 = Btos2Faction.Compliance;
-
-        if (isCompliance && __instance.role2.IsNeutralKilling())
+        if (Constants.IsCompliance() && __instance.role2.IsNeutralKilling())
             factionType2 = Btos2Faction.Compliance;
-
         if (__instance.role2 == Role.NONE)
+        {
             __instance.roleName.text = __instance.role.ToColorizedDisplayString(factionType1) ?? "";
+        }
         else
         {
-            __instance.roleName.text = __instance.role.ToColorizedShortenedDisplayString(factionType1) + " <color=#FFFFFF40>-</color> " +
-                __instance.role2.ToColorizedShortenedDisplayString(factionType2);
+            __instance.roleName.text = __instance.role.ToColorizedShortenedDisplayString(factionType1) + " <color=#FFFFFF40>-</color> " + __instance.role2.ToColorizedShortenedDisplayString(factionType2);
         }
-
         __instance.roleName.gameObject.SetActive(true);
         __instance.roleImage.gameObject.SetActive(true);
-
         if (__instance.isBan)
+        {
             __instance.roleImage.sprite = __instance.bannedSprite;
+        }
         else if (__instance.role.IsModifierCard())
-            __instance.roleImage.sprite = __instance.uiRoleData.hostOptionsDataList.Find(d => d.role == __instance.role).roleIcon;
+        {
+            __instance.roleImage.sprite = __instance.uiRoleData.hostOptionsDataList.Find((UIRoleData.UIRoleDataInstance d) => d.role == __instance.role).roleIcon;
+        }
         else if (__instance.role.IsBucket())
-            __instance.roleImage.sprite = __instance.uiRoleData.roleBucketDataList.Find(d => d.role == __instance.role).roleIcon;
+        {
+            __instance.roleImage.sprite = __instance.uiRoleData.roleBucketDataList.Find((UIRoleData.UIRoleDataInstance d) => d.role == __instance.role).roleIcon;
+        }
         else
-            __instance.roleImage.sprite = __instance.uiRoleData.roleDataList.Find(d => d.role == __instance.role).roleIcon;
-
+        {
+            __instance.roleImage.sprite = __instance.uiRoleData.roleDataList.Find((UIRoleData.UIRoleDataInstance d) => d.role == __instance.role).roleIcon;
+        }
         __instance.roleImage.SetAllDirty();
         __instance.gameObject.SetActive(true);
         __instance.ValidateButtons();
@@ -804,29 +768,31 @@ public static class PandoraAndComplianceListItemPatch
     }
 }
 
+
 // THIS GOD FOR SAKEN PATCH REFUSES TO DO ANYTHING, SOMEONE FIX THIS SHIT
 
 /* HEY LOONIE
 NEXT TIME YOU WANT A FUCKING MULTI-LINE COMMENT
-DO IT LIKE THIS PLEASE
+DO IT LIKE THIS PLEASE 
 - synapsium synapperson XIV */
 
 [HarmonyPatch(typeof(TribunalCinematicPlayer), nameof(TribunalCinematicPlayer.CommonSetup))]
 public static class MarshalCinematicFixes
 {
+    [HarmonyPostfix]
     public static void Postfix(TribunalCinematicPlayer __instance)
     {
         if (!Constants.IsBTOS2())
             return;
 
-        var playerPosition = __instance.roleRevealCinematic.playerPosition;
-        var characterByPosition = Service.Game.Cast.GetCharacterByPosition(playerPosition);
-
-        if (characterByPosition)
+        int playerPosition = __instance.roleRevealCinematic.playerPosition;
+        TosCharacter characterByPosition = Service.Game.Cast.GetCharacterByPosition(playerPosition);
+        if (characterByPosition != null)
+        {
             characterByPosition.characterSprite.SetColor(Color.clear);
-
-        var playerName = Service.Game.Cast.GetPlayerName(playerPosition, false);
-        var text = (__instance.roleRevealCinematic.hasRevealed ? Utils.GetString("FANCY_MARSHAL_CINEMATIC_2") : Utils.GetString("FANCY_MARSHAL_CINEMATIC_BTOS")).Replace("%name%", playerName);
+        }
+        string playerName = Service.Game.Cast.GetPlayerName(playerPosition, false);
+        string text = (__instance.roleRevealCinematic.hasRevealed ? Utils.GetString("FANCY_MARSHAL_CINEMATIC_2") : Utils.GetString("FANCY_MARSHAL_CINEMATIC_BTOS")).Replace("%name%", playerName);
         // __instance.silhouetteWrapper.SwapWithSilhouette(56, true);
         __instance.textAnimatorPlayer.ShowText(text);
     }

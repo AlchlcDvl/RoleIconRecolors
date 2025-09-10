@@ -16,6 +16,7 @@ using Server.Shared.Cinematics;
 using Server.Shared.Cinematics.Data;
 using Server.Shared.Extensions;
 using Server.Shared.Messages;
+using Server.Shared.State;
 using Server.Shared.State.Chat;
 using Shared.Chat;
 
@@ -36,27 +37,25 @@ public static class PatchRoleCard
         __instance.roleNameText.text = Pepper.GetMyRole().ToChangedDisplayString(Pepper.GetMyFaction(), Service.Game.Sim.simulation.observations.roleCardObservation.Data.modifier);
     }
 
-    [HarmonyPatch(nameof(RoleCardPanel.GetSubAlignment))]
+    [HarmonyPatch(nameof(RoleCardPanel.GetSubAlignment)), HarmonyPrefix]
     public static bool Prefix(RoleCardPanel __instance, ref string __result)
     {
         if (!Fancy.GradientBuckets.Value)
             return true;
-
         var role = __instance.CurrentRole;
         var faction = __instance.CurrentFaction;
         var alignment = role.GetAlignment();
         var subAlignment = role.GetSubAlignment();
         var factionID = (int)faction;
-        var useNeutralGradient = false;
+        bool useNeutralGradient = false;
         var neutralGradient = Utils.CreateGradient(Fancy.NeutralStart.Value, Fancy.NeutralEnd.Value);
         var subAlignGradient = Utils.CreateGradient(Fancy.BucketStart.Value, Fancy.BucketEnd.Value);
-
+        string displayString = "";
         if (role is Role.DEATH or Role.PESTILENCE or Role.WAR or Role.FAMINE)
         {
             __result = string.Empty;
             return false;
         }
-
         var acolyte = role switch
         {
             Role.BERSERKER => Role.WAR.ToColorizedNoLabel(faction),
@@ -65,16 +64,12 @@ public static class PatchRoleCard
             Role.SOULCOLLECTOR or Btos2Role.Warlock => Role.DEATH.ToColorizedNoLabel(faction),
             _ => string.Empty
         };
-
         if (!string.IsNullOrEmpty(acolyte))
         {
             __result = $"{acolyte} {Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_ACOLYTE"), subAlignGradient)}";
             return false;
         }
-
-        string displayString;
-
-        if (factionID is (> 2 and < 12 and not 7) or (> 37 and < 42))
+        if (factionID > 2 && factionID < 12 && factionID != 7 || factionID > 37 && factionID < 42)
         {
             useNeutralGradient = true;
             displayString = RoleAlignment.NEUTRAL.ToDisplayString();
@@ -83,7 +78,7 @@ public static class PatchRoleCard
             displayString = Utils.GetString("FANCY_BUCKETS_CURSEDSOUL");
         else
             displayString = faction.ToDisplayString();
-
+        var text = string.Empty;
         if (subAlignment.IsInvalid())
         {
             if (alignment.IsInvalid())
@@ -91,13 +86,11 @@ public static class PatchRoleCard
                 __result = string.Empty;
                 return false;
             }
-
             __result = alignment.ToColorizedDisplayString();
             return false;
         }
-
-        __result = Utils.ApplyGradient(displayString, useNeutralGradient ? neutralGradient : faction.GetChangedGradient(role)) + " " + Utils.ApplyGradient(subAlignment.ToDisplayString(),
-            subAlignGradient);
+        text = Utils.ApplyGradient(displayString, useNeutralGradient ? neutralGradient : faction.GetChangedGradient(role)) + " " + Utils.ApplyGradient(subAlignment.ToDisplayString(), subAlignGradient);
+        __result = text;
         return false;
     }
 
@@ -188,10 +181,14 @@ public static class PatchRoleCard
             return;
 
         var faction = text[start..end].Trim();
+
         var factionName = faction.RemoveColorTags();
+
         var factionType = __instance.CurrentFaction;
+
         var gradient = factionType.GetChangedGradient(factionType == (FactionType)33 ? Btos2Role.Jackal : Role.NONE);
         var colored = Utils.ApplyGradient(factionName, gradient);
+
         __instance.roleDescText.text = text[..start] + colored + text[end..];
     }
 }
@@ -216,34 +213,36 @@ public static class RoleCardPopupPatches2
             return;
 
         var faction = text[start..end].Trim();
+
         var factionName = faction.RemoveColorTags();
+
         var factionType = __instance.CurrentFaction;
+
         var gradient = factionType.GetChangedGradient(factionType == (FactionType)33 ? Btos2Role.Jackal : Role.NONE);
         var colored = Utils.ApplyGradient(factionName, gradient);
+
         __instance.roleDescText.text = text[..start] + colored + text[end..];
     }
 
     [HarmonyPatch(nameof(RoleCardPopupPanel.GetSubAlignment)), HarmonyPrefix]
     public static bool Prefix(RoleCardPopupPanel __instance, ref string __result)
     {
-        if (!Fancy.GradientBuckets.Value)
+        if (!Fancy.GradientBuckets.Value) 
             return true;
-
         var role = __instance.CurrentRole;
         var faction = __instance.CurrentFaction;
         var alignment = role.GetAlignment();
         var subAlignment = role.GetSubAlignment();
         var factionID = (int)faction;
-        var useNeutralGradient = false;
+        bool useNeutralGradient = false;
         var neutralGradient = Utils.CreateGradient(Fancy.NeutralStart.Value, Fancy.NeutralEnd.Value);
         var subAlignGradient = Utils.CreateGradient(Fancy.BucketStart.Value, Fancy.BucketEnd.Value);
-
+        string displayString = "";
         if (role is Role.DEATH or Role.PESTILENCE or Role.WAR or Role.FAMINE)
         {
             __result = string.Empty;
             return false;
         }
-
         var acolyte = role switch
         {
             Role.BERSERKER => Role.WAR.ToColorizedNoLabel(faction),
@@ -252,16 +251,12 @@ public static class RoleCardPopupPatches2
             Role.SOULCOLLECTOR or Btos2Role.Warlock => Role.DEATH.ToColorizedNoLabel(faction),
             _ => string.Empty
         };
-
         if (!string.IsNullOrEmpty(acolyte))
         {
             __result = $"{acolyte} {Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_ACOLYTE"), subAlignGradient)}";
             return false;
         }
-
-        string displayString;
-
-        if (factionID is (> 2 and < 12 and not 7) or (> 37 and < 42))
+        if (factionID > 2 && factionID < 12 && factionID != 7 || factionID > 37 && factionID < 42)
         {
             useNeutralGradient = true;
             displayString = RoleAlignment.NEUTRAL.ToDisplayString();
@@ -270,7 +265,7 @@ public static class RoleCardPopupPatches2
             displayString = Utils.GetString("FANCY_BUCKETS_CURSEDSOUL");
         else
             displayString = faction.ToDisplayString();
-
+        var text = string.Empty;
         if (subAlignment.IsInvalid())
         {
             if (alignment.IsInvalid())
@@ -281,11 +276,11 @@ public static class RoleCardPopupPatches2
             __result = alignment.ToColorizedDisplayString();
             return false;
         }
-
-        __result = Utils.ApplyGradient(displayString, useNeutralGradient ? neutralGradient : faction.GetChangedGradient(role)) + " " + Utils.ApplyGradient(subAlignment.ToDisplayString(),
-            subAlignGradient);
+        text = Utils.ApplyGradient(displayString, useNeutralGradient ? neutralGradient : faction.GetChangedGradient(role)) + " " + Utils.ApplyGradient(subAlignment.ToDisplayString(), subAlignGradient);
+        __result = text;
         return false;
     }
+
 
     [HarmonyPatch(nameof(RoleCardPopupPanel.SetRole))]
     public static void Postfix(Role role, RoleCardPopupPanel __instance) => __instance.roleNameText.text = role.ToColorizedNoLabel(__instance.CurrentFaction);
@@ -296,55 +291,69 @@ public static class RoleCardPopupPatches2
     [HarmonyPatch(nameof(RoleCardPopupPanel.ShowAttackAndDefense)), HarmonyPrefix]
     public static bool Prefix(RoleCardPopupPanel __instance, RoleCardData data)
     {
-        if (Service.Game.Sim.simulation.roleDeckBuilder.Data.modifierCards.Contains(Role.FEELIN_LUCKY) || (Constants.IsBTOS2() &&
-            Service.Game.Sim.simulation.roleDeckBuilder.Data.modifierCards.Contains(Btos2Role.FeelinLucky)))
-        {
+        if (Service.Game.Sim.simulation.roleDeckBuilder.Data.modifierCards.Contains(Role.FEELIN_LUCKY) || Constants.IsBTOS2() && Service.Game.Sim.simulation.roleDeckBuilder.Data.modifierCards.Contains(Btos2Role.FeelinLucky))
             return true;
-        }
-
         int defense = -1;
         Role role = __instance.CurrentRole;
         int faction = (int)__instance.CurrentFaction;
-
         if (faction == 33)
             faction = (int)__instance.CurrentRole.GetFaction();
-
-        if ((faction > 0 && faction < 3) || faction > 42)
+        if (faction > 0 && faction < 3 || faction > 42)
             defense = 0;
-
-        if ((faction > 2 && faction < 34) || (faction == 33 && role == Btos2Role.Jackal) || role == Role.CULTIST || role == Role.COVENLEADER || (Constants.IsBTOS2() && role == Btos2Role.Cultist) || faction == 40)
+        if (faction > 2 && faction < 34 || faction == 33 && role == Btos2Role.Jackal || role == Role.CULTIST || role == Role.COVENLEADER || Constants.IsBTOS2() && role == Btos2Role.Cultist || faction == 40)
             defense = 1;
-
-        if (role.IsHorseman() || data.defense == 3)
+        if (Utils.IsHorseman(role) || data.defense == 3)
             defense = 3;
-
         if (faction > 37 && faction < 43 && faction != 40)
             defense = 4;
-
-        if ((faction == 33 && role != Btos2Role.Jackal) || (faction > 33 && faction < 37))
+        if (faction == 33 && role != Btos2Role.Jackal || faction > 33 && faction < 37)
             defense = data.defense;
-
-        var num = data.attack / 3f;
-        var num2 = defense == 4 ? 0.66f : (defense / 3f);
-
+        float num = 0f;
+        float num2 = 0f;
+        if (data.attack == 1)
+        {
+            num = 0.33f;
+        }
+        else if (data.attack == 2)
+        {
+            num = 0.66f;
+        }
+        else if (data.attack == 3)
+        {
+            num = 1f;
+        }
+        if (defense == 1)
+        {
+            num2 = 0.33f;
+        }
+        else if (defense == 2 || defense == 4)
+        {
+            num2 = 0.66f;
+        }
+        else if (defense == 3)
+        {
+            num2 = 1f;
+        }
         __instance.attackIcon.fillAmount = num;
         __instance.attackGlow.fillAmount = num;
-
         if (__instance.tabAtkFillImage)
+        {
             __instance.tabAtkFillImage.fillAmount = num;
-
+        }
         if (__instance.tabAtkGlowImage)
+        {
             __instance.tabAtkGlowImage.fillAmount = num;
-
+        }
         __instance.defenseIcon.fillAmount = num2;
         __instance.defenseGlow.fillAmount = num2;
-
         if (__instance.tabDefFillImage)
+        {
             __instance.tabDefFillImage.fillAmount = num2;
-
+        }
         if (__instance.tabDefGlowImage)
+        {
             __instance.tabDefGlowImage.fillAmount = num2;
-
+        }
         return false;
     }
 }
@@ -370,6 +379,7 @@ public static class PlayerListPatch
 
         __instance.playerRoleText.gameObject.SetActive(true);
         __instance.playerRoleText.enableAutoSizing = false; // Remove when PlayerNotes+ fix is out
+
         return false;
     }
 }
@@ -473,7 +483,8 @@ public static class FancyChatExperimentalBTOS2
             if (gradient != null)
             {
                 var text4 = Utils.ApplyGradient($"{gameName}:", gradient);
-                var regex = new Regex($"<color=#[0-9A-Fa-f]+>{Regex.Escape(gameName)}:");
+                var pattern = $"<color=#[0-9A-Fa-f]+>{Regex.Escape(gameName)}:";
+                var regex = new Regex(pattern);
                 text2 = regex.Replace(text2, text4);
             }
             else
@@ -611,6 +622,7 @@ public static class PatchCustomWinScreens
                 else
                 image.color = child.name == "Filigree_R" ? Utils.GetFactionEndingColor(winningFaction) : Utils.GetFactionStartingColor(winningFaction);
             }
+                
         }
 
         __instance.SetUpWinners();
@@ -661,7 +673,8 @@ public static class ClientRoleExtensionsPatches
         {
             if (factionType == Btos2Faction.Jackal)
             {
-                factionText = role.GetFactionType(Utils.GetGameType()) switch
+                var originalFaction = role.GetFactionType(Utils.GetGameType());
+                factionText = originalFaction switch
                 {
                     Btos2Faction.Town => Fancy.RecruitLabelTown.Value,
                     Btos2Faction.Coven => !Constants.IsPandora() ? Fancy.RecruitLabelCoven.Value : Fancy.RecruitLabelPandora.Value,
@@ -674,7 +687,6 @@ public static class ClientRoleExtensionsPatches
                     _ => factionType.ToDisplayString()
                 };
             }
-
             if (gradient != null)
                 newText += $" {Utils.ApplyGradient($"({factionText})", gradient)}";
             else
@@ -687,9 +699,7 @@ public static class ClientRoleExtensionsPatches
     [HarmonyPatch(nameof(ClientRoleExtensions.GetFactionColor))]
     public static bool Prefix(ref string __result, FactionType factionType)
     {
-        var name = Utils.GetFactionKey(factionType);
-
-        __result = Fancy.Colors[name].Start;
+        __result = Fancy.Colors[Utils.FactionName(factionType, stoned: true).ToUpper()].Start;
         return false;
     }
 
@@ -713,6 +723,10 @@ public static class ClientRoleExtensionsPatches
         var covenMajor = FactionType.COVEN.GetChangedGradient(Role.COVENLEADER);
         var covenLethal = FactionType.COVEN.GetChangedGradient(Role.CONJURER);
         var apocalypse = FactionType.APOCALYPSE.GetChangedGradient(Role.PLAGUEBEARER);
+        var pandora = Btos2Faction.Pandora.GetChangedGradient(Role.DREAMWEAVER);
+        var pandoraMajor = Btos2Faction.Pandora.GetChangedGradient(Role.COVENLEADER);
+        var pandoraLethal = Btos2Faction.Pandora.GetChangedGradient(Role.CONJURER);
+        var compliance = Btos2Faction.Compliance.GetChangedGradient(Role.SERIALKILLER);
         var bucket = Utils.CreateGradient(Fancy.BucketStart.Value, Fancy.BucketEnd.Value);
         var neutral = Utils.CreateGradient(Fancy.NeutralStart.Value, Fancy.NeutralEnd.Value);
 
@@ -773,79 +787,79 @@ public static class ClientRoleExtensionsPatches
         }
     }
 
-    [HarmonyPatch(nameof(ClientRoleExtensions.GetShortenedBucketDisplayString)), HarmonyPostfix]
-    public static void PostfixShortened(ref string __result, Role role)
+[HarmonyPatch(nameof(ClientRoleExtensions.GetShortenedBucketDisplayString)), HarmonyPostfix]
+public static void PostfixShortened(ref string __result, Role role)
+{
+    if (!Fancy.GradientBuckets.Value)
+        return;
+
+    var town = FactionType.TOWN.GetChangedGradient(Role.ADMIRER);
+    var townMajor = FactionType.TOWN.GetChangedGradient(Role.MAYOR);
+    var townLethal = FactionType.TOWN.GetChangedGradient(Role.VIGILANTE);
+    var coven = FactionType.COVEN.GetChangedGradient(Role.DREAMWEAVER);
+    var covenMajor = FactionType.COVEN.GetChangedGradient(Role.COVENLEADER);
+    var covenLethal = FactionType.COVEN.GetChangedGradient(Role.CONJURER);
+    var apocalypse = FactionType.APOCALYPSE.GetChangedGradient(Role.PLAGUEBEARER);
+    var compliance = Btos2Faction.Compliance.GetChangedGradient(Role.SERIALKILLER);
+    var bucket = Utils.CreateGradient(Fancy.BucketStart.Value, Fancy.BucketEnd.Value);
+    var neutral = Utils.CreateGradient(Fancy.NeutralStart.Value, Fancy.NeutralEnd.Value);
+
+    if (Constants.IsBTOS2())
     {
-        if (!Fancy.GradientBuckets.Value)
-            return;
-
-        var town = FactionType.TOWN.GetChangedGradient(Role.ADMIRER);
-        var townMajor = FactionType.TOWN.GetChangedGradient(Role.MAYOR);
-        var townLethal = FactionType.TOWN.GetChangedGradient(Role.VIGILANTE);
-        var coven = FactionType.COVEN.GetChangedGradient(Role.DREAMWEAVER);
-        var covenMajor = FactionType.COVEN.GetChangedGradient(Role.COVENLEADER);
-        var covenLethal = FactionType.COVEN.GetChangedGradient(Role.CONJURER);
-        var apocalypse = FactionType.APOCALYPSE.GetChangedGradient(Role.PLAGUEBEARER);
-        var bucket = Utils.CreateGradient(Fancy.BucketStart.Value, Fancy.BucketEnd.Value);
-        var neutral = Utils.CreateGradient(Fancy.NeutralStart.Value, Fancy.NeutralEnd.Value);
-
-        if (Constants.IsBTOS2())
+        __result = role switch
         {
-            __result = role switch
-            {
-                Btos2Role.Any => Utils.GetString("BTOS_ROLE_LIST_BUCKET_ANY_SHORT"),
-                Btos2Role.RandomTown => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_RANDOM_SHORT"), bucket)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), town)}",
-                Btos2Role.CommonTown => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COMMON_SHORT"), bucket)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), town)}",
-                Btos2Role.TownInvestigative => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), town)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_INVESTIGATIVE_SHORT"), bucket)}",
-                Btos2Role.TownProtective => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), town)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_PROTECTIVE_SHORT"), bucket)}",
-                Btos2Role.TownSupport => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), town)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_SUPPORT_SHORT"), bucket)}",
-                Btos2Role.TownKilling => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), townLethal)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_KILLING_SHORT"), bucket)}",
-                Btos2Role.TownGovernment => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), townMajor)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_GOVERNMENT_SHORT"), bucket)}",
-                Btos2Role.TownExecutive => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), townMajor)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_EXECUTIVE_SHORT"), bucket)}",
-                Btos2Role.RandomCoven => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_RANDOM_SHORT"), bucket)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN_SHORT"), coven)}",
-                Btos2Role.CommonCoven => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COMMON_SHORT"), bucket)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN_SHORT"), coven)}",
-                Btos2Role.CovenPower => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN_SHORT"), covenMajor)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_POWER_SHORT"), bucket)}",
-                Btos2Role.CovenKilling => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN_SHORT"), covenLethal)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_KILLING_SHORT"), bucket)}",
-                Btos2Role.CovenUtility => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN_SHORT"), coven)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_UTILITY_SHORT"), bucket)}",
-                Btos2Role.CovenDeception => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN_SHORT"), coven)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_DECEPTION_SHORT"), bucket)}",
-                Btos2Role.RandomApocalypse => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_RANDOM_SHORT"), bucket)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_APOCALYPSE_SHORT"), apocalypse)}",
-                Btos2Role.NeutralKilling => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_NEUTRAL_SHORT"), neutral)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_KILLING_SHORT"), bucket)}",
-                Btos2Role.NeutralEvil => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_NEUTRAL_SHORT"), neutral)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_EVIL_SHORT"), bucket)}",
-                Btos2Role.NeutralPariah => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_NEUTRAL_SHORT"), neutral)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_PARIAH_SHORT"), bucket)}",
-                Btos2Role.NeutralOutlier => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_NEUTRAL_SHORT"), neutral)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_OUTLIER_SHORT"), bucket)}",
-                Btos2Role.RandomNeutral => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_RANDOM_SHORT"), bucket)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_NEUTRAL_SHORT"), neutral)}",
-                _ => string.Empty,
-            };
-        }
-        else
-        {
-            __result = role switch
-            {
-                Role.ANY => Utils.GetString("GUI_ROLE_LIST_BUCKET_ANY_SHORT"),
-                Role.RANDOM_TOWN => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_RANDOM_SHORT"), bucket)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), town)}",
-                Role.COMMON_TOWN => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COMMON_SHORT"), bucket)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), town)}",
-                Role.TOWN_INVESTIGATIVE => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), town)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_INVESTIGATIVE_SHORT"), bucket)}",
-                Role.TOWN_PROTECTIVE => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), town)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_PROTECTIVE_SHORT"), bucket)}",
-                Role.TOWN_SUPPORT => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), town)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_SUPPORT_SHORT"), bucket)}",
-                Role.TOWN_KILLING => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), townLethal)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_KILLING_SHORT"), bucket)}",
-                Role.TOWN_POWER => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), townMajor)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_POWER_SHORT"), bucket)}",
-                Role.RANDOM_COVEN => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_RANDOM_SHORT"), bucket)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN_SHORT"), coven)}",
-                Role.COMMON_COVEN => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COMMON_SHORT"), bucket)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN_SHORT"), coven)}",
-                Role.COVEN_POWER => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN_SHORT"), covenMajor)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_POWER_SHORT"), bucket)}",
-                Role.COVEN_KILLING => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN_SHORT"), covenLethal)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_KILLING_SHORT"), bucket)}",
-                Role.COVEN_UTILITY => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN_SHORT"), coven)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_UTILITY_SHORT"), bucket)}",
-                Role.COVEN_DECEPTION => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN_SHORT"), coven)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_DECEPTION_SHORT"), bucket)}",
-                Role.NEUTRAL_APOCALYPSE => !Fancy.ReplaceNAwithRA.Value
-                    ? $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_NEUTRAL_SHORT"), neutral)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_APOCALYPSE_SHORT"), bucket)}"
-                    : $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_RANDOM_SHORT"), bucket)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_APOCALYPSE_SHORT"), apocalypse)}",
-                Role.NEUTRAL_KILLING => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_NEUTRAL_SHORT"), neutral)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_KILLING_SHORT"), bucket)}",
-                Role.NEUTRAL_EVIL => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_NEUTRAL_SHORT"), neutral)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_EVIL_SHORT"), bucket)}",
-                Role.RANDOM_NEUTRAL => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_RANDOM_SHORT"), bucket)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_NEUTRAL_SHORT"), neutral)}",
-                _ => string.Empty,
-            };
-        }
+            Btos2Role.Any => Utils.GetString("BTOS_ROLE_LIST_BUCKET_ANY_SHORT"),
+            Btos2Role.RandomTown => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_RANDOM_SHORT"), bucket)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), town)}",
+            Btos2Role.CommonTown => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COMMON_SHORT"), bucket)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), town)}",
+            Btos2Role.TownInvestigative => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), town)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_INVESTIGATIVE_SHORT"), bucket)}",
+            Btos2Role.TownProtective => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), town)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_PROTECTIVE_SHORT"), bucket)}",
+            Btos2Role.TownSupport => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), town)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_SUPPORT_SHORT"), bucket)}",
+            Btos2Role.TownKilling => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), townLethal)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_KILLING_SHORT"), bucket)}",
+            Btos2Role.TownGovernment => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), townMajor)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_GOVERNMENT_SHORT"), bucket)}",
+            Btos2Role.TownExecutive => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), townMajor)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_EXECUTIVE_SHORT"), bucket)}",
+            Btos2Role.RandomCoven => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_RANDOM_SHORT"), bucket)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN_SHORT"), coven)}",
+            Btos2Role.CommonCoven => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COMMON_SHORT"), bucket)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN_SHORT"), coven)}",
+            Btos2Role.CovenPower => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN_SHORT"), covenMajor)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_POWER_SHORT"), bucket)}",
+            Btos2Role.CovenKilling => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN_SHORT"), covenLethal)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_KILLING_SHORT"), bucket)}",
+            Btos2Role.CovenUtility => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN_SHORT"), coven)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_UTILITY_SHORT"), bucket)}",
+            Btos2Role.CovenDeception => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN_SHORT"), coven)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_DECEPTION_SHORT"), bucket)}",
+            Btos2Role.RandomApocalypse => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_RANDOM_SHORT"), bucket)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_APOCALYPSE_SHORT"), apocalypse)}",
+            Btos2Role.NeutralKilling => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_NEUTRAL_SHORT"), neutral)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_KILLING_SHORT"), bucket)}",
+            Btos2Role.NeutralEvil => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_NEUTRAL_SHORT"), neutral)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_EVIL_SHORT"), bucket)}",
+            Btos2Role.NeutralPariah => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_NEUTRAL_SHORT"), neutral)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_PARIAH_SHORT"), bucket)}",
+            Btos2Role.NeutralOutlier => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_NEUTRAL_SHORT"), neutral)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_OUTLIER_SHORT"), bucket)}",
+            Btos2Role.RandomNeutral => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_RANDOM_SHORT"), bucket)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_NEUTRAL_SHORT"), neutral)}",
+            _ => string.Empty,
+        };
     }
-
+    else
+    {
+        __result = role switch
+        {
+            Role.ANY => Utils.GetString("GUI_ROLE_LIST_BUCKET_ANY_SHORT"),
+            Role.RANDOM_TOWN => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_RANDOM_SHORT"), bucket)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), town)}",
+            Role.COMMON_TOWN => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COMMON_SHORT"), bucket)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), town)}",
+            Role.TOWN_INVESTIGATIVE => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), town)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_INVESTIGATIVE_SHORT"), bucket)}",
+            Role.TOWN_PROTECTIVE => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), town)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_PROTECTIVE_SHORT"), bucket)}",
+            Role.TOWN_SUPPORT => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), town)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_SUPPORT_SHORT"), bucket)}",
+            Role.TOWN_KILLING => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), townLethal)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_KILLING_SHORT"), bucket)}",
+            Role.TOWN_POWER => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), townMajor)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_POWER_SHORT"), bucket)}",
+            Role.RANDOM_COVEN => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_RANDOM_SHORT"), bucket)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN_SHORT"), coven)}",
+            Role.COMMON_COVEN => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COMMON_SHORT"), bucket)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN_SHORT"), coven)}",
+            Role.COVEN_POWER => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN_SHORT"), covenMajor)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_POWER_SHORT"), bucket)}",
+            Role.COVEN_KILLING => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN_SHORT"), covenLethal)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_KILLING_SHORT"), bucket)}",
+            Role.COVEN_UTILITY => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN_SHORT"), coven)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_UTILITY_SHORT"), bucket)}",
+            Role.COVEN_DECEPTION => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN_SHORT"), coven)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_DECEPTION_SHORT"), bucket)}",
+            Role.NEUTRAL_APOCALYPSE => !Fancy.ReplaceNAwithRA.Value
+                ? $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_NEUTRAL_SHORT"), neutral)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_APOCALYPSE_SHORT"), bucket)}"
+                : $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_RANDOM_SHORT"), bucket)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_APOCALYPSE_SHORT"), apocalypse)}",
+            Role.NEUTRAL_KILLING => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_NEUTRAL_SHORT"), neutral)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_KILLING_SHORT"), bucket)}",
+            Role.NEUTRAL_EVIL => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_NEUTRAL_SHORT"), neutral)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_EVIL_SHORT"), bucket)}",
+            Role.RANDOM_NEUTRAL => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_RANDOM_SHORT"), bucket)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_NEUTRAL_SHORT"), neutral)}",
+            _ => string.Empty,
+        };
+    }
+}
     [HarmonyPatch(nameof(ClientRoleExtensions.ToColorizedShortenedDisplayString), typeof(Role), typeof(FactionType)), HarmonyPostfix]
     public static void ToColorizedShortenedDisplayStringPostfix(ref string __result, Role role, FactionType factionType)
     {
@@ -864,9 +878,7 @@ public static class ClientRoleExtensionsPatches
     [HarmonyPatch(nameof(ClientRoleExtensions.GetSecondFactionColor)), HarmonyPrefix]
     public static bool GetSecondFactionColorPrefix(ref string __result, FactionType factionType)
     {
-        var name = Utils.GetFactionKey(factionType);
-
-        __result = Fancy.Colors[name].Start;
+        __result = Fancy.Colors[Utils.FactionName(factionType, stoned: true).ToUpper()].Start;
         return false;
     }
 }
@@ -934,7 +946,7 @@ public static class KeywordMentionsPatches
                 __instance.BuildRoleMentions();
             else
                 BuildCustomRoleMentions(__instance);
-            // BuildFactionMentions(__instance);
+            BuildFactionMentions(__instance);
         }
 
         if (keywords)
@@ -1016,14 +1028,19 @@ public static class KeywordMentionsPatches
         {
             var role = (int)item.role;
             var display = item.role.ToDisplayString();
-            var shortName = item.role.ToShortenedDisplayString();
-            
-            var encodedText = $"[[#{role}]]";
+            var shortName = item.shortRoleName.Length > 0 ? item.shortRoleName : display;
+
+            var endFaction = (item.role.GetFaction() == FactionType.COVEN || item.role.GetFaction() == FactionType.APOCALYPSE) && Constants.IsPandora() ? Btos2Faction.Pandora : (item.role.IsNeutralKilling() && Constants.IsCompliance() ? Btos2Faction.Compliance : item.role.GetFaction());
+            var endFactionText = (int)endFaction > 42 ? "," + (int)endFaction : string.Empty;
+
+            var encodedText = $"[[#{role}{endFactionText}]]";
 
             var sprite = (__instance._roleEffects == 1) ? $"<sprite=\"BTOSRoleIcons\" name=\"Role{role}\">" : "";
-            var name = __instance._useColors ? item.role.ToColorizedDisplayString() : display;
+            if (endFactionText != string.Empty && __instance._roleEffects == 1)
+                sprite = sprite.Replace("RoleIcons\"", $"RoleIcons ({((item.role.GetFactionType() == endFaction && Constants.CurrentStyle() == "Regular") ? "Regular" : Utils.FactionName(endFaction, false))})\"");
+            var name = __instance._useColors ? item.role.ToColorizedDisplayString(endFaction) : display;
 
-            var richText = $"{__instance.styleTagOpen}{__instance.styleTagFont}<link=\"r{role}\">{sprite}<b>{name}</b></link>{__instance.styleTagClose}";
+            var richText = $"{__instance.styleTagOpen}{__instance.styleTagFont}<link=\"r{role}{endFactionText}\">{sprite}<b>{name}</b></link>{__instance.styleTagClose}";
 
             var mentionInfo = new MentionInfo
             {
@@ -1038,13 +1055,6 @@ public static class KeywordMentionsPatches
             __instance.MentionTokens.Add(new MentionToken
             {
                 mentionTokenType = MentionToken.MentionTokenType.ROLE,
-                match = "#" + display,
-                mentionInfo = mentionInfo,
-                priority = priority++
-            });
-            __instance.MentionTokens.Add(new MentionToken
-            {
-                mentionTokenType = MentionToken.MentionTokenType.ROLE,
                 match = "#" + shortName,
                 mentionInfo = mentionInfo,
                 priority = priority++
@@ -1054,9 +1064,7 @@ public static class KeywordMentionsPatches
     private static void BuildFactionMentions(SharedMentionsProvider __instance)
     {
         Dictionary<FactionType, Role> dict;
-
         if (!Constants.IsBTOS2())
-        {
             dict = new()
             {
                 { FactionType.TOWN, Role.RANDOM_TOWN },
@@ -1073,9 +1081,8 @@ public static class KeywordMentionsPatches
                 { FactionType.VAMPIRE, Role.VAMPIRE },
                 { FactionType.CURSED_SOUL, Role.CURSED_SOUL }
             };
-        }
+
         else
-        {
             dict = new()
             {
                 { FactionType.TOWN, Btos2Role.RandomTown },
@@ -1103,8 +1110,6 @@ public static class KeywordMentionsPatches
                 { Btos2Faction.Pandora, Btos2Role.PandorasBox },
                 { Btos2Faction.Compliance, Btos2Role.CompliantKillers }
             };
-        }
-
         var shortNames = new Dictionary<FactionType, string>
         {
             { FactionType.COVEN, "TT" },
@@ -1157,9 +1162,7 @@ public static class KeywordMentionsPatches
                 mentionInfo = mentionInfo,
                 priority = priority++
             });
-
             if (shortName != display)
-            {
                 __instance.MentionTokens.Add(new MentionToken
                 {
                     mentionTokenType = (MentionToken.MentionTokenType)10,
@@ -1167,10 +1170,7 @@ public static class KeywordMentionsPatches
                     mentionInfo = mentionInfo,
                     priority = priority++
                 });
-            }
-
             if (item == FactionType.COVEN)
-            {
                 __instance.MentionTokens.Add(new MentionToken
                 {
                     mentionTokenType = (MentionToken.MentionTokenType)10,
@@ -1178,10 +1178,7 @@ public static class KeywordMentionsPatches
                     mentionInfo = mentionInfo,
                     priority = priority++
                 });
-            }
-
             if (faction > 33 && faction < 37)
-            {
                 __instance.MentionTokens.Add(new MentionToken
                 {
                     mentionTokenType = (MentionToken.MentionTokenType)10,
@@ -1189,7 +1186,6 @@ public static class KeywordMentionsPatches
                     mentionInfo = mentionInfo,
                     priority = priority++
                 });
-            }
         }
     }
 
@@ -1209,7 +1205,7 @@ public static class KeywordMentionsPatches
         var text2 = (mentionTokenType == MentionToken.MentionTokenType.ACCOUNT) ? "a" : string.Empty;
         var gradient = Utils.CreateGradient(Fancy.MentionStart.Value, Fancy.MentionEnd.Value);
 
-        // var color = Fancy.MentionStart.Value;
+        var color = Fancy.MentionStart.Value;
         // var faction = Pepper.GetDiscussionPlayerFactionIfKnown(i);
         // if (faction is not FactionType.NONE and not FactionType.UNKNOWN)
         // {
@@ -1219,8 +1215,8 @@ public static class KeywordMentionsPatches
         //         roleColorString = "FFCE3B";
         //     color = $"#{roleColorString}";
         // }
-        // if (string.IsNullOrEmpty(color))
-        //     color = "#FFCE3B";
+        if (string.IsNullOrEmpty(color))
+            color = "#FFCE3B";
 
         var text3 = __instance._useColors
             ? $"<b>{Utils.ApplyGradient($"{text}", gradient)}</b>"
@@ -1263,13 +1259,13 @@ public static class KeywordMentionsPatches
     }
 
     [HarmonyPatch(nameof(SharedMentionsProvider.ClearMentions))]
-    public static void Postfix(SharedMentionsProvider __instance, bool rebuildRoles)
+    public static void Postfix(SharedMentionsProvider __instance, ref bool rebuildRoles, ref bool rebuildKeywords, ref bool rebuildPlayers, ref bool rebuildPrefixes, ref bool rebuildEmojis, ref bool rebuildAchievements)
     {
-        if (!rebuildRoles)
-            return;
-
-        __instance.MentionTokens.RemoveAll(m => m.mentionTokenType == (MentionToken.MentionTokenType)10);
-        __instance.MentionInfos.RemoveAll(m => m.mentionInfoType == (MentionInfo.MentionInfoType)10);
+        if (rebuildRoles)
+        {
+            __instance.MentionTokens.RemoveAll((MentionToken m) => m.mentionTokenType == (MentionToken.MentionTokenType)10);
+            __instance.MentionInfos.RemoveAll((MentionInfo m) => m.mentionInfoType == (MentionInfo.MentionInfoType)10);
+        }
     }
 }
 
@@ -1367,10 +1363,14 @@ public static class ReplaceRoleTagWithRoleTextPatch
     }
 }
 
+
 [HarmonyPatch(typeof(HomeLocalizationService), nameof(HomeLocalizationService.GetLocalizedString))]
 public static class LocalizationManagerPatches
 {
-    public static void Postfix(ref string __result) => __result = Utils.RemoveVanillaGradientStyleTags(__result);
+    public static void Postfix(ref string __result)
+    {
+        __result = Utils.RemoveVanillaGradientStyleTags(__result);
+    }
 }
 
 [HarmonyPatch(typeof(GraveyardItem), nameof(GraveyardItem.SetPlayerPicAndName))]
@@ -1410,36 +1410,36 @@ public static class GameSimPatches
 [HarmonyPatch(typeof(WhoDiedDecoder), nameof(WhoDiedDecoder.Encode))]
 public static class WdahChatPatch
 {
-    public static bool Prefix(ChatLogMessage chatLogMessage, UIController uiController, ref string __result)
+    public static bool Prefix(ChatLogMessage chatLogMessage, MentionPanel mentionPanel, GamePhase chatPhase, UIController uiController, List<HudChatStyle> chatStyles, ChatWindowType chatWindowType, ref string __result)
     {
-        if (chatLogMessage?.chatLogEntry is not ChatLogWhoDiedEntry { killRecord: not null } entry)
+        if (chatLogMessage?.chatLogEntry is ChatLogWhoDiedEntry entry && entry.killRecord != null)
         {
-            Debug.LogWarning("Unable to encode invalid ChatLogWhoDiedEntry.");
-            __result = string.Empty;
+            var killRecord = entry.killRecord;
+            var playerName = Utils.BuildPlayerTag(killRecord);
+
+            if (entry.subphase == WhoDiedAndHowSubphase.WhoDied)
+            {
+                __result = killRecord.isDay
+                    ? uiController.l10n("GUI_XDIED_TODAY").Replace("%name%", playerName)
+                    : uiController.l10n("GUI_XDIED_LAST_NIGHT").Replace("%name%", playerName);
+            }
+            else if (entry.subphase == WhoDiedAndHowSubphase.Role)
+            {
+                var roleName = Utils.BuildRoleText(killRecord);
+                var key = Utils.GetHangingMessage(killRecord.playerRole, killRecord.playerFaction);
+
+                __result = uiController.l10n(key).Replace("%name%", playerName).Replace("%role%", roleName);
+            }
+            else
+            {
+                Debug.LogWarning($"Invalid SubPhase {entry.subphase} in WhoDiedDecoder");
+                __result = string.Empty;
+            }
             return false;
         }
 
-        var killRecord = entry.killRecord;
-        var playerName = Utils.BuildPlayerTag(killRecord);
-
-        if (entry.subphase == WhoDiedAndHowSubphase.WhoDied)
-        {
-            __result = killRecord.isDay
-                ? uiController.l10n("GUI_XDIED_TODAY").Replace("%name%", playerName)
-                : uiController.l10n("GUI_XDIED_LAST_NIGHT").Replace("%name%", playerName);
-        }
-        else if (entry.subphase == WhoDiedAndHowSubphase.Role)
-        {
-            var roleName = Utils.BuildRoleText(killRecord);
-            var key = Utils.GetHangingMessage(killRecord.playerRole, killRecord.playerFaction);
-            __result = uiController.l10n(key).Replace("%name%", playerName).Replace("%role%", roleName);
-        }
-        else
-        {
-            Debug.LogWarning($"Invalid SubPhase {entry.subphase} in WhoDiedDecoder");
-            __result = string.Empty;
-        }
-
+        Debug.LogWarning("Unable to encode invalid ChatLogWhoDiedEntry.");
+        __result = string.Empty;
         return false;
     }
 }
@@ -1447,22 +1447,22 @@ public static class WdahChatPatch
 [HarmonyPatch(typeof(WhoDiedRoleDecoder), nameof(WhoDiedRoleDecoder.Encode))]
 public static class WdahChatPatch2
 {
-    public static bool Prefix(ChatLogMessage chatLogMessage, UIController uiController, ref string __result)
+    public static bool Prefix(ChatLogMessage chatLogMessage, MentionPanel mentionPanel, GamePhase chatPhase, UIController uiController, List<HudChatStyle> chatStyles, ChatWindowType chatWindowType, ref string __result)
     {
-        if (chatLogMessage?.chatLogEntry is not ChatLogWhoDiedEntry { killRecord: not null } entry)
-        {
-            Debug.LogWarning("Unable to encode invalid ChatLogWhoDiedEntry.");
-            __result = string.Empty;
-            return false;
-        }
+        if (chatLogMessage?.chatLogEntry is ChatLogWhoDiedEntry entry && entry.killRecord != null)
+            {
+                var killRecord = entry.killRecord;
+                var playerName = Utils.BuildPlayerTag(killRecord);
+                var roleName = Utils.BuildRoleText(killRecord);
+                var key = Utils.GetHangingMessage(killRecord.playerRole, killRecord.playerFaction);
 
-        var killRecord = entry.killRecord;
-        var playerName = Utils.BuildPlayerTag(killRecord);
-        var roleName = Utils.BuildRoleText(killRecord);
-        var key = Utils.GetHangingMessage(killRecord.playerRole, killRecord.playerFaction);
+                __result = uiController.l10n(key).Replace("%name%", playerName).Replace("%role%", roleName);
 
-        __result = uiController.l10n(key).Replace("%name%", playerName).Replace("%role%", roleName);
+                return false;
+            }
 
+        Debug.LogWarning("Unable to encode invalid ChatLogWhoDiedEntry.");
+        __result = string.Empty;
         return false;
     }
 }
@@ -1470,40 +1470,42 @@ public static class WdahChatPatch2
 [HarmonyPatch(typeof(HudGameMessagePoolItem), nameof(HudGameMessagePoolItem.Validate))]
 public static class LeaveTownFactionPatch
 {
-    private static readonly List<HudGameMessagePoolItem> LeaveTownItems = [];
-
     public static void Postfix(HudGameMessagePoolItem __instance)
     {
-        if (__instance._chatLogMessage.chatLogEntry is ChatLogGameMessageEntry { messageId: GameFeedbackMessage.LEFT_TOWN })
-            LeaveTownItems.Add(__instance);
+        ChatLogGameMessageEntry chatLogGameMessageEntry = __instance._chatLogMessage.chatLogEntry as ChatLogGameMessageEntry;
+        if (chatLogGameMessageEntry.messageId == GameFeedbackMessage.LEFT_TOWN)
+            leaveTownItems.Add(__instance);
     }
-
     public static void FixLeaveTownMessages(KillRecord killRecord)
     {
-        foreach (var __instance in LeaveTownItems)
+        foreach (HudGameMessagePoolItem __instance in leaveTownItems)
         {
-            var chatLogGameMessageEntry = __instance._chatLogMessage.chatLogEntry as ChatLogGameMessageEntry;
-
+            ChatLogGameMessageEntry chatLogGameMessageEntry = __instance._chatLogMessage.chatLogEntry as ChatLogGameMessageEntry;
             if (killRecord.playerId != chatLogGameMessageEntry.playerNumber1)
                 continue;
-
-            var text = __instance.l10n(Constants.IsBTOS2() ? "BTOS_GAME_304" : "GAME_304");
+            string text = __instance.l10n(Constants.IsBTOS2() ? "BTOS_GAME_304" : "GAME_304");
             text = text.Replace("%name%", string.Format("[[@{0}]]", chatLogGameMessageEntry.playerNumber1 + 1));
-            text = text.Replace("%role%", string.Format("[[#{0},{1}]]", (int)killRecord.playerRole, (int)killRecord.playerFaction));
+            Tuple<Role, FactionType> tuple = new(killRecord.playerRole, killRecord.playerFaction);
+            text = text.Replace("%role%", string.Format("[[#{0},{1}]]", (int)tuple.Item1, (int)tuple.Item2));
             text = __instance.mentionPanel.mentionsProvider.DecodeText(text);
             __instance.textField.SetText(text);
-            var text2 = __instance.l10nStyle(text, "");
-
+            string style = __instance.l10nStyle(Constants.IsBTOS2() ? "BTOS_GAME_304" : "GAME_304", "");
+            string text2 = __instance.l10nStyle(text, "");
             if (!string.IsNullOrEmpty(text2))
+            {
                 __instance.SetChatStyle(text2);
+            }
             else
+            {
                 __instance.ChatColor = __instance._chatColor;
-
+            }
             __instance.SetBounds(text);
         }
 
-        LeaveTownItems.Clear();
+        leaveTownItems.Clear();
     }
+
+    public static List<HudGameMessagePoolItem> leaveTownItems = new();
 }
 
 [HarmonyPatch(typeof(HudGraveyardPanel), nameof(HudGraveyardPanel.CreateGraveyardItem))]
@@ -1519,12 +1521,22 @@ public static class LeaveTownFactionPatch2
 [HarmonyPatch(typeof(GameMessageDecoder), nameof(GameMessageDecoder.Encode))]
 public static class FactionSpecificPotionMasterResults
 {
-    private static readonly int[] BaseAllowedMessageIds = [5, 7, 13, 15, 16, 21, 28, 393, 394];
-    private static readonly int[] BTOS2AllowedMessageIds = [1010, 1012, 1018, 1020, 1022, 1027, 1030, 1072, 1090, 1091, 1099];
+    private static readonly HashSet<int> BaseAllowedMessageIds =
+    [
+        5, 7, 13, 15, 16, 21, 28, 393, 394
+    ];
+
+    private static readonly HashSet<int> BTOS2AllowedMessageIds =
+    [
+        1010, 1012, 1018, 1020, 1022, 1027, 1030, 1072, 1090, 1091, 1099
+    ];
 
     public static void Postfix(ChatLogMessage chatLogMessage, UIController uiController, ref string __result)
     {
-        if (chatLogMessage?.chatLogEntry is not ChatLogGameMessageEntry { gameMessageType :ChatLogGameMessageType.SPY } entry)
+        if (chatLogMessage?.chatLogEntry is not ChatLogGameMessageEntry entry)
+            return;
+
+        if (entry.gameMessageType == ChatLogGameMessageType.SPY)
             return;
 
         var id = (int)entry.messageId;
@@ -1535,28 +1547,30 @@ public static class FactionSpecificPotionMasterResults
             ? BTOS2AllowedMessageIds.Contains(id)
             : BaseAllowedMessageIds.Contains(id);
 
-        if ((!inRange && !inList) || entry.role1 == Role.NONE || entry.faction1 == FactionType.NONE)
-            return;
-
-        var newKey = Constants.IsBTOS2() ? $"FANCY_BTOS_REVEAL_{(int)entry.role1}_{(int)entry.faction1}" : $"FANCY_REVEAL_{(int)entry.role1}_{(int)entry.faction1}";
-
-        if (!uiController.l10nStringExists(newKey))
-            return;
-
-        __result = uiController.l10n(newKey);
-
-        if (entry.playerNumber1 >= 0)
+        if (inRange || inList)
         {
-            __result = __result.Replace("%number%", $"{entry.playerNumber1}");
-            __result = __result.Replace("%name%", $"[[@{entry.playerNumber1 + 1}]]");
+            if (entry.role1 != Role.NONE && entry.faction1 != FactionType.NONE)
+            {
+                var newKey = Constants.IsBTOS2() ? $"FANCY_BTOS_REVEAL_{(int)entry.role1}_{(int)entry.faction1}" : $"FANCY_REVEAL_{(int)entry.role1}_{(int)entry.faction1}";
+
+                if (uiController.l10nStringExists(newKey))
+                {
+                    __result = uiController.l10n(newKey);
+
+                    if (entry.playerNumber1 >= 0)
+                    {
+                        __result = __result.Replace("%number%", $"{entry.playerNumber1}");
+                        __result = __result.Replace("%name%", $"[[@{entry.playerNumber1 + 1}]]");
+                    }
+                    if (entry.role1 != Role.NONE)
+                    {
+                        if (entry.faction1 != FactionType.NONE)
+                            __result = __result.Replace("%role%", $"[[#{(int)entry.role1},{(int)entry.faction1}]]");
+                        else
+                            __result = __result.Replace("%role%", $"[[#{(int)entry.role1}]]");
+                    }
+                }
+            }
         }
-
-        if (entry.role1 == Role.NONE)
-            return;
-
-        if (entry.faction1 != FactionType.NONE)
-            __result = __result.Replace("%role%", $"[[#{(int)entry.role1},{(int)entry.faction1}]]");
-        else
-            __result = __result.Replace("%role%", $"[[#{(int)entry.role1}]]");
     }
 }

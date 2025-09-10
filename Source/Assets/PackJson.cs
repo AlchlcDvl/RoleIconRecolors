@@ -1,9 +1,8 @@
-using System.Runtime.Serialization;
 using Newtonsoft.Json;
 
 namespace FancyUI.Assets;
 
-public sealed class PackJson
+public class PackJson
 {
     [JsonProperty("name")]
     public string Name { get; set; }
@@ -30,8 +29,7 @@ public sealed class PackJson
 
     public string ApiLink() => $"https://api.github.com/repos/{RepoOwner}/{RepoName}/zipball/{Branch}";
 
-    [OnDeserialized]
-    public void SetDefaults(StreamingContext _)
+    public void SetDefaults()
     {
         Branch ??= "main";
         RepoOwner ??= "AlchlcDvl";

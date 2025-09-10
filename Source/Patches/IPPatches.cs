@@ -143,7 +143,7 @@ public static class PatchRoleCards
         if (icon1)
             icon1.sprite = attack.IsValid() ? attack : FancyAssetManager.Attack;
 
-        var eth = __instance.CurrentFaction is > Btos2Faction.Hawks and < Btos2Faction.Pandora and not Btos2Faction.Inquisitor;
+        var eth = __instance.CurrentFaction > Btos2Faction.Hawks && __instance.CurrentFaction < Btos2Faction.Pandora && __instance.CurrentFaction != Btos2Faction.Inquisitor;
         var defenseAmount = __instance.defenseGlow.fillAmount * 3.0303030303f;
         var defense = GetSprite($"Defense{Utils.GetLevel(eth ? 4 : (int)defenseAmount, false)}");
         var icon2 = __instance.transform.Find("DefenseIcon").Find("Icon").GetComponent<Image>();
@@ -937,7 +937,13 @@ public static class MentionsProviderPatches
         if (!Constants.EnableIcons())
             return true;
 
-        if (!int.TryParse(roleMatch.Groups["R"].Value, out var result) || !int.TryParse(roleMatch.Groups["F"].Value, out var result2))
+        if (!int.TryParse(roleMatch.Groups["R"].Value, out var result))
+        {
+            __result = encodedText;
+            return false;
+        }
+
+        if (!int.TryParse(roleMatch.Groups["F"].Value, out var result2))
         {
             __result = encodedText;
             return false;
@@ -963,7 +969,9 @@ public static class MentionsProviderPatches
         if (!__instance.MentionInfos.Contains(item))
             __instance.MentionInfos.Add(item);
 
-        __result = encodedText.ReplaceIcons().Replace(mention, text3);
+        encodedText = encodedText.ReplaceIcons();
+
+        __result = encodedText.Replace(mention, text3);
         return false;
     }
 
@@ -979,59 +987,54 @@ public static class MentionsProviderPatches
             __result = __result.Replace("RoleIcons\"", "RoleIcons (Regular)\"");
     }
 
-    [HarmonyPatch(nameof(MentionsProvider.Start))] // Achievement  mentions
+    [HarmonyPatch(nameof(MentionsProvider.Start))] // Achievement and faction mentions
     // ReSharper disable once InconsistentNaming
     public static void Prefix(ref HashSet<char> ___ExpansionTokens)
     {
         ___ExpansionTokens.Add('~');
-        // ___ExpansionTokens.Add('$');
+        ___ExpansionTokens.Add('$');
     }
 
-    // [HarmonyPatch(nameof(MentionsProvider.ExpandCandidate), typeof(MentionInfo))]
-    // public static bool Prefix(MentionsProvider __instance, MentionInfo candidate)
-    // {
-    //     if (candidate.mentionInfoType != (MentionInfo.MentionInfoType)10)
-    //         return true;
+    [HarmonyPatch(nameof(MentionsProvider.ExpandCandidate),
+    [
+        typeof(MentionInfo)
+    ])]
+    public static bool Prefix(MentionsProvider __instance, ref MentionInfo candidate)
+    {
+        if (candidate.mentionInfoType == (MentionInfo.MentionInfoType)10)
+        {
+            string fullText = __instance._matchInfo.fullText;
+            string trimmed = __instance._matchInfo.stringPosition == fullText.Length ? fullText : fullText.Remove(__instance._matchInfo.stringPosition);
+            Match match = FactionalRoleRegex.Match(trimmed);
+            if (!match.Success)
+            {
+                __instance._candidates.Clear();
+                return false;
+            }
+            string value = match.Value + ">";
+            string encodedValue = __instance.EncodeText(value);
+            Match encodedMatch = EncodedRoleRegex.Match(encodedValue);
+            if (!encodedMatch.Success)
+            {
+                __instance._candidates.Clear();
+                return false;
+            }
+            encodedValue = encodedMatch.Value + "," + candidate.encodedText + "]]";
+            string finalValue = __instance.DecodeText(encodedValue);
+            if (!__instance._matchInfo.endsWithSubmissionCharacter && !__instance._matchInfo.followedBySubmissionCharacter && !__instance._matchInfo.endsWithPunctuationCharacter && !__instance._matchInfo.followedByPunctuationCharacter)
+                finalValue += " ";
+            __instance._matchInfo.fullText = fullText.Replace(value + __instance._matchInfo.matchString, finalValue);
+            __instance._matchInfo.stringPosition = __instance._matchInfo.stringPosition
+                                                   + (finalValue.Length - (value + __instance._matchInfo.matchString).Length)
+                                                   + ((__instance._matchInfo.followedBySubmissionCharacter || __instance._matchInfo.endsWithSubmissionCharacter || __instance._matchInfo.followedByPunctuationCharacter || __instance._matchInfo.endsWithPunctuationCharacter) ? 1 : 0);
+            __instance._candidates.Clear();
+            return false;
+        }
+        return true;
+    }
 
-    //     var fullText = __instance._matchInfo.fullText;
-    //     var trimmed = __instance._matchInfo.stringPosition == fullText.Length ? fullText : fullText.Remove(__instance._matchInfo.stringPosition);
-    //     var match = FactionalRoleRegex.Match(trimmed);
-
-    //     if (!match.Success)
-    //     {
-    //         __instance._candidates.Clear();
-    //         return false;
-    //     }
-
-    //     var value = match.Value + ">";
-    //     var encodedValue = __instance.EncodeText(value);
-    //     var encodedMatch = EncodedRoleRegex.Match(encodedValue);
-
-    //     if (!encodedMatch.Success)
-    //     {
-    //         __instance._candidates.Clear();
-    //         return false;
-    //     }
-
-    //     encodedValue = encodedMatch.Value + "," + candidate.encodedText + "]]";
-    //     var finalValue = __instance.DecodeText(encodedValue);
-
-    //     if (!__instance._matchInfo.endsWithSubmissionCharacter && !__instance._matchInfo.followedBySubmissionCharacter && !__instance._matchInfo.endsWithPunctuationCharacter &&
-    //         !__instance._matchInfo.followedByPunctuationCharacter)
-    //     {
-    //         finalValue += " ";
-    //     }
-
-    //     __instance._matchInfo.fullText = fullText.Replace(value + __instance._matchInfo.matchString, finalValue);
-    //     __instance._matchInfo.stringPosition = __instance._matchInfo.stringPosition
-    //                                             + (finalValue.Length - (value + __instance._matchInfo.matchString).Length)
-    //                                             + ((__instance._matchInfo.followedBySubmissionCharacter || __instance._matchInfo.endsWithSubmissionCharacter || __instance._matchInfo.followedByPunctuationCharacter || __instance._matchInfo.endsWithPunctuationCharacter) ? 1 : 0);
-    //     __instance._candidates.Clear();
-    //     return false;
-    // }
-
-    // public static Regex FactionalRoleRegex = new(@"<style=(Mention|MentionMono)>(.*?)</style(?=>\$)", RegexOptions.RightToLeft);
-    // public static Regex EncodedRoleRegex = new(@"\[\[#\d+");
+    public static Regex FactionalRoleRegex = new Regex(@"<style=(Mention|MentionMono)>(.*?)</style(?=>\$)", RegexOptions.RightToLeft);
+    public static Regex EncodedRoleRegex = new Regex(@"\[\[#\d+");
 }
 
 // This whole class is a mess but DO NOT TOUCH
@@ -1111,8 +1114,7 @@ public static class MakeProperFactionChecksInWdah2
 {
     public static bool Prefix(WhoDiedAndHowPanel __instance, float phaseTime)
     {
-        if (!Constants.EnableIcons())
-            return true;
+        if (!Constants.EnableIcons()) return true;
 
         Debug.Log($"HandleSubphaseWhoDied phaseTime = {phaseTime}");
 
@@ -1193,23 +1195,25 @@ public static class PatchNecroRetMenu
 }
 
 [HarmonyPatch(typeof(SpecialAbilityPopupNecromancerRetributionistListItem), nameof(SpecialAbilityPopupNecromancerRetributionistListItem.SetData))]
+[HarmonyPatch(typeof(SpecialAbilityPopupNecromancerRetributionistListItem), nameof(SpecialAbilityPopupNecromancerRetributionistListItem.SetData))]
 public static class PatchNecroRetMenuItem
 {
-    public static void Postfix(SpecialAbilityPopupNecromancerRetributionistListItem __instance, int position)
+    public static void Postfix(SpecialAbilityPopupNecromancerRetributionistListItem __instance, Role role)
     {
-        if (!Constants.EnableIcons() || !Utils.GetRoleAndFaction(position, out var tuple))
+        if (!Constants.EnableIcons())
             return;
 
-        var role = Utils.RoleName(tuple.Item1);
-        var faction = Utils.FactionName(tuple.Item2);
-        var sprite = GetSprite(role, faction);
-        var myrole = Pepper.GetMyRole();
-        var myfaction = Utils.FactionName(Pepper.GetMyFaction());
+        var corpse = Utils.RoleName(role);
+        var faction = Utils.FactionName(role.GetFaction());
+        var sprite = GetSprite(corpse, faction);
 
         if (sprite.IsValid() && __instance.choiceSprite)
             __instance.choiceSprite.sprite = sprite;
 
-        var sprite2 = GetSprite($"{myrole}_Ability_3", myfaction, false);
+        var sprite2 = GetSprite($"{corpse}_{(corpse is "Deputy" or "Conjurer" ? "Special" : "Ability")}", faction, false);
+
+        if (!sprite2.IsValid())
+            sprite2 = GetSprite($"{corpse}_Ability_1", faction, false);
 
         if (sprite2.IsValid() && __instance.choice2Sprite)
             __instance.choice2Sprite.sprite = sprite2;

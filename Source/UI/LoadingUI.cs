@@ -1,6 +1,6 @@
 namespace FancyUI.UI;
 
-public sealed class LoadingUI : UIController
+public class LoadingUI : UIController
 {
     private Transform Cog { get; set; }
 

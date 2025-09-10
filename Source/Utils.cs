@@ -8,16 +8,17 @@ namespace FancyUI;
 
 public static class Utils
 {
-    // Note: This may need to be tweaked to account for role cards being different in game (e.g. Admirer, Vigilante, Werewolf)
+	// Note: This may need to be tweaked to account for role cards being different in game (e.g. Admirer, Vigilante, Werewolf)
     private static readonly string[] VanillaSkippableNames = ["Baker_Ability", "Pirate_Ability_1", "Pirate_Ability_2", "Socialite_Ability"];
-    private static readonly string[] BTOS2SkippableNames = [ "Baker_Ability_1", "Baker_Ability_2", "Jackal_Ability", "Auditor_Ability_1", "Auditor_Ability_2", "Inquisitor_Ability_1",
-        "Inquisitor_Ability_2", "Banshee_Ability", "Judge_Ability", "Warlock_Ability", "Wildling_Ability_2", "Starspawn_Ability", "Necromancer_Ability_2" ];
-    private static readonly string[] CommonSkippableNames = [ "Admirer_Ability_1", "Admirer_Ability_2", "Amnesiac_Ability", "Arsonist_Ability", "Attributes", "Berserker_Ability",
-        "Bodyguard_Ability", "Catalyst_Ability", "Cleric_Ability", "Coroner_Ability", "Crusader_Ability", "CursedSoul_Ability", "Death_Ability", "Dreamweaver_Ability", "Enchanter_Ability",
-        "Famine_Ability", "HexMaster_Ability", "Illusionist_Ability", "Investigator_Ability", "Jailor_Ability", "Jester_Ability", "Jinx_Ability", "Lookout_Ability", "Medusa_Ability",
-        "Monarch_Ability", "Seer_Ability_1", "Pestilence_Ability", "Plaguebearer_Ability", "Poisoner_Ability_1", "Poisoner_Ability_2", "PotionMaster_Ability_1", "PotionMaster_Ability_2", "Psychic_Ability", "War_Ability_1", "Werewolf_Ability_2", "Seer_Ability_2", "SerialKiller_Ability", "Sheriff_Ability", "Shroud_Ability", "SoulCollector_Ability", "Trickster_Ability_1",
-        "Trickster_Ability_2", "Spy_Ability", "Wildling_Ability", "TavernKeeper_Ability", "Tracker_Ability", "Trapper_Ability", "Vampire_Ability_1", "Vampire_Ability_2", "Vigilante_Ability",
-        "VoodooMaster_Ability", "War_Ability_2", "Witch_Ability_1", "Witch_Ability_2", "Werewolf_Ability_1" ];
+    private static readonly string[] BTOS2SkippableNames = [ "Baker_Ability_1", "Baker_Ability_2", "Jackal_Ability", "Auditor_Ability_1", "Auditor_Ability_2", "Inquisitor_Ability_1", "Inquisitor_Ability_2", "Banshee_Ability", "Judge_Ability",
+        "Warlock_Ability", "Wildling_Ability_2", "Starspawn_Ability", "Necromancer_Ability_2" ];
+    private static readonly string[] CommonSkippableNames = [ "Admirer_Ability_1", "Admirer_Ability_2", "Amnesiac_Ability", "Arsonist_Ability", "Attributes", "Berserker_Ability", "Bodyguard_Ability", "Catalyst_Ability",
+        "Cleric_Ability", "Coroner_Ability", "Crusader_Ability", "CursedSoul_Ability", "Death_Ability", "Dreamweaver_Ability", "Enchanter_Ability", "Famine_Ability", "HexMaster_Ability",
+        "Illusionist_Ability", "Investigator_Ability", "Jailor_Ability", "Jester_Ability", "Jinx_Ability", "Lookout_Ability", "Medusa_Ability", "Monarch_Ability", "Seer_Ability_1",
+        "Pestilence_Ability", "Plaguebearer_Ability", "Poisoner_Ability_1", "Poisoner_Ability_2", "PotionMaster_Ability_1", "PotionMaster_Ability_2", "Psychic_Ability", "War_Ability_1", "Werewolf_Ability_2",
+        "Seer_Ability_2", "SerialKiller_Ability", "Sheriff_Ability", "Shroud_Ability", "SoulCollector_Ability", "Trickster_Ability_1", "Trickster_Ability_2", "Spy_Ability", "Wildling_Ability",
+        "TavernKeeper_Ability", "Tracker_Ability", "Trapper_Ability", "Vampire_Ability_1", "Vampire_Ability_2", "Vigilante_Ability", "VoodooMaster_Ability", "War_Ability_2", "Witch_Ability_1", "Witch_Ability_2",
+        "Werewolf_Ability_1" ];
 
     private static readonly Dictionary<GameModType, (Dictionary<string, string>, Dictionary<string, int>)> RoleStuff = [];
 
@@ -134,11 +135,11 @@ public static class Utils
         Btos2Role.Any => "Any",
         Btos2Role.TownExecutive => "TownExecutive",
         Btos2Role.TownGovernment => "TownGovernment",
-        Btos2Role.CovenTownTraitor => "CovenTT",
-        Btos2Role.ApocTownTraitor => "ApocTT",
+        Btos2Role.CovenTownTraitor => "CovenTownTraitor",
+        Btos2Role.ApocTownTraitor => "ApocTownTraitor",
         Btos2Role.PerfectTown => "PerfectTown",
         Btos2Role.GhostTown => "GhostTown",
-        Btos2Role.Vip => "TownVIP",
+        Btos2Role.Vip => "VIP",
         Btos2Role.SlowMode => "SlowMode",
         Btos2Role.FastMode => "FastMode",
         Btos2Role.AnonVoting => "AnonVoting",
@@ -256,7 +257,7 @@ public static class Utils
         Role.TOWN_TRAITOR => "TownTraitor",
         Role.NO_TOWN_HANGED => "PerfectTown",
         Role.GHOST_TOWN => "GhostTown",
-        Role.VIP => "TownVIP",
+        Role.VIP => "VIP",
         Role.SLOW_MODE => "SlowMode",
         Role.FAST_MODE => "FastMode",
         Role.ANONYMOUS_VOTES => "AnonVoting",
@@ -459,7 +460,6 @@ public static class Utils
         EffectType.REVEALED_BY_PMWITCH => "Illuminated",
         EffectType.BESTOWED or (EffectType)111 => "Bestowed",
         EffectType.SOVEREIGN => "Sovereign",
-        EffectType.STONED => "Petrified",
 
         // BTOS2
         (EffectType)100 => "Recruit",
@@ -596,8 +596,8 @@ public static class Utils
 
         // Vanilla specific role checks
         ( > 53 and < 57, _, GameModType.Vanilla) => FactionType.TOWN,
-        (_, Role.PILGRIM or Role.CATALYST, GameModType.Vanilla) => FactionType.TOWN,
-        (_, Role.COVENITE or Role.CULTIST, GameModType.Vanilla) => FactionType.COVEN,
+        ( _, Role.PILGRIM or Role.CATALYST, GameModType.Vanilla) => FactionType.TOWN,
+        ( _, Role.COVENITE or Role.CULTIST, GameModType.Vanilla) => FactionType.COVEN,
 
         // Default case
         _ => FactionType.NONE
@@ -746,7 +746,6 @@ public static class Utils
 
             return text2;
         }
-
         return "<color=#FFFFFFFF><gradient=\"" + Gradients.GetVerticalGradientKey(gradient) + "\">" + text + "</gradient></color>";
     }
 
@@ -818,21 +817,16 @@ public static class Utils
         return roleName;
     }
 
-    public static Color GetFactionStartingColor(FactionType faction)
-    {
-        var name = Utils.GetFactionKey(faction);
-
-        return Fancy.Colors[name].Start.ToColor();
-    }
+    public static Color GetFactionStartingColor(FactionType faction) => Fancy.Colors[FactionName(faction, stoned: true).ToUpper()].Start.ToColor();
 
     public static Color GetFactionEndingColor(FactionType faction)
     {
-        var name = Utils.GetFactionKey(faction);
+        var name = FactionName(faction, stoned: true);
 
-        return name == "STONED_HIDDEN"
-            ? Fancy.Colors["STONED_HIDDEN"].Start.ToColor()
-            : Fancy.Colors[name].End.ToColor();
+        // Explicit fallback to start color for STONED_HIDDEN
+        return name == "Stoned_Hidden" ? Fancy.Colors["STONED_HIDDEN"].Start.ToColor() : Fancy.Colors[name.ToUpper()].End.ToColor();
     }
+
     public static string GetString(string key) => Service.Home.LocalizationService.GetLocalizedString(key);
 
     public static string RemoveVanillaGradientStyleTags(string input)
@@ -989,9 +983,10 @@ public static class Utils
 
     public static string BuildHiddenRoleTag(KillRecord killRecord)
     {
-        if (killRecord.hiddenPlayerRole is not Role.NONE and not Role.HIDDEN)
+        if (killRecord.hiddenPlayerRole != Role.NONE && killRecord.hiddenPlayerRole != Role.HIDDEN)
+        {
             return $"[[#{(int)killRecord.hiddenPlayerRole},{(int)killRecord.hiddenPlayerFaction}]]";
-
+        }
         return null;
     }
 
@@ -999,24 +994,8 @@ public static class Utils
     {
         var text = $"[[#{(int)killRecord.playerRole},{(int)killRecord.playerFaction}]]";
         var hidden = BuildHiddenRoleTag(killRecord);
-
         if (hidden != null)
             text += $" ({hidden})";
-
         return text;
-    }
-
-    public static string GetFactionKey(FactionType faction)
-    {
-        return faction == FactionType.CURSED_SOUL && !Constants.IsBTOS2()
-            ? "WANDERINGSOULS"
-            : FactionName(faction, stoned: true).ToUpper();
-    }
-
-    public static string GetFactionTestingKey(FactionType faction)
-    {
-        return faction == FactionType.CURSED_SOUL && SettingsAndTestingUI.Instance?.IsBTOS2 == false
-            ? "WANDERINGSOULS"
-            : FactionName(faction, stoned: true).ToUpper();
     }
 }

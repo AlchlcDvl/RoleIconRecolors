@@ -1,6 +1,6 @@
 // namespace FancyUI.Assets.SilhouetteSwapper;
 //
-// public sealed class SilhouetteAssets(string name)
+// public class SilhouetteAssets(string name)
 // {
 //     private string Name { get; } = name;
 //     public int Count { get; private set; }

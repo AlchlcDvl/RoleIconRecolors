@@ -24,6 +24,8 @@ public static class FancyAssetManager
     public static TMP_SpriteAsset BTOS21 { get; private set; }
     public static TMP_SpriteAsset BTOS22 { get; private set; }
 
+    public static Material Grayscale { get; set; }
+
     public static Gif LoadingGif { get; set; }
     public static Gif Flame { get; set; }
     public static SilhouetteAnimation Loading { get; set; }
@@ -96,7 +98,8 @@ public static class FancyAssetManager
                 if (!sprite.IsValid())
                     sprite = pack.GetSprite(name, allowEe, "Factionless");
             }
-
+            sprite.texture.anisoLevel = 4;
+            sprite.texture.mipMapBias = -2;
             return sprite ?? Blank;
         }
         catch (Exception e)
@@ -297,7 +300,7 @@ public static class FancyAssetManager
                     Fancy.Instance.Warning($"NO VANILLA ICON FOR {name}?!");
             }
 
-            Vanilla1 = BuildGlyphs(sprites, "RoleIcons", index.Item1, 384f, 384f, 0f, 300f, 390f);
+            Vanilla1 = FancyAssetManager.BuildGlyphs(sprites, "RoleIcons", index.Item1, 384f, 384f, 0f, 300f, 390f);
             Utils.DumpSprite(Vanilla1.spriteSheet as Texture2D, "RoleIcons_Modified", Path.Combine(IPPath, "Vanilla"));
         }
         catch (Exception e)
@@ -326,7 +329,7 @@ public static class FancyAssetManager
                 dict.Add($"PlayerNumbers_{i}", $"PlayerNumbers_{i}");
             }
 
-            Vanilla2 = BuildGlyphs(sprites, "PlayerNumbers", dict, 128f, 128f, 0f, 105f, 150f);
+            Vanilla2 = FancyAssetManager.BuildGlyphs(sprites, "PlayerNumbers", dict, 128f, 128f, 0f, 105f, 150f);
             Utils.DumpSprite(Vanilla2.spriteSheet as Texture2D, "PlayerNumbers_Modified", Path.Combine(IPPath, "Vanilla"));
         }
         catch (Exception e)
@@ -406,7 +409,7 @@ public static class FancyAssetManager
                     Fancy.Instance.Warning($"NO BTOS2 ICON FOR {name}?!");
             }
 
-            BTOS22 = BuildGlyphs(sprites, "BTOSRoleIcons", index.Item1, 256f, 256f, 0f, 224f, 256f);
+            BTOS22 = FancyAssetManager.BuildGlyphs(sprites, "BTOSRoleIcons", index.Item1, 256f, 256f, 0f, 224f, 256f);
             Utils.DumpSprite(BTOS22.spriteSheet as Texture2D, "BTOS2RoleIcons_Modified", Path.Combine(IPPath, "BTOS2"));
         }
         catch (Exception e)
@@ -415,34 +418,31 @@ public static class FancyAssetManager
             BTOS22 = null;
         }
     }
-
-    public static TMP_SpriteAsset BuildGlyphs(List<Sprite> sprites, string spriteAssetName, Dictionary<string, string> index, float metricsWidth, float metricsHeight, float metricsHBX,
-        float metricsHBY, float metricsHA)
+    public static TMP_SpriteAsset BuildGlyphs(IEnumerable<Sprite> sprites, string spriteAssetName, Dictionary<string, string> index, float metricsWidth, float metricsHeight, float metricsHBX, float metricsHBY, float metricsHA)
     {
-        var array = sprites.Select(x => x.texture).ToArray();
-        var tMP_SpriteAsset = ScriptableObject.CreateInstance<TMP_SpriteAsset>();
-        var texture2D = new Texture2D(4096, 4096, TextureFormat.RGBA32, false)
+        Texture2D[] array = sprites.Select((Sprite x) => x.texture).ToArray();
+        TMP_SpriteAsset tMP_SpriteAsset = ScriptableObject.CreateInstance<TMP_SpriteAsset>();
+        Texture2D texture2D = new Texture2D(4096, 4096, TextureFormat.RGBA32, false)
         {
             name = spriteAssetName,
             filterMode = FilterMode.Trilinear,
             anisoLevel = 4,
             mipMapBias = -2
         };
-        var array2 = texture2D.PackTextures(array, 2, 4096);
-
-        for (var i = 0; i < array2.Length; i++)
+        Rect[] array2 = texture2D.PackTextures(array, 2, 4096);
+        for (int i = 0; i < array2.Length; i++)
         {
-            var rect = array2[i];
-            var tMP_SpriteGlyph = new TMP_SpriteGlyph
+            Rect rect = array2[i];
+            TMP_SpriteGlyph tMP_SpriteGlyph = new TMP_SpriteGlyph
             {
-                glyphRect = new()
+                glyphRect = new GlyphRect
                 {
-                    x = (int)(rect.x * texture2D.width),
-                    y = (int)(rect.y * texture2D.height),
-                    width = (int)(rect.width * texture2D.width),
-                    height = (int)(rect.height * texture2D.height)
+                    x = (int)(rect.x * (float)texture2D.width),
+                    y = (int)(rect.y * (float)texture2D.height),
+                    width = (int)(rect.width * (float)texture2D.width),
+                    height = (int)(rect.height * (float)texture2D.height)
                 },
-                metrics = new()
+                metrics = new GlyphMetrics
                 {
                     width = metricsWidth,
                     height = metricsHeight,
@@ -451,11 +451,11 @@ public static class FancyAssetManager
                     horizontalAdvance = metricsHA
                 },
                 index = (uint)i,
-                sprite = sprites[i],
+                sprite = sprites.ElementAtOrDefault(i),
                 scale = 1f
             };
             tMP_SpriteAsset.spriteGlyphTable.Add(tMP_SpriteGlyph);
-            tMP_SpriteAsset.spriteCharacterTable.Add(new(0u, tMP_SpriteAsset, tMP_SpriteGlyph)
+            tMP_SpriteAsset.spriteCharacterTable.Add(new TMP_SpriteCharacter(0u, tMP_SpriteAsset, tMP_SpriteGlyph)
             {
                 name = index[tMP_SpriteGlyph.sprite.name],
                 glyphIndex = (uint)i,
@@ -471,11 +471,5 @@ public static class FancyAssetManager
         tMP_SpriteAsset.hashCode = TMP_TextUtilities.GetSimpleHashCode(tMP_SpriteAsset.name);
         tMP_SpriteAsset.material.SetTexture(ShaderUtilities.ID_MainTex, tMP_SpriteAsset.spriteSheet);
         return tMP_SpriteAsset.DontDestroy();
-    }
-
-    public static void ImproveSprite(this Sprite sprite)
-    {
-        sprite.texture.anisoLevel = 4;
-        sprite.texture.mipMapBias = -2;
     }
 }

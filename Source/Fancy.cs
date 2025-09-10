@@ -3,7 +3,7 @@ using NewModLoading;
 
 namespace FancyUI;
 
-public sealed class Fancy : BaseMod<Fancy>
+public class Fancy : BaseMod<Fancy>
 {
     public override string Name => "Fancy UI";
     public override string HarmonyId => "alchlcsystm.fancy.ui";
@@ -56,22 +56,22 @@ public sealed class Fancy : BaseMod<Fancy>
         FancyAssetManager.Defense = Assets.GetSprite("Defense");
         Ethereal = Assets.GetSprite("Ethereal");
         MenuButton.FancyMenu.Icon = Assets.GetSprite("Thumbnail");
+        FancyAssetManager.Attack.texture.anisoLevel = 4;
+        FancyAssetManager.Defense.texture.anisoLevel = 4;
+        Ethereal.texture.anisoLevel = 4;
+        FancyAssetManager.Attack.texture.mipMapBias = -2;
+        FancyAssetManager.Defense.texture.mipMapBias = -2;
+        Ethereal.texture.mipMapBias = -2;
 
-        Blank.ImproveSprite();
-        FancyAssetManager.Attack.ImproveSprite();
-        FancyAssetManager.Defense.ImproveSprite();
-        Ethereal.ImproveSprite();
-        MenuButton.FancyMenu.Icon.ImproveSprite();
-
-        var grayscale = Assets.Get<Shader>("GrayscaleShader");
+        Grayscale = Assets.GetMaterial("GrayscaleMaterial");
 
         var normalMats = Constants.AllMaterials[true] = [];
         var guideMats = Constants.AllMaterials[false] = [];
 
         foreach (var type in GeneralUtils.GetEnumValues<ColorType>()!.Where(x => x != ColorType.All))
         {
-            normalMats[type] = new(grayscale);
-            guideMats[type] = new(grayscale);
+            normalMats[type] = new(Grayscale);
+            guideMats[type] = new(Grayscale);
         }
 
         Utils.UpdateMaterials();
@@ -142,7 +142,6 @@ public sealed class Fancy : BaseMod<Fancy>
     public static FloatOption GrayscaleAmount;
 
     public static FloatOption DeadChatDesaturation;
-    public static ToggleOption TallRoleDeck;
 
     public static FloatOption PlayerNumber;
 
@@ -179,8 +178,7 @@ public sealed class Fancy : BaseMod<Fancy>
         { "COVEN", ("#B545FF", "#B545FF", "#B545FF", null, "#B545FF") },
         { "APOCALYPSE", ("#FF004E", "#FF004E", "#FF004E", null, "#FF004E") },
         { "VAMPIRE", ("#ff0000", "#6A1B1B", "#6A1B1B", null, "#6A1B1B") },
-        { "CURSEDSOUL", ("#B54FFF", "#4FFF9F", "#4FFF9F", null, "#4FFF9F") },
-        { "WANDERINGSOULS", ("#B24CFF", "#FFB24C", "#FFB24C", null, "#FFB24C") },
+        { "CURSEDSOUL", ("#4FFF9F", "#B54FFF", "#4FFF9F", null, "#4FFF9F") },
         { "PANDORA", ("#B545FF", "#FF004E", "#FF004E", null, "#FF004E") },
         { "COMPLIANCE", ("#2D44B5", "#FC9F32", "#FC9F32", "#AE1B1E", null) },
         { "SERIALKILLER", ("#1D4DFC", "#1D4DFC", "#1D4DFC", null, null) },
@@ -414,7 +412,6 @@ public sealed class Fancy : BaseMod<Fancy>
         MentionEnd = new("MENTION_END", "#FFCE3B", PackType.MiscRoleCustomisation, setActive: () => !Constants.BetterMentionsExists());
         // ColorMentionsWithFaction = new("FACTIONAL_PLAYER_MENTIONS", true, PackType.MiscRoleCustomisation, setActive: () => !Constants.BetterMentionsExists());
 
-        TallRoleDeck = new("TALL_ROLE_DECK", false, PackType.Testing);
         PlayerNumber = new("PLAYER_NUMBER", 0, PackType.Testing, 0, 15, true, Constants.CustomNumbers);
         ChatBackgroundOpacity = new("CHAT_BACKGROUND", 80, PackType.Testing, 0, 100, true);
         DumpSpriteSheets = new("DUMP_SHEETS", false, PackType.Testing);
@@ -451,7 +448,7 @@ public sealed class Fancy : BaseMod<Fancy>
 
             ColorOptions[$"{key}_START"] = new($"{key}_START", start, PackType.MiscRoleCustomisation, SetActive, uponChanged: ReloadColors);
 
-            if (middle != null && !VerticalGradients.Value)
+            if (middle != null)
                 ColorOptions[$"{key}_MIDDLE"] = new($"{key}_MIDDLE", middle, PackType.MiscRoleCustomisation, SetActive, uponChanged: ReloadColors);
 
             if (end != null)
@@ -463,22 +460,7 @@ public sealed class Fancy : BaseMod<Fancy>
             if (lethal != null)
                 ColorOptions[$"{key}_LETHAL"] = new($"{key}_LETHAL", lethal, PackType.MiscRoleCustomisation, SetActive, uponChanged: ReloadColors);
 
-            bool SetActive()
-            {
-                var isBTOS2 = SettingsAndTestingUI.Instance?.IsBTOS2 == true;
-                var activeKey = Utils.FactionName(SelectTestingFaction.Value, true, stoned: true).ToUpper();
-
-                if (key == "WANDERINGSOULS")
-                    return !isBTOS2 && activeKey == "CURSEDSOUL";
-
-                if (key == "CURSEDSOUL")
-                    return isBTOS2 && activeKey == "CURSEDSOUL";
-
-                if (key == "LOVERS")
-                    return isBTOS2;
-
-                return key == activeKey;
-            }
+            bool SetActive() => Utils.FactionName(SelectTestingFaction.Value, true, stoned: true).ToUpper() == key;
         }
 
         ReloadColors();
@@ -503,8 +485,7 @@ public sealed class Fancy : BaseMod<Fancy>
         foreach (var faction in BTOS2Factions.Where(x => x is not (FactionType.NONE or (> FactionType.APOCALYPSE and < FactionType.VAMPIRE) or FactionType.CURSED_SOUL or FactionType.UNKNOWN or (>
             Btos2Faction.Hawks and < Btos2Faction.Pandora))))
         {
-            if (CinematicMap.ContainsKey(faction))
-                continue;
+            if (CinematicMap.ContainsKey(faction)) continue;
 
             CinematicMap[faction] = new(
                 $"{Utils.FactionName(faction, GameModType.BTOS2, false).ToUpper()}_CINEMATIC",

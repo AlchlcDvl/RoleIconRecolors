@@ -4,10 +4,10 @@ namespace FancyUI;
 
 public static class Gradients
 {
-    public static Gradient GetChangedGradient(this FactionType faction, Role role, bool isTesting = false)
+    public static Gradient GetChangedGradient(this FactionType faction, Role role)
     {
         var mod = Utils.GetGameType();
-        var middleKey = isTesting ? Utils.GetFactionTestingKey(faction) : Utils.GetFactionKey(faction);
+        var middleKey = Utils.FactionName(faction, mod, stoned: true).ToUpper();
         var baseKey = Utils.FactionName(role.GetFactionType(mod), mod, stoned: true).ToUpper();
         var startKey = faction == Btos2Faction.Jackal ? "JACKAL" : middleKey;
         string end;
@@ -54,24 +54,22 @@ public static class Gradients
 
     public static string GetVerticalGradientKey(Gradient gradient)
     {
-        if (VerticalGradients.TryGetValue(gradient, out var value))
-            return value;
-
-        var name = "FancyGradient" + (VerticalGradients.Count + 1);
+        foreach (var kvp in verticalGradients)
+            if (kvp.Key.Equals(gradient))
+                return kvp.Value;
+        var name = "FancyGradient" + (verticalGradients.Count + 1);
         var hashCode = TMP_TextUtilities.GetHashCode(name);
         var color1 = gradient.Evaluate(0f);
         var color2 = gradient.Evaluate(1f);
-        var colorGradient = ScriptableObject.CreateInstance<TMP_ColorGradient>();
-        colorGradient.name = name;
-        colorGradient.colorMode = ColorMode.VerticalGradient;
-        colorGradient.topLeft = color1;
-        colorGradient.topRight = color1;
-        colorGradient.bottomLeft = color2;
-        colorGradient.bottomRight = color2;
+        TMP_ColorGradient colorGradient = new(color1, color1, color2, color2)
+        {
+            name = name,
+            colorMode = ColorMode.VerticalGradient
+        };
         MaterialReferenceManager.AddColorGradientPreset(hashCode, colorGradient);
-        VerticalGradients.Add(gradient, name);
+        verticalGradients.Add(gradient, name);
         return name;
     }
 
-    private static readonly Dictionary<Gradient, string> VerticalGradients = [];
+    public static Dictionary<Gradient, string> verticalGradients = [];
 }
