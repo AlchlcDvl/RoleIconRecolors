@@ -1198,23 +1198,22 @@ public static class PatchNecroRetMenu
 [HarmonyPatch(typeof(SpecialAbilityPopupNecromancerRetributionistListItem), nameof(SpecialAbilityPopupNecromancerRetributionistListItem.SetData))]
 public static class PatchNecroRetMenuItem
 {
-    public static void Postfix(SpecialAbilityPopupNecromancerRetributionistListItem __instance, Role role)
+     public static void Postfix(SpecialAbilityPopupNecromancerRetributionistListItem __instance, int position)
     {
-        if (!Constants.EnableIcons())
+       if (!Constants.EnableIcons() || !Utils.GetRoleAndFaction(position, out var tuple))
             return;
 
-        var corpse = Utils.RoleName(role);
-        var faction = Utils.FactionName(role.GetFaction());
-        var sprite = GetSprite(corpse, faction);
+        var role = Utils.RoleName(tuple.Item1);
+        var faction = Utils.FactionName(tuple.Item2);
+        var sprite = GetSprite(role, faction);
+         var myrole = Pepper.GetMyRole();
+        var myfaction = Utils.FactionName(Pepper.GetMyFaction());
 
         if (sprite.IsValid() && __instance.choiceSprite)
             __instance.choiceSprite.sprite = sprite;
 
-        var sprite2 = GetSprite($"{corpse}_{(corpse is "Deputy" or "Conjurer" ? "Special" : "Ability")}", faction, false);
-
-        if (!sprite2.IsValid())
-            sprite2 = GetSprite($"{corpse}_Ability_1", faction, false);
-
+        var sprite2 = GetSprite($"{myrole}_Ability_3", myfaction, false);
+        
         if (sprite2.IsValid() && __instance.choice2Sprite)
             __instance.choice2Sprite.sprite = sprite2;
     }
