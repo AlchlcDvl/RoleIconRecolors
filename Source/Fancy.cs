@@ -114,7 +114,6 @@ public class Fancy : BaseMod<Fancy>
     public static ToggleOption DebugPackLoading;
     public static ToggleOption ShowOverlayWhenJailed;
     public static ToggleOption ShowOverlayAsJailor;
-    public static ToggleOption IconsInRoleReveal;
     public static ToggleOption ModifierFactions;
     public static ToggleOption FactionalRoleNames;
     public static ToggleOption FactionalRoleBlurbs;
@@ -426,7 +425,6 @@ public class Fancy : BaseMod<Fancy>
         DebugPackLoading = new("DEBUG_LOADING", false, PackType.Testing);
         ShowOverlayWhenJailed = new("SHOW_TO_JAILED", true, PackType.Testing);
         ShowOverlayAsJailor = new("SHOW_TO_JAILOR", false, PackType.Testing);
-        IconsInRoleReveal = new("ROLE_REVEAL_ICONS", true, PackType.Testing);
         ModifierFactions = new("MODIFIER_FACTIONS", true, PackType.Testing);
         DisableBTOSTribunal = new("DISABLE_BTOS_TRIBUNAL", true, PackType.Testing, setActive: Constants.BTOS2Exists);
 

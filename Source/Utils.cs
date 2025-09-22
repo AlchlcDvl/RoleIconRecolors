@@ -113,6 +113,8 @@ public static class Utils
         Btos2Role.Vampire => "Vampire",
         Btos2Role.Catalyst => "Catalyst",
         Btos2Role.Cultist => "Cultist",
+        Btos2Role.Socialite => "Socialite",
+        Btos2Role.Pacifist => "Pacifist",
         Btos2Role.Stoned => "Stoned",
         Btos2Role.RandomTown => "Town",
         Btos2Role.RandomCoven => "Coven",
@@ -587,7 +589,7 @@ public static class Utils
 
         // BTOS2 specific role checks
         (_, Btos2Role.Banshee or Btos2Role.Cultist, GameModType.BTOS2) => Btos2Faction.Coven,
-        (_, Btos2Role.Marshal or Btos2Role.Oracle or Btos2Role.Catalyst, GameModType.BTOS2) => Btos2Faction.Town,
+        (_, Btos2Role.Marshal or Btos2Role.Oracle or Btos2Role.Catalyst or Btos2Role.Socialite or Btos2Role.Pacifist, GameModType.BTOS2) => Btos2Faction.Town,
         (_, Btos2Role.Jackal, GameModType.BTOS2) => Btos2Faction.Jackal,
         (_, Btos2Role.Judge, GameModType.BTOS2) => Btos2Faction.Judge,
         (_, Btos2Role.Auditor, GameModType.BTOS2) => Btos2Faction.Auditor,

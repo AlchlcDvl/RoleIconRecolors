@@ -77,6 +77,8 @@ public static class Btos2Role
     public const Role Starspawn = (Role)60;
     public const Role Oracle = (Role)61;
     public const Role Warlock = (Role)62;
+    public const Role Socialite = (Role)65;
+    public const Role Pacifist = (Role)66;
 
     public const Role RoleCount = (Role)65;
 

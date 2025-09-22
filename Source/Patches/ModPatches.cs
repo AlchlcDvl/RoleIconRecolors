@@ -88,11 +88,7 @@ public static class RoleRevealCinematicPlayerPatch
         if (role == Role.NONE)
             return true;
 
-        var showIcons = Fancy.IconsInRoleReveal.Value;
-
-        var skinIcon = showIcons
-            ? $"<sprite=\"Cast\" name=\"Skin{__instance.roleRevealCinematic.skinId}\">{Service.Game.Cast.GetSkinName(__instance.roleRevealCinematic.skinId)}"
-            : Service.Game.Cast.GetSkinName(__instance.roleRevealCinematic.skinId);
+        var skinIcon = $"<sprite=\"Cast\" name=\"Skin{__instance.roleRevealCinematic.skinId}\">{Service.Game.Cast.GetSkinName(__instance.roleRevealCinematic.skinId)}";
 
         var skinText = __instance.l10n("CINE_ROLE_REVEAL_SKIN").Replace("%skin%", skinIcon);
         __instance.skinTextPlayer.ShowText(skinText);
@@ -102,7 +98,7 @@ public static class RoleRevealCinematicPlayerPatch
         __instance.silhouetteWrapper.SwapWithSilhouette((int)role);
 
         var roleName = role.ToColorizedNoLabel(CurrentFaction);
-        var roleIcon = showIcons ? (role.GetTMPSprite() + roleName) : roleName;
+        var roleIcon = role.GetTMPSprite() + roleName;
 
         roleIcon = roleIcon.Replace("RoleIcons\"", $"RoleIcons ({((role.GetFactionType() == CurrentFaction && Constants.CurrentStyle() == "Regular")
             ? "Regular"
