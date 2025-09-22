@@ -80,7 +80,7 @@ public static class Btos2Role
     public const Role Socialite = (Role)65;
     public const Role Pacifist = (Role)66;
 
-    public const Role RoleCount = (Role)65;
+    public const Role RoleCount = (Role)67;
 
     // Buckets
     public const Role Any = (Role)100;
