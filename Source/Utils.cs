@@ -458,7 +458,7 @@ public static class Utils
         EffectType.PESTILENCE => "Sickness",
         EffectType.REVEALED_MARSHAL => "RevealedMarshal",
         EffectType.SOCIALITE_GUEST => "Guest",
-        EffectType.REAPED or (EffectType)109 => "Reaped",
+        EffectType.REAPED => "Reaped",
         EffectType.REVEALED_BY_PMWITCH => "Illuminated",
         EffectType.BESTOWED or (EffectType)111 => "Bestowed",
         EffectType.SOVEREIGN => "Sovereign",
@@ -474,6 +474,7 @@ public static class Utils
         (EffectType)106 => "Accompanied",
         (EffectType)107 => "PandoraTraitor",
         (EffectType)108 => "Egotist",
+        (EffectType)109 => "Suspect",
         (EffectType)110 => "WarlockCursed",
         (EffectType)112 => "Sensed",
         _ => "Blank"
