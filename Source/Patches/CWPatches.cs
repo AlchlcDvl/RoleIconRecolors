@@ -990,18 +990,6 @@ public static void AdjustSizeBasedOnRolesAddedPostfix(RoleDeckPanelController __
 
     if (MetalTransform && PaperTransform)
         MetalTransform.offsetMax = PaperTransform.offsetMax = component.offsetMax;
-
-    var pand = Constants.IsPandora();
-    var comp = Constants.IsCompliance();
-
-    if (Pandora == pand && Compliance == comp)
-        return;
-
-    Pandora = pand;
-    Compliance = comp;
-
-    // if (ChatInputControllerPatch.MentionsProvider)
-    //     ChatInputControllerPatch.MentionsProvider.RebuildAndUpdateCandidates(Mentions.RebuildMentionTypesFlag.ROLES);
 }
 
 
