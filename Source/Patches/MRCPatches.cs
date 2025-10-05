@@ -97,21 +97,21 @@ public static class PatchRoleCard
     private static string ToChangedDisplayString(this Role role, FactionType faction, ROLE_MODIFIER modifier)
     {
         var roleName = Fancy.FactionalRoleNames.Value ? role.ToRoleFactionDisplayString(faction) : role.ToDisplayString();
-        var gradientTt = faction.GetChangedGradient(role);
-        var text = gradientTt != null ? Utils.ApplyGradient(roleName, gradientTt) : $"<color={faction.GetFactionColor()}>{roleName}</color>";
+        var gradient = faction.GetChangedGradient(role);
+        var text = gradient != null ? Utils.ApplyGradient(roleName, gradient) : $"<color={faction.GetFactionColor()}>{roleName}</color>";
 
         switch (modifier)
         {
             case ROLE_MODIFIER.TRAITOR:
             {
-                if (gradientTt != null)
+                if (gradient != null)
                 {
                     text += faction switch
                     {
-                        FactionType.COVEN => $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.CovenTraitorLabel.Value})", gradientTt)}</size>",
-                        FactionType.APOCALYPSE => $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.ApocTraitorLabel.Value})", gradientTt)}</size>",
-                        (FactionType)43 => $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.PandoraTraitorLabel.Value})", gradientTt)}</size>",
-                        _ => $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.CovenTraitorLabel.Value})", gradientTt)}</size>",
+                        FactionType.COVEN => $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.CovenTraitorLabel.Value})", gradient)}</size>",
+                        FactionType.APOCALYPSE => $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.ApocTraitorLabel.Value})", gradient)}</size>",
+                        (FactionType)43 => $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.PandoraTraitorLabel.Value})", gradient)}</size>",
+                        _ => $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.CovenTraitorLabel.Value})", gradient)}</size>",
                     };
                 }
 
@@ -119,29 +119,12 @@ public static class PatchRoleCard
             }
             case ROLE_MODIFIER.VIP:
             {
-                text += $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.VipLabel.Value})", gradientTt)}</size>";
+                text += $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.VipLabel.Value})", gradient)}</size>";
                 break;
             }
             case (ROLE_MODIFIER)10:
             {
-                var gradient = Btos2Faction.Jackal.GetChangedGradient(role);
-                var mod = Utils.GetGameType();
-                var originalFaction = role.GetFactionType(mod);
-
-                var label = originalFaction switch
-                {
-                    Btos2Faction.Town => Fancy.RecruitLabelTown.Value,
-                    Btos2Faction.Coven => !Constants.IsPandora() ? Fancy.RecruitLabelCoven.Value : Fancy.RecruitLabelPandora.Value,
-                    Btos2Faction.Apocalypse => !Constants.IsPandora() ? Fancy.RecruitLabelApocalypse.Value : Fancy.RecruitLabelPandora.Value,
-                    Btos2Faction.SerialKiller => !Constants.IsCompliance() ? Fancy.RecruitLabelSerialKiller.Value : Fancy.RecruitLabelCompliance.Value,
-                    Btos2Faction.Arsonist => !Constants.IsCompliance() ? Fancy.RecruitLabelArsonist.Value : Fancy.RecruitLabelCompliance.Value,
-                    Btos2Faction.Werewolf => !Constants.IsCompliance() ? Fancy.RecruitLabelWerewolf.Value : Fancy.RecruitLabelCompliance.Value,
-                    Btos2Faction.Shroud => !Constants.IsCompliance() ? Fancy.RecruitLabelShroud.Value : Fancy.RecruitLabelCompliance.Value,
-                    Btos2Faction.CursedSoul => Fancy.RecruitLabelCursedSoul.Value,
-                    _ => Btos2Role.Jackal.ToColorizedDisplayString()
-                };
-
-                text += $"\n<size=85%>{Utils.ApplyGradient($"({label})", gradient)}</size>";
+                text += $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.RecruitLabel.Value})", gradient)}</size>";
                 break;
             }
             default:
@@ -671,22 +654,6 @@ public static class ClientRoleExtensionsPatches
         if (((Fancy.FactionNameNextToRole.Value == FactionLabelOption.Mismatch && role.GetFaction() != factionType) || (Fancy.FactionNameNextToRole.Value == FactionLabelOption.Always) ||
             (Fancy.FactionNameNextToRole.Value == FactionLabelOption.Conditional && !Utils.ConditionalCompliancePandora(role.GetFaction(), factionType))) && !Pepper.IsRoleRevealPhase())
         {
-            if (factionType == Btos2Faction.Jackal)
-            {
-                var originalFaction = role.GetFactionType(Utils.GetGameType());
-                factionText = originalFaction switch
-                {
-                    Btos2Faction.Town => Fancy.RecruitLabelTown.Value,
-                    Btos2Faction.Coven => !Constants.IsPandora() ? Fancy.RecruitLabelCoven.Value : Fancy.RecruitLabelPandora.Value,
-                    Btos2Faction.Apocalypse => !Constants.IsPandora() ? Fancy.RecruitLabelApocalypse.Value : Fancy.RecruitLabelPandora.Value,
-                    Btos2Faction.SerialKiller => !Constants.IsCompliance() ? Fancy.RecruitLabelSerialKiller.Value : Fancy.RecruitLabelCompliance.Value,
-                    Btos2Faction.Arsonist => !Constants.IsCompliance() ? Fancy.RecruitLabelArsonist.Value : Fancy.RecruitLabelCompliance.Value,
-                    Btos2Faction.Werewolf => !Constants.IsCompliance() ? Fancy.RecruitLabelWerewolf.Value : Fancy.RecruitLabelCompliance.Value,
-                    Btos2Faction.Shroud => !Constants.IsCompliance() ? Fancy.RecruitLabelShroud.Value : Fancy.RecruitLabelCompliance.Value,
-                    Btos2Faction.CursedSoul => Fancy.RecruitLabelCursedSoul.Value,
-                    _ => factionType.ToDisplayString()
-                };
-            }
             if (gradient != null)
                 newText += $" {Utils.ApplyGradient($"({factionText})", gradient)}";
             else

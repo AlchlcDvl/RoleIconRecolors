@@ -188,6 +188,9 @@
     <Entry key="FANCY_DISABLE_BTOS_TRIBUNAL_NAME">Disable BetterTOS2 Tribunal Intro</Entry>
     <Entry key="FANCY_DISABLE_BTOS_TRIBUNAL_DESC">Makes the musicians that play the trumpets remember they can play more than one note.</Entry>
 
+    <Entry key="FANCY_RECRUIT_LABEL_NAME">Recruit Label</Entry>
+    <Entry key="FANCY_RECRUIT_LABEL_DESC">The text that is shown in the role card when the player is recruited by the Jackal.</Entry>
+
     <Entry key="FANCY_RECRUIT_LABEL_TOWN_NAME">Town Recruit Label</Entry>
     <Entry key="FANCY_RECRUIT_LABEL_TOWN_DESC">The text that is shown when a Town role is recruited by the Jackal.</Entry>
 

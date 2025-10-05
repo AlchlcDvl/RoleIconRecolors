@@ -148,7 +148,8 @@ public class Fancy : BaseMod<Fancy>
 
     public static FloatOption PlayerNumber;
 
-    public static StringInputOption RecruitLabelTown;
+    public static StringInputOption RecruitLabel;
+    /* public static StringInputOption RecruitLabelTown;
     public static StringInputOption RecruitLabelCoven;
     public static StringInputOption RecruitLabelApocalypse;
     public static StringInputOption RecruitLabelSerialKiller;
@@ -157,7 +158,7 @@ public class Fancy : BaseMod<Fancy>
     public static StringInputOption RecruitLabelShroud;
     public static StringInputOption RecruitLabelPandora;
     public static StringInputOption RecruitLabelCompliance;
-    public static StringInputOption RecruitLabelCursedSoul;
+    public static StringInputOption RecruitLabelCursedSoul; */
     public static StringInputOption CovenTraitorLabel;
     public static StringInputOption ApocTraitorLabel;
     public static StringInputOption PandoraTraitorLabel;
@@ -377,7 +378,8 @@ public class Fancy : BaseMod<Fancy>
         RecruitEndingColor = new("RECRUIT_ENDING", RecruitEndType.JackalEnd, PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists, useTranslations: true);
         RoleCardFactionLabel = new("FACTION_LABEL", FactionLabelOption.Mismatch, PackType.MiscRoleCustomisation, useTranslations: true);
         FactionNameNextToRole = new("FACTION_NEXT_TO_ROLE", FactionLabelOption.Never, PackType.MiscRoleCustomisation, useTranslations: true);
-        RecruitLabelTown = new("RECRUIT_LABEL_TOWN", "Recruited", PackType.MiscRoleCustomisation, setActive: () => Constants.BTOS2Exists() && SelectTestingFaction.Value == FactionType.TOWN);
+        RecruitLabel = new("RECRUIT_LABEL", "Recruited", PackType.MiscRoleCustomisation, setActive: () => Constants.BTOS2Exists());
+        /* RecruitLabelTown = new("RECRUIT_LABEL_TOWN", "Recruited", PackType.MiscRoleCustomisation, setActive: () => Constants.BTOS2Exists() && SelectTestingFaction.Value == FactionType.TOWN);
         RecruitLabelCoven = new("RECRUIT_LABEL_COVEN", "Recruited", PackType.MiscRoleCustomisation, setActive: () => Constants.BTOS2Exists() && SelectTestingFaction.Value == FactionType.COVEN);
         RecruitLabelApocalypse = new("RECRUIT_LABEL_APOCALYPSE", "Recruited", PackType.MiscRoleCustomisation, setActive: () => Constants.BTOS2Exists() && SelectTestingFaction.Value == FactionType.APOCALYPSE);
         RecruitLabelSerialKiller = new("RECRUIT_LABEL_SERIAL_KILLER", "Recruited", PackType.MiscRoleCustomisation, setActive: () => Constants.BTOS2Exists() && SelectTestingFaction.Value == FactionType.SERIALKILLER);
@@ -386,7 +388,7 @@ public class Fancy : BaseMod<Fancy>
         RecruitLabelShroud = new("RECRUIT_LABEL_SHROUD", "Recruited", PackType.MiscRoleCustomisation, setActive: () => Constants.BTOS2Exists() && SelectTestingFaction.Value == FactionType.SHROUD);
         RecruitLabelPandora = new("RECRUIT_LABEL_PANDORA", "Recruited", PackType.MiscRoleCustomisation, setActive: () => Constants.BTOS2Exists() && SelectTestingFaction.Value == Btos2Faction.Pandora);
         RecruitLabelCompliance = new("RECRUIT_LABEL_COMPLIANCE", "Recruited", PackType.MiscRoleCustomisation, setActive: () => Constants.BTOS2Exists() && SelectTestingFaction.Value == Btos2Faction.Compliance);
-        RecruitLabelCursedSoul = new("RECRUIT_LABEL_CURSEDSOUL", "Recruited", PackType.MiscRoleCustomisation, setActive: () => Constants.BTOS2Exists() && SelectTestingFaction.Value == FactionType.CURSED_SOUL);
+        RecruitLabelCursedSoul = new("RECRUIT_LABEL_CURSEDSOUL", "Recruited", PackType.MiscRoleCustomisation, setActive: () => Constants.BTOS2Exists() && SelectTestingFaction.Value == FactionType.CURSED_SOUL); */
         CovenTraitorLabel = new("COVEN_TRAITOR_LABEL", "Town Traitor", PackType.MiscRoleCustomisation, setActive: () => SelectTestingFaction.Value == FactionType.COVEN);
         ApocTraitorLabel = new("APOC_TRAITOR_LABEL", "Town Traitor", PackType.MiscRoleCustomisation, setActive: () => Constants.BTOS2Exists() && SelectTestingFaction.Value == FactionType.APOCALYPSE);
         PandoraTraitorLabel = new("PANDORA_TRAITOR_LABEL", "Town Traitor", PackType.MiscRoleCustomisation, setActive: () => Constants.BTOS2Exists() && SelectTestingFaction.Value == Btos2Faction.Pandora);
