@@ -983,47 +983,62 @@ public static class KeywordMentionsPatches
         }
     }
 
-    public static void BuildCustomRoleMentions(SharedMentionsProvider __instance)
-    {
-        var list = Service.Game.Roles.roleInfos
-            .Where(item => !item.role.IsModifierCard() && item.role != Role.NONE)
-            .OrderBy(item => item.role.ToDisplayString(), StringComparer.Ordinal)
-            .ToList();
+	public static void BuildCustomRoleMentions(SharedMentionsProvider __instance)
+	{
+		var list = Service.Game.Roles.roleInfos
+			.Where(item => !item.role.IsModifierCard() && item.role != Role.NONE)
+			.OrderBy(item => item.role.ToDisplayString(), StringComparer.Ordinal)
+			.ToList();
 
-        var priority = 0;
+		var priority = 0;
 
-        foreach (var item in list)
-        {
-            var role = (int)item.role;
-            var display = item.role.ToDisplayString();
-            var shortName = item.role.ToShortenedDisplayString();
-            
-            var encodedText = $"[[#{role}]]";
+		foreach (var item in list)
+		{
+			var role = (int)item.role;
+			var display = item.role.ToDisplayString();
+			var shortName = item.role.ToShortenedDisplayString();
 
-            var sprite = (__instance._roleEffects == 1) ? $"<sprite=\"BTOSRoleIcons\" name=\"Role{role}\">" : "";
-            var name = __instance._useColors ? item.role.ToColorizedDisplayString() : display;
+			var encodedText = $"[[#{role}]]";
 
-            var richText = $"{__instance.styleTagOpen}{__instance.styleTagFont}<link=\"r{role}\">{sprite}<b>{name}</b></link>{__instance.styleTagClose}";
+			var sprite = (__instance._roleEffects == 1)
+				? $"<sprite=\"BTOSRoleIcons\" name=\"Role{role}\">"
+				: "";
+			var name = __instance._useColors
+				? item.role.ToColorizedDisplayString()
+				: display;
 
-            var mentionInfo = new MentionInfo
-            {
-                mentionInfoType = MentionInfo.MentionInfoType.ROLE,
-                richText = richText,
-                encodedText = encodedText,
-                hashCode = richText.ToLowerInvariant().GetHashCode(),
-                humanText = "#" + display.ToLowerInvariant()
-            };
+			var richText =
+				$"{__instance.styleTagOpen}{__instance.styleTagFont}<link=\"r{role}\">{sprite}<b>{name}</b></link>{__instance.styleTagClose}";
 
-            __instance.MentionInfos.Add(mentionInfo);
-            __instance.MentionTokens.Add(new MentionToken
-            {
-                mentionTokenType = MentionToken.MentionTokenType.ROLE,
-                match = "#" + shortName,
-                mentionInfo = mentionInfo,
-                priority = priority++
-            });
-        }
-    }
+			var mentionInfo = new MentionInfo
+			{
+				mentionInfoType = MentionInfo.MentionInfoType.ROLE,
+				richText = richText,
+				encodedText = encodedText,
+				hashCode = richText.ToLowerInvariant().GetHashCode(),
+				humanText = "#" + display.ToLowerInvariant()
+			};
+
+			__instance.MentionInfos.Add(mentionInfo);
+			var tokens = new[]
+			{
+				"#" + shortName,
+				"#" + display,
+				"#" + display.Replace(" ", "").ToLowerInvariant()
+			};
+
+			foreach (var token in tokens.Distinct(StringComparer.OrdinalIgnoreCase))
+			{
+				__instance.MentionTokens.Add(new MentionToken
+				{
+					mentionTokenType = MentionToken.MentionTokenType.ROLE,
+					match = token,
+					mentionInfo = mentionInfo,
+					priority = priority++
+				});
+			}
+		}
+	}
     private static void BuildFactionMentions(SharedMentionsProvider __instance)
     {
         Dictionary<FactionType, Role> dict;
