@@ -452,7 +452,7 @@ public static class Utils
         EffectType.VOODOOED => "Silenced",
         EffectType.DREAMWOVE => "Dreamwoven",
         EffectType.INSANE => "Insomniac",
-        EffectType.VIP => "VIP",
+        EffectType.VIP => "StatusVIP",
         EffectType.BUG => "Bugged",
         EffectType.SCENT_TRACK => "Tracked",
         EffectType.PESTILENCE => "Sickness",
