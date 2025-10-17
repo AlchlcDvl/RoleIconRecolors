@@ -1,4 +1,5 @@
 using Server.Shared.Extensions;
+using UnityEngine.UIElements;
 
 namespace FancyUI;
 
@@ -67,11 +68,13 @@ public static class Gradients
         var hashCode = TMP_TextUtilities.GetHashCode(name);
         var color1 = gradient.Evaluate(0f);
         var color2 = gradient.Evaluate(1f);
-        TMP_ColorGradient colorGradient = new(color1, color1, color2, color2)
-        {
-            name = name,
-            colorMode = ColorMode.VerticalGradient
-        };
+        TMP_ColorGradient colorGradient = ScriptableObject.CreateInstance<TMP_ColorGradient>();
+        colorGradient.name = name;
+        colorGradient.colorMode = ColorMode.VerticalGradient;
+        colorGradient.topLeft = color1;
+        colorGradient.topRight = color1;
+        colorGradient.bottomLeft = color2;
+        colorGradient.bottomRight = color2;
         MaterialReferenceManager.AddColorGradientPreset(hashCode, colorGradient);
         verticalGradients.Add(gradient, name);
         return name;
