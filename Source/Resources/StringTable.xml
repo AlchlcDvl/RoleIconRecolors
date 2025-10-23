@@ -737,6 +737,11 @@
     <Entry key="FANCY_WILDLING_XIS_WHISPERING_TO_Y" style="whisper_notice">You overhear %name1% whispering to %name2%:</Entry>
     <Entry key="FANCY_SERIALKILLER_XIS_WHISPERING_TO_Y" style="whisper_notice">You overhear %name1% whispering to %name2%:</Entry>
 
+    <Entry key="FANCY_RETRAIN_POPUP">The %name_role26% would like to retrain you into a %role%.</Entry>
+    <Entry key="FANCY_RETRAIN_POPUP_VOWEL">The %name_role26% would like to retrain you into an %role%.</Entry>
+    <Entry key="FANCY_DOOMED_POPUP">You are Doomed. Do you wish to live or to die?</Entry>
+
+
     <Entry key="FANCY_NONE">None</Entry>
     <Entry key="FANCY_TOWN">Town</Entry>
     <Entry key="FANCY_COVEN">Coven</Entry>

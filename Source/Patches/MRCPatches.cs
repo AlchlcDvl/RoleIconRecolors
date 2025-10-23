@@ -483,7 +483,7 @@ public static class FancyChatExperimentalBTOS2
     [HarmonyPatch(nameof(MentionsProvider.ProcessSpeakerName))]
     public static void Postfix(string encodedText, int position, ref string __result)
     {
-        if (Constants.IsBTOS2())
+        if (!Constants.IsBTOS2())
             return;
 
         __result = position switch

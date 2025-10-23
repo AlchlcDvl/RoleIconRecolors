@@ -76,7 +76,41 @@ public static class RemoveJailorOverlay
         }
     }
 }
+[HarmonyPatch(typeof(RetrainPopup), nameof(RetrainPopup.HandleRoleAlteringEffects))]
+public static class RetrainPopupPatch
+{
+    public static bool Prefix(RetrainPopup __instance, RoleAlteringEffectsState state)
+    {
+        __instance.requestedRole = state.isRetraining;
 
+        if (__instance.Popup == null || __instance.HeaderText == null)
+            return false;
+
+        if (state.isRetraining == Role.NONE)
+        {
+            __instance.Popup.SetActive(false);
+            return false;
+        }
+
+        __instance.Popup.SetActive(true);
+
+        if (state.isRetraining == Role.DOOMSAYER)
+        {
+            __instance.HeaderText.text = Utils.GetString("FANCY_DOOMED_POPUP");
+            __instance.AcceptButton.GetComponentInChildren<TMProLocalizedTextController>()?.SetKey("BTOS_LIVE");
+            __instance.DeclineButton.GetComponentInChildren<TMProLocalizedTextController>()?.SetKey("BTOS_DIE");
+            return false;
+        }
+
+        var name = state.isRetraining.ToDisplayString();
+        var key = "AEIOUaeiou".IndexOf(name[0]) >= 0 ? "FANCY_RETRAIN_POPUP_VOWEL" : "FANCY_RETRAIN_POPUP";
+
+        __instance.HeaderText.text = Utils.GetString(key)
+            .Replace("%role%", state.isRetraining.ToColorizedDisplayString(Pepper.GetMyFaction()));
+
+        return false;
+    }
+}
 [HarmonyPatch(typeof(RoleRevealCinematicPlayer), nameof(RoleRevealCinematicPlayer.SetRole))]
 public static class RoleRevealCinematicPlayerPatch
 {
