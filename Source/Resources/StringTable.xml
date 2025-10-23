@@ -5085,6 +5085,12 @@
 	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_62">You are an acolyte of <![CDATA[<shake a=0.3><style=ApocalypseColor>%name_role253%</style></shake>]]> who curses the Town.</Entry> <!--Warlock-->
 	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_63">You are a crazed galvanist overflowing with energy.</Entry> <!--Catalyst-->
 	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_64">You are a master of indoctrination, rewiring minds to serve your will.</Entry> <!--Cultist-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_65">You are a host of the town's most exclusive parties.</Entry> <!--Cultist-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_66">You are a voice of peace rallying the Town to rise against evil.</Entry> <!--Cultist-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_250">You are a Horseman of the Apocalypse, spoiling nutrients and inducing malnourishment within the town.</Entry> <!--Famine-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_251">You are a Horseman of the Apocalypse, causing disorder and conflict throughout the town.</Entry> <!--War-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_252">You are a Horseman of the Apocalypse, spreading blight and draining strength across the town.</Entry> <!--Pestilence-->
+	<Entry key="FANCY_FROGS_BTOS_ROLE_BLURB_253">You are a Horseman of the Apocalypse, the angel of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role253"><style=ApocalypseColor>%name_role253%</style></shake>]]>, bringing about the apocalypse throughout the world.</Entry> <!--Death-->
 
 	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_0">You are... nothing. Please report this as a bug if you see this.</Entry> <!--NONE! NOTHING! NOTHING AT ALL!-->
 	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_1">You are a hopeless romantic searching for your soulmate.</Entry> <!--Admirer-->
@@ -5151,6 +5157,12 @@
 	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_62">You are an acolyte of <![CDATA[<shake a=0.3><style=ApocalypseColor>%name_role253%</style></shake>]]> who curses the Town.</Entry> <!--Warlock-->
 	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_63">You are a crazed galvanist overflowing with energy.</Entry> <!--Catalyst-->
 	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_64">You are a master of indoctrination, rewiring minds to serve your will.</Entry> <!--Cultist-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_65">You are a host of the town's most exclusive parties.</Entry> <!--Cultist-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_66">You are a voice of peace rallying the Town to rise against evil.</Entry> <!--Cultist-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_250">You are a Horseman of the Apocalypse, spoiling nutrients and inducing malnourishment within the town.</Entry> <!--Famine-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_251">You are a Horseman of the Apocalypse, causing disorder and conflict throughout the town.</Entry> <!--War-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_252">You are a Horseman of the Apocalypse, spreading blight and draining strength across the town.</Entry> <!--Pestilence-->
+	<Entry key="FANCY_LIONS_BTOS_ROLE_BLURB_253">You are a Horseman of the Apocalypse, the angel of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role253"><style=ApocalypseColor>%name_role253%</style></shake>]]>, bringing about the apocalypse throughout the world.</Entry> <!--Death-->
 
 	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_0">You are... nothing. Please report this as a bug if you see this.</Entry> <!--NONE! NOTHING! NOTHING AT ALL!-->
 	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_1">You are a hopeless romantic searching for your soulmate.</Entry> <!--Admirer-->
@@ -5217,5 +5229,11 @@
 	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_62">You are an acolyte of <![CDATA[<shake a=0.3><style=ApocalypseColor>%name_role253%</style></shake>]]> who curses the Town.</Entry> <!--Warlock-->
 	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_63">You are a crazed galvanist overflowing with energy.</Entry> <!--Catalyst-->
 	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_64">You are a master of indoctrination, rewiring minds to serve your will.</Entry> <!--Cultist-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_65">You are a host of the town's most exclusive parties.</Entry> <!--Cultist-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_66">You are a voice of peace rallying the Town to rise against evil.</Entry> <!--Cultist-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_250">You are a Horseman of the Apocalypse, spoiling nutrients and inducing malnourishment within the town.</Entry> <!--Famine-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_251">You are a Horseman of the Apocalypse, causing disorder and conflict throughout the town.</Entry> <!--War-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_252">You are a Horseman of the Apocalypse, spreading blight and draining strength across the town.</Entry> <!--Pestilence-->
+	<Entry key="FANCY_HAWKS_BTOS_ROLE_BLURB_253">You are a Horseman of the Apocalypse, the angel of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role253"><style=ApocalypseColor>%name_role253%</style></shake>]]>, bringing about the apocalypse throughout the world.</Entry> <!--Death-->
 
 </StringTable>
