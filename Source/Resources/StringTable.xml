@@ -246,6 +246,18 @@
     <Entry key="FANCY_JURY_COLOR_NAME">Jury Color</Entry>
     <Entry key="FANCY_JURY_COLOR_DESC">The color of the text that is shown in chat during court when anyone other than the Judge speaks (BetterTOS2 Games Only).</Entry>
 
+    <Entry key="FANCY_COURT_CHAT_COLOR_NAME">Court Chat Color</Entry>
+    <Entry key="FANCY_COURT_CHAT_COLOR_DESC">The color of chat messages sent by the Judge during Court (BetterTOS2 Games Only).</Entry>
+
+    <Entry key="FANCY_JAILOR_CHAT_COLOR_NAME">Jailor Chat Color</Entry>
+    <Entry key="FANCY_JAILOR_CHAT_COLOR_DESC">The color of chat messages sent by the Jailor while in Jail.</Entry>
+
+    <Entry key="FANCY_JAILOR_CHAT_COLOR_NAME">Pirate Chat Color</Entry>
+    <Entry key="FANCY_JAILOR_CHAT_COLOR_DESC">The color of chat messages sent by the Pirate while being dueled by a Pirate (BetterTOS2 Games Only).</Entry>
+
+    <Entry key="FANCY_YOU_ARE_A_ROLE_NAME">You Are A Role</Entry>
+    <Entry key="FANCY_YOU_ARE_A_ROLE_DESC">Toggles various text making use of a more dynamic set of text (But secretly, you are a Jailor).</Entry>
+
     <Entry key="FANCY_PIRATE_LABEL_NAME">Pirate Label</Entry>
     <Entry key="FANCY_PIRATE_LABEL_DESC">The text that is shown in chat at night when being dueled by the Pirate (BetterTOS2 Games Only).</Entry>
 

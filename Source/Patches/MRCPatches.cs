@@ -483,17 +483,27 @@ public static class FancyChatExperimentalBTOS2
     [HarmonyPatch(nameof(MentionsProvider.ProcessSpeakerName))]
     public static void Postfix(string encodedText, int position, ref string __result)
     {
-        if (!Constants.IsBTOS2())
-            return;
+        var role = Pepper.GetMyRole();
+        var myfaction = Utils.FactionName(Pepper.GetMyFaction());
+        var jailor = FactionType.TOWN.GetChangedGradient(Role.JAILOR);
+        var jailorself = Pepper.GetMyFaction().GetChangedGradient(Role.JAILOR);
+        var pirate = FactionType.PIRATE.GetChangedGradient(Role.PIRATE);
+        var pirateself = Pepper.GetMyFaction().GetChangedGradient(Role.PIRATE);
+        var court = Btos2Faction.Judge.GetChangedGradient(Btos2Role.Judge);
+        var jailortext = role == Role.JAILOR ? Utils.ApplyGradient(Role.JAILOR.ToColorizedNoLabel(Pepper.GetMyFaction()).RemoveColorTags(), jailorself) : Utils.ApplyGradient(Role.JAILOR.ToDisplayString(), jailor);
+        var piratetext = role == Role.PIRATE ? Utils.ApplyGradient(Role.PIRATE.ToColorizedNoLabel(Pepper.GetMyFaction()).RemoveColorTags(), pirateself) : Utils.ApplyGradient(Role.PIRATE.ToDisplayString(), pirate);
+        var jailoricon = role == Role.JAILOR ? $"<sprite=\"BTOSRoleIcons ({myfaction})\" name=\"Role9\">" : $"<sprite=\"BTOSRoleIcons\" name=\"Role9\">";
+        var pirateicon = role == Role.PIRATE ? $"<sprite=\"BTOSRoleIcons ({myfaction})\" name=\"Role46\">" : $"<sprite=\"BTOSRoleIcons\" name=\"Role46\">";
 
         __result = position switch
         {
-            70 => $"<link=\"r57\"><sprite=\"BTOSRoleIcons\" name=\"Role57\"><indent=1.1em><b>{Utils.ApplyGradient(Fancy.CourtLabel.Value, Fancy.Colors["JUDGE"].Start, Fancy.Colors["JUDGE"].End)}:</b> </link>{encodedText.Replace("????: </color>", "").Replace("white", "#FFFF00")}",
+            50 => $"<link=\"r9\"><sprite=\"RoleIcons\" name=\"Role9\"><indent=1.1em><b>{jailortext}:</b> </link>{encodedText.Replace("????: </color>", "").Replace("white", $"{ColorUtility.ToHtmlStringRGB(Fancy.JailorChatColor.Value.ToColor())}")}",
+            70 => $"<link=\"r57\"><sprite=\"BTOSRoleIcons\" name=\"Role57\"><indent=1.1em><b>{Utils.ApplyGradient(Fancy.CourtLabel.Value, court)}:</b> </link>{encodedText.Replace("????: </color>", "").Replace("white", $"{ColorUtility.ToHtmlStringRGB(Fancy.CourtChatColor.Value.ToColor())}")}",
             69 => encodedText.Replace("????:", $"<color=#{ColorUtility.ToHtmlStringRGB(Fancy.JuryColor.Value.ToColor())}>{Fancy.JuryLabel.Value}:</color>"),
             // I decided to remove the Seer icon from Jury messages for the scenario of which an Icon Pack's Seer icon does not fit Jury. An example is replacing Seer with TOS1 Medium.
             // 69 => encodedText.Replace("????:", $"<sprite=\"BTOSRoleIcons\" name=\"Role16\"> <color=#{ColorUtility.ToHtmlStringRGB(Fancy.JuryColor.Value.ToColor())}>{Fancy.JuryLabel.Value}:</color>"),
 
-            71 => $"<link=\"r46\"><sprite=\"BTOSRoleIcons\" name=\"Role46\"><indent=1.1em><b>{Utils.ApplyGradient(Fancy.PirateLabel.Value, Fancy.Colors["PIRATE"].Start, Fancy.Colors["PIRATE"].End)}:</b> </link>{encodedText.Replace("????: </color>", "").Replace("white", "#ECC23E")}",
+            71 => $"<link=\"r46\"><sprite=\"BTOSRoleIcons\" name=\"Role46\"><indent=1.1em><b>{piratetext}:</b> </link>{encodedText.Replace("????: </color>", "").Replace("white", $"{ColorUtility.ToHtmlStringRGB(Fancy.PirateChatColor.Value.ToColor())}")}",
             _ => __result
         };
     }
@@ -1404,7 +1414,7 @@ public static class WdahChatPatch
             else if (entry.subphase == WhoDiedAndHowSubphase.Role)
             {
                 var roleName = Utils.BuildRoleText(killRecord);
-                var key = Utils.GetHangingMessage(killRecord.playerRole, killRecord.playerFaction);
+                var key = Fancy.YouAreARole.Value ? Utils.GetHangingMessage(killRecord.playerRole, killRecord.playerFaction) : "GUI_XROLE_LAST_NIGHT";
 
                 __result = uiController.l10n(key).Replace("%name%", playerName).Replace("%role%", roleName);
             }
@@ -1432,7 +1442,7 @@ public static class WdahChatPatch2
                 var killRecord = entry.killRecord;
                 var playerName = Utils.BuildPlayerTag(killRecord);
                 var roleName = Utils.BuildRoleText(killRecord);
-                var key = Utils.GetHangingMessage(killRecord.playerRole, killRecord.playerFaction);
+                var key = Fancy.YouAreARole.Value ? Utils.GetHangingMessage(killRecord.playerRole, killRecord.playerFaction) : "GUI_XROLE_LAST_NIGHT";
 
                 __result = uiController.l10n(key).Replace("%name%", playerName).Replace("%role%", roleName);
 

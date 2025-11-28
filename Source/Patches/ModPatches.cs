@@ -147,10 +147,9 @@ public static class RoleRevealCinematicPlayerPatch
         else
             roleRevealKey = "FANCY_ROLE_REVEAL_ROLE_CONSONANT";
 
-        var roleText = __instance.l10n(roleRevealKey).Replace("%role%", roleIcon);
+        var roleText = Fancy.YouAreARole.Value ? __instance.l10n(roleRevealKey).Replace("%role%", roleIcon) : __instance.l10n("CINE_ROLE_REVEAL_ROLE").Replace("%role%", roleIcon);
         __instance.roleTextPlayer.ShowText(roleText);
 
-        // TODO: Faction Specific Role Blurbs
         var roleBlurb = Fancy.FactionalRoleBlurbs ? role.ToFactionalRoleBlurb(CurrentFaction) : role.GetRoleBlurb();
         __instance.roleBlurbTextPlayer.ShowText(roleBlurb);
 

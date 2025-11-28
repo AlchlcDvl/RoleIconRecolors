@@ -145,6 +145,7 @@ public class Fancy : BaseMod<Fancy>
 
     public static FloatOption DeadChatDesaturation;
     public static ToggleOption TallRoleDeck;
+    public static ToggleOption YouAreARole;
 
     public static FloatOption PlayerNumber;
 
@@ -167,6 +168,9 @@ public class Fancy : BaseMod<Fancy>
     public static StringInputOption JuryLabel;
     public static StringInputOption PirateLabel;
 
+    public static ColorOption CourtChatColor;
+    public static ColorOption JailorChatColor;
+    public static ColorOption PirateChatColor;
     public static ColorOption JuryColor;
     public static ColorOption UnknownColor;
     public static ColorOption DeadColor;
@@ -393,9 +397,12 @@ public class Fancy : BaseMod<Fancy>
         ApocTraitorLabel = new("APOC_TRAITOR_LABEL", "Town Traitor", PackType.MiscRoleCustomisation, setActive: () => Constants.BTOS2Exists() && SelectTestingFaction.Value == FactionType.APOCALYPSE);
         PandoraTraitorLabel = new("PANDORA_TRAITOR_LABEL", "Town Traitor", PackType.MiscRoleCustomisation, setActive: () => Constants.BTOS2Exists() && SelectTestingFaction.Value == Btos2Faction.Pandora);
         VipLabel = new("VIP_LABEL", "VIP", PackType.MiscRoleCustomisation);
+        JailorChatColor = new("JAILOR_CHAT_COLOR", "#FFFFFF", PackType.MiscRoleCustomisation);
+        PirateChatColor = new("PIRATE_CHAT_COLOR", "#FFFFFF", PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists);
         CourtLabel = new("COURT_LABEL", "Court", PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists);
+        CourtChatColor = new("COURT_CHAT_COLOR", "#FFFF00", PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists);
         JuryLabel = new("JURY_LABEL", "Jury", PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists);
-        PirateLabel = new("PIRATE_LABEL", "Pirate", PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists);
+        // PirateLabel = new("PIRATE_LABEL", "Pirate", PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists);
         JuryColor = new("JURY_COLOR", "#FCCE3B", PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists);
         UnknownColor = new("UNKNOWN_ROLE", "#b0b0b0", PackType.MiscRoleCustomisation);
         DeadColor = new("DEAD_CHAT", "#689194", PackType.MiscRoleCustomisation);
@@ -421,6 +428,7 @@ public class Fancy : BaseMod<Fancy>
         // ColorMentionsWithFaction = new("FACTIONAL_PLAYER_MENTIONS", true, PackType.MiscRoleCustomisation, setActive: () => !Constants.BetterMentionsExists());
 
         TallRoleDeck = new("TALL_ROLE_DECK", false, PackType.Testing);
+        YouAreARole = new("YOU_ARE_A_ROLE", true, PackType.Testing);
         PlayerNumber = new("PLAYER_NUMBER", 0, PackType.Testing, 0, 15, true, Constants.CustomNumbers);
         ChatBackgroundOpacity = new("CHAT_BACKGROUND", 80, PackType.Testing, 0, 100, true);
         DumpSpriteSheets = new("DUMP_SHEETS", false, PackType.Testing);

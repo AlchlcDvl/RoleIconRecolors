@@ -1068,7 +1068,7 @@ public static class MakeProperFactionChecksInHeaderAnnouncement
         var icon = $"<sprite=\"{roleIconsString} ({(Constants.CurrentStyle() == "Regular" && role.GetFactionType() == faction ? "Regular" : Utils.FactionName(faction, false))})\" name=\"Role{(int)role}\">";
         var display = icon + roleText;
 
-        var l10nKey = Utils.GetHangingMessage(role, faction);
+        var l10nKey = Fancy.YouAreARole ? Utils.GetHangingMessage(role, faction) : "GUI_GAME_WHO_DIED_AND_HOW_1_2";
         var formattedLine = __instance.l10n(l10nKey).Replace("%role%", display);
 
         var name = Service.Game.Sim.simulation.GetDisplayName(trialData.defendantPosition).ToWhiteNameString();
@@ -1100,9 +1100,25 @@ public static class MakeProperFactionChecksInWdah1
         if (Constants.EnableIcons())
             roleText = roleText.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(killRecord.playerFaction)})\"");
 
-        var text = Utils.GetString(Utils.GetWdahMessage(killRecord.playerRole, killRecord.playerFaction))
+        string newLine;
+        if (killRecord.playerRole is Role.NONE or Role.UNKNOWN)
+        {
+            newLine = Utils.GetString("GUI_GAME_WHO_DIED_VICTIM_ROLE_UNKNOWN");
+        }
+        else
+        {
+            if (killRecord.playerRole == Role.STONED)
+            {
+                newLine = Utils.GetString("GUI_GAME_WHO_DIED_VICTIM_ROLE_STONED");
+            }
+
+            newLine = (killRecord.playerRole != Role.HIDDEN) ? Utils.GetString("GUI_GAME_WHO_DIED_VICTIM_ROLE_KNOWN") : Utils.GetString("GUI_GAME_WHO_DIED_VICTIM_ROLE_HIDDEN");
+            newLine = newLine.Replace("%role%", killRecord.playerRole.GetTMPSprite() + killRecord.playerRole.ToColorizedDisplayString(killRecord.playerFaction));
+        }
+
+        var text = Fancy.YouAreARole ? Utils.GetString(Utils.GetWdahMessage(killRecord.playerRole, killRecord.playerFaction))
             .Replace("%role%", roleText)
-            .ReplaceIcons();
+            .ReplaceIcons() : newLine.ReplaceIcons();
 
         __instance.AddLine(text, 1f);
         return false;
@@ -1194,30 +1210,33 @@ public static class PatchNecroRetMenu
     }
 }
 
+
 [HarmonyPatch(typeof(SpecialAbilityPopupNecromancerRetributionistListItem), nameof(SpecialAbilityPopupNecromancerRetributionistListItem.SetData))]
 public static class PatchNecroRetMenuItem
 {
-     public static void Postfix(SpecialAbilityPopupNecromancerRetributionistListItem __instance, int position)
+    public static void Postfix(SpecialAbilityPopupNecromancerRetributionistListItem __instance, int position)
     {
-       if (!Constants.EnableIcons() || !Utils.GetRoleAndFaction(position, out var tuple))
+        if (!Constants.EnableIcons() || !Utils.GetRoleAndFaction(position, out var tuple))
             return;
 
         var role = Utils.RoleName(tuple.Item1);
         var faction = Utils.FactionName(tuple.Item2);
         var sprite = GetSprite(role, faction);
-         var myrole = Pepper.GetMyRole();
+        var myrole = Pepper.GetMyRole();
         var myfaction = Utils.FactionName(Pepper.GetMyFaction());
 
         if (sprite.IsValid() && __instance.choiceSprite)
-            __instance.choiceSprite.sprite = sprite;
+            __instance.choiceSprite.sprite = GetSprite($"{myrole}_Special", myfaction, false);;
 
-        var sprite2 = GetSprite($"{myrole}_Ability_3", myfaction, false);
-        
+        var sprite2 = GetSprite($"{role}_{(role is "Deputy" or "Conjurer" ? "Special" : "Ability")}", faction, false);
+
+        if (!sprite2.IsValid())
+            sprite2 = GetSprite($"{role}_Ability_1", faction, false);
+
         if (sprite2.IsValid() && __instance.choice2Sprite)
             __instance.choice2Sprite.sprite = sprite2;
     }
 }
-
 [HarmonyPatch(typeof(SpecialAbilityPopupGenericDualTarget), nameof(SpecialAbilityPopupGenericDualTarget.Start))]
 public static class PatchDualAbilityMenu
 {
@@ -1248,10 +1267,8 @@ public static class PatchDualAbilityMenuItem
         if (sprite.IsValid() && __instance.choiceSprite)
             __instance.choiceSprite.sprite = sprite;
 
-        var sprite2 = GetSprite($"{role}_Ability_2", faction, false);
-
-        if (sprite2.IsValid() && __instance.choice2Sprite)
-            __instance.choice2Sprite.sprite = sprite2;
+        if (sprite.IsValid() && __instance.choice2Sprite)
+            __instance.choice2Sprite.sprite = sprite;
     }
 }
 
