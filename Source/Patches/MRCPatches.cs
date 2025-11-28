@@ -1105,7 +1105,7 @@ public static class KeywordMentionsPatches
             { FactionType.WEREWOLF, "WW" },
             { FactionType.APOCALYPSE, "ATT" },
             { FactionType.VAMPIRE, "CONVERTED" },
-            { FactionType.CURSED_SOUL, "CS" },
+            { FactionType.CURSED_SOUL, "WS" },
             { Btos2Faction.Jackal, "RECRUITED" },
             { Btos2Faction.Frogs, "BLUE" },
             { Btos2Faction.Lions, "YELLOW" },
