@@ -397,8 +397,6 @@ public class Fancy : BaseMod<Fancy>
         ApocTraitorLabel = new("APOC_TRAITOR_LABEL", "Town Traitor", PackType.MiscRoleCustomisation, setActive: () => Constants.BTOS2Exists() && SelectTestingFaction.Value == FactionType.APOCALYPSE);
         PandoraTraitorLabel = new("PANDORA_TRAITOR_LABEL", "Town Traitor", PackType.MiscRoleCustomisation, setActive: () => Constants.BTOS2Exists() && SelectTestingFaction.Value == Btos2Faction.Pandora);
         VipLabel = new("VIP_LABEL", "VIP", PackType.MiscRoleCustomisation);
-        JailorChatColor = new("JAILOR_CHAT_COLOR", "#FFFFFF", PackType.MiscRoleCustomisation);
-        PirateChatColor = new("PIRATE_CHAT_COLOR", "#FFFFFF", PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists);
         CourtLabel = new("COURT_LABEL", "Court", PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists);
         CourtChatColor = new("COURT_CHAT_COLOR", "#FFFF00", PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists);
         JuryLabel = new("JURY_LABEL", "Jury", PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists);
