@@ -1222,7 +1222,7 @@ public static class PatchNecroRetMenuItem
         var role = Utils.RoleName(tuple.Item1);
         var faction = Utils.FactionName(tuple.Item2);
         var sprite = GetSprite(role, faction);
-        var myrole = Pepper.GetMyRole();
+        var myrole = Utils.RoleName(Pepper.GetMyRole());
         var myfaction = Utils.FactionName(Pepper.GetMyFaction());
 
         if (sprite.IsValid() && __instance.choiceSprite)
