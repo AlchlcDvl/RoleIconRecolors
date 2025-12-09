@@ -1221,14 +1221,17 @@ public static class PatchNecroRetMenuItem
 
         var role = Utils.RoleName(tuple.Item1);
         var faction = Utils.FactionName(tuple.Item2);
-        var sprite = GetSprite(role, faction);
+
         var myrole = Utils.RoleName(Pepper.GetMyRole());
         var myfaction = Utils.FactionName(Pepper.GetMyFaction());
 
-        if (sprite.IsValid() && __instance.choiceSprite)
-            __instance.choiceSprite.sprite = GetSprite($"{myrole}_Special", myfaction, false);;
+        var sprite = GetSprite($"{myrole}_Special", myfaction, false);
 
-        var sprite2 = GetSprite($"{role}_{(role is "Deputy" or "Conjurer" ? "Special" : "Ability")}", faction, false);
+        if (sprite.IsValid() && __instance.choiceSprite)
+            __instance.choiceSprite.sprite = sprite;
+
+        var key = $"{role}_{(role is "Deputy" or "Conjurer" ? "Special" : "Ability")}";
+        var sprite2 = GetSprite(key, faction, false);
 
         if (!sprite2.IsValid())
             sprite2 = GetSprite($"{role}_Ability_1", faction, false);
@@ -1257,7 +1260,7 @@ public static class PatchDualAbilityMenuItem
 {
     public static void Postfix(SpecialAbilityPopupGenericDualTargetListItem __instance, int position)
     {
-        if (!Constants.EnableIcons() || !Utils.GetRoleAndFaction(position, out var tuple))
+        if (!Constants.EnableIcons())
             return;
 
         var role = Utils.RoleName(Pepper.GetMyRole());
