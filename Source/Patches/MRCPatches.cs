@@ -210,7 +210,7 @@ public static class RoleCardPopupPatches2
     [HarmonyPatch(nameof(RoleCardPopupPanel.GetSubAlignment)), HarmonyPrefix]
     public static bool Prefix(RoleCardPopupPanel __instance, ref string __result)
     {
-        if (!Fancy.GradientBuckets.Value) 
+        if (!Fancy.GradientBuckets.Value)
             return true;
         var role = __instance.CurrentRole;
         var faction = __instance.CurrentFaction;
@@ -607,7 +607,7 @@ public static class PatchCustomWinScreens
                 else
                 image.color = child.name == "Filigree_R" ? Utils.GetFactionEndingColor(winningFaction) : Utils.GetFactionStartingColor(winningFaction);
             }
-                
+
         }
 
         __instance.SetUpWinners();
@@ -668,7 +668,10 @@ public static class ClientRoleExtensionsPatches
     [HarmonyPatch(nameof(ClientRoleExtensions.GetFactionColor))]
     public static bool Prefix(ref string __result, FactionType factionType)
     {
-        __result = Fancy.Colors[Utils.FactionName(factionType, stoned: true).ToUpper()].Start;
+        if (!Fancy.Colors.TryGetValue(Utils.FactionName(factionType, stoned: true).ToUpper(), out var color))
+            return true;
+
+        __result = color.Start;
         return false;
     }
 

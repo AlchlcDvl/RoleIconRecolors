@@ -995,46 +995,48 @@ public static class MentionsProviderPatches
         ___ExpansionTokens.Add('$');
     }
 
-    [HarmonyPatch(nameof(MentionsProvider.ExpandCandidate),
-    [
-        typeof(MentionInfo)
-    ])]
+    public static Regex FactionalRoleRegex = new Regex(@"<style=(Mention|MentionMono)>(.*?)</style(?=>\$)", RegexOptions.RightToLeft);
+    public static Regex EncodedRoleRegex = new Regex(@"\[\[#\d+");
+
+    [HarmonyPatch(nameof(MentionsProvider.ExpandCandidate), typeof(MentionInfo))]
     public static bool Prefix(MentionsProvider __instance, ref MentionInfo candidate)
     {
-        if (candidate.mentionInfoType == (MentionInfo.MentionInfoType)10)
+        if (candidate.mentionInfoType != (MentionInfo.MentionInfoType)10)
+            return true;
+
+        var fullText = __instance._matchInfo.fullText;
+        var trimmed = __instance._matchInfo.stringPosition == fullText.Length ? fullText : fullText.Remove(__instance._matchInfo.stringPosition);
+        var match = FactionalRoleRegex.Match(trimmed);
+
+        if (!match.Success)
         {
-            string fullText = __instance._matchInfo.fullText;
-            string trimmed = __instance._matchInfo.stringPosition == fullText.Length ? fullText : fullText.Remove(__instance._matchInfo.stringPosition);
-            Match match = FactionalRoleRegex.Match(trimmed);
-            if (!match.Success)
-            {
-                __instance._candidates.Clear();
-                return false;
-            }
-            string value = match.Value + ">";
-            string encodedValue = __instance.EncodeText(value);
-            Match encodedMatch = EncodedRoleRegex.Match(encodedValue);
-            if (!encodedMatch.Success)
-            {
-                __instance._candidates.Clear();
-                return false;
-            }
-            encodedValue = encodedMatch.Value + "," + candidate.encodedText + "]]";
-            string finalValue = __instance.DecodeText(encodedValue);
-            if (!__instance._matchInfo.endsWithSubmissionCharacter && !__instance._matchInfo.followedBySubmissionCharacter && !__instance._matchInfo.endsWithPunctuationCharacter && !__instance._matchInfo.followedByPunctuationCharacter)
-                finalValue += " ";
-            __instance._matchInfo.fullText = fullText.Replace(value + __instance._matchInfo.matchString, finalValue);
-            __instance._matchInfo.stringPosition = __instance._matchInfo.stringPosition
-                                                   + (finalValue.Length - (value + __instance._matchInfo.matchString).Length)
-                                                   + ((__instance._matchInfo.followedBySubmissionCharacter || __instance._matchInfo.endsWithSubmissionCharacter || __instance._matchInfo.followedByPunctuationCharacter || __instance._matchInfo.endsWithPunctuationCharacter) ? 1 : 0);
             __instance._candidates.Clear();
             return false;
         }
-        return true;
-    }
 
-    public static Regex FactionalRoleRegex = new Regex(@"<style=(Mention|MentionMono)>(.*?)</style(?=>\$)", RegexOptions.RightToLeft);
-    public static Regex EncodedRoleRegex = new Regex(@"\[\[#\d+");
+        var value = match.Value + ">";
+        var encodedValue = __instance.EncodeText(value);
+        var encodedMatch = EncodedRoleRegex.Match(encodedValue);
+
+        if (!encodedMatch.Success)
+        {
+            __instance._candidates.Clear();
+            return false;
+        }
+
+        encodedValue = encodedMatch.Value + "," + candidate.encodedText + "]]";
+        var finalValue = __instance.DecodeText(encodedValue);
+
+        if (!__instance._matchInfo.endsWithSubmissionCharacter && !__instance._matchInfo.followedBySubmissionCharacter && !__instance._matchInfo.endsWithPunctuationCharacter && !__instance._matchInfo.followedByPunctuationCharacter)
+            finalValue += " ";
+
+        __instance._matchInfo.fullText = fullText.Replace(value + __instance._matchInfo.matchString, finalValue);
+        __instance._matchInfo.stringPosition = __instance._matchInfo.stringPosition
+                                                + (finalValue.Length - (value + __instance._matchInfo.matchString).Length)
+                                                + ((__instance._matchInfo.followedBySubmissionCharacter || __instance._matchInfo.endsWithSubmissionCharacter || __instance._matchInfo.followedByPunctuationCharacter || __instance._matchInfo.endsWithPunctuationCharacter) ? 1 : 0);
+        __instance._candidates.Clear();
+        return false;
+    }
 }
 
 // This whole class is a mess but DO NOT TOUCH
@@ -1222,10 +1224,10 @@ public static class PatchNecroRetMenuItem
         var role = Utils.RoleName(tuple.Item1);
         var faction = Utils.FactionName(tuple.Item2);
 
-        var myrole = Utils.RoleName(Pepper.GetMyRole());
-        var myfaction = Utils.FactionName(Pepper.GetMyFaction());
+        var myRole = Utils.RoleName(Pepper.GetMyRole());
+        var myFaction = Utils.FactionName(Pepper.GetMyFaction());
 
-        var sprite = GetSprite($"{myrole}_Special", myfaction, false);
+        var sprite = GetSprite($"{myRole}_Special", myFaction, false);
 
         if (sprite.IsValid() && __instance.choiceSprite)
             __instance.choiceSprite.sprite = sprite;
