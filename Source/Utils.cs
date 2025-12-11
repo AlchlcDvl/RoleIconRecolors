@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using Home.Shared;
 using NewModLoading;
 using Server.Shared.Extensions;
+using System.Text;
 
 namespace FancyUI;
 
@@ -880,7 +881,7 @@ public static class Utils
 
     private static string StripFormatting(string input)
     {
-        var sb = new System.Text.StringBuilder();
+        var sb = new StringBuilder();
         var insideTag = false;
 
         foreach (var c in input)
@@ -987,10 +988,9 @@ public static class Utils
 
     public static string BuildHiddenRoleTag(KillRecord killRecord)
     {
-        if (killRecord.hiddenPlayerRole != Role.NONE && killRecord.hiddenPlayerRole != Role.HIDDEN)
-        {
+        if (killRecord.hiddenPlayerRole is not Role.NONE and not Role.HIDDEN)
             return $"[[#{(int)killRecord.hiddenPlayerRole},{(int)killRecord.hiddenPlayerFaction}]]";
-        }
+
         return null;
     }
 
@@ -998,8 +998,10 @@ public static class Utils
     {
         var text = $"[[#{(int)killRecord.playerRole},{(int)killRecord.playerFaction}]]";
         var hidden = BuildHiddenRoleTag(killRecord);
+
         if (hidden != null)
             text += $" ({hidden})";
+
         return text;
     }
 }
