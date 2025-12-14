@@ -9,17 +9,26 @@ namespace FancyUI;
 
 public static class Utils
 {
-	// Note: This may need to be tweaked to account for role cards being different in game (e.g. Admirer, Vigilante, Werewolf)
-    private static readonly string[] VanillaSkippableNames = ["Baker_Ability", "Pirate_Ability_1", "Pirate_Ability_2", "Socialite_Ability"];
+	// TODO: Rewrite skippables to accommodate for dynamic role cards (Admirer, Vigilante, Werewolf)
+	// Admirer switches from using Admirer_Ability_1 to Admirer_Ability_2 when they find their Obsession
+	// Vigilante's role card drops Vigilante_Ability_1 when they shoot a town member
+	// Werewolf uses Werewolf_Ability_2 during Night 1 and Night 3.
+	// The role card updates to accommodate for these changes.
+	
+	
+	// Before Obsession: Admirer_Ability_1, Attributes / After Obsession: Admirer_Ability_2, Attributes
+	// Before Misfire: Vigilante_Ability, Attributes / After Misfire: Attributes
+	// Full Moon Nights: Werewolf_Ability_1, Attributes / Nights 1 and 3: Werewolf_Ability_2, Attributes
+    private static readonly string[] VanillaSkippableNames = ["Baker_Ability", "Pirate_Ability_1", "Pirate_Ability_2", "Dreamweaver_Ability_1"];
     private static readonly string[] BTOS2SkippableNames = [ "Baker_Ability_1", "Baker_Ability_2", "Jackal_Ability", "Auditor_Ability_1", "Auditor_Ability_2", "Inquisitor_Ability_1", "Inquisitor_Ability_2", "Banshee_Ability", "Judge_Ability",
-        "Warlock_Ability", "Wildling_Ability_2", "Starspawn_Ability", "Necromancer_Ability_2" ];
+        "Warlock_Ability", "Starspawn_Ability", "Necromancer_Ability_2", "Dreamweaver_Ability_2", "Illusionist_Ability_2" ];
     private static readonly string[] CommonSkippableNames = [ "Admirer_Ability_1", "Admirer_Ability_2", "Amnesiac_Ability", "Arsonist_Ability", "Attributes", "Berserker_Ability", "Bodyguard_Ability", "Catalyst_Ability",
-        "Cleric_Ability", "Coroner_Ability", "Crusader_Ability", "CursedSoul_Ability", "Death_Ability", "Dreamweaver_Ability", "Enchanter_Ability", "Famine_Ability", "HexMaster_Ability",
-        "Illusionist_Ability", "Investigator_Ability", "Jailor_Ability", "Jester_Ability", "Jinx_Ability", "Lookout_Ability", "Medusa_Ability", "Monarch_Ability", "Seer_Ability_1",
+        "Cleric_Ability", "Coroner_Ability", "Crusader_Ability", "CursedSoul_Ability", "Death_Ability", "Enchanter_Ability", "Famine_Ability", "HexMaster_Ability",
+        "Illusionist_Ability", "Investigator_Ability", "Jailor_Ability", "Jester_Ability", "Jinx_Ability", "Lookout_Ability", "Medusa_Ability", "Monarch_Ability_2", "Seer_Ability_1",
         "Pestilence_Ability", "Plaguebearer_Ability", "Poisoner_Ability_1", "Poisoner_Ability_2", "PotionMaster_Ability_1", "PotionMaster_Ability_2", "Psychic_Ability", "War_Ability_1", "Werewolf_Ability_2",
         "Seer_Ability_2", "SerialKiller_Ability", "Sheriff_Ability", "Shroud_Ability", "SoulCollector_Ability", "Trickster_Ability_1", "Trickster_Ability_2", "Spy_Ability", "Wildling_Ability",
         "TavernKeeper_Ability", "Tracker_Ability", "Trapper_Ability", "Vampire_Ability_1", "Vampire_Ability_2", "Vigilante_Ability", "VoodooMaster_Ability", "War_Ability_2", "Witch_Ability_1", "Witch_Ability_2",
-        "Werewolf_Ability_1" ];
+        "Werewolf_Ability_1", "Socialite_Ability_2" ];
 
     private static readonly Dictionary<GameModType, (Dictionary<string, string>, Dictionary<string, int>)> RoleStuff = [];
 

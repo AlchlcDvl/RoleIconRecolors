@@ -1232,8 +1232,30 @@ public static class PatchNecroRetMenuItem
         if (sprite.IsValid() && __instance.choiceSprite)
             __instance.choiceSprite.sprite = sprite;
 
-        var key = $"{role}_{(role is "Deputy" or "Conjurer" ? "Special" : "Ability")}";
-        var sprite2 = GetSprite(key, faction, false);
+        var ability = "Ability";
+
+		switch (role)
+		{
+			case "Deputy":
+			case "Conjurer":
+				ability = "Special";
+				break;
+
+			case "Monarch":
+			case "Socialite":
+				ability = "Ability_2";
+				break;
+
+			case "Dreamweaver" when Constants.IsBTOS2():
+				ability = "Ability_2";
+				break;
+
+			default:
+				ability = "Ability";
+				break;
+		}
+
+		var sprite2 = GetSprite($"{role}_{ability}", faction, false);
 
         if (!sprite2.IsValid())
             sprite2 = GetSprite($"{role}_Ability_1", faction, false);
