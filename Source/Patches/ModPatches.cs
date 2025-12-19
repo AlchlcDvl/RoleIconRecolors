@@ -102,11 +102,16 @@ public static class RetrainPopupPatch
             return false;
         }
 
-        var name = state.isRetraining.ToDisplayString();
-        var key = "AEIOUaeiou".IndexOf(name[0]) >= 0 ? "FANCY_RETRAIN_POPUP_VOWEL" : "FANCY_RETRAIN_POPUP";
+        var icon = state.isRetraining.GetTMPSprite();
+        icon = icon.Replace("RoleIcons\"", $"RoleIcons ({((state.isRetraining.GetFactionType() == Pepper.GetMyFaction() && Constants.CurrentStyle() == "Regular")
+            ? "Regular"
+            : Utils.FactionName(Pepper.GetMyFaction(), false))})\"");
+
+        var key = "FANCY_RETRAIN_POPUP";
+        var roleName = state.isRetraining.ToColorizedNoLabel(Pepper.GetMyFaction());
 
         __instance.HeaderText.text = Utils.GetString(key)
-            .Replace("%role%", state.isRetraining.ToColorizedDisplayString(Pepper.GetMyFaction()));
+            .Replace("%role%", icon + roleName);
 
         return false;
     }
