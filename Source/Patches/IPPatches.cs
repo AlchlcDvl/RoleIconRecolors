@@ -278,7 +278,7 @@ public static class PatchAbilityPanelListItems
         __instance.playerName.SetGraphicColor(ColorType.Paper);
         __instance.playerNumber.SetGraphicColor(ColorType.Paper);
 
-        if (!Constants.EnableIcons() || overrideType == AbilityType.VOTING)
+        if (!Constants.EnableIcons())
             return;
 
         var role = Pepper.GetMyRole();
@@ -293,14 +293,14 @@ public static class PatchAbilityPanelListItems
         {
             case AbilityType.NECRO_ATTACK:
             {
-                var nommy = GetSprite("Necronomicon", ee);
+                var nommy = GetSprite("Necronomicon", faction, ee);
 
-                if (nommy.IsValid() && __instance.choice1Sprite && role != Role.ILLUSIONIST)
+                if (nommy.IsValid() && __instance.choice1Sprite)
                     __instance.choice1Sprite.sprite = nommy;
 
                 switch (role)
                 {
-                    case Role.ILLUSIONIST when __instance.choice2Sprite:
+                    case Role.ILLUSIONIST when __instance.choice2Sprite && !Constants.IsBTOS2():
                     {
                         __instance.choice2Sprite.sprite = nommy;
                         var illu = GetSprite(reg, "Illusionist_Ability", faction, ee);
@@ -326,6 +326,15 @@ public static class PatchAbilityPanelListItems
                         break;
                     }
                 }
+
+                break;
+            }
+            case AbilityType.VOTING:
+            {
+                var ab1 = GetSprite(reg, $"Vote", faction, ee);
+
+                if (ab1.IsValid() && __instance.choice1Sprite)
+                    __instance.choice1Sprite.sprite = ab1;
 
                 break;
             }
@@ -1221,11 +1230,13 @@ public static class PatchNecroRetMenuItem
         if (!Constants.EnableIcons() || !Utils.GetRoleAndFaction(position, out var tuple))
             return;
 
-        var role = Utils.RoleName(tuple.Item1);
+        var roleName = Utils.RoleName(tuple.Item1);
         var faction = Utils.FactionName(tuple.Item2);
 
-        var myRole = Utils.RoleName(Pepper.GetMyRole());
+		var role = Pepper.GetMyRole();
+        var myRole = Utils.RoleName(role);
         var myFaction = Utils.FactionName(Pepper.GetMyFaction());
+        // var ogfaction = Utils.FactionName(role.GetFactionType(), false);
 
         var sprite = GetSprite($"{myRole}_Special", myFaction, false);
 
@@ -1234,10 +1245,11 @@ public static class PatchNecroRetMenuItem
 
         var ability = "Ability";
 
-		switch (role)
+		switch (roleName)
 		{
 			case "Deputy":
 			case "Conjurer":
+			case "Veteran":
 				ability = "Special";
 				break;
 
@@ -1255,10 +1267,10 @@ public static class PatchNecroRetMenuItem
 				break;
 		}
 
-		var sprite2 = GetSprite($"{role}_{ability}", faction, false);
+		var sprite2 = GetSprite($"{roleName}_{ability}", faction, false);
 
         if (!sprite2.IsValid())
-            sprite2 = GetSprite($"{role}_Ability_1", faction, false);
+            sprite2 = GetSprite($"{roleName}_Ability_1", faction, false);
 
         if (sprite2.IsValid() && __instance.choice2Sprite)
             __instance.choice2Sprite.sprite = sprite2;

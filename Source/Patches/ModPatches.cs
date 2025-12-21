@@ -860,7 +860,7 @@ public static class AlwaysShowPrimaryAbility
         var obs = Service.Game?.Sim?.info?.roleCardObservation;
         if (obs == null || __instance.myData == null)
             return;
-
+					
         _cachedAvailability = obs.Data.normalAbilityAvailable;
 
         if (__instance.myData.abilityIcon != null)
