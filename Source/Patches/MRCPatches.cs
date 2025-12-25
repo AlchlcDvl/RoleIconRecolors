@@ -666,6 +666,7 @@ public static class ClientRoleExtensionsPatches
     }
 
     [HarmonyPatch(nameof(ClientRoleExtensions.GetFactionColor))]
+	[HarmonyPriority(Priority.Last)]
     public static bool Prefix(ref string __result, FactionType factionType)
     {
         if (!Fancy.Colors.TryGetValue(Utils.FactionName(factionType, stoned: true).ToUpper(), out var color))
@@ -849,6 +850,7 @@ public static void PostfixShortened(ref string __result, Role role)
     }
 
     [HarmonyPatch(nameof(ClientRoleExtensions.GetSecondFactionColor)), HarmonyPrefix]
+	[HarmonyPriority(Priority.Last)]
     public static bool GetSecondFactionColorPrefix(ref string __result, FactionType factionType)
     {
         __result = Fancy.Colors[Utils.FactionName(factionType, stoned: true).ToUpper()].Start;

@@ -751,8 +751,7 @@
 
     <Entry key="FANCY_RETRAIN_POPUP">The <![CDATA[<sprite="RoleIcons" name="Role26">]]>%name_role26% would like to retrain you into %role%.</Entry>
     <Entry key="FANCY_DOOMED_POPUP">You are Doomed. Do you wish to live or to die?</Entry>
-
-
+	
     <Entry key="FANCY_NONE">None</Entry>
     <Entry key="FANCY_TOWN">Town</Entry>
     <Entry key="FANCY_COVEN">Coven</Entry>

@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Cinematics.Players;
 using FlexMenu;
 using Game.Characters;
@@ -17,6 +18,9 @@ using Server.Shared.Extensions;
 using Server.Shared.State;
 using UnityEngine.EventSystems;
 using UnityEngine.TextCore;
+using System.Collections.Generic;
+using System.Reflection.Emit;
+using Game.Chat;
 
 namespace FancyUI.Patches;
 
@@ -279,6 +283,7 @@ public static class ModifierFactionPatch
     }
 }
 
+/* 
 [HarmonyPatch(typeof(SpecialAbilityPopupGenericListItem), nameof(SpecialAbilityPopupGenericListItem.SetData))]
 public static class SpecialAbilityPopupGenericListItemPatch
 {
@@ -334,6 +339,7 @@ public static class SpecialAbilityPopupGenericListItemPatch
         return false;
     }
 }
+*/
 
 [HarmonyPatch(typeof(SpecialAbilityPopupDayConfirmListItem), nameof(SpecialAbilityPopupDayConfirmListItem.SetData))]
 public static class SpecialAbilityPopupDayConfirmListItemPatch
@@ -850,43 +856,157 @@ public static class MarshalCinematicFixes
     }
 }
 
+[HarmonyPatch(typeof(TosAbilityPanelListItem), nameof(TosAbilityPanelListItem.OverrideIconAndText))]
+public static class FixHorsemenAbilityButtons
+	{
+	[HarmonyPostfix]
+    [HarmonyPriority(Priority.Last)]
+	public static void FixHorsemanText(
+		TosAbilityPanelListItem __instance,
+		TosAbilityPanelListItem.OverrideAbilityType overrideType)
+	{
+		if (overrideType != TosAbilityPanelListItem.OverrideAbilityType.HORSEMAN)
+			return;
+
+		Role role = Pepper.GetMyCurrentIdentity().role;
+
+		switch (role)
+		{
+			case Role.SOULCOLLECTOR:
+				role = Role.DEATH;
+				break;
+			case Role.PLAGUEBEARER:
+				role = Role.PESTILENCE;
+				break;
+			case Role.BAKER:
+				role = Role.FAMINE;
+				break;
+			case Role.BERSERKER:
+				role = Role.WAR;
+				break;
+		}
+
+		__instance.choice1Text.text =
+			__instance.l10n($"GUI_ROLE_ABILITY1_VERB_{(int)role}");
+
+		if (role == (Role.WAR) && __instance.choice2Text)
+		{
+			__instance.choice2Text.text =
+				__instance.l10n($"GUI_ROLE_ABILITY2_VERB_{(int)role}");
+		}
+
+		__instance.choice1Text.SetAllDirty();
+		if (__instance.choice2Text)
+			__instance.choice2Text.SetAllDirty();
+	}
+
+}
+
+// [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.DetermineFrameAndSlots_AbilityIcon))]
+// public static class AlwaysShowPrimaryAbility
+// {
+//     private static bool _cachedAvailability;
+
+//     public static void Prefix(RoleCardPanel __instance)
+//     {
+//         var obs = Service.Game?.Sim?.info?.roleCardObservation;
+//         if (obs == null || __instance.myData == null)
+//             return;
+					
+//         _cachedAvailability = obs.Data.normalAbilityAvailable;
+
+//         if (__instance.myData.abilityIcon != null)
+//         {
+//             obs.Data.normalAbilityAvailable = true;
+//         }
+//     }
+// }
+
+// [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.DetermineFrameAndSlots_AbilityIcon2))]
+// public static class AlwaysShowSecondaryAbility
+// {
+//     private static bool _cachedAvailability;
+
+//     public static void Prefix(RoleCardPanel __instance)
+//     {
+//         var obs = Service.Game?.Sim?.info?.roleCardObservation;
+//         if (obs == null || __instance.myData == null)
+//             return;
+
+//         _cachedAvailability = obs.Data.secondAbilityAvailable;
+
+//         if (__instance.myData.abilityIcon2 != null)
+//         {
+//             obs.Data.secondAbilityAvailable = true;
+//         }
+//     }
+
+// }
+
 [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.DetermineFrameAndSlots_AbilityIcon))]
 public static class AlwaysShowPrimaryAbility
 {
-    private static bool _cachedAvailability;
+    private static readonly ConditionalWeakTable<RoleCardPanel, BoolBox> Cache = new();
+
+    private class BoolBox
+    {
+        public bool Value;
+    }
 
     public static void Prefix(RoleCardPanel __instance)
     {
         var obs = Service.Game?.Sim?.info?.roleCardObservation;
-        if (obs == null || __instance.myData == null)
+        if (obs?.Data == null || __instance.myData == null)
             return;
-					
-        _cachedAvailability = obs.Data.normalAbilityAvailable;
+
+        var box = Cache.GetOrCreateValue(__instance);
+        box.Value = obs.Data.normalAbilityAvailable;
 
         if (__instance.myData.abilityIcon != null)
-        {
             obs.Data.normalAbilityAvailable = true;
-        }
+    }
+
+    public static void Postfix(RoleCardPanel __instance)
+    {
+        var obs = Service.Game?.Sim?.info?.roleCardObservation;
+        if (obs?.Data == null)
+            return;
+
+        if (Cache.TryGetValue(__instance, out var box))
+            obs.Data.normalAbilityAvailable = box.Value;
     }
 }
 
 [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.DetermineFrameAndSlots_AbilityIcon2))]
 public static class AlwaysShowSecondaryAbility
 {
-    private static bool _cachedAvailability;
+    private static readonly ConditionalWeakTable<RoleCardPanel, BoolBox> Cache = new();
+
+    private class BoolBox
+    {
+        public bool Value;
+    }
 
     public static void Prefix(RoleCardPanel __instance)
     {
         var obs = Service.Game?.Sim?.info?.roleCardObservation;
-        if (obs == null || __instance.myData == null)
+        if (obs?.Data == null || __instance.myData == null)
             return;
 
-        _cachedAvailability = obs.Data.secondAbilityAvailable;
+        var box = Cache.GetOrCreateValue(__instance);
+        box.Value = obs.Data.secondAbilityAvailable;
 
         if (__instance.myData.abilityIcon2 != null)
-        {
             obs.Data.secondAbilityAvailable = true;
-        }
     }
 
+    public static void Postfix(RoleCardPanel __instance)
+    {
+        var obs = Service.Game?.Sim?.info?.roleCardObservation;
+        if (obs?.Data == null)
+            return;
+
+        if (Cache.TryGetValue(__instance, out var box))
+            obs.Data.secondAbilityAvailable = box.Value;
+    }
 }
