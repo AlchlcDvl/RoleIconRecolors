@@ -10,7 +10,7 @@ namespace FancyUI;
 public static class Utils
 {
 	// Note: Update this whenever a role's ability count changes in updates for Vanilla and BetterTOS2
-	
+
     private static readonly string[] VanillaSkippableNames = ["Baker_Ability", "Pirate_Ability_1", "Pirate_Ability_2", "Dreamweaver_Ability_1"];
     private static readonly string[] BTOS2SkippableNames = [ "Baker_Ability_1", "Baker_Ability_2", "Jackal_Ability", "Auditor_Ability_1", "Auditor_Ability_2", "Inquisitor_Ability_1", "Inquisitor_Ability_2", "Banshee_Ability", "Judge_Ability",
         "Warlock_Ability", "Starspawn_Ability", "Dreamweaver_Ability_2", "Illusionist_Ability_2", "Pacifist_Ability_2", "CovenLeader_Ability" ];

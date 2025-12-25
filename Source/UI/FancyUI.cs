@@ -9,11 +9,19 @@ public class FancyUI : UIController
 
     public PackType Page { get; set; }
 
-    public static FancyUI Instance { get; private set; }
+    private static FancyUI _instance;
+    public static FancyUI Instance
+    {
+        get
+        {
+            _instance ??= FindObjectOfType<FancyUI>(true);
+            return _instance;
+        }
+    }
 
     public void Awake()
     {
-        Instance = this;
+        _instance = this;
 
         var font = ApplicationController.ApplicationContext.FontControllerSource.fonts[0];
         GameFont = font.tmp_FontAsset;
@@ -47,7 +55,7 @@ public class FancyUI : UIController
 
     public void OnDestroy()
     {
-        Instance = null;
+        _instance = null;
         LoadingUI.Instance?.gameObject?.Destroy();
         DownloaderUI.Instance?.gameObject?.Destroy();
         SettingsAndTestingUI.Instance?.gameObject?.Destroy();
@@ -103,19 +111,17 @@ public class FancyUI : UIController
             return;
         }
 
-        var go = Instantiate(Fancy.Instance.Assets.GetGameObject("SettingsAndTestingUI"), transform.parent, false);
-        go.transform.localPosition = new(0, 0, 0);
-        go.transform.localScale = Vector3.one * 1.5f;
-        go.AddComponent<SettingsAndTestingUI>();
-        gameObject.SetActive(false);
+        CreateMenu<SettingsAndTestingUI>("SettingsAndTestingUI");
     }
 
-    private void OpenMenu()
+    private void OpenMenu() => CreateMenu<DownloaderUI>("DownloaderUI");
+
+    private void CreateMenu<T>(string prefabName) where T : UIController
     {
-        var go = Instantiate(Fancy.Instance.Assets.GetGameObject("DownloaderUI"), transform.parent, false);
+        var go = Instantiate(Fancy.Instance.Assets.GetGameObject(prefabName), transform.parent, false);
         go.transform.localPosition = new(0, 0, 0);
         go.transform.localScale = Vector3.one * 1.5f;
-        go.AddComponent<DownloaderUI>();
+        go.AddComponent<T>();
         gameObject.SetActive(false);
     }
 }
