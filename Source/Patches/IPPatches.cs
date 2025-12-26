@@ -392,35 +392,55 @@ public static class PatchAbilityPanelListItems
                 break;
             }
             default:
-            {
-                var abilityName = $"{name}_Ability";
-                var ability1 = GetSprite(reg, abilityName, faction, ee);
+			{
+				if (role == Role.JAILOR && Pepper.GetCurrentPlayPhase() == PlayPhase.NIGHT)
+				{
+					var target = GetSprite(reg, "Jailor_Ability", faction, ee);
 
-                if (!ability1.IsValid())
-                    ability1 = GetSprite(reg, $"{abilityName}_1", faction, ee);
+					if (!target.IsValid() && reg)
+						target = GetSprite("Jailor_Ability_1", faction, ee);
 
-                if (reg)
-                {
-                    if (!ability1.IsValid())
-                        ability1 = GetSprite(abilityName, ogfaction, ee);
+					if (!target.IsValid() && reg)
+						target = GetSprite("Jailor_Ability", ogfaction, ee);
 
-                    if (!ability1.IsValid())
-                        ability1 = GetSprite($"{abilityName}_1", ogfaction, ee);
-                }
+					if (!target.IsValid() && reg)
+						target = GetSprite("Jailor_Ability_1", ogfaction, ee);
 
-                if (ability1.IsValid() && __instance.choice1Sprite)
-                    __instance.choice1Sprite.sprite = ability1;
+					if (target.IsValid() && __instance.choice2Sprite)
+						__instance.choice2Sprite.sprite = target;
+				}
+				else
+				{
+					var abilityName = $"{name}_Ability";
+					var ability1 = GetSprite(reg, abilityName, faction, ee);
 
-                var ability2 = GetSprite(reg, $"{abilityName}_2", faction, ee);
+					if (!ability1.IsValid())
+						ability1 = GetSprite(reg, $"{abilityName}_1", faction, ee);
 
-                if (!ability2.IsValid() && reg)
-                    ability2 = GetSprite($"{abilityName}_2", ogfaction, ee);
+					if (reg)
+					{
+						if (!ability1.IsValid())
+							ability1 = GetSprite(abilityName, ogfaction, ee);
 
-                if (ability2.IsValid() && __instance.choice2Sprite)
-                    __instance.choice2Sprite.sprite = ability2;
+						if (!ability1.IsValid())
+							ability1 = GetSprite($"{abilityName}_1", ogfaction, ee);
+					}
 
-                break;
-            }
+					if (ability1.IsValid() && __instance.choice1Sprite)
+						__instance.choice1Sprite.sprite = ability1;
+
+					var ability2 = GetSprite(reg, $"{abilityName}_2", faction, ee);
+
+					if (!ability2.IsValid() && reg)
+						ability2 = GetSprite($"{abilityName}_2", ogfaction, ee);
+
+					if (ability2.IsValid() && __instance.choice2Sprite)
+						__instance.choice2Sprite.sprite = ability2;
+				}
+
+				break;
+			}
+
         }
     }
 }
