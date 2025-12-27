@@ -752,6 +752,16 @@
     <Entry key="FANCY_RETRAIN_POPUP">The <![CDATA[<sprite="RoleIcons" name="Role26">]]>%name_role26% would like to retrain you into %role%.</Entry>
     <Entry key="FANCY_DOOMED_POPUP">You are Doomed. Do you wish to live or to die?</Entry>
 	
+	<Entry key="FANCY_CINEMATIC_HEXBOMB"><![CDATA[<shake a=0.3>The %name_faction1% has been Hex Bombed!</shake>]]></Entry>
+	<Entry key="FANCY_CINEMATIC_DEATH"><![CDATA[<shake a=0.3>%name_role253% has claimed the souls of the %name_faction1%!</shake>]]></Entry>
+	<Entry key="FANCY_CINEMATIC_DOOMSAYER"><![CDATA[The %name_role43% has appeased the Old Ones.]]></Entry>
+	<Entry key="FANCY_CINEMATIC_PIRATE"><![CDATA[<color=#ffffff>The %name_role46% sets sail after their victory!</color>]]></Entry>
+
+	<Entry key="FANCY_CINEMATIC_ATTACK_COVEN"><![CDATA[<shake a=0.3>You were killed by a member of the %name_faction2%!</shake>]]></Entry>
+	<Entry key="FANCY_CINEMATIC_ATTACK_ARSONIST"><![CDATA[<shake a=0.3>You were incinerated by an %name_role40%!</shake>]]></Entry>
+	<Entry key="FANCY_CINEMATIC_ATTACK_SERIALKILLER"><![CDATA[<shake a=0.3>You were stabbed by a %name_role48%!</shake>]]></Entry>
+	<Entry key="FANCY_CINEMATIC_ATTACK_WEREWOLF"><![CDATA[<shake a=0.3>You were mauled by a %name_role51%!</shake>]]></Entry>
+	
     <Entry key="FANCY_NONE">None</Entry>
     <Entry key="FANCY_TOWN">Town</Entry>
     <Entry key="FANCY_COVEN">Coven</Entry>

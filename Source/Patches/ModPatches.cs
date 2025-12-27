@@ -21,6 +21,8 @@ using UnityEngine.TextCore;
 using System.Collections.Generic;
 using System.Reflection.Emit;
 using Game.Chat;
+using Game.Interface;
+using Server.Shared.Cinematics;
 
 namespace FancyUI.Patches;
 
@@ -901,6 +903,96 @@ public static class FixHorsemenAbilityButtons
 	}
 
 }
+
+[HarmonyPatch(typeof(HexBombCinematicPlayer), nameof(HexBombCinematicPlayer.Init))]
+public static class HexBombTextPatch
+{
+    [HarmonyPostfix]
+    public static void InitPostfix(HexBombCinematicPlayer __instance)
+    {
+        foreach (var child in __instance.transform.GetComponentsInChildren<Transform>(true))
+        {
+            if (child.name != "BigText") continue;
+            if (child.TryGetComponent<TextMeshProUGUI>(out var tmp))
+                tmp.text = Utils.GetString("FANCY_CINEMATIC_HEXBOMB");
+        }
+    }
+}
+
+[HarmonyPatch(typeof(MassDeathCinematicPlayer), nameof(MassDeathCinematicPlayer.Init))]
+public static class MassDeathTextPatch
+{
+    [HarmonyPostfix]
+    public static void InitPostfix(MassDeathCinematicPlayer __instance)
+    {
+        foreach (var child in __instance.transform.GetComponentsInChildren<Transform>(true))
+        {
+            if (child.name != "BigText") continue;
+            if (child.TryGetComponent<TextMeshProUGUI>(out var tmp))
+                tmp.text = Utils.GetString("FANCY_CINEMATIC_DEATH");
+        }
+    }
+}
+
+[HarmonyPatch(typeof(DoomsayerLeavesCinematicPlayer), nameof(DoomsayerLeavesCinematicPlayer.Init))]
+public static class DoomsayerLeavesTextPatch
+{
+    [HarmonyPostfix]
+    public static void InitPostfix(DoomsayerLeavesCinematicPlayer __instance)
+    {
+        foreach (var child in __instance.transform.GetComponentsInChildren<Transform>(true))
+        {
+            if (child.name != "BigText") continue;
+            if (child.TryGetComponent<TextMeshProUGUI>(out var tmp))
+                tmp.text = Utils.GetString("FANCY_CINEMATIC_DOOMSAYER");
+        }
+    }
+}
+
+[HarmonyPatch(typeof(PirateSimplyLeavesCinematicPlayer), nameof(PirateSimplyLeavesCinematicPlayer.Init))]
+public static class PirateSimplyLeavesTextPatch
+{
+    [HarmonyPostfix]
+    public static void InitPostfix(PirateSimplyLeavesCinematicPlayer __instance)
+    {
+        foreach (var child in __instance.transform.GetComponentsInChildren<Transform>(true))
+        {
+            if (child.name != "BigText") continue;
+            if (child.TryGetComponent<TextMeshProUGUI>(out var tmp))
+                tmp.text = Utils.GetString("FANCY_CINEMATIC_PIRATE");
+        }
+    }
+}
+
+[HarmonyPatch(typeof(AttackedCinematicPlayer), nameof(AttackedCinematicPlayer.Init))]
+public static class AttackedCinematicTextPatch
+{
+    [HarmonyPostfix]
+    public static void InitPostfix(AttackedCinematicPlayer __instance)
+    {
+        string customText = __instance.attackerRole switch
+        {
+            Role.COVENLEADER => Utils.GetString("FANCY_CINEMATIC_ATTACK_COVEN"),
+            Role.ARSONIST => Utils.GetString("FANCY_CINEMATIC_ATTACK_ARSONIST"),
+            Role.SERIALKILLER => Utils.GetString("FANCY_CINEMATIC_ATTACK_SERIALKILLER"),
+            Role.WEREWOLF => Utils.GetString("FANCY_CINEMATIC_ATTACK_WEREWOLF"),
+            _ => null
+        };
+
+        if (string.IsNullOrEmpty(customText)) return;
+
+        foreach (var child in __instance.transform.GetComponentsInChildren<Transform>(true))
+        {
+            if (child.name != "Text") continue;
+
+            if (child.TryGetComponent<TextMeshProUGUI>(out var tmp))
+                tmp.text = customText;
+            else if (child.TryGetComponent<UnityEngine.UI.Text>(out var uiText))
+                uiText.text = customText;
+        }
+    }
+}
+
 
 // [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.DetermineFrameAndSlots_AbilityIcon))]
 // public static class AlwaysShowPrimaryAbility
