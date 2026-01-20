@@ -471,15 +471,18 @@ public static class SpecialAbilityPopupGenericListItemPatch
         var gradient = factionType.GetChangedGradient(role);
 
         if (role != Role.NONE)
+        {
             roleText = Fancy.FactionalRoleNames.Value
                 ? Utils.GetRoleName(role, factionType, true)
                 : $"({role.ToDisplayString()})";
+        }
 
-        var text = $"{player_name} {Utils.ApplyGradient(roleText, gradient)}";
-        __instance.playerName.SetText(text);
+        __instance.playerName.SetText(
+            $"{player_name} {Utils.ApplyGradient(roleText, gradient)}");
+
         __instance.playerHeadshot.sprite = headshot;
         __instance.characterPosition = position;
-        __instance.playerNumber.text = $"{__instance.characterPosition + 1}.";
+        __instance.playerNumber.text = $"{position + 1}.";
 
         var myRole = Pepper.GetMyRole();
         var uiRoleDataInstance = data.roleDataList.Find(d => d.role == myRole);
@@ -489,31 +492,62 @@ public static class SpecialAbilityPopupGenericListItemPatch
             __instance.choiceText.text =
                 __instance.l10n($"GUI_ROLE_SPECIAL_ABILITY_VERB_{(int)uiRoleDataInstance.role}");
 
-            __instance.choiceSprite.sprite =
-                uiRoleDataInstance.specialAbilityIcon;
-
             __instance.choice2Text.text =
                 __instance.l10n($"GUI_ROLE_ABILITY2_VERB_{(int)uiRoleDataInstance.role}");
 
-            __instance.choice2Sprite.sprite =
-                uiRoleDataInstance.abilityIcon2;
-        }
-
-        if (Constants.EnableIcons() && __instance.choiceSprite)
-        {
-            var iconRole = Pepper.GetMyRole();
-            var name = $"{Utils.RoleName(iconRole)}_Special";
             var faction = Utils.FactionName(Pepper.GetMyFaction());
-            var ogFaction = Utils.FactionName(iconRole.GetFactionType(), false);
+            var ogFaction = Utils.FactionName(myRole.GetFactionType(), false);
             var reg = faction != ogFaction;
 
-            var special = GetSprite(reg, name, faction);
+            // Special ability icon
+            if (__instance.choiceSprite)
+            {
+                if (Constants.EnableIcons())
+                {
+                    var name = $"{Utils.RoleName(myRole)}_Special";
+                    var sprite = GetSprite(reg, name, faction);
 
-            if (!special.IsValid() && reg)
-                special = GetSprite(name, ogFaction);
+                    if (!sprite.IsValid() && reg)
+                        sprite = GetSprite(name, ogFaction);
 
-            if (special.IsValid())
-                __instance.choiceSprite.sprite = special;
+                    __instance.choiceSprite.sprite = sprite.IsValid()
+                        ? sprite
+                        : uiRoleDataInstance.specialAbilityIcon;
+                }
+                else
+                {
+                    __instance.choiceSprite.sprite =
+                        uiRoleDataInstance.specialAbilityIcon;
+                }
+
+                __instance.choiceSprite.enabled = false;
+                __instance.choiceSprite.enabled = true;
+            }
+
+            // Ability 2 icon
+            if (__instance.choice2Sprite)
+            {
+                if (Constants.EnableIcons())
+                {
+                    var name = $"{Utils.RoleName(myRole)}_Ability_2";
+                    var sprite = GetSprite(reg, name, faction);
+
+                    if (!sprite.IsValid() && reg)
+                        sprite = GetSprite(name, ogFaction);
+
+                    __instance.choice2Sprite.sprite = sprite.IsValid()
+                        ? sprite
+                        : uiRoleDataInstance.abilityIcon2;
+                }
+                else
+                {
+                    __instance.choice2Sprite.sprite =
+                        uiRoleDataInstance.abilityIcon2;
+                }
+
+                __instance.choice2Sprite.enabled = false;
+                __instance.choice2Sprite.enabled = true;
+            }
         }
 
         __instance.choiceButton.gameObject.SetActive(hasChoice1);
@@ -973,31 +1007,47 @@ public static class NecroPassPatches
     [HarmonyPatch(nameof(NecroPassingVoteEntry.RefreshData)), HarmonyPostfix]
     public static void RefreshDataPatch(NecroPassingVoteEntry __instance)
     {
-        if (!Constants.EnableIcons())
-            return;
-
-        var nommy = GetSprite("Necronomicon");
-
-        if (__instance.BookIcon && nommy.IsValid())
-            __instance.BookIcon.sprite = nommy;
-
         if (!Utils.GetRoleAndFaction(__instance.Position, out var tuple))
             return;
 
         if (Pepper.GetMyPosition() == __instance.Position)
             tuple = new(Pepper.GetMyRole(), Pepper.GetMyFaction());
 
-        var ogfaction = tuple.Item1.GetFactionType();
-        var reg = ogfaction != tuple.Item2;
-        var role = Utils.RoleName(tuple.Item1);
-        var sprite = GetSprite(reg, role, Utils.FactionName(tuple.Item2));
+        var role = tuple.Item1;
+        var faction = tuple.Item2;
 
-        if (!sprite.IsValid() && reg)
-            sprite = GetSprite(role, Utils.FactionName(ogfaction));
+        if (Constants.EnableIcons())
+        {
+            var nommy = GetSprite("Necronomicon");
 
-        if (sprite.IsValid() && __instance.RoleIcon)
-            __instance.RoleIcon.sprite = sprite;
+            if (__instance.BookIcon && nommy.IsValid())
+                __instance.BookIcon.sprite = nommy;
+
+            var ogfaction = role.GetFactionType();
+            var reg = ogfaction != faction;
+            var roleName = Utils.RoleName(role);
+            var sprite = GetSprite(reg, roleName, Utils.FactionName(faction));
+
+            if (!sprite.IsValid() && reg)
+                sprite = GetSprite(roleName, Utils.FactionName(ogfaction));
+
+            if (sprite.IsValid() && __instance.RoleIcon)
+                __instance.RoleIcon.sprite = sprite;
+        }
+
+        if (__instance.NameAndRole)
+        {
+            var discussionPlayer = Service.Game.Sim.info.GetDiscussionPlayer(__instance.Position);
+            if (discussionPlayer != null)
+            {
+                var roleText = role.ToFactionalDisplayString(faction);
+
+                __instance.NameAndRole.text =
+                    $"{discussionPlayer.gameName}\n<size=24>({roleText})</size>";
+            }
+        }
     }
+
 
     [HarmonyPatch(nameof(NecroPassingVoteEntry.UpdateVoteState)), HarmonyPostfix]
     public static void UpdateVoteStatePatch(NecroPassingVoteEntry __instance)
@@ -1318,72 +1368,46 @@ public static class PatchNecroRetMenu
 [HarmonyPatch(typeof(SpecialAbilityPopupNecromancerRetributionistListItem), nameof(SpecialAbilityPopupNecromancerRetributionistListItem.SetData))]
 public static class PatchNecroRetMenuItem
 {
-    public static void Postfix(SpecialAbilityPopupNecromancerRetributionistListItem __instance, int position)
+    public static void Postfix(SpecialAbilityPopupNecromancerRetributionistListItem __instance, Role role)
     {
-        if (!Constants.EnableIcons() || !Utils.GetRoleAndFaction(position, out var tuple))
+        if (!Constants.EnableIcons())
             return;
 
-        var targetRoleName = Utils.RoleName(tuple.Item1);
-        var targetFaction  = Utils.FactionName(tuple.Item2);
-
-        var myRole        = Pepper.GetMyRole();
-        var myRoleName    = Utils.RoleName(myRole);
-        var myFaction     = Utils.FactionName(Pepper.GetMyFaction());
-        var myOgFaction   = Utils.FactionName(myRole.GetFactionType(), false);
+        var myRole      = Pepper.GetMyRole();
+        var myRoleName  = Utils.RoleName(myRole);
+        var myFaction   = Utils.FactionName(Pepper.GetMyFaction());
+        var myOgFaction = Utils.FactionName(myRole.GetFactionType(), false);
 
         var specialName = $"{myRoleName}_Special";
-
-        var special = GetSprite(specialName, myFaction, false);
-
-        if (!special.IsValid())
-            special = GetSprite(specialName, myOgFaction, false);
+        var special =
+            GetSprite(specialName, myFaction, false) ??
+            GetSprite(specialName, myOgFaction, false);
 
         if (special.IsValid() && __instance.choiceSprite)
             __instance.choiceSprite.sprite = special;
 
-        string ability;
+        var targetRoleName = Utils.RoleName(role);
+        var targetFaction  = Utils.FactionName(role.GetFactionType(), false);
 
-        switch (targetRoleName)
+        string ability = targetRoleName switch
         {
-            case "Deputy":
-            case "Conjurer":
-            case "Veteran":
-                ability = "Special";
-                break;
-
-            case "Monarch":
-            case "Socialite":
-                ability = "Ability_2";
-                break;
-
-            case "Dreamweaver" when Constants.IsBTOS2():
-                ability = "Ability_2";
-                break;
-
-            default:
-                ability = "Ability";
-                break;
-        }
+            "Deputy" or "Conjurer" or "Veteran" => "Special",
+            "Monarch" or "Socialite" or "Pacifist" => "Ability_2",
+            "Dreamweaver" when Constants.IsBTOS2() => "Ability_2",
+            _ => "Ability"
+        };
 
         var abilityName = $"{targetRoleName}_{ability}";
 
-
-        var abilitySprite = GetSprite(abilityName, targetFaction, false);
-
-        if (!abilitySprite.IsValid())
-            abilitySprite = GetSprite($"{abilityName}_1", targetFaction, false);
-
-        if (!abilitySprite.IsValid())
-            abilitySprite = GetSprite(abilityName, Utils.FactionName(tuple.Item1.GetFactionType(), false), false);
-
-        if (!abilitySprite.IsValid())
-            abilitySprite = GetSprite($"{abilityName}_1",
-                Utils.FactionName(tuple.Item1.GetFactionType(), false), false);
+        var abilitySprite =
+            GetSprite(abilityName, targetFaction, false) ??
+            GetSprite($"{abilityName}_1", targetFaction, false);
 
         if (abilitySprite.IsValid() && __instance.choice2Sprite)
             __instance.choice2Sprite.sprite = abilitySprite;
     }
 }
+
 [HarmonyPatch(typeof(SpecialAbilityPopupGenericDualTarget), nameof(SpecialAbilityPopupGenericDualTarget.Start))]
 public static class PatchDualAbilityMenu
 {
@@ -1495,6 +1519,61 @@ public static class Tos2GameBrowserListItemPatch
             any.sprite = sprite;
     }
 }
+
+// [HarmonyPatch(typeof(HudDockItem))]
+// [HarmonyPatch(nameof(HudDockItem.Start))]
+// [HarmonyPatch(nameof(HudDockItem.OnEnable))]
+// [HarmonyPatch(nameof(HudDockItem.HandleOnGameInfoChanged))]
+// public static class DockItemIconPatches
+// {
+    // [HarmonyPostfix]
+    // public static void Postfix(HudDockItem __instance)
+    // {
+        // if (!Constants.EnableIcons()) 
+            // return;
+
+        // Utils.ApplyDockItemIcon(__instance);
+    // }
+// }
+
+// [HarmonyPatch(typeof(HudDockPanel), nameof(HudDockPanel.RefreshNavigation))]
+// public static class HudDockPanel_RefreshNavigation_Patch
+// {
+    // [HarmonyPostfix]
+    // public static void Postfix(HudDockPanel __instance)
+    // {
+        // if (!Constants.EnableIcons())
+            // return;
+
+        // if (__instance == null)
+            // return;
+
+        // var items = __instance.GetComponentsInChildren<HudDockItem>(true);
+        // if (items == null || items.Length == 0)
+            // return;
+
+        // foreach (var item in items)
+        // {
+            // Utils.ApplyDockItemIcon(item);
+        // }
+    // }
+// }
+
+// [HarmonyPatch(typeof(HudDockPanel), nameof(HudDockPanel.RefreshNavigation))]
+// public static class HudDockPanel_RefreshNavigation_Patch
+// {
+    // [HarmonyPostfix]
+    // public static void Postfix(HudDockPanel __instance)
+    // {
+        // if (!Constants.EnableIcons())
+            // return;
+
+        // foreach (var item in __instance.GetComponentsInChildren<HudDockItem>(true))
+        // {
+            // Utils.ApplyDockItemIcon(item);
+        // }
+    // }
+// }
 
 // // Role bucket header
 // [HarmonyPatch(typeof(RoleListPopupController), nameof(RoleListPopupController.Show))]

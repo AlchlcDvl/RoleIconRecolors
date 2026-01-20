@@ -72,3 +72,10 @@ public enum FactionLabelOption : byte
     Always,
     Never
 }
+
+public enum PlayerListRoleIconOption : byte
+{
+    Disabled,
+    Left,
+    Right
+}

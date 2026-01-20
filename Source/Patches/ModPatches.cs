@@ -88,6 +88,8 @@ public static class RetrainPopupPatch
     public static bool Prefix(RetrainPopup __instance, RoleAlteringEffectsState state)
     {
         __instance.requestedRole = state.isRetraining;
+		var myRole = Pepper.GetMyRole();
+		var myFaction = Pepper.GetMyFaction();
 
         if (__instance.Popup == null || __instance.HeaderText == null)
             return false;
@@ -109,15 +111,20 @@ public static class RetrainPopupPatch
         }
 
         var icon = state.isRetraining.GetTMPSprite();
-        icon = icon.Replace("RoleIcons\"", $"RoleIcons ({((state.isRetraining.GetFactionType() == Pepper.GetMyFaction() && Constants.CurrentStyle() == "Regular")
+        icon = icon.Replace("RoleIcons\"", $"RoleIcons ({((state.isRetraining.GetFactionType() == myFaction && Constants.CurrentStyle() == "Regular")
             ? "Regular"
-            : Utils.FactionName(Pepper.GetMyFaction(), false))})\"");
+            : Utils.FactionName(myFaction, false))})\"");
+
+        var myIcon = myRole.GetTMPSprite();
+        icon = icon.Replace("RoleIcons\"", $"RoleIcons ({((myRole.GetFactionType() == myFaction && Constants.CurrentStyle() == "Regular")
+            ? "Regular"
+            : Utils.FactionName(myFaction, false))})\"");
 
         var key = "FANCY_RETRAIN_POPUP";
-        var roleName = state.isRetraining.ToColorizedNoLabel(Pepper.GetMyFaction());
+        var roleName = state.isRetraining.ToColorizedNoLabel(myFaction);
+        var myRoleName = myRole.ToColorizedNoLabel(myFaction);
 
-        __instance.HeaderText.text = Utils.GetString(key)
-            .Replace("%role%", icon + roleName);
+        __instance.HeaderText.text = Utils.GetString(key).Replace("%role%", icon + roleName).Replace("%role2%", myIcon + myRoleName);
 
         return false;
     }

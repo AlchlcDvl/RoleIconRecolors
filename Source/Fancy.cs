@@ -125,6 +125,9 @@ public class Fancy : BaseMod<Fancy>
     public static ToggleOption LethalColors;
     public static ToggleOption HorsemenColors;
     public static ToggleOption VerticalGradients;
+    public static ToggleOption ExcludeTownGovernmentRoles;
+    public static ToggleOption ExcludeCatalyst;
+    public static ToggleOption ExcludeCultist;
 
     public static ColorOption NeutralStart;
     public static ColorOption NeutralEnd;
@@ -222,6 +225,7 @@ public class Fancy : BaseMod<Fancy>
     public static EnumDropdownOption<RecruitEndType> RecruitEndingColor;
     public static EnumDropdownOption<FactionLabelOption> RoleCardFactionLabel;
     public static EnumDropdownOption<FactionLabelOption> FactionNameNextToRole;
+    public static EnumDropdownOption<PlayerListRoleIconOption> PlayerListRoleIcon;
     public static EnumDropdownOption<DisplayType> SelectDisplay;
 
     private static FactionType[] VanillaFactions;
@@ -376,6 +380,9 @@ public class Fancy : BaseMod<Fancy>
         FactionalRoleNames = new("FACTIONAL_ROLE_NAMES", false, PackType.MiscRoleCustomisation, Constants.TextEditorExists);
         FactionalRoleBlurbs = new("FACTIONAL_ROLE_BLURBS", false, PackType.MiscRoleCustomisation, Constants.TextEditorExists);
         MajorColors = new("MAJOR_COLORS", false, PackType.MiscRoleCustomisation);
+        ExcludeCatalyst = new("EXCLUDE_CATALYST", false, PackType.MiscRoleCustomisation, setActive: () => MajorColors.Value);
+        ExcludeCultist = new("EXCLUDE_CULTIST", false, PackType.MiscRoleCustomisation, setActive: () => MajorColors.Value);
+        ExcludeTownGovernmentRoles = new("EXCLUDE_TG", false, PackType.MiscRoleCustomisation, setActive: () => MajorColors.Value);
         HorsemenColors = new("HORSEMAN_COLORS", false, PackType.MiscRoleCustomisation);
         LethalColors = new("LETHAL_COLORS", false, PackType.MiscRoleCustomisation);
         VerticalGradients = new("VERTICAL_GRADIENTS", true, PackType.MiscRoleCustomisation);
@@ -425,6 +432,7 @@ public class Fancy : BaseMod<Fancy>
         MentionEnd = new("MENTION_END", "#FFCE3B", PackType.MiscRoleCustomisation, setActive: () => !Constants.BetterMentionsExists());
         // ColorMentionsWithFaction = new("FACTIONAL_PLAYER_MENTIONS", true, PackType.MiscRoleCustomisation, setActive: () => !Constants.BetterMentionsExists());
 
+        PlayerListRoleIcon = new("PLAYER_LIST_ROLE_ICON", PlayerListRoleIconOption.Disabled, PackType.Testing, useTranslations: true);
         TallRoleDeck = new("TALL_ROLE_DECK", false, PackType.Testing);
         YouAreARole = new("YOU_ARE_A_ROLE", true, PackType.Testing);
         PlayerNumber = new("PLAYER_NUMBER", 0, PackType.Testing, 0, 15, true, Constants.CustomNumbers);

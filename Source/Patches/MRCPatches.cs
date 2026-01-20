@@ -47,6 +47,7 @@ public static class PatchRoleCard
         var alignment = role.GetAlignment();
         var subAlignment = role.GetSubAlignment();
         var factionID = (int)faction;
+		// var prefix = Constants.IsBTOS2() ? "BTOS" : "GUI";
         bool useNeutralGradient = false;
         var neutralGradient = Utils.CreateGradient(Fancy.NeutralStart.Value, Fancy.NeutralEnd.Value);
         var subAlignGradient = Utils.CreateGradient(Fancy.BucketStart.Value, Fancy.BucketEnd.Value);
@@ -76,6 +77,8 @@ public static class PatchRoleCard
         }
         else if (factionID == 13)
             displayString = Utils.GetString("FANCY_BUCKETS_CURSEDSOUL");
+        else if (factionID == 43)
+            displayString = Utils.GetString("FANCY_BUCKETS_PANDORA");
         else
             displayString = faction.ToDisplayString();
         var text = string.Empty;
@@ -352,13 +355,23 @@ public static class PlayerListPatch
             return false;
 
         __instance.playerRole = role;
+        var isStonedOrHidden = role is Role.STONED or Role.HIDDEN;
         var roleName = Fancy.FactionalRoleNames.Value ? role.ToRoleFactionDisplayString(faction) : role.ToDisplayString();
         var gradient = faction.GetChangedGradient(role);
+        var gradientText = gradient != null ? Utils.ApplyGradient($"({roleName})", gradient) : $"<color={faction.GetFactionColor()}>({roleName})</color>";
+        var hiddenText = $"<color={role.GetFaction().GetFactionColor()}>({roleName})</color>";
+        var text = isStonedOrHidden ? $"{hiddenText}" : $"{gradientText}";
+        var icon = role.GetTMPSprite();
+        icon = icon.Replace("RoleIcons\"", $"RoleIcons ({((role.GetFactionType() == faction && Constants.CurrentStyle() == "Regular")
+            ? "Regular"
+            : Utils.FactionName(faction, false))})\"");
 
-        if (role is not (Role.STONED or Role.HIDDEN))
-            __instance.playerRoleText.text = gradient != null ? Utils.ApplyGradient($"({roleName})", gradient) : $"<color={faction.GetFactionColor()}>({roleName})</color>";
-        else
-            __instance.playerRoleText.text = $"<color={role.GetFaction().GetFactionColor()}>({roleName})</color>";
+        __instance.playerRoleText.text = Fancy.PlayerListRoleIcon.Value switch
+        {
+            PlayerListRoleIconOption.Left => $"{icon} {text}",
+            PlayerListRoleIconOption.Right => $"{text} {icon} ",
+            _ => $"{text}",
+        };
 
         __instance.playerRoleText.gameObject.SetActive(true);
         __instance.playerRoleText.enableAutoSizing = false; // Remove when PlayerNotes+ fix is out
@@ -490,7 +503,7 @@ public static class FancyChatExperimentalBTOS2
 
         __result = position switch
         {
-            70 => $"<link=\"r57\"><sprite=\"BTOSRoleIcons\" name=\"Role57\"><indent=1.1em><b>{Utils.ApplyGradient(Fancy.CourtLabel.Value, court)}:</b> </link>{encodedText.Replace("????: </color>", "").Replace("white", $"{ColorUtility.ToHtmlStringRGB(Fancy.CourtChatColor.Value.ToColor())}")}",
+            70 => $"<link=\"r57\"><sprite=\"BTOSRoleIcons\" name=\"Role57\"><indent=1.1em><b>{Utils.ApplyGradient(Fancy.CourtLabel.Value, court)}:</b> </link>{encodedText.Replace("????: </color>", "").Replace("white", $"#{ColorUtility.ToHtmlStringRGB(Fancy.CourtChatColor.Value.ToColor())}")}",
             69 => encodedText.Replace("????:", $"<color=#{ColorUtility.ToHtmlStringRGB(Fancy.JuryColor.Value.ToColor())}>{Fancy.JuryLabel.Value}:</color>"),
             // I decided to remove the Seer icon from Jury messages for the scenario of which an Icon Pack's Seer icon does not fit Jury. An example is replacing Seer with TOS1 Medium.
             // 69 => encodedText.Replace("????:", $"<sprite=\"BTOSRoleIcons\" name=\"Role16\"> <color=#{ColorUtility.ToHtmlStringRGB(Fancy.JuryColor.Value.ToColor())}>{Fancy.JuryLabel.Value}:</color>"),
@@ -690,8 +703,9 @@ public static class ClientRoleExtensionsPatches
             return;
 
         var town = FactionType.TOWN.GetChangedGradient(Role.ADMIRER);
-        var townMajor = FactionType.TOWN.GetChangedGradient(Role.MAYOR);
-        var townLethal = FactionType.TOWN.GetChangedGradient(Role.VIGILANTE);
+		var townExecutive = FactionType.TOWN.GetChangedGradient(Role.PROSECUTOR);
+        var townGovernment = FactionType.TOWN.GetChangedGradient(Role.MAYOR);
+		var townLethal = FactionType.TOWN.GetChangedGradient(Role.VIGILANTE);
         var coven = FactionType.COVEN.GetChangedGradient(Role.DREAMWEAVER);
         var covenMajor = FactionType.COVEN.GetChangedGradient(Role.COVENLEADER);
         var covenLethal = FactionType.COVEN.GetChangedGradient(Role.CONJURER);
@@ -715,8 +729,8 @@ public static class ClientRoleExtensionsPatches
                 Btos2Role.TownProtective => $"{Utils.ApplyGradient(Utils.GetString("BTOS_ALIGNMENTNAME_1"), town)} {Utils.ApplyGradient(Utils.GetString("BTOS_SUBALIGNMENTNAME_4"), bucket)}",
                 Btos2Role.TownSupport => $"{Utils.ApplyGradient(Utils.GetString("BTOS_ALIGNMENTNAME_1"), town)} {Utils.ApplyGradient(Utils.GetString("BTOS_SUBALIGNMENTNAME_2"), bucket)}",
                 Btos2Role.TownKilling => $"{Utils.ApplyGradient(Utils.GetString("BTOS_ALIGNMENTNAME_1"), townLethal)} {Utils.ApplyGradient(Utils.GetString("BTOS_SUBALIGNMENTNAME_6"), bucket)}",
-                Btos2Role.TownGovernment => $"{Utils.ApplyGradient(Utils.GetString("BTOS_ALIGNMENTNAME_1"), townMajor)} {Utils.ApplyGradient(Utils.GetString("BTOS_SUBALIGNMENTNAME_38"), bucket)}",
-                Btos2Role.TownExecutive => $"{Utils.ApplyGradient(Utils.GetString("BTOS_ALIGNMENTNAME_1"), townMajor)} {Utils.ApplyGradient(Utils.GetString("BTOS_SUBALIGNMENTNAME_37"), bucket)}",
+                Btos2Role.TownGovernment => $"{Utils.ApplyGradient(Utils.GetString("BTOS_ALIGNMENTNAME_1"), townGovernment)} {Utils.ApplyGradient(Utils.GetString("BTOS_SUBALIGNMENTNAME_38"), bucket)}",
+                Btos2Role.TownExecutive => $"{Utils.ApplyGradient(Utils.GetString("BTOS_ALIGNMENTNAME_1"), townExecutive)} {Utils.ApplyGradient(Utils.GetString("BTOS_SUBALIGNMENTNAME_37"), bucket)}",
                 Btos2Role.RandomCoven => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_RANDOM"), bucket)} {Utils.ApplyGradient(Utils.GetString("BTOS_ALIGNMENTNAME_2"), coven)}",
                 Btos2Role.CommonCoven => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COMMON"), bucket)} {Utils.ApplyGradient(Utils.GetString("BTOS_ALIGNMENTNAME_2"), coven)}",
                 Btos2Role.CovenPower => $"{Utils.ApplyGradient(Utils.GetString("BTOS_ALIGNMENTNAME_2"), covenMajor)} {Utils.ApplyGradient(Utils.GetString("BTOS_SUBALIGNMENTNAME_3"), bucket)}",
@@ -743,7 +757,7 @@ public static class ClientRoleExtensionsPatches
                 Role.TOWN_PROTECTIVE => $"{Utils.ApplyGradient(Utils.GetString("GUI_ALIGNMENTNAME_1"), town)} {Utils.ApplyGradient(Utils.GetString("GUI_SUBALIGNMENTNAME_4"), bucket)}",
                 Role.TOWN_SUPPORT => $"{Utils.ApplyGradient(Utils.GetString("GUI_ALIGNMENTNAME_1"), town)} {Utils.ApplyGradient(Utils.GetString("GUI_SUBALIGNMENTNAME_2"), bucket)}",
                 Role.TOWN_KILLING => $"{Utils.ApplyGradient(Utils.GetString("GUI_ALIGNMENTNAME_1"), townLethal)} {Utils.ApplyGradient(Utils.GetString("GUI_SUBALIGNMENTNAME_6"), bucket)}",
-                Role.TOWN_POWER => $"{Utils.ApplyGradient(Utils.GetString("GUI_ALIGNMENTNAME_1"), townMajor)} {Utils.ApplyGradient(Utils.GetString("GUI_SUBALIGNMENTNAME_3"), bucket)}",
+                Role.TOWN_POWER => $"{Utils.ApplyGradient(Utils.GetString("GUI_ALIGNMENTNAME_1"), townExecutive)} {Utils.ApplyGradient(Utils.GetString("GUI_SUBALIGNMENTNAME_3"), bucket)}",
                 Role.RANDOM_COVEN => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_RANDOM"), bucket)} {Utils.ApplyGradient(Utils.GetString("GUI_ALIGNMENTNAME_2"), coven)}",
                 Role.COMMON_COVEN => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COMMON"), bucket)} {Utils.ApplyGradient(Utils.GetString("GUI_ALIGNMENTNAME_2"), coven)}",
                 Role.COVEN_POWER => $"{Utils.ApplyGradient(Utils.GetString("GUI_ALIGNMENTNAME_2"), covenMajor)} {Utils.ApplyGradient(Utils.GetString("GUI_SUBALIGNMENTNAME_3"), bucket)}",
@@ -768,7 +782,8 @@ public static void PostfixShortened(ref string __result, Role role)
         return;
 
     var town = FactionType.TOWN.GetChangedGradient(Role.ADMIRER);
-    var townMajor = FactionType.TOWN.GetChangedGradient(Role.MAYOR);
+    var townGovernment = FactionType.TOWN.GetChangedGradient(Role.MAYOR);
+    var townExecutive = FactionType.TOWN.GetChangedGradient(Role.PROSECUTOR);
     var townLethal = FactionType.TOWN.GetChangedGradient(Role.VIGILANTE);
     var coven = FactionType.COVEN.GetChangedGradient(Role.DREAMWEAVER);
     var covenMajor = FactionType.COVEN.GetChangedGradient(Role.COVENLEADER);
@@ -789,8 +804,8 @@ public static void PostfixShortened(ref string __result, Role role)
             Btos2Role.TownProtective => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), town)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_PROTECTIVE_SHORT"), bucket)}",
             Btos2Role.TownSupport => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), town)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_SUPPORT_SHORT"), bucket)}",
             Btos2Role.TownKilling => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), townLethal)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_KILLING_SHORT"), bucket)}",
-            Btos2Role.TownGovernment => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), townMajor)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_GOVERNMENT_SHORT"), bucket)}",
-            Btos2Role.TownExecutive => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), townMajor)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_EXECUTIVE_SHORT"), bucket)}",
+            Btos2Role.TownGovernment => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), townGovernment)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_GOVERNMENT_SHORT"), bucket)}",
+            Btos2Role.TownExecutive => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), townExecutive)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_EXECUTIVE_SHORT"), bucket)}",
             Btos2Role.RandomCoven => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_RANDOM_SHORT"), bucket)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN_SHORT"), coven)}",
             Btos2Role.CommonCoven => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COMMON_SHORT"), bucket)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN_SHORT"), coven)}",
             Btos2Role.CovenPower => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN_SHORT"), covenMajor)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_POWER_SHORT"), bucket)}",
@@ -817,7 +832,7 @@ public static void PostfixShortened(ref string __result, Role role)
             Role.TOWN_PROTECTIVE => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), town)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_PROTECTIVE_SHORT"), bucket)}",
             Role.TOWN_SUPPORT => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), town)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_SUPPORT_SHORT"), bucket)}",
             Role.TOWN_KILLING => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), townLethal)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_KILLING_SHORT"), bucket)}",
-            Role.TOWN_POWER => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), townMajor)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_POWER_SHORT"), bucket)}",
+            Role.TOWN_POWER => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), townExecutive)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_POWER_SHORT"), bucket)}",
             Role.RANDOM_COVEN => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_RANDOM_SHORT"), bucket)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN_SHORT"), coven)}",
             Role.COMMON_COVEN => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COMMON_SHORT"), bucket)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN_SHORT"), coven)}",
             Role.COVEN_POWER => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COVEN_SHORT"), covenMajor)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_POWER_SHORT"), bucket)}",

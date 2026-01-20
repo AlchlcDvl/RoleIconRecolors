@@ -35,6 +35,15 @@
     <Entry key="FANCY_MAJOR_COLORS_NAME">Override Secondary Color for Power Roles</Entry>
     <Entry key="FANCY_MAJOR_COLORS_DESC">Determines whether or not secondary colors on factions will be overwritten with a separate Major color value when Coven Power, Town Power, Cultist, or Catalyst.</Entry>
 
+    <Entry key="FANCY_EXCLUDE_CATALYST_NAME">Exclude Catalyst from Major</Entry>
+    <Entry key="FANCY_EXCLUDE_CATALYST_DESC">Determines whether or not Catalyst is excluded from the Major gradient set or not.</Entry>
+
+    <Entry key="FANCY_EXCLUDE_CULTIST_NAME">Exclude Cultist from Major</Entry>
+    <Entry key="FANCY_EXCLUDE_CULTIST_DESC">Determines whether or not Cultist is excluded from the Major gradient set or not.</Entry>
+
+    <Entry key="FANCY_EXCLUDE_TG_NAME">Exclude Town Government Roles from Major</Entry>
+    <Entry key="FANCY_EXCLUDE_TG_DESC">Determines whether or not Town Government roles (Mayor, Monarch and Pacifist) are excluded from the Major gradient set or not.</Entry>
+
     <Entry key="FANCY_LETHAL_COLORS_NAME">Override Secondary Color for Killing Roles</Entry>
     <Entry key="FANCY_LETHAL_COLORS_DESC">Determines whether or not secondary colors on factions will be overwritten with a separate Lethal color value when Coven Killing, Town Killing, or a Berserker. Jailor is also included if the above setting is disabled.</Entry>
 
@@ -746,6 +755,9 @@
     <Entry key="FANCY_CHAT_BACKGROUND_NAME">Chat Background Opacity</Entry>
     <Entry key="FANCY_CHAT_BACKGROUND_DESC">The opacity of the chat background.</Entry>
 
+    <Entry key="FANCY_PLAYER_LIST_ROLE_ICON_NAME">Render Role Icon in Player List</Entry>
+    <Entry key="FANCY_PLAYER_LIST_ROLE_ICON_DESC">Whether or not to render the role icon in the player list, either to the left or to the right.</Entry>
+
     <Entry key="FANCY_WILDLING_XIS_WHISPERING_TO_Y" style="whisper_notice">You overhear %name1% whispering to %name2%:</Entry>
     <Entry key="FANCY_SERIALKILLER_XIS_WHISPERING_TO_Y" style="whisper_notice">You overhear %name1% whispering to %name2%:</Entry>
 
@@ -859,6 +871,7 @@
     <Entry key="FANCY_BUCKETS_NEUTRAL">Neutral</Entry>
     <Entry key="FANCY_BUCKETS_APOCALYPSE">Apocalypse</Entry>
     <Entry key="FANCY_BUCKETS_CURSEDSOUL">Cursed</Entry>
+    <Entry key="FANCY_BUCKETS_PANDORA">Pandora</Entry>
     <Entry key="FANCY_BUCKETS_COMPLIANCE">Compliance</Entry>
     <Entry key="FANCY_BUCKETS_RANDOM">Random</Entry>
     <Entry key="FANCY_BUCKETS_COMMON">Common</Entry>
@@ -881,6 +894,7 @@
     <Entry key="FANCY_BUCKETS_COVEN_SHORT">C</Entry>
     <Entry key="FANCY_BUCKETS_NEUTRAL_SHORT">N</Entry>
     <Entry key="FANCY_BUCKETS_APOCALYPSE_SHORT">A</Entry>
+    <Entry key="FANCY_BUCKETS_PANDORA_SHORT">Pand</Entry>
     <Entry key="FANCY_BUCKETS_COMPLIANCE_SHORT">Comp</Entry>
     <Entry key="FANCY_BUCKETS_RANDOM_SHORT">R</Entry>
     <Entry key="FANCY_BUCKETS_COMMON_SHORT">C</Entry>
@@ -909,6 +923,10 @@
     <Entry key="FANCY_JACKALEND">Jackal</Entry>
     <Entry key="FANCY_FACTIONSTART">Original Primary</Entry>
     <Entry key="FANCY_FACTIONEND">Original Secondary</Entry>
+
+    <Entry key="FANCY_DISABLED">Disabled</Entry>
+    <Entry key="FANCY_LEFT">Left</Entry>
+    <Entry key="FANCY_RIGHT">Right</Entry>
 
     <Entry key="FANCY_MISMATCH">Mismatch</Entry>
     <Entry key="FANCY_CONDITIONAL">Conditional</Entry>

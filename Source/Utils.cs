@@ -1005,4 +1005,81 @@ public static class Utils
 
         return text;
     }
+
+
+    public static string ToFactionalDisplayString(this Role role, FactionType faction)
+    {
+        return Fancy.FactionalRoleNames.Value ? role.ToRoleFactionDisplayString(faction) : role.ToDisplayString();
+    }
+
+	public static void ApplyDockItemIcon(HudDockItem item)
+	{
+		if (item == null) return;
+		if (item.button == null) return;
+
+		var img = item.button.image;
+		if (img == null) return;
+
+		Sprite sprite = null;
+
+		switch (item.dockFunctionType)
+		{
+			case DockFunctionType.NECRO_PASS:
+				sprite = GetSprite("NecroPass");
+				break;
+
+			// case DockFunctionType.LAST_WILL:
+				// sprite = GetSprite("LastWill");
+				// break;
+
+			// case DockFunctionType.DEATH_NOTE:
+				// sprite = GetSprite("DeathNote");
+				// break;
+
+			// case DockFunctionType.NOTEPAD:
+				// sprite = GetSprite("Notepad");
+				// break;
+
+			// case DockFunctionType.CHAT:
+				// sprite = GetSprite("Chat");
+				// break;
+
+			// case DockFunctionType.FOOLS_FORTUNE:
+				// sprite = GetSprite("FoolsFortune");
+				// break;
+
+			// case DockFunctionType.GHOST_PLAY:
+				// sprite = GetSprite("GhostPlay");
+				// break;
+
+			// case DockFunctionType.LOBBY_PREVIOUS_GAME_RESULTS:
+				// sprite = GetSprite("PreviousGameResults");
+				// break;
+
+			// case DockFunctionType.LOBBY_CUSTOMIZATION:
+				// sprite = GetSprite("Customization");
+				// break;
+
+			// case DockFunctionType.LOBBY_PLAYERS:
+				// sprite = GetSprite("Players");
+				// break;
+
+			// case DockFunctionType.LOBBY_ROLE_DECK:
+				// sprite = GetSprite("RoleDeck");
+				// break;
+
+			// case DockFunctionType.LOBBY_SETTINGS:
+			// case DockFunctionType.SETTINGS:
+				// sprite = GetSprite("Settings");
+				// break;
+
+			// case DockFunctionType.LOBBY_FRIENDS:
+			// case DockFunctionType.FRIENDS:
+				// sprite = GetSprite("Friends");
+				// break;
+		}
+
+		if (sprite != null)
+			img.sprite = sprite;
+}
 }
