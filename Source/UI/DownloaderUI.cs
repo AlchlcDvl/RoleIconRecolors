@@ -5,7 +5,7 @@ using UnityEngine.Networking;
 
 namespace FancyUI.UI;
 
-public class DownloaderUI : UIController
+public sealed class DownloaderUI : UISingleton<DownloaderUI>
 {
     private const string Repo = "https://raw.githubusercontent.com/AlchlcDvl/RoleIconRecolors/main";
     private static readonly Dictionary<string, bool> Running = [];
@@ -39,11 +39,9 @@ public class DownloaderUI : UIController
     private static readonly List<PackJson> Packs = [];
     private readonly List<GameObject> PackGOs = [];
 
-    public static DownloaderUI Instance { get; private set; }
-
     public void Awake()
     {
-        Instance = this;
+        _instance = this;
 
         PackName = transform.GetComponent<TMP_InputField>("PackName")!;
         RepoName = transform.GetComponent<TMP_InputField>("RepoName")!;
@@ -115,9 +113,9 @@ public class DownloaderUI : UIController
         Refresh();
     }
 
-    public void OnDestroy()
+    public override void OnDestroy()
     {
-        Instance = null;
+        base.OnDestroy();
 
         if (FancyUI.Instance.Page == PackType.IconPacks)
         {

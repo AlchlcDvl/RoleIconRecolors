@@ -1,5 +1,6 @@
 namespace FancyUI.UI;
-public class GradientRoleColorController : MonoBehaviour
+
+public sealed class GradientRoleColorController : MonoBehaviour
 {
     private const float Duration = 10f;
 

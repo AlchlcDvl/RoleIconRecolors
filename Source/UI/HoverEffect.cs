@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 
 namespace FancyUI.UI;
 
-public class HoverEffect : TooltipTrigger
+public sealed class HoverEffect : TooltipTrigger
 {
     private Button.ButtonClickedEvent OnMouseOver { get; set; }
     private Button.ButtonClickedEvent OnMouseOut { get; set; }

@@ -1,9 +1,7 @@
 namespace FancyUI.UI;
 
-public class SettingsAndTestingUI : UIController
+public sealed class SettingsAndTestingUI : UISingleton<SettingsAndTestingUI>
 {
-    public static SettingsAndTestingUI Instance { get; private set; }
-
     private CustomImageAnimator Animator { get; set; }
     private CustomImageAnimator Flame { get; set; }
 
@@ -70,7 +68,7 @@ public class SettingsAndTestingUI : UIController
 
     public void Awake()
     {
-        Instance = this;
+        _instance = this;
 
         Animator = transform.EnsureComponent<CustomImageAnimator>("Animator")!;
         Animator.SetAnim(Loading.Frames, Fancy.AnimationDuration.Value);
@@ -259,8 +257,6 @@ public class SettingsAndTestingUI : UIController
 
         Refresh();
     }
-
-    public void OnDestroy() => Instance = null;
 
     public void GoBack()
     {
