@@ -1001,47 +1001,6 @@ public static class AttackedCinematicTextPatch
 }
 
 
-// [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.DetermineFrameAndSlots_AbilityIcon))]
-// public static class AlwaysShowPrimaryAbility
-// {
-//     private static bool _cachedAvailability;
-
-//     public static void Prefix(RoleCardPanel __instance)
-//     {
-//         var obs = Service.Game?.Sim?.info?.roleCardObservation;
-//         if (obs == null || __instance.myData == null)
-//             return;
-					
-//         _cachedAvailability = obs.Data.normalAbilityAvailable;
-
-//         if (__instance.myData.abilityIcon != null)
-//         {
-//             obs.Data.normalAbilityAvailable = true;
-//         }
-//     }
-// }
-
-// [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.DetermineFrameAndSlots_AbilityIcon2))]
-// public static class AlwaysShowSecondaryAbility
-// {
-//     private static bool _cachedAvailability;
-
-//     public static void Prefix(RoleCardPanel __instance)
-//     {
-//         var obs = Service.Game?.Sim?.info?.roleCardObservation;
-//         if (obs == null || __instance.myData == null)
-//             return;
-
-//         _cachedAvailability = obs.Data.secondAbilityAvailable;
-
-//         if (__instance.myData.abilityIcon2 != null)
-//         {
-//             obs.Data.secondAbilityAvailable = true;
-//         }
-//     }
-
-// }
-
 [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.DetermineFrameAndSlots_AbilityIcon))]
 public static class AlwaysShowPrimaryAbility
 {

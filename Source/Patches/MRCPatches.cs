@@ -48,10 +48,9 @@ public static class PatchRoleCard
         var subAlignment = role.GetSubAlignment();
         var factionID = (int)faction;
 		// var prefix = Constants.IsBTOS2() ? "BTOS" : "GUI";
-        bool useNeutralGradient = false;
+        var useNeutralGradient = false;
         var neutralGradient = Utils.CreateGradient(Fancy.NeutralStart.Value, Fancy.NeutralEnd.Value);
         var subAlignGradient = Utils.CreateGradient(Fancy.BucketStart.Value, Fancy.BucketEnd.Value);
-        string displayString = "";
         if (role is Role.DEATH or Role.PESTILENCE or Role.WAR or Role.FAMINE)
         {
             __result = string.Empty;
@@ -70,7 +69,8 @@ public static class PatchRoleCard
             __result = $"{acolyte} {Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_ACOLYTE"), subAlignGradient)}";
             return false;
         }
-        if (factionID > 2 && factionID < 12 && factionID != 7 || factionID > 37 && factionID < 42)
+        string displayString;
+        if (factionID is (> 2 and < 12 and not 7) or (> 37 and < 42))
         {
             useNeutralGradient = true;
             displayString = RoleAlignment.NEUTRAL.ToDisplayString();
@@ -81,7 +81,6 @@ public static class PatchRoleCard
             displayString = Utils.GetString("FANCY_BUCKETS_PANDORA");
         else
             displayString = faction.ToDisplayString();
-        var text = string.Empty;
         if (subAlignment.IsInvalid())
         {
             if (alignment.IsInvalid())
@@ -92,8 +91,7 @@ public static class PatchRoleCard
             __result = alignment.ToColorizedDisplayString();
             return false;
         }
-        text = Utils.ApplyGradient(displayString, useNeutralGradient ? neutralGradient : faction.GetChangedGradient(role)) + " " + Utils.ApplyGradient(subAlignment.ToDisplayString(), subAlignGradient);
-        __result = text;
+        __result = Utils.ApplyGradient(displayString, useNeutralGradient ? neutralGradient : faction.GetChangedGradient(role)) + " " + Utils.ApplyGradient(subAlignment.ToDisplayString(), subAlignGradient);
         return false;
     }
 
@@ -102,6 +100,7 @@ public static class PatchRoleCard
         var roleName = Fancy.FactionalRoleNames.Value ? role.ToRoleFactionDisplayString(faction) : role.ToDisplayString();
         var gradient = faction.GetChangedGradient(role);
         var text = gradient != null ? Utils.ApplyGradient(roleName, gradient) : $"<color={faction.GetFactionColor()}>{roleName}</color>";
+        var size = Fancy.FactionLabelSize.Value;
 
         switch (modifier)
         {
@@ -109,25 +108,37 @@ public static class PatchRoleCard
             {
                 if (gradient != null)
                 {
-                    text += faction switch
+                    var label = faction switch
                     {
-                        FactionType.COVEN => $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.CovenTraitorLabel.Value})", gradient)}</size>",
-                        FactionType.APOCALYPSE => $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.ApocTraitorLabel.Value})", gradient)}</size>",
-                        (FactionType)43 => $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.PandoraTraitorLabel.Value})", gradient)}</size>",
-                        _ => $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.CovenTraitorLabel.Value})", gradient)}</size>",
+                        FactionType.COVEN => Fancy.CovenTraitorLabel.Value,
+                        FactionType.APOCALYPSE => Fancy.ApocTraitorLabel.Value,
+                        (FactionType)43 => Fancy.PandoraTraitorLabel.Value,
+                        _ => Fancy.CovenTraitorLabel.Value,
                     };
+
+                    if (!string.IsNullOrWhiteSpace(label))
+                    {
+                        text += $"\n<size={size}%>{Utils.ApplyGradient($"({label})", gradient)}</size>";
+                    }
                 }
 
                 break;
             }
+
             case ROLE_MODIFIER.VIP:
             {
-                text += $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.VipLabel.Value})", gradient)}</size>";
+                if (!string.IsNullOrWhiteSpace(Fancy.VipLabel.Value))
+                {
+                    text += $"\n<size={size}%>{Utils.ApplyGradient($"({Fancy.VipLabel.Value})", gradient)}</size>";
+                }
                 break;
             }
             case (ROLE_MODIFIER)10:
             {
-                text += $"\n<size=85%>{Utils.ApplyGradient($"({Fancy.RecruitLabel.Value})", gradient)}</size>";
+                if (!string.IsNullOrWhiteSpace(Fancy.RecruitLabel.Value))
+                {
+                    text += $"\n<size={size}%>{Utils.ApplyGradient($"({Fancy.RecruitLabel.Value})", gradient)}</size>";
+                }
                 break;
             }
             default:
@@ -138,9 +149,9 @@ public static class PatchRoleCard
                     var gradient2 = faction.GetChangedGradient(role);
 
                     if (gradient2 != null)
-                        text += $"\n<size=85%>{Utils.ApplyGradient($"({faction.ToDisplayString()})", gradient2)}</size>";
+                        text += $"\n<size={size}%>{Utils.ApplyGradient($"({faction.ToDisplayString()})", gradient2)}</size>";
                     else
-                        text = $"{text}\n<size=85%><color={faction.GetFactionColor()}>({faction.ToDisplayString()})</color></size>";
+                        text = $"{text}\n<size={size}%><color={faction.GetFactionColor()}>({faction.ToDisplayString()})</color></size>";
                 }
 
                 break;
@@ -220,10 +231,9 @@ public static class RoleCardPopupPatches2
         var alignment = role.GetAlignment();
         var subAlignment = role.GetSubAlignment();
         var factionID = (int)faction;
-        bool useNeutralGradient = false;
+        var useNeutralGradient = false;
         var neutralGradient = Utils.CreateGradient(Fancy.NeutralStart.Value, Fancy.NeutralEnd.Value);
         var subAlignGradient = Utils.CreateGradient(Fancy.BucketStart.Value, Fancy.BucketEnd.Value);
-        string displayString = "";
         if (role is Role.DEATH or Role.PESTILENCE or Role.WAR or Role.FAMINE)
         {
             __result = string.Empty;
@@ -242,16 +252,18 @@ public static class RoleCardPopupPatches2
             __result = $"{acolyte} {Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_ACOLYTE"), subAlignGradient)}";
             return false;
         }
-        if (factionID > 2 && factionID < 12 && factionID != 7 || factionID > 37 && factionID < 42)
+        string displayString;
+        if (factionID is (> 2 and < 12 and not 7) or (> 37 and < 42))
         {
             useNeutralGradient = true;
             displayString = RoleAlignment.NEUTRAL.ToDisplayString();
         }
         else if (factionID == 13)
             displayString = Utils.GetString("FANCY_BUCKETS_CURSEDSOUL");
+        else if (factionID == 43)
+            displayString = Utils.GetString("FANCY_BUCKETS_PANDORA");
         else
             displayString = faction.ToDisplayString();
-        var text = string.Empty;
         if (subAlignment.IsInvalid())
         {
             if (alignment.IsInvalid())
@@ -262,8 +274,7 @@ public static class RoleCardPopupPatches2
             __result = alignment.ToColorizedDisplayString();
             return false;
         }
-        text = Utils.ApplyGradient(displayString, useNeutralGradient ? neutralGradient : faction.GetChangedGradient(role)) + " " + Utils.ApplyGradient(subAlignment.ToDisplayString(), subAlignGradient);
-        __result = text;
+        __result = Utils.ApplyGradient(displayString, useNeutralGradient ? neutralGradient : faction.GetChangedGradient(role)) + " " + Utils.ApplyGradient(subAlignment.ToDisplayString(), subAlignGradient);
         return false;
     }
 

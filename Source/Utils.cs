@@ -761,49 +761,62 @@ public static class Utils
         return Color.Lerp(color, strength < 0 ? Color.white : Color.black, Mathf.Abs(strength));
     }
 
-    public static string ToRoleFactionDisplayString(this Role role, FactionType faction)
-    {
-        if (!Fancy.FactionalRoleNames.Value)
-            return role.ToDisplayString();
+	public static string ToRoleFactionDisplayString(this Role role, FactionType faction)
+	{
+		if (!Fancy.FactionalRoleNames.Value)
+			return role.ToDisplayString();
 
-        if (role is Role.STONED or Role.HIDDEN or Role.UNKNOWN)
-            faction = FactionType.NONE;
+		if (role is Role.STONED or Role.HIDDEN or Role.UNKNOWN)
+			faction = FactionType.NONE;
 
-        var factionName = FactionName(faction, GameModType.BTOS2).ToUpper();
+		var factionName = FactionName(faction, GameModType.BTOS2)?.ToUpper() ?? "NONE";
+		if (factionName == "FACTIONLESS")
+			factionName = "NONE";
 
-        if (factionName == "FACTIONLESS")
-            factionName = "NONE";
+		var isBTOS2 = Constants.IsBTOS2() || SettingsAndTestingUI.Instance?.IsBTOS2 == true;
 
-        if (Constants.IsBTOS2())
-            factionName += "_BTOS";
+		var newKey = $"{(isBTOS2 ? "BTOS_" : "GUI_")}ROLENAME_{(int)role}_{(int)faction}";
+		var oldKey = $"FANCY_{(isBTOS2 ? "BTOS_" : "")}{factionName}_ROLENAME_{(int)role}";
 
-        if (SettingsAndTestingUI.Instance?.IsBTOS2 == true)
-            factionName += "_BTOS";
+		var loc = Service.Home.LocalizationService;
 
-        return GetString($"FANCY_{factionName}_ROLENAME_{(int)role}");
-    }
+		if (loc.StringExists(newKey))
+			return loc.GetLocalizedString(newKey);
 
-    public static string ToFactionalRoleBlurb(this Role role, FactionType faction)
-    {
-        if (!Fancy.FactionalRoleBlurbs.Value)
-            return role.ToDisplayString();
+		if (loc.StringExists(oldKey))
+			return loc.GetLocalizedString(oldKey);
 
-        if (role is Role.STONED or Role.HIDDEN or Role.UNKNOWN)
-            faction = FactionType.NONE;
+		return role.ToDisplayString();
+	}
 
-        var factionName = FactionName(faction, GameModType.BTOS2).ToUpper();
 
-        if (factionName == "FACTIONLESS")
-            factionName = "NONE";
+	public static string ToFactionalRoleBlurb(this Role role, FactionType faction)
+	{
+		if (!Fancy.FactionalRoleBlurbs.Value)
+			return role.GetRoleBlurb();
 
-        if (Constants.IsBTOS2())
-            factionName += "_BTOS";
+		if (role is Role.STONED or Role.HIDDEN or Role.UNKNOWN)
+			faction = FactionType.NONE;
 
-        if (SettingsAndTestingUI.Instance?.IsBTOS2 == true)
-            factionName += "_BTOS";
+		var factionName = FactionName(faction, GameModType.BTOS2)?.ToUpper() ?? "NONE";
+		if (factionName == "FACTIONLESS")
+			factionName = "NONE";
 
-        return GetString($"FANCY_{factionName}_ROLE_BLURB_{(int)role}");
-    }
+		var isBTOS2 = Constants.IsBTOS2() || SettingsAndTestingUI.Instance?.IsBTOS2 == true;
+
+		var newKey = $"{(isBTOS2 ? "BTOS_" : "GUI_")}ROLE_BLURB_{(int)role}_{(int)faction}";
+		var oldKey = $"FANCY_{(isBTOS2 ? "BTOS_" : "")}{factionName}_ROLE_BLURB_{(int)role}";
+
+		var loc = Service.Home.LocalizationService;
+
+		if (loc.StringExists(newKey))
+			return loc.GetLocalizedString(newKey);
+
+		if (loc.StringExists(oldKey))
+			return loc.GetLocalizedString(oldKey);
+
+		return role.GetRoleBlurb();
+	}
 
     public static Color GetPlayerRoleColor(int pos)
     {

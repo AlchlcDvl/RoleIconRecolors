@@ -223,6 +223,7 @@ public class Fancy : BaseMod<Fancy>
     public static EnumDropdownOption<EffectType> SelectTestingEffect;
 
     public static EnumDropdownOption<RecruitEndType> RecruitEndingColor;
+    public static FloatOption FactionLabelSize;
     public static EnumDropdownOption<FactionLabelOption> RoleCardFactionLabel;
     public static EnumDropdownOption<FactionLabelOption> FactionNameNextToRole;
     public static EnumDropdownOption<PlayerListRoleIconOption> PlayerListRoleIcon;
@@ -387,6 +388,7 @@ public class Fancy : BaseMod<Fancy>
         LethalColors = new("LETHAL_COLORS", false, PackType.MiscRoleCustomisation);
         VerticalGradients = new("VERTICAL_GRADIENTS", true, PackType.MiscRoleCustomisation);
         RecruitEndingColor = new("RECRUIT_ENDING", RecruitEndType.JackalEnd, PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists, useTranslations: true);
+        FactionLabelSize = new("FACTION_LABEL_SIZE", 85, PackType.MiscRoleCustomisation, 10, 100, true);
         RoleCardFactionLabel = new("FACTION_LABEL", FactionLabelOption.Mismatch, PackType.MiscRoleCustomisation, useTranslations: true);
         FactionNameNextToRole = new("FACTION_NEXT_TO_ROLE", FactionLabelOption.Never, PackType.MiscRoleCustomisation, useTranslations: true);
         RecruitLabel = new("RECRUIT_LABEL", "Recruited", PackType.MiscRoleCustomisation, setActive: () => Constants.BTOS2Exists());
