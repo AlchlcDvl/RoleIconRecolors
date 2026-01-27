@@ -1,6 +1,6 @@
 namespace FancyUI.Settings;
 
-public class DropdownSetting : Setting
+public sealed class DropdownSetting : Setting
 {
     public TMP_Dropdown Dropdown { get; set; }
     public IDropdown Option { get; set; }

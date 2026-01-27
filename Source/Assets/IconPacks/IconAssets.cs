@@ -1,6 +1,6 @@
 namespace FancyUI.Assets.IconPacks;
 
-public class IconAssets(string name)
+public sealed class IconAssets(string name)
 {
     private string Name { get; } = name;
 

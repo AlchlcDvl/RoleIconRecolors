@@ -1,6 +1,6 @@
 // namespace FancyUI.Assets.SilhouetteSwapper;
 //
-// public class SilhouetteSet(string name) : Pack(name, PackType.SilhouetteSets)
+// public sealed class SilhouetteSet(string name) : Pack(name, PackType.SilhouetteSets)
 // {
 //     public Dictionary<ModType, SilhouetteAssets> Assets { get; set; } = [];
 //

@@ -2,7 +2,7 @@ using NewModLoading;
 
 namespace FancyUI.Assets.IconPacks;
 
-public class IconPack(string name) : Pack(name, PackType.IconPacks)
+public sealed class IconPack(string name) : Pack(name, PackType.IconPacks)
 {
     public Dictionary<GameModType, IconAssets> Assets { get; } = [];
     private Dictionary<string, Sprite> NumberSprites { get; } = [];

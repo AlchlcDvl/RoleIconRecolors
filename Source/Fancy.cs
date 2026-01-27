@@ -3,7 +3,7 @@ using NewModLoading;
 
 namespace FancyUI;
 
-public class Fancy : BaseMod<Fancy>
+public sealed class Fancy : BaseMod<Fancy>
 {
     public override string Name => "Fancy UI";
     public override string HarmonyId => "alchlcsystm.fancy.ui";

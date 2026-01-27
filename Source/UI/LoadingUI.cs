@@ -1,6 +1,6 @@
 namespace FancyUI.UI;
 
-public class LoadingUI : UIController
+public sealed class LoadingUI : UISingleton<LoadingUI>
 {
     private Transform Cog { get; set; }
 
@@ -11,11 +11,9 @@ public class LoadingUI : UIController
 
     private bool Started { get; set; }
 
-    public static LoadingUI Instance { get; private set; }
-
     public void Awake()
     {
-        Instance = this;
+        _instance = this;
 
         Cog = transform.Find("Cog");
         Title = transform.GetComponent<TextMeshProUGUI>("Title");
@@ -32,8 +30,6 @@ public class LoadingUI : UIController
 
         FancyUI.SetupFonts(transform);
     }
-
-    public void OnDestroy() => Instance = null;
 
     private static void Cancel() => Coroutines.Stop(DownloaderUI.Instance.InProgress);
 
