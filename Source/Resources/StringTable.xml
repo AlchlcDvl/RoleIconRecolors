@@ -756,7 +756,7 @@
     <Entry key="FANCY_CHAT_BACKGROUND_DESC">The opacity of the chat background. Default is 80%.</Entry>
 
     <Entry key="FANCY_FACTION_LABEL_SIZE_NAME">Faction Label Size (%)</Entry>
-    <Entry key="FANCY_CHAT_BACKGROUND_DESC">The size of the faction label in the role card. Also applies to the VIP, Town Traitor and Recruited labels. Default is 85%.</Entry>
+    <Entry key="FANCY_FACTION_LABEL_SIZE_DESC">The size of the faction label in the role card. Also applies to the VIP, Town Traitor and Recruited labels. Default is 85%.</Entry>
 
     <Entry key="FANCY_PLAYER_LIST_ROLE_ICON_NAME">Render Role Icon in Player List</Entry>
     <Entry key="FANCY_PLAYER_LIST_ROLE_ICON_DESC">Whether or not to render the role icon in the player list, either to the left or to the right.</Entry>

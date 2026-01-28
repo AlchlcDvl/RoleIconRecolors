@@ -1539,7 +1539,7 @@ public static class FactionSpecificPotionMasterResults
 
     private static readonly HashSet<int> BTOS2AllowedMessageIds =
     [
-        1010, 1012, 1018, 1020, 1022, 1027, 1030, 1072, 1090, 1091, 1099
+        1010, 1012, 1018, 1020, 1022, 1027, 1030, 1072, 1090, 1091, 1099, 1060, 1061
     ];
 
     public static void Postfix(ChatLogMessage chatLogMessage, UIController uiController, ref string __result)
