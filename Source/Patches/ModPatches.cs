@@ -149,7 +149,7 @@ public static class RoleRevealCinematicPlayerPatch
         __instance.silhouetteWrapper.gameObject.SetActive(true);
         __instance.silhouetteWrapper.SwapWithSilhouette((int)role);
 
-        var roleName = role.ToColorizedNoLabel(CurrentFaction);
+        var roleName = CurrentFaction == FactionType.NONE ? role.ToColorizedNoLabel(role.GetFaction()) : role.ToColorizedNoLabel(CurrentFaction);
         var roleIcon = role.GetTMPSprite() + roleName;
 
         roleIcon = roleIcon.Replace("RoleIcons\"", $"RoleIcons ({((role.GetFactionType() == CurrentFaction && Constants.CurrentStyle() == "Regular")
@@ -701,7 +701,7 @@ public static class PandoraAndComplianceRoleSlotsPatch
 		if (!Constants.IsBTOS2())
 			return;
 		
-        var alignmentOrder = new RoleAlignment[] { RoleAlignment.TOWN, RoleAlignment.COVEN, (RoleAlignment)17, (RoleAlignment)100, (RoleAlignment)101, RoleAlignment.NEUTRAL, RoleAlignment.ANY };
+        var alignmentOrder = new RoleAlignment[] { RoleAlignment.TOWN, RoleAlignment.COVEN, (RoleAlignment)17, (RoleAlignment)100, (RoleAlignment)101, RoleAlignment.NEUTRAL };
 
         var list = new List<RoleDeckSlot>();
 
