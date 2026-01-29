@@ -789,6 +789,34 @@ public static class Utils
 		return role.ToDisplayString();
 	}
 
+	public static string ToRoleFactionShortenedDisplayString(this Role role, FactionType faction)
+	{
+		if (!Fancy.FactionalRoleNames.Value)
+			return role.ToShortenedDisplayString();
+
+		if (role is Role.STONED or Role.HIDDEN or Role.UNKNOWN)
+			faction = FactionType.NONE;
+
+		var factionName = FactionName(faction, GameModType.BTOS2)?.ToUpper() ?? "NONE";
+		if (factionName == "FACTIONLESS")
+			factionName = "NONE";
+
+		var isBTOS2 = Constants.IsBTOS2() || SettingsAndTestingUI.Instance?.IsBTOS2 == true;
+
+		var newKey = $"{(isBTOS2 ? "BTOS_" : "GUI_")}SHORTNAME_{(int)role}_{(int)faction}";
+		var oldKey = $"FANCY_{(isBTOS2 ? "BTOS_" : "")}{factionName}_SHORTNAME_{(int)role}";
+
+		var loc = Service.Home.LocalizationService;
+
+		if (loc.StringExists(newKey))
+			return loc.GetLocalizedString(newKey);
+
+		if (loc.StringExists(oldKey))
+			return loc.GetLocalizedString(oldKey);
+
+		return role.ToShortenedDisplayString();
+	}
+
 
 	public static string ToFactionalRoleBlurb(this Role role, FactionType faction)
 	{
@@ -1023,6 +1051,11 @@ public static class Utils
     public static string ToFactionalDisplayString(this Role role, FactionType faction)
     {
         return Fancy.FactionalRoleNames.Value ? role.ToRoleFactionDisplayString(faction) : role.ToDisplayString();
+    }
+
+    public static string ToFactionalShortenedDisplayString(this Role role, FactionType faction)
+    {
+        return Fancy.FactionalRoleNames.Value ? role.ToRoleFactionShortenedDisplayString(faction) : role.ToShortenedDisplayString();
     }
 
 	public static void ApplyDockItemIcon(HudDockItem item)

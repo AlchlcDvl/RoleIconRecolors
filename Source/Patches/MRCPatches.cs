@@ -662,14 +662,6 @@ public static class ClientRoleExtensionsPatches
     {
         var gradient = factionType.GetChangedGradient(role);
 
-        // Pretty sure this got removed from vanilla but I don't know for sure
-        if (__result.Contains("<color=#B545FF>(Traitor)"))
-        {
-            __result = __result.Replace("<color=#B545FF>(Traitor)</color>", gradient != null
-                ? $"{Utils.ApplyGradient($"({Fancy.CovenTraitorLabel.Value})", gradient)}"
-                : $"<style=CovenColor>({Fancy.CovenTraitorLabel.Value})</style>");
-        }
-
         if (!role.IsResolved() && role is not (Role.FAMINE or Role.DEATH or Role.PESTILENCE or Role.WAR))
             return;
 
@@ -678,7 +670,7 @@ public static class ClientRoleExtensionsPatches
         var factionText = factionType.ToDisplayString();
 
         if (((Fancy.FactionNameNextToRole.Value == FactionLabelOption.Mismatch && role.GetFaction() != factionType) || (Fancy.FactionNameNextToRole.Value == FactionLabelOption.Always) ||
-            (Fancy.FactionNameNextToRole.Value == FactionLabelOption.Conditional && !Utils.ConditionalCompliancePandora(role.GetFaction(), factionType))) && !Pepper.IsRoleRevealPhase())
+            (Fancy.FactionNameNextToRole.Value == FactionLabelOption.Conditional && !Utils.ConditionalCompliancePandora(role.GetFaction(), factionType))))
         {
             if (gradient != null)
                 newText += $" {Utils.ApplyGradient($"({factionText})", gradient)}";
@@ -868,11 +860,11 @@ public static void PostfixShortened(ref string __result, Role role)
         if (!role.IsResolved() && role is not (Role.FAMINE or Role.DEATH or Role.PESTILENCE or Role.WAR))
             return;
 
-        var text = role.ToShortenedDisplayString();
+        var text = Fancy.FactionalRoleNames.Value ? role.ToRoleFactionShortenedDisplayString(factionType) : role.ToShortenedDisplayString();
+        var newText = gradient != null ? Utils.ApplyGradient(text, gradient) : $"<color={factionType.GetFactionColor()}>{text}</color>";
 
-        __result = gradient != null
-            ? Utils.ApplyGradient(text, gradient)
-            : $"<color={factionType.GetFactionColor()}>{text}</color>";
+        __result = newText;
+
     }
 
     [HarmonyPatch(nameof(ClientRoleExtensions.GetSecondFactionColor)), HarmonyPrefix]
