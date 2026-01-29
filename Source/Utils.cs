@@ -1094,5 +1094,12 @@ public static class Utils
 
 		if (sprite != null)
 			img.sprite = sprite;
-}
+    }
+    public static string GetKeyPrefix(bool fancy = false)
+    {
+        if (fancy)
+            return Constants.IsBTOS2() ? "FBTOS" : "FGUI";
+
+        return Constants.IsBTOS2() ? "BTOS" : "GUI";
+    }
 }
