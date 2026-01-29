@@ -26,8 +26,11 @@
     <Entry key="FANCY_RANDOM_APOC_IN_VANILLA_NAME">Random Apocalypse Over Neutral Apocalypse</Entry>
     <Entry key="FANCY_RANDOM_APOC_IN_VANILLA_DESC">If enabled, the Neutral Apocalypse bucket will be changed to say Random Apocalypse if Gradient Buckets is active.</Entry>
 
-    <Entry key="FANCY_DEAD_CHAT_DESATURATION_NAME">Dead Chat Desaturation (%)</Entry>
-    <Entry key="FANCY_DEAD_CHAT_DESATURATION_DESC">Deterines how desaturated the names of dead players are when you know their roles. Setting to -1 effectively disables this feature.</Entry>
+    <Entry key="FANCY_DEAD_CHAT_DESATURATION_NAME">Dead Chat Saturation (%)</Entry>
+    <Entry key="FANCY_DEAD_CHAT_DESATURATION_DESC">Determines how saturated the names of dead players are when you know their roles. Setting to -1 effectively disables this feature.</Entry>
+
+    <Entry key="FANCY_BANNED_ROLE_DESATURATION_NAME">Banned Role Saturation (%)</Entry>
+    <Entry key="FANCY_BANNED_ROLE_DESATURATION_DESC">Determines how saturated the color of a banned role is. Setting to -1 effectively disables this feature.</Entry>
 
     <Entry key="FANCY_GRADIENT_BUCKETS_NAME">Gradient Buckets</Entry>
     <Entry key="FANCY_GRADIENT_BUCKETS_DESC">If enabled, buckets will make use of gradients.</Entry>
@@ -771,6 +774,8 @@
 	<Entry key="FANCY_CINEMATIC_DEATH"><![CDATA[<shake a=0.3>%name_role253% has claimed the souls of the %name_faction1%!</shake>]]></Entry>
 	<Entry key="FANCY_CINEMATIC_DOOMSAYER"><![CDATA[The %name_role43% has appeased the Old Ones.]]></Entry>
 	<Entry key="FANCY_CINEMATIC_PIRATE"><![CDATA[<color=#ffffff>The %name_role46% sets sail after their victory!</color>]]></Entry>
+	<Entry key="FANCY_CINEMATIC_APOCALYPSE_IS_NIGH"><![CDATA[<shake a=0.3>The %name_faction7% is nigh!</shake>]]></Entry>
+	
 
 	<Entry key="FANCY_CINEMATIC_ATTACK_COVEN"><![CDATA[<shake a=0.3>You were killed by a member of the %name_faction2%!</shake>]]></Entry>
 	<Entry key="FANCY_CINEMATIC_ATTACK_ARSONIST"><![CDATA[<shake a=0.3>You were incinerated by an %name_role40%!</shake>]]></Entry>

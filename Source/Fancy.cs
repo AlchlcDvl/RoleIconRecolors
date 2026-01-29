@@ -147,6 +147,7 @@ public sealed class Fancy : BaseMod<Fancy>
     public static FloatOption GrayscaleAmount;
 
     public static FloatOption DeadChatDesaturation;
+    public static FloatOption BannedRoleDesaturation;
     public static ToggleOption TallRoleDeck;
     public static ToggleOption YouAreARole;
 
@@ -414,6 +415,7 @@ public sealed class Fancy : BaseMod<Fancy>
         UnknownColor = new("UNKNOWN_ROLE", "#b0b0b0", PackType.MiscRoleCustomisation);
         DeadColor = new("DEAD_CHAT", "#689194", PackType.MiscRoleCustomisation);
         DeadChatDesaturation = new("DEAD_CHAT_DESATURATION", 50, PackType.MiscRoleCustomisation, -1, 100, true);
+        // BannedRoleDesaturation = new("BANNED_ROLE_DESATURATION", -1, PackType.MiscRoleCustomisation, -1, 100, true);
         WhisperColor = new("WHISPER", "#AA7CFF", PackType.MiscRoleCustomisation);
         WildlingWhisperColor = new("WILDLING_WHISPER", "#DD0000", PackType.MiscRoleCustomisation);
         SerialKillerWhisperColor = new("SERIALKILLER_WHISPER", "#800040", PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists);

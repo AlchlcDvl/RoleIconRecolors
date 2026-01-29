@@ -37,19 +37,19 @@ public static class FancyChatWhispers
         var isWildling = myRole == Role.WILDLING;
         var isSerialKiller = myRole == Role.SERIALKILLER && Constants.IsBTOS2();
 
-        if (!(myPosition == __instance.whispererId || myPosition == __instance.whispereeId) && (isWildling || isSerialKiller) && Pepper.AmIAlive())
+        if (!(myPosition == __instance.whispererId || myPosition == __instance.whispereeId) && (isWildling || isSerialKiller))
         {
             string xToY;
             Color color;
 
             if (isWildling)
             {
-                xToY = Utils.GetString("FANCY_WILDLING_XIS_WHISPERING_TO_Y");
+                xToY = Pepper.AmIAlive() ? Utils.GetString("FANCY_WILDLING_XIS_WHISPERING_TO_Y") : Utils.GetString("GUI_XIS_WHISPERING_TO_Y");
                 color = Fancy.WildlingWhisperColor.Value.ToColor();
             }
             else
             {
-                xToY = Utils.GetString("FANCY_SERIALKILLER_XIS_WHISPERING_TO_Y");
+                xToY = Pepper.AmIAlive() ? Utils.GetString("FANCY_SERIALKILLER_XIS_WHISPERING_TO_Y") : Utils.GetString("GUI_XIS_WHISPERING_TO_Y");
                 color = Fancy.SerialKillerWhisperColor.Value.ToColor();
             }
 

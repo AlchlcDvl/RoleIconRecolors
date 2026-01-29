@@ -874,6 +874,14 @@ public static class Utils
         return name == "Stoned_Hidden" ? Fancy.Colors["STONED_HIDDEN"].Start.ToColor() : Fancy.Colors[name.ToUpper()].End.ToColor();
     }
 
+	public static Color GetFactionMiddleColor(FactionType faction)
+	{
+		var start = GetFactionStartingColor(faction);
+		var end = GetFactionEndingColor(faction);
+
+		return Color.Lerp(start, end, 0.5f);
+	}
+
     public static string GetString(string key) => Service.Home.LocalizationService.GetLocalizedString(key);
 
     public static string RemoveVanillaGradientStyleTags(string input)

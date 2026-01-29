@@ -73,6 +73,8 @@ public static class Constants
 
     public static float DeadChatDesaturation() => Fancy.DeadChatDesaturation.Value / 100f;
 
+    // public static float BannedRoleDesaturation() => Fancy.BannedRoleDesaturation.Value / 100f;
+
     public static float ChatBackgroundOpacity() => Fancy.ChatBackgroundOpacity.Value / 100f;
 
     public static int PlayerNumber() => (int)Fancy.PlayerNumber.Value;
@@ -147,4 +149,8 @@ public static class Constants
     public static bool IsIndividuality() => IsBTOS2() && Service.Game?.Sim?.simulation?.roleDeckBuilder?.Data?.modifierCards?.Contains(Btos2Role.Individuality) == true;
 
     public static bool IsFourHorsemen() => !IsBTOS2() && Service.Game?.Sim?.simulation?.roleDeckBuilder?.Data?.modifierCards?.Contains(Role.FOUR_HORSEMEN) == true;
+
+    public static bool IsRoleInDeck(Role role) => Service.Game?.Sim?.simulation?.roleDeckBuilder?.Data?.roles?.Contains(role) == true;
+
+    public static bool IsRoleBanned(Role role) => Service.Game?.Sim?.simulation?.roleDeckBuilder?.Data?.bannedRoles?.Contains(role) == true;
 }

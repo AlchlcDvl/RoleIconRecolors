@@ -576,8 +576,9 @@ public static class PatchDefaultWinScreens
 
         if (gradient != null)
         {
-            __instance.leftImage.color = Utils.GetFactionStartingColor(winningFaction);
-            __instance.rightImage.color = Fancy.VerticalGradients.Value ? Utils.GetFactionStartingColor(winningFaction) : Utils.GetFactionEndingColor(winningFaction);
+            __instance.leftImage.color = Fancy.VerticalGradients.Value ? Utils.GetFactionMiddleColor(winningFaction) : Utils.GetFactionStartingColor(winningFaction);
+            __instance.rightImage.color = Fancy.VerticalGradients.Value ? Utils.GetFactionMiddleColor(winningFaction) : Utils.GetFactionEndingColor(winningFaction);
+			__instance.glow.color = Fancy.VerticalGradients.Value ? Utils.GetFactionMiddleColor(winningFaction) : Utils.GetFactionStartingColor(winningFaction);
             __instance.textAnimatorPlayer.ShowText(Utils.ApplyGradient(text, gradient));
         }
         else
@@ -620,20 +621,38 @@ public static class PatchCustomWinScreens
             __instance.textAnimatorPlayer.ShowText(text2);
 
         foreach (var child in __instance.transform.GetComponentsInChildren<Transform>(true))
-        {
-            if (child.name is not ("Filigree_L" or "Filigree_R" or "Glow"))
-                continue;
+		{
+			switch (child.name)
+			{
+				case "Filigree_L":
+				case "Filigree_R":
+				case "Glow":
+					if (child.TryGetComponent<Image>(out var image))
+					{
+						if (Fancy.VerticalGradients.Value)
+						{
+							image.color = Utils.GetFactionMiddleColor(winningFaction);
+						}
+						else
+						{
+							image.color = child.name == "Filigree_R"
+								? Utils.GetFactionEndingColor(winningFaction)
+								: Utils.GetFactionStartingColor(winningFaction);
+						}
+					}
+					break;
 
-            if (child.TryGetComponent<Image>(out var image))
-            {
-                if (Fancy.VerticalGradients.Value)
-                image.color = Utils.GetFactionStartingColor(winningFaction);
-                else
-                image.color = child.name == "Filigree_R" ? Utils.GetFactionEndingColor(winningFaction) : Utils.GetFactionStartingColor(winningFaction);
-            }
+				case "BigText":
+				case "BigText (1)":
+					if (child.TryGetComponent<TextMeshProUGUI>(out var tmp))
+					{
+						tmp.text = Utils.GetString("FANCY_APOCALYPSE_IS_NIGH");
+					}
+					break;
+			}
+		}
 
-        }
-
+		
         __instance.SetUpWinners();
         return false;
     }
@@ -665,6 +684,9 @@ public static class ClientRoleExtensionsPatches
         if (!role.IsResolved() && role is not (Role.FAMINE or Role.DEATH or Role.PESTILENCE or Role.WAR))
             return;
 
+		// if (gradient != null && Fancy.BannedRoleDesaturation.Value != -1 && Constants.IsRoleBanned(role))
+			// gradient = Utils.Desaturate(gradient, Constants.BannedRoleDesaturation());
+		
         var text = Fancy.FactionalRoleNames.Value ? role.ToRoleFactionDisplayString(factionType) : role.ToDisplayString();
         var newText = gradient != null ? Utils.ApplyGradient(text, gradient) : $"<color={factionType.GetFactionColor()}>{text}</color>";
         var factionText = factionType.ToDisplayString();
@@ -860,6 +882,9 @@ public static void PostfixShortened(ref string __result, Role role)
         if (!role.IsResolved() && role is not (Role.FAMINE or Role.DEATH or Role.PESTILENCE or Role.WAR))
             return;
 
+		// if (gradient != null && Fancy.BannedRoleDesaturation.Value != -1 && Constants.IsRoleBanned(role))
+			// gradient = Utils.Desaturate(gradient, Constants.BannedRoleDesaturation());
+		
         var text = Fancy.FactionalRoleNames.Value ? role.ToRoleFactionShortenedDisplayString(factionType) : role.ToShortenedDisplayString();
         var newText = gradient != null ? Utils.ApplyGradient(text, gradient) : $"<color={factionType.GetFactionColor()}>{text}</color>";
 
