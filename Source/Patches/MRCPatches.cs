@@ -16,7 +16,6 @@ using Server.Shared.Cinematics;
 using Server.Shared.Cinematics.Data;
 using Server.Shared.Extensions;
 using Server.Shared.Messages;
-using Server.Shared.State;
 using Server.Shared.State.Chat;
 using Shared.Chat;
 
@@ -31,7 +30,7 @@ public static class PatchRoleCard
         var component = __instance.GetComponent<GradientRoleColorController>();
 
         if (component != null)
-            UObject.Destroy(component);
+            component.Destroy();
 
         __instance.gameObject.AddComponent<GradientRoleColorController>().Instance = __instance.rolecardBG;
         __instance.roleNameText.text = Pepper.GetMyRole().ToChangedDisplayString(Pepper.GetMyFaction(), Service.Game.Sim.simulation.observations.roleCardObservation.Data.modifier);
@@ -290,9 +289,9 @@ public static class RoleCardPopupPatches2
     {
         if (Service.Game.Sim.simulation.roleDeckBuilder.Data.modifierCards.Contains(Role.FEELIN_LUCKY) || Constants.IsBTOS2() && Service.Game.Sim.simulation.roleDeckBuilder.Data.modifierCards.Contains(Btos2Role.FeelinLucky))
             return true;
-        int defense = -1;
+        var defense = -1;
         Role role = __instance.CurrentRole;
-        int faction = (int)__instance.CurrentFaction;
+        var faction = (int)__instance.CurrentFaction;
         if (faction == 33)
             faction = (int)__instance.CurrentRole.GetFaction();
         if (faction > 0 && faction < 3 || faction > 42)
@@ -305,8 +304,8 @@ public static class RoleCardPopupPatches2
             defense = 4;
         if (faction == 33 && role != Btos2Role.Jackal || faction > 33 && faction < 37)
             defense = data.defense;
-        float num = 0f;
-        float num2 = 0f;
+        var num = 0f;
+        var num2 = 0f;
         if (data.attack == 1)
         {
             num = 0.33f;
@@ -652,7 +651,7 @@ public static class PatchCustomWinScreens
 			}
 		}
 
-		
+
         __instance.SetUpWinners();
         return false;
     }
@@ -686,7 +685,7 @@ public static class ClientRoleExtensionsPatches
 
 		// if (gradient != null && Fancy.BannedRoleDesaturation.Value != -1 && Constants.IsRoleBanned(role))
 			// gradient = Utils.Desaturate(gradient, Constants.BannedRoleDesaturation());
-		
+
         var text = Fancy.FactionalRoleNames.Value ? role.ToRoleFactionDisplayString(factionType) : role.ToDisplayString();
         var newText = gradient != null ? Utils.ApplyGradient(text, gradient) : $"<color={factionType.GetFactionColor()}>{text}</color>";
         var factionText = factionType.ToDisplayString();
@@ -884,7 +883,7 @@ public static void PostfixShortened(ref string __result, Role role)
 
 		// if (gradient != null && Fancy.BannedRoleDesaturation.Value != -1 && Constants.IsRoleBanned(role))
 			// gradient = Utils.Desaturate(gradient, Constants.BannedRoleDesaturation());
-		
+
         var text = Fancy.FactionalRoleNames.Value ? role.ToRoleFactionShortenedDisplayString(factionType) : role.ToShortenedDisplayString();
         var newText = gradient != null ? Utils.ApplyGradient(text, gradient) : $"<color={factionType.GetFactionColor()}>{text}</color>";
 
@@ -1511,14 +1510,14 @@ public static class LeaveTownFactionPatch
             ChatLogGameMessageEntry chatLogGameMessageEntry = __instance._chatLogMessage.chatLogEntry as ChatLogGameMessageEntry;
             if (killRecord.playerId != chatLogGameMessageEntry.playerNumber1)
                 continue;
-            string text = __instance.l10n(Constants.IsBTOS2() ? "BTOS_GAME_304" : "GAME_304");
+            var text = __instance.l10n(Constants.IsBTOS2() ? "BTOS_GAME_304" : "GAME_304");
             text = text.Replace("%name%", string.Format("[[@{0}]]", chatLogGameMessageEntry.playerNumber1 + 1));
             Tuple<Role, FactionType> tuple = new(killRecord.playerRole, killRecord.playerFaction);
             text = text.Replace("%role%", string.Format("[[#{0},{1}]]", (int)tuple.Item1, (int)tuple.Item2));
             text = __instance.mentionPanel.mentionsProvider.DecodeText(text);
             __instance.textField.SetText(text);
-            string style = __instance.l10nStyle(Constants.IsBTOS2() ? "BTOS_GAME_304" : "GAME_304", "");
-            string text2 = __instance.l10nStyle(text, "");
+            var style = __instance.l10nStyle(Constants.IsBTOS2() ? "BTOS_GAME_304" : "GAME_304", "");
+            var text2 = __instance.l10nStyle(text, "");
             if (!string.IsNullOrEmpty(text2))
             {
                 __instance.SetChatStyle(text2);

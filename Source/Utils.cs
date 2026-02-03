@@ -1136,11 +1136,24 @@ public static class Utils
 		if (sprite != null)
 			img.sprite = sprite;
     }
+
     public static string GetKeyPrefix(bool fancy = false)
     {
         if (fancy)
             return Constants.IsBTOS2() ? "FBTOS" : "FGUI";
 
         return Constants.IsBTOS2() ? "BTOS" : "GUI";
+    }
+
+    public static void TrueDestroy(this Sprite sprite)
+    {
+        sprite.texture.Destroy();
+        sprite.Destroy();
+    }
+
+    public static void TrueDestroy(this TMP_SpriteAsset sprite)
+    {
+        sprite.spriteSheet.Destroy();
+        sprite.Destroy();
     }
 }

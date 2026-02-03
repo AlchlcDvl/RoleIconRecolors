@@ -9,20 +9,11 @@ using Home.Services;
 using Home.Shared;
 using Mentions;
 using Mentions.Providers;
-using NewModLoading;
-using SalemModLoader;
 using SalemModLoaderUI;
 using Server.Shared.Cinematics.Data;
 using Server.Shared.Collections;
 using Server.Shared.Extensions;
-using Server.Shared.State;
 using UnityEngine.EventSystems;
-using UnityEngine.TextCore;
-using System.Collections.Generic;
-using System.Reflection.Emit;
-using Game.Chat;
-using Game.Interface;
-using Server.Shared.Cinematics;
 
 namespace FancyUI.Patches;
 
@@ -292,7 +283,7 @@ public static class ModifierFactionPatch
     }
 }
 
-/* 
+/*
 [HarmonyPatch(typeof(SpecialAbilityPopupGenericListItem), nameof(SpecialAbilityPopupGenericListItem.SetData))]
 public static class SpecialAbilityPopupGenericListItemPatch
 {
@@ -700,7 +691,7 @@ public static class PandoraAndComplianceRoleSlotsPatch
     {
 		if (!Constants.IsBTOS2())
 			return;
-		
+
         var alignmentOrder = new RoleAlignment[] { RoleAlignment.TOWN, RoleAlignment.COVEN, (RoleAlignment)17, (RoleAlignment)100, (RoleAlignment)101, RoleAlignment.NEUTRAL };
 
         var list = new List<RoleDeckSlot>();
@@ -806,7 +797,7 @@ public static class PandoraAndComplianceDeckSlotPatch
 
         var role1Alignment = __instance.Role1.GetAlignment();
         var role2Alignment = __instance.Role2.GetAlignment();
-		
+
 		if (Constants.IsPandora())
 		{
 			if (role1Alignment is RoleAlignment.COVEN or ((RoleAlignment)17))
@@ -824,7 +815,7 @@ public static class PandoraAndComplianceDeckSlotPatch
 			if (__instance.Role2.IsNeutralKilling() || __instance.Role1 == Btos2Role.NeutralKilling)
 				role2Alignment = (RoleAlignment)101;
 		}
-		
+
         if (!__instance.IsDualBucket() || role1Alignment == role2Alignment)
         {
             __result = role1Alignment;
@@ -910,14 +901,14 @@ public static class MarshalCinematicFixes
         if (!Constants.IsBTOS2())
             return;
 
-        int playerPosition = __instance.roleRevealCinematic.playerPosition;
+        var playerPosition = __instance.roleRevealCinematic.playerPosition;
         TosCharacter characterByPosition = Service.Game.Cast.GetCharacterByPosition(playerPosition);
         if (characterByPosition != null)
         {
             characterByPosition.characterSprite.SetColor(Color.clear);
         }
-        string playerName = Service.Game.Cast.GetPlayerName(playerPosition, false);
-        string text = (__instance.roleRevealCinematic.hasRevealed ? Utils.GetString("FANCY_MARSHAL_CINEMATIC_2") : Utils.GetString("FANCY_MARSHAL_CINEMATIC_BTOS")).Replace("%name%", playerName);
+        var playerName = Service.Game.Cast.GetPlayerName(playerPosition, false);
+        var text = (__instance.roleRevealCinematic.hasRevealed ? Utils.GetString("FANCY_MARSHAL_CINEMATIC_2") : Utils.GetString("FANCY_MARSHAL_CINEMATIC_BTOS")).Replace("%name%", playerName);
         // __instance.silhouetteWrapper.SwapWithSilhouette(56, true);
         __instance.textAnimatorPlayer.ShowText(text);
     }
@@ -1073,7 +1064,7 @@ public static class AttackedCinematicTextPatch
     [HarmonyPostfix]
     public static void InitPostfix(AttackedCinematicPlayer __instance)
     {
-        string customText = __instance.attackerRole switch
+        var customText = __instance.attackerRole switch
         {
             Role.COVENLEADER => Utils.GetString("FANCY_CINEMATIC_ATTACK_COVEN"),
             Role.ARSONIST => Utils.GetString("FANCY_CINEMATIC_ATTACK_ARSONIST"),
@@ -1163,6 +1154,6 @@ public static class AlwaysShowSecondaryAbility
         if (Cache.TryGetValue(__instance, out var box))
             obs.Data.secondAbilityAvailable = box.Value;
     }
-    
+
 }
 

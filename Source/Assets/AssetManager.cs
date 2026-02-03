@@ -2,7 +2,6 @@ using FancyUI.Assets.IconPacks;
 using FancyUI.Assets.SilhouetteSwapper;
 using NewModLoading;
 using SalemModLoader;
-using SML;
 using UnityEngine.TextCore;
 
 namespace FancyUI.Assets;
@@ -430,7 +429,7 @@ public static class FancyAssetManager
             mipMapBias = -2
         };
         Rect[] array2 = texture2D.PackTextures(array, 2, 4096);
-        for (int i = 0; i < array2.Length; i++)
+        for (var i = 0; i < array2.Length; i++)
         {
             Rect rect = array2[i];
             TMP_SpriteGlyph tMP_SpriteGlyph = new TMP_SpriteGlyph

@@ -10,7 +10,6 @@ global using UObject = UnityEngine.Object;
 
 global using System.Reflection;
 global using System.Collections;
-global using SRandom = System.Random;
 
 global using Game.Interface;
 global using Server.Shared.State;

@@ -170,7 +170,7 @@ public static class PatchRoleCards
         var ogfaction = Utils.FactionName(role.GetFactionType(), false);
         var reg = ogfaction != factionName;
         var sprite = GetSprite(reg, roleName, factionName);
-		
+
 		/* var obs = Service.Game?.Sim?.info?.roleCardObservation;
 		var data = obs?.Data;
 		bool ability1Available = data?.normalAbilityAvailable ?? true;
@@ -873,34 +873,53 @@ public static class PmBakerMenuPatch
 [HarmonyPatch(typeof(DownloadContributorTags), nameof(DownloadContributorTags.AddTMPSprites)), HarmonyPriority(Priority.VeryLow)]
 public static class ReplaceTMPSpritesPatch
 {
+    private static Func<int, string, TMP_SpriteAsset> OldSpriteAssetRequest;
+    private static readonly Dictionary<string, TMP_SpriteAsset> CachedAssets = [];
+
+    public static void ClearCache() => CachedAssets.Clear();
+
     public static void Postfix()
     {
-        var oldSpriteAssetRequest = Traverse.Create<TMP_Text>().Field<Func<int, string, TMP_SpriteAsset>>("OnSpriteAssetRequest").Value;
-        TMP_Text.OnSpriteAssetRequest += (index, str) =>
+        OldSpriteAssetRequest = Traverse.Create<TMP_Text>().Field<Func<int, string, TMP_SpriteAsset>>("OnSpriteAssetRequest").Value;
+        TMP_Text.OnSpriteAssetRequest += Request;;
+    }
+
+    private static TMP_SpriteAsset Request(int index, string str)
+    {
+        if (CachedAssets.TryGetValue(str, out var result))
+            return result;
+
+        var requestSuccess = false;
+
+        try
         {
-            try
-            {
-                if (Request(str, out var result))
-                    return result;
-            }
-            catch (Exception e)
-            {
-                RunDiagnostics(e);
-            }
+            if (Request(str, out result))
+                requestSuccess = true;
+        }
+        catch (Exception e)
+        {
+            RunDiagnostics(e);
+        }
 
+        if (!requestSuccess)
+        {
             if (str.Contains("BTOSRoleIcons"))
-                return BTOS22 ?? BTOS21;
-
-            if (str.Contains("RoleIcons"))
-                return Vanilla1 ?? CacheDefaults.RoleIcons;
-
-            return str switch
+                result = BTOS22 ?? BTOS21;
+            else if (str.Contains("RoleIcons"))
+                result = Vanilla1 ?? CacheDefaults.RoleIcons;
+            else
             {
-                "PlayerNumbers" => Vanilla2 ?? CacheDefaults.Numbers,
-                "Emojis" => Vanilla3 ?? CacheDefaults.Emojis,
-                _ => oldSpriteAssetRequest(index, str)
-            };
-        };
+                result = str switch
+                {
+                    "PlayerNumbers" => Vanilla2 ?? CacheDefaults.Numbers,
+                    "Emojis" => Vanilla3 ?? CacheDefaults.Emojis,
+                    _ => OldSpriteAssetRequest(index, str)
+                };
+            }
+        }
+
+        CachedAssets[str] = result;
+        return result;
     }
 
     private static bool Request(string str, out TMP_SpriteAsset asset)
@@ -912,77 +931,77 @@ public static class ReplaceTMPSpritesPatch
 
         var packName = Fancy.SelectedIconPack.Value;
 
-        if (IconPacks.TryGetValue(packName, out var pack))
+        if (!IconPacks.TryGetValue(packName, out var pack))
         {
-            if (str.Contains("RoleIcons"))
-            {
-                var mod = GameModType.Vanilla;
-
-                if (str.Contains("BTOS") || Constants.IsBTOS2() || Utils.FindCasualQueue())
-                    mod = GameModType.BTOS2;
-
-                var deconstructed = Constants.CurrentStyle();
-                var defaultSprite = mod switch
-                {
-                    GameModType.BTOS2 => BTOS22 ?? BTOS21,
-                    _ => Vanilla1 ?? CacheDefaults.RoleIcons
-                };
-
-                if (str.Contains("("))
-                    deconstructed = str.Split('(', ')').Select(x => x.Trim()).Last(x => !NewModLoading.Utils.IsNullEmptyOrWhiteSpace(x));
-
-                if (deconstructed is "None" or "Blank" || NewModLoading.Utils.IsNullEmptyOrWhiteSpace(deconstructed))
-                    deconstructed = "Regular";
-
-                if (!pack.Assets.TryGetValue(mod, out var assets))
-                    Fancy.Instance.Warning($"Unable to find {packName} assets for {mod}");
-                else if (deconstructed == "Vanilla")
-                    asset = defaultSprite;
-                else
-                {
-                    if (!assets.MentionStyles.TryGetValue(deconstructed, out asset) || !asset)
-                        Fancy.Instance.Warning($"{packName} {mod} Mention Style {deconstructed} was null or missing");
-
-                    if (!asset && deconstructed != "Regular")
-                    {
-                        if (!assets.MentionStyles.TryGetValue("Regular", out asset) || !asset)
-                            Fancy.Instance.Warning($"{packName} {mod} Mention Style Regular was null or missing");
-                    }
-
-                    if (!asset && deconstructed != "Factionless")
-                    {
-                        if (!assets.MentionStyles.TryGetValue("Factionless", out asset) || !asset)
-                            Fancy.Instance.Warning($"{packName} {mod} Mention Style Factionless was null or missing");
-                    }
-                }
-
-                asset ??= defaultSprite;
-            }
-            else switch (str)
-            {
-                case "PlayerNumbers":
-                {
-                    if (!pack.PlayerNumbers && Constants.CustomNumbers())
-                        Fancy.Instance.Warning($"{packName} PlayerNumber was null");
-
-                    asset = pack.PlayerNumbers ?? Vanilla2 ?? CacheDefaults.Numbers;
-                    return Constants.CustomNumbers() && asset;
-                }
-                case "Emojis":
-                {
-                    if (!pack.Emojis)
-                        Fancy.Instance.Warning($"{packName} Emoji was null");
-
-                    asset = pack.Emojis ?? Vanilla3 ?? CacheDefaults.Emojis;
-                    return asset;
-                }
-            }
-
-            return (str.Contains("RoleIcons") || str is "PlayerNumbers" or "Emojis") && asset;
+            Fancy.Instance.Warning($"{packName} doesn't have an icon pack");
+            return false;
         }
 
-        Fancy.Instance.Warning($"{packName} doesn't have an icon pack");
-        return false;
+        if (str.Contains("RoleIcons"))
+        {
+            var mod = GameModType.Vanilla;
+
+            if (str.Contains("BTOS") || Constants.IsBTOS2() || Utils.FindCasualQueue())
+                mod = GameModType.BTOS2;
+
+            var deconstructed = Constants.CurrentStyle();
+            var defaultSprite = mod switch
+            {
+                GameModType.BTOS2 => BTOS22 ?? BTOS21,
+                _ => Vanilla1 ?? CacheDefaults.RoleIcons
+            };
+
+            if (str.Contains("("))
+                deconstructed = str.Split('(', ')').Select(x => x.Trim()).Last(x => !NewModLoading.Utils.IsNullEmptyOrWhiteSpace(x));
+
+            if (deconstructed is "None" or "Blank" || NewModLoading.Utils.IsNullEmptyOrWhiteSpace(deconstructed))
+                deconstructed = "Regular";
+
+            if (!pack.Assets.TryGetValue(mod, out var assets))
+                Fancy.Instance.Warning($"Unable to find {packName} assets for {mod}");
+            else if (deconstructed == "Vanilla")
+                asset = defaultSprite;
+            else
+            {
+                if (!assets.MentionStyles.TryGetValue(deconstructed, out asset) || !asset)
+                    Fancy.Instance.Warning($"{packName} {mod} Mention Style {deconstructed} was null or missing");
+
+                if (!asset && deconstructed != "Regular")
+                {
+                    if (!assets.MentionStyles.TryGetValue("Regular", out asset) || !asset)
+                        Fancy.Instance.Warning($"{packName} {mod} Mention Style Regular was null or missing");
+                }
+
+                if (!asset && deconstructed != "Factionless")
+                {
+                    if (!assets.MentionStyles.TryGetValue("Factionless", out asset) || !asset)
+                        Fancy.Instance.Warning($"{packName} {mod} Mention Style Factionless was null or missing");
+                }
+            }
+
+            asset ??= defaultSprite;
+        }
+        else switch (str)
+        {
+            case "PlayerNumbers":
+            {
+                if (!pack.PlayerNumbers && Constants.CustomNumbers())
+                    Fancy.Instance.Warning($"{packName} PlayerNumber was null");
+
+                asset = pack.PlayerNumbers ?? Vanilla2 ?? CacheDefaults.Numbers;
+                return Constants.CustomNumbers() && asset;
+            }
+            case "Emojis":
+            {
+                if (!pack.Emojis)
+                    Fancy.Instance.Warning($"{packName} Emoji was null");
+
+                asset = pack.Emojis ?? Vanilla3 ?? CacheDefaults.Emojis;
+                return asset;
+            }
+        }
+
+        return (str.Contains("RoleIcons") || str is "PlayerNumbers" or "Emojis") && asset;
     }
 }
 
@@ -1389,7 +1408,7 @@ public static class PatchNecroRetMenuItem
         var targetRoleName = Utils.RoleName(role);
         var targetFaction  = Utils.FactionName(role.GetFactionType(), false);
 
-        string ability = targetRoleName switch
+        var ability = targetRoleName switch
         {
             "Deputy" or "Conjurer" or "Veteran" => "Special",
             "Monarch" or "Socialite" or "Pacifist" => "Ability_2",
@@ -1529,7 +1548,7 @@ public static class Tos2GameBrowserListItemPatch
     // [HarmonyPostfix]
     // public static void Postfix(HudDockItem __instance)
     // {
-        // if (!Constants.EnableIcons()) 
+        // if (!Constants.EnableIcons())
             // return;
 
         // Utils.ApplyDockItemIcon(__instance);
