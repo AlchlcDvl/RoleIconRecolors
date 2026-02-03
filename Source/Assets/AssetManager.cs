@@ -157,6 +157,8 @@ public static class FancyAssetManager
 
         if (type == PackType.IconPacks)
         {
+            ReplaceTMPSpritesPatch.ClearCache();
+
             try
             {
                 if (IconPacks.TryGetValue(packName, out var exists) && exists)
@@ -299,7 +301,7 @@ public static class FancyAssetManager
                     Fancy.Instance.Warning($"NO VANILLA ICON FOR {name}?!");
             }
 
-            Vanilla1 = FancyAssetManager.BuildGlyphs(sprites, "RoleIcons", index.Item1, 384f, 384f, 0f, 300f, 390f);
+            Vanilla1 = BuildGlyphs(sprites, "RoleIcons", index.Item1, 384f, 384f, 0f, 300f, 390f);
             Utils.DumpSprite(Vanilla1.spriteSheet as Texture2D, "RoleIcons_Modified", Path.Combine(IPPath, "Vanilla"));
         }
         catch (Exception e)
@@ -328,7 +330,7 @@ public static class FancyAssetManager
                 dict.Add($"PlayerNumbers_{i}", $"PlayerNumbers_{i}");
             }
 
-            Vanilla2 = FancyAssetManager.BuildGlyphs(sprites, "PlayerNumbers", dict, 128f, 128f, 0f, 105f, 150f);
+            Vanilla2 = BuildGlyphs(sprites, "PlayerNumbers", dict, 128f, 128f, 0f, 105f, 150f);
             Utils.DumpSprite(Vanilla2.spriteSheet as Texture2D, "PlayerNumbers_Modified", Path.Combine(IPPath, "Vanilla"));
         }
         catch (Exception e)
@@ -357,7 +359,7 @@ public static class FancyAssetManager
                 dict.Add($"Emoji{i}", $"Emoji{i}");
             }
 
-            Vanilla3 = FancyAssetManager.BuildGlyphs(sprites, "Emoji", dict, 384f, 384f, 0f, 300f, 390f);
+            Vanilla3 = BuildGlyphs(sprites, "Emoji", dict, 384f, 384f, 0f, 300f, 390f);
             Utils.DumpSprite(Vanilla3.spriteSheet as Texture2D, "Emoji_Modified", Path.Combine(IPPath, "Vanilla"));
         }
         catch (Exception e)
@@ -408,7 +410,7 @@ public static class FancyAssetManager
                     Fancy.Instance.Warning($"NO BTOS2 ICON FOR {name}?!");
             }
 
-            BTOS22 = FancyAssetManager.BuildGlyphs(sprites, "BTOSRoleIcons", index.Item1, 256f, 256f, 0f, 224f, 256f);
+            BTOS22 = BuildGlyphs(sprites, "BTOSRoleIcons", index.Item1, 256f, 256f, 0f, 224f, 256f);
             Utils.DumpSprite(BTOS22.spriteSheet as Texture2D, "BTOS2RoleIcons_Modified", Path.Combine(IPPath, "BTOS2"));
         }
         catch (Exception e)
@@ -417,6 +419,7 @@ public static class FancyAssetManager
             BTOS22 = null;
         }
     }
+
     public static TMP_SpriteAsset BuildGlyphs(IEnumerable<Sprite> sprites, string spriteAssetName, Dictionary<string, string> index, float metricsWidth, float metricsHeight, float metricsHBX, float metricsHBY, float metricsHA)
     {
         Texture2D[] array = sprites.Select((Sprite x) => x.texture).ToArray();
