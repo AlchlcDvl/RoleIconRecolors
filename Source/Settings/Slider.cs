@@ -1,6 +1,6 @@
 namespace FancyUI.Settings;
 
-public sealed class SliderSetting : BaseInputSetting
+public class SliderSetting : BaseInputSetting
 {
     public Slider Slider { get; set; }
     public FloatOption Option { get; set; }

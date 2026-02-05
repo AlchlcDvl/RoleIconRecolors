@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace FancyUI.Assets;
 
-public sealed class PackJson
+public class PackJson
 {
     [JsonProperty("name")]
     public string Name { get; set; }

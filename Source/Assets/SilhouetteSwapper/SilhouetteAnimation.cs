@@ -1,6 +1,6 @@
 namespace FancyUI.Assets.SilhouetteSwapper;
 
-public sealed class SilhouetteAnimation(string name)
+public class SilhouetteAnimation(string name)
 {
     private string Name { get; } = name;
 

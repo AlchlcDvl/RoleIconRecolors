@@ -1,3 +1,3 @@
 namespace FancyUI.Settings;
 
-public sealed class StringInputSetting : BaseInputSetting;
+public class StringInputSetting : BaseInputSetting;

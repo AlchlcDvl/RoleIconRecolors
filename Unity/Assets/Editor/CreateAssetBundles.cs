@@ -3,7 +3,7 @@ using UnityEditor;
 using System.IO;
 using System.Linq;
 
-public sealed class CreateAssetBundles
+public class CreateAssetBundles
 {
     [MenuItem("AssetBundle/Build")]
     static void BuildAllAssetBundlesWin()

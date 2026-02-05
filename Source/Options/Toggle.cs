@@ -1,6 +1,6 @@
 namespace FancyUI.Options;
 
-public sealed class ToggleOption(string id, bool defaultValue, PackType page, Func<bool> setActive = null, Action<bool> onChanged = null, Action uponChanged = null) : Option<bool, ToggleSetting>(id,
+public class ToggleOption(string id, bool defaultValue, PackType page, Func<bool> setActive = null, Action<bool> onChanged = null, Action uponChanged = null) : Option<bool, ToggleSetting>(id,
     defaultValue, page, setActive, onChanged, uponChanged)
 {
     protected override void UponValueChanged(bool value)

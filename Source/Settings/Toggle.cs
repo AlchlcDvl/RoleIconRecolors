@@ -1,6 +1,6 @@
 namespace FancyUI.Settings;
 
-public sealed class ToggleSetting : Setting
+public class ToggleSetting : Setting
 {
     public Toggle Toggle { get; set; }
     public Image OnBg { get; set; }

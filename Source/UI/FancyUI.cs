@@ -2,12 +2,22 @@ using Home.Shared;
 
 namespace FancyUI.UI;
 
-public sealed class FancyUI : UISingleton<FancyUI>
+public class FancyUI : UIController
 {
     private static TMP_FontAsset GameFont { get; set; }
     private static Material GameFontMaterial { get; set; }
 
     public PackType Page { get; set; }
+
+    private static FancyUI _instance;
+    public static FancyUI Instance
+    {
+        get
+        {
+            _instance ??= FindObjectOfType<FancyUI>(true);
+            return _instance;
+        }
+    }
 
     public void Awake()
     {
@@ -43,10 +53,9 @@ public sealed class FancyUI : UISingleton<FancyUI>
 
     public void Start() => Utils.UpdateMaterials(skipFactionCheck: true);
 
-    public override void OnDestroy()
+    public void OnDestroy()
     {
-        base.OnDestroy();
-
+        _instance = null;
         LoadingUI.Instance?.gameObject?.Destroy();
         DownloaderUI.Instance?.gameObject?.Destroy();
         SettingsAndTestingUI.Instance?.gameObject?.Destroy();
@@ -62,13 +71,9 @@ public sealed class FancyUI : UISingleton<FancyUI>
         }
     }
 
-    private void OpenIP() => OpenMenu(PackType.IconPacks, OpenMenu);
-
-    private void OpenSS() => OpenMenu(PackType.SilhouetteSets, OpenMenu);
-
-    private void OpenMenu(PackType packType, Action open)
+    private void OpenIP()
     {
-        Page = packType;
+        Page = PackType.IconPacks;
 
         if (DownloaderUI.Instance)
         {
@@ -77,7 +82,21 @@ public sealed class FancyUI : UISingleton<FancyUI>
             return;
         }
 
-        open?.Invoke();
+        OpenMenu();
+    }
+
+    private void OpenSS()
+    {
+        Page = PackType.SilhouetteSets;
+
+        if (DownloaderUI.Instance)
+        {
+            DownloaderUI.Instance.gameObject.SetActive(true);
+            gameObject.SetActive(false);
+            return;
+        }
+
+        OpenMenu();
     }
 
     private void OpenSettings()
