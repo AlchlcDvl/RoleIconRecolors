@@ -182,7 +182,7 @@ public sealed class Fancy : BaseMod<Fancy>
     public static ColorOption WildlingWhisperColor;
     public static ColorOption SerialKillerWhisperColor;
     public static FloatOption ChatBackgroundOpacity;
-
+	
     private static readonly Dictionary<string, ColorOption> ColorOptions = [];
     public static readonly Dictionary<string, (string Start, string End, string Major, string Middle, string Lethal, string Horsemen)> Colors = new()
     {
@@ -512,8 +512,8 @@ public sealed class Fancy : BaseMod<Fancy>
 
     private static void ReloadCinematics()
     {
-        foreach (var faction in BTOS2Factions.Where(x => x is not (FactionType.NONE or (> FactionType.APOCALYPSE and < FactionType.VAMPIRE) or FactionType.CURSED_SOUL or FactionType.UNKNOWN or (>
-            Btos2Faction.Hawks and < Btos2Faction.Pandora))))
+        foreach (var faction in BTOS2Factions.Where(x => x is not (FactionType.NONE or (> FactionType.APOCALYPSE and < FactionType.VAMPIRE) or FactionType.UNKNOWN or (>
+            Btos2Faction.Hawks and < Btos2Faction.Egotist))))
         {
             if (CinematicMap.ContainsKey(faction)) continue;
 

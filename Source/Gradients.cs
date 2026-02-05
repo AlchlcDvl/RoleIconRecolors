@@ -19,6 +19,8 @@ public static class Gradients
             {
                 RecruitEndType.FactionStart => Fancy.Colors.TryGetValue(baseKey, out var baseTuple) ? baseTuple.Start : Fancy.Colors["JACKAL"].End,
                 RecruitEndType.FactionEnd => GetEndColor(baseKey, role),
+				RecruitEndType.FactionBothColors => Utils.BlendHexColors(Fancy.Colors.TryGetValue(baseKey, out var bt) ? bt.Start : Fancy.Colors["JACKAL"].Start, GetEndColor(baseKey, role)
+        ),
                 _ => GetEndColor("JACKAL", role),
             };
         }

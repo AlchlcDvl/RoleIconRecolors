@@ -62,7 +62,8 @@ public enum RecruitEndType : byte
 {
     JackalEnd,
     FactionStart,
-    FactionEnd
+    FactionEnd,
+	FactionBothColors
 }
 
 public enum FactionLabelOption : byte

@@ -509,7 +509,7 @@ public static class FancyChatExperimentalBTOS2
     {
         var role = Pepper.GetMyRole();
         var myfaction = Utils.FactionName(Pepper.GetMyFaction());
-        var pirate = FactionType.PIRATE.GetChangedGradient(Role.PIRATE);
+        var pirate = Utils.GetString("BTOS_ROLENAME_46");
         var court = Btos2Faction.Judge.GetChangedGradient(Btos2Role.Judge);
 
         __result = position switch
@@ -642,7 +642,6 @@ public static class PatchCustomWinScreens
 					}
 					break;
 
-				case "BigText":
 				case "BigText (1)":
 					if (child.TryGetComponent<TextMeshProUGUI>(out var tmp))
 					{
@@ -715,6 +714,7 @@ public static class ClientRoleExtensionsPatches
     }
 
     [HarmonyPatch(nameof(ClientRoleExtensions.ApplyFactionColor))]
+	[HarmonyPriority(Priority.Last)]
     public static void Postfix(ref string __result, string text, FactionType factionType)
     {
         var factionColor = factionType.GetFactionColor();
@@ -817,12 +817,13 @@ public static void PostfixShortened(ref string __result, Role role)
     var compliance = Btos2Faction.Compliance.GetChangedGradient(Role.SERIALKILLER);
     var bucket = Utils.CreateGradient(Fancy.BucketStart.Value, Fancy.BucketEnd.Value);
     var neutral = Utils.CreateGradient(Fancy.NeutralStart.Value, Fancy.NeutralEnd.Value);
+	var any = Utils.CreateGradient(Fancy.AnyStart.Value, Fancy.AnyEnd.Value);
 
     if (Constants.IsBTOS2())
     {
         __result = role switch
         {
-            Btos2Role.Any => Utils.GetString("BTOS_ROLE_LIST_BUCKET_ANY_SHORT"),
+            Btos2Role.Any => $"{Utils.ApplyGradient(Utils.GetString("BTOS_ROLE_LIST_BUCKET_ANY_SHORT"), any)}",
             Btos2Role.RandomTown => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_RANDOM_SHORT"), bucket)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), town)}",
             Btos2Role.CommonTown => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COMMON_SHORT"), bucket)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), town)}",
             Btos2Role.TownInvestigative => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), town)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_INVESTIGATIVE_SHORT"), bucket)}",
@@ -850,7 +851,7 @@ public static void PostfixShortened(ref string __result, Role role)
     {
         __result = role switch
         {
-            Role.ANY => Utils.GetString("GUI_ROLE_LIST_BUCKET_ANY_SHORT"),
+            Role.ANY => $"{Utils.ApplyGradient(Utils.GetString("GUI_ROLE_LIST_BUCKET_ANY_SHORT"), any)}",
             Role.RANDOM_TOWN => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_RANDOM_SHORT"), bucket)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), town)}",
             Role.COMMON_TOWN => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_COMMON_SHORT"), bucket)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), town)}",
             Role.TOWN_INVESTIGATIVE => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_TOWN_SHORT"), town)}{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_INVESTIGATIVE_SHORT"), bucket)}",
@@ -1232,23 +1233,22 @@ public static class KeywordMentionsPatches
         var encodedText = $"[[@{i + 1}]]";
         var text2 = (mentionTokenType == MentionToken.MentionTokenType.ACCOUNT) ? "a" : string.Empty;
         var gradient = Utils.CreateGradient(Fancy.MentionStart.Value, Fancy.MentionEnd.Value);
+        var playerPos = Pepper.GetDiscussionPlayerByPosition(i);
+        var isRecruited = Service.Game.Sim.simulation.observations.playerEffects.Any(x => x.Data.effects.Contains((EffectType)100) && x.Data.playerPosition == i);
 
+        // if (Fancy.ColorMentionsWithFaction.Value)
         var color = Fancy.MentionStart.Value;
-        // var faction = Pepper.GetDiscussionPlayerFactionIfKnown(i);
-        // if (faction is not FactionType.NONE and not FactionType.UNKNOWN)
-        // {
-        //     var roleColor = Utils.GetPlayerRoleColor(i);
-        //     var roleColorString = ColorUtility.ToHtmlStringRGB(roleColor);
-        //     if (string.IsNullOrEmpty(roleColorString))
-        //         roleColorString = "FFCE3B";
-        //     color = $"#{roleColorString}";
-        // }
         if (string.IsNullOrEmpty(color))
             color = "#FFCE3B";
 
+        // if (Fancy.ColorMentionsWithFaction.Value && Utils.GetRoleAndFaction(i, out var playerInfo) && playerInfo.Item2 != FactionType.NONE && playerInfo.Item2 != FactionType.UNKNOWN)
+            // gradient = playerInfo.Item2.GetChangedGradient(playerInfo.Item1);
+
         var text3 = __instance._useColors
-            ? $"<b>{Utils.ApplyGradient($"{text}", gradient)}</b>"
+            ? $"<b>{Utils.ApplyGradient(text, gradient)}</b>"
             : $"<b>{text}</b>";
+  
+
 
         var text4 = __instance._playerEffects == 2
             ? $"<sprite=\"PlayerNumbers\" name=\"PlayerNumbers_{player.Data.position + 1}\">"
@@ -1285,6 +1285,29 @@ public static class KeywordMentionsPatches
 
         return false;
     }
+
+	// [HarmonyPatch(typeof(MentionsProvider), nameof(MentionsProvider.ValidateTextualMentions))]
+    // internal static class RehashMentionsBeforeValidation
+    // {
+        // [HarmonyPrefix]
+        // private static void Prefix(MentionsProvider __instance)
+        // {
+            // // Ensure all mentions remain valid after color / gradient modifications
+            // var mentionInfos = __instance.MentionInfos;
+            // if (mentionInfos == null)
+                // return;
+
+            // for (int i = 0; i < mentionInfos.Count; i++)
+            // {
+                // var mi = mentionInfos[i];
+                // if (mi?.richText == null)
+                    // continue;
+
+                // mi.hashCode = mi.richText.ToLower().GetHashCode();
+            // }
+        // }
+    // }
+
 
     [HarmonyPatch(nameof(SharedMentionsProvider.ClearMentions))]
     public static void Postfix(SharedMentionsProvider __instance, ref bool rebuildRoles, ref bool rebuildKeywords, ref bool rebuildPlayers, ref bool rebuildPrefixes, ref bool rebuildEmojis, ref bool rebuildAchievements)

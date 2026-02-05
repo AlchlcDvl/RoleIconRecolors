@@ -745,56 +745,73 @@ public static class PandoraAndComplianceRoleSlotsPatch
     private static void AddSlots(RoleDeckBuilder builder, List<RoleDeckSlot> list, RoleAlignment alignment, bool pandora, bool compliance)
     {
         list.AddRange(builder.GetPredicateRoleSlots(r =>
-            r.IsResolved() &&
+            SlotMatchesAlignment(r, alignment) &&r.IsResolved() &&
             !(alignment == RoleAlignment.NEUTRAL && (r.Role1.IsNeutralKilling() || r.Role1 == Btos2Role.NeutralKilling) && Constants.IsCompliance()) &&
             MatchesAlignment(r.Role1, alignment, pandora, compliance)
         ));
 
         list.AddRange(builder.GetPredicateRoleSlots(r =>
-            r.Role1.IsResolved() && r.Role2.IsResolved() &&
+            SlotMatchesAlignment(r, alignment) && r.Role1.IsResolved() && r.Role2.IsResolved() &&
             !(alignment == RoleAlignment.NEUTRAL && (r.Role1.IsNeutralKilling() || r.Role2.IsNeutralKilling()) && Constants.IsCompliance()) &&
             MatchesAlignment(r.Role1, alignment, pandora, compliance) &&
             MatchesAlignment(r.Role2, alignment, pandora, compliance)
         ));
 
         list.AddRange(builder.GetPredicateRoleSlots(r =>
-            r.Role1.IsBucket() && r.Role2.IsResolved() &&
+            SlotMatchesAlignment(r, alignment) && r.Role1.IsBucket() && r.Role2.IsResolved() &&
             !(alignment == RoleAlignment.NEUTRAL && (r.Role1.IsNeutralKilling() || r.Role2.IsNeutralKilling()) && Constants.IsCompliance()) &&
             MatchesAlignment(r.Role1, alignment, pandora, compliance) &&
             MatchesAlignment(r.Role2, alignment, pandora, compliance)
         ));
 
         list.AddRange(builder.GetPredicateRoleSlots(r =>
-            r.Role1.IsBucket() && r.Role2.IsBucket() &&
+            SlotMatchesAlignment(r, alignment) && r.Role1.IsBucket() && r.Role2.IsBucket() &&
             !(alignment == RoleAlignment.NEUTRAL && (r.Role1.IsNeutralKilling() || r.Role2.IsNeutralKilling()) && Constants.IsCompliance()) &&
             MatchesAlignment(r.Role1, alignment, pandora, compliance) &&
             MatchesAlignment(r.Role2, alignment, pandora, compliance)
         ));
 
         list.AddRange(builder.GetPredicateRoleSlots(r =>
-            r.IsBucket() &&
+            SlotMatchesAlignment(r, alignment) && r.IsBucket() &&
             !(alignment == RoleAlignment.NEUTRAL && (r.Role1.IsNeutralKilling() || r.Role1 == Btos2Role.NeutralKilling) && Constants.IsCompliance()) &&
             MatchesAlignment(r.Role1, alignment, pandora, compliance) &&
             r.Role1.GetRoleBucket().subAlignment != SubAlignment.ANY
         ));
 
         list.AddRange(builder.GetPredicateRoleSlots(r =>
-            r.IsBucket() &&
+            SlotMatchesAlignment(r, alignment) && r.IsBucket() &&
             !(alignment == RoleAlignment.NEUTRAL && (r.Role1.IsNeutralKilling() || r.Role1 == Btos2Role.NeutralKilling) && Constants.IsCompliance()) &&
             MatchesAlignment(r.Role1, alignment, pandora, compliance) &&
             r.Role1.GetRoleBucket().subAlignment == SubAlignment.ANY
         ));
 
         if (compliance)
-            list.AddRange(builder.GetPredicateRoleSlots(r => r.Role1 == Btos2Role.NeutralKilling));
+            list.AddRange(builder.GetPredicateRoleSlots(r => SlotMatchesAlignment(r, alignment) && r.Role1 == Btos2Role.NeutralKilling));
     }
 
     private static bool MatchesAlignment(Role role, RoleAlignment alignment, bool pandora, bool compliance)
-    {
-        return role.GetAlignment() == alignment ||
-               (pandora && (role.GetAlignment() == RoleAlignment.COVEN || role.GetAlignment() == (RoleAlignment)17)) ||
-               (compliance && role.IsNeutralKilling());
-    }
+	{
+		if (compliance && (role.IsNeutralKilling() || role is Btos2Role.NeutralKilling))
+			return alignment == (RoleAlignment)101;
+
+		return role.GetAlignment() == alignment ||
+			   (pandora && (role.GetAlignment() == RoleAlignment.COVEN || role.GetAlignment() == (RoleAlignment)17));
+	}
+	
+	private static bool SlotMatchesAlignment(RoleDeckSlot r, RoleAlignment alignment)
+	{
+		var slotAlignment = r.GetRoleAlignment();
+
+		if (slotAlignment == RoleAlignment.ANY)
+			return alignment == RoleAlignment.ANY;
+
+		if (alignment == RoleAlignment.ANY)
+			return false;
+
+		return slotAlignment == alignment;
+	}
+
+
 }
 [HarmonyPatch(typeof(RoleDeckSlot), nameof(RoleDeckSlot.GetRoleAlignment))]
 public static class PandoraAndComplianceDeckSlotPatch
@@ -802,7 +819,7 @@ public static class PandoraAndComplianceDeckSlotPatch
     public static bool Prefix(RoleDeckSlot __instance, ref RoleAlignment __result)
     {
 		if (!Constants.IsBTOS2())
-			return false;
+			return true;
 
         var role1Alignment = __instance.Role1.GetAlignment();
         var role2Alignment = __instance.Role2.GetAlignment();
@@ -821,7 +838,7 @@ public static class PandoraAndComplianceDeckSlotPatch
 			if (__instance.Role1.IsNeutralKilling() || __instance.Role1 == Btos2Role.NeutralKilling)
 				role1Alignment = (RoleAlignment)101;
 
-			if (__instance.Role2.IsNeutralKilling() || __instance.Role1 == Btos2Role.NeutralKilling)
+			if (__instance.Role2.IsNeutralKilling() || __instance.Role2 == Btos2Role.NeutralKilling)
 				role2Alignment = (RoleAlignment)101;
 		}
 		
@@ -954,6 +971,10 @@ public static class FixAbilityButtonOverrides
     public static void FixOverrideText(TosAbilityPanelListItem __instance, TosAbilityPanelListItem.OverrideAbilityType overrideType)
     {
         var role = Pepper.GetMyCurrentIdentity().role;
+		
+		if (overrideType is not (TosAbilityPanelListItem.OverrideAbilityType.HORSEMAN or TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_HEAL or TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_REVEAL))
+			return;
+
 
         switch (overrideType)
         {
@@ -962,6 +983,7 @@ public static class FixAbilityButtonOverrides
                 switch (role)
                 {
                     case Role.SOULCOLLECTOR:
+                    case (Role)62:
                         role = Role.DEATH;
                         break;
                     case Role.PLAGUEBEARER:
@@ -990,18 +1012,6 @@ public static class FixAbilityButtonOverrides
                 break;
             case TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_REVEAL:
                     __instance.choice1Text.text =  Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY2_VERB_{(int)role}");
-                break;
-            default:
-                __instance.choice1Text.text = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY1_VERB_{(int)role}");
-                if (Pepper.GetCurrentPlayPhase() == PlayPhase.NIGHT && Pepper.GetMyRole() == Role.JAILOR)
-                {
-                    __instance.choice2Text.text = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY1_VERB_{(int)role}");
-                }
-                else
-                {
-                    __instance.choice2Text.text = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY2_VERB_{(int)role}");
-                }
-
                 break;
         }
     }

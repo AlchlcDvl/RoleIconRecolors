@@ -881,6 +881,32 @@ public static class Utils
 
 		return Color.Lerp(start, end, 0.5f);
 	}
+	
+	public static string GetFactionMiddleColorHex(FactionType faction)
+	{
+		var color = GetFactionMiddleColor(faction);
+		return ColorToHex(color);
+	}
+
+	public static string ColorToHex(Color color)
+	{
+		int r = Mathf.RoundToInt(color.r * 255f);
+		int g = Mathf.RoundToInt(color.g * 255f);
+		int b = Mathf.RoundToInt(color.b * 255f);
+
+		return $"#{r:X2}{g:X2}{b:X2}";
+	}
+
+	public static string BlendHexColors(string color1, string color2, float t = 0.5f)
+	{
+		if (!ColorUtility.TryParseHtmlString(color1, out var a))
+			return color2;
+		if (!ColorUtility.TryParseHtmlString(color2, out var b))
+			return color1;
+
+		var blended = Color.Lerp(a, b, t);
+		return $"#{ColorUtility.ToHtmlStringRGB(blended)}";
+	}
 
     public static string GetString(string key) => Service.Home.LocalizationService.GetLocalizedString(key);
 

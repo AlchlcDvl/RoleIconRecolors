@@ -110,6 +110,12 @@
     <Entry key="FANCY_LOVERS_CINEMATIC_NAME">Override Lovers Win Cinematic</Entry>
     <Entry key="FANCY_LOVERS_CINEMATIC_DESC">Determines which victory cinematic Lovers will use.</Entry>
 
+    <Entry key="FANCY_CURSEDSOUL_CINEMATIC_NAME">Override Wandering Souls Win Cinematic</Entry>
+    <Entry key="FANCY_CURSEDSOUL_CINEMATIC_DESC">Determines which victory cinematic Wandering Souls will use. Note that this can only ever appear if a Wandering Souls Pacifist wins their Protest.</Entry>
+
+    <Entry key="FANCY_EGOTIST_CINEMATIC_NAME">Override Egotist Win Cinematic</Entry>
+    <Entry key="FANCY_EGOTIST_CINEMATIC_DESC">Determines which victory cinematic Egotist will use. Note that this can only ever appear if an Egotist Pacifist wins their Protest.</Entry>
+
     <Entry key="FANCY_SELECTED_ICON_PACK_NAME">Selected Icon Pack</Entry>
     <Entry key="FANCY_SELECTED_ICON_PACK_DESC">The selected icon will start replacing the visible icons with the images you put in. If it can't find the valid image or pack, it will be replaced by the mod's default files. May require a game restart for the in-text icons to change.\nVanilla - No pack selected.</Entry>
 
@@ -786,6 +792,7 @@
     <Entry key="FANCY_TOWN">Town</Entry>
     <Entry key="FANCY_COVEN">Coven</Entry>
     <Entry key="FANCY_APOCALYPSE">Apocalypse</Entry>
+    <Entry key="FANCY_WANDERINGSOULS">Wandering Souls</Entry>
     <Entry key="FANCY_ADMIRER">Admirer</Entry>
     <Entry key="FANCY_AMNESIAC">Amnesiac</Entry>
     <Entry key="FANCY_BODYGUARD">Bodyguard</Entry>
@@ -931,6 +938,7 @@
     <Entry key="FANCY_JACKALEND">Jackal</Entry>
     <Entry key="FANCY_FACTIONSTART">Original Primary</Entry>
     <Entry key="FANCY_FACTIONEND">Original Secondary</Entry>
+    <Entry key="FANCY_FACTIONBOTHCOLORS">Original Blend</Entry>
 
     <Entry key="FANCY_DISABLED">Disabled</Entry>
     <Entry key="FANCY_LEFT">Left</Entry>
