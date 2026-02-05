@@ -1,5 +1,4 @@
 using Server.Shared.Extensions;
-using UnityEngine.UIElements;
 
 namespace FancyUI;
 
@@ -39,14 +38,13 @@ public static class Gradients
     {
         var (_, endVal, majorVal, _, lethalVal, horsemanVal) = Fancy.Colors[key];
 
-		
 		var isPower = role.GetSubAlignment() is SubAlignment.POWER or (SubAlignment)37;
 		var isTownGovernment = Constants.IsBTOS2() ? role.GetSubAlignment() == (SubAlignment)38 : role is Role.MAYOR or Role.MONARCH;
 		var isCultist = Constants.IsBTOS2() ? role is Btos2Role.Cultist : role is Role.CULTIST;
 		var isCatalyst = Constants.IsBTOS2() ? role is Btos2Role.Catalyst : role is Role.CATALYST;
-		
+
 		var isMajor = Fancy.MajorColors.Value && ((isPower && !(Fancy.ExcludeTownGovernmentRoles.Value && isTownGovernment)) || (isCultist && !Fancy.ExcludeCultist.Value) || (isCatalyst && !Fancy.ExcludeCatalyst.Value));
-		
+
         /* var isMajor = Fancy.MajorColors.Value &&
             (role.GetSubAlignment() == SubAlignment.POWER || (Constants.IsBTOS2() && role.GetSubAlignment() is (SubAlignment)37 or (SubAlignment)38)
             || (Constants.IsBTOS2() ? (role is Btos2Role.Cultist or Btos2Role.Catalyst) : (role is Role.CULTIST or Role.CATALYST)));*/

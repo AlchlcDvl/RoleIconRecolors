@@ -2,18 +2,18 @@ namespace FancyUI.Assets.IconPacks;
 
 public sealed class IconAssets(string name)
 {
-    private string Name { get; } = name;
+    private readonly string Name = name;
 
-    public Dictionary<string, Dictionary<string, Sprite>> BaseIcons { get; } = [];
-    public Dictionary<string, Dictionary<string, HashSet<Sprite>>> EasterEggs { get; } = [];
-    public Dictionary<string, TMP_SpriteAsset> MentionStyles { get; } = [];
+    public readonly Dictionary<string, Dictionary<string, Sprite>> BaseIcons = [];
+    public readonly Dictionary<string, Dictionary<string, HashSet<Sprite>>> EasterEggs = [];
+    public readonly Dictionary<string, TMP_SpriteAsset> MentionStyles = [];
 
-    public int Count { get; private set; }
+    public int DebugCount { get; private set; }
 
     public void Debug()
     {
         Fancy.Instance.Message($"Debugging {Name}");
-        Count = 0;
+        DebugCount = 0;
 
         foreach (var (name1, icons) in BaseIcons)
         {
@@ -23,7 +23,7 @@ public sealed class IconAssets(string name)
                     continue;
 
                 Fancy.Instance.Message($"{name2} has a(n) {name1} sprite!");
-                Count++;
+                DebugCount++;
             }
         }
 
@@ -39,12 +39,12 @@ public sealed class IconAssets(string name)
                     continue;
 
                 Fancy.Instance.Message($"{name2} has {count} {name1} easter egg sprite(s)!");
-                Count += count;
+                DebugCount += count;
             }
         }
 
         Fancy.Instance.Message($"{EasterEggs.Count} easter egg assets loaded!");
-        Fancy.Instance.Message($"{Count} image assets exist!");
+        Fancy.Instance.Message($"{DebugCount} image assets exist!");
 
         foreach (var (name2, sheet) in MentionStyles)
         {
@@ -52,26 +52,26 @@ public sealed class IconAssets(string name)
                 continue;
 
             Fancy.Instance.Message($"{name2} mention style exists!");
-            Count++;
+            DebugCount++;
         }
 
         Fancy.Instance.Message($"{MentionStyles.Count} mention styles exist!");
-        Fancy.Instance.Message($"{Count} net assets exist!");
+        Fancy.Instance.Message($"{DebugCount} net assets exist!");
         Fancy.Instance.Message($"{Name} Debugged!");
     }
 
     public void Delete()
     {
-        BaseIcons.Values.Do(x => x.Values.Do(UObject.Destroy));
+        BaseIcons.Values.Do(x => x.Values.Do(Utils.TrueDestroy));
         BaseIcons.Values.Do(x => x.Clear());
         BaseIcons.Clear();
 
-        EasterEggs.Values.Do(x => x.Values.Do(y => y.Do(UObject.Destroy)));
+        EasterEggs.Values.Do(x => x.Values.Do(y => y.Do(Utils.TrueDestroy)));
         EasterEggs.Values.Do(x => x.Values.Do(y => y.Clear()));
         EasterEggs.Values.Do(x => x.Clear());
         EasterEggs.Clear();
 
-        MentionStyles.Values.Do(UObject.Destroy);
+        MentionStyles.Values.Do(Utils.TrueDestroy);
         MentionStyles.Clear();
     }
 }

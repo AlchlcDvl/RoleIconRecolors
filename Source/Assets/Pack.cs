@@ -2,12 +2,10 @@ namespace FancyUI.Assets;
 
 public abstract class Pack(string name, PackType type)
 {
-    protected string Name { get; } = name;
-    private PackType Type { get; } = type;
+    protected readonly string Name = name;
+    protected readonly string PackPath = Path.Combine(Fancy.Instance.ModPath, $"{type}", name);
 
     protected bool Deleted { get; set; }
-
-    protected string PackPath => Path.Combine(Fancy.Instance.ModPath, $"{Type}", Name);
 
     // public static readonly string[] Roles = [ "Admirer", "Amnesiac", "Bodyguard", "Cleric", "Coroner", "Crusader", "Deputy", "Investigator", "Jailor", "Lookout", "Amnesiac", "Amnesiac", "War",
     //     "Amnesiac", "Amnesiac", "Amnesiac", "Amnesiac", "Amnesiac", "Mayor", "Monarch", "Prosecutor", "Psychic", "Retributionist", "Seer", "Sheriff", "Spy", "TavernKeeper", "Tracker", "Death",

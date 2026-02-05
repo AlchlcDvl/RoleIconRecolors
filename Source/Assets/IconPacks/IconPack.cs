@@ -4,9 +4,10 @@ namespace FancyUI.Assets.IconPacks;
 
 public sealed class IconPack(string name) : Pack(name, PackType.IconPacks)
 {
-    public Dictionary<GameModType, IconAssets> Assets { get; } = [];
-    private Dictionary<string, Sprite> NumberSprites { get; } = [];
-    private Dictionary<string, Sprite> EmojiSprites { get; } = [];
+    public readonly Dictionary<GameModType, IconAssets> Assets = [];
+    private readonly Dictionary<string, Sprite> NumberSprites = [];
+    private readonly Dictionary<string, Sprite> EmojiSprites = [];
+
     public TMP_SpriteAsset PlayerNumbers { get; private set; }
     public TMP_SpriteAsset Emojis { get; private set; }
 
@@ -22,7 +23,7 @@ public sealed class IconPack(string name) : Pack(name, PackType.IconPacks)
         foreach (var assets in Assets.Values)
         {
             assets.Debug();
-            count += assets.Count;
+            count += assets.DebugCount;
         }
 
         if (PlayerNumbers)
@@ -230,7 +231,7 @@ public sealed class IconPack(string name) : Pack(name, PackType.IconPacks)
                     dict.Add($"PlayerNumbers_{i}", $"PlayerNumbers_{i}");
                 }
 
-                PlayerNumbers = FancyAssetManager.BuildGlyphs(sprites, $"PlayerNumbers ({Name})", dict, 128f, 128f, 0f, 105f, 150f);
+                PlayerNumbers = BuildGlyphs(sprites, $"PlayerNumbers ({Name})", dict, 128f, 128f, 0f, 105f, 150f);
                 Utils.DumpSprite(PlayerNumbers.spriteSheet as Texture2D, "PlayerNumbers", Path.Combine(PackPath, "PlayerNumbers"));
             }
             catch (Exception e)
@@ -266,7 +267,7 @@ public sealed class IconPack(string name) : Pack(name, PackType.IconPacks)
                     dict.Add($"Emoji{i}", $"Emoji{i}");
                 }
 
-                Emojis = FancyAssetManager.BuildGlyphs(sprites, $"Emojis ({Name})", dict, 384f, 384f, 0f, 300f, 390f);
+                Emojis = BuildGlyphs(sprites, $"Emojis ({Name})", dict, 384f, 384f, 0f, 300f, 390f);
                 Utils.DumpSprite(PlayerNumbers.spriteSheet as Texture2D, "Emojis", Path.Combine(PackPath, "Emojis"));
             }
             catch (Exception e)
@@ -396,11 +397,12 @@ public sealed class IconPack(string name) : Pack(name, PackType.IconPacks)
             else
                 Fancy.Instance.Warning($"NO {mod.ToUpper()} ICON FOR {name2}?!");
         }
-        float metricsWidth = mod == "BTOS" ? 256f : 384f;
-        float metricsHeight = metricsWidth;
-        float metricsHBY = mod == "BTOS" ? 224f : 300f;
-        float metricsHA = mod == "BTOS" ? 256f : 390f;
-        return FancyAssetManager.BuildGlyphs(sprites, $"{mod}RoleIcons ({Name}, {style})", index.Item1, metricsWidth, metricsHeight, 0f, metricsHBY, metricsHA);
+
+        var metricsWidth = mod == "BTOS" ? 256f : 384f;
+        var metricsHeight = metricsWidth;
+        var metricsHBY = mod == "BTOS" ? 224f : 300f;
+        var metricsHA = mod == "BTOS" ? 256f : 390f;
+        return BuildGlyphs(sprites, $"{mod}RoleIcons ({Name}, {style})", index.Item1, metricsWidth, metricsHeight, 0f, metricsHBY, metricsHA);
     }
 
     public Sprite GetSprite(string iconName, bool allowEe, string type)
