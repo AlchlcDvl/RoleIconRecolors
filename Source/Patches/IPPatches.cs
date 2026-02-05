@@ -1602,98 +1602,96 @@ public static class Tos2GameBrowserListItemPatch
 //     public static void Postfix(RoleListPopupController __instance, Role role) => __instance.RoleNameLabel.SetText($"{role.GetTMPSprite()} {role.ToColorizedDisplayString()}");
 // }
 
-[HarmonyPatch(typeof(RoleListItem), nameof(RoleListItem.SetRole))]
-public static class RoleListItemIcon
-{
-    public static bool Prefix(RoleListItem __instance, Role role, Role role2)
-    {
-        __instance.role = role;
-        __instance.role2 = role2;
+// [HarmonyPatch(typeof(RoleListItem), nameof(RoleListItem.SetRole))]
+// public static class RoleListItemIcon
+// {
+    // public static bool Prefix(RoleListItem __instance, Role role, Role role2)
+    // {
+        // __instance.role = role;
+        // __instance.role2 = role2;
 
-        var actualFaction = role.GetFactionType();
-        var displayFaction = actualFaction;
+        // var actualFaction = role.GetFactionType();
+        // var displayFaction = actualFaction;
 
-        if (Constants.IsPandora() && (actualFaction == FactionType.COVEN || actualFaction == FactionType.APOCALYPSE))
-            displayFaction = Btos2Faction.Pandora;
+        // if (Constants.IsPandora() && (actualFaction == FactionType.COVEN || actualFaction == FactionType.APOCALYPSE))
+            // displayFaction = Btos2Faction.Pandora;
 
-        if (Constants.IsCompliance() &&
-            (role == Role.SERIALKILLER || role == Role.SHROUD || role == Role.WEREWOLF || role == Role.ARSONIST))
-            displayFaction = Btos2Faction.Compliance;
+        // if (Constants.IsCompliance() &&
+            // (role == Role.SERIALKILLER || role == Role.SHROUD || role == Role.WEREWOLF || role == Role.ARSONIST))
+            // displayFaction = Btos2Faction.Compliance;
 
-        string roleText;
-        if (role2 == Role.NONE)
-        {
-            roleText = role.GetTMPSprite() + role.ToColorizedDisplayString(displayFaction);
-        }
-        else
-        {
-            roleText = string.Concat(
-                role.GetTMPSprite(),
-                role.ToColorizedShortenedDisplayString(),
-                " <color=#FFFFFF40>-</color> ",
-                role2.GetTMPSprite(),
-                role2.ToColorizedShortenedDisplayString()
-            );
-        }
+        // string roleText;
+        // if (role2 == Role.NONE)
+        // {
+            // roleText = role.GetTMPSprite() + role.ToColorizedDisplayString(displayFaction);
+        // }
+        // else
+        // {
+            // roleText = string.Concat(
+                // role.GetTMPSprite(),
+                // role.ToColorizedShortenedDisplayString(),
+                // " <color=#FFFFFF40>-</color> ",
+                // role2.GetTMPSprite(),
+                // role2.ToColorizedShortenedDisplayString()
+            // );
+        // }
 
-        var factionName = (displayFaction == actualFaction && Constants.CurrentStyle() == "Regular") ? "Regular" : Utils.FactionName(displayFaction, false);
-        roleText = roleText.Replace("RoleIcons\"", $"RoleIcons ({factionName})\"");
+        // var factionName = (displayFaction == actualFaction && Constants.CurrentStyle() == "Regular") ? "Regular" : Utils.FactionName(displayFaction, false);
+        // roleText = roleText.Replace("RoleIcons\"", $"RoleIcons ({factionName})\"");
 
-        roleText = roleText.ReplaceIcons();
+        // roleText = roleText.ReplaceIcons();
 
-        __instance.roleLabel.SetText(roleText);
+        // __instance.roleLabel.SetText(roleText);
 
-        __instance.roleLabel.color = role.GetFaction().GetFactionColor().ParseColor();
+        // __instance.roleLabel.color = role.GetFaction().GetFactionColor().ParseColor();
 
-        __instance.ValidateCrossOut();
+        // __instance.ValidateCrossOut();
 
-        return false;
-    }
-}
+        // return false;
+    // }
+// }
 
-[HarmonyPatch(typeof(RoleListItem), nameof(RoleListItem.RefreshLabel))]
-public static class RoleListItem_RefreshLabel_Patch
-{
-    [HarmonyPostfix]
-    public static void Postfix(RoleListItem __instance)
-    {
-        var role = __instance.role;
-        if (role == Role.NONE)
-            return;
+// [HarmonyPatch(typeof(RoleListItem), nameof(RoleListItem.RefreshLabel))]
+// public static class RoleListItem_RefreshLabel_Patch
+// {
+    // [HarmonyPostfix]
+    // public static void Postfix(RoleListItem __instance)
+    // {
+        // var role = __instance.role;
+        // if (role == Role.NONE)
+            // return;
 
-        var actualFaction = role.GetFactionType();
-        var displayFaction = actualFaction;
+        // var actualFaction = role.GetFactionType();
+        // var displayFaction = actualFaction;
 
-        if (Constants.IsPandora() &&
-            (actualFaction == FactionType.COVEN || actualFaction == FactionType.APOCALYPSE))
-            displayFaction = Btos2Faction.Pandora;
+        // if (Constants.IsPandora() &&
+            // (actualFaction == FactionType.COVEN || actualFaction == FactionType.APOCALYPSE))
+            // displayFaction = Btos2Faction.Pandora;
 
-        if (Constants.IsCompliance() &&
-            (role == Role.SERIALKILLER || role == Role.SHROUD ||
-             role == Role.WEREWOLF || role == Role.ARSONIST))
-            displayFaction = Btos2Faction.Compliance;
+        // if (Constants.IsCompliance() &&
+            // (role == Role.SERIALKILLER || role == Role.SHROUD ||
+             // role == Role.WEREWOLF || role == Role.ARSONIST))
+            // displayFaction = Btos2Faction.Compliance;
 
-        // Modify the *already-built* text
-        var text = __instance.roleLabel.text;
+        // var text = __instance.roleLabel.text;
 
-        var factionName =
-            (displayFaction == actualFaction && Constants.CurrentStyle() == "Regular")
-                ? "Regular"
-                : Utils.FactionName(displayFaction, false);
+        // var factionName =
+            // (displayFaction == actualFaction && Constants.CurrentStyle() == "Regular")
+                // ? "Regular"
+                // : Utils.FactionName(displayFaction, false);
 
-        text = text.Replace(
-            "RoleIcons\"",
-            $"RoleIcons ({factionName})\""
-        );
+        // text = text.Replace(
+            // "RoleIcons\"",
+            // $"RoleIcons ({factionName})\""
+        // );
 
-        text = text.ReplaceIcons();
+        // text = text.ReplaceIcons();
 
-        __instance.roleLabel.SetText(text);
+        // __instance.roleLabel.SetText(text);
 
-        // Preserve strike-through
-        __instance.ValidateCrossOut();
-    }
-}
+        // __instance.ValidateCrossOut();
+    // }
+// }
 
 // // The role list panel listings oh my god
 // [HarmonyPatch(typeof(RandomRoleListItemController))]
