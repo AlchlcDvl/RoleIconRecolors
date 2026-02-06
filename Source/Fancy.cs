@@ -224,6 +224,7 @@ public class Fancy : BaseMod<Fancy>
     public static EnumDropdownOption<EffectType> SelectTestingEffect;
 
     public static EnumDropdownOption<RecruitEndType> RecruitEndingColor;
+    public static EnumDropdownOption<NecroPassingFormatOption> NecroPassingFormat;
     public static FloatOption FactionLabelSize;
     public static EnumDropdownOption<FactionLabelOption> RoleCardFactionLabel;
     public static EnumDropdownOption<FactionLabelOption> FactionNameNextToRole;
@@ -439,6 +440,7 @@ public class Fancy : BaseMod<Fancy>
         PlayerListRoleIcon = new("PLAYER_LIST_ROLE_ICON", PlayerListRoleIconOption.Disabled, PackType.Testing, useTranslations: true);
         TallRoleDeck = new("TALL_ROLE_DECK", false, PackType.Testing);
         YouAreARole = new("YOU_ARE_A_ROLE", true, PackType.Testing);
+        NecroPassingFormat = new("NECRO_PASS_FORMAT", NecroPassingFormatOption.Vanilla, PackType.Testing, useTranslations: true);
         PlayerNumber = new("PLAYER_NUMBER", 0, PackType.Testing, 0, 15, true, Constants.CustomNumbers);
         ChatBackgroundOpacity = new("CHAT_BACKGROUND", 80, PackType.Testing, 0, 100, true);
         DumpSpriteSheets = new("DUMP_SHEETS", false, PackType.Testing);

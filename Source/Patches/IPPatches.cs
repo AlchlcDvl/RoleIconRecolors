@@ -10,6 +10,9 @@ using Server.Shared.Extensions;
 using Server.Shared.Messages;
 using Server.Shared.State.Chat;
 using AbilityType = Game.Interface.TosAbilityPanelListItem.OverrideAbilityType;
+using Game.Chat;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace FancyUI.Patches;
 
@@ -1055,16 +1058,44 @@ public static class NecroPassPatches
         }
 
         if (__instance.NameAndRole)
-        {
-            var discussionPlayer = Service.Game.Sim.info.GetDiscussionPlayer(__instance.Position);
-            if (discussionPlayer != null)
-            {
-                var roleText = role.ToFactionalDisplayString(faction);
+		{
+			var discussionPlayer = Service.Game.Sim.info.GetDiscussionPlayer(__instance.Position);
+			if (discussionPlayer == null)
+				return;
 
-                __instance.NameAndRole.text =
-                    $"{discussionPlayer.gameName}\n<size=24>({roleText})</size>";
-            }
-        }
+			var playerName = discussionPlayer.gameName;
+			var roleText = role.ToFactionalDisplayString(faction);
+			var colored = role.ToColorizedDisplayString(faction);
+
+			switch (Fancy.NecroPassingFormat.Value)
+			{
+				case NecroPassingFormatOption.Vanilla:
+					// Name
+					// (Role)
+					__instance.NameAndRole.text =
+						$"{playerName}\n<size=24>({roleText})</size>";
+					break;
+
+				case NecroPassingFormatOption.Classic:
+					// Name (Role)
+					__instance.NameAndRole.text =
+						$"{colored}\n{playerName}";
+					break;
+
+				case NecroPassingFormatOption.InvertedClassic:
+					// (Role) Name
+					__instance.NameAndRole.text =
+						$"{playerName}\n{colored}";
+					break;
+
+				default:
+					// Safety fallback
+					__instance.NameAndRole.text =
+						$"{playerName}\n<size=24>({roleText})</size>";
+					break;
+			}
+}
+
     }
 
 

@@ -80,3 +80,10 @@ public enum PlayerListRoleIconOption : byte
     Left,
     Right
 }
+
+public enum NecroPassingFormatOption : byte
+{
+    Vanilla,
+    Classic,
+    InvertedClassic
+}

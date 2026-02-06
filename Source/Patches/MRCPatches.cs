@@ -701,7 +701,7 @@ public static class ClientRoleExtensionsPatches
         __result = newText;
     }
 
-    [HarmonyPatch(nameof(ClientRoleExtensions.GetFactionColor))]
+    [HarmonyPatch(nameof(ClientRoleExtensions.GetFactionColor)), HarmonyPrefix]
 	[HarmonyPriority(Priority.Last)]
     public static bool Prefix(ref string __result, FactionType factionType)
     {

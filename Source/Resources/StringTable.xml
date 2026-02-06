@@ -770,6 +770,9 @@
     <Entry key="FANCY_PLAYER_LIST_ROLE_ICON_NAME">Render Role Icon in Player List</Entry>
     <Entry key="FANCY_PLAYER_LIST_ROLE_ICON_DESC">Whether or not to render the role icon in the player list, either to the left or to the right.</Entry>
 
+    <Entry key="FANCY_NECRO_PASS_FORMAT_NAME">Necro Passing Vote UI Format</Entry>
+    <Entry key="FANCY_NECRO_PASS_FORMAT_DESC">Determines the format of the Necro Passing UI. Vanilla is just the vanilla appearance, Classic is the old appearance from when Necro Passing was a BTOS2 exclusive, and Inverted Classic is Classic with the player names and role name swapped.</Entry>
+
     <Entry key="FANCY_WILDLING_XIS_WHISPERING_TO_Y" style="whisper_notice">You overhear %name1% whispering to %name2%:</Entry>
     <Entry key="FANCY_SERIALKILLER_XIS_WHISPERING_TO_Y" style="whisper_notice">You overhear %name1% whispering to %name2%:</Entry>
 
@@ -943,6 +946,9 @@
     <Entry key="FANCY_DISABLED">Disabled</Entry>
     <Entry key="FANCY_LEFT">Left</Entry>
     <Entry key="FANCY_RIGHT">Right</Entry>
+
+    <Entry key="FANCY_CLASSIC">Classic</Entry>
+    <Entry key="FANCY_INVERTEDCLASSIC">Inverted Classic</Entry>
 
     <Entry key="FANCY_MISMATCH">Mismatch</Entry>
     <Entry key="FANCY_CONDITIONAL">Conditional</Entry>
