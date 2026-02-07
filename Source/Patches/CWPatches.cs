@@ -4,6 +4,7 @@ using Home.Interface;
 using Home.Shared;
 using Mentions.Providers;
 using Mentions.UI;
+using Game.Interface;
 
 namespace FancyUI.Patches;
 
@@ -1041,3 +1042,63 @@ public static class NavigationControllerPatch
         catch { }
     }
 }
+
+[HarmonyPatch(typeof(SpecialAbilityPopupNecromancerRetributionistListItem), nameof(SpecialAbilityPopupNecromancerRetributionistListItem.SetData))]
+public static class PatchAbilityWaxColors
+{
+    public static void Postfix(
+        SpecialAbilityPopupNecromancerRetributionistListItem __instance,
+        bool hasChoice1,
+        bool hasChoice2)
+    {
+        if (hasChoice1 && __instance.choiceButton)
+        {
+            foreach (var img in __instance.choiceButton.GetComponentsInChildren<Image>(true))
+            {
+                if (img == __instance.choiceSprite)
+                    continue;
+
+                img.SetImageColor(ColorType.Wax);
+            }
+        }
+
+        if (hasChoice2 && __instance.choice2Button)
+        {
+            foreach (var img in __instance.choice2Button.GetComponentsInChildren<Image>(true))
+            {
+                if (img == __instance.choice2Sprite)
+                    continue;
+
+                img.SetImageColor(ColorType.Wax);
+                img.color *= 0.75f;
+            }
+        }
+    }
+}
+
+[HarmonyPatch( typeof(SpecialAbilityPopupNecromancerRetributionist), nameof(SpecialAbilityPopupNecromancerRetributionist.Start))]
+public static class Patch_NecroPopup_FrameColor
+{
+    static void Postfix(SpecialAbilityPopupNecromancerRetributionist __instance)
+    {
+        var background = __instance.transform.Find("Background");
+        if (background == null)
+            return;
+
+        var frame = background.Find("Frame");
+        if (frame != null)
+        {
+            var frameImg = frame.GetComponent<Image>();
+            if (frameImg != null)
+                frameImg.SetImageColor(ColorType.Wood);
+        }
+
+        var close = background.Find("CloseButton");
+        if (close != null)
+        {
+            foreach (var img in close.GetComponentsInChildren<Image>(true))
+                img.SetImageColor(ColorType.Metal);
+        }
+    }
+}
+

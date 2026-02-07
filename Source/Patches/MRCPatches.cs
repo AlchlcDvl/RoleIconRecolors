@@ -644,7 +644,7 @@ public static class PatchCustomWinScreens
 				case "BigText (1)":
 					if (child.TryGetComponent<TextMeshProUGUI>(out var tmp))
 					{
-						tmp.text = Utils.GetString("FANCY_APOCALYPSE_IS_NIGH");
+						tmp.text = Utils.GetString("FANCY_CINEMATIC_APOCALYPSE_IS_NIGH");
 					}
 					break;
 			}
