@@ -1065,31 +1065,26 @@ public static class NecroPassPatches
 
 			var playerName = discussionPlayer.gameName;
 			var roleText = role.ToFactionalDisplayString(faction);
-			var colored = role.ToColorizedDisplayString(faction);
+			var colored = role.ToColorizedNoLabel(faction);
 
 			switch (Fancy.NecroPassingFormat.Value)
 			{
 				case NecroPassingFormatOption.Vanilla:
-					// Name
-					// (Role)
 					__instance.NameAndRole.text =
 						$"{playerName}\n<size=24>({roleText})</size>";
 					break;
 
 				case NecroPassingFormatOption.Classic:
-					// Name (Role)
 					__instance.NameAndRole.text =
 						$"{colored}\n{playerName}";
 					break;
 
 				case NecroPassingFormatOption.InvertedClassic:
-					// (Role) Name
 					__instance.NameAndRole.text =
 						$"{playerName}\n{colored}";
 					break;
 
 				default:
-					// Safety fallback
 					__instance.NameAndRole.text =
 						$"{playerName}\n<size=24>({roleText})</size>";
 					break;
