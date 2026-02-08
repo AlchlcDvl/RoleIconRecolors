@@ -1182,4 +1182,12 @@ public static class Utils
         sprite.spriteSheet.Destroy();
         sprite.Destroy();
     }
+
+	// This just... does not exist in vanilla some reason. They have IsNeutralEvil and IsNeutralKilling, but NOT IsNeutralApocalypse.
+	public static bool IsNeutralApocalypse(this Role role)
+	{
+		var data = SharedRoleData.GetRoleData(role);
+		return data.roleAlignment == RoleAlignment.NEUTRAL &&
+			   data.subAlignment == SubAlignment.APOCALYPSE;
+	}
 }

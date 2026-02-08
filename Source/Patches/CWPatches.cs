@@ -1044,7 +1044,7 @@ public static class NavigationControllerPatch
 }
 
 [HarmonyPatch(typeof(SpecialAbilityPopupNecromancerRetributionistListItem), nameof(SpecialAbilityPopupNecromancerRetributionistListItem.SetData))]
-public static class PatchAbilityWaxColors
+public static class ReanimateMenuListPatch
 {
     public static void Postfix(
         SpecialAbilityPopupNecromancerRetributionistListItem __instance,
@@ -1077,7 +1077,7 @@ public static class PatchAbilityWaxColors
 }
 
 [HarmonyPatch( typeof(SpecialAbilityPopupNecromancerRetributionist), nameof(SpecialAbilityPopupNecromancerRetributionist.Start))]
-public static class Patch_NecroPopup_FrameColor
+public static class ReanimateMenuPatches
 {
     static void Postfix(SpecialAbilityPopupNecromancerRetributionist __instance)
     {
@@ -1102,3 +1102,172 @@ public static class Patch_NecroPopup_FrameColor
     }
 }
 
+[HarmonyPatch(typeof(SpecialAbilityPopupDayConfirm), nameof(SpecialAbilityPopupDayConfirm.Start))]
+public static class DayConfirmPatch
+{
+    static void Postfix(SpecialAbilityPopupDayConfirm __instance)
+    {
+        var root = __instance.transform;
+
+        var woodFrame = root.Find("Background/Frame/Frame");
+        if (woodFrame != null)
+        {
+            var img = woodFrame.GetComponent<Image>();
+            if (img != null)
+                img.SetImageColor(ColorType.Wood);
+        }
+
+        var closeButton = root.Find("Background/CloseButton");
+        if (closeButton != null)
+        {
+            foreach (var img in closeButton.GetComponentsInChildren<Image>(true))
+                img.SetImageColor(ColorType.Metal);
+        }
+
+        var confirmPopup = root.Find("ConfirmPopup");
+        if (confirmPopup != null)
+        {
+            foreach (var img in confirmPopup.GetComponentsInChildren<Image>(true))
+            {
+                img.SetImageColor(ColorType.Wood);
+            }
+
+            var confirmButton = confirmPopup.Find("ConfirmButton");
+            if (confirmButton != null)
+            {
+                foreach (var img in confirmButton.GetComponentsInChildren<Image>(true))
+                    img.SetImageColor(ColorType.Wax);
+            }
+
+            var cancelButton = confirmPopup.Find("CancelButton");
+            if (cancelButton != null)
+            {
+                foreach (var img in cancelButton.GetComponentsInChildren<Image>(true))
+                    img.SetImageColor(ColorType.Wax);
+            }
+        }
+    }
+}
+
+[HarmonyPatch(typeof(SpecialAbilityPopupDayConfirmListItem), nameof(SpecialAbilityPopupDayConfirmListItem.SetData))]
+public static class DayConfirmListPatch
+{
+    static void Postfix(SpecialAbilityPopupDayConfirmListItem __instance)
+    {
+        var backing = __instance.transform
+            .Find("AbilityButton/Backing");
+
+        if (backing == null)
+            return;
+
+        var img = backing.GetComponent<Image>();
+        if (img == null)
+            return;
+
+		img.SetImageColor(ColorType.Wax);
+    }
+}
+
+[HarmonyPatch(typeof(SpecialAbilityPopupGeneric), nameof(SpecialAbilityPopupGeneric.Start))]
+public static class GenericSpecialAbilityPatch
+{
+    static void Postfix(SpecialAbilityPopupGeneric __instance)
+    {
+        var root = __instance.transform;
+
+        var frame = root.Find("Background/Frame");
+        if (frame != null)
+        {
+            var img = frame.GetComponent<Image>();
+            if (img != null)
+                img.SetImageColor(ColorType.Wood);
+        }
+
+        var closeButton = root.Find("Background/CloseButton");
+		if (closeButton != null)
+		{
+			foreach (var img in closeButton.GetComponentsInChildren<Image>(true))
+			{
+				img.SetImageColor(ColorType.Metal);
+			}
+		}
+
+    }
+}
+
+[HarmonyPatch(typeof(SpecialAbilityPopupGenericListItem), nameof(SpecialAbilityPopupGenericListItem.SetData))]
+public static class GenericSpecialAbilityListPatch
+{
+    static void Postfix(SpecialAbilityPopupGenericListItem __instance)
+    {
+        var backings = __instance.transform
+            .Find("AbilityButtons");
+
+        if (backings == null)
+            return;
+
+        foreach (Transform child in backings)
+        {
+            if (child.name != "AbilityButton")
+                continue;
+
+            var backing = child.Find("Backing");
+            if (backing == null)
+                continue;
+
+            var img = backing.GetComponent<Image>();
+            if (img != null)
+                img.SetImageColor(ColorType.Wax);
+        }
+    }
+}
+
+[HarmonyPatch(typeof(SpecialAbilityPopupGenericDualTarget), nameof(SpecialAbilityPopupGenericDualTarget.Start))]
+public static class DualTargetAbilityPatch
+{
+    static void Postfix(SpecialAbilityPopupGenericDualTarget __instance)
+    {
+        var root = __instance.transform;
+        var frame = root.Find("Background/Frame");
+        if (frame != null)
+        {
+            var img = frame.GetComponent<Image>();
+            if (img != null)
+                img.SetImageColor(ColorType.Wood);
+        }
+
+        var closeButton = root.Find("Background/CloseButton");
+        if (closeButton != null)
+        {
+            foreach (var img in closeButton.GetComponentsInChildren<Image>(true))
+                img.SetImageColor(ColorType.Metal);
+        }
+    }
+}
+
+[HarmonyPatch(typeof(SpecialAbilityPopupGenericDualTargetListItem), nameof(SpecialAbilityPopupGenericDualTargetListItem.SetData))]
+public static class DualTargetAbilityListPatch
+{
+    static void Postfix(SpecialAbilityPopupGenericDualTargetListItem __instance)
+    {
+        var abilityButtons = __instance.transform
+            .Find("AbilityButtons");
+
+        if (abilityButtons == null)
+            return;
+
+        foreach (Transform btn in abilityButtons)
+        {
+            if (btn.name != "AbilityButton")
+                continue;
+
+            var backing = btn.Find("Backing");
+            if (backing == null)
+                continue;
+
+            var img = backing.GetComponent<Image>();
+            if (img != null)
+                img.SetImageColor(ColorType.Wax);
+        }
+    }
+}
