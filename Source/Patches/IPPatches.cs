@@ -360,10 +360,10 @@ public static class PatchAbilityPanelListItems
             }
             case AbilityType.POTIONMASTER_ATTACK:
             {
-                var special = GetSprite(reg, $"{name}_Ability_3", faction, ee);
+                var special = GetSprite(reg, $"Necronomicon", faction, ee);
 
                 if (!special.IsValid() && reg)
-                    special = GetSprite($"{name}_Ability_3", ogfaction, ee);
+                    special = GetSprite($"Necronomicon", ogfaction, ee);
 
                 if (special.IsValid() && __instance.choice1Sprite)
                     __instance.choice1Sprite.sprite = special;

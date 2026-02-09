@@ -107,7 +107,7 @@ public static class RetrainPopupPatch
             : Utils.FactionName(myFaction, false))})\"");
 
         var myIcon = myRole.GetTMPSprite();
-        icon = icon.Replace("RoleIcons\"", $"RoleIcons ({((myRole.GetFactionType() == myFaction && Constants.CurrentStyle() == "Regular")
+        myIcon = myIcon.Replace("RoleIcons\"", $"RoleIcons ({((myRole.GetFactionType() == myFaction && Constants.CurrentStyle() == "Regular")
             ? "Regular"
             : Utils.FactionName(myFaction, false))})\"");
 
