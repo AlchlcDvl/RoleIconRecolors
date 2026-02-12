@@ -48,7 +48,7 @@
     <Entry key="FANCY_EXCLUDE_TG_DESC">Determines whether or not Town Government roles (Mayor, Monarch and Pacifist) are excluded from the Major gradient set or not.</Entry>
 
     <Entry key="FANCY_LETHAL_COLORS_NAME">Override Secondary Color for Killing Roles</Entry>
-    <Entry key="FANCY_LETHAL_COLORS_DESC">Determines whether or not secondary colors on factions will be overwritten with a separate Lethal color value when Coven Killing, Town Killing, or a Berserker. Jailor is also included if the above setting is disabled.</Entry>
+    <Entry key="FANCY_LETHAL_COLORS_DESC">Determines whether or not secondary colors on factions will be overwritten with a separate Lethal color value when Coven Killing, Town Killing, or a Berserker. Jailor is also included if Major Colors is disabled.</Entry>
 
     <Entry key="FANCY_HORSEMAN_COLORS_NAME">Override Secondary Color for Horsemen</Entry>
     <Entry key="FANCY_HORSEMAN_COLORS_DESC">Determines whether or not secondary colors on factions will be overwritten with a separate Horseman color value when role is a Horseman of the Apocalypse.</Entry>
