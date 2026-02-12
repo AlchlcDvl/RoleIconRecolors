@@ -10,3 +10,4 @@ Ignore.*
 *.DotSettings.user
 .qodo
 /.vs
+Source/Libs/
