@@ -57,7 +57,28 @@
     <Entry key="FANCY_VERTICAL_GRADIENTS_DESC">Determines whether or not gradients should be vertical (like Vanilla's gradients) or horziontal (like BToS2's gradients).</Entry>
 
     <Entry key="FANCY_RECRUIT_ENDING_NAME">Override Recruit Secondary Color</Entry>
-    <Entry key="FANCY_RECRUIT_ENDING_DESC">Determines what color recruits will pull. Jackal means it pulls from the Jackal Secondary Color, Original Primary means it pulls from their original faction's primary color, and Original Secondary pulls from their original faction's secondary color (Major if a Major role with the setting on).</Entry>
+    <Entry key="FANCY_RECRUIT_ENDING_DESC">Determines what secondary color Jackal recruits will pull. Jackal means it pulls from the Jackal Secondary Color, Original Primary means it pulls from their original faction's primary color, and Original Secondary pulls from their original faction's secondary color (Major if a Major role with the setting on). Original Blend takes the Primary and Secondary colors of the role's original faction and blends them together and makes that the secondary color.</Entry>
+
+    <Entry key="FANCY_CONVERT_ENDING_NAME">Override Convert Secondary Color</Entry>
+    <Entry key="FANCY_CONVERT_ENDING_DESC">Determines what secondary color Vampire converts will pull. Vampire means it pulls from the Vampire Secondary Color, Original Primary means it pulls from their original faction's primary color, and Original Secondary pulls from their original faction's secondary color (Major if a Major role with the setting on). Original Blend takes the Primary and Secondary colors of the role's original faction and blends them together and makes that the secondary color.</Entry>
+
+    <Entry key="FANCY_RECRUIT_STARTING_NAME">Override Recruit Primary Color</Entry>
+    <Entry key="FANCY_RECRUIT_STARTING_DESC">Determines what primary color Jackal recruits will pull. Jackal means it pulls from the Jackal Primary Color, Original Primary means it pulls from their original faction's primary color, and Original Secondary pulls from their original faction's secondary color (Major if a Major role with the setting on). Original Blend takes the Primary and Secondary colors of the role's original faction and blends them together and makes that the secondary color.</Entry>
+
+    <Entry key="FANCY_CONVERT_STARTING_NAME">Override Convert Primary Color</Entry>
+    <Entry key="FANCY_CONVERT_STARTING_DESC">Determines what primary color Vampire converts will pull. Vampire means it pulls from the Vampire Primary Color, Original Primary means it pulls from their original faction's primary color, and Original Secondary pulls from their original faction's secondary color (Major if a Major role with the setting on). Original Blend takes the Primary and Secondary colors of the role's original faction and blends them together and makes that the secondary color.</Entry>
+
+    <Entry key="FANCY_RECRUIT_START_RATIO_NAME">Recruit Primary Blend Ratio</Entry>
+    <Entry key="FANCY_RECRUIT_START_RATIO_DESC">Determines the ratio between all Blend types within the Recruit Primary Override setting for both ends of each color blend.</Entry>
+
+    <Entry key="FANCY_RECRUIT_END_RATIO_NAME">Recruit Secondary Blend Ratio</Entry>
+    <Entry key="FANCY_RECRUIT_END_RATIO_DESC">Determines the ratio between all Blend types within the Recruit Secondary Override setting for both ends of each color blend.</Entry>
+
+    <Entry key="FANCY_CONVERT_START_RATIO_NAME">Convert Primary Blend Ratio</Entry>
+    <Entry key="FANCY_CONVERT_START_RATIO_DESC">Determines the ratio between all Blend types within the Convert Primary Override setting for both ends of each color blend.</Entry>
+
+    <Entry key="FANCY_CONVERT_END_RATIO_NAME">Convert Secondary Blend Ratio</Entry>
+    <Entry key="FANCY_CONVERT_END_RATIO_DESC">Determines the ratio between all Blend types within the Convert Secondary Override setting for both ends of each color blend.</Entry>
 
     <Entry key="FANCY_IS_JACKAL_MAJOR_NAME">Jackal is Major</Entry>
     <Entry key="FANCY_IS_JACKAL_MAJOR_DESC">Determines whether or not the Jackal role is considered Major.</Entry>
@@ -938,10 +959,12 @@
     <Entry key="FANCY_WAX">Wax</Entry>
     <Entry key="FANCY_ALL">All</Entry>
 
-    <Entry key="FANCY_JACKALEND">Jackal</Entry>
     <Entry key="FANCY_FACTIONSTART">Original Primary</Entry>
     <Entry key="FANCY_FACTIONEND">Original Secondary</Entry>
     <Entry key="FANCY_FACTIONBOTHCOLORS">Original Blend</Entry>
+    <Entry key="FANCY_BLENDFACTIONSTART">Default + Original Primary</Entry>
+    <Entry key="FANCY_BLENDFACTIONEND">Default + Original Secondary</Entry>
+    <Entry key="FANCY_BLENDFACTIONBOTHCOLORS">Default + Original Blend</Entry>
 
     <Entry key="FANCY_DISABLED">Disabled</Entry>
     <Entry key="FANCY_LEFT">Left</Entry>

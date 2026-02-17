@@ -58,12 +58,26 @@ public enum DisplayType : byte
 //     Effect
 // }
 
-public enum RecruitEndType : byte
+public enum OverrideStartType : byte
 {
-    JackalEnd,
+    Default,
     FactionStart,
     FactionEnd,
-	FactionBothColors
+	FactionBothColors,
+	BlendFactionStart,
+    BlendFactionEnd,
+    BlendFactionBothColors
+}
+
+public enum OverrideEndType : byte
+{
+    Default,
+    FactionStart,
+    FactionEnd,
+	FactionBothColors,
+	BlendFactionStart,
+    BlendFactionEnd,
+    BlendFactionBothColors
 }
 
 public enum FactionLabelOption : byte

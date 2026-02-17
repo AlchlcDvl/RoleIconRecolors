@@ -72,6 +72,14 @@ public static class Constants
     public static float GrayscaleAmount() => Fancy.GrayscaleAmount.Value / 100f;
 
     public static float DeadChatDesaturation() => Fancy.DeadChatDesaturation.Value / 100f;
+	
+    public static float RecruitStartRatio() => Fancy.RecruitStartBlendRatio.Value / 100f;
+	
+    public static float RecruitEndRatio() => Fancy.RecruitEndBlendRatio.Value / 100f;
+	
+    public static float ConvertStartRatio() => Fancy.ConvertStartBlendRatio.Value / 100f;
+	
+    public static float ConvertEndRatio() => Fancy.ConvertEndBlendRatio.Value / 100f;
 
     // public static float BannedRoleDesaturation() => Fancy.BannedRoleDesaturation.Value / 100f;
 

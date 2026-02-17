@@ -1434,15 +1434,41 @@ public static class PatchNecroRetMenuItem
         var targetRoleName = Utils.RoleName(role);
         var targetFaction  = Utils.FactionName(role.GetFactionType(), false);
 
-        var ability = targetRoleName switch
-        {
-            "Deputy" or "Conjurer" or "Veteran" => "Special",
-            "Monarch" or "Socialite" or "Pacifist" => "Ability_2",
-            "Dreamweaver" when Constants.IsBTOS2() => "Ability_2",
-            _ => "Ability"
-        };
+        RoleCardData roleCardData = SharedRoleData.GetRoleCardData(role);
 
-        var abilityName = $"{targetRoleName}_{ability}";
+        string abilitySuffix;
+		string abilityText;
+
+        if (roleCardData != null)
+        {
+            if (roleCardData.normalAbilityAvailable)
+			{
+				abilitySuffix = "Ability";
+				abilityText = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY1_VERB_{(int)role}");
+			}
+            else if (roleCardData.secondAbilityAvailable)
+			{
+				abilitySuffix = "Ability_2";
+				abilityText = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY2_VERB_{(int)role}");
+			}
+            else if (roleCardData.specialAbilityAvailable)
+			{
+				abilitySuffix = "Special";
+				abilityText = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_SPECIAL_ABILITY_VERB_{(int)role}");
+			}
+            else
+			{
+				abilitySuffix = "Ability";
+				abilityText = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY1_VERB_{(int)role}");
+			}
+        }
+        else
+        {
+            abilitySuffix = "Ability";
+			abilityText = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY1_VERB_{(int)role}");
+        }
+
+        var abilityName = $"{targetRoleName}_{abilitySuffix}";
 
         var abilitySprite =
             GetSprite(abilityName, targetFaction, false) ??
@@ -1450,6 +1476,10 @@ public static class PatchNecroRetMenuItem
 
         if (abilitySprite.IsValid() && __instance.choice2Sprite)
             __instance.choice2Sprite.sprite = abilitySprite;
+		
+		if (__instance.choice2Text)
+			__instance.choice2Text.text = abilityText;
+		
     }
 }
 
@@ -1500,6 +1530,33 @@ public static class PatchDualAbilityMenuItem
     }
 }
 
+[HarmonyPatch(typeof(SpecialAbilityPopupDayConfirmListItem), nameof(SpecialAbilityPopupDayConfirmListItem.SetData))]
+public static class PatchDayConfirmAbilityMenuItem
+{
+    public static void Postfix(SpecialAbilityPopupDayConfirmListItem __instance, int position, string player_name, Sprite headshot, bool hasChoice1, UIRoleData data)
+    {
+        if (!Constants.EnableIcons())
+            return;
+
+        var role      = Pepper.GetMyRole();
+        var roleName  = Utils.RoleName(role);
+        var faction   = Utils.FactionName(Pepper.GetMyFaction());
+        var ogFaction = Utils.FactionName(role.GetFactionType(), false);
+
+        var baseName = $"{roleName}_Special";
+
+        var sprite = GetSprite(baseName, faction, false);
+
+        if (!sprite.IsValid())
+            sprite = GetSprite(baseName, ogFaction, false);
+
+        if (!sprite.IsValid())
+            return;
+
+        if (__instance.choiceSprite)
+            __instance.choiceSprite.sprite = sprite;
+    }
+}
 [HarmonyPatch(typeof(PirateProgressLevelElement), nameof(PirateProgressLevelElement.SetData), typeof(Role), typeof(Role), typeof(Role), typeof(bool), typeof(bool), typeof(bool))]
 public static class PatchPirateMenu
 {
