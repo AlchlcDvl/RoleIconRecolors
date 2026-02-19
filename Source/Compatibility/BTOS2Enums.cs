@@ -149,6 +149,10 @@ public static class Btos2Role
     public const Role Stoned = Role.STONED;
 
     public const Role Unknown = Role.UNKNOWN;
+
+    // Player Notes +
+    public const Role TownPower = (Role)242;
+
 }
 
 public static class Btos2Faction
