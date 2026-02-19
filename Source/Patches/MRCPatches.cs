@@ -767,6 +767,7 @@ public static class ClientRoleExtensionsPatches
                 Btos2Role.NeutralPariah => $"{Utils.ApplyGradient(Utils.GetString("BTOS_ALIGNMENTNAME_3"), neutral)} {Utils.ApplyGradient(Utils.GetString("BTOS_SUBALIGNMENTNAME_34"), bucket)}",
                 Btos2Role.NeutralOutlier => $"{Utils.ApplyGradient(Utils.GetString("BTOS_ALIGNMENTNAME_3"), neutral)} {Utils.ApplyGradient(Utils.GetString("BTOS_SUBALIGNMENTNAME_33"), bucket)}",
                 Btos2Role.RandomNeutral => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_RANDOM"), bucket)} {Utils.ApplyGradient(Utils.GetString("BTOS_ALIGNMENTNAME_3"), neutral)}",
+                Btos2Role.TownPower => $"{Utils.ApplyGradient(Utils.GetString("BTOS_ALIGNMENTNAME_1"), townExecutive)} {Utils.ApplyGradient(Utils.GetString("BTOS_SUBALIGNMENTNAME_3"), bucket)}", // Player Notes +
                 _ => string.Empty,
             };
         }

@@ -139,6 +139,7 @@ public static class Utils
         Btos2Role.Any => "Any",
         Btos2Role.TownExecutive => "TownExecutive",
         Btos2Role.TownGovernment => "TownGovernment",
+        Btos2Role.TownPower => "TownPower", // Player Notes +
         Btos2Role.CovenTownTraitor => "CovenTownTraitor",
         Btos2Role.ApocTownTraitor => "ApocTownTraitor",
         Btos2Role.PerfectTown => "PerfectTown",
