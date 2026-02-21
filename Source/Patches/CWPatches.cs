@@ -949,7 +949,7 @@ public static class RoleDeckPanelControllerPatch
         if (sprite.IsValid() && any)
             any.sprite = sprite;
 
-        modifier = GetSprite("Modifier");
+        sprite = GetSprite("Modifier");
 
         if (sprite.IsValid() && modifier)
             modifier.sprite = sprite;
