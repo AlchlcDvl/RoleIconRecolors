@@ -917,16 +917,18 @@ public static class RoleDeckPanelControllerPatch
         paper.SetImageColor(ColorType.Paper);
         __instance.transform.GetComponent<Image>("RolesIcon").SetImageColor(ColorType.Paper);
         __instance.transform.GetComponent<Image>("PlayersIcon").SetImageColor(ColorType.Wax);
+        __instance.transform.GetComponent<Image>("RoleTypeSeparator").SetImageColor(ColorType.Leather);
         __instance.transform.GetComponent<TextMeshProUGUI>("LobbyInstructionsText").SetGraphicColor(ColorType.Paper);
         __instance.splatIcon.GetComponent<Image>().SetImageColor(ColorType.Wax);
 
         if (!Constants.EnableIcons())
             return;
 
-        var town = __instance.transform.GetComponent<Image>("TowniesIcon");
-        var coven = __instance.transform.GetComponent<Image>("Coven");
-        var neut = __instance.transform.GetComponent<Image>("Neutral");
+        var town = __instance.transform.GetComponent<Image>("TownIcon");
+        var coven = __instance.transform.GetComponent<Image>("CovenIcon");
+        var neut = __instance.transform.GetComponent<Image>("NeutralIcon");
         var any = __instance.transform.GetComponent<Image>("AnyIcon");
+        var modifier = __instance.transform.GetComponent<Image>("ModifierIcon");
         var sprite = GetSprite("Town");
 
         if (sprite.IsValid() && town)
@@ -946,6 +948,11 @@ public static class RoleDeckPanelControllerPatch
 
         if (sprite.IsValid() && any)
             any.sprite = sprite;
+
+        modifier = GetSprite("Modifier");
+
+        if (sprite.IsValid() && modifier)
+            modifier.sprite = sprite;
 
         Pandora = Constants.IsPandora();
         Compliance = Constants.IsCompliance();
@@ -1258,7 +1265,7 @@ public static class DualTargetAbilityListPatch
 
         foreach (Transform btn in abilityButtons)
         {
-            if (btn.name != "AbilityButton")
+            if (btn.name != "AbilityButton" || btn.name != "AbilityButton2")
                 continue;
 
             var backing = btn.Find("Backing");
