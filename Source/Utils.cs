@@ -834,7 +834,7 @@ public static class Utils
 		var isBTOS2 = Constants.IsBTOS2() || SettingsAndTestingUI.Instance?.IsBTOS2 == true;
 
 		var newKey = $"{(isBTOS2 ? "BTOS_" : "GUI_")}ROLE_BLURB_{(int)role}_{(int)faction}";
-		var oldKey = $"FANCY_{(isBTOS2 ? "BTOS_" : "")}{factionName}_ROLE_BLURB_{(int)role}";
+		var oldKey = $"FANCY_{factionName}_{(isBTOS2 ? "BTOS_" : "")}ROLE_BLURB_{(int)role}";
 
 		var loc = Service.Home.LocalizationService;
 

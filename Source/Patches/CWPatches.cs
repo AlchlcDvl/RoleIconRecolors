@@ -1265,8 +1265,8 @@ public static class DualTargetAbilityListPatch
 
         foreach (Transform btn in abilityButtons)
         {
-            if (btn.name != "AbilityButton" || btn.name != "AbilityButton2")
-                continue;
+		    if (btn.name != "AbilityButton" && btn.name != "AbilityButton2")
+			   continue;
 
             var backing = btn.Find("Backing");
             if (backing == null)
