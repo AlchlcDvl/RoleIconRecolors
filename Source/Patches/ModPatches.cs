@@ -252,6 +252,7 @@ public static class ModifierFactionPatch
                     Btos2Role.Lovers => Btos2Faction.Lovers,
                     Btos2Role.FeelinLucky => Btos2Faction.Jester,
                     Btos2Role.AllOutliers => Btos2Faction.CursedSoul,
+                    Btos2Role.TownPower => Btos2Faction.Town, // so it shows as town, cuz game believes its a modifier
                     _ => FactionType.NONE
                 };
             else
@@ -344,7 +345,6 @@ public static class SpecialAbilityPopupGenericListItemPatch
 [HarmonyPatch(typeof(SpecialAbilityPopupDayConfirmListItem), nameof(SpecialAbilityPopupDayConfirmListItem.SetData))]
 public static class SpecialAbilityPopupDayConfirmListItemPatch
 {
-    // ReSharper disable once InconsistentNaming
     public static bool Prefix(SpecialAbilityPopupDayConfirmListItem __instance, int position, string player_name, Sprite headshot, bool hasChoice1, UIRoleData data)
     {
         var role = Role.NONE;
@@ -356,17 +356,42 @@ public static class SpecialAbilityPopupDayConfirmListItemPatch
             factionType = tuple.Item2;
         }
 
-        var roleText = "";
-        var gradient = factionType.GetChangedGradient(role);
+        var myFaction = factionType;
+        var isHidden = role is Role.STONED or Role.HIDDEN;
+        var roleName = Fancy.FactionalRoleNames.Value ? role.ToRoleFactionDisplayString(myFaction) : role.ToDisplayString();
+        var wrapped = $"({roleName})";
+        var gradient = myFaction.GetChangedGradient(role);
+        var gradientText = gradient != null ? Utils.ApplyGradient(wrapped, gradient) : $"<color={myFaction.GetFactionColor()}>{wrapped}</color>";
+        var hiddenText = $"<color={role.GetFaction().GetFactionColor()}>{wrapped}</color>";
+        var final = role != Role.NONE
+            ? (isHidden ? hiddenText : gradientText)
+            : "";
+        var icon = role != Role.NONE ? role.GetTMPSprite() : "";
 
         if (role != Role.NONE)
-            roleText = Fancy.FactionalRoleNames.Value ? Utils.GetRoleName(role, factionType, true) : $"({role.ToDisplayString()})";
+        {
+            var styleName =
+                role.GetFactionType() == myFaction && Constants.CurrentStyle() == "Regular"
+                    ? "Regular"
+                    : Utils.FactionName(myFaction, false);
 
-        var text = $"{player_name} {Utils.ApplyGradient(roleText, gradient)}";
-        __instance.playerName.SetText(text);
+            icon = icon.Replace("RoleIcons\"", $"RoleIcons ({styleName})\"");
+        }
+
+        var formatted = Fancy.PlayerListRoleIcon.Value switch
+        {
+            PlayerListRoleIconOption.Left  => $"{icon} {final}",
+            PlayerListRoleIconOption.Right => $"{final} {icon}",
+            _ => final,
+        };
+
+        var full = $"{player_name} {formatted}".Trim();
+
+        __instance.playerName.SetText(full);
         __instance.playerHeadshot.sprite = headshot;
         __instance.characterPosition = position;
         __instance.playerNumber.text = $"{__instance.characterPosition + 1}.";
+
         var myRole = Pepper.GetMyRole();
         var uiRoleDataInstance = data.roleDataList.Find(d => d.role == myRole);
 
@@ -378,19 +403,20 @@ public static class SpecialAbilityPopupDayConfirmListItemPatch
 
         __instance.choiceButton.gameObject.SetActive(hasChoice1);
         __instance.selected = false;
+
         return false;
     }
 }
-
 [HarmonyPatch(typeof(SpecialAbilityPopupNecromancerRetributionistListItem), nameof(SpecialAbilityPopupNecromancerRetributionistListItem.SetData))]
 public static class SpecialAbilityPopupNecromancerRetributionistListItemPatch
 {
-    // ReSharper disable once InconsistentNaming
-    public static bool Prefix(SpecialAbilityPopupNecromancerRetributionistListItem __instance, int position, string player_name, Sprite headshot, bool hasChoice1, bool hasChoice2, UIRoleData
-        data, Role role, SpecialAbilityPopupNecromancerRetributionist parent)
+    public static bool Prefix(SpecialAbilityPopupNecromancerRetributionistListItem __instance, int position, string player_name, 
+	Sprite headshot, bool hasChoice1, bool hasChoice2, UIRoleData data, Role role, SpecialAbilityPopupNecromancerRetributionist parent)
     {
         __instance.parent = parent;
+
         var myRole = Pepper.GetMyRole();
+
         var role2 = Role.NONE;
         var factionType = FactionType.NONE;
 
@@ -399,31 +425,59 @@ public static class SpecialAbilityPopupNecromancerRetributionistListItemPatch
             role2 = tuple.Item1;
             factionType = tuple.Item2;
         }
-
-        var roleText = "";
+        var isHidden = role2 is Role.STONED or Role.HIDDEN;
+        var roleName = Fancy.FactionalRoleNames.Value ? Utils.GetRoleName(role2, factionType, true) : role2.ToDisplayString();
+        var wrapped = $"({roleName})";
         var gradient = factionType.GetChangedGradient(role2);
+        var gradientText = gradient != null ? Utils.ApplyGradient(wrapped, gradient) : $"<color={factionType.GetFactionColor()}>{wrapped}</color>";
+        var hiddenText = $"<color={role2.GetFaction().GetFactionColor()}>{wrapped}</color>";
+        var final = role2 != Role.NONE
+            ? (isHidden ? hiddenText : gradientText)
+            : "";
+        var icon = role2 != Role.NONE ? role2.GetTMPSprite() : "";
 
         if (role2 != Role.NONE)
-            roleText = Fancy.FactionalRoleNames.Value ? Utils.GetRoleName(role2, factionType, true) : $"({role2.ToDisplayString()})";
+        {
+            var styleName =
+                role2.GetFactionType() == factionType && Constants.CurrentStyle() == "Regular"
+                    ? "Regular"
+                    : Utils.FactionName(factionType, false);
 
-        var text = $"{player_name} {Utils.ApplyGradient(roleText, gradient)}";
+            icon = icon.Replace("RoleIcons\"", $"RoleIcons ({styleName})\"");
+        }
+
+        var formatted = Fancy.PlayerListRoleIcon.Value switch
+        {
+            PlayerListRoleIconOption.Left  => $"{icon} {final}",
+            PlayerListRoleIconOption.Right => $"{final} {icon}",
+            _ => final,
+        };
+
+        var text = $"{player_name} {formatted}".Trim();
+
         __instance.playerName.SetText(text);
         __instance.playerHeadshot.sprite = headshot;
         __instance.characterPosition = position;
-        __instance.playerNumber.text = $"{__instance.characterPosition + 1}.";
+        __instance.playerNumber.text = $"{position + 1}.";
+
         var uiRoleDataInstance = data.roleDataList.Find(d => d.role == myRole);
         var uiRoleDataInstance2 = data.roleDataList.Find(d => d.role == role);
 
         if (uiRoleDataInstance != null)
         {
-            __instance.choiceText.text = __instance.l10n($"GUI_ROLE_SPECIAL_ABILITY_VERB_{(int)myRole}");
-            __instance.choiceSprite.sprite = uiRoleDataInstance.specialAbilityIcon;
+            __instance.choiceText.text =
+                __instance.l10n($"GUI_ROLE_SPECIAL_ABILITY_VERB_{(int)myRole}");
+            __instance.choiceSprite.sprite =
+                uiRoleDataInstance.specialAbilityIcon;
         }
 
         if (uiRoleDataInstance2 != null && role != Role.NONE)
         {
             __instance.choice2Text.text = __instance.GetAbilityVerb(uiRoleDataInstance2.role);
-            __instance.choice2Sprite.sprite = uiRoleDataInstance2.role is Role.DEPUTY or Role.CONJURER ? uiRoleDataInstance2.specialAbilityIcon : uiRoleDataInstance2.abilityIcon;
+            __instance.choice2Sprite.sprite =
+                uiRoleDataInstance2.role is Role.DEPUTY or Role.CONJURER
+                    ? uiRoleDataInstance2.specialAbilityIcon
+                    : uiRoleDataInstance2.abilityIcon;
         }
 
         __instance.choiceButton.gameObject.SetActive(hasChoice1);
@@ -449,46 +503,76 @@ public static class SpecialAbilityPopupNecromancerRetributionistListItemPatch
         return false;
     }
 }
-
 [HarmonyPatch(typeof(SpecialAbilityPopupGenericDualTargetListItem), nameof(SpecialAbilityPopupGenericDualTargetListItem.SetData))]
 public static class PatchSpecialAbilityPopupGenericDualTargetListItem
 {
     public static bool Prefix(
-        SpecialAbilityPopupGenericDualTargetListItem __instance, int position, string player_name, Sprite headshot, bool hasChoice1, bool hasChoice2, UIRoleData
-        data, SpecialAbilityPopupGenericDualTarget parent)
+        SpecialAbilityPopupGenericDualTargetListItem __instance,
+        int position,
+        string player_name,
+        Sprite headshot,
+        bool hasChoice1,
+        bool hasChoice2,
+        UIRoleData data,
+        SpecialAbilityPopupGenericDualTarget parent)
     {
         __instance.parent = parent;
-
         var myRole = Pepper.GetMyRole();
         var role2 = Role.NONE;
         var factionType = FactionType.NONE;
-
         if (Utils.GetRoleAndFaction(position, out var tuple))
         {
             role2 = tuple.Item1;
             factionType = tuple.Item2;
         }
-
-        var roleText = "";
+        var isHidden = role2 is Role.STONED or Role.HIDDEN;
+        var roleName = Fancy.FactionalRoleNames.Value
+            ? Utils.GetRoleName(role2, factionType, true)
+            : role2.ToDisplayString();
+        var wrapped = $"({roleName})";
         var gradient = factionType.GetChangedGradient(role2);
+        var gradientText = gradient != null
+            ? Utils.ApplyGradient(wrapped, gradient)
+            : $"<color={factionType.GetFactionColor()}>{wrapped}</color>";
 
+        var hiddenText = $"<color={role2.GetFaction().GetFactionColor()}>{wrapped}</color>";
+        var final = role2 != Role.NONE
+            ? (isHidden ? hiddenText : gradientText)
+            : "";
+        var icon = role2 != Role.NONE ? role2.GetTMPSprite() : "";
         if (role2 != Role.NONE)
-            roleText = Fancy.FactionalRoleNames.Value ? Utils.GetRoleName(role2, factionType, true) : $"({role2.ToDisplayString()})";
+        {
+            var styleName =
+                role2.GetFactionType() == factionType && Constants.CurrentStyle() == "Regular"
+                    ? "Regular"
+                    : Utils.FactionName(factionType, false);
 
-        var text = $"{player_name} {Utils.ApplyGradient(roleText, gradient)}";
+            icon = icon.Replace("RoleIcons\"", $"RoleIcons ({styleName})\"");
+        }
+
+        var formatted = Fancy.PlayerListRoleIcon.Value switch
+        {
+            PlayerListRoleIconOption.Left  => $"{icon} {final}",
+            PlayerListRoleIconOption.Right => $"{final} {icon}",
+            _ => final,
+        };
+
+        var text = $"{player_name} {formatted}".Trim();
+
         __instance.playerName.SetText(text);
-
         __instance.playerHeadshot.sprite = headshot;
         __instance.characterPosition = position;
-        __instance.playerNumber.text = $"{__instance.characterPosition + 1}.";
+        __instance.playerNumber.text = $"{position + 1}.";
 
         var uiRoleDataInstance = data.roleDataList.Find(d => d.role == myRole);
 
         if (uiRoleDataInstance != null)
         {
-            __instance.choiceText.text = __instance.l10n($"GUI_ROLE_SPECIAL_ABILITY_VERB_{(int)myRole}");
+            __instance.choiceText.text =
+                __instance.l10n($"GUI_ROLE_SPECIAL_ABILITY_VERB_{(int)myRole}");
             __instance.choiceSprite.sprite = uiRoleDataInstance.specialAbilityIcon;
-            __instance.choice2Text.text = __instance.l10n($"GUI_ROLE_SPECIAL_ABILITY_VERB_{(int)myRole}");
+            __instance.choice2Text.text =
+                __instance.l10n($"GUI_ROLE_SPECIAL_ABILITY_VERB_{(int)myRole}");
             __instance.choice2Sprite.sprite = uiRoleDataInstance.specialAbilityIcon;
         }
 
@@ -515,7 +599,6 @@ public static class PatchSpecialAbilityPopupGenericDualTargetListItem
         return false;
     }
 }
-
 [HarmonyPatch(typeof(Pepper), nameof(Pepper.GetMyFaction))]
 public static class FixMyFaction
 {

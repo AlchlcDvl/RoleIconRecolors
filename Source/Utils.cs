@@ -1191,4 +1191,137 @@ public static class Utils
 		return data.roleAlignment == RoleAlignment.NEUTRAL &&
 			   data.subAlignment == SubAlignment.APOCALYPSE;
 	}
+
+	// public static Color GetRoleColor(Role role)
+	// {
+		// var plus = ToRolePlus(role);
+
+		// if (Fancy.RoleColorMap.TryGetValue(plus, out var option) &&
+			// ColorUtility.TryParseHtmlString(option.Value, out var parsed))
+			// return parsed;
+
+		// // fallback to faction if not found
+		// return role.GetFactionType().GetFactionColor();
+	// }
+
+	// public static RolePlus ToRolePlus(Role role)
+	// {
+		// if (role is Role.HIDDEN or Role.STONED or Role.UNKNOWN)
+			// return RolePlus.Hidden;
+
+		// var logicalName = GetLogicalRoleName(role);
+
+		// if (Enum.TryParse(logicalName, true, out RolePlus plus))
+			// return plus;
+
+		// return RolePlus.Unknown;
+	// }
+	// public static string GetLogicalRoleName(Role role)
+	// {
+		// if (!Constants.IsBTOS2())
+			// return role.ToString();
+
+		// // BTOS2 remaps
+		// if (role == Role.SOCIALITE) return nameof(RolePlus.Banshee);
+		// if (role == Role.MARSHAL)   return nameof(RolePlus.Jackal);
+		// if (role == Role.ORACLE)    return nameof(RolePlus.Marshal);
+		// if (role == Role.PILGRIM)   return nameof(RolePlus.Judge);
+		// if (role == Role.COVENITE)  return nameof(RolePlus.Auditor);
+		// if (role == Role.CATALYST)  return nameof(RolePlus.Inquisitor);
+		// if (role == Role.CULTIST)   return nameof(RolePlus.Starspawn);
+		// if (role == Role.ROLE_COUNT) return nameof(RolePlus.Oracle);
+		// if ((int)role == 62)        return nameof(RolePlus.Warlock);
+		// if ((int)role == 65)        return nameof(RolePlus.Socialite);
+		// if ((int)role == 66)        return nameof(RolePlus.Pacifist);
+
+		// return role.ToString();
+	// }
+
+	// private static FactionType GetRolePlusFaction(RolePlus plus)
+	// {
+		// return plus switch
+		// {
+			// // Town
+			// RolePlus.Admirer => FactionType.TOWN,
+			// RolePlus.Bodyguard => FactionType.TOWN,
+			// RolePlus.Cleric => FactionType.TOWN,
+			// RolePlus.Coroner => FactionType.TOWN,
+			// RolePlus.Crusader => FactionType.TOWN,
+			// RolePlus.Deputy => FactionType.TOWN,
+			// RolePlus.Investigator => FactionType.TOWN,
+			// RolePlus.Jailor => FactionType.TOWN,
+			// RolePlus.Lookout => FactionType.TOWN,
+			// RolePlus.Mayor => FactionType.TOWN,
+			// RolePlus.Monarch => FactionType.TOWN,
+			// RolePlus.Prosecutor => FactionType.TOWN,
+			// RolePlus.Psychic => FactionType.TOWN,
+			// RolePlus.Retributionist => FactionType.TOWN,
+			// RolePlus.Seer => FactionType.TOWN,
+			// RolePlus.Sheriff => FactionType.TOWN,
+			// RolePlus.Spy => FactionType.TOWN,
+			// RolePlus.TavernKeeper => FactionType.TOWN,
+			// RolePlus.Tracker => FactionType.TOWN,
+			// RolePlus.Trapper => FactionType.TOWN,
+			// RolePlus.Trickster => FactionType.TOWN,
+			// RolePlus.Veteran => FactionType.TOWN,
+			// RolePlus.Vigilante => FactionType.TOWN,
+			// RolePlus.Amnesiac => FactionType.TOWN,
+			// RolePlus.Socialite => FactionType.TOWN,
+			// RolePlus.Marshal => FactionType.TOWN,
+			// RolePlus.Oracle => FactionType.TOWN,
+			// RolePlus.Catalyst => FactionType.TOWN,
+			// RolePlus.Pilgrim => FactionType.TOWN,
+			// RolePlus.Pacifist => FactionType.TOWN,
+
+			// // Coven
+			// RolePlus.Conjurer => FactionType.COVEN,
+			// RolePlus.CovenLeader => FactionType.COVEN,
+			// RolePlus.Dreamweaver => FactionType.COVEN,
+			// RolePlus.Enchanter => FactionType.COVEN,
+			// RolePlus.HexMaster => FactionType.COVEN,
+			// RolePlus.Illusionist => FactionType.COVEN,
+			// RolePlus.Jinx => FactionType.COVEN,
+			// RolePlus.Medusa => FactionType.COVEN,
+			// RolePlus.Necromancer => FactionType.COVEN,
+			// RolePlus.Poisoner => FactionType.COVEN,
+			// RolePlus.PotionMaster => FactionType.COVEN,
+			// RolePlus.Ritualist => FactionType.COVEN,
+			// RolePlus.VoodooMaster => FactionType.COVEN,
+			// RolePlus.Wildling => FactionType.COVEN,
+			// RolePlus.Witch => FactionType.COVEN,
+			// RolePlus.Covenite => FactionType.COVEN,
+			// RolePlus.Banshee => FactionType.COVEN,
+			// RolePlus.Cultist => FactionType.COVEN,
+
+			// // Neutral
+			// RolePlus.Arsonist => FactionType.ARSONIST,
+			// RolePlus.SerialKiller => FactionType.SERIALKILLER,
+			// RolePlus.Shroud => FactionType.SHROUD,
+			// RolePlus.Werewolf => FactionType.WEREWOLF,
+			// RolePlus.Jackal => Btos2Faction.Jackal,
+			// RolePlus.Executioner => FactionType.EXECUTIONER,
+			// RolePlus.Jester => FactionType.JESTER,
+			// RolePlus.Doomsayer => FactionType.DOOMSAYER,
+			// RolePlus.Inquisitor => FactionType.Inquisitor,
+			// RolePlus.Judge => Btos2Faction.Judge,
+			// RolePlus.Auditor => Btos2Faction.Auditor,
+			// RolePlus.Pirate => FactionType.PIRATE,
+			// RolePlus.CursedSoul => FactionType.CURSED_SOUL,
+			// RolePlus.Starspawn => Btos2Faction.Starspawn,
+			// RolePlus.Vampire => FactionType.VAMPIRE,
+
+			// // Apocalypse
+			// RolePlus.Baker => FactionType.APOCALYPSE,
+			// RolePlus.Famine => FactionType.APOCALYPSE,
+			// RolePlus.Berserker => FactionType.APOCALYPSE,
+			// RolePlus.War => FactionType.APOCALYPSE,
+			// RolePlus.Plaguebearer => FactionType.APOCALYPSE,
+			// RolePlus.Pestilence => FactionType.APOCALYPSE,
+			// RolePlus.SoulCollector => FactionType.APOCALYPSE,
+			// RolePlus.Warlock => FactionType.APOCALYPSE,
+			// RolePlus.Death => FactionType.APOCALYPSE,
+
+			// _ => FactionType.NONE
+		// };
+	// }
 }

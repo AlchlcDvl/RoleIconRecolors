@@ -29,9 +29,9 @@ public static class Gradients
                 OverrideEndType.FactionStart => Fancy.Colors.TryGetValue(baseKey, out var baseTuple) ? baseTuple.Start : Fancy.Colors["JACKAL"].End,
                 OverrideEndType.FactionEnd => GetEndColor(baseKey, role),
 				OverrideEndType.FactionBothColors => Utils.BlendHexColors(Fancy.Colors.TryGetValue(baseKey, out var bt) ? bt.Start : Fancy.Colors["JACKAL"].Start, GetEndColor(baseKey, role), Constants.RecruitEndRatio()),
-				OverrideEndType.BlendFactionStart => Utils.BlendHexColors(Fancy.Colors["JACKAL"].End, Fancy.Colors.TryGetValue(baseKey, out var vs) ? vs.Start : Fancy.Colors["JACKAL"].End, Constants.RecruitEndRatio()),
-				OverrideEndType.BlendFactionEnd => Utils.BlendHexColors(Fancy.Colors["JACKAL"].End, GetEndColor(baseKey, role), Constants.RecruitEndRatio()),
-				OverrideEndType.BlendFactionBothColors => Utils.BlendHexColors(Fancy.Colors["JACKAL"].End, Utils.BlendHexColors(Fancy.Colors.TryGetValue(baseKey, out var vb) ? vb.Start : Fancy.Colors["JACKAL"].Start, GetEndColor(baseKey, role), Constants.RecruitEndRatio()), Constants.RecruitEndRatio()),
+				OverrideEndType.BlendFactionStart => Utils.BlendHexColors(GetEndColor("JACKAL", role), Fancy.Colors.TryGetValue(baseKey, out var vs) ? vs.Start : Fancy.Colors["JACKAL"].End, Constants.RecruitEndRatio()),
+				OverrideEndType.BlendFactionEnd => Utils.BlendHexColors(GetEndColor("JACKAL", role), GetEndColor(baseKey, role), Constants.RecruitEndRatio()),
+				OverrideEndType.BlendFactionBothColors => Utils.BlendHexColors(GetEndColor("JACKAL", role), Utils.BlendHexColors(Fancy.Colors.TryGetValue(baseKey, out var vb) ? vb.Start : Fancy.Colors["JACKAL"].Start, GetEndColor(baseKey, role), Constants.RecruitEndRatio()), Constants.RecruitEndRatio()),
                 _ => GetEndColor("JACKAL", role),
             };
         }
@@ -42,9 +42,9 @@ public static class Gradients
 				OverrideEndType.FactionStart => Fancy.Colors.TryGetValue(baseKey, out var baseTuple) ? baseTuple.Start : Fancy.Colors["VAMPIRE"].End,
 				OverrideEndType.FactionEnd => GetEndColor(baseKey, role),
 				OverrideEndType.FactionBothColors => Utils.BlendHexColors(Fancy.Colors.TryGetValue(baseKey, out var bt) ? bt.Start : Fancy.Colors["VAMPIRE"].Start, GetEndColor(baseKey, role), Constants.ConvertEndRatio()),
-				OverrideEndType.BlendFactionStart => Utils.BlendHexColors(Fancy.Colors["VAMPIRE"].End, Fancy.Colors.TryGetValue(baseKey, out var vs) ? vs.Start : Fancy.Colors["VAMPIRE"].End, Constants.ConvertEndRatio()),
-				OverrideEndType.BlendFactionEnd => Utils.BlendHexColors(Fancy.Colors["VAMPIRE"].End, GetEndColor(baseKey, role), Constants.ConvertEndRatio()),
-				OverrideEndType.BlendFactionBothColors => Utils.BlendHexColors(Fancy.Colors["VAMPIRE"].End, Utils.BlendHexColors(Fancy.Colors.TryGetValue(baseKey, out var vb) ? vb.Start : Fancy.Colors["VAMPIRE"].Start, GetEndColor(baseKey, role), Constants.ConvertEndRatio()), Constants.ConvertEndRatio()),
+				OverrideEndType.BlendFactionStart => Utils.BlendHexColors(GetEndColor("VAMPIRE", role), Fancy.Colors.TryGetValue(baseKey, out var vs) ? vs.Start : Fancy.Colors["VAMPIRE"].End, Constants.ConvertEndRatio()),
+				OverrideEndType.BlendFactionEnd => Utils.BlendHexColors(GetEndColor("VAMPIRE", role), GetEndColor(baseKey, role), Constants.ConvertEndRatio()),
+				OverrideEndType.BlendFactionBothColors => Utils.BlendHexColors(GetEndColor("VAMPIRE", role), Utils.BlendHexColors(Fancy.Colors.TryGetValue(baseKey, out var vb) ? vb.Start : Fancy.Colors["VAMPIRE"].Start, GetEndColor(baseKey, role), Constants.ConvertEndRatio()), Constants.ConvertEndRatio()),
 				_ => GetEndColor("VAMPIRE", role),
 			};
 		}
@@ -93,14 +93,22 @@ public static class Gradients
 
     private static string GetEndColor(string key, Role role)
     {
+		// if (Fancy.RoleSpecificEndingColors.Value)
+		// {
+			// return ColorUtility.ToHtmlStringRGB(
+				// Utils.GetRoleColor(role)
+			// );
+		// }
+
         var (_, endVal, majorVal, _, lethalVal, horsemanVal) = Fancy.Colors[key];
 
 		var isPower = role.GetSubAlignment() is SubAlignment.POWER or (SubAlignment)37;
-		var isTownGovernment = Constants.IsBTOS2() ? role.GetSubAlignment() == (SubAlignment)38 : role is Role.MAYOR or Role.MONARCH;
+		var isTownGovernment = Constants.IsBTOS2() ? (role.GetSubAlignment() == (SubAlignment)38 || role is Btos2Role.TownGovernment) : role is Role.MAYOR or Role.MONARCH;
 		var isCultist = Constants.IsBTOS2() ? role is Btos2Role.Cultist : role is Role.CULTIST;
 		var isCatalyst = Constants.IsBTOS2() ? role is Btos2Role.Catalyst : role is Role.CATALYST;
+		var isPowerBucket = Constants.IsBTOS2() ?  role is Btos2Role.TownPower or Btos2Role.TownExecutive or Btos2Role.CovenPower : role is Role.TOWN_POWER or Role.COVEN_POWER;
 
-		var isMajor = Fancy.MajorColors.Value && ((isPower && !(Fancy.ExcludeTownGovernmentRoles.Value && isTownGovernment)) || (isCultist && !Fancy.ExcludeCultist.Value) || (isCatalyst && !Fancy.ExcludeCatalyst.Value));
+		var isMajor = Fancy.MajorColors.Value && (isPowerBucket || (isPower && !(Fancy.ExcludeTownGovernmentRoles.Value && isTownGovernment)) || (isCultist && !Fancy.ExcludeCultist.Value) || (isCatalyst && !Fancy.ExcludeCatalyst.Value));
 
         /* var isMajor = Fancy.MajorColors.Value &&
             (role.GetSubAlignment() == SubAlignment.POWER || (Constants.IsBTOS2() && role.GetSubAlignment() is (SubAlignment)37 or (SubAlignment)38)

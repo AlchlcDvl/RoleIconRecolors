@@ -669,6 +669,230 @@
     <Entry key="FANCY_SELECT_DISPLAY_NAME">Current Testing Display</Entry>
     <Entry key="FANCY_SELECT_DISPLAY_DESC">Changes which testing display is currently visible.</Entry>
 
+
+    <Entry key="FANCY_ROLE_SPECIFIC_COLORS_NAME">Override Secondary Color For Specific Roles</Entry>
+    <Entry key="ROLE_SPECIFIC_COLORS">Determines whether or not every role gets a unique secondary color instead of using a factional color.</Entry>
+
+    <Entry key="FANCY_NONE_ROLE_COLOR_NAME">None Secondary Color</Entry>
+    <Entry key="FANCY_NONE_ROLE_COLOR_DESC">The secondary color for the None role.</Entry>
+
+	<Entry key="FANCY_ADMIRER_ROLE_COLOR_NAME">Admirer Secondary Color</Entry>
+	<Entry key="FANCY_ADMIRER_ROLE_COLOR_DESC">The secondary color for the Admirer role.</Entry>
+
+	<Entry key="FANCY_AMNESIAC_ROLE_COLOR_NAME">Amnesiac Secondary Color</Entry>
+	<Entry key="FANCY_AMNESIAC_ROLE_COLOR_DESC">The secondary color for the Amnesiac role.</Entry>
+
+	<Entry key="FANCY_BODYGUARD_ROLE_COLOR_NAME">Bodyguard Secondary Color</Entry>
+	<Entry key="FANCY_BODYGUARD_ROLE_COLOR_DESC">The secondary color for the Bodyguard role.</Entry>
+
+	<Entry key="FANCY_CLERIC_ROLE_COLOR_NAME">Cleric Secondary Color</Entry>
+	<Entry key="FANCY_CLERIC_ROLE_COLOR_DESC">The secondary color for the Cleric role.</Entry>
+
+	<Entry key="FANCY_CORONER_ROLE_COLOR_NAME">Coroner Secondary Color</Entry>
+	<Entry key="FANCY_CORONER_ROLE_COLOR_DESC">The secondary color for the Coroner role.</Entry>
+
+	<Entry key="FANCY_CRUSADER_ROLE_COLOR_NAME">Crusader Secondary Color</Entry>
+	<Entry key="FANCY_CRUSADER_ROLE_COLOR_DESC">The secondary color for the Crusader role.</Entry>
+
+	<Entry key="FANCY_DEPUTY_ROLE_COLOR_NAME">Deputy Secondary Color</Entry>
+	<Entry key="FANCY_DEPUTY_ROLE_COLOR_DESC">The secondary color for the Deputy role.</Entry>
+
+	<Entry key="FANCY_INVESTIGATOR_ROLE_COLOR_NAME">Investigator Secondary Color</Entry>
+	<Entry key="FANCY_INVESTIGATOR_ROLE_COLOR_DESC">The secondary color for the Investigator role.</Entry>
+
+	<Entry key="FANCY_JAILOR_ROLE_COLOR_NAME">Jailor Secondary Color</Entry>
+	<Entry key="FANCY_JAILOR_ROLE_COLOR_DESC">The secondary color for the Jailor role.</Entry>
+
+	<Entry key="FANCY_LOOKOUT_ROLE_COLOR_NAME">Lookout Secondary Color</Entry>
+	<Entry key="FANCY_LOOKOUT_ROLE_COLOR_DESC">The secondary color for the Lookout role.</Entry>
+
+	<Entry key="FANCY_MAYOR_ROLE_COLOR_NAME">Mayor Secondary Color</Entry>
+	<Entry key="FANCY_MAYOR_ROLE_COLOR_DESC">The secondary color for the Mayor role.</Entry>
+
+	<Entry key="FANCY_MONARCH_ROLE_COLOR_NAME">Monarch Secondary Color</Entry>
+	<Entry key="FANCY_MONARCH_ROLE_COLOR_DESC">The secondary color for the Monarch role.</Entry>
+
+	<Entry key="FANCY_PROSECUTOR_ROLE_COLOR_NAME">Prosecutor Secondary Color</Entry>
+	<Entry key="FANCY_PROSECUTOR_ROLE_COLOR_DESC">The secondary color for the Prosecutor role.</Entry>
+
+	<Entry key="FANCY_PSYCHIC_ROLE_COLOR_NAME">Psychic Secondary Color</Entry>
+	<Entry key="FANCY_PSYCHIC_ROLE_COLOR_DESC">The secondary color for the Psychic role.</Entry>
+
+	<Entry key="FANCY_RETRIBUTIONIST_ROLE_COLOR_NAME">Retributionist Secondary Color</Entry>
+	<Entry key="FANCY_RETRIBUTIONIST_ROLE_COLOR_DESC">The secondary color for the Retributionist role.</Entry>
+
+	<Entry key="FANCY_SEER_ROLE_COLOR_NAME">Seer Secondary Color</Entry>
+	<Entry key="FANCY_SEER_ROLE_COLOR_DESC">The secondary color for the Seer role.</Entry>
+
+	<Entry key="FANCY_SHERIFF_ROLE_COLOR_NAME">Sheriff Secondary Color</Entry>
+	<Entry key="FANCY_SHERIFF_ROLE_COLOR_DESC">The secondary color for the Sheriff role.</Entry>
+
+	<Entry key="FANCY_SPY_ROLE_COLOR_NAME">Spy Secondary Color</Entry>
+	<Entry key="FANCY_SPY_ROLE_COLOR_DESC">The secondary color for the Spy role.</Entry>
+
+	<Entry key="FANCY_TAVERNKEEPER_ROLE_COLOR_NAME">Tavern Keeper Secondary Color</Entry>
+	<Entry key="FANCY_TAVERNKEEPER_ROLE_COLOR_DESC">The secondary color for the Tavern Keeper role.</Entry>
+
+	<Entry key="FANCY_TRACKER_ROLE_COLOR_NAME">Tracker Secondary Color</Entry>
+	<Entry key="FANCY_TRACKER_ROLE_COLOR_DESC">The secondary color for the Tracker role.</Entry>
+
+	<Entry key="FANCY_TRAPPER_ROLE_COLOR_NAME">Trapper Secondary Color</Entry>
+	<Entry key="FANCY_TRAPPER_ROLE_COLOR_DESC">The secondary color for the Trapper role.</Entry>
+
+	<Entry key="FANCY_TRICKSTER_ROLE_COLOR_NAME">Trickster Secondary Color</Entry>
+	<Entry key="FANCY_TRICKSTER_ROLE_COLOR_DESC">The secondary color for the Trickster role.</Entry>
+
+	<Entry key="FANCY_VETERAN_ROLE_COLOR_NAME">Veteran Secondary Color</Entry>
+	<Entry key="FANCY_VETERAN_ROLE_COLOR_DESC">The secondary color for the Veteran role.</Entry>
+
+	<Entry key="FANCY_VIGILANTE_ROLE_COLOR_NAME">Vigilante Secondary Color</Entry>
+	<Entry key="FANCY_VIGILANTE_ROLE_COLOR_DESC">The secondary color for the Vigilante role.</Entry>
+
+	<Entry key="FANCY_CONJURER_ROLE_COLOR_NAME">Conjurer Secondary Color</Entry>
+	<Entry key="FANCY_CONJURER_ROLE_COLOR_DESC">The secondary color for the Conjurer role.</Entry>
+
+	<Entry key="FANCY_COVENLEADER_ROLE_COLOR_NAME">Coven Leader Secondary Color</Entry>
+	<Entry key="FANCY_COVENLEADER_ROLE_COLOR_DESC">The secondary color for the Coven Leader role.</Entry>
+
+	<Entry key="FANCY_DREAMWEAVER_ROLE_COLOR_NAME">Dreamweaver Secondary Color</Entry>
+	<Entry key="FANCY_DREAMWEAVER_ROLE_COLOR_DESC">The secondary color for the Dreamweaver role.</Entry>
+
+	<Entry key="FANCY_ENCHANTER_ROLE_COLOR_NAME">Enchanter Secondary Color</Entry>
+	<Entry key="FANCY_ENCHANTER_ROLE_COLOR_DESC">The secondary color for the Enchanter role.</Entry>
+
+	<Entry key="FANCY_HEXMASTER_ROLE_COLOR_NAME">Hex Master Secondary Color</Entry>
+	<Entry key="FANCY_HEXMASTER_ROLE_COLOR_DESC">The secondary color for the Hex Master role.</Entry>
+
+	<Entry key="FANCY_ILLUSIONIST_ROLE_COLOR_NAME">Illusionist Secondary Color</Entry>
+	<Entry key="FANCY_ILLUSIONIST_ROLE_COLOR_DESC">The secondary color for the Illusionist role.</Entry>
+
+	<Entry key="FANCY_JINX_ROLE_COLOR_NAME">Jinx Secondary Color</Entry>
+	<Entry key="FANCY_JINX_ROLE_COLOR_DESC">The secondary color for the Jinx role.</Entry>
+
+	<Entry key="FANCY_MEDUSA_ROLE_COLOR_NAME">Medusa Secondary Color</Entry>
+	<Entry key="FANCY_MEDUSA_ROLE_COLOR_DESC">The secondary color for the Medusa role.</Entry>
+
+	<Entry key="FANCY_NECROMANCER_ROLE_COLOR_NAME">Necromancer Secondary Color</Entry>
+	<Entry key="FANCY_NECROMANCER_ROLE_COLOR_DESC">The secondary color for the Necromancer role.</Entry>
+
+	<Entry key="FANCY_POISONER_ROLE_COLOR_NAME">Poisoner Secondary Color</Entry>
+	<Entry key="FANCY_POISONER_ROLE_COLOR_DESC">The secondary color for the Poisoner role.</Entry>
+
+	<Entry key="FANCY_POTIONMASTER_ROLE_COLOR_NAME">Potion Master Secondary Color</Entry>
+	<Entry key="FANCY_POTIONMASTER_ROLE_COLOR_DESC">The secondary color for the Potion Master role.</Entry>
+
+	<Entry key="FANCY_RITUALIST_ROLE_COLOR_NAME">Ritualist Secondary Color</Entry>
+	<Entry key="FANCY_RITUALIST_ROLE_COLOR_DESC">The secondary color for the Ritualist role.</Entry>
+
+	<Entry key="FANCY_VOODOOMASTER_ROLE_COLOR_NAME">Voodoo Master Secondary Color</Entry>
+	<Entry key="FANCY_VOODOOMASTER_ROLE_COLOR_DESC">The secondary color for the Voodoo Master role.</Entry>
+
+	<Entry key="FANCY_WILDLING_ROLE_COLOR_NAME">Wildling Secondary Color</Entry>
+	<Entry key="FANCY_WILDLING_ROLE_COLOR_DESC">The secondary color for the Wildling role.</Entry>
+
+	<Entry key="FANCY_WITCH_ROLE_COLOR_NAME">Witch Secondary Color</Entry>
+	<Entry key="FANCY_WITCH_ROLE_COLOR_DESC">The secondary color for the Witch role.</Entry>
+
+	<Entry key="FANCY_ARSONIST_ROLE_COLOR_NAME">Arsonist Secondary Color</Entry>
+	<Entry key="FANCY_ARSONIST_ROLE_COLOR_DESC">The secondary color for the Arsonist role.</Entry>
+
+	<Entry key="FANCY_BAKER_ROLE_COLOR_NAME">Baker Secondary Color</Entry>
+	<Entry key="FANCY_BAKER_ROLE_COLOR_DESC">The secondary color for the Baker role.</Entry>
+
+	<Entry key="FANCY_BERSERKER_ROLE_COLOR_NAME">Berserker Secondary Color</Entry>
+	<Entry key="FANCY_BERSERKER_ROLE_COLOR_DESC">The secondary color for the Berserker role.</Entry>
+
+	<Entry key="FANCY_DOOMSAYER_ROLE_COLOR_NAME">Doomsayer Secondary Color</Entry>
+	<Entry key="FANCY_DOOMSAYER_ROLE_COLOR_DESC">The secondary color for the Doomsayer role.</Entry>
+
+	<Entry key="FANCY_EXECUTIONER_ROLE_COLOR_NAME">Executioner Secondary Color</Entry>
+	<Entry key="FANCY_EXECUTIONER_ROLE_COLOR_DESC">The secondary color for the Executioner role.</Entry>
+
+	<Entry key="FANCY_JESTER_ROLE_COLOR_NAME">Jester Secondary Color</Entry>
+	<Entry key="FANCY_JESTER_ROLE_COLOR_DESC">The secondary color for the Jester role.</Entry>
+
+	<Entry key="FANCY_PIRATE_ROLE_COLOR_NAME">Pirate Secondary Color</Entry>
+	<Entry key="FANCY_PIRATE_ROLE_COLOR_DESC">The secondary color for the Pirate role.</Entry>
+
+	<Entry key="FANCY_PLAGUEBEARER_ROLE_COLOR_NAME">Plaguebearer Secondary Color</Entry>
+	<Entry key="FANCY_PLAGUEBEARER_ROLE_COLOR_DESC">The secondary color for the Plaguebearer role.</Entry>
+
+	<Entry key="FANCY_SERIALKILLER_ROLE_COLOR_NAME">Serial Killer Secondary Color</Entry>
+	<Entry key="FANCY_SERIALKILLER_ROLE_COLOR_DESC">The secondary color for the Serial Killer role.</Entry>
+
+	<Entry key="FANCY_SHROUD_ROLE_COLOR_NAME">Shroud Secondary Color</Entry>
+	<Entry key="FANCY_SHROUD_ROLE_COLOR_DESC">The secondary color for the Shroud role.</Entry>
+
+	<Entry key="FANCY_SOULCOLLECTOR_ROLE_COLOR_NAME">Soul Collector Secondary Color</Entry>
+	<Entry key="FANCY_SOULCOLLECTOR_ROLE_COLOR_DESC">The secondary color for the Soul Collector role.</Entry>
+
+	<Entry key="FANCY_WEREWOLF_ROLE_COLOR_NAME">Werewolf Secondary Color</Entry>
+	<Entry key="FANCY_WEREWOLF_ROLE_COLOR_DESC">The secondary color for the Werewolf role.</Entry>
+
+	<Entry key="FANCY_VAMPIRE_ROLE_COLOR_NAME">Vampire Secondary Color</Entry>
+	<Entry key="FANCY_VAMPIRE_ROLE_COLOR_DESC">The secondary color for the Vampire role.</Entry>
+
+	<Entry key="FANCY_CURSEDSOUL_ROLE_COLOR_NAME">Cursed Soul Secondary Color</Entry>
+	<Entry key="FANCY_CURSEDSOUL_ROLE_COLOR_DESC">The secondary color for the Cursed Soul role.</Entry>
+
+	<Entry key="FANCY_SOCIALITE_ROLE_COLOR_NAME">Socialite Secondary Color</Entry>
+	<Entry key="FANCY_SOCIALITE_ROLE_COLOR_DESC">The secondary color for the Socialite role.</Entry>
+
+	<Entry key="FANCY_MARSHAL_ROLE_COLOR_NAME">Marshal Secondary Color</Entry>
+	<Entry key="FANCY_MARSHAL_ROLE_COLOR_DESC">The secondary color for the Marshal role.</Entry>
+
+	<Entry key="FANCY_ORACLE_ROLE_COLOR_NAME">Oracle Secondary Color</Entry>
+	<Entry key="FANCY_ORACLE_ROLE_COLOR_DESC">The secondary color for the Oracle role.</Entry>
+
+	<Entry key="FANCY_PILGRIM_ROLE_COLOR_NAME">Pilgrim Secondary Color</Entry>
+	<Entry key="FANCY_PILGRIM_ROLE_COLOR_DESC">The secondary color for the Pilgrim role.</Entry>
+
+	<Entry key="FANCY_COVENITE_ROLE_COLOR_NAME">Covenite Secondary Color</Entry>
+	<Entry key="FANCY_COVENITE_ROLE_COLOR_DESC">The secondary color for the Covenite role.</Entry>
+
+	<Entry key="FANCY_CATALYST_ROLE_COLOR_NAME">Catalyst Secondary Color</Entry>
+	<Entry key="FANCY_CATALYST_ROLE_COLOR_DESC">The secondary color for the Catalyst role.</Entry>
+
+	<Entry key="FANCY_CULTIST_ROLE_COLOR_NAME">Cultist Secondary Color</Entry>
+	<Entry key="FANCY_CULTIST_ROLE_COLOR_DESC">The secondary color for the Cultist role.</Entry>
+
+	<Entry key="FANCY_PACIFIST_ROLE_COLOR_NAME">Pacifist Secondary Color</Entry>
+	<Entry key="FANCY_PACIFIST_ROLE_COLOR_DESC">The secondary color for the Pacifist role.</Entry>
+
+	<Entry key="FANCY_BANSHEE_ROLE_COLOR_NAME">Banshee Secondary Color</Entry>
+	<Entry key="FANCY_BANSHEE_ROLE_COLOR_DESC">The secondary color for the Banshee role.</Entry>
+
+	<Entry key="FANCY_WARLOCK_ROLE_COLOR_NAME">Warlock Secondary Color</Entry>
+	<Entry key="FANCY_WARLOCK_ROLE_COLOR_DESC">The secondary color for the Warlock role.</Entry>
+
+	<Entry key="FANCY_INQUISITOR_ROLE_COLOR_NAME">Inquisitor Secondary Color</Entry>
+	<Entry key="FANCY_INQUISITOR_ROLE_COLOR_DESC">The secondary color for the Inquisitor role.</Entry>
+
+	<Entry key="FANCY_JACKAL_ROLE_COLOR_NAME">Jackal Secondary Color</Entry>
+	<Entry key="FANCY_JACKAL_ROLE_COLOR_DESC">The secondary color for the Jackal role.</Entry>
+
+	<Entry key="FANCY_AUDITOR_ROLE_COLOR_NAME">Auditor Secondary Color</Entry>
+	<Entry key="FANCY_AUDITOR_ROLE_COLOR_DESC">The secondary color for the Auditor role.</Entry>
+
+	<Entry key="FANCY_JUDGE_ROLE_COLOR_NAME">Judge Secondary Color</Entry>
+	<Entry key="FANCY_JUDGE_ROLE_COLOR_DESC">The secondary color for the Judge role.</Entry>
+
+	<Entry key="FANCY_STARSPAWN_ROLE_COLOR_NAME">Starspawn Secondary Color</Entry>
+	<Entry key="FANCY_STARSPAWN_ROLE_COLOR_DESC">The secondary color for the Starspawn role.</Entry>
+
+	<Entry key="FANCY_FAMINE_ROLE_COLOR_NAME">Famine Secondary Color</Entry>
+	<Entry key="FANCY_FAMINE_ROLE_COLOR_DESC">The secondary color for the Famine role.</Entry>
+
+	<Entry key="FANCY_WAR_ROLE_COLOR_NAME">War Secondary Color</Entry>
+	<Entry key="FANCY_WAR_ROLE_COLOR_DESC">The secondary color for the War role.</Entry>
+
+	<Entry key="FANCY_PESTILENCE_ROLE_COLOR_NAME">Pestilence Secondary Color</Entry>
+	<Entry key="FANCY_PESTILENCE_ROLE_COLOR_DESC">The secondary color for the Pestilence role.</Entry>
+
+	<Entry key="FANCY_DEATH_ROLE_COLOR_NAME">Death Secondary Color</Entry>
+	<Entry key="FANCY_DEATH_ROLE_COLOR_DESC">The secondary color for the Death role.</Entry>
+
+
     <Entry key="FANCY_ROLE_REVEAL_ROLE_VOWEL">
         <![CDATA[<waitfor=5>But secretly, you<waitfor=0.2> are<waitfor=0.2> an<waitfor=0.2><shake a=0.3> %role%.]]>
     </Entry>
@@ -798,7 +1022,8 @@
     <Entry key="FANCY_SERIALKILLER_XIS_WHISPERING_TO_Y" style="whisper_notice">You overhear %name1% whispering to %name2%:</Entry>
 
     <Entry key="FANCY_RETRAIN_POPUP">The <![CDATA[<sprite="RoleIcons" name="Role26">]]>%name_role26% would like to retrain you into %role%.</Entry>
-    <Entry key="FANCY_DOOMED_POPUP">You are Doomed. Do you wish to live or to die?</Entry>
+	<Entry key="FANCY_RETRAIN_POPUP">The <![CDATA[<sprite="RoleIcons" name="Role26">]]>%name_role26% will %keyword_Retrain% you from %role2% into %role%.</Entry>
+    <Entry key="FANCY_DOOMED_POPUP">You are %keyword_Doom%ed. Do you wish to live or to die?</Entry>
 	
 	<Entry key="FANCY_CINEMATIC_HEXBOMB"><![CDATA[<shake a=0.3>The %name_faction1% has been Hex Bombed!</shake>]]></Entry>
 	<Entry key="FANCY_CINEMATIC_DEATH"><![CDATA[<shake a=0.3>%name_role253% has claimed the souls of the %name_faction1%!</shake>]]></Entry>
@@ -1336,6 +1561,7 @@
 
 
 
+	
 	<Entry key="GUI_ROLE_BLURB_41_7">You are an acolyte of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role250"><style=ApocalypseColor>%name_role250%</style></shake>]]>, destroying the town's food supply.</Entry> <!--Baker-->
 	<Entry key="GUI_ROLE_BLURB_42_7">You are an acolyte of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role251"><style=ApocalypseColor>%name_role251%</style></shake>]]>, embodying nothing but raw power.</Entry> <!--Berserker-->
 	<Entry key="GUI_ROLE_BLURB_47_7">You are an acolyte of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role252"><style=ApocalypseColor>%name_role252%</style></shake>]]>, infecting the town with a deadly disease.</Entry> <!--Plaguebearer-->
@@ -1370,6 +1596,5 @@
 	<Entry key="BTOS_ROLE_BLURB_47_36">You are an acolyte of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role252"><style=ApocalypseColor>%name_role252%</style></shake>]]>, infecting the town with a deadly disease.</Entry> <!--Plaguebearer-->
 	<Entry key="BTOS_ROLE_BLURB_50_36">You are an acolyte of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role253"><style=ApocalypseColor>%name_role253%</style></shake>]]>, harvesting the souls of the town.</Entry> <!--Soul Collector-->
 	<Entry key="BTOS_ROLE_BLURB_62_36">You are an acolyte of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role253"><style=ApocalypseColor>%name_role253%</style></shake>]]> who curses the Town.</Entry> <!--Warlock-->
-
-
+	
 </StringTable>

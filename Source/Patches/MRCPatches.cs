@@ -803,7 +803,7 @@ public static class ClientRoleExtensionsPatches
                 Btos2Role.NeutralPariah => $"{Utils.ApplyGradient(Utils.GetString("BTOS_ALIGNMENTNAME_3"), neutral)} {Utils.ApplyGradient(Utils.GetString("BTOS_SUBALIGNMENTNAME_34"), bucket)}",
                 Btos2Role.NeutralOutlier => $"{Utils.ApplyGradient(Utils.GetString("BTOS_ALIGNMENTNAME_3"), neutral)} {Utils.ApplyGradient(Utils.GetString("BTOS_SUBALIGNMENTNAME_33"), bucket)}",
                 Btos2Role.RandomNeutral => $"{Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_RANDOM"), bucket)} {Utils.ApplyGradient(Utils.GetString("BTOS_ALIGNMENTNAME_3"), neutral)}",
-                // Btos2Role.TownPower => $"{Utils.ApplyGradient(Utils.GetString("BTOS_ALIGNMENTNAME_1"), townExecutive)} {Utils.ApplyGradient(Utils.GetString("BTOS_SUBALIGNMENTNAME_3"), bucket)}", // Player Notes +
+                Btos2Role.TownPower => $"{Utils.ApplyGradient(Utils.GetString("BTOS_ALIGNMENTNAME_1"), townExecutive)} {Utils.ApplyGradient(Utils.GetString("BTOS_SUBALIGNMENTNAME_3"), bucket)}", // Player Notes +
                 _ => string.Empty,
             };
         }
@@ -1442,6 +1442,40 @@ public static class ReplaceRoleTagWithRoleTextPatch
 
             index = str.IndexOf("%name_faction", index + 1);
         }
+		
+		// Manage %keyword_X% - Supports any word due to how keywords work.
+		var prefix = "%keyword_";
+		index = str.IndexOf(prefix);
+
+		while (index > -1)
+		{
+			var endIndex = str.IndexOf("%", index + prefix.Length);
+			if (endIndex == -1)
+				break;
+
+			var fullTag = str.Substring(index, endIndex - index + 1);
+
+			var content = str.Substring(
+				index + prefix.Length,
+				endIndex - (index + prefix.Length)
+			);
+
+			if (!string.IsNullOrWhiteSpace(content))
+			{
+				var gradient = Utils.CreateGradient(
+					Fancy.KeywordStart.Value,
+					Fancy.KeywordEnd.Value
+				);
+
+				var formatted = content.Trim();
+				var colorized = $"<b>{Utils.ApplyGradient(formatted, gradient)}</b>";
+
+				str = str.Replace(fullTag, colorized);
+				modified = true;
+			}
+
+			index = str.IndexOf(prefix, index + 1);
+		}
 
         if (modified)
             __result = str;

@@ -1356,24 +1356,27 @@ public static class MakeProperFactionChecksInWdah2
 
         if (killRecord == null || killRecord.killedByReasons.Count < 1)
             __instance.AddLine(__instance.l10n("GUI_GAME_KILLED_BY_REASON_0"), Tuning.REVEAL_TIME_PER_ADDL_KILLED_BY_REASON);
-        else
-        {
-            for (var i = 0; i < killRecord.killedByReasons.Count; i++)
-            {
-                var killedByReason = killRecord.killedByReasons[i];
-                var text2 = __instance.l10n($"GUI_GAME{(i == 0 ? "" : "_ALSO")}_KILLED_BY_REASON_{(int)killedByReason}");
+		else
+		{
+			var isBTOS2 = Constants.IsBTOS2();
+			var loc = Service.Home.LocalizationService;
 
-                text2 = text2.Replace("RoleIcons\"", "RoleIcons (Regular)\"");
+			for (var i = 0; i < killRecord.killedByReasons.Count; i++)
+			{
+				var killedByReason = killRecord.killedByReasons[i];
 
-                if (Constants.IsBTOS2())
-                    text2 = text2.Replace("\"RoleIcons", "\"BTOSRoleIcons").Replace("106\"", "107\"");
-                else
-                    text2 = text2.Replace("\"BTOSRoleIcons", "\"RoleIcons").Replace("107\"", "106\"");
+				var text2 = $"GUI_GAME{(i == 0 ? "" : "_ALSO")}_KILLED_BY_REASON_{(int)killedByReason}";
 
-                __instance.AddLine(text2, Tuning.REVEAL_TIME_PER_ADDL_KILLED_BY_REASON);
-            }
-        }
+				text2 = text2.Replace("RoleIcons\"", "RoleIcons (Regular)\"");
 
+				if (isBTOS2)
+					text2 = text2.Replace("\"RoleIcons", "\"BTOSRoleIcons").Replace("106\"", "107\"");
+				else
+					text2 = text2.Replace("\"BTOSRoleIcons", "\"RoleIcons").Replace("107\"", "106\"");
+
+				__instance.AddLine(text2, Tuning.REVEAL_TIME_PER_ADDL_KILLED_BY_REASON);
+			}
+		}
         Debug.Log("WhoDiedAndHowPanel:: HandleSubphaseWhoDied");
         return false;
     }

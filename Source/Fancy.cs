@@ -128,6 +128,7 @@ public class Fancy : BaseMod<Fancy>
     public static ToggleOption ExcludeTownGovernmentRoles;
     public static ToggleOption ExcludeCatalyst;
     public static ToggleOption ExcludeCultist;
+	// public static ToggleOption RoleSpecificEndingColors;
 
     public static ColorOption NeutralStart;
     public static ColorOption NeutralEnd;
@@ -244,6 +245,7 @@ public class Fancy : BaseMod<Fancy>
     private static Role[] BTOS2Roles;
 
     public static readonly Dictionary<FactionType, Dictionary<ColorType, ColorOption>> FactionToColorMap = [];
+	// public static readonly Dictionary<RolePlus, ColorOption> RoleColorMap = [];
     public static readonly Dictionary<ColorType, ColorOption> CustomUIColorsMap = [];
     public static readonly Dictionary<ColorType, ToggleOption> ColorShadeToggleMap = [];
     public static readonly Dictionary<ColorType, FloatOption> ColorShadeMap = [];
@@ -376,6 +378,21 @@ public class Fancy : BaseMod<Fancy>
                     SelectTestingFaction.Value == faction && SelectColorFilter.Value.IsAny(type, ColorType.All));
             }
         }
+		
+		// foreach (RolePlus role in Enum.GetValues<RolePlus>())
+		// {
+			// if (role is RolePlus.None or RolePlus.Stoned or RolePlus.Hidden or RolePlus.Unknown)
+				// continue;
+
+			// var key = Enum.GetName(typeof(RolePlus), role)!;
+
+			// RoleColorMap[role] = new ColorOption(
+				// $"{key.ToUpperInvariant()}_ROLE_COLOR",
+				// "#FFFFFF",
+				// PackType.MiscRoleCustomisation,
+				// () => RoleSpecificEndingColors.Value
+			// );
+		// }
 
         GeneralBrightness = new("GENERAL_BRIGHTNESS", 100, PackType.RecoloredUI, 0, 100, true, Constants.EnableCustomUI);
         GrayscaleAmount = new("GRAYSCALE_AMOUNT", 100, PackType.RecoloredUI, 0, 100, true, Constants.EnableCustomUI);
@@ -389,6 +406,7 @@ public class Fancy : BaseMod<Fancy>
 
         FactionalRoleNames = new("FACTIONAL_ROLE_NAMES", false, PackType.MiscRoleCustomisation, Constants.TextEditorExists);
         FactionalRoleBlurbs = new("FACTIONAL_ROLE_BLURBS", false, PackType.MiscRoleCustomisation, Constants.TextEditorExists);
+        // RoleSpecificEndingColors = new("ROLE_SPECIFIC_COLORS", false, PackType.MiscRoleCustomisation);
         MajorColors = new("MAJOR_COLORS", false, PackType.MiscRoleCustomisation);
         ExcludeCatalyst = new("EXCLUDE_CATALYST", false, PackType.MiscRoleCustomisation, setActive: () => MajorColors.Value);
         ExcludeCultist = new("EXCLUDE_CULTIST", false, PackType.MiscRoleCustomisation, setActive: () => MajorColors.Value);
