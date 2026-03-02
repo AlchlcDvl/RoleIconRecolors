@@ -121,6 +121,7 @@ public class Fancy : BaseMod<Fancy>
     public static ToggleOption GradientBuckets;
     public static ToggleOption DisableBTOSTribunal;
 
+    public static ToggleOption SwapStartAndEnd;
     public static ToggleOption MajorColors;
     public static ToggleOption LethalColors;
     public static ToggleOption HorsemenColors;
@@ -407,6 +408,7 @@ public class Fancy : BaseMod<Fancy>
         FactionalRoleNames = new("FACTIONAL_ROLE_NAMES", false, PackType.MiscRoleCustomisation, Constants.TextEditorExists);
         FactionalRoleBlurbs = new("FACTIONAL_ROLE_BLURBS", false, PackType.MiscRoleCustomisation, Constants.TextEditorExists);
         // RoleSpecificEndingColors = new("ROLE_SPECIFIC_COLORS", false, PackType.MiscRoleCustomisation);
+        SwapStartAndEnd = new("START_END_SWAP", false, PackType.MiscRoleCustomisation);
         MajorColors = new("MAJOR_COLORS", false, PackType.MiscRoleCustomisation);
         ExcludeCatalyst = new("EXCLUDE_CATALYST", false, PackType.MiscRoleCustomisation, setActive: () => MajorColors.Value);
         ExcludeCultist = new("EXCLUDE_CULTIST", false, PackType.MiscRoleCustomisation, setActive: () => MajorColors.Value);

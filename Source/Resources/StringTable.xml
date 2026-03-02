@@ -35,38 +35,41 @@
     <Entry key="FANCY_GRADIENT_BUCKETS_NAME">Gradient Buckets</Entry>
     <Entry key="FANCY_GRADIENT_BUCKETS_DESC">If enabled, buckets will make use of gradients.</Entry>
 
+    <Entry key="FANCY_START_END_SWAP_NAME">Swap Primary and Secondary Colors</Entry>
+    <Entry key="FANCY_START_END_SWAP_DESC">If enabled, the positions of Primary and Secondary colors are reversed.</Entry>
+
     <Entry key="FANCY_MAJOR_COLORS_NAME">Override Secondary Color for Power Roles</Entry>
-    <Entry key="FANCY_MAJOR_COLORS_DESC">Determines whether or not secondary colors on factions will be overwritten with a separate Major color value when Coven Power, Town Power, Cultist, or Catalyst.</Entry>
+    <Entry key="FANCY_MAJOR_COLORS_DESC">Determines whether or not secondary colors on factions will be overwritten with a separate color value when Coven Power, Town Power, Cultist, or Catalyst.</Entry>
 
-    <Entry key="FANCY_EXCLUDE_CATALYST_NAME">Exclude Catalyst from Major</Entry>
-    <Entry key="FANCY_EXCLUDE_CATALYST_DESC">Determines whether or not Catalyst is excluded from the Major gradient set or not.</Entry>
+    <Entry key="FANCY_EXCLUDE_CATALYST_NAME">Exclude Catalyst from Power</Entry>
+    <Entry key="FANCY_EXCLUDE_CATALYST_DESC">Determines whether or not Catalyst is excluded from the Power gradient set or not.</Entry>
 
-    <Entry key="FANCY_EXCLUDE_CULTIST_NAME">Exclude Cultist from Major</Entry>
-    <Entry key="FANCY_EXCLUDE_CULTIST_DESC">Determines whether or not Cultist is excluded from the Major gradient set or not.</Entry>
+    <Entry key="FANCY_EXCLUDE_CULTIST_NAME">Exclude Cultist from Power</Entry>
+    <Entry key="FANCY_EXCLUDE_CULTIST_DESC">Determines whether or not Cultist is excluded from the Power gradient set or not.</Entry>
 
-    <Entry key="FANCY_EXCLUDE_TG_NAME">Exclude Town Government Roles from Major</Entry>
-    <Entry key="FANCY_EXCLUDE_TG_DESC">Determines whether or not Town Government roles (Mayor, Monarch and Pacifist) are excluded from the Major gradient set or not.</Entry>
+    <Entry key="FANCY_EXCLUDE_TG_NAME">Exclude Town Government Roles from Power</Entry>
+    <Entry key="FANCY_EXCLUDE_TG_DESC">Determines whether or not Town Government roles (Mayor, Monarch and Pacifist) are excluded from the Power gradient set or not.</Entry>
 
     <Entry key="FANCY_LETHAL_COLORS_NAME">Override Secondary Color for Killing Roles</Entry>
-    <Entry key="FANCY_LETHAL_COLORS_DESC">Determines whether or not secondary colors on factions will be overwritten with a separate Lethal color value when Coven Killing, Town Killing, or a Berserker. Jailor is also included if Major Colors is disabled.</Entry>
+    <Entry key="FANCY_LETHAL_COLORS_DESC">Determines whether or not secondary colors on factions will be overwritten with a separate color value when Coven Killing, Town Killing, or a Berserker. Jailor is also included if Power Colors is disabled.</Entry>
 
     <Entry key="FANCY_HORSEMAN_COLORS_NAME">Override Secondary Color for Horsemen</Entry>
-    <Entry key="FANCY_HORSEMAN_COLORS_DESC">Determines whether or not secondary colors on factions will be overwritten with a separate Horseman color value when role is a Horseman of the Apocalypse.</Entry>
+    <Entry key="FANCY_HORSEMAN_COLORS_DESC">Determines whether or not secondary colors on factions will be overwritten with a separate color value when role is a Horseman of the Apocalypse.</Entry>
 
     <Entry key="FANCY_VERTICAL_GRADIENTS_NAME">Vertical Gradients</Entry>
     <Entry key="FANCY_VERTICAL_GRADIENTS_DESC">Determines whether or not gradients should be vertical (like Vanilla's gradients) or horziontal (like BToS2's gradients).</Entry>
 
     <Entry key="FANCY_RECRUIT_ENDING_NAME">Override Recruit Secondary Color</Entry>
-    <Entry key="FANCY_RECRUIT_ENDING_DESC">Determines what secondary color Jackal recruits will pull. Jackal means it pulls from the Jackal Secondary Color, Original Primary means it pulls from their original faction's primary color, and Original Secondary pulls from their original faction's secondary color (Major if a Major role with the setting on). Original Blend takes the Primary and Secondary colors of the role's original faction and blends them together and makes that the secondary color.</Entry>
+    <Entry key="FANCY_RECRUIT_ENDING_DESC">Determines what secondary color Jackal recruits will pull. Jackal means it pulls from the Jackal Secondary Color, Original Primary means it pulls from their original faction's primary color, and Original Secondary pulls from their original faction's secondary color (Power if a Power role with the setting on). Original Blend takes the Primary and Secondary colors of the role's original faction and blends them together and makes that the secondary color.</Entry>
 
     <Entry key="FANCY_CONVERT_ENDING_NAME">Override Convert Secondary Color</Entry>
-    <Entry key="FANCY_CONVERT_ENDING_DESC">Determines what secondary color Vampire converts will pull. Vampire means it pulls from the Vampire Secondary Color, Original Primary means it pulls from their original faction's primary color, and Original Secondary pulls from their original faction's secondary color (Major if a Major role with the setting on). Original Blend takes the Primary and Secondary colors of the role's original faction and blends them together and makes that the secondary color.</Entry>
+    <Entry key="FANCY_CONVERT_ENDING_DESC">Determines what secondary color Vampire converts will pull. Vampire means it pulls from the Vampire Secondary Color, Original Primary means it pulls from their original faction's primary color, and Original Secondary pulls from their original faction's secondary color (Power if a Power role with the setting on). Original Blend takes the Primary and Secondary colors of the role's original faction and blends them together and makes that the secondary color.</Entry>
 
     <Entry key="FANCY_RECRUIT_STARTING_NAME">Override Recruit Primary Color</Entry>
-    <Entry key="FANCY_RECRUIT_STARTING_DESC">Determines what primary color Jackal recruits will pull. Jackal means it pulls from the Jackal Primary Color, Original Primary means it pulls from their original faction's primary color, and Original Secondary pulls from their original faction's secondary color (Major if a Major role with the setting on). Original Blend takes the Primary and Secondary colors of the role's original faction and blends them together and makes that the secondary color.</Entry>
+    <Entry key="FANCY_RECRUIT_STARTING_DESC">Determines what primary color Jackal recruits will pull. Jackal means it pulls from the Jackal Primary Color, Original Primary means it pulls from their original faction's primary color, and Original Secondary pulls from their original faction's secondary color (Power if a Power role with the setting on). Original Blend takes the Primary and Secondary colors of the role's original faction and blends them together and makes that the secondary color.</Entry>
 
     <Entry key="FANCY_CONVERT_STARTING_NAME">Override Convert Primary Color</Entry>
-    <Entry key="FANCY_CONVERT_STARTING_DESC">Determines what primary color Vampire converts will pull. Vampire means it pulls from the Vampire Primary Color, Original Primary means it pulls from their original faction's primary color, and Original Secondary pulls from their original faction's secondary color (Major if a Major role with the setting on). Original Blend takes the Primary and Secondary colors of the role's original faction and blends them together and makes that the secondary color.</Entry>
+    <Entry key="FANCY_CONVERT_STARTING_DESC">Determines what primary color Vampire converts will pull. Vampire means it pulls from the Vampire Primary Color, Original Primary means it pulls from their original faction's primary color, and Original Secondary pulls from their original faction's secondary color (Power if a Power role with the setting on). Original Blend takes the Primary and Secondary colors of the role's original faction and blends them together and makes that the secondary color.</Entry>
 
     <Entry key="FANCY_RECRUIT_START_RATIO_NAME">Recruit Primary Blend Ratio</Entry>
     <Entry key="FANCY_RECRUIT_START_RATIO_DESC">Determines the ratio between all Blend types within the Recruit Primary Override setting for both ends of each color blend.</Entry>
@@ -80,11 +83,11 @@
     <Entry key="FANCY_CONVERT_END_RATIO_NAME">Convert Secondary Blend Ratio</Entry>
     <Entry key="FANCY_CONVERT_END_RATIO_DESC">Determines the ratio between all Blend types within the Convert Secondary Override setting for both ends of each color blend.</Entry>
 
-    <Entry key="FANCY_IS_JACKAL_MAJOR_NAME">Jackal is Major</Entry>
-    <Entry key="FANCY_IS_JACKAL_MAJOR_DESC">Determines whether or not the Jackal role is considered Major.</Entry>
+    <Entry key="FANCY_IS_JACKAL_MAJOR_NAME">Jackal is Power</Entry>
+    <Entry key="FANCY_IS_JACKAL_MAJOR_DESC">Determines whether or not the Jackal role is considered Power.</Entry>
 
-    <Entry key="FANCY_IS_VAMPIRE_MAJOR_NAME">Vampire is Major</Entry>
-    <Entry key="FANCY_IS_VAMPIRE_MAJOR_DESC">Determines whether or not the Vampire role is considered Major.</Entry>
+    <Entry key="FANCY_IS_VAMPIRE_MAJOR_NAME">Vampire is Power</Entry>
+    <Entry key="FANCY_IS_VAMPIRE_MAJOR_DESC">Determines whether or not the Vampire role is considered Power.</Entry>
 
     <Entry key="FANCY_TOWN_CINEMATIC_NAME">Override Town Win Cinematic</Entry>
     <Entry key="FANCY_TOWN_CINEMATIC_DESC">Determines which victory cinematic Town will use.</Entry>
@@ -351,11 +354,11 @@
     <Entry key="FANCY_TOWN_END_NAME">Town Secondary Color</Entry>
     <Entry key="FANCY_TOWN_END_DESC">The secondary color for the Town faction.</Entry>
 
-    <Entry key="FANCY_TOWN_MAJOR_NAME">Town Major Color</Entry>
-    <Entry key="FANCY_TOWN_MAJOR_DESC">The major ending color for the Town faction.</Entry>
+    <Entry key="FANCY_TOWN_MAJOR_NAME">Town Power Color</Entry>
+    <Entry key="FANCY_TOWN_MAJOR_DESC">The power ending color for the Town faction.</Entry>
 
-    <Entry key="FANCY_TOWN_LETHAL_NAME">Town Lethal Color</Entry>
-    <Entry key="FANCY_TOWN_LETHAL_DESC">The lethal ending color for the Town faction.</Entry>
+    <Entry key="FANCY_TOWN_LETHAL_NAME">Town Killing Color</Entry>
+    <Entry key="FANCY_TOWN_LETHAL_DESC">The killing ending color for the Town faction.</Entry>
 
     <Entry key="FANCY_TOWN_HORSEMAN_NAME">Town Horseman Color</Entry>
     <Entry key="FANCY_TOWN_HORSEMAN_DESC">The horseman ending color for the Town faction.</Entry>
@@ -366,11 +369,11 @@
     <Entry key="FANCY_COVEN_END_NAME">Coven Secondary Color</Entry>
     <Entry key="FANCY_COVEN_END_DESC">The secondary color for the Coven faction.</Entry>
 
-    <Entry key="FANCY_COVEN_MAJOR_NAME">Coven Major Color</Entry>
-    <Entry key="FANCY_COVEN_MAJOR_DESC">The major ending color for the Coven faction.</Entry>
+    <Entry key="FANCY_COVEN_MAJOR_NAME">Coven Power Color</Entry>
+    <Entry key="FANCY_COVEN_MAJOR_DESC">The power ending color for the Coven faction.</Entry>
 
-    <Entry key="FANCY_COVEN_LETHAL_NAME">Coven Lethal Color</Entry>
-    <Entry key="FANCY_COVEN_LETHAL_DESC">The lethal ending color for the Coven faction.</Entry>
+    <Entry key="FANCY_COVEN_LETHAL_NAME">Coven Killing Color</Entry>
+    <Entry key="FANCY_COVEN_LETHAL_DESC">The killing ending color for the Coven faction.</Entry>
 
     <Entry key="FANCY_COVEN_HORSEMAN_NAME">Coven Horseman Color</Entry>
     <Entry key="FANCY_COVEN_HORSEMAN_DESC">The horseman ending color for the Coven faction.</Entry>
@@ -381,11 +384,11 @@
     <Entry key="FANCY_APOCALYPSE_END_NAME">Apocalypse Secondary Color</Entry>
     <Entry key="FANCY_APOCALYPSE_END_DESC">The secondary color for the Apocalypse faction.</Entry>
 
-    <Entry key="FANCY_APOCALYPSE_MAJOR_NAME">Apocalypse Major Color</Entry>
-    <Entry key="FANCY_APOCALYPSE_MAJOR_DESC">The major ending color for the Apocalypse faction.</Entry>
+    <Entry key="FANCY_APOCALYPSE_MAJOR_NAME">Apocalypse Power Color</Entry>
+    <Entry key="FANCY_APOCALYPSE_MAJOR_DESC">The power ending color for the Apocalypse faction.</Entry>
 
-    <Entry key="FANCY_APOCALYPSE_LETHAL_NAME">Apocalypse Lethal Color</Entry>
-    <Entry key="FANCY_APOCALYPSE_LETHAL_DESC">The lethal ending color for the Apocalypse faction.</Entry>
+    <Entry key="FANCY_APOCALYPSE_LETHAL_NAME">Apocalypse Killing Color</Entry>
+    <Entry key="FANCY_APOCALYPSE_LETHAL_DESC">The killing ending color for the Apocalypse faction.</Entry>
 
     <Entry key="FANCY_APOCALYPSE_HORSEMAN_NAME">Apocalypse Horseman Color</Entry>
     <Entry key="FANCY_APOCALYPSE_HORSEMAN_DESC">The horseman ending color for the Apocalypse faction.</Entry>
@@ -396,8 +399,8 @@
     <Entry key="FANCY_SERIALKILLER_END_NAME">Serial Killer Secondary Color</Entry>
     <Entry key="FANCY_SERIALKILLER_END_DESC">The secondary color for the Serial Killer faction.</Entry>
 
-    <Entry key="FANCY_SERIALKILLER_MAJOR_NAME">Serial Killer Major Color</Entry>
-    <Entry key="FANCY_SERIALKILLER_MAJOR_DESC">The major ending color for the Serial Killer faction.</Entry>
+    <Entry key="FANCY_SERIALKILLER_MAJOR_NAME">Serial Killer Power Color</Entry>
+    <Entry key="FANCY_SERIALKILLER_MAJOR_DESC">The power ending color for the Serial Killer faction.</Entry>
 
     <Entry key="FANCY_SERIALKILLER_HORSEMAN_NAME">Serial Killer Horseman Color</Entry>
     <Entry key="FANCY_SERIALKILLER_HORSEMAN_DESC">The horseman ending color for the Serial Killer faction.</Entry>
@@ -408,8 +411,8 @@
     <Entry key="FANCY_ARSONIST_END_NAME">Arsonist Secondary Color</Entry>
     <Entry key="FANCY_ARSONIST_END_DESC">The secondary color for the Arsonist faction.</Entry>
 
-    <Entry key="FANCY_ARSONIST_MAJOR_NAME">Arsonist Major Color</Entry>
-    <Entry key="FANCY_ARSONIST_MAJOR_DESC">The major ending color for the Arsonist faction.</Entry>
+    <Entry key="FANCY_ARSONIST_MAJOR_NAME">Arsonist Power Color</Entry>
+    <Entry key="FANCY_ARSONIST_MAJOR_DESC">The power ending color for the Arsonist faction.</Entry>
 
     <Entry key="FANCY_ARSONIST_HORSEMAN_NAME">Arsonist Horseman Color</Entry>
     <Entry key="FANCY_ARSONIST_HORSEMAN_DESC">The horseman ending color for the Arsonist faction.</Entry>
@@ -420,8 +423,8 @@
     <Entry key="FANCY_WEREWOLF_END_NAME">Werewolf Secondary Color</Entry>
     <Entry key="FANCY_WEREWOLF_END_DESC">The secondary color for the Werewolf faction.</Entry>
 
-    <Entry key="FANCY_WEREWOLF_MAJOR_NAME">Werewolf Major Color</Entry>
-    <Entry key="FANCY_WEREWOLF_MAJOR_DESC">The major ending color for the Werewolf faction.</Entry>
+    <Entry key="FANCY_WEREWOLF_MAJOR_NAME">Werewolf Power Color</Entry>
+    <Entry key="FANCY_WEREWOLF_MAJOR_DESC">The power ending color for the Werewolf faction.</Entry>
 
     <Entry key="FANCY_WEREWOLF_HORSEMAN_NAME">Werewolf Horseman Color</Entry>
     <Entry key="FANCY_WEREWOLF_HORSEMAN_DESC">The horseman ending color for the Werewolf faction.</Entry>
@@ -432,8 +435,8 @@
     <Entry key="FANCY_SHROUD_END_NAME">Shroud Secondary Color</Entry>
     <Entry key="FANCY_SHROUD_END_DESC">The secondary color for the Shroud faction.</Entry>
 
-    <Entry key="FANCY_SHROUD_MAJOR_NAME">Shroud Major Color</Entry>
-    <Entry key="FANCY_SHROUD_MAJOR_DESC">The major ending color for the Shroud faction.</Entry>
+    <Entry key="FANCY_SHROUD_MAJOR_NAME">Shroud Power Color</Entry>
+    <Entry key="FANCY_SHROUD_MAJOR_DESC">The power ending color for the Shroud faction.</Entry>
 
     <Entry key="FANCY_SHROUD_HORSEMAN_NAME">Shroud Horseman Color</Entry>
     <Entry key="FANCY_SHROUD_HORSEMAN_DESC">The horseman ending color for the Shroud faction.</Entry>
@@ -444,14 +447,14 @@
     <Entry key="FANCY_JACKAL_END_NAME">Jackal Secondary Color</Entry>
     <Entry key="FANCY_JACKAL_END_DESC">The secondary color for the Jackal faction.</Entry>
 
-    <Entry key="FANCY_JACKAL_MAJOR_NAME">Jackal Major Color</Entry>
-    <Entry key="FANCY_JACKAL_MAJOR_DESC">The major ending color for the Jackal faction.</Entry>
+    <Entry key="FANCY_JACKAL_MAJOR_NAME">Jackal Power Color</Entry>
+    <Entry key="FANCY_JACKAL_MAJOR_DESC">The power ending color for the Jackal faction.</Entry>
 
     <Entry key="FANCY_JACKAL_HORSEMAN_NAME">Jackal Horseman Color</Entry>
     <Entry key="FANCY_JACKAL_HORSEMAN_DESC">The horseman ending color for the Jackal faction.</Entry>
 
-    <Entry key="FANCY_JACKAL_LETHAL_NAME">Jackal Lethal Color</Entry>
-    <Entry key="FANCY_JACKAL_LETHAL_DESC">The lethal ending color for the Jackal faction.</Entry>
+    <Entry key="FANCY_JACKAL_LETHAL_NAME">Jackal Killing Color</Entry>
+    <Entry key="FANCY_JACKAL_LETHAL_DESC">The killing ending color for the Jackal faction.</Entry>
 
     <Entry key="FANCY_PANDORA_START_NAME">Pandora Primary Color</Entry>
     <Entry key="FANCY_PANDORA_START_DESC">The primary color for the Pandora faction.</Entry>
@@ -459,14 +462,14 @@
     <Entry key="FANCY_PANDORA_END_NAME">Pandora Secondary Color</Entry>
     <Entry key="FANCY_PANDORA_END_DESC">The secondary color for the Pandora faction.</Entry>
 
-    <Entry key="FANCY_PANDORA_MAJOR_NAME">Pandora Major Color</Entry>
-    <Entry key="FANCY_PANDORA_MAJOR_DESC">The major ending color for the Pandora faction.</Entry>
+    <Entry key="FANCY_PANDORA_MAJOR_NAME">Pandora Power Color</Entry>
+    <Entry key="FANCY_PANDORA_MAJOR_DESC">The power ending color for the Pandora faction.</Entry>
 
     <Entry key="FANCY_PANDORA_HORSEMAN_NAME">Pandora Horseman Color</Entry>
     <Entry key="FANCY_PANDORA_HORSEMAN_DESC">The horseman ending color for the Pandora faction.</Entry>
 
-    <Entry key="FANCY_PANDORA_LETHAL_NAME">Pandora Lethal Color</Entry>
-    <Entry key="FANCY_PANDORA_LETHAL_DESC">The lethal ending color for the Pandora faction.</Entry>
+    <Entry key="FANCY_PANDORA_LETHAL_NAME">Pandora Killing Color</Entry>
+    <Entry key="FANCY_PANDORA_LETHAL_DESC">The killing ending color for the Pandora faction.</Entry>
 
     <Entry key="FANCY_COMPLIANCE_START_NAME">Compliance Primary Color</Entry>
     <Entry key="FANCY_COMPLIANCE_START_DESC">The primary color for the Compliance faction.</Entry>
@@ -477,8 +480,8 @@
     <Entry key="FANCY_COMPLIANCE_END_NAME">Compliance Secondary Color</Entry>
     <Entry key="FANCY_COMPLIANCE_END_DESC">The secondary color for the Compliance faction.</Entry>
 
-    <Entry key="FANCY_COMPLIANCE_MAJOR_NAME">Compliance Major Color</Entry>
-    <Entry key="FANCY_COMPLIANCE_MAJOR_DESC">The major ending color for the Compliance faction.</Entry>
+    <Entry key="FANCY_COMPLIANCE_MAJOR_NAME">Compliance Power Color</Entry>
+    <Entry key="FANCY_COMPLIANCE_MAJOR_DESC">The power ending color for the Compliance faction.</Entry>
 
     <Entry key="FANCY_COMPLIANCE_HORSEMAN_NAME">Compliance Horseman Color</Entry>
     <Entry key="FANCY_COMPLIANCE_HORSEMAN_DESC">The horseman ending color for the Compliance faction.</Entry>
@@ -489,14 +492,14 @@
     <Entry key="FANCY_FROGS_END_NAME">Frogs Secondary Color</Entry>
     <Entry key="FANCY_FROGS_END_DESC">The secondary color for the Frogs faction.</Entry>
 
-    <Entry key="FANCY_FROGS_MAJOR_NAME">Frogs Major Color</Entry>
-    <Entry key="FANCY_FROGS_MAJOR_DESC">The major ending color for the Frogs faction.</Entry>
+    <Entry key="FANCY_FROGS_MAJOR_NAME">Frogs Power Color</Entry>
+    <Entry key="FANCY_FROGS_MAJOR_DESC">The power ending color for the Frogs faction.</Entry>
 
     <Entry key="FANCY_FROGS_HORSEMAN_NAME">Frogs Horseman Color</Entry>
     <Entry key="FANCY_FROGS_HORSEMAN_DESC">The horseman ending color for the Frogs faction.</Entry>
 
-    <Entry key="FANCY_FROGS_LETHAL_NAME">Frogs Lethal Color</Entry>
-    <Entry key="FANCY_FROGS_LETHAL_DESC">The lethal ending color for the Frogs faction.</Entry>
+    <Entry key="FANCY_FROGS_LETHAL_NAME">Frogs Killing Color</Entry>
+    <Entry key="FANCY_FROGS_LETHAL_DESC">The killing ending color for the Frogs faction.</Entry>
 
     <Entry key="FANCY_HAWKS_START_NAME">Hawks Primary Color</Entry>
     <Entry key="FANCY_HAWKS_START_DESC">The primary color for the Hawks faction.</Entry>
@@ -504,14 +507,14 @@
     <Entry key="FANCY_HAWKS_END_NAME">Hawks Secondary Color</Entry>
     <Entry key="FANCY_HAWKS_END_DESC">The secondary color for the Hawks faction.</Entry>
 
-    <Entry key="FANCY_HAWKS_MAJOR_NAME">Hawks Major Color</Entry>
-    <Entry key="FANCY_HAWKS_MAJOR_DESC">The major ending color for the Hawks faction.</Entry>
+    <Entry key="FANCY_HAWKS_MAJOR_NAME">Hawks Power Color</Entry>
+    <Entry key="FANCY_HAWKS_MAJOR_DESC">The power ending color for the Hawks faction.</Entry>
 
     <Entry key="FANCY_HAWKS_HORSEMAN_NAME">Hawks Horseman Color</Entry>
     <Entry key="FANCY_HAWKS_HORSEMAN_DESC">The horseman ending color for the Hawks faction.</Entry>
 
-    <Entry key="FANCY_HAWKS_LETHAL_NAME">Hawks Lethal Color</Entry>
-    <Entry key="FANCY_HAWKS_LETHAL_DESC">The lethal ending color for the Hawks faction.</Entry>
+    <Entry key="FANCY_HAWKS_LETHAL_NAME">Hawks Killing Color</Entry>
+    <Entry key="FANCY_HAWKS_LETHAL_DESC">The killing ending color for the Hawks faction.</Entry>
 
     <Entry key="FANCY_LIONS_START_NAME">Lions Primary Color</Entry>
     <Entry key="FANCY_LIONS_START_DESC">The primary color for the Lions faction.</Entry>
@@ -519,14 +522,14 @@
     <Entry key="FANCY_LIONS_END_NAME">Lions Secondary Color</Entry>
     <Entry key="FANCY_LIONS_END_DESC">The secondary color for the Lions faction.</Entry>
 
-    <Entry key="FANCY_LIONS_MAJOR_NAME">Lions Major Color</Entry>
-    <Entry key="FANCY_LIONS_MAJOR_DESC">The major ending color for the Lions faction.</Entry>
+    <Entry key="FANCY_LIONS_MAJOR_NAME">Lions Power Color</Entry>
+    <Entry key="FANCY_LIONS_MAJOR_DESC">The power ending color for the Lions faction.</Entry>
 
     <Entry key="FANCY_LIONS_HORSEMAN_NAME">Lions Horseman Color</Entry>
     <Entry key="FANCY_LIONS_HORSEMAN_DESC">The horseman ending color for the Lions faction.</Entry>
 
-    <Entry key="FANCY_LIONS_LETHAL_NAME">Lions Lethal Color</Entry>
-    <Entry key="FANCY_LIONS_LETHAL_DESC">The lethal ending color for the Lions faction.</Entry>
+    <Entry key="FANCY_LIONS_LETHAL_NAME">Lions Killing Color</Entry>
+    <Entry key="FANCY_LIONS_LETHAL_DESC">The killing ending color for the Lions faction.</Entry>
 
     <Entry key="FANCY_EGOTIST_START_NAME">Egotist Primary Color</Entry>
     <Entry key="FANCY_EGOTIST_START_DESC">The primary color for the Egotist faction.</Entry>
@@ -534,14 +537,14 @@
     <Entry key="FANCY_EGOTIST_END_NAME">Egotist Secondary Color</Entry>
     <Entry key="FANCY_EGOTIST_END_DESC">The secondary color for the Egotist faction.</Entry>
 
-    <Entry key="FANCY_EGOTIST_MAJOR_NAME">Egotist Major Color</Entry>
-    <Entry key="FANCY_EGOTIST_MAJOR_DESC">The major ending color for the Egotist faction.</Entry>
+    <Entry key="FANCY_EGOTIST_MAJOR_NAME">Egotist Power Color</Entry>
+    <Entry key="FANCY_EGOTIST_MAJOR_DESC">The power ending color for the Egotist faction.</Entry>
 
     <Entry key="FANCY_EGOTIST_HORSEMAN_NAME">Egotist Horseman Color</Entry>
     <Entry key="FANCY_EGOTIST_HORSEMAN_DESC">The horseman ending color for the Egotist faction.</Entry>
 
-    <Entry key="FANCY_EGOTIST_LETHAL_NAME">Egotist Lethal Color</Entry>
-    <Entry key="FANCY_EGOTIST_LETHAL_DESC">The lethal ending color for the Egotist faction.</Entry>
+    <Entry key="FANCY_EGOTIST_LETHAL_NAME">Egotist Killing Color</Entry>
+    <Entry key="FANCY_EGOTIST_LETHAL_DESC">The killing ending color for the Egotist faction.</Entry>
 
     <Entry key="FANCY_VAMPIRE_START_NAME">Vampire Primary Color</Entry>
     <Entry key="FANCY_VAMPIRE_START_DESC">The primary color for the Vampire faction.</Entry>
@@ -549,14 +552,14 @@
     <Entry key="FANCY_VAMPIRE_END_NAME">Vampire Secondary Color</Entry>
     <Entry key="FANCY_VAMPIRE_END_DESC">The secondary color for the Vampire faction.</Entry>
 
-    <Entry key="FANCY_VAMPIRE_MAJOR_NAME">Vampire Major Color</Entry>
-    <Entry key="FANCY_VAMPIRE_MAJOR_DESC">The major ending color for the Vampire faction.</Entry>
+    <Entry key="FANCY_VAMPIRE_MAJOR_NAME">Vampire Power Color</Entry>
+    <Entry key="FANCY_VAMPIRE_MAJOR_DESC">The power ending color for the Vampire faction.</Entry>
 
     <Entry key="FANCY_VAMPIRE_HORSEMAN_NAME">Vampire Horseman Color</Entry>
     <Entry key="FANCY_VAMPIRE_HORSEMAN_DESC">The horseman ending color for the Vampire faction.</Entry>
 
-    <Entry key="FANCY_VAMPIRE_LETHAL_NAME">Vampire Lethal Color</Entry>
-    <Entry key="FANCY_VAMPIRE_LETHAL_DESC">The lethal ending color for the Vampire faction.</Entry>
+    <Entry key="FANCY_VAMPIRE_LETHAL_NAME">Vampire Killing Color</Entry>
+    <Entry key="FANCY_VAMPIRE_LETHAL_DESC">The killing ending color for the Vampire faction.</Entry>
 
     <Entry key="FANCY_CURSEDSOUL_START_NAME">Cursed Soul Primary Color</Entry>
     <Entry key="FANCY_CURSEDSOUL_START_DESC">The primary color for the Cursed Soul faction.</Entry>
@@ -564,14 +567,14 @@
     <Entry key="FANCY_CURSEDSOUL_END_NAME">Cursed Soul Secondary Color</Entry>
     <Entry key="FANCY_CURSEDSOUL_END_DESC">The secondary color for the Cursed Soul faction.</Entry>
 
-    <Entry key="FANCY_CURSEDSOUL_MAJOR_NAME">Cursed Soul Major Color</Entry>
-    <Entry key="FANCY_CURSEDSOUL_MAJOR_DESC">The major ending color for the Cursed Soul faction.</Entry>
+    <Entry key="FANCY_CURSEDSOUL_MAJOR_NAME">Cursed Soul Power Color</Entry>
+    <Entry key="FANCY_CURSEDSOUL_MAJOR_DESC">The power ending color for the Cursed Soul faction.</Entry>
 
     <Entry key="FANCY_CURSEDSOUL_HORSEMAN_NAME">Cursed Soul Horseman Color</Entry>
     <Entry key="FANCY_CURSEDSOUL_HORSEMAN_DESC">The horseman ending color for the Cursed Soul faction.</Entry>
 
-    <Entry key="FANCY_CURSEDSOUL_LETHAL_NAME">Cursed Soul Lethal Color</Entry>
-    <Entry key="FANCY_CURSEDSOUL_LETHAL_DESC">The lethal ending color for the Cursed Soul faction.</Entry>
+    <Entry key="FANCY_CURSEDSOUL_LETHAL_NAME">Cursed Soul Killing Color</Entry>
+    <Entry key="FANCY_CURSEDSOUL_LETHAL_DESC">The killing ending color for the Cursed Soul faction.</Entry>
 
     <Entry key="FANCY_JESTER_START_NAME">Jester Primary Color</Entry>
     <Entry key="FANCY_JESTER_START_DESC">The primary color for the Jester faction.</Entry>

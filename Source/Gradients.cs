@@ -86,9 +86,12 @@ public static class Gradients
         // var start = Fancy.Colors[startKey].Start;
         var middle = Fancy.Colors[middleKey].Middle;
 
+        var s = Fancy.SwapStartAndEnd.Value ? end : start;
+        var e   = Fancy.SwapStartAndEnd.Value ? start : end;
+
         return middle != null
-            ? Utils.CreateGradient(start, middle, end)
-            : Utils.CreateGradient(start, end ?? start);
+            ? Utils.CreateGradient(s, middle, e)
+            : Utils.CreateGradient(s, e ?? s);
     }
 
     private static string GetEndColor(string key, Role role)
