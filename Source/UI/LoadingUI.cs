@@ -35,7 +35,15 @@ public class LoadingUI : UIController
 
     public void OnDestroy() => Instance = null;
 
-    private static void Cancel() => Coroutines.Stop(DownloaderUI.Instance.InProgress);
+    private static void Cancel()
+    {
+        if (DownloaderUI.Instance.InProgress != null)
+        {
+            DownloaderUI.Instance.StopCoroutine(DownloaderUI.Instance.InProgress);
+            DownloaderUI.Instance.InProgress = null;
+        }
+    }
+    // private static void Cancel() => Coroutines.Stop(DownloaderUI.Instance.InProgress);
 
     public void Update()
     {

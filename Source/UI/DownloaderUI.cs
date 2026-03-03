@@ -31,7 +31,7 @@ public class DownloaderUI : UIController
 
     private readonly List<TextMeshProUGUI> WaxTexts = [];
 
-    public IEnumerator InProgress { get; set; }
+    public Coroutine InProgress { get; set; }
 
     private static string Type => FancyUI.Instance.Page == PackType.IconPacks ? "Icon Pack" : "Silhouette Set";
     private static string FolderPath => Path.Combine(Fancy.Instance.ModPath, $"{FancyUI.Instance.Page}");
