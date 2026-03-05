@@ -119,20 +119,19 @@ public static class PatchRoleCard
                     {
                         text += $"\n<size={size}%>{Utils.ApplyGradient($"({label})", gradient)}</size>";
                     }
+                    else 
+                    {
+                        if ((Fancy.RoleCardFactionLabel.Value == FactionLabelOption.Mismatch && role.GetFactionType() != faction) || Fancy.RoleCardFactionLabel.Value == FactionLabelOption.Always ||
+                        (Fancy.RoleCardFactionLabel.Value == FactionLabelOption.Conditional && !Utils.ConditionalCompliancePandora(role.GetFactionType(), faction)))
+                        {
+
+                            if (gradient != null)
+                                text += $"\n<size={size}%>{Utils.ApplyGradient($"({faction.ToDisplayString()})", gradient)}</size>";
+                            else
+                                text = $"{text}\n<size={size}%><color={faction.GetFactionColor()}>({faction.ToDisplayString()})</color></size>";
+                        }
+                    }
                 }
-				else 
-				{
-					if ((Fancy.RoleCardFactionLabel.Value == FactionLabelOption.Mismatch && role.GetFactionType() != faction) || Fancy.RoleCardFactionLabel.Value == FactionLabelOption.Always ||
-                    (Fancy.RoleCardFactionLabel.Value == FactionLabelOption.Conditional && !Utils.ConditionalCompliancePandora(role.GetFactionType(), faction)))
-					{
-
-						if (gradient != null)
-							text += $"\n<size={size}%>{Utils.ApplyGradient($"({faction.ToDisplayString()})", gradient)}</size>";
-						else
-							text = $"{text}\n<size={size}%><color={faction.GetFactionColor()}>({faction.ToDisplayString()})</color></size>";
-					}
-				}
-
                 break;
             }
 
