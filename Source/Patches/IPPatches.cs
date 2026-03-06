@@ -233,6 +233,9 @@ public static class PatchRoleCards
         if (!attribute.IsValid() && role.IsTransformedApoc())
             attribute = GetSprite(reg, "Attributes_Horsemen", factionName);
 
+        if (!attribute.IsValid() && role.IsCovenRole())
+            attribute = GetSprite(reg, "Attributes_Coven", factionName);
+
         if (!attribute.IsValid())
             attribute = GetSprite(reg, "Attributes", factionName);
 
@@ -243,15 +246,15 @@ public static class PatchRoleCards
             if (!attribute.IsValid() && role.IsTransformedApoc())
                 attribute = GetSprite("Attributes_Horsemen", ogfaction);
 
+            if (!attribute.IsValid() && role.IsCovenRole())
+                attribute = GetSprite(reg, "Attributes_Coven", ogfaction);
+
             if (!attribute.IsValid())
                 attribute = GetSprite("Attributes", ogfaction);
         }
 
         if (attribute.IsValid() && roleInfoButtons.IsValid(index))
             roleInfoButtons[index].abilityIcon.sprite = attribute;
-
-        if (ogfaction != "Coven")
-            return;
 
         index++;
         var nommy = GetSprite(reg, $"Necronomicon_{roleName}", factionName);
@@ -360,13 +363,34 @@ public static class PatchAbilityPanelListItems
             }
             case AbilityType.POTIONMASTER_ATTACK:
             {
-                var special = GetSprite(reg, $"Necronomicon", faction, ee);
+                switch (role)
+                {
+                    case Role.POTIONMASTER:
+                    {
+                        var special = GetSprite(reg, $"Necronomicon", faction, ee);
 
-                if (!special.IsValid() && reg)
-                    special = GetSprite($"Necronomicon", ogfaction, ee);
+                        if (!special.IsValid() && reg)
+                            special = GetSprite($"Necronomicon", ogfaction, ee);
 
-                if (special.IsValid() && __instance.choice1Sprite)
-                    __instance.choice1Sprite.sprite = special;
+                        if (special.IsValid() && __instance.choice1Sprite)
+                            __instance.choice1Sprite.sprite = special;
+
+                        break;
+
+                    }
+                    default:
+                    {
+                        var special = GetSprite(reg, $"{name}_Ability_3", faction, ee);
+
+                        if (!special.IsValid() && reg)
+                            special = GetSprite($"{name}_Ability_3", ogfaction, ee);
+
+                        if (special.IsValid() && __instance.choice1Sprite)
+                            __instance.choice1Sprite.sprite = special;
+
+                        break;
+                    }
+                }
 
                 break;
             }
