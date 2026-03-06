@@ -1087,6 +1087,17 @@ public static class FixAbilityButtonOverrides
             case TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_REVEAL:
                     __instance.choice1Text.text =  Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY2_VERB_{(int)role}");
                 break;
+            case TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_ATTACK:
+				switch (role)
+				{
+					case Role.POTIONMASTER:
+						__instance.choice1Text.text =  Utils.GetString($"GUI_ROLE_CARD_NECRONOMICON_ABILITY");
+						break;
+					default:
+						__instance.choice1Text.text = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY3_VERB_{(int)role}");
+						break;
+				}
+                break;
         }
     }
 }
