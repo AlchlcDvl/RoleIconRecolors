@@ -433,60 +433,26 @@ public static class Utils
     private static bool IsTransformedApocBTOS(this Role role) => role is Btos2Role.Death or Btos2Role.Famine or Btos2Role.War or Btos2Role.Pestilence;
 
     private static bool IsTransformedApocVanilla(this Role role) => role is Role.DEATH or Role.FAMINE or Role.WAR or Role.PESTILENCE;
-
-    public static bool IsCovenRole(this Role role, GameModType? mod = null)
+    
+    public static bool IsApocAcolyte(this Role role, GameModType? mod = null)
     {
         try
         {
             return (mod ?? GetGameType()) switch
             {
-                GameModType.BTOS2 => IsCovenRoleBTOS(role),
-                _ => IsCovenRoleVanilla(role),
+                GameModType.BTOS2 => IsApocAcolyteBTOS(role),
+                _ => IsApocAcolyteVanilla(role),
             };
         }
         catch
         {
-            return IsCovenRoleVanilla(role);
+            return IsApocAcolyteVanilla(role);
         }
     }
 
-    private static bool IsCovenRoleBTOS(this Role role) =>
-        role is Btos2Role.Banshee or
-            Btos2Role.Conjurer or
-            Btos2Role.CovenLeader or
-            Btos2Role.Dreamweaver or
-            Btos2Role.Enchanter or
-            Btos2Role.HexMaster or
-            Btos2Role.Illusionist or
-            Btos2Role.Necromancer or
-            Btos2Role.Poisoner or
-            Btos2Role.Medusa or
-            Btos2Role.Ritualist or
-            Btos2Role.Jinx or
-            Btos2Role.VoodooMaster or
-            Btos2Role.PotionMaster or
-            Btos2Role.Cultist or
-            Btos2Role.Wildling or
-            Btos2Role.Witch;
+    private static bool IsApocAcolyteBTOS(this Role role) => role is Btos2Role.SoulCollector or Btos2Role.Baker or Btos2Role.Berserker or Btos2Role.Plaguebearer or Btos2Role.Warlock;
 
-    private static bool IsCovenRoleVanilla(this Role role) =>
-        role is Role.CONJURER or
-            Role.COVENLEADER or
-            Role.ENCHANTER or
-            Role.DREAMWEAVER or
-            Role.HEXMASTER or
-            Role.ILLUSIONIST or
-            Role.MEDUSA or
-            Role.POTIONMASTER or
-            Role.NECROMANCER or
-            Role.VOODOOMASTER or
-            Role.POISONER or
-            Role.JINX or
-            Role.RITUALIST or
-            Role.WILDLING or
-            Role.WITCH or
-            Role.COVENITE or
-            Role.CULTIST;
+    private static bool IsApocAcolyteVanilla(this Role role) => role is Role.SOULCOLLECTOR or Role.BAKER or Role.BERSERKER or Role.PLAGUEBEARER;
     
     public static bool IsValid(this Sprite sprite) => sprite && sprite != Blank;
 
@@ -858,7 +824,7 @@ public static class Utils
 
 		var isBTOS2 = Constants.IsBTOS2() || SettingsAndTestingUI.Instance?.IsBTOS2 == true;
 
-		var newKey = $"{(isBTOS2 ? "BTOS_" : "GUI_")}SHORTNAME_{(int)role}_{(int)faction}";
+		var newKey = $"{(isBTOS2 ? "BTOS_" : "GUI_")}ROLE_SHORTNAME_{(int)role}_{(int)faction}";
 		var oldKey = $"FANCY_{factionName}_{(isBTOS2 ? "BTOS_" : "")}SHORTNAME_{(int)role}";
 
 		var loc = Service.Home.LocalizationService;

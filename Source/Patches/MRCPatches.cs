@@ -549,11 +549,11 @@ public static class FancyChatExperimentalBTOS2
         __result = position switch
         {
             70 => $"<link=\"r57\"><sprite=\"BTOSRoleIcons\" name=\"Role57\"><indent=1.1em><b>{Utils.ApplyGradient(Fancy.CourtLabel.Value, court)}:</b> </link>{encodedText.Replace("????: </color>", "").Replace("white", $"#{ColorUtility.ToHtmlStringRGB(Fancy.CourtChatColor.Value.ToColor())}")}",
-            69 => encodedText.Replace("????:", $"<color=#{ColorUtility.ToHtmlStringRGB(Fancy.JuryColor.Value.ToColor())}>{Fancy.JuryLabel.Value}:</color>"),
+            // 69 => encodedText.Replace("????:", $"<color=#{ColorUtility.ToHtmlStringRGB(Fancy.JuryColor.Value.ToColor())}>{Fancy.JuryLabel.Value}:</color>"),
             // I decided to remove the Seer icon from Jury messages for the scenario of which an Icon Pack's Seer icon does not fit Jury. An example is replacing Seer with TOS1 Medium.
-            // 69 => encodedText.Replace("????:", $"<sprite=\"BTOSRoleIcons\" name=\"Role16\"> <color=#{ColorUtility.ToHtmlStringRGB(Fancy.JuryColor.Value.ToColor())}>{Fancy.JuryLabel.Value}:</color>"),
+            69 => encodedText.Replace("????:", $"<sprite=\"BTOSRoleIcons (Judge)\" name=\"Role16\"> <color=#{ColorUtility.ToHtmlStringRGB(Fancy.JuryColor.Value.ToColor())}>{Fancy.JuryLabel.Value}:</color>"),
 
-            71 => encodedText.Replace("????:", $"<color=#ECC23E>{pirate}:</color>").Replace("white", "#ECC23E"),
+            71 => encodedText.Replace("????:", $"<sprite=\"BTOSRoleIcons\" name=\"Role46\"> <color=#ECC23E>{pirate}:</color>").Replace("white", "#ECC23E"),
             _ => __result
         };
     }

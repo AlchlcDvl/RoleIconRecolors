@@ -233,8 +233,14 @@ public static class PatchRoleCards
         if (!attribute.IsValid() && role.IsTransformedApoc())
             attribute = GetSprite(reg, "Attributes_Horsemen", factionName);
 
-        if (!attribute.IsValid() && role.IsCovenRole())
+        if (!attribute.IsValid() && role.IsApocAcolyte())
+            attribute = GetSprite(reg, "Attributes_Apocalypse", factionName);
+
+        if (!attribute.IsValid() && role.IsCovenAligned())
             attribute = GetSprite(reg, "Attributes_Coven", factionName);
+
+        if (!attribute.IsValid() && role.IsTownAligned())
+            attribute = GetSprite(reg, "Attributes_Town", factionName);
 
         if (!attribute.IsValid())
             attribute = GetSprite(reg, "Attributes", factionName);
@@ -246,8 +252,14 @@ public static class PatchRoleCards
             if (!attribute.IsValid() && role.IsTransformedApoc())
                 attribute = GetSprite("Attributes_Horsemen", ogfaction);
 
-            if (!attribute.IsValid() && role.IsCovenRole())
+            if (!attribute.IsValid() && role.IsApocAcolyte())
+                attribute = GetSprite("Attributes_Apocalypse", ogfaction);
+
+            if (!attribute.IsValid() && role.IsCovenAligned())
                 attribute = GetSprite(reg, "Attributes_Coven", ogfaction);
+
+            if (!attribute.IsValid() && role.IsTownAligned())
+                attribute = GetSprite(reg, "Attributes_Town", ogfaction);
 
             if (!attribute.IsValid())
                 attribute = GetSprite("Attributes", ogfaction);

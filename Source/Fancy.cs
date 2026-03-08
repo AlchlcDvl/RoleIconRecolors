@@ -121,7 +121,6 @@ public class Fancy : BaseMod<Fancy>
     public static ToggleOption GradientBuckets;
     public static ToggleOption DisableBTOSTribunal;
 
-    public static ToggleOption SwapStartAndEnd;
     public static ToggleOption MajorColors;
     public static ToggleOption LethalColors;
     public static ToggleOption HorsemenColors;
@@ -192,7 +191,7 @@ public class Fancy : BaseMod<Fancy>
         { "COVEN", ("#B545FF", "#B545FF", "#B545FF", null, "#B545FF", "#B545FF") },
         { "APOCALYPSE", ("#FF004E", "#FF004E", "#FF004E", null, "#FF004E", "#FF004E") },
         { "VAMPIRE", ("#ff0000", "#6A1B1B", "#6A1B1B", null, "#6A1B1B", "#6A1B1B") },
-        { "CURSEDSOUL", ("#4FFF9F", "#B54FFF", "#4FFF9F", null, "#4FFF9F", "#4FFF9F") },
+        { "CURSEDSOUL", ("#4FFF9F", "#B54FFF", "#B54FFF", null, "#B54FFF", "#B54FFF") },
         { "PANDORA", ("#B545FF", "#FF004E", "#FF004E", null, "#FF004E", "#FF004E") },
         { "COMPLIANCE", ("#2D44B5", "#FC9F32", "#FC9F32", "#AE1B1E", null, "#AE1B1E") },
         { "SERIALKILLER", ("#1D4DFC", "#1D4DFC", "#1D4DFC", null, null, "#1D4DFC") },
@@ -408,7 +407,6 @@ public class Fancy : BaseMod<Fancy>
         FactionalRoleNames = new("FACTIONAL_ROLE_NAMES", false, PackType.MiscRoleCustomisation, Constants.TextEditorExists);
         FactionalRoleBlurbs = new("FACTIONAL_ROLE_BLURBS", false, PackType.MiscRoleCustomisation, Constants.TextEditorExists);
         // RoleSpecificEndingColors = new("ROLE_SPECIFIC_COLORS", false, PackType.MiscRoleCustomisation);
-        SwapStartAndEnd = new("START_END_SWAP", false, PackType.MiscRoleCustomisation);
         MajorColors = new("MAJOR_COLORS", false, PackType.MiscRoleCustomisation);
         ExcludeCatalyst = new("EXCLUDE_CATALYST", false, PackType.MiscRoleCustomisation, setActive: () => MajorColors.Value);
         ExcludeCultist = new("EXCLUDE_CULTIST", false, PackType.MiscRoleCustomisation, setActive: () => MajorColors.Value);

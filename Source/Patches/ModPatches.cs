@@ -388,6 +388,7 @@ public static class SpecialAbilityPopupDayConfirmListItemPatch
         var full = $"{player_name} {formatted}".Trim();
 
         __instance.playerName.SetText(full);
+		__instance.playerName.enableAutoSizing = false;
         __instance.playerHeadshot.sprite = headshot;
         __instance.characterPosition = position;
         __instance.playerNumber.text = $"{__instance.characterPosition + 1}.";
@@ -456,6 +457,7 @@ public static class SpecialAbilityPopupNecromancerRetributionistListItemPatch
         var text = $"{player_name} {formatted}".Trim();
 
         __instance.playerName.SetText(text);
+		__instance.playerName.enableAutoSizing = false;
         __instance.playerHeadshot.sprite = headshot;
         __instance.characterPosition = position;
         __instance.playerNumber.text = $"{position + 1}.";
@@ -560,6 +562,7 @@ public static class PatchSpecialAbilityPopupGenericDualTargetListItem
         var text = $"{player_name} {formatted}".Trim();
 
         __instance.playerName.SetText(text);
+		__instance.playerName.enableAutoSizing = false;
         __instance.playerHeadshot.sprite = headshot;
         __instance.characterPosition = position;
         __instance.playerNumber.text = $"{position + 1}.";
@@ -859,8 +862,8 @@ public static class PandoraAndComplianceRoleSlotsPatch
             r.Role1.GetRoleBucket().subAlignment == SubAlignment.ANY
         ));
 
-        if (compliance)
-            list.AddRange(builder.GetPredicateRoleSlots(r => SlotMatchesAlignment(r, alignment) && r.Role1 == Btos2Role.NeutralKilling));
+        // if (compliance)
+            // list.AddRange(builder.GetPredicateRoleSlots(r => SlotMatchesAlignment(r, alignment) && r.Role1 == Btos2Role.NeutralKilling));
     }
 
     private static bool MatchesAlignment(Role role, RoleAlignment alignment, bool pandora, bool compliance)
