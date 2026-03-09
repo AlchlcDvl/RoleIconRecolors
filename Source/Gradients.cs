@@ -88,7 +88,7 @@ public static class Gradients
 
         return middle != null
             ? Utils.CreateGradient(start, middle, end)
-            : Utils.CreateGradient(start, end ?? s);
+            : Utils.CreateGradient(start, end ?? start);
     }
 
     private static string GetEndColor(string key, Role role)
