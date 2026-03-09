@@ -359,7 +359,7 @@ public static class SpecialAbilityPopupDayConfirmListItemPatch
         var myFaction = factionType;
         var isHidden = role is Role.STONED or Role.HIDDEN;
         var roleName = Fancy.FactionalRoleNames.Value ? role.ToRoleFactionDisplayString(myFaction) : role.ToDisplayString();
-        var wrapped = $"({roleName})";
+        var wrapped = $"{roleName}";
         var gradient = myFaction.GetChangedGradient(role);
         var gradientText = gradient != null ? Utils.ApplyGradient(wrapped, gradient) : $"<color={myFaction.GetFactionColor()}>{wrapped}</color>";
         var hiddenText = $"<color={role.GetFaction().GetFactionColor()}>{wrapped}</color>";
@@ -428,7 +428,7 @@ public static class SpecialAbilityPopupNecromancerRetributionistListItemPatch
         }
         var isHidden = role2 is Role.STONED or Role.HIDDEN;
         var roleName = Fancy.FactionalRoleNames.Value ? Utils.GetRoleName(role2, factionType, true) : role2.ToDisplayString();
-        var wrapped = $"({roleName})";
+        var wrapped = $"{roleName}";
         var gradient = factionType.GetChangedGradient(role2);
         var gradientText = gradient != null ? Utils.ApplyGradient(wrapped, gradient) : $"<color={factionType.GetFactionColor()}>{wrapped}</color>";
         var hiddenText = $"<color={role2.GetFaction().GetFactionColor()}>{wrapped}</color>";
@@ -531,7 +531,7 @@ public static class PatchSpecialAbilityPopupGenericDualTargetListItem
         var roleName = Fancy.FactionalRoleNames.Value
             ? Utils.GetRoleName(role2, factionType, true)
             : role2.ToDisplayString();
-        var wrapped = $"({roleName})";
+        var wrapped = $"{roleName}";
         var gradient = factionType.GetChangedGradient(role2);
         var gradientText = gradient != null
             ? Utils.ApplyGradient(wrapped, gradient)
