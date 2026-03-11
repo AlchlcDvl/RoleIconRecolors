@@ -1031,7 +1031,8 @@
     <Entry key="FANCY_SERIALKILLER_XIS_WHISPERING_TO_Y" style="whisper_notice">You overhear %name1% whispering to %name2%:</Entry>
 
     <Entry key="FANCY_RETRAIN_POPUP">The <![CDATA[<sprite="RoleIcons" name="Role26">]]>%name_role26% would like to retrain you into %role%.</Entry>
-	<Entry key="FANCY_RETRAIN_POPUP">The <![CDATA[<sprite="RoleIcons" name="Role26">]]>%name_role26% will %keyword_Retrain% you from %role2% into %role%.</Entry>
+	<Entry key="FANCY_RETRAIN_POPUP">The <![CDATA[<sprite="RoleIcons" name="Role26">]]>%name_role26% has offered to %keyword_Retrain% you.
+Would you like to abandon %role2% and become %role%?</Entry>
     <Entry key="FANCY_DOOMED_POPUP">You are %keyword_Doom%ed. Do you wish to live or to die?</Entry>
 	
 	<Entry key="FANCY_CINEMATIC_HEXBOMB"><![CDATA[<shake a=0.3>The %name_faction1% has been Hex Bombed!</shake>]]></Entry>
