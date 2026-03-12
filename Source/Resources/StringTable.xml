@@ -1608,10 +1608,10 @@ Would you like to abandon %role2% and become %role%?</Entry>
 	<Entry key="BTOS_ROLE_BLURB_62_36">You are an acolyte of <![CDATA[<shake a=0.3><sprite="RoleIcons" name="Role253"><style=ApocalypseColor>%name_role253%</style></shake>]]> who curses the Town.</Entry> <!--Warlock-->
 	
 	<!-- THIS DOES SOMETHING DONT DELETE -->
-	<Entry key="BTOS_GUI_ROLE_TARGETING_41_ALT0">You decided to give Wheat Loaf [[:35]] to and reveal %target% tonight.</Entry>
-	<Entry key="BTOS_GUI_ROLE_TARGETING_41_ALT1">You decided to give Rye Boule [[:35]] to and distract %target% tonight.</Entry>
-	<Entry key="BTOS_GUI_ROLE_TARGETING_41_ALT2">You decided to give Soul Cake [[:35]] to and [[:32]] %target% tonight.</Entry>
-	<Entry key="BTOS_GUI_FACTION_TARGETING_41_ALT0">%name% decided to give Wheat Loaf [[:35]] to and reveal %target% tonight.</Entry>
-	<Entry key="BTOS_GUI_FACTION_TARGETING_41_ALT1">%name% decided to give Rye Boule [[:35]] to and distract %target% tonight.</Entry>
-	<Entry key="BTOS_GUI_FACTION_TARGETING_41_ALT2">%name% decided to give Soul Cake [[:35]] to and [[:32]] %target% tonight.</Entry>
+	<Entry key="BTOS_GUI_ROLE_TARGETING_41_ALT0">You decided to give [[:35]] to and reveal %target% tonight.</Entry>
+	<Entry key="BTOS_GUI_ROLE_TARGETING_41_ALT1">You decided to give [[:35]] to and distract %target% tonight.</Entry>
+	<Entry key="BTOS_GUI_ROLE_TARGETING_41_ALT2">You decided to give [[:35]] to and [[:32]] %target% tonight.</Entry>
+	<Entry key="BTOS_GUI_FACTION_TARGETING_41_ALT0">%name% decided to give [[:35]] to and reveal %target% tonight.</Entry>
+	<Entry key="BTOS_GUI_FACTION_TARGETING_41_ALT1">%name% decided to give [[:35]] to and distract %target% tonight.</Entry>
+	<Entry key="BTOS_GUI_FACTION_TARGETING_41_ALT2">%name% decided to give [[:35]] to and [[:32]] %target% tonight.</Entry>
 </StringTable>
