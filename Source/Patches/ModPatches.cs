@@ -2,6 +2,7 @@ using System.Runtime.CompilerServices;
 using Cinematics.Players;
 using FlexMenu;
 using Game.Characters;
+using Game.Chat;
 using Game.DevMenu;
 using Home.HomeScene;
 using Home.LoginScene;
@@ -464,6 +465,7 @@ public static class SpecialAbilityPopupNecromancerRetributionistListItemPatch
 
         var uiRoleDataInstance = data.roleDataList.Find(d => d.role == myRole);
         var uiRoleDataInstance2 = data.roleDataList.Find(d => d.role == role);
+        var roleCardData = SharedRoleData.GetRoleCardData(role);
 
         if (uiRoleDataInstance != null)
         {
@@ -476,10 +478,22 @@ public static class SpecialAbilityPopupNecromancerRetributionistListItemPatch
         if (uiRoleDataInstance2 != null && role != Role.NONE)
         {
             __instance.choice2Text.text = __instance.GetAbilityVerb(uiRoleDataInstance2.role);
-            __instance.choice2Sprite.sprite =
-                uiRoleDataInstance2.role is Role.DEPUTY or Role.CONJURER
-                    ? uiRoleDataInstance2.specialAbilityIcon
-                    : uiRoleDataInstance2.abilityIcon;
+            // __instance.choice2Sprite.sprite =
+            //     uiRoleDataInstance2.role is Role.DEPUTY or Role.CONJURER
+            //         ? uiRoleDataInstance2.specialAbilityIcon
+            //         : uiRoleDataInstance2.abilityIcon;
+            if (roleCardData.normalAbilityAvailable)
+            {
+                __instance.choice2Sprite.sprite = uiRoleDataInstance2.abilityIcon;
+            }
+            else if (roleCardData.secondAbilityAvailable)
+            {
+                __instance.choice2Sprite.sprite = uiRoleDataInstance2.abilityIcon2;
+            }
+            else if (roleCardData.specialAbilityAvailable)
+            {
+                __instance.choice2Sprite.sprite = uiRoleDataInstance2.specialAbilityIcon;
+            }
         }
 
         __instance.choiceButton.gameObject.SetActive(hasChoice1);
@@ -1261,6 +1275,293 @@ public static class AlwaysShowSecondaryAbility
         if (Cache.TryGetValue(__instance, out var box))
             obs.Data.secondAbilityAvailable = box.Value;
     }
-
 }
 
+[HarmonyPatch(typeof(RoleCardPanel))]
+public static class RoleCardPanelTextPatches
+{
+    [HarmonyPrefix, HarmonyPatch(nameof(RoleCardPanel.GetAbilities)), HarmonyPriority(int.MaxValue)]
+    public static bool GetAbilities_Prefix(RoleCardPanel __instance, ref string __result)
+    {
+        var text = $"{Utils.GetKeyPrefix()}_ROLE_ABILITY_SUMMARY_{(int)__instance.CurrentRole}_{(int)__instance.CurrentFaction}";
+        var text2 = $"{Utils.GetKeyPrefix()}_ROLE_ABILITY_SUMMARY_{(int)__instance.CurrentRole}";
+
+        __result = Utils.TryGetString(text, text2);
+        return false;
+    }
+
+    [HarmonyPrefix, HarmonyPatch(nameof(RoleCardPanel.GetAttributes)), HarmonyPriority(int.MaxValue)]
+    public static bool GetAttributes_Prefix(RoleCardPanel __instance, ref string __result)
+    {
+        var text = $"{Utils.GetKeyPrefix()}_ROLE_ATTRIBUTES_{(int)__instance.CurrentRole}_{(int)__instance.CurrentFaction}";
+        var text2 = $"{Utils.GetKeyPrefix()}_ROLE_ATTRIBUTES_{(int)__instance.CurrentRole}";
+
+        __result = Utils.TryGetString(text, text2);
+        return false;
+    }
+
+    [HarmonyPrefix, HarmonyPatch(nameof(RoleCardPanel.GetAbility1Header)), HarmonyPriority(int.MaxValue)]
+    public static bool GetAbility1Header_Prefix(RoleCardPanel __instance, ref string __result)
+    {
+        var text = $"{Utils.GetKeyPrefix()}_ROLE_ABILITY1_VERB_{(int)__instance.CurrentRole}_{(int)__instance.CurrentFaction}";
+        var text2 = $"{Utils.GetKeyPrefix()}_ROLE_ABILITY1_VERB_{(int)__instance.CurrentRole}";
+
+        __result = Utils.TryGetString(text, text2);
+        return false;
+    }
+
+    [HarmonyPrefix, HarmonyPatch(nameof(RoleCardPanel.GetAbility1Desc)), HarmonyPriority(int.MaxValue)]
+    public static bool GetAbility1Desc_Prefix(RoleCardPanel __instance, ref string __result)
+    {
+        var text = $"{Utils.GetKeyPrefix()}_ROLE_ABILITY1_{GetAbilityText()}_{(int)__instance.CurrentRole}_{(int)__instance.CurrentFaction}";
+        var text2 = $"{Utils.GetKeyPrefix()}_ROLE_ABILITY1_{GetAbilityText()}_{(int)__instance.CurrentRole}";
+
+        __result = Utils.TryGetString(text, text2);
+        return false;
+    }
+
+    [HarmonyPrefix, HarmonyPatch(nameof(RoleCardPanel.GetAbility2Header)), HarmonyPriority(int.MaxValue)]
+    public static bool GetAbility2Header_Prefix(RoleCardPanel __instance, ref string __result)
+    {
+        var text = $"{Utils.GetKeyPrefix()}_ROLE_ABILITY2_VERB_{(int)__instance.CurrentRole}_{(int)__instance.CurrentFaction}";
+        var text2 = $"{Utils.GetKeyPrefix()}_ROLE_ABILITY2_VERB_{(int)__instance.CurrentRole}";
+
+        __result = Utils.TryGetString(text, text2);
+        return false;
+    }
+
+    [HarmonyPrefix, HarmonyPatch(nameof(RoleCardPanel.GetAbility2Desc)), HarmonyPriority(int.MaxValue)]
+    public static bool GetAbility2Desc_Prefix(RoleCardPanel __instance, ref string __result)
+    {
+        var text = $"{Utils.GetKeyPrefix()}_ROLE_ABILITY2_{GetAbilityText()}_{(int)__instance.CurrentRole}_{(int)__instance.CurrentFaction}";
+        var text2 = $"{Utils.GetKeyPrefix()}_ROLE_ABILITY2_{GetAbilityText()}_{(int)__instance.CurrentRole}";
+
+        __result = Utils.TryGetString(text, text2);
+        return false;
+    }
+
+    [HarmonyPrefix, HarmonyPatch(nameof(RoleCardPanel.GetSpecialAbilityHeader)), HarmonyPriority(int.MaxValue)]
+    public static bool GetSpecialAbilityHeader_Prefix(RoleCardPanel __instance, ref string __result)
+    {
+        var text = $"{Utils.GetKeyPrefix()}_ROLE_{GetAbilityText(true)}_VERB_{(int)__instance.CurrentRole}_{(int)__instance.CurrentFaction}";
+        var text2 = $"{Utils.GetKeyPrefix()}_ROLE_{GetAbilityText(true)}_VERB_{(int)__instance.CurrentRole}";
+
+        __result = Utils.TryGetString(text, text2);
+        return false;
+    }
+
+    [HarmonyPrefix, HarmonyPatch(nameof(RoleCardPanel.GetSpecialAbilityDesc)), HarmonyPriority(int.MaxValue)]
+    public static bool GetSpecialAbilityDesc_Prefix(RoleCardPanel __instance, ref string __result)
+    {
+        var text = $"{Utils.GetKeyPrefix()}_ROLE_{GetAbilityText(true)}_{GetAbilityText()}_{(int)__instance.CurrentRole}_{(int)__instance.CurrentFaction}";
+        var text2 = $"{Utils.GetKeyPrefix()}_ROLE_{GetAbilityText(true)}_{GetAbilityText()}_{(int)__instance.CurrentRole}";
+
+        __result = Utils.TryGetString(text, text2);
+        return false;
+    }
+
+    private static string GetAbilityText(bool special = false)
+    {
+        if (special)
+            return Constants.IsBTOS2() ? "SPECIALABILITY" : "SPECIAL_ABILITY";
+
+        return Constants.IsBTOS2() ? "TEXT" : "DESC";
+    }
+}
+
+[HarmonyPatch(typeof(HudTargetSelectionShared))]
+public static class RoleTargetingPatches
+{
+    [HarmonyPrefix, HarmonyPatch(nameof(HudTargetSelectionShared.GetTargetSelectionMessage)), HarmonyPriority(int.MaxValue)]
+    public static bool GetTargetSelectionMessage_Prefix(Role myRole, MenuChoiceType menuChoiceType, int player1, int player2, bool isChangingTarget, bool isCancel, out bool isValidMessage, ref string __result)
+    {
+        string key;
+        if (menuChoiceType == MenuChoiceType.Vote)
+        {
+            var currentPlayPhase = Pepper.GetCurrentPlayPhase();
+
+            var isMe = player1 == Pepper.GetMyPosition();
+            var isGhost = player1 == 30;
+
+            key = "GUI_GAME_DISCUSSION_VOTE";
+
+            switch (currentPlayPhase)
+            {
+                case PlayPhase.TRIBUNAL:
+                    key += "_TRIBUNAL";
+                    break;
+                case PlayPhase.ELECTION:
+                    key += "_ELECTION";
+                    break;
+            }
+            if (isChangingTarget)
+                key += "_CHANGE";
+
+            if (isCancel)
+                key += "_CANCELLED";
+
+            if (isMe)
+                key += "_ME";
+
+            if (isGhost)
+                key += "_GHOST";
+
+            isValidMessage = true;
+            __result = Utils.GetString(key);
+            return false;
+        }
+
+        if (menuChoiceType is MenuChoiceType.NightAbility or MenuChoiceType.NightAbility2 or MenuChoiceType.SpecialAbility)
+        {
+            var isBTOS2 = Constants.IsBTOS2();
+            var btosKey = isBTOS2 ? "BTOS_" : string.Empty;
+            key = $"{btosKey}GUI_ROLE_TARGETING_{(int)myRole}";
+
+            var powerUp = Service.Game.Sim.info.roleCardObservation.Data.powerUp;
+            switch (powerUp)
+            {
+                case POWER_UP_TYPE.NECRONOMICON:
+                    key += "_NOMICON";
+                    if (myRole == Role.MEDUSA && Service.Game.Sim.info.roleCardObservation.Data.normalAbilityRemaining < 1)
+                        key += "_2";
+                    break;
+                case POWER_UP_TYPE.HORSEMAN:
+                    key += "_HORSEMAN";
+                    break;
+                case POWER_UP_TYPE.BERSERKER_ONE_KILL:
+                    key += "_BERSERKER_ONE_KILL";
+                    break;
+                case POWER_UP_TYPE.BERSERKER_TWO_KILLS:
+                    key += "_BERSERKER_TWO_KILLS";
+                    break;
+            }
+
+            if (isCancel)
+                key += "_CANCEL";
+            else if (isChangingTarget)
+                key += "_INSTEAD";
+
+            var overrideType = Service.Game.Sim.simulation.abilityIconAndVerbOverride.Data;
+            switch (myRole)
+            {
+                case Role.POTIONMASTER:
+                    if (overrideType == TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_REVEAL)
+                        key += "_ALT1";
+                    else if (overrideType == TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_ATTACK)
+                        key += "_ALT2";
+                    break;
+                case Role.SHROUD:
+                    if (overrideType == TosAbilityPanelListItem.OverrideAbilityType.SHROUD)
+                        key += "_ALT1";
+                    break;
+                case Role.WEREWOLF:
+                    if (!Pepper.IsFullMoonNight())
+                        key += "_ALT1";
+                    break;
+                case Role.SERIALKILLER:
+                    if (overrideType == Btos2OverrideAbilityType.SerialKillerDisguise && isBTOS2)
+                        key += "_ALT1";
+                    break;
+                case Role.BAKER:
+                    if (isBTOS2)
+                    {
+                        if (overrideType == Btos2OverrideAbilityType.BakerReveal)
+                            key += "_ALT0";
+                        else if (overrideType == Btos2OverrideAbilityType.BakerRoleblock)
+                            key += "_ALT1";
+                        else if (overrideType == Btos2OverrideAbilityType.BakerDefend)
+                            key += "_ALT2";
+                    }
+                    break;
+            }
+
+    
+            if (menuChoiceType == MenuChoiceType.NightAbility2)
+                key += "_TARGET2";
+
+            if (player2 == Pepper.GetMyPosition())
+                key += "_SELF";
+
+            if (menuChoiceType == MenuChoiceType.SpecialAbility)
+                key += "_SPECIAL";
+
+            isValidMessage = true;
+            __result = Utils.GetString(key);
+            return false;
+        }
+
+        isValidMessage = false;
+        return true;
+    }
+}
+
+[HarmonyPatch(typeof(HudFactionTargetSelectionChatLogShared))]
+public static class FactionTargetingPatches
+{
+    [HarmonyPrefix, HarmonyPatch(nameof(HudFactionTargetSelectionChatLogShared.GetTargetSelectionMessage)), HarmonyPriority(int.MaxValue)]
+    public static bool GetTargetSelectionMessage_Prefix(MenuChoiceType menuChoiceType, Role teammateRole, bool isChangingTarget, bool isCancel, int specialData, bool hasNecronomicon, out bool isValidMessage, ref string __result)
+    {
+        if (menuChoiceType != MenuChoiceType.None &&
+            menuChoiceType - MenuChoiceType.NightAbility <= 2)
+        {
+            var isBTOS2 = Constants.IsBTOS2();
+            var btosKey = isBTOS2 ? "BTOS_" : string.Empty;
+
+            var key = $"{btosKey}GUI_FACTION_TARGETING_{(int)teammateRole}";
+
+            if (hasNecronomicon)
+            {
+                key += "_NOMICON";
+
+                if (teammateRole == Role.MEDUSA && specialData < 1)
+                    key += "_2";
+            }
+
+            if (isCancel)
+                key += "_CANCEL";
+            else if (isChangingTarget)
+                key += "_INSTEAD";
+
+            switch (teammateRole)
+            {
+                case Role.POTIONMASTER:
+                    if (specialData > 0)
+                    {
+                        if (specialData == 2)
+                            key += "_ALT1";
+                        else if (specialData == 3)
+                            key += "_ALT2";
+                    }
+                    break;
+                case Role.WEREWOLF:
+                    if (!Pepper.IsFullMoonNight())
+                        key += "_ALT1";
+                    break;
+                case Role.BAKER:
+                    if (isBTOS2 && specialData > 0)
+                    {
+                        if (specialData == 1)
+                            key += "_ALT0";
+                        else if (specialData == 2)
+                            key += "_ALT1";
+                        else if (specialData == 3)
+                            key += "_ALT2";
+                    }
+                    break;
+                
+            }
+            if (menuChoiceType == MenuChoiceType.NightAbility2)
+                key += "_TARGET2";
+
+            if (menuChoiceType == MenuChoiceType.SpecialAbility)
+                key += "_SPECIAL";
+
+            isValidMessage = true;
+            __result = Utils.GetString(key);
+            return false;
+        }
+
+        isValidMessage = false;
+        return true;
+    }
+}

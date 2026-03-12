@@ -1,3 +1,5 @@
+using static Game.Interface.TosAbilityPanelListItem;
+
 namespace FancyUI.Compatibility;
 
 public static class Btos2Role
@@ -199,4 +201,12 @@ public static class Btos2RoleAlignment
     public const RoleAlignment Apocalypse = (RoleAlignment)17;
     public const RoleAlignment Pandora = (RoleAlignment)100;
     public const RoleAlignment Compliance = (RoleAlignment)101;
+}
+
+public static class Btos2OverrideAbilityType
+{
+    public const OverrideAbilityType SerialKillerDisguise = (OverrideAbilityType)32;
+    public const OverrideAbilityType BakerReveal = OverrideAbilityType.POTIONMASTER_HEAL;
+    public const OverrideAbilityType BakerRoleblock = OverrideAbilityType.POTIONMASTER_REVEAL;
+    public const OverrideAbilityType BakerDefend = OverrideAbilityType.POTIONMASTER_ATTACK;
 }
