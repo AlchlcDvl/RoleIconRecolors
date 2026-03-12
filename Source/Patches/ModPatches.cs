@@ -1291,7 +1291,7 @@ public static class RoleTargetingPatches
 
             var isMe = player1 == Pepper.GetMyPosition();
             var isGhost = player1 == 30;
-			var isAnon = player == -1;
+			var isAnon = player1 == -1;
 
             key = "GUI_GAME_DISCUSSION_VOTE";
 
