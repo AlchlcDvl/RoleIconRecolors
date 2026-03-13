@@ -1492,8 +1492,9 @@ public static class PatchNecroRetMenuItem
 			}
             else if (roleCardData.specialAbilityAvailable)
 			{
+				var btos = Constants.IsBTOS2() ? string.Empty : "_";
 				abilitySuffix = "Special";
-				abilityText = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_SPECIAL_ABILITY_VERB_{(int)role}");
+				abilityText = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_SPECIAL{btos}ABILITY_VERB_{(int)role}");
 			}
             else
 			{

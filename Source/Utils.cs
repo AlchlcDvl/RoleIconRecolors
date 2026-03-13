@@ -930,6 +930,19 @@ public static class Utils
 	}
 
     public static string GetString(string key) => Service.Home.LocalizationService.GetLocalizedString(key);
+	public static bool StringExists(string key) => Service.Home.LocalizationService.StringExists(key);
+	public static string TryGetString(string key1, string key2, bool preferFirst = true)
+	{
+		string text;
+
+		if (Service.Home.LocalizationService.TryGetString(key1, out text))
+			return text;
+
+		if (Service.Home.LocalizationService.TryGetString(key2, out text))
+			return text;
+
+		return GetString(preferFirst ? key1 : key2);
+	}
 
     public static string RemoveVanillaGradientStyleTags(string input)
     {
@@ -1210,6 +1223,17 @@ public static class Utils
 		var data = SharedRoleData.GetRoleData(role);
 		return data.roleAlignment == RoleAlignment.NEUTRAL &&
 			   data.subAlignment == SubAlignment.APOCALYPSE;
+	}
+	
+	public static bool ShouldShowFactionLabel(FactionLabelOption option, FactionType roleFaction, FactionType targetFaction)
+	{
+		return option switch
+		{
+			FactionLabelOption.Always => true,
+			FactionLabelOption.Mismatch => roleFaction != targetFaction,
+			FactionLabelOption.Conditional => !ConditionalCompliancePandora(roleFaction, targetFaction),
+			_ => false
+		};
 	}
 
 	// public static Color GetRoleColor(Role role)

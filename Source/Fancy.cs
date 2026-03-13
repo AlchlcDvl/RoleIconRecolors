@@ -171,6 +171,7 @@ public class Fancy : BaseMod<Fancy>
     public static StringInputOption VipLabel;
     public static StringInputOption CourtLabel;
     public static StringInputOption JuryLabel;
+    public static ToggleOption JuryIcon;
     public static StringInputOption PirateLabel;
 
     public static ColorOption CourtChatColor;
@@ -445,6 +446,7 @@ public class Fancy : BaseMod<Fancy>
         JuryLabel = new("JURY_LABEL", "Jury", PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists);
         // PirateLabel = new("PIRATE_LABEL", "Pirate", PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists);
         JuryColor = new("JURY_COLOR", "#FCCE3B", PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists);
+        JuryIcon = new("JURY_ICON", true, PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists);
         UnknownColor = new("UNKNOWN_ROLE", "#b0b0b0", PackType.MiscRoleCustomisation);
         DeadColor = new("DEAD_CHAT", "#689194", PackType.MiscRoleCustomisation);
         DeadChatDesaturation = new("DEAD_CHAT_DESATURATION", 50, PackType.MiscRoleCustomisation, -1, 100, true);

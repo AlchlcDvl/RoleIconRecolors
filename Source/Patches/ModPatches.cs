@@ -1399,7 +1399,7 @@ public static class RoleTargetingPatches
                 key += "_SPECIAL";
 
             isValidMessage = true;
-            __result = Utils.GetString(key);
+            __result = Utils.TryGetString(key, key.Replace("BTOS_", ""));
             return false;
         }
 
@@ -1470,7 +1470,7 @@ public static class FactionTargetingPatches
                 key += "_SPECIAL";
 
             isValidMessage = true;
-            __result = Utils.GetString(key);
+            __result = Utils.TryGetString(key, key.Replace("BTOS_", ""));
             return false;
         }
 

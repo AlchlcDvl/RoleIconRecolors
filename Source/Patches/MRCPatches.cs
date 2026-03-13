@@ -100,6 +100,7 @@ public static class PatchRoleCard
         var gradient = faction.GetChangedGradient(role);
         var text = gradient != null ? Utils.ApplyGradient(roleName, gradient) : $"<color={faction.GetFactionColor()}>{roleName}</color>";
         var size = Fancy.FactionLabelSize.Value;
+		var factionType = role.GetFactionType();
 
         switch (modifier)
         {
@@ -107,7 +108,7 @@ public static class PatchRoleCard
             {
                 if (gradient != null)
                 {
-                    var label = faction switch
+                    var modlabel = faction switch
                     {
                         FactionType.COVEN => Fancy.CovenTraitorLabel.Value,
                         FactionType.APOCALYPSE => Fancy.ApocTraitorLabel.Value,
@@ -115,21 +116,20 @@ public static class PatchRoleCard
                         _ => Fancy.CovenTraitorLabel.Value,
                     };
 
-                    if (!string.IsNullOrWhiteSpace(label))
+                    if (!string.IsNullOrWhiteSpace(modlabel))
                     {
-                        text += $"\n<size={size}%>{Utils.ApplyGradient($"({label})", gradient)}</size>";
+                        text += $"\n<size={size}%>{Utils.ApplyGradient($"({modlabel})", gradient)}</size>";
                     }
                     else 
                     {
-                        if ((Fancy.RoleCardFactionLabel.Value == FactionLabelOption.Mismatch && role.GetFactionType() != faction) || Fancy.RoleCardFactionLabel.Value == FactionLabelOption.Always ||
-                        (Fancy.RoleCardFactionLabel.Value == FactionLabelOption.Conditional && !Utils.ConditionalCompliancePandora(role.GetFactionType(), faction)))
-                        {
+						var label = $"({faction.ToDisplayString()})";
 
-                            if (gradient != null)
-                                text += $"\n<size={size}%>{Utils.ApplyGradient($"({faction.ToDisplayString()})", gradient)}</size>";
-                            else
-                                text = $"{text}\n<size={size}%><color={faction.GetFactionColor()}>({faction.ToDisplayString()})</color></size>";
-                        }
+						if (Utils.ShouldShowFactionLabel(Fancy.RoleCardFactionLabel.Value, factionType, faction))
+						{
+							var formatted = gradient != null ? Utils.ApplyGradient(label, gradient) : $"<color={faction.GetFactionColor()}>{label}</color>";
+
+							text += $"\n<size={size}%>{formatted}</size>";
+						}
                     }
                 }
                 break;
@@ -143,14 +143,13 @@ public static class PatchRoleCard
                 }
  				else 
 				{
-					if ((Fancy.RoleCardFactionLabel.Value == FactionLabelOption.Mismatch && role.GetFactionType() != faction) || Fancy.RoleCardFactionLabel.Value == FactionLabelOption.Always ||
-                    (Fancy.RoleCardFactionLabel.Value == FactionLabelOption.Conditional && !Utils.ConditionalCompliancePandora(role.GetFactionType(), faction)))
-					{
+					var label = $"({faction.ToDisplayString()})";
 
-						if (gradient != null)
-							text += $"\n<size={size}%>{Utils.ApplyGradient($"({faction.ToDisplayString()})", gradient)}</size>";
-						else
-							text = $"{text}\n<size={size}%><color={faction.GetFactionColor()}>({faction.ToDisplayString()})</color></size>";
+					if (Utils.ShouldShowFactionLabel(Fancy.RoleCardFactionLabel.Value, factionType, faction))
+					{
+						var formatted = gradient != null ? Utils.ApplyGradient(label, gradient) : $"<color={faction.GetFactionColor()}>{label}</color>";
+
+						text += $"\n<size={size}%>{formatted}</size>";
 					}
 				}
                break;
@@ -163,30 +162,28 @@ public static class PatchRoleCard
                 }
 				else 
 				{
-					if ((Fancy.RoleCardFactionLabel.Value == FactionLabelOption.Mismatch && role.GetFactionType() != faction) || Fancy.RoleCardFactionLabel.Value == FactionLabelOption.Always ||
-                    (Fancy.RoleCardFactionLabel.Value == FactionLabelOption.Conditional && !Utils.ConditionalCompliancePandora(role.GetFactionType(), faction)))
-					{
+					var label = $"({faction.ToDisplayString()})";
 
-						if (gradient != null)
-							text += $"\n<size={size}%>{Utils.ApplyGradient($"({faction.ToDisplayString()})", gradient)}</size>";
-						else
-							text = $"{text}\n<size={size}%><color={faction.GetFactionColor()}>({faction.ToDisplayString()})</color></size>";
+					if (Utils.ShouldShowFactionLabel(Fancy.RoleCardFactionLabel.Value, factionType, faction))
+					{
+						var formatted = gradient != null ? Utils.ApplyGradient(label, gradient) : $"<color={faction.GetFactionColor()}>{label}</color>";
+
+						text += $"\n<size={size}%>{formatted}</size>";
 					}
 				}
                 break;
             }
             default:
             {
-                if ((Fancy.RoleCardFactionLabel.Value == FactionLabelOption.Mismatch && role.GetFactionType() != faction) || Fancy.RoleCardFactionLabel.Value == FactionLabelOption.Always ||
-                    (Fancy.RoleCardFactionLabel.Value == FactionLabelOption.Conditional && !Utils.ConditionalCompliancePandora(role.GetFactionType(), faction)))
-                {
-                    var gradient2 = faction.GetChangedGradient(role);
+				var label = $"({faction.ToDisplayString()})";
 
-                    if (gradient2 != null)
-                        text += $"\n<size={size}%>{Utils.ApplyGradient($"({faction.ToDisplayString()})", gradient2)}</size>";
-                    else
-                        text = $"{text}\n<size={size}%><color={faction.GetFactionColor()}>({faction.ToDisplayString()})</color></size>";
-                }
+				if (Utils.ShouldShowFactionLabel(Fancy.RoleCardFactionLabel.Value, factionType, faction))
+				{
+					var formatted = gradient != null ? Utils.ApplyGradient(label, gradient) : $"<color={faction.GetFactionColor()}>{label}</color>";
+
+					text += $"\n<size={size}%>{formatted}</size>";
+				}
+
 
                 break;
             }
@@ -545,13 +542,14 @@ public static class FancyChatExperimentalBTOS2
         var myfaction = Utils.FactionName(Pepper.GetMyFaction());
         var pirate = Utils.GetString("BTOS_ROLENAME_46");
         var court = Btos2Faction.Judge.GetChangedGradient(Btos2Role.Judge);
+		var juryIcon = Fancy.JuryIcon.Value ? $"<sprite=\"BTOSRoleIcons (Judge)\" name=\"Role16\">" : string.Empty;
 
         __result = position switch
         {
             70 => $"<link=\"r57\"><sprite=\"BTOSRoleIcons\" name=\"Role57\"><indent=1.1em><b>{Utils.ApplyGradient(Fancy.CourtLabel.Value, court)}:</b> </link>{encodedText.Replace("????: </color>", "").Replace("white", $"#{ColorUtility.ToHtmlStringRGB(Fancy.CourtChatColor.Value.ToColor())}")}",
             // 69 => encodedText.Replace("????:", $"<color=#{ColorUtility.ToHtmlStringRGB(Fancy.JuryColor.Value.ToColor())}>{Fancy.JuryLabel.Value}:</color>"),
             // I decided to remove the Seer icon from Jury messages for the scenario of which an Icon Pack's Seer icon does not fit Jury. An example is replacing Seer with TOS1 Medium.
-            69 => encodedText.Replace("????:", $"<sprite=\"BTOSRoleIcons (Judge)\" name=\"Role16\"> <color=#{ColorUtility.ToHtmlStringRGB(Fancy.JuryColor.Value.ToColor())}>{Fancy.JuryLabel.Value}:</color>"),
+            69 => encodedText.Replace("????:", $"{juryIcon}<color=#{ColorUtility.ToHtmlStringRGB(Fancy.JuryColor.Value.ToColor())}>{Fancy.JuryLabel.Value}:</color>"),
 
             71 => encodedText.Replace("????:", $"<sprite=\"BTOSRoleIcons\" name=\"Role46\"> <color=#ECC23E>{pirate}:</color>").Replace("white", "#ECC23E"),
             _ => __result
@@ -724,14 +722,17 @@ public static class ClientRoleExtensionsPatches
         var newText = gradient != null ? Utils.ApplyGradient(text, gradient) : $"<color={factionType.GetFactionColor()}>{text}</color>";
         var factionText = factionType.ToDisplayString();
 
-        if (((Fancy.FactionNameNextToRole.Value == FactionLabelOption.Mismatch && role.GetFaction() != factionType) || (Fancy.FactionNameNextToRole.Value == FactionLabelOption.Always) ||
-            (Fancy.FactionNameNextToRole.Value == FactionLabelOption.Conditional && !Utils.ConditionalCompliancePandora(role.GetFaction(), factionType))))
-        {
-            if (gradient != null)
-                newText += $" {Utils.ApplyGradient($"({factionText})", gradient)}";
-            else
-                newText += $" <color={factionType.GetFactionColor()}>({factionText})</color>";
-        }
+		var roleFaction = role.GetFaction();
+		var label = $"({factionText})";
+
+		if (Utils.ShouldShowFactionLabel(Fancy.FactionNameNextToRole.Value, roleFaction, factionType))
+		{
+
+			if (gradient != null)
+				newText += $" {Utils.ApplyGradient(label, gradient)}";
+			else
+				newText += $" <color={factionType.GetFactionColor()}>{label}</color>";
+		}
 
         __result = newText;
     }
