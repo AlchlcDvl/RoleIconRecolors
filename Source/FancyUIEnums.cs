@@ -84,7 +84,7 @@ public enum FactionLabelOption : byte
 {
     Mismatch,
     Conditional,
-    Always,
+    // Always,
     Never
 }
 

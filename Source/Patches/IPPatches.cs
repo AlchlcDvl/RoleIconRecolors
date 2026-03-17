@@ -1365,7 +1365,7 @@ public static class MakeProperFactionChecksInWdah2
 {
     public static bool Prefix(WhoDiedAndHowPanel __instance, float phaseTime)
     {
-        if (!Constants.EnableIcons()) return true;
+        // if (!Constants.EnableIcons()) return true;
 
         Debug.Log($"HandleSubphaseWhoDied phaseTime = {phaseTime}");
 
@@ -1400,8 +1400,14 @@ public static class MakeProperFactionChecksInWdah2
 			for (var i = 0; i < killRecord.killedByReasons.Count; i++)
 			{
 				var killedByReason = killRecord.killedByReasons[i];
+				var also = i == 0 ? "" : "_ALSO";
+				var reasonId = (int)killedByReason;
 
-				var text2 = __instance.l10n($"GUI_GAME{(i == 0 ? "" : "_ALSO")}_KILLED_BY_REASON_{(int)killedByReason}");
+				var fancy = $"FANCY_GUI_GAME{also}_KILLED_BY_REASON_{reasonId}";
+				var normal = $"GUI_GAME{also}_KILLED_BY_REASON_{reasonId}";
+
+				// var text2 = __instance.l10n($"GUI_GAME{also}_KILLED_BY_REASON_{(int)killedByReason}");
+				var text2 = Utils.TryGetString(fancy, normal, false);
 
 				text2 = text2.Replace("RoleIcons\"", "RoleIcons (Regular)\"");
 

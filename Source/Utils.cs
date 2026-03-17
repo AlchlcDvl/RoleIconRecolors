@@ -782,6 +782,29 @@ public static class Utils
         return Color.Lerp(color, strength < 0 ? Color.white : Color.black, Mathf.Abs(strength));
     }
 
+	public static bool UsesBaseDisplayName(this Role role, FactionType faction)
+	{
+		if (!Fancy.FactionalRoleNames.Value || role.GetFaction() == faction)
+			return true;
+
+		var factionName = FactionName(faction, GameModType.BTOS2)?.ToUpper() ?? "NONE";
+		if (factionName == "FACTIONLESS")
+			factionName = "NONE";
+
+		var isBTOS2 = Constants.IsBTOS2();
+		var newKey = $"{(isBTOS2 ? "BTOS_" : "GUI_")}ROLENAME_{(int)role}_{(int)faction}";
+		var oldKey = $"FANCY_{factionName}_{(isBTOS2 ? "BTOS_" : "")}ROLENAME_{(int)role}";
+
+		var loc = Service.Home.LocalizationService;
+
+		if (loc.StringExists(newKey))
+			return false;
+
+		if (loc.StringExists(oldKey))
+			return false;
+
+		return true;
+	}
 	public static string ToRoleFactionDisplayString(this Role role, FactionType faction)
 	{
 		if (!Fancy.FactionalRoleNames.Value)
@@ -933,13 +956,11 @@ public static class Utils
 	public static bool StringExists(string key) => Service.Home.LocalizationService.StringExists(key);
 	public static string TryGetString(string key1, string key2, bool preferFirst = true)
 	{
-		string text;
+		if (StringExists(key1))
+			return GetString(key1);
 
-		if (Service.Home.LocalizationService.TryGetString(key1, out text))
-			return text;
-
-		if (Service.Home.LocalizationService.TryGetString(key2, out text))
-			return text;
+		if (StringExists(key2))
+			return GetString(key2);
 
 		return GetString(preferFirst ? key1 : key2);
 	}
@@ -1229,7 +1250,7 @@ public static class Utils
 	{
 		return option switch
 		{
-			FactionLabelOption.Always => true,
+			// FactionLabelOption.Always => true,
 			FactionLabelOption.Mismatch => roleFaction != targetFaction,
 			FactionLabelOption.Conditional => !ConditionalCompliancePandora(roleFaction, targetFaction),
 			_ => false

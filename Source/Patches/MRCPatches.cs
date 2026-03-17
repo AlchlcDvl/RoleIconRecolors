@@ -124,7 +124,7 @@ public static class PatchRoleCard
                     {
 						var label = $"({faction.ToDisplayString()})";
 
-						if (Utils.ShouldShowFactionLabel(Fancy.RoleCardFactionLabel.Value, factionType, faction))
+						if (Utils.ShouldShowFactionLabel(Fancy.RoleCardFactionLabel.Value, factionType, faction) && Utils.UsesBaseDisplayName(role, faction))
 						{
 							var formatted = gradient != null ? Utils.ApplyGradient(label, gradient) : $"<color={faction.GetFactionColor()}>{label}</color>";
 
@@ -145,7 +145,7 @@ public static class PatchRoleCard
 				{
 					var label = $"({faction.ToDisplayString()})";
 
-					if (Utils.ShouldShowFactionLabel(Fancy.RoleCardFactionLabel.Value, factionType, faction))
+					if (Utils.ShouldShowFactionLabel(Fancy.RoleCardFactionLabel.Value, factionType, faction) && Utils.UsesBaseDisplayName(role, faction))
 					{
 						var formatted = gradient != null ? Utils.ApplyGradient(label, gradient) : $"<color={faction.GetFactionColor()}>{label}</color>";
 
@@ -164,7 +164,7 @@ public static class PatchRoleCard
 				{
 					var label = $"({faction.ToDisplayString()})";
 
-					if (Utils.ShouldShowFactionLabel(Fancy.RoleCardFactionLabel.Value, factionType, faction))
+					if (Utils.ShouldShowFactionLabel(Fancy.RoleCardFactionLabel.Value, factionType, faction) && Utils.UsesBaseDisplayName(role, faction))
 					{
 						var formatted = gradient != null ? Utils.ApplyGradient(label, gradient) : $"<color={faction.GetFactionColor()}>{label}</color>";
 
@@ -177,7 +177,7 @@ public static class PatchRoleCard
             {
 				var label = $"({faction.ToDisplayString()})";
 
-				if (Utils.ShouldShowFactionLabel(Fancy.RoleCardFactionLabel.Value, factionType, faction))
+				if (Utils.ShouldShowFactionLabel(Fancy.RoleCardFactionLabel.Value, factionType, faction) && Utils.UsesBaseDisplayName(role, faction))
 				{
 					var formatted = gradient != null ? Utils.ApplyGradient(label, gradient) : $"<color={faction.GetFactionColor()}>{label}</color>";
 
@@ -723,9 +723,9 @@ public static class ClientRoleExtensionsPatches
         var factionText = factionType.ToDisplayString();
 
 		var roleFaction = role.GetFaction();
-		var label = $"({factionText})";
+		var label = (factionType == Btos2Faction.Jackal && !string.IsNullOrWhiteSpace(Fancy.RecruitLabel.Value)) ? $"({Fancy.RecruitLabel.Value})" : $"({factionText})";
 
-		if (Utils.ShouldShowFactionLabel(Fancy.FactionNameNextToRole.Value, roleFaction, factionType))
+		if (Utils.ShouldShowFactionLabel(Fancy.FactionNameNextToRole.Value, roleFaction, factionType) && Utils.UsesBaseDisplayName(role, factionType))
 		{
 
 			if (gradient != null)

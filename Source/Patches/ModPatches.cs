@@ -359,7 +359,7 @@ public static class SpecialAbilityPopupDayConfirmListItemPatch
 
         var myFaction = factionType;
         var isHidden = role is Role.STONED or Role.HIDDEN;
-        var roleName = Fancy.FactionalRoleNames.Value ? role.ToRoleFactionDisplayString(myFaction) : role.ToDisplayString();
+		var roleName = Fancy.FactionalRoleNames.Value ? Utils.GetRoleName(role, myFaction, true) : $"({role.ToDisplayString()})";
         var wrapped = $"{roleName}";
         var gradient = myFaction.GetChangedGradient(role);
         var gradientText = gradient != null ? Utils.ApplyGradient(wrapped, gradient) : $"<color={myFaction.GetFactionColor()}>{wrapped}</color>";
@@ -428,7 +428,7 @@ public static class SpecialAbilityPopupNecromancerRetributionistListItemPatch
             factionType = tuple.Item2;
         }
         var isHidden = role2 is Role.STONED or Role.HIDDEN;
-        var roleName = Fancy.FactionalRoleNames.Value ? Utils.GetRoleName(role2, factionType, true) : role2.ToDisplayString();
+        var roleName = Fancy.FactionalRoleNames.Value ? Utils.GetRoleName(role2, factionType, true) : $"({role2.ToDisplayString()})";
         var wrapped = $"{roleName}";
         var gradient = factionType.GetChangedGradient(role2);
         var gradientText = gradient != null ? Utils.ApplyGradient(wrapped, gradient) : $"<color={factionType.GetFactionColor()}>{wrapped}</color>";
@@ -544,7 +544,7 @@ public static class PatchSpecialAbilityPopupGenericDualTargetListItem
         var isHidden = role2 is Role.STONED or Role.HIDDEN;
         var roleName = Fancy.FactionalRoleNames.Value
             ? Utils.GetRoleName(role2, factionType, true)
-            : role2.ToDisplayString();
+            : $"({role2.ToDisplayString()})";
         var wrapped = $"{roleName}";
         var gradient = factionType.GetChangedGradient(role2);
         var gradientText = gradient != null
@@ -1291,7 +1291,7 @@ public static class RoleTargetingPatches
 
             var isMe = player1 == Pepper.GetMyPosition();
             var isGhost = player1 == 30;
-			var isAnon = player1 == -1;
+			var isAnon = player1 == 255;
 
             key = "GUI_GAME_DISCUSSION_VOTE";
 
