@@ -192,8 +192,6 @@ public static class FancyAssetManager
 
     public static void RunDiagnostics(Exception e)
     {
-        IconPack pack = null;
-        var game = Utils.GetGameType();
         var diagnostic = $"Uh oh, something happened here\nPack Name: {Fancy.SelectedIconPack.Value}\nStyle Name: {Constants.CurrentStyle()}\nFaction Override: {Constants.FactionOverride()}\nCustom Numbers: {Constants.CustomNumbers()}";
 
         if (!CacheDefaults.RoleIcons)
@@ -217,6 +215,8 @@ public static class FancyAssetManager
                 diagnostic += "\nModified BTOS2 Sheet Does Not Exist";
         }
 
+        IconPack pack = null;
+        var game = Utils.GetGameType();
         diagnostic += $"\nCurrently In A {game} Game";
 
         if (Constants.EnableIcons() && !IconPacks.TryGetValue(Fancy.SelectedIconPack.Value, out pack))

@@ -1,9 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
+        <NoWarn>$(NoWarn);CS0436</NoWarn>
         <AssemblyName>FancyUI</AssemblyName>
         <Description>THE customisation mod for TOS2!</Description>
-        <Version>2.0.0</Version>
+        <Version>2.0.1</Version>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <LangVersion>preview</LangVersion>
         <RestoreAdditionalProjectSources>
@@ -13,26 +14,33 @@
         <RootNamespace>FancyUI</RootNamespace>
         <ImplicitUsings>enable</ImplicitUsings>
         <EnableDynamicLoading>true</EnableDynamicLoading>
-        <Authors>AlchlcSystm</Authors>
+        <Authors>AlchlcSystm, Loonie, Synapsium, Det, patr</Authors>
         <RepositoryType>git</RepositoryType>
         <DebugType>embedded</DebugType>
         <DebugSymbols>true</DebugSymbols>
         <RepositoryUrl>https://github.com/AlchlcDvl/RoleIconRecolors.git</RepositoryUrl>
         <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
-        <TOS>C:\Program Files (x86)\Steam\steamapps\common\Town of Salem 2</TOS>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="$(Configuration)==Release">
+        <Optimize>true</Optimize>
     </PropertyGroup>
 
     <ItemGroup>
         <EmbeddedResource Include="Resources\*" />
+
         <PackageReference Include="HarmonyX" Version="2.10.1" />
         <PackageReference Include="UnityEngine.Modules" Version="2021.3.44" IncludeAssets="compile" />
         <PackageReference Include="Roslynator.Analyzers" Version="4.12.11" PrivateAssets="all" />
         <PackageReference Include="Roslynator.CodeAnalysis.Analyzers" Version="4.12.11" PrivateAssets="all" />
         <PackageReference Include="Roslynator.Formatting.Analyzers" Version="4.12.11" PrivateAssets="all" />
-        <Reference Include="Libs\*.dll" />
+        <PackageReference Include="Krafs.Publicizer" Version="2.3.0" PrivateAssets="all" ExcludeAssets="runtime" />
+
+        <Reference Include="Libs/*.dll" />
+
+        <Publicize Include="Assembly-CSharp" IncludeCompilerGeneratedMembers="false" />
+        <Publicize Include="SalemModLoader" IncludeCompilerGeneratedMembers="false" />
     </ItemGroup>
 
-    <Target Name="Copy" AfterTargets="Build" Condition="'$(TOS)' != ''">
-        <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(TOS)/SalemModLoader/Mods"></Copy>
-    </Target>
+    <Import Project="../TOS.props" />
 </Project>
