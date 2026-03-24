@@ -134,6 +134,7 @@ public static class FancyAssetManager
     {
         path = path.SanitisePath();
         path = path.Replace("Marshall", "Marshal");
+        path = path.Replace("CovenLeader", "Archmage");
         path = path.Replace("NeutralApocalypse", "Apocalypse");
         path = path.Replace("RandomApocalypse", "Apocalypse");
 

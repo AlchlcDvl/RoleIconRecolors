@@ -760,8 +760,8 @@
 	<Entry key="FANCY_CONJURER_ROLE_COLOR_NAME">Conjurer Secondary Color</Entry>
 	<Entry key="FANCY_CONJURER_ROLE_COLOR_DESC">The secondary color for the Conjurer role.</Entry>
 
-	<Entry key="FANCY_COVENLEADER_ROLE_COLOR_NAME">Coven Leader Secondary Color</Entry>
-	<Entry key="FANCY_COVENLEADER_ROLE_COLOR_DESC">The secondary color for the Coven Leader role.</Entry>
+	<Entry key="FANCY_COVENLEADER_ROLE_COLOR_NAME">Archmage Secondary Color</Entry>
+	<Entry key="FANCY_COVENLEADER_ROLE_COLOR_DESC">The secondary color for the Archmage role.</Entry>
 
 	<Entry key="FANCY_DREAMWEAVER_ROLE_COLOR_NAME">Dreamweaver Secondary Color</Entry>
 	<Entry key="FANCY_DREAMWEAVER_ROLE_COLOR_DESC">The secondary color for the Dreamweaver role.</Entry>
@@ -1080,7 +1080,7 @@ Would you like to abandon %role2% and become %role%?</Entry>
     <Entry key="FANCY_VETERAN">Veteran</Entry>
     <Entry key="FANCY_VIGILANTE">Vigilante</Entry>
     <Entry key="FANCY_CONJURER">Conjurer</Entry>
-    <Entry key="FANCY_COVENLEADER">Coven Leader</Entry>
+    <Entry key="FANCY_COVENLEADER">Archmage</Entry>
     <Entry key="FANCY_DREAMWEAVER">Dreamweaver</Entry>
     <Entry key="FANCY_ENCHANTER">Enchanter</Entry>
     <Entry key="FANCY_HEXMASTER">Hex Master</Entry>

@@ -13,7 +13,7 @@ public static class Utils
 
     private static readonly string[] VanillaSkippableNames = ["Baker_Ability", "Pirate_Ability_1", "Pirate_Ability_2", "Dreamweaver_Ability_1"];
     private static readonly string[] BTOS2SkippableNames = [ "Baker_Ability_1", "Baker_Ability_2", "Jackal_Ability", "Auditor_Ability_1", "Auditor_Ability_2", "Inquisitor_Ability_1", "Inquisitor_Ability_2", "Banshee_Ability", "Judge_Ability",
-        "Warlock_Ability", "Starspawn_Ability", "Dreamweaver_Ability_2", "Illusionist_Ability_2", "Pacifist_Ability_2", "CovenLeader_Ability" ];
+        "Warlock_Ability", "Starspawn_Ability", "Dreamweaver_Ability_2", "Illusionist_Ability_2", "Pacifist_Ability_2", "Archmage_Ability" ];
     private static readonly string[] CommonSkippableNames = [ "Admirer_Ability_1", "Admirer_Ability_2", "Amnesiac_Ability", "Arsonist_Ability", "Attributes", "Berserker_Ability", "Bodyguard_Ability", "Catalyst_Ability",
         "Cleric_Ability", "Coroner_Ability", "Crusader_Ability", "CursedSoul_Ability", "Death_Ability", "Enchanter_Ability", "Famine_Ability", "HexMaster_Ability",
         "Illusionist_Ability", "Investigator_Ability", "Jailor_Ability", "Jester_Ability", "Jinx_Ability", "Lookout_Ability", "Medusa_Ability", "Monarch_Ability_2", "Seer_Ability_1",
@@ -72,7 +72,7 @@ public static class Utils
         Btos2Role.Veteran => "Veteran",
         Btos2Role.Vigilante => "Vigilante",
         Btos2Role.Conjurer => "Conjurer",
-        Btos2Role.CovenLeader => "CovenLeader",
+        Btos2Role.CovenLeader => "Archmage",
         Btos2Role.Dreamweaver => "Dreamweaver",
         Btos2Role.Enchanter => "Enchanter",
         Btos2Role.HexMaster => "HexMaster",
@@ -206,7 +206,7 @@ public static class Utils
         Role.VETERAN => "Veteran",
         Role.VIGILANTE => "Vigilante",
         Role.CONJURER => "Conjurer",
-        Role.COVENLEADER => "CovenLeader",
+        Role.COVENLEADER => "Archmage",
         Role.DREAMWEAVER => "Dreamweaver",
         Role.ENCHANTER => "Enchanter",
         Role.HEXMASTER => "HexMaster",
