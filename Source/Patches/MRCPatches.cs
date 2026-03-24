@@ -45,7 +45,6 @@ public static class PatchRoleCard
         var faction = __instance.CurrentFaction;
         var alignment = role.GetAlignment();
         var subAlignment = role.GetSubAlignment();
-        var factionID = (int)faction;
 		// var prefix = Constants.IsBTOS2() ? "BTOS" : "GUI";
         var useNeutralGradient = false;
         var neutralGradient = Utils.CreateGradient(Fancy.NeutralStart.Value, Fancy.NeutralEnd.Value);
@@ -69,17 +68,25 @@ public static class PatchRoleCard
             return false;
         }
         string displayString;
-        if (factionID is (> 2 and < 12 and not 7) or (> 37 and < 42))
-        {
-            useNeutralGradient = true;
+
+        if (role.IsTownAligned())
+            displayString = RoleAlignment.TOWN.ToDisplayString();
+        else if (role.IsCovenAligned())
+            displayString = RoleAlignment.COVEN.ToDisplayString();
+        else if (role.IsNeutralAligned())
             displayString = RoleAlignment.NEUTRAL.ToDisplayString();
-        }
-        else if (factionID == 13)
-            displayString = Utils.GetString("FANCY_BUCKETS_CURSEDSOUL");
-        else if (factionID == 43)
-            displayString = Utils.GetString("FANCY_BUCKETS_PANDORA");
-        else
-            displayString = faction.ToDisplayString();
+        else 
+            displayString = RoleAlignment.NONE.ToDisplayString();
+
+        if (faction is FactionType.SERIALKILLER 
+            or FactionType.ARSONIST or FactionType.SHROUD 
+            or FactionType.WEREWOLF or FactionType.JESTER 
+            or FactionType.EXECUTIONER or FactionType.PIRATE
+            or FactionType.DOOMSAYER or Btos2Faction.Judge
+            or Btos2Faction.Auditor or Btos2Faction.Starspawn
+            or Btos2Faction.Inquisitor or (FactionType)37)
+            useNeutralGradient = true;
+
         if (subAlignment.IsInvalid())
         {
             if (alignment.IsInvalid())
@@ -261,7 +268,7 @@ public static class RoleCardPopupPatches2
         var faction = __instance.CurrentFaction;
         var alignment = role.GetAlignment();
         var subAlignment = role.GetSubAlignment();
-        var factionID = (int)faction;
+		// var prefix = Constants.IsBTOS2() ? "BTOS" : "GUI";
         var useNeutralGradient = false;
         var neutralGradient = Utils.CreateGradient(Fancy.NeutralStart.Value, Fancy.NeutralEnd.Value);
         var subAlignGradient = Utils.CreateGradient(Fancy.BucketStart.Value, Fancy.BucketEnd.Value);
@@ -284,17 +291,25 @@ public static class RoleCardPopupPatches2
             return false;
         }
         string displayString;
-        if (factionID is (> 2 and < 12 and not 7) or (> 37 and < 42))
-        {
-            useNeutralGradient = true;
+
+        if (role.IsTownAligned())
+            displayString = RoleAlignment.TOWN.ToDisplayString();
+        else if (role.IsCovenAligned())
+            displayString = RoleAlignment.COVEN.ToDisplayString();
+        else if (role.IsNeutralAligned())
             displayString = RoleAlignment.NEUTRAL.ToDisplayString();
-        }
-        else if (factionID == 13)
-            displayString = Utils.GetString("FANCY_BUCKETS_CURSEDSOUL");
-        else if (factionID == 43)
-            displayString = Utils.GetString("FANCY_BUCKETS_PANDORA");
-        else
-            displayString = faction.ToDisplayString();
+        else 
+            displayString = RoleAlignment.NONE.ToDisplayString();
+
+        if (faction is FactionType.SERIALKILLER 
+            or FactionType.ARSONIST or FactionType.SHROUD 
+            or FactionType.WEREWOLF or FactionType.JESTER 
+            or FactionType.EXECUTIONER or FactionType.PIRATE
+            or FactionType.DOOMSAYER or Btos2Faction.Judge
+            or Btos2Faction.Auditor or Btos2Faction.Starspawn
+            or Btos2Faction.Inquisitor or (FactionType)37)
+            useNeutralGradient = true;
+
         if (subAlignment.IsInvalid())
         {
             if (alignment.IsInvalid())
