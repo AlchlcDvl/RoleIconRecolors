@@ -626,6 +626,20 @@ public static class Utils
         ( _, Role.PILGRIM or Role.CATALYST, GameModType.Vanilla) => FactionType.TOWN,
         ( _, Role.COVENITE or Role.CULTIST, GameModType.Vanilla) => FactionType.COVEN,
 
+        // Town buckets
+        ( > 99 and < 106, _, GameModType.Vanilla) => FactionType.TOWN,
+        (_, Role.COMMON_TOWN, GameModType.Vanilla) => FactionType.TOWN,
+        ( > 100 and < 107, _, GameModType.BTOS2) => FactionType.TOWN,
+        (_, Btos2Role.TownExecutive or Btos2Role.TownGovernment, GameModType.BTOS2) => FactionType.TOWN,
+
+        // Coven buckets
+        ( > 105 and < 111, _, GameModType.Vanilla) => FactionType.COVEN,
+        (_, Role.COMMON_COVEN, GameModType.Vanilla) => FactionType.COVEN,
+        ( > 106 and < 113, _, GameModType.BTOS2) => FactionType.COVEN,
+
+        (_, Role.NEUTRAL_APOCALYPSE, GameModType.Vanilla) => FactionType.APOCALYPSE,
+        (_, Btos2Role.RandomApocalypse, GameModType.BTOS2) => FactionType.APOCALYPSE,
+
         // Default case
         _ => FactionType.NONE
     };
