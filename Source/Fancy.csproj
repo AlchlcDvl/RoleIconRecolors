@@ -36,8 +36,6 @@
         <PackageReference Include="Roslynator.Formatting.Analyzers" Version="4.12.11" PrivateAssets="all" />
         <PackageReference Include="Krafs.Publicizer" Version="2.3.0" PrivateAssets="all" ExcludeAssets="runtime" />
 
-        <Reference Include="Libs/*.dll" />
-
         <Publicize Include="Assembly-CSharp" IncludeCompilerGeneratedMembers="false" />
         <Publicize Include="SalemModLoader" IncludeCompilerGeneratedMembers="false" />
     </ItemGroup>
