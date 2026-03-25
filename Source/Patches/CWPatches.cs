@@ -871,8 +871,6 @@ public static class RoleDeckPanelControllerPatch
 {
     private static RectTransform MetalTransform;
     private static RectTransform PaperTransform;
-    public static bool Pandora;
-    public static bool Compliance;
 
     [HarmonyPatch(nameof(RoleDeckPanelController.Start)), HarmonyPostfix]
     public static void StartPostfix(RoleDeckPanelController __instance)
@@ -953,9 +951,6 @@ public static class RoleDeckPanelControllerPatch
 
         if (sprite.IsValid() && modifier)
             modifier.sprite = sprite;
-
-        Pandora = Constants.IsPandora();
-        Compliance = Constants.IsCompliance();
         __instance.AdjustSizeBasedOnRolesAdded();
     }
 

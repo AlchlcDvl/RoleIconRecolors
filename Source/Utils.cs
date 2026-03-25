@@ -11,10 +11,10 @@ public static class Utils
 {
 	// Note: Update this whenever a role's ability count changes in updates for Vanilla and BetterTOS2
 
-    private static readonly string[] VanillaSkippableNames = ["Baker_Ability", "Pirate_Ability_1", "Pirate_Ability_2", "Dreamweaver_Ability_1"];
-    private static readonly string[] BTOS2SkippableNames = [ "Baker_Ability_1", "Baker_Ability_2", "Jackal_Ability", "Auditor_Ability_1", "Auditor_Ability_2", "Inquisitor_Ability_1", "Inquisitor_Ability_2", "Banshee_Ability", "Judge_Ability",
-        "Warlock_Ability", "Starspawn_Ability", "Dreamweaver_Ability_2", "Illusionist_Ability_2", "Pacifist_Ability_2", "Archmage_Ability" ];
-    private static readonly string[] CommonSkippableNames = [ "Admirer_Ability_1", "Admirer_Ability_2", "Amnesiac_Ability", "Arsonist_Ability", "Attributes", "Berserker_Ability", "Bodyguard_Ability", "Catalyst_Ability",
+    private static readonly string[] VanillaSkippableNames = ["Pirate_Ability_1", "Pirate_Ability_2", "Dreamweaver_Ability_1"];
+    private static readonly string[] BTOS2SkippableNames = [ "Baker_Ability_1", "Jackal_Ability", "Auditor_Ability_1", "Auditor_Ability_2", "Inquisitor_Ability_1", "Inquisitor_Ability_2", "Banshee_Ability", "Judge_Ability",
+        "Warlock_Ability", "Starspawn_Ability", "Dreamweaver_Ability_2", "Illusionist_Ability_2", "Pacifist_Ability_2", "Archmage_Ability", "Mayor_Ability" ];
+    private static readonly string[] CommonSkippableNames = [ "Baker_Ability_2", "Admirer_Ability_1", "Admirer_Ability_2", "Amnesiac_Ability", "Arsonist_Ability", "Attributes", "Berserker_Ability", "Bodyguard_Ability", "Catalyst_Ability",
         "Cleric_Ability", "Coroner_Ability", "Crusader_Ability", "CursedSoul_Ability", "Death_Ability", "Enchanter_Ability", "Famine_Ability", "HexMaster_Ability",
         "Illusionist_Ability", "Investigator_Ability", "Jailor_Ability", "Jester_Ability", "Jinx_Ability", "Lookout_Ability", "Medusa_Ability", "Monarch_Ability_2", "Seer_Ability_1",
         "Pestilence_Ability", "Plaguebearer_Ability", "Poisoner_Ability_1", "Poisoner_Ability_2", "PotionMaster_Ability_1", "PotionMaster_Ability_2", "Psychic_Ability", "War_Ability_1", "Werewolf_Ability_2",
@@ -160,8 +160,8 @@ public static class Utils
         Btos2Role.SecretObjectives => "SecretObjectives",
         Btos2Role.NoLastWills => "NoLastWills",
         Btos2Role.Immovable => "Immovable",
-        Btos2Role.CompliantKillers => "CompliantKillers",
-        Btos2Role.PandorasBox => "PandorasBox",
+        Btos2Role.Anomaly => "Anomaly",
+        Btos2Role.FourHorsemen => "4Horsemen",
         Btos2Role.BallotVoting => "BallotVoting",
         Btos2Role.Individuality => "Individuality",
         Btos2Role.Snitch => "Snitch",
@@ -486,16 +486,17 @@ public static class Utils
         EffectType.BESTOWED or (EffectType)111 => "Bestowed",
         EffectType.SOVEREIGN => "Sovereign",
         EffectType.STONED => "Stoned",
+        EffectType.TOWN_TRAITOR => "TownTraitor",
+        EffectType.DEAFENED or (EffectType)101 => "Deafened",
 
         // BTOS2
         (EffectType)100 => "Recruit",
-        (EffectType)101 => "Deafened",
         (EffectType)102 => "CovenTownTraitor",
         (EffectType)103 => "ApocTownTraitor",
         (EffectType)104 => "Audited",
         (EffectType)105 => "Enchanted",
         (EffectType)106 => "Accompanied",
-        (EffectType)107 => "PandoraTownTraitor",
+        (EffectType)107 => "Campaigned",
         (EffectType)108 => "Egotist",
         (EffectType)109 => "Suspect",
         (EffectType)110 => "WarlockCursed",
@@ -1102,6 +1103,22 @@ public static class Utils
             return "FANCY_PLAYER_WAS_A_ROLE";
     }
 
+    public static string GetHangingMessage2(Role role, FactionType faction)
+    {
+        var roleName = StripFormatting(role.ToColorizedDisplayString(faction));
+
+        if (role == Role.STONED)
+            return "FANCY_PLAYER_WAS_STONED_ALT";
+        else if (role == Role.HIDDEN)
+            return "FANCY_PLAYER_WAS_A_HIDDEN_ROLE_ALT";
+        else if (role.IsHorseman())
+            return "FANCY_PLAYER_WAS_ROLE_ALT";
+        else if (StartsWithVowel(roleName))
+            return "FANCY_PLAYER_WAS_AN_ROLE_ALT";
+        else
+            return "FANCY_PLAYER_WAS_A_ROLE_ALT";
+    }
+
     public static string GetWdahMessage(Role role, FactionType faction)
     {
         var roleName = StripFormatting(role.ToColorizedDisplayString(faction));
@@ -1265,8 +1282,7 @@ public static class Utils
 		return option switch
 		{
 			// FactionLabelOption.Always => true,
-			FactionLabelOption.Mismatch => roleFaction != targetFaction,
-			FactionLabelOption.Conditional => !ConditionalCompliancePandora(roleFaction, targetFaction),
+			FactionLabelOption.Mismatch => !ConditionalCompliancePandora(roleFaction, targetFaction),
 			_ => false
 		};
 	}

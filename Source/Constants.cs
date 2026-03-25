@@ -118,7 +118,7 @@ public static class Constants
     {
         try
         {
-            return Service.Game?.Sim?.info?.roleCardObservation?.Data?.powerUp == POWER_UP_TYPE.NECRONOMICON;
+            return Service.Game.Sim.info.roleCardObservation.Data.hasNecronomicon;
         }
         catch
         {
@@ -130,7 +130,7 @@ public static class Constants
     {
         try
         {
-            return Service.Game?.Sim?.info?.roleCardObservation?.Data?.powerUp == POWER_UP_TYPE.HORSEMAN;
+            return Service.Game.Sim.info.roleCardObservation.Data.isHorseman;
         }
         catch
         {
@@ -150,13 +150,8 @@ public static class Constants
         }
     }
 
-    public static bool IsPandora() => IsBTOS2() && Service.Game?.Sim?.simulation?.roleDeckBuilder?.Data?.modifierCards?.Contains(Btos2Role.PandorasBox) == true;
-
-    public static bool IsCompliance() => IsBTOS2() && Service.Game?.Sim?.simulation?.roleDeckBuilder?.Data?.modifierCards?.Contains(Btos2Role.CompliantKillers) == true;
 
     public static bool IsIndividuality() => IsBTOS2() && Service.Game?.Sim?.simulation?.roleDeckBuilder?.Data?.modifierCards?.Contains(Btos2Role.Individuality) == true;
-
-    public static bool IsFourHorsemen() => !IsBTOS2() && Service.Game?.Sim?.simulation?.roleDeckBuilder?.Data?.modifierCards?.Contains(Role.FOUR_HORSEMEN) == true;
 
     public static bool IsRoleInDeck(Role role) => Service.Game?.Sim?.simulation?.roleDeckBuilder?.Data?.roles?.Contains(role) == true;
 

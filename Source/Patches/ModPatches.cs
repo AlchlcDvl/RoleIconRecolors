@@ -121,32 +121,32 @@ public static class RetrainPopupPatch
         return false;
     }
 }
-[HarmonyPatch(typeof(RoleRevealCinematicPlayer), nameof(RoleRevealCinematicPlayer.SetRole))]
+[HarmonyPatch(typeof(RoleRevealCinematicPlayer), nameof(RoleRevealCinematicPlayer.SetPlayerInfo))]
 public static class RoleRevealCinematicPlayerPatch
 {
-    private static FactionType CurrentFaction;
-
-    [HarmonyPatch(nameof(RoleRevealCinematicPlayer.SetRole))]
-    public static bool Prefix(RoleRevealCinematicPlayer __instance, Role role)
+    public static bool Prefix(RoleRevealCinematicPlayer __instance, Role role, FactionType factionType)
     {
         if (role == Role.NONE)
-            return true;
+            return false;
 
-        var skinIcon = $"<sprite=\"Cast\" name=\"Skin{__instance.roleRevealCinematic.skinId}\">{Service.Game.Cast.GetSkinName(__instance.roleRevealCinematic.skinId)}";
-
-        var skinText = __instance.l10n("CINE_ROLE_REVEAL_SKIN").Replace("%skin%", skinIcon);
+        // Skin
+        var skinIcon = $"<sprite=\"Cast\" name=\"Skin{__instance.roleRevealCinematic.skinId}\">";
+        var skinName = skinIcon + Service.Game.Cast.GetSkinName(__instance.roleRevealCinematic.skinId);
+        var skinText = __instance.l10n("CINE_ROLE_REVEAL_SKIN").Replace("%skin%", skinName);
         __instance.skinTextPlayer.ShowText(skinText);
 
         __instance.totalDuration = Tuning.ROLE_REVEAL_TIME;
-        __instance.silhouetteWrapper.gameObject.SetActive(true);
-        __instance.silhouetteWrapper.SwapWithSilhouette((int)role);
 
-        var roleName = CurrentFaction == FactionType.NONE ? role.ToColorizedNoLabel(role.GetFaction()) : role.ToColorizedNoLabel(CurrentFaction);
+        __instance.silhouetteWrapper.gameObject.SetActive(true);
+        __instance.silhouetteWrapper.SwapWithSilhouette((int)role, true);
+
+        // Role name + icon
+        var roleName = role.ToColorizedNoLabel(factionType);
         var roleIcon = role.GetTMPSprite() + roleName;
 
-        roleIcon = roleIcon.Replace("RoleIcons\"", $"RoleIcons ({((role.GetFactionType() == CurrentFaction && Constants.CurrentStyle() == "Regular")
+        roleIcon = roleIcon.Replace("RoleIcons\"", $"RoleIcons ({((role.GetFactionType() == factionType && Constants.CurrentStyle() == "Regular")
             ? "Regular"
-            : Utils.FactionName(CurrentFaction, false))})\"");
+            : Utils.FactionName(factionType, false))})\"");
 
         string roleRevealKey;
 
@@ -157,22 +157,25 @@ public static class RoleRevealCinematicPlayerPatch
         else
             roleRevealKey = "FANCY_ROLE_REVEAL_ROLE_CONSONANT";
 
-        var roleText = Fancy.YouAreARole.Value ? __instance.l10n(roleRevealKey).Replace("%role%", roleIcon) : __instance.l10n("CINE_ROLE_REVEAL_ROLE").Replace("%role%", roleIcon);
+        var roleText = Fancy.YouAreARole.Value
+            ? __instance.l10n(roleRevealKey).Replace("%role%", roleIcon)
+            : __instance.l10n("CINE_ROLE_REVEAL_ROLE").Replace("%role%", roleIcon);
+
         __instance.roleTextPlayer.ShowText(roleText);
 
-        var roleBlurb = Fancy.FactionalRoleBlurbs ? role.ToFactionalRoleBlurb(CurrentFaction) : role.GetRoleBlurb();
+        // Blurb
+        var roleBlurb = Fancy.FactionalRoleBlurbs
+            ? role.ToFactionalRoleBlurb(factionType)
+            : role.GetRoleBlurb();
+
         __instance.roleBlurbTextPlayer.ShowText(roleBlurb);
 
         if (Pepper.GetCurrentGameType() == GameType.Ranked)
             __instance.playableDirector.Resume();
 
-        return false;
+        return false; // skip original
     }
-
-    [HarmonyPatch(nameof(RoleRevealCinematicPlayer.HandleOnMyIdentityChanged))]
-    public static void Prefix(PlayerIdentityData playerIdentity) => CurrentFaction = playerIdentity.faction;
 }
-
 [HarmonyPatch(typeof(SharedMentionsProvider), nameof(SharedMentionsProvider.BuildAchievementMentions))]
 public static class AchievementMentionsPatch
 {
@@ -247,8 +250,7 @@ public static class ModifierFactionPatch
                     Btos2Role.NecroPass => Btos2Faction.Coven,
                     Btos2Role.Egotist => Btos2Faction.Egotist,
                     Btos2Role.SpeakingSpirits => Btos2Faction.CursedSoul,
-                    Btos2Role.CompliantKillers => Btos2Faction.Compliance,
-                    Btos2Role.PandorasBox => Btos2Faction.Pandora,
+                    Btos2Role.FourHorsemen => Btos2Faction.Apocalypse,
                     Btos2Role.CovenVip => Btos2Faction.Coven,
                     Btos2Role.Lovers => Btos2Faction.Lovers,
                     Btos2Role.FeelinLucky => Btos2Faction.Jester,
@@ -399,7 +401,7 @@ public static class SpecialAbilityPopupDayConfirmListItemPatch
 
         if (uiRoleDataInstance != null)
         {
-            __instance.choiceText.text = __instance.l10n(uiRoleDataInstance.specialAbilityVerb);
+            __instance.choiceText.text = __instance.l10n(uiRoleDataInstance.role.GetSpecialAbilityVerb());
             __instance.choiceSprite.sprite = uiRoleDataInstance.specialAbilityIcon;
         }
 
@@ -783,226 +785,6 @@ public static class AddBTOS2RolesToDevMenu
     }
 }
 
-[HarmonyPatch(typeof(RoleDeckBuilder), nameof(RoleDeckBuilder.GetSortedRoleSlots))]
-public static class PandoraAndComplianceRoleSlotsPatch
-{
-    [HarmonyPriority(0)]
-    public static void Postfix(RoleDeckBuilder __instance, ref List<RoleDeckSlot> __result)
-    {
-		if (!Constants.IsBTOS2())
-			return;
-
-        var alignmentOrder = new RoleAlignment[] { RoleAlignment.TOWN, RoleAlignment.COVEN, (RoleAlignment)17, (RoleAlignment)100, (RoleAlignment)101, RoleAlignment.NEUTRAL };
-
-        var list = new List<RoleDeckSlot>();
-
-        foreach (var alignment in alignmentOrder)
-        {
-            var pandora = alignment == (RoleAlignment)100 && Constants.IsPandora();
-            var compliance = alignment == (RoleAlignment)101 && Constants.IsCompliance();
-
-            if (Constants.IsPandora() && (alignment == RoleAlignment.COVEN || alignment == (RoleAlignment)17))
-                continue;
-
-            AddSlots(__instance, list, alignment, pandora, compliance);
-        }
-
-        list.AddRange(__instance.GetPredicateRoleSlots(r =>
-            r.Role1.IsResolved() && r.Role2.IsResolved() && r.Role1.GetAlignment() != r.Role2.GetAlignment() &&
-            (!Constants.IsPandora() || !(r.Role1.GetAlignment() == RoleAlignment.COVEN && r.Role2.GetAlignment() == (RoleAlignment)17 ||
-                                         r.Role2.GetAlignment() == RoleAlignment.COVEN && r.Role1.GetAlignment() == (RoleAlignment)17)) &&
-            (!Constants.IsCompliance() || !(r.Role1.IsNeutralKilling() && r.Role2.IsNeutralKilling()))
-        ));
-
-        list.AddRange(__instance.GetPredicateRoleSlots(r =>
-            r.Role1.IsBucket() && r.Role2.IsResolved() && r.Role1.GetAlignment() != r.Role2.GetAlignment() &&
-            (!Constants.IsPandora() || !(r.Role1.GetAlignment() == RoleAlignment.COVEN && r.Role2.GetAlignment() == (RoleAlignment)17 ||
-                                         r.Role2.GetAlignment() == RoleAlignment.COVEN && r.Role1.GetAlignment() == (RoleAlignment)17)) &&
-            (!Constants.IsCompliance() || !(r.Role1.IsNeutralKilling() && r.Role2.IsNeutralKilling()))
-        ));
-
-        list.AddRange(__instance.GetPredicateRoleSlots(r =>
-            r.Role1.IsBucket() && r.Role2.IsBucket() && r.Role1.GetAlignment() != r.Role2.GetAlignment() &&
-            (!Constants.IsPandora() || !(r.Role1.GetAlignment() == RoleAlignment.COVEN && r.Role2.GetAlignment() == (RoleAlignment)17 ||
-                                         r.Role2.GetAlignment() == RoleAlignment.COVEN && r.Role1.GetAlignment() == (RoleAlignment)17)) &&
-            (!Constants.IsCompliance() || !(r.Role1.IsNeutralKilling() && r.Role2.IsNeutralKilling()))
-        ));
-
-        list.AddRange(__instance.GetPredicateRoleSlots(r => r.IsBucket() && r.Role1.GetAlignment() == RoleAlignment.ANY));
-
-        __result = list;
-    }
-
-    private static void AddSlots(RoleDeckBuilder builder, List<RoleDeckSlot> list, RoleAlignment alignment, bool pandora, bool compliance)
-    {
-        list.AddRange(builder.GetPredicateRoleSlots(r =>
-            SlotMatchesAlignment(r, alignment) &&r.IsResolved() &&
-            !(alignment == RoleAlignment.NEUTRAL && (r.Role1.IsNeutralKilling() || r.Role1 == Btos2Role.NeutralKilling) && Constants.IsCompliance()) &&
-            MatchesAlignment(r.Role1, alignment, pandora, compliance)
-        ));
-
-        list.AddRange(builder.GetPredicateRoleSlots(r =>
-            SlotMatchesAlignment(r, alignment) && r.Role1.IsResolved() && r.Role2.IsResolved() &&
-            !(alignment == RoleAlignment.NEUTRAL && (r.Role1.IsNeutralKilling() || r.Role2.IsNeutralKilling()) && Constants.IsCompliance()) &&
-            MatchesAlignment(r.Role1, alignment, pandora, compliance) &&
-            MatchesAlignment(r.Role2, alignment, pandora, compliance)
-        ));
-
-        list.AddRange(builder.GetPredicateRoleSlots(r =>
-            SlotMatchesAlignment(r, alignment) && r.Role1.IsBucket() && r.Role2.IsResolved() &&
-            !(alignment == RoleAlignment.NEUTRAL && (r.Role1.IsNeutralKilling() || r.Role2.IsNeutralKilling()) && Constants.IsCompliance()) &&
-            MatchesAlignment(r.Role1, alignment, pandora, compliance) &&
-            MatchesAlignment(r.Role2, alignment, pandora, compliance)
-        ));
-
-        list.AddRange(builder.GetPredicateRoleSlots(r =>
-            SlotMatchesAlignment(r, alignment) && r.Role1.IsBucket() && r.Role2.IsBucket() &&
-            !(alignment == RoleAlignment.NEUTRAL && (r.Role1.IsNeutralKilling() || r.Role2.IsNeutralKilling()) && Constants.IsCompliance()) &&
-            MatchesAlignment(r.Role1, alignment, pandora, compliance) &&
-            MatchesAlignment(r.Role2, alignment, pandora, compliance)
-        ));
-
-        list.AddRange(builder.GetPredicateRoleSlots(r =>
-            SlotMatchesAlignment(r, alignment) && r.IsBucket() &&
-            !(alignment == RoleAlignment.NEUTRAL && (r.Role1.IsNeutralKilling() || r.Role1 == Btos2Role.NeutralKilling) && Constants.IsCompliance()) &&
-            MatchesAlignment(r.Role1, alignment, pandora, compliance) &&
-            r.Role1.GetRoleBucket().subAlignment != SubAlignment.ANY
-        ));
-
-        list.AddRange(builder.GetPredicateRoleSlots(r =>
-            SlotMatchesAlignment(r, alignment) && r.IsBucket() &&
-            !(alignment == RoleAlignment.NEUTRAL && (r.Role1.IsNeutralKilling() || r.Role1 == Btos2Role.NeutralKilling) && Constants.IsCompliance()) &&
-            MatchesAlignment(r.Role1, alignment, pandora, compliance) &&
-            r.Role1.GetRoleBucket().subAlignment == SubAlignment.ANY
-        ));
-
-        // if (compliance)
-            // list.AddRange(builder.GetPredicateRoleSlots(r => SlotMatchesAlignment(r, alignment) && r.Role1 == Btos2Role.NeutralKilling));
-    }
-
-    private static bool MatchesAlignment(Role role, RoleAlignment alignment, bool pandora, bool compliance)
-	{
-		if (compliance && (role.IsNeutralKilling() || role is Btos2Role.NeutralKilling))
-			return alignment == (RoleAlignment)101;
-
-		return role.GetAlignment() == alignment ||
-			   (pandora && (role.GetAlignment() == RoleAlignment.COVEN || role.GetAlignment() == (RoleAlignment)17));
-	}
-	
-	private static bool SlotMatchesAlignment(RoleDeckSlot r, RoleAlignment alignment)
-	{
-		var slotAlignment = r.GetRoleAlignment();
-
-		if (slotAlignment == RoleAlignment.ANY)
-			return alignment == RoleAlignment.ANY;
-
-		if (alignment == RoleAlignment.ANY)
-			return false;
-
-		return slotAlignment == alignment;
-	}
-
-
-}
-[HarmonyPatch(typeof(RoleDeckSlot), nameof(RoleDeckSlot.GetRoleAlignment))]
-public static class PandoraAndComplianceDeckSlotPatch
-{
-    public static bool Prefix(RoleDeckSlot __instance, ref RoleAlignment __result)
-    {
-		if (!Constants.IsBTOS2())
-			return true;
-
-        var role1Alignment = __instance.Role1.GetAlignment();
-        var role2Alignment = __instance.Role2.GetAlignment();
-
-		if (Constants.IsPandora())
-		{
-			if (role1Alignment is RoleAlignment.COVEN or ((RoleAlignment)17))
-				role1Alignment = (RoleAlignment)100;
-
-			if (role2Alignment is RoleAlignment.COVEN or ((RoleAlignment)17))
-				role2Alignment = (RoleAlignment)100;
-		}
-
-		if (Constants.IsCompliance())
-		{
-			if (__instance.Role1.IsNeutralKilling() || __instance.Role1 == Btos2Role.NeutralKilling)
-				role1Alignment = (RoleAlignment)101;
-
-			if (__instance.Role2.IsNeutralKilling() || __instance.Role2 == Btos2Role.NeutralKilling)
-				role2Alignment = (RoleAlignment)101;
-		}
-
-        if (!__instance.IsDualBucket() || role1Alignment == role2Alignment)
-        {
-            __result = role1Alignment;
-            return false;
-        }
-
-        __result = RoleAlignment.ANY;
-        return false;
-    }
-}
-
-[HarmonyPatch(typeof(RoleDeckListItem), nameof(RoleDeckListItem.SetData))]
-public static class PandoraAndComplianceListItemPatch
-{
-    public static bool Prefix(RoleDeckListItem __instance, RoleDeckSlot a_roleDeckSlot, RoleDeckPanelController parent, bool a_isBan = false)
-    {
-        if (!Constants.IsBTOS2())
-            return true;
-
-        __instance.Reset();
-        __instance._parentPanel = parent;
-        __instance.background.SetActive(false);
-        __instance.roleDeckSlot = a_roleDeckSlot;
-        __instance.role = a_roleDeckSlot.Role1;
-        __instance.role2 = a_roleDeckSlot.Role2;
-        __instance.isBan = a_isBan;
-        Debug.Log(string.Format("Setting Deck Slot {0} + {1}", __instance.role, __instance.role2));
-        FactionType factionType1 = __instance.role.GetFaction();
-        FactionType factionType2 = __instance.role2.GetFaction();
-        if (Constants.IsPandora() && (factionType1 == FactionType.COVEN || factionType1 == FactionType.APOCALYPSE))
-            factionType1 = Btos2Faction.Pandora;
-        if (Constants.IsPandora() && (factionType2 == FactionType.COVEN || factionType2 == FactionType.APOCALYPSE))
-            factionType2 = Btos2Faction.Pandora;
-        if (Constants.IsCompliance() && __instance.role.IsNeutralKilling())
-            factionType1 = Btos2Faction.Compliance;
-        if (Constants.IsCompliance() && __instance.role2.IsNeutralKilling())
-            factionType2 = Btos2Faction.Compliance;
-        if (__instance.role2 == Role.NONE)
-        {
-            __instance.roleName.text = __instance.role.ToColorizedDisplayString(factionType1) ?? "";
-        }
-        else
-        {
-            __instance.roleName.text = __instance.role.ToColorizedShortenedDisplayString(factionType1) + " <color=#FFFFFF40>-</color> " + __instance.role2.ToColorizedShortenedDisplayString(factionType2);
-        }
-        __instance.roleName.gameObject.SetActive(true);
-        __instance.roleImage.gameObject.SetActive(true);
-        if (__instance.isBan)
-        {
-            __instance.roleImage.sprite = __instance.bannedSprite;
-        }
-        else if (__instance.role.IsModifierCard())
-        {
-            __instance.roleImage.sprite = __instance.uiRoleData.hostOptionsDataList.Find((UIRoleData.UIRoleDataInstance d) => d.role == __instance.role).roleIcon;
-        }
-        else if (__instance.role.IsBucket())
-        {
-            __instance.roleImage.sprite = __instance.uiRoleData.roleBucketDataList.Find((UIRoleData.UIRoleDataInstance d) => d.role == __instance.role).roleIcon;
-        }
-        else
-        {
-            __instance.roleImage.sprite = __instance.uiRoleData.roleDataList.Find((UIRoleData.UIRoleDataInstance d) => d.role == __instance.role).roleIcon;
-        }
-        __instance.roleImage.SetAllDirty();
-        __instance.gameObject.SetActive(true);
-        __instance.ValidateButtons();
-        return false;
-    }
-}
-
 // THIS GOD FOR SAKEN PATCH REFUSES TO DO ANYTHING, SOMEONE FIX THIS SHIT
 
 /* HEY LOONIE
@@ -1099,10 +881,16 @@ public static class FixAbilityButtonOverrides
                 break;
             // Exists for BTOS2 Baker, not that this'll ever appear outside BTOS2 until Cursed Soul happens, but thats its own bug
             case TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_HEAL:
-                    __instance.choice1Text.text =  Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY1_VERB_{(int)role}");
+					if (role.IsCovenAligned())
+						__instance.choice1Text.text = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY1_VERB_{(int)role}");
+					else
+						__instance.choice2Text.text = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY1_VERB_{(int)role}");
                 break;
             case TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_REVEAL:
-                    __instance.choice1Text.text =  Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY2_VERB_{(int)role}");
+					if (role.IsCovenAligned())
+						__instance.choice1Text.text = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY2_VERB_{(int)role}");
+					else
+						__instance.choice2Text.text = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY2_VERB_{(int)role}");
                 break;
             case TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_ATTACK:
 				switch (role)
@@ -1111,7 +899,10 @@ public static class FixAbilityButtonOverrides
 						__instance.choice1Text.text =  Utils.GetString($"GUI_ROLE_CARD_NECRONOMICON_ABILITY");
 						break;
 					default:
+					if (role.IsCovenAligned())
 						__instance.choice1Text.text = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY3_VERB_{(int)role}");
+					else
+						__instance.choice2Text.text = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY3_VERB_{(int)role}");
 						break;
 				}
                 break;
@@ -1330,24 +1121,31 @@ public static class RoleTargetingPatches
             var btosKey = isBTOS2 ? "BTOS_" : string.Empty;
             key = $"{btosKey}GUI_ROLE_TARGETING_{(int)myRole}";
 
-            var powerUp = Service.Game.Sim.info.roleCardObservation.Data.powerUp;
-            switch (powerUp)
-            {
-                case POWER_UP_TYPE.NECRONOMICON:
-                    key += "_NOMICON";
-                    if (myRole == Role.MEDUSA && Service.Game.Sim.info.roleCardObservation.Data.normalAbilityRemaining < 1)
-                        key += "_2";
-                    break;
-                case POWER_UP_TYPE.HORSEMAN:
-                    key += "_HORSEMAN";
-                    break;
-                case POWER_UP_TYPE.BERSERKER_ONE_KILL:
-                    key += "_BERSERKER_ONE_KILL";
-                    break;
-                case POWER_UP_TYPE.BERSERKER_TWO_KILLS:
-                    key += "_BERSERKER_TWO_KILLS";
-                    break;
-            }
+
+			if (Service.Game.Sim.info.roleCardObservation.Data.hasNecronomicon)
+			{
+				key += "_NOMICON";
+				if (myRole == Role.MEDUSA && Service.Game.Sim.info.roleCardObservation.Data.normalAbilityRemaining < 1)
+				{
+					key += "_2";
+				}
+			}
+			else if (Service.Game.Sim.info.roleCardObservation.Data.isHorseman)
+			{
+				key += "_HORSEMAN";
+			}
+			else if (Service.Game.Sim.info.roleCardObservation.Data.roleId == 42)
+			{
+				int powerLevelCurrent = Service.Game.Sim.info.roleCardObservation.Data.powerLevelCurrent;
+				if (powerLevelCurrent == 1)
+				{
+					key += "_BERSERKER_ONE_KILL";
+				}
+				else if (powerLevelCurrent == 2)
+				{
+					key += "_BERSERKER_TWO_KILLS";
+				}
+			}
 
             if (isCancel)
                 key += "_CANCEL";
@@ -1361,6 +1159,14 @@ public static class RoleTargetingPatches
                     if (overrideType == TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_REVEAL)
                         key += "_ALT1";
                     else if (overrideType == TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_ATTACK)
+                        key += "_ALT2";
+                    break;
+                case Role.VOODOOMASTER:
+                    if (overrideType == TosAbilityPanelListItem.OverrideAbilityType.VOODOOMASTER_SILENCE)
+                        key += "_ALT0";
+                    else if (overrideType == TosAbilityPanelListItem.OverrideAbilityType.VOODOOMASTER_DEAFEN)
+                        key += "_ALT1";
+                    else if (overrideType == TosAbilityPanelListItem.OverrideAbilityType.VOODOOMASTER_BLIND)
                         key += "_ALT2";
                     break;
                 case Role.SHROUD:
@@ -1452,6 +1258,17 @@ public static class FactionTargetingPatches
                     break;
                 case Role.BAKER:
                     if (isBTOS2 && specialData > 0)
+                    {
+                        if (specialData == 1)
+                            key += "_ALT0";
+                        else if (specialData == 2)
+                            key += "_ALT1";
+                        else if (specialData == 3)
+                            key += "_ALT2";
+                    }
+                    break;
+                case Role.VOODOOMASTER:
+                    if (specialData > 0)
                     {
                         if (specialData == 1)
                             key += "_ALT0";

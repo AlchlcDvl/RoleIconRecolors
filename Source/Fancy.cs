@@ -118,7 +118,6 @@ public class Fancy : BaseMod<Fancy>
     public static ToggleOption FactionalRoleNames;
     public static ToggleOption FactionalRoleBlurbs;
     public static ToggleOption ReplaceNAwithRA;
-    public static ToggleOption GradientBuckets;
     public static ToggleOption DisableBTOSTribunal;
 
     public static ToggleOption MajorColors;
@@ -133,6 +132,8 @@ public class Fancy : BaseMod<Fancy>
     public static ColorOption NeutralStart;
     public static ColorOption NeutralEnd;
     public static ColorOption BucketStart;
+    public static ColorOption BucketColor;
+    public static ColorOption NeutralColor;
     public static ColorOption BucketEnd;
     public static ColorOption AnyStart;
     public static ColorOption AnyEnd;
@@ -155,19 +156,8 @@ public class Fancy : BaseMod<Fancy>
     public static FloatOption PlayerNumber;
 
     public static StringInputOption RecruitLabel;
-    /* public static StringInputOption RecruitLabelTown;
-    public static StringInputOption RecruitLabelCoven;
-    public static StringInputOption RecruitLabelApocalypse;
-    public static StringInputOption RecruitLabelSerialKiller;
-    public static StringInputOption RecruitLabelArsonist;
-    public static StringInputOption RecruitLabelWerewolf;
-    public static StringInputOption RecruitLabelShroud;
-    public static StringInputOption RecruitLabelPandora;
-    public static StringInputOption RecruitLabelCompliance;
-    public static StringInputOption RecruitLabelCursedSoul; */
     public static StringInputOption CovenTraitorLabel;
     public static StringInputOption ApocTraitorLabel;
-    public static StringInputOption PandoraTraitorLabel;
     public static StringInputOption VipLabel;
     public static StringInputOption CourtLabel;
     public static StringInputOption JuryLabel;
@@ -260,7 +250,7 @@ public class Fancy : BaseMod<Fancy>
             Role.UNKNOWN])];
 
         var colors = GeneralUtils.GetEnumValues<ColorType>()!.Where(x => x != ColorType.All).ToDictionary(x => x, x => x.ToString().ToUpperInvariant());
-        var filteredFactions = BTOS2Factions.Where(x => x is not (Btos2Faction.Cannibal or Btos2Faction.None or Btos2Faction.Lovers));
+        var filteredFactions = BTOS2Factions.Where(x => x is not (Btos2Faction.Cannibal or Btos2Faction.None or Btos2Faction.Lovers or Btos2Faction.Compliance or Btos2Faction.Pandora));
 
         var factions = filteredFactions.ToDictionary(x => x, x => Utils.FactionName(x, Constants.BTOS2Exists() ? GameModType.BTOS2 : GameModType.Vanilla, false).ToUpperInvariant());
 
@@ -308,8 +298,6 @@ public class Fancy : BaseMod<Fancy>
                         Btos2Faction.Jackal => "#D9BF41",
                         Btos2Faction.Doomsayer => "#CCCCCC",
                         Btos2Faction.Shroud => "#70FAF1",
-                        Btos2Faction.Compliance => "#AE1B1E",
-                        Btos2Faction.Pandora => "#B545FF",
                         Btos2Faction.Judge => "#C77364",
                         Btos2Faction.Auditor => "#AEBA87",
                         Btos2Faction.Starspawn => "#FCE79A",
@@ -427,19 +415,8 @@ public class Fancy : BaseMod<Fancy>
         RoleCardFactionLabel = new("FACTION_LABEL", FactionLabelOption.Mismatch, PackType.MiscRoleCustomisation, useTranslations: true);
         FactionNameNextToRole = new("FACTION_NEXT_TO_ROLE", FactionLabelOption.Never, PackType.MiscRoleCustomisation, useTranslations: true);
         RecruitLabel = new("RECRUIT_LABEL", "Recruited", PackType.MiscRoleCustomisation, setActive: () => Constants.BTOS2Exists());
-        /* RecruitLabelTown = new("RECRUIT_LABEL_TOWN", "Recruited", PackType.MiscRoleCustomisation, setActive: () => Constants.BTOS2Exists() && SelectTestingFaction.Value == FactionType.TOWN);
-        RecruitLabelCoven = new("RECRUIT_LABEL_COVEN", "Recruited", PackType.MiscRoleCustomisation, setActive: () => Constants.BTOS2Exists() && SelectTestingFaction.Value == FactionType.COVEN);
-        RecruitLabelApocalypse = new("RECRUIT_LABEL_APOCALYPSE", "Recruited", PackType.MiscRoleCustomisation, setActive: () => Constants.BTOS2Exists() && SelectTestingFaction.Value == FactionType.APOCALYPSE);
-        RecruitLabelSerialKiller = new("RECRUIT_LABEL_SERIAL_KILLER", "Recruited", PackType.MiscRoleCustomisation, setActive: () => Constants.BTOS2Exists() && SelectTestingFaction.Value == FactionType.SERIALKILLER);
-        RecruitLabelArsonist = new("RECRUIT_LABEL_ARSONIST", "Recruited", PackType.MiscRoleCustomisation, setActive: () => Constants.BTOS2Exists() && SelectTestingFaction.Value == FactionType.ARSONIST);
-        RecruitLabelWerewolf = new("RECRUIT_LABEL_WEREWOLF", "Recruited", PackType.MiscRoleCustomisation, setActive: () => Constants.BTOS2Exists() && SelectTestingFaction.Value == FactionType.WEREWOLF);
-        RecruitLabelShroud = new("RECRUIT_LABEL_SHROUD", "Recruited", PackType.MiscRoleCustomisation, setActive: () => Constants.BTOS2Exists() && SelectTestingFaction.Value == FactionType.SHROUD);
-        RecruitLabelPandora = new("RECRUIT_LABEL_PANDORA", "Recruited", PackType.MiscRoleCustomisation, setActive: () => Constants.BTOS2Exists() && SelectTestingFaction.Value == Btos2Faction.Pandora);
-        RecruitLabelCompliance = new("RECRUIT_LABEL_COMPLIANCE", "Recruited", PackType.MiscRoleCustomisation, setActive: () => Constants.BTOS2Exists() && SelectTestingFaction.Value == Btos2Faction.Compliance);
-        RecruitLabelCursedSoul = new("RECRUIT_LABEL_CURSEDSOUL", "Recruited", PackType.MiscRoleCustomisation, setActive: () => Constants.BTOS2Exists() && SelectTestingFaction.Value == FactionType.CURSED_SOUL); */
         CovenTraitorLabel = new("COVEN_TRAITOR_LABEL", "Town Traitor", PackType.MiscRoleCustomisation, setActive: () => SelectTestingFaction.Value == FactionType.COVEN);
         ApocTraitorLabel = new("APOC_TRAITOR_LABEL", "Town Traitor", PackType.MiscRoleCustomisation, setActive: () => Constants.BTOS2Exists() && SelectTestingFaction.Value == FactionType.APOCALYPSE);
-        PandoraTraitorLabel = new("PANDORA_TRAITOR_LABEL", "Town Traitor", PackType.MiscRoleCustomisation, setActive: () => Constants.BTOS2Exists() && SelectTestingFaction.Value == Btos2Faction.Pandora);
         VipLabel = new("VIP_LABEL", "VIP", PackType.MiscRoleCustomisation);
         CourtLabel = new("COURT_LABEL", "Court", PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists);
         CourtChatColor = new("COURT_CHAT_COLOR", "#FFFF00", PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists);
@@ -454,13 +431,14 @@ public class Fancy : BaseMod<Fancy>
         WhisperColor = new("WHISPER", "#AA7CFF", PackType.MiscRoleCustomisation);
         WildlingWhisperColor = new("WILDLING_WHISPER", "#DD0000", PackType.MiscRoleCustomisation);
         SerialKillerWhisperColor = new("SERIALKILLER_WHISPER", "#800040", PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists);
-        GradientBuckets = new("GRADIENT_BUCKETS", true, PackType.MiscRoleCustomisation);
-        ReplaceNAwithRA = new("RANDOM_APOC_IN_VANILLA", false, PackType.MiscRoleCustomisation, setActive: () => GradientBuckets.Value);
+        // ReplaceNAwithRA = new("RANDOM_APOC_IN_VANILLA", false, PackType.MiscRoleCustomisation, setActive: () => VerticalGradients.Value);
 
-        NeutralStart = new("NEUTRAL_START", "#A9A9A9", PackType.MiscRoleCustomisation);
-        NeutralEnd = new("NEUTRAL_END", "#A9A9A9", PackType.MiscRoleCustomisation, setActive: () => GradientBuckets.Value);
-        BucketStart = new("BUCKET_START", "#1F51FF", PackType.MiscRoleCustomisation, setActive: () => GradientBuckets.Value);
-        BucketEnd = new("BUCKET_END", "#1F51FF", PackType.MiscRoleCustomisation, setActive: () => GradientBuckets.Value);
+        NeutralStart = new("NEUTRAL_START", "#A9A9A9", PackType.MiscRoleCustomisation, setActive: () => false);
+        NeutralEnd = new("NEUTRAL_END", "#A9A9A9", PackType.MiscRoleCustomisation, setActive: () => false);
+        BucketStart = new("BUCKET_START", "#1F51FF", PackType.MiscRoleCustomisation, setActive: () => false);
+        BucketEnd = new("BUCKET_END", "#1F51FF", PackType.MiscRoleCustomisation, setActive: () => false);
+        NeutralColor = new("NEUTRAL_COLOR", "#A9A9A9", PackType.MiscRoleCustomisation);
+        BucketColor = new("BUCKET_COLOR", "#1F51FF", PackType.MiscRoleCustomisation);
         AnyStart = new("ANY_START", "#ffffff", PackType.MiscRoleCustomisation);
         AnyEnd = new("ANY_END", "#ffffff", PackType.MiscRoleCustomisation);
         KeywordStart = new("KEYWORD_START", "#007AFF", PackType.MiscRoleCustomisation);
@@ -484,8 +462,8 @@ public class Fancy : BaseMod<Fancy>
         ModifierFactions = new("MODIFIER_FACTIONS", true, PackType.Testing);
         DisableBTOSTribunal = new("DISABLE_BTOS_TRIBUNAL", true, PackType.Testing, setActive: Constants.BTOS2Exists);
 
-        foreach (var faction in BTOS2Factions.Where(x => x is not (FactionType.NONE or (> FactionType.APOCALYPSE and < FactionType.VAMPIRE) or FactionType.CURSED_SOUL or FactionType.UNKNOWN or
-            Btos2Faction.Lovers or (> Btos2Faction.Hawks and < Btos2Faction.Pandora))))
+        foreach (var faction in BTOS2Factions.Where(x => x is not (FactionType.NONE or (> FactionType.APOCALYPSE and < FactionType.VAMPIRE) or FactionType.CURSED_SOUL or FactionType.UNKNOWN or Btos2Faction.Compliance or
+            Btos2Faction.Lovers or > Btos2Faction.Hawks)))
         {
             CinematicMap[faction] = new(
                 $"{Utils.FactionName(faction, GameModType.BTOS2, false).ToUpper()}_CINEMATIC",

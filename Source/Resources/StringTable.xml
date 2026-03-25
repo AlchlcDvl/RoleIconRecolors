@@ -18,7 +18,7 @@
     <Entry key="FANCY_FACTION_NEXT_TO_ROLE_DESC">Determines whether or not factions will be displayed next to roles as if colors were off in Town of Salem 2's chat settings.</Entry>
 
     <Entry key="FANCY_FACTION_LABEL_NAME">Faction Label in Role Card</Entry>
-    <Entry key="FANCY_FACTION_LABEL_DESC">Determines whether or not the faction label within the role card will be displayed and under what conditions. Mismatch means if the role doesn't belong in the current faction. Conditional means Coven and Apocalypse will not show the Pandora label, and Neutral Killing roles will not show the Compliance label. Setting to Never hides it entirely. If Faction Specific Role Names are enabled, the label will NOT show up if the faction specific role name is different from the base name.</Entry>
+    <Entry key="FANCY_FACTION_LABEL_DESC">Determines whether or not the faction label within the role card will be displayed and under what conditions. If Faction Specific Role Names are enabled, the label will NOT show up if the faction specific role name is different from the base name.</Entry>
 
     <Entry key="FANCY_MODIFIER_FACTIONS_NAME">Modifier Factions</Entry>
     <Entry key="FANCY_MODIFIER_FACTIONS_DESC">Gives some modifiers a faction to display as, instead of every modifier being white.</Entry>
@@ -347,6 +347,12 @@
 
     <Entry key="FANCY_NEUTRAL_END_NAME">Neutral Secondary Color</Entry>
     <Entry key="FANCY_NEUTRAL_END_DESC">The secondary color for the Neutral part of Neutral buckets.</Entry>
+
+    <Entry key="FANCY_NEUTRAL_COLOR_NAME">Neutral Alignment Color</Entry>
+    <Entry key="FANCY_NEUTRAL_COLOR_DESC">The color used for Neutral roles in the role card.</Entry>
+
+    <Entry key="FANCY_BUCKET_COLOR_NAME">Sub Alignment Color</Entry>
+    <Entry key="FANCY_BUCKET_COLOR_DESC">The color used for sub alugnments in the role card.</Entry>
 
     <Entry key="FANCY_TOWN_START_NAME">Town Primary Color</Entry>
     <Entry key="FANCY_TOWN_START_DESC">The primary color for the Town faction.</Entry>
@@ -971,6 +977,18 @@
 	<Entry key="FANCY_PLAYER_WAS_ROLE">%name% was %role%.</Entry>
 	<Entry key="FANCY_PLAYER_WAS_STONED">%name% was %role%.</Entry>
 	<Entry key="FANCY_PLAYER_WAS_A_HIDDEN_ROLE">%name% was a %role% role.</Entry>
+
+    <Entry key="FANCY_PLAYER_WAS_A_ROLE_ALT">%name% was a
+%role%.</Entry>
+	<Entry key="FANCY_PLAYER_WAS_AN_ROLE_ALT">%name% was an 
+%role%.</Entry>
+    <Entry key="FANCY_PLAYER_WAS_THE_ROLE_ALT">%name% was the %role%.</Entry>
+	<Entry key="FANCY_PLAYER_WAS_ROLE_ALT">%name% was 
+%role%.</Entry>
+	<Entry key="FANCY_PLAYER_WAS_STONED_ALT">%name% was 
+%role%.</Entry>
+	<Entry key="FANCY_PLAYER_WAS_A_HIDDEN_ROLE_ALT">%name% was a 
+%role% role.</Entry>
 
     <Entry key="FANCY_VANILLA">Vanilla</Entry>
     <Entry key="FANCY_DEFAULT">Default</Entry>
@@ -1638,10 +1656,29 @@ Would you like to abandon %role2% and become %role%?</Entry>
 	<Entry key="FANCY_GUI_GAME_ALSO_KILLED_BY_REASON_31"><![CDATA[<style="ApocalypseColor"><sprite="RoleIcons" name="Role253">]]>%name_role253%<![CDATA[</style>]]> also brought about the Apocalypse killing them.</Entry>
 
 	<!-- THIS DOES SOMETHING DONT DELETE -->
-	<Entry key="BTOS_GUI_ROLE_TARGETING_41_ALT0">You decided to give [[:35]] to and reveal %target% tonight.</Entry>
-	<Entry key="BTOS_GUI_ROLE_TARGETING_41_ALT1">You decided to give [[:35]] to and distract %target% tonight.</Entry>
-	<Entry key="BTOS_GUI_ROLE_TARGETING_41_ALT2">You decided to give [[:35]] to and [[:32]] %target% tonight.</Entry>
-	<Entry key="BTOS_GUI_FACTION_TARGETING_41_ALT0">%name% decided to give [[:35]] to and reveal %target% tonight.</Entry>
-	<Entry key="BTOS_GUI_FACTION_TARGETING_41_ALT1">%name% decided to give [[:35]] to and distract %target% tonight.</Entry>
-	<Entry key="BTOS_GUI_FACTION_TARGETING_41_ALT2">%name% decided to give [[:35]] to and [[:32]] %target% tonight.</Entry>
+	<Entry key="BTOS_GUI_ROLE_TARGETING_41_ALT0_TARGET2">You decided to give [[:35]] to and reveal %target2% tonight.</Entry>
+	<Entry key="BTOS_GUI_ROLE_TARGETING_41_ALT1_TARGET2">You decided to give [[:35]] to and distract %target2% tonight.</Entry>
+	<Entry key="BTOS_GUI_ROLE_TARGETING_41_ALT2_TARGET2">You decided to give [[:35]] to and [[:32]] %target2% tonight.</Entry>
+	<Entry key="BTOS_GUI_ROLE_TARGETING_41_NOMICON_ALT0_TARGET2">You decided to give [[:35]] to and reveal %target2% tonight.</Entry>
+	<Entry key="BTOS_GUI_ROLE_TARGETING_41_NOMICON_ALT1_TARGET2">You decided to give [[:35]] to and distract %target2% tonight.</Entry>
+	<Entry key="BTOS_GUI_ROLE_TARGETING_41_NOMICON_ALT2_TARGET2">You decided to give [[:35]] to and [[:32]] %target2% tonight.</Entry>
+	<Entry key="BTOS_GUI_FACTION_TARGETING_41_ALT0_TARGET2">%name% decided to give [[:35]] to and reveal %target2% tonight.</Entry>
+	<Entry key="BTOS_GUI_FACTION_TARGETING_41_ALT1_TARGET2">%name% decided to give [[:35]] to and distract %target2% tonight.</Entry>
+	<Entry key="BTOS_GUI_FACTION_TARGETING_41_ALT2_TARGET2">%name% decided to give [[:35]] to and [[:32]] %target2% tonight.</Entry>
+	<Entry key="BTOS_GUI_FACTION_TARGETING_41_NOMICON_ALT0_TARGET2">%name% decided to give [[:35]] to and reveal %target2% tonight.</Entry>
+	<Entry key="BTOS_GUI_FACTION_TARGETING_41_NOMICON_ALT1_TARGET2">%name% decided to give [[:35]] to and distract %target2% tonight.</Entry>
+	<Entry key="BTOS_GUI_FACTION_TARGETING_41_NOMICON_ALT2_TARGET2">%name% decided to give [[:35]] to and [[:32]] %target2% tonight.</Entry>
+
+	<Entry key="BTOS_GUI_ROLE_TARGETING_37_ALT0">You decided to use a voodoo doll to silence %target% tonight.</Entry>
+	<Entry key="BTOS_GUI_ROLE_TARGETING_37_ALT1">You decided to use a voodoo doll to deafen %target% tonight.</Entry>
+	<Entry key="BTOS_GUI_ROLE_TARGETING_37_ALT2">You decided to use a voodoo doll to blind %target% tonight.</Entry>
+	<Entry key="BTOS_GUI_FACTION_TARGETING_37_ALT0">%name% decided to use a voodoo doll to silence %target% tonight</Entry>
+	<Entry key="BTOS_GUI_FACTION_TARGETING_37_ALT1">%name% decided to use a voodoo doll to deafen %target% tonight.</Entry>
+	<Entry key="BTOS_GUI_FACTION_TARGETING_37_ALT2">%name% decided to use a voodoo doll to blind %target% tonight.</Entry>
+	<Entry key="BTOS_GUI_ROLE_TARGETING_37_NOMICON_ALT0">You decided to use a voodoo doll to silence and attack %target% tonight.</Entry>
+	<Entry key="BTOS_GUI_ROLE_TARGETING_37_NOMICON_ALT1">You decided to use a voodoo doll to deafen and attack %target% tonight.</Entry>
+	<Entry key="BTOS_GUI_ROLE_TARGETING_37_NOMICON_ALT2">You decided to use a voodoo doll to blind and attack %target% tonight.</Entry>
+	<Entry key="BTOS_GUI_FACTION_TARGETING_37_NOMICON_ALT0">%name% decided to use a voodoo doll to silence and attack %target% tonight</Entry>
+	<Entry key="BTOS_GUI_FACTION_TARGETING_37_NOMICON_ALT1">%name% decided to use a voodoo doll to deafen and attack %target% tonight.</Entry>
+	<Entry key="BTOS_GUI_FACTION_TARGETING_37_NOMICON_ALT2">%name% decided to use a voodoo doll to blind and attack %target% tonight.</Entry>
 </StringTable>

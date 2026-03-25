@@ -83,7 +83,7 @@ public enum OverrideEndType : byte
 public enum FactionLabelOption : byte
 {
     Mismatch,
-    Conditional,
+    // Conditional,
     // Always,
     Never
 }

@@ -37,59 +37,150 @@ public static class PatchRoleDeckBuilder
     }
 }
 
+// [HarmonyPatch(typeof(RoleDeckListItem), nameof(RoleDeckListItem.SetData))]
+// public static class PatchRoleListPanel2
+// {
+//     public static void Postfix(RoleDeckListItem __instance, RoleDeckSlot a_roleDeckSlot, bool a_isBan)
+//     {
+//         if (!Constants.EnableIcons())
+//             return;
+
+//         var a_role = a_roleDeckSlot?.Role1;
+
+//         if (a_role == null)
+//             return;
+
+//         var role = a_role.Value;
+//         var factionType = role.GetFactionType();
+
+//         var icon = a_isBan
+//             ? GetSprite("Banned")
+//             : GetSprite(Utils.RoleName(role), Utils.FactionName(factionType), false);
+
+//         if (__instance.roleImage && icon.IsValid())
+//             __instance.roleImage.sprite = icon;
+//     }
+// }
+
 [HarmonyPatch(typeof(RoleDeckListItem), nameof(RoleDeckListItem.SetData))]
 public static class PatchRoleListPanel
 {
-    public static void Postfix(RoleDeckListItem __instance, RoleDeckSlot a_roleDeckSlot, bool a_isBan)
+    public static bool Prefix(RoleDeckListItem __instance, RoleDeckSlot a_roleDeckSlot, RoleDeckPanelController parent, bool a_isBan = false)
     {
-        if (!Constants.EnableIcons())
-            return;
+        __instance.Reset();
+        __instance._parentPanel = parent;
+        __instance.background.SetActive(false);
+        __instance.roleDeckSlot = a_roleDeckSlot;
+        __instance.role = a_roleDeckSlot.Role1;
+        __instance.role2 = a_roleDeckSlot.Role2;
+        __instance.faction = a_roleDeckSlot.Faction1;
+        __instance.faction2 = a_roleDeckSlot.Faction2;
+        __instance.isBan = a_isBan;
 
-        var a_role = a_roleDeckSlot?.Role1;
+        var role1 = __instance.role;
+        var role2 = __instance.role2;
+        var faction1 = __instance.faction;
+        var faction2 = __instance.faction2;
 
-        if (a_role == null)
-            return;
+        __instance.index = Service.Game.Sim.simulation.roleDeckBuilder.Data.roleDeckSlots
+            .IndexOf(a_roleDeckSlot);
 
-        var role = a_role.Value;
-        var factionType = role.GetFactionType();
-        if (Constants.IsPandora() && (factionType == FactionType.COVEN || factionType == FactionType.APOCALYPSE))
-            factionType = Btos2Faction.Pandora;
-        if (Constants.IsCompliance() && role.IsNeutralKilling())
-            factionType = Btos2Faction.Compliance;
+        __instance.roleName.gameObject.SetActive(true);
+        __instance.roleImage.gameObject.SetActive(__instance.isBan);
 
-        var icon = a_isBan
-            ? GetSprite("Banned")
-            : GetSprite(Utils.RoleName(role), Utils.FactionName(factionType), false);
+        if (__instance.isBan)
+        {
+            __instance.roleName.text = "      " + role1.ToColorizedNoLabel(faction1);
+            __instance.roleImage.sprite = GetSprite("Banned");
+        }
+        else if (a_roleDeckSlot.IsDualBucket())
+        {
+            var icon1 = GetStyledIcon(role1, faction1);
+            var icon2 = GetStyledIcon(role2, faction2);
 
-        if (__instance.roleImage && icon.IsValid())
-            __instance.roleImage.sprite = icon;
+            __instance.roleName.text = string.Concat(
+                "<size=200%><voffset=-7>", icon1, "</voffset></size>", role1.ToColorizedShortenedDisplayString(faction1),
+                " <color=#FFFFFF40>-</color> <size=200%><voffset=-7>", icon2, "</voffset></size>", role2.ToColorizedShortenedDisplayString(faction2)
+            );
+        }
+        else
+        {
+            var icon1 = GetStyledIcon(role1, faction1);
+            __instance.roleName.text = "<size=200%><voffset=-7>" + icon1 + "</voffset></size>" + role1.ToColorizedDisplayString(faction1);
+        }
+
+        __instance.roleImage.SetAllDirty();
+        __instance.gameObject.SetActive(true);
+        __instance.ValidateButtons();
+
+        return false;
+    }
+
+    private static string GetStyledIcon(Role role, FactionType faction)
+    {
+        var icon = role.GetTMPSprite();
+        return icon.Replace("RoleIcons\"", $"RoleIcons ({((role.GetFactionType() == faction && Constants.CurrentStyle() == "Regular")
+            ? "Regular" : Utils.FactionName(faction, false))})\"");
     }
 }
-
 [HarmonyPatch(typeof(GameBrowserRoleDeckListItem), nameof(GameBrowserRoleDeckListItem.SetData))]
 public static class PatchBrowserRoleListPanel
 {
-    public static void Postfix(GameBrowserRoleDeckListItem __instance, RoleDeckSlot a_roleDeckSlot, bool a_isBan)
+    public static bool Prefix(GameBrowserRoleDeckListItem __instance, RoleDeckSlot a_roleDeckSlot, bool a_isBan = false)
     {
-        if (!Constants.EnableIcons())
-            return;
+        if (a_roleDeckSlot == null)
+            return false;
 
-        var a_role = a_roleDeckSlot?.Role1;
+        __instance.Reset();
+        __instance.background.SetActive(false);
+        __instance.roleDeckSlot = a_roleDeckSlot;
+        __instance.isBan = a_isBan;
 
-        if (a_role == null)
-            return;
+        var role1 = a_roleDeckSlot.Role1;
+        var role2 = a_roleDeckSlot.Role2;
+        var faction1 = a_roleDeckSlot.Faction1;
+        var faction2 = a_roleDeckSlot.Faction2;
 
-        var role = a_role.Value;
+        __instance.roleName.gameObject.SetActive(true);
+        __instance.roleImage.gameObject.SetActive(__instance.isBan);
 
-        var icon = a_isBan
-            ? GetSprite("Banned")
-            : GetSprite(Utils.RoleName(role), Utils.FactionName(role.GetFactionType()), false);
+        if (__instance.isBan)
+        {
+			// var icon1 = role1.GetTMPSprite();
+            // icon1 = icon1.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(faction1, false)})\"");
+			
+            __instance.roleName.text = "      " + role1.ToColorizedNoLabel(faction1);
+            __instance.roleImage.sprite = GetSprite("Banned");
+        }
+        else if (a_roleDeckSlot.IsDualBucket())
+        {
+            var icon1 = role1.GetTMPSprite();
+            var icon2 = role2.GetTMPSprite();
 
-        if (__instance.roleImage && icon.IsValid())
-            __instance.roleImage.sprite = icon;
+            icon1 = icon1.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(faction1, false)})\"");
+            icon2 = icon2.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(faction2, false)})\"");
+
+            __instance.roleName.text = string.Concat(
+                "<size=200%><voffset=-7>", icon1, "</voffset></size>",
+                role1.ToColorizedShortenedDisplayString(faction1),
+                " <color=#FFFFFF40>-</color> <size=200%><voffset=-7>", icon2, "</voffset></size>",
+                role2.ToColorizedShortenedDisplayString(faction2)
+            );
+        }
+        else
+        {
+            var icon1 = role1.GetTMPSprite();
+            icon1 = icon1.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(faction1, false)})\"");
+
+            __instance.roleName.text = "<size=200%><voffset=-7>" + icon1 + "</voffset></size>" +
+                                       role1.ToColorizedDisplayString(faction1);
+        }
+
+        __instance.gameObject.SetActive(true);
+
+        return false; // skip original method
     }
 }
-
 [HarmonyPatch(typeof(RoleCardPanelBackground))]
 public static class RoleCardFixesAndPatches
 {
@@ -1303,7 +1394,7 @@ public static class MakeProperFactionChecksInHeaderAnnouncement
         var icon = $"<sprite=\"{roleIconsString} ({(Constants.CurrentStyle() == "Regular" && role.GetFactionType() == faction ? "Regular" : Utils.FactionName(faction, false))})\" name=\"Role{(int)role}\">";
         var display = icon + roleText;
 
-        var l10nKey = Fancy.YouAreARole ? Utils.GetHangingMessage(role, faction) : "GUI_GAME_WHO_DIED_AND_HOW_1_2";
+        var l10nKey = Fancy.YouAreARole ? Utils.GetHangingMessage2(role, faction) : "GUI_GAME_WHO_DIED_AND_HOW_1_2";
         var formattedLine = __instance.l10n(l10nKey).Replace("%role%", display);
 
         var name = Service.Game.Sim.simulation.GetDisplayName(trialData.defendantPosition).ToWhiteNameString();
@@ -1723,193 +1814,173 @@ public static class Tos2GameBrowserListItemPatch
     // }
 // }
 
-// // Role bucket header
-// [HarmonyPatch(typeof(RoleListPopupController), nameof(RoleListPopupController.Show))]
-// public static class RoleListHeaderIcon
-// {
-//     // Fun Fact: This happened by mistake, but kept it as I liked it.
-//     public static void Postfix(RoleListPopupController __instance, Role role) => __instance.RoleNameLabel.SetText($"{role.GetTMPSprite()} {role.ToColorizedDisplayString()}");
-// }
+// Role bucket header
+[HarmonyPatch(typeof(RoleListPopupController), nameof(RoleListPopupController.Show))]
+public static class RoleListHeaderIcon
+{
+    public static bool Prefix(RoleListPopupController __instance, Role role, Role role2, FactionType faction, FactionType faction2)
+    {
+        __instance.gameObject.SetActive(true);
 
-// [HarmonyPatch(typeof(RoleListItem), nameof(RoleListItem.SetRole))]
-// public static class RoleListItemIcon
-// {
-    // public static bool Prefix(RoleListItem __instance, Role role, Role role2)
-    // {
-        // __instance.role = role;
-        // __instance.role2 = role2;
+        if (role2 == Role.NONE)
+        {
+            var icon1 = role.GetTMPSprite();
+            icon1 = icon1.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(faction, false)})\"");
 
-        // var actualFaction = role.GetFactionType();
-        // var displayFaction = actualFaction;
+            __instance.RoleNameLabel.text = icon1 + role.ToColorizedNoLabel(faction);
+        }
+        else
+        {
+            var icon1 = role.GetTMPSprite();
+            var icon2 = role2.GetTMPSprite();
+            icon1 = icon1.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(faction, false)})\"");
+            icon2 = icon2.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(faction2, false)})\"");
 
-        // if (Constants.IsPandora() && (actualFaction == FactionType.COVEN || actualFaction == FactionType.APOCALYPSE))
-            // displayFaction = Btos2Faction.Pandora;
+            __instance.RoleNameLabel.text = string.Concat(
+                icon1,
+                role.ToColorizedShortenedDisplayString(faction),
+                " <color=#808080>-</color> ",
+                icon2,
+                role2.ToColorizedShortenedDisplayString(faction2)
+            );
+        }
 
-        // if (Constants.IsCompliance() &&
-            // (role == Role.SERIALKILLER || role == Role.SHROUD || role == Role.WEREWOLF || role == Role.ARSONIST))
-            // displayFaction = Btos2Faction.Compliance;
+        Role[] roles = [role, role2];
+        FactionType[] factions = [faction, faction2];
+        __instance.randomRoleListController.BuildList(roles, factions, null);
 
-        // string roleText;
-        // if (role2 == Role.NONE)
-        // {
-            // roleText = role.GetTMPSprite() + role.ToColorizedDisplayString(displayFaction);
-        // }
-        // else
-        // {
-            // roleText = string.Concat(
-                // role.GetTMPSprite(),
-                // role.ToColorizedShortenedDisplayString(),
-                // " <color=#FFFFFF40>-</color> ",
-                // role2.GetTMPSprite(),
-                // role2.ToColorizedShortenedDisplayString()
-            // );
-        // }
+        Service.Game.Interface.PopupController.DefaultRoleListPopupAnchor = __instance.DefaultRoleListPopupAnchor;
+        Service.Game.Interface.PopupController.IsRoleListPopupOpen = true;
+        Service.Game.Interface.PopupController.UpdateRoleListPopupAnchor();
 
-        // var factionName = (displayFaction == actualFaction && Constants.CurrentStyle() == "Regular") ? "Regular" : Utils.FactionName(displayFaction, false);
-        // roleText = roleText.Replace("RoleIcons\"", $"RoleIcons ({factionName})\"");
+        return false;
+    }
+}
+[HarmonyPatch(typeof(RoleListItem))]
+public static class RoleListItemIcon
+{
+    [HarmonyPatch(nameof(RoleListItem.RefreshLabel))]
+    [HarmonyPostfix]
+    public static void RefreshLabel_Postfix(RoleListItem __instance)
+    {
+        ApplyCustomLabel(__instance);
+    }
 
-        // roleText = roleText.ReplaceIcons();
+    [HarmonyPatch(nameof(RoleListItem.SetRole))]
+    [HarmonyPostfix]
+    public static void SetRole_Postfix(RoleListItem __instance)
+    {
+        ApplyCustomLabel(__instance);
+    }
 
-        // __instance.roleLabel.SetText(roleText);
+    private static void ApplyCustomLabel(RoleListItem __instance)
+    {
+        if (__instance.role == Role.NONE)
+            return;
 
-        // __instance.roleLabel.color = role.GetFaction().GetFactionColor().ParseColor();
+        string roleText;
 
-        // __instance.ValidateCrossOut();
 
-        // return false;
-    // }
-// }
+        if (__instance.role2 == Role.NONE)
+        {
+			var role1Sprite = __instance.role.GetTMPSprite();
+			var role1Text = __instance.role.ToColorizedDisplayString(__instance.faction);
+			role1Sprite = role1Sprite.Replace("RoleIcons", $"RoleIcons ({Utils.FactionName(__instance.faction, false)})");
+            roleText = role1Sprite + role1Text;
+        }
+        else
+        {
+			var role1Sprite = __instance.role.GetTMPSprite();
+			var role1Text = __instance.role.ToColorizedShortenedDisplayString(__instance.faction);
+            var role2Sprite = __instance.role2.GetTMPSprite();
+			role1Sprite = role1Sprite.Replace("RoleIcons", $"RoleIcons ({Utils.FactionName(__instance.faction, false)})");
+			role2Sprite = role2Sprite.Replace("RoleIcons", $"RoleIcons ({Utils.FactionName(__instance.faction2, false)})");
+			
+            var role2Text = __instance.role2.ToColorizedShortenedDisplayString(__instance.faction2);
 
-// [HarmonyPatch(typeof(RoleListItem), nameof(RoleListItem.RefreshLabel))]
-// public static class RoleListItem_RefreshLabel_Patch
-// {
-    // [HarmonyPostfix]
-    // public static void Postfix(RoleListItem __instance)
-    // {
-        // var role = __instance.role;
-        // if (role == Role.NONE)
-            // return;
+            roleText = $"{role1Sprite}{role1Text} <color=#FFFFFF40>-</color> {role2Sprite}{role2Text}";
+        }
 
-        // var actualFaction = role.GetFactionType();
-        // var displayFaction = actualFaction;
+        __instance.roleLabel.SetText(roleText);
 
-        // if (Constants.IsPandora() &&
-            // (actualFaction == FactionType.COVEN || actualFaction == FactionType.APOCALYPSE))
-            // displayFaction = Btos2Faction.Pandora;
+        __instance.ValidateCrossOut();
+    }
+}
+[HarmonyPatch(typeof(RandomRoleListItemController))]
+public static class RoleListPopupUpdate
+{
+    private static FactionType GetEffectiveFaction(RoleData roleData)
+    {
+        if (roleData.factionType == FactionType.NONE)
+            return roleData.role.GetFactionType();
+        return roleData.factionType;
+    }
 
-        // if (Constants.IsCompliance() &&
-            // (role == Role.SERIALKILLER || role == Role.SHROUD ||
-             // role == Role.WEREWOLF || role == Role.ARSONIST))
-            // displayFaction = Btos2Faction.Compliance;
+    private static string BuildRoleText(RoleData roleData)
+    {
+        var factionType = GetEffectiveFaction(roleData);
+		var icon = roleData.role.GetTMPSprite();
+		icon = icon.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(factionType, false)})\"");
 
-        // var text = __instance.roleLabel.text;
+        var roleText = icon + roleData.role.ToColorizedDisplayString(factionType);
+        return roleText;
+    }
 
-        // var factionName =
-            // (displayFaction == actualFaction && Constants.CurrentStyle() == "Regular")
-                // ? "Regular"
-                // : Utils.FactionName(displayFaction, false);
+    [HarmonyPatch(nameof(RandomRoleListItemController.HandleOnRoleDeckBuilderChanged))]
+    public static bool Prefix(RandomRoleListItemController __instance, RoleDeckBuilder roleDeckBuilder)
+    {
+        var banPanel = __instance.BannedPanelGO;
+        var roleData = __instance.m_roleData;
+        var roleName = __instance.RoleNameLabel;
 
-        // text = text.Replace(
-            // "RoleIcons\"",
-            // $"RoleIcons ({factionName})\""
-        // );
+        if (roleDeckBuilder.bannedRoles.Contains(roleData.role))
+            roleData.factionType = FactionType.NONE;
 
-        // text = text.ReplaceIcons();
+        var roleText = BuildRoleText(roleData);
 
-        // __instance.roleLabel.SetText(text);
+        if (roleDeckBuilder.bannedRoles.Contains(roleData.role))
+        {
+            if (!banPanel.activeSelf)
+            {
+                roleName.SetText("<color=#8C8C8C>" + roleText + "</color>");
+                banPanel.SetActive(true);
+            }
+        }
+        else
+        {
+            roleName.SetText(roleText);
+            banPanel.SetActive(false);
+        }
 
-        // __instance.ValidateCrossOut();
-    // }
-// }
+        return false;
+    }
 
-// // The role list panel listings oh my god
-// [HarmonyPatch(typeof(RandomRoleListItemController))]
-// public static class RoleListPopupUpdate
-// {
-//     [HarmonyPatch(nameof(RandomRoleListItemController.HandleOnRoleDeckBuilderChanged))]
-//     public static bool Prefix(RandomRoleListItemController __instance, RoleDeckBuilder roleDeckBuilder)
-//     {
-//         var banPanel = __instance.BannedPanelGO;
-//         var roleData = __instance.m_roleData;
-//         var roleName = __instance.RoleNameLabel;
+    [HarmonyPatch(nameof(RandomRoleListItemController.OnDataSet))]
+    public static bool Prefix(RandomRoleListItemController __instance, RoleData roleData)
+    {
+        __instance.m_roleData = roleData;
 
-//         var actualFaction = roleData.role.GetFactionType();
-//         var displayFaction = actualFaction;
+        var banPanel = __instance.BannedPanelGO;
+        var roleName = __instance.RoleNameLabel;
 
-//         if (Constants.IsPandora() && actualFaction is FactionType.COVEN or FactionType.APOCALYPSE)
-//             displayFaction = Btos2Faction.Pandora;
+        var deckBuilder = Service.Game.Sim.simulation.roleDeckBuilder.Data;
 
-//         if (Constants.IsCompliance() && roleData.role is Role.SERIALKILLER or Role.SHROUD or Role.WEREWOLF or Role.ARSONIST)
-//             displayFaction = Btos2Faction.Compliance;
+        if (deckBuilder.bannedRoles.Contains(roleData.role))
+            roleData.factionType = FactionType.NONE;
 
-//         if (roleDeckBuilder.bannedRoles.Contains(roleData.role))
-//             displayFaction = FactionType.NONE;
+        var roleText = BuildRoleText(roleData);
 
-//         var roleText = roleData.role.GetTMPSprite() + roleData.role.ToColorizedDisplayString(displayFaction);
-//         var faction = displayFaction == actualFaction && Constants.CurrentStyle() == "Regular"
-//             ? "Regular"
-//             : Utils.FactionName(displayFaction, false);
-//         roleText = roleText.Replace("RoleIcons\"", $"RoleIcons ({faction})\"");
+        if (deckBuilder.bannedRoles.Contains(roleData.role))
+        {
+            roleName.SetText("<color=#8C8C8C>" + roleData.role.ToDisplayString() + "</color>");
+            banPanel.SetActive(true);
+        }
+        else
+        {
+            roleName.SetText(roleText);
+            banPanel.SetActive(false);
+        }
 
-//         roleText = roleText.ReplaceIcons();
-
-//         if (roleDeckBuilder.bannedRoles.Contains(roleData.role))
-//         {
-//             if (!banPanel.activeSelf)
-//             {
-//                 roleName.SetText("<color=#8C8C8C>" + roleText + "</color>");
-//                 banPanel.SetActive(true);
-//             }
-//         }
-//         else if (banPanel.activeSelf)
-//         {
-//             roleName.SetText(roleText);
-//             banPanel.SetActive(false);
-//         }
-
-//         return false;
-//     }
-
-//     [HarmonyPatch(nameof(RandomRoleListItemController.OnDataSet))]
-//     public static bool Prefix(RandomRoleListItemController __instance, RoleData roleData)
-//     {
-//         __instance.m_roleData = roleData;
-
-//         var banPanel = __instance.BannedPanelGO;
-//         var roleName = __instance.RoleNameLabel;
-
-//         var actualFaction = roleData.role.GetFactionType();
-//         var displayFaction = actualFaction;
-
-//         if (Constants.IsPandora() && actualFaction is FactionType.COVEN or FactionType.APOCALYPSE)
-//             displayFaction = Btos2Faction.Pandora;
-
-//         if (Constants.IsCompliance() && roleData.role is Role.SERIALKILLER or Role.SHROUD or Role.WEREWOLF or Role.ARSONIST)
-//             displayFaction = Btos2Faction.Compliance;
-
-//         var bannedRoles = Service.Game.Sim.simulation.roleDeckBuilder.Data.bannedRoles;
-//         if (bannedRoles.Contains(roleData.role))
-//             displayFaction = FactionType.NONE;
-
-//         var roleText = roleData.role.GetTMPSprite() + roleData.role.ToColorizedDisplayString(displayFaction);
-//         var faction = displayFaction == actualFaction && Constants.CurrentStyle() == "Regular"
-//             ? "Regular"
-//             : Utils.FactionName(displayFaction, false);
-//         roleText = roleText.Replace("RoleIcons\"", $"RoleIcons ({faction})\"");
-
-//         roleText = roleText.ReplaceIcons();
-
-//         if (bannedRoles.Contains(roleData.role))
-//         {
-//             roleName.SetText("<color=#8C8C8C>" + roleText + "</color>");
-//             banPanel.SetActive(true);
-//         }
-//         else
-//         {
-//             roleName.SetText(roleText);
-//             banPanel.SetActive(false);
-//         }
-
-//         return false;
-//     }
-// }
+        return false;
+    }
+}
