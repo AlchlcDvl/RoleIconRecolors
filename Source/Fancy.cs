@@ -150,7 +150,7 @@ public class Fancy : BaseMod<Fancy>
 
     public static FloatOption DeadChatDesaturation;
     public static FloatOption BannedRoleDesaturation;
-    public static ToggleOption TallRoleDeck;
+    // public static ToggleOption TallRoleDeck;
     public static ToggleOption YouAreARole;
 
     public static FloatOption PlayerNumber;
@@ -450,7 +450,7 @@ public class Fancy : BaseMod<Fancy>
         // ColorMentionsWithFaction = new("FACTIONAL_PLAYER_MENTIONS", true, PackType.MiscRoleCustomisation, setActive: () => !Constants.BetterMentionsExists());
 
         PlayerListRoleIcon = new("PLAYER_LIST_ROLE_ICON", PlayerListRoleIconOption.Disabled, PackType.Testing, useTranslations: true);
-        TallRoleDeck = new("TALL_ROLE_DECK", false, PackType.Testing);
+        // TallRoleDeck = new("TALL_ROLE_DECK", false, PackType.Testing);
         YouAreARole = new("YOU_ARE_A_ROLE", true, PackType.Testing);
         NecroPassingFormat = new("NECRO_PASS_FORMAT", NecroPassingFormatOption.Vanilla, PackType.Testing, useTranslations: true);
         PlayerNumber = new("PLAYER_NUMBER", 0, PackType.Testing, 0, 15, true, Constants.CustomNumbers);
