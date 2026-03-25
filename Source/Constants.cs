@@ -71,6 +71,8 @@ public static class Constants
 
     public static float GrayscaleAmount() => Fancy.GrayscaleAmount.Value / 100f;
 
+    public static float RoleRevealTintIntensity() => Fancy.RoleRevealTintIntensity.Value / 1000f;
+
     public static float DeadChatDesaturation() => Fancy.DeadChatDesaturation.Value / 100f;
 
     public static float RecruitStartRatio() => Fancy.RecruitStartBlendRatio.Value / 100f;

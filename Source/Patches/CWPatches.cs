@@ -916,17 +916,23 @@ public static class RoleDeckPanelControllerPatch
         __instance.transform.GetComponent<Image>("RolesIcon").SetImageColor(ColorType.Paper);
         __instance.transform.GetComponent<Image>("PlayersIcon").SetImageColor(ColorType.Wax);
         __instance.transform.GetComponent<Image>("RoleTypeSeparator").SetImageColor(ColorType.Leather);
-        __instance.transform.GetComponent<TextMeshProUGUI>("LobbyInstructionsText").SetGraphicColor(ColorType.Paper);
+        // __instance.transform.GetComponent<TextMeshProUGUI>("LobbyInstructionsText").SetGraphicColor(ColorType.Paper);
+		var instructions = __instance.transform.Find("DeckView/LobbyInstructions/Instructions/LobbyInstructionsText")?.GetComponent<TextMeshProUGUI>();
         __instance.splatIcon.GetComponent<Image>().SetImageColor(ColorType.Wax);
 
         if (!Constants.EnableIcons())
             return;
 
-        var town = __instance.transform.GetComponent<Image>("TownIcon");
-        var coven = __instance.transform.GetComponent<Image>("CovenIcon");
-        var neut = __instance.transform.GetComponent<Image>("NeutralIcon");
-        var any = __instance.transform.GetComponent<Image>("AnyIcon");
-        var modifier = __instance.transform.GetComponent<Image>("ModifierIcon");
+        // var town = __instance.transform.GetComponent<Image>("TownIcon");
+        // var coven = __instance.transform.GetComponent<Image>("CovenIcon");
+        // var neut = __instance.transform.GetComponent<Image>("NeutralIcon");
+        // var any = __instance.transform.GetComponent<Image>("AnyIcon");
+        // var modifier = __instance.transform.GetComponent<Image>("ModifierIcon");
+		var town = __instance.transform.Find("DeckView/Count/TextContainer/Town/TownIcon")?.GetComponent<Image>();
+		var coven = __instance.transform.Find("DeckView/Count/TextContainer/Coven/CovenIcon")?.GetComponent<Image>();
+		var neut = __instance.transform.Find("DeckView/Count/TextContainer/Neutral/NeutralIcon")?.GetComponent<Image>();
+		var any = __instance.transform.Find("DeckView/Count/TextContainer/Any/AnyIcon")?.GetComponent<Image>();
+		var modifier = __instance.transform.Find("DeckView/Count/TextContainer/Modifier/ModifierIcon")?.GetComponent<Image>();
         var sprite = GetSprite("Town");
 
         if (sprite.IsValid() && town)
@@ -954,42 +960,42 @@ public static class RoleDeckPanelControllerPatch
         __instance.AdjustSizeBasedOnRolesAdded();
     }
 
-    // [HarmonyPatch(nameof(RoleDeckPanelController.AdjustSizeBasedOnRolesAdded)), HarmonyPostfix]
-    // public static void AdjustSizeBasedOnRolesAddedPostfix(RoleDeckPanelController __instance)
-    // {
-        // if (__instance.roleDeckListItems.Count < 10 && !Fancy.TallRoleDeck.Value)
-            // return;
+    [HarmonyPatch(nameof(RoleDeckPanelController.AdjustSizeBasedOnRolesAdded)), HarmonyPostfix]
+    public static void AdjustSizeBasedOnRolesAddedPostfix(RoleDeckPanelController __instance)
+    {
+        if (__instance.roleDeckListItems.Count < 10 && !Fancy.TallRoleDeck.Value)
+            return;
 
-        // var component = __instance.deckView.GetComponent<RectTransform>();
-        // var viewport = __instance.deckView.transform.GetChild(3).GetChild(0) as RectTransform;
-        // var bitchAssMask = viewport.GetComponent<RectMask2D>();
-        // var num3 = 0f;
-        // var ySize = __instance.startTop;
-        // var lastActiveDeckItem = __instance.deckListItemTemplate;
+        var component = __instance.deckView.GetComponent<RectTransform>();
+        var viewport = __instance.deckView.transform.GetChild(3).GetChild(0) as RectTransform;
+        var bitchAssMask = viewport.GetComponent<RectMask2D>();
+        var num3 = 0f;
+        var ySize = __instance.startTop;
+        var lastActiveDeckItem = __instance.deckListItemTemplate;
 
-        // for (var i = __instance.roleDeckListItems.Count - 1; !lastActiveDeckItem.isActiveAndEnabled && i > -1; i--)
-            // lastActiveDeckItem = __instance.roleDeckListItems[i];
+        for (var i = __instance.roleDeckListItems.Count - 1; !lastActiveDeckItem.isActiveAndEnabled && i > -1; i--)
+            lastActiveDeckItem = __instance.roleDeckListItems[i];
 
-        // if (Fancy.TallRoleDeck.Value)
-            // ySize = 720f;
-        // else if (-lastActiveDeckItem.transform.localPosition.y + 50 > viewport.rect.yMax)
-        // {
-            // for (var num = 1; ySize + viewport.rect.yMax < -lastActiveDeckItem.transform.localPosition.y + 50 && ySize < 720f; num++)
-            // {
-                // var num2 = num * 40;
-                // num3 = num * 0.04f;
-                // ySize = Mathf.Min(__instance.startTop + num2, 720f);
-            // }
-        // }
+        if (Fancy.TallRoleDeck.Value)
+            ySize = 720f;
+        else if (-lastActiveDeckItem.transform.localPosition.y + 50 > viewport.rect.yMax)
+        {
+            for (var num = 1; ySize + viewport.rect.yMax < -lastActiveDeckItem.transform.localPosition.y + 50 && ySize < 720f; num++)
+            {
+                var num2 = num * 40;
+                num3 = num * 0.04f;
+                ySize = Mathf.Min(__instance.startTop + num2, 720f);
+            }
+        }
 
-        // component.offsetMax = new Vector2(component.offsetMax.x, ySize);
-        // bitchAssMask.padding = new Vector4(0f, -ySize, 0f, 0f);
+        component.offsetMax = new Vector2(component.offsetMax.x, ySize);
+        bitchAssMask.padding = new Vector4(0f, -ySize, 0f, 0f);
 
-        // __instance.scaler.matchWidthOrHeight = Fancy.TallRoleDeck.Value ? 1f : 0.5f + num3;
+        __instance.scaler.matchWidthOrHeight = Fancy.TallRoleDeck.Value ? 1f : 0.5f + num3;
 
-        // if (MetalTransform && PaperTransform)
-            // MetalTransform.offsetMax = PaperTransform.offsetMax = component.offsetMax;
-    // }
+        if (MetalTransform && PaperTransform)
+            MetalTransform.offsetMax = PaperTransform.offsetMax = component.offsetMax;
+    }
 }
 
 [HarmonyPatch(typeof(GameBrowserRoleDeck), nameof(GameBrowserRoleDeck.Start))]

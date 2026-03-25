@@ -132,8 +132,6 @@ public class Fancy : BaseMod<Fancy>
     public static ColorOption NeutralStart;
     public static ColorOption NeutralEnd;
     public static ColorOption BucketStart;
-    public static ColorOption BucketColor;
-    public static ColorOption NeutralColor;
     public static ColorOption BucketEnd;
     public static ColorOption AnyStart;
     public static ColorOption AnyEnd;
@@ -150,8 +148,9 @@ public class Fancy : BaseMod<Fancy>
 
     public static FloatOption DeadChatDesaturation;
     public static FloatOption BannedRoleDesaturation;
-    // public static ToggleOption TallRoleDeck;
+    public static ToggleOption TallRoleDeck;
     public static ToggleOption YouAreARole;
+    public static FloatOption RoleRevealTintIntensity;
 
     public static FloatOption PlayerNumber;
 
@@ -293,8 +292,7 @@ public class Fancy : BaseMod<Fancy>
                         Btos2Faction.Town => "#737373",
                         Btos2Faction.Apocalypse => "#6E472C",
                         Btos2Faction.Coven => "#CFDEE6",
-                        Btos2Faction.CursedSoul when Constants.BTOS2Exists() => "#52C2EF",
-                        Btos2Faction.CursedSoul when !Constants.BTOS2Exists() => "#8500BF",
+                        Btos2Faction.CursedSoul => "#52C2EF",
                         Btos2Faction.Jackal => "#D9BF41",
                         Btos2Faction.Doomsayer => "#CCCCCC",
                         Btos2Faction.Shroud => "#70FAF1",
@@ -319,19 +317,16 @@ public class Fancy : BaseMod<Fancy>
                         {
                             ColorType.Fire => faction switch
                             {
-                                Btos2Faction.Compliance => "#FC9F32",
                                 Btos2Faction.CursedSoul => "#B54FFF",
                                 _ => "#DA23A7",
                             },
                             ColorType.Wood or ColorType.Wax => faction switch
                             {
-                                Btos2Faction.Compliance => "#2D44B5",
                                 Btos2Faction.CursedSoul => "#4FFF9F",
                                 _ => "#FF004E",
                             },
                             _ => faction switch
                             {
-                                Btos2Faction.Compliance => "#AE1B1E",
                                 Btos2Faction.CursedSoul => "#7500AF",
                                 _ => "#B545FF",
                             }
@@ -393,6 +388,7 @@ public class Fancy : BaseMod<Fancy>
         AllEasterEggs = new("ALL_EE", false, PackType.IconPacks, Constants.EnableIcons);
         PlayerPanelEasterEggs = new("PLAYER_PANEL_EE", false, PackType.IconPacks, Constants.EnableIcons);
 
+        RoleRevealTintIntensity = new("ROLE_REVEAL_TINT_INTENSITY", 625, PackType.MiscRoleCustomisation, 0, 1000, true);
         FactionalRoleNames = new("FACTIONAL_ROLE_NAMES", false, PackType.MiscRoleCustomisation, Constants.TextEditorExists);
         FactionalRoleBlurbs = new("FACTIONAL_ROLE_BLURBS", false, PackType.MiscRoleCustomisation, Constants.TextEditorExists);
         // RoleSpecificEndingColors = new("ROLE_SPECIFIC_COLORS", false, PackType.MiscRoleCustomisation);
@@ -431,14 +427,14 @@ public class Fancy : BaseMod<Fancy>
         WhisperColor = new("WHISPER", "#AA7CFF", PackType.MiscRoleCustomisation);
         WildlingWhisperColor = new("WILDLING_WHISPER", "#DD0000", PackType.MiscRoleCustomisation);
         SerialKillerWhisperColor = new("SERIALKILLER_WHISPER", "#800040", PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists);
-        // ReplaceNAwithRA = new("RANDOM_APOC_IN_VANILLA", false, PackType.MiscRoleCustomisation, setActive: () => VerticalGradients.Value);
+        ReplaceNAwithRA = new("RANDOM_APOC_IN_VANILLA", false, PackType.MiscRoleCustomisation);
 
-        NeutralStart = new("NEUTRAL_START", "#A9A9A9", PackType.MiscRoleCustomisation, setActive: () => false);
-        NeutralEnd = new("NEUTRAL_END", "#A9A9A9", PackType.MiscRoleCustomisation, setActive: () => false);
-        BucketStart = new("BUCKET_START", "#1F51FF", PackType.MiscRoleCustomisation, setActive: () => false);
-        BucketEnd = new("BUCKET_END", "#1F51FF", PackType.MiscRoleCustomisation, setActive: () => false);
-        NeutralColor = new("NEUTRAL_COLOR", "#A9A9A9", PackType.MiscRoleCustomisation);
-        BucketColor = new("BUCKET_COLOR", "#1F51FF", PackType.MiscRoleCustomisation);
+        NeutralStart = new("NEUTRAL_START", "#A9A9A9", PackType.MiscRoleCustomisation);
+        NeutralEnd = new("NEUTRAL_END", "#A9A9A9", PackType.MiscRoleCustomisation);
+        BucketStart = new("BUCKET_START", "#1F51FF", PackType.MiscRoleCustomisation);
+        BucketEnd = new("BUCKET_END", "#1F51FF", PackType.MiscRoleCustomisation);
+        // NeutralColor = new("NEUTRAL_COLOR", "#A9A9A9", PackType.MiscRoleCustomisation);
+        // BucketColor = new("BUCKET_COLOR", "#1F51FF", PackType.MiscRoleCustomisation);
         AnyStart = new("ANY_START", "#ffffff", PackType.MiscRoleCustomisation);
         AnyEnd = new("ANY_END", "#ffffff", PackType.MiscRoleCustomisation);
         KeywordStart = new("KEYWORD_START", "#007AFF", PackType.MiscRoleCustomisation);
@@ -450,7 +446,7 @@ public class Fancy : BaseMod<Fancy>
         // ColorMentionsWithFaction = new("FACTIONAL_PLAYER_MENTIONS", true, PackType.MiscRoleCustomisation, setActive: () => !Constants.BetterMentionsExists());
 
         PlayerListRoleIcon = new("PLAYER_LIST_ROLE_ICON", PlayerListRoleIconOption.Disabled, PackType.Testing, useTranslations: true);
-        // TallRoleDeck = new("TALL_ROLE_DECK", false, PackType.Testing);
+        TallRoleDeck = new("TALL_ROLE_DECK", false, PackType.Testing);
         YouAreARole = new("YOU_ARE_A_ROLE", true, PackType.Testing);
         NecroPassingFormat = new("NECRO_PASS_FORMAT", NecroPassingFormatOption.Vanilla, PackType.Testing, useTranslations: true);
         PlayerNumber = new("PLAYER_NUMBER", 0, PackType.Testing, 0, 15, true, Constants.CustomNumbers);

@@ -176,6 +176,41 @@ public static class RoleRevealCinematicPlayerPatch
         return false; // skip original
     }
 }
+
+[HarmonyPatch(typeof(RoleRevealCinematicPlayer), nameof(RoleRevealCinematicPlayer.SetGlobalTintToFactionColor))]
+public static class TintColorPatch
+{
+    private static readonly FieldInfo HasSetFactionColorField = AccessTools.Field(typeof(RoleRevealCinematicPlayer), "hasSetFactionColor");
+    public static bool Prefix(RoleRevealCinematicPlayer __instance, ref IEnumerator __result)
+    {
+        __result = Replacement(__instance);
+        return false;
+    }
+
+    private static IEnumerator Replacement(RoleRevealCinematicPlayer __instance)
+    {
+        HasSetFactionColorField.SetValue(__instance, true);
+
+        var startColor = __instance.globalTintColor;
+
+        var faction = Service.Game.Sim.simulation.myIdentity.Data.faction;
+        var color = Color.Lerp(Utils.GetFactionMiddleColor(faction), Color.white, Constants.RoleRevealTintIntensity());
+
+        const float transitionDuration = 0.5f;
+        var duration = 0f;
+
+        while (duration < transitionDuration)
+        {
+            duration += Time.deltaTime;
+
+            __instance.globalTintColor = Color.Lerp(startColor, color, duration / transitionDuration);
+
+            yield return null;
+        }
+
+        __instance.globalTintColor = color;
+    }
+}
 [HarmonyPatch(typeof(SharedMentionsProvider), nameof(SharedMentionsProvider.BuildAchievementMentions))]
 public static class AchievementMentionsPatch
 {

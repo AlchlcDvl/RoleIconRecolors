@@ -16,7 +16,7 @@ public static class Utils
         "Warlock_Ability", "Starspawn_Ability", "Dreamweaver_Ability_2", "Illusionist_Ability_2", "Pacifist_Ability_2", "Archmage_Ability", "Mayor_Ability" ];
     private static readonly string[] CommonSkippableNames = [ "Baker_Ability_2", "Admirer_Ability_1", "Admirer_Ability_2", "Amnesiac_Ability", "Arsonist_Ability", "Attributes", "Berserker_Ability", "Bodyguard_Ability", "Catalyst_Ability",
         "Cleric_Ability", "Coroner_Ability", "Crusader_Ability", "CursedSoul_Ability", "Death_Ability", "Enchanter_Ability", "Famine_Ability", "HexMaster_Ability",
-        "Illusionist_Ability", "Investigator_Ability", "Jailor_Ability", "Jester_Ability", "Jinx_Ability", "Lookout_Ability", "Medusa_Ability", "Monarch_Ability_2",,
+        "Illusionist_Ability", "Investigator_Ability", "Jailor_Ability", "Jester_Ability", "Jinx_Ability", "Lookout_Ability", "Medusa_Ability", "Monarch_Ability_2",
         "Pestilence_Ability", "Plaguebearer_Ability", "Poisoner_Ability_1", "Poisoner_Ability_2", "PotionMaster_Ability_1", "PotionMaster_Ability_2", "Psychic_Ability", "War_Ability_1", "Werewolf_Ability_2",
         "SerialKiller_Ability", "Sheriff_Ability", "Shroud_Ability", "SoulCollector_Ability", "Trickster_Ability_1", "Trickster_Ability_2", "Spy_Ability", "Wildling_Ability",
         "TavernKeeper_Ability", "Tracker_Ability", "Trapper_Ability", "Vampire_Ability_1", "Vampire_Ability_2", "Vigilante_Ability", "VoodooMaster_Ability_1", "VoodooMaster_Ability_2", "War_Ability_2", "Witch_Ability_1", "Witch_Ability_2",

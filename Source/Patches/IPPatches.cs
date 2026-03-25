@@ -1827,7 +1827,7 @@ public static class RoleListHeaderIcon
             var icon1 = role.GetTMPSprite();
             icon1 = icon1.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(faction, false)})\"");
 
-            __instance.RoleNameLabel.text = icon1 + role.ToColorizedNoLabel(faction);
+            __instance.RoleNameLabel.text = icon1 + role.ToColorizedDisplayString(faction);
         }
         else
         {
