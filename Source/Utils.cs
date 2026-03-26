@@ -277,6 +277,7 @@ public static class Utils
         Role.ELECTION => "Election",
         Role.NO_NIGHT_ONE_KILLS => "GracePeriod",
         Role.ALL_OUTLIERS => "AllOutliers",
+        Role.ANOMALY => "Anomaly",
         Role.HIDDEN => "Hidden",
         _ => "Blank"
     };

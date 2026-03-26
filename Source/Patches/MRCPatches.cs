@@ -1073,6 +1073,60 @@ public static class KeywordMentionsPatches
         }
     }
 
+	[HarmonyPatch(typeof(SharedMentionsProvider), "BuildRoleMentions")]
+	public static class ModifierMentionsPatch
+	{
+		public static void Postfix(SharedMentionsProvider __instance)
+		{
+			var tokens = __instance.MentionTokens;
+			var infos = __instance.MentionInfos;
+
+			// Find all modifier MentionInfos that were created but have no usable tokens
+			var modifierInfos = infos
+				.Where(m =>
+					m.mentionInfoType == MentionInfo.MentionInfoType.ROLE &&
+					string.IsNullOrEmpty(m.humanText)) // <-- modifiers were blanked
+				.ToList();
+
+			int priority = tokens.Count;
+
+			foreach (var info in modifierInfos)
+			{
+				// Extract roleId from encodedText: [[#ID]]
+				var idStr = info.encodedText.Replace("[[#", "").Replace("]]", "");
+				if (!int.TryParse(idStr, out var roleId))
+					continue;
+
+				var role = (Role)roleId;
+
+				string full = role.ToDisplayString();
+				string shortName = role.ToShortenedDisplayString();
+
+				string matchShort = "#" + shortName;
+				string matchFull = "#" + full;
+
+				// Fix humanText so it shows in suggestions
+				info.humanText = "#" + full.ToLower();
+
+				tokens.Add(new MentionToken
+				{
+					mentionTokenType = MentionToken.MentionTokenType.ROLE,
+					match = matchShort,
+					mentionInfo = info,
+					priority = priority++
+				});
+
+				tokens.Add(new MentionToken
+				{
+					mentionTokenType = MentionToken.MentionTokenType.ROLE,
+					match = matchFull,
+					mentionInfo = info,
+					priority = priority++
+				});
+			}
+		}
+	}
+
     [HarmonyPatch(nameof(SharedMentionsProvider.Build))]
     public static bool Prefix(SharedMentionsProvider __instance, RebuildMentionTypesFlag rebuildMentionTypesFlag)
     {
@@ -1166,8 +1220,12 @@ public static class KeywordMentionsPatches
 
 	public static void BuildCustomRoleMentions(SharedMentionsProvider __instance)
 	{
+		var originalInfos = __instance.MentionInfos
+			.Where(m => m.mentionInfoType == MentionInfo.MentionInfoType.ROLE)
+			.ToDictionary(m => m.encodedText, m => m);
+
 		var list = Service.Game.Roles.roleInfos
-			.Where(item => !item.role.IsModifierCard() && item.role != Role.NONE)
+			.Where(item => item.role != Role.NONE && item.role != Btos2Role.TownPower)
 			.OrderBy(item => item.role.ToDisplayString(), StringComparer.Ordinal)
 			.ToList();
 
@@ -1175,17 +1233,30 @@ public static class KeywordMentionsPatches
 
 		foreach (var item in list)
 		{
-			var role = (int)item.role;
-			var display = item.role.ToDisplayString();
-			var shortName = item.role.ToShortenedDisplayString();
+			var roleEnum = item.role;
+			var role = (int)roleEnum;
 
 			var encodedText = $"[[#{role}]]";
+
+			if (roleEnum.IsModifierCard() && originalInfos.TryGetValue(encodedText, out var existing))
+			{
+				existing.humanText = "#" + roleEnum.ToDisplayString().ToLowerInvariant();
+
+				__instance.MentionInfos.Add(existing);
+
+				AddTokens(__instance, existing, roleEnum, ref priority);
+				continue;
+			}
+
+			var display = roleEnum.ToDisplayString();
+			var shortName = roleEnum.ToShortenedDisplayString();
 
 			var sprite = (__instance._roleEffects == 1)
 				? $"<sprite=\"BTOSRoleIcons\" name=\"Role{role}\">"
 				: "";
+
 			var name = __instance._useColors
-				? item.role.ToColorizedDisplayString()
+				? roleEnum.ToColorizedDisplayString()
 				: display;
 
 			var richText =
@@ -1201,26 +1272,37 @@ public static class KeywordMentionsPatches
 			};
 
 			__instance.MentionInfos.Add(mentionInfo);
-			var tokens = new[]
-			{
-				"#" + shortName,
-				"#" + display,
-				"#" + display.Replace(" ", "").ToLowerInvariant()
-			};
 
-			foreach (var token in tokens.Distinct(StringComparer.OrdinalIgnoreCase))
-			{
-				__instance.MentionTokens.Add(new MentionToken
-				{
-					mentionTokenType = MentionToken.MentionTokenType.ROLE,
-					match = token,
-					mentionInfo = mentionInfo,
-					priority = priority++
-				});
-			}
+			AddTokens(__instance, mentionInfo, roleEnum, ref priority);
 		}
 	}
-    private static void BuildFactionMentions(SharedMentionsProvider __instance)
+
+	private static void AddTokens(SharedMentionsProvider provider, MentionInfo info, Role role, ref int priority)
+	{
+		var display = role.ToDisplayString();
+		var shortName = role.ToShortenedDisplayString();
+
+		var tokens = new[]
+		{
+			"#" + shortName,
+			"#" + display,
+			"#" + display.Replace(" ", ""),
+			"#" + display.ToLowerInvariant(),
+			"#" + display.Replace(" ", "").ToLowerInvariant()
+		};
+
+		foreach (var token in tokens.Distinct(StringComparer.OrdinalIgnoreCase))
+		{
+			provider.MentionTokens.Add(new MentionToken
+			{
+				mentionTokenType = MentionToken.MentionTokenType.ROLE,
+				match = token,
+				mentionInfo = info,
+				priority = priority++
+			});
+		}
+	}  
+	private static void BuildFactionMentions(SharedMentionsProvider __instance)
     {
         Dictionary<FactionType, Role> dict;
         if (!Constants.IsBTOS2())
