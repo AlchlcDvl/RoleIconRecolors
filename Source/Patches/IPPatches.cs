@@ -37,6 +37,252 @@ public static class PatchRoleDeckBuilder
     }
 }
 
+[HarmonyPatch(typeof(SpecialAbilityPopupRoleListItem))]
+[HarmonyPatch(nameof(SpecialAbilityPopupRoleListItem.SetData), new Type[] { typeof(Sprite), typeof(Role), typeof(SpecialAbilityPopupEnchanter) })]
+public static class Patch_SpecialAbilityPopupRoleListItem_Enchanter
+{
+	public static void Postfix(SpecialAbilityPopupRoleListItem __instance, Role role, Image ___roleIconImage)
+	{
+		if (!Constants.EnableIcons()) return;
+		if (___roleIconImage == null) return;
+
+		var icon = GetSprite(Utils.RoleName(role), Utils.FactionName(role.GetFactionType()), false);
+		if (icon.IsValid())
+		{
+			___roleIconImage.sprite = icon;
+			___roleIconImage.gameObject.SetActive(true);
+		}
+	}
+}
+
+[HarmonyPatch(typeof(SpecialAbilityPopupRoleListItem))]
+[HarmonyPatch(nameof(SpecialAbilityPopupRoleListItem.SetData), new Type[] { typeof(Sprite), typeof(Role), typeof(SpecialAbilityPopupRitualist) })]
+public static class Patch_SpecialAbilityPopupRoleListItem_Ritualist
+{
+	public static void Postfix(SpecialAbilityPopupRoleListItem __instance, Role role, Image ___roleIconImage)
+	{
+		if (!Constants.EnableIcons()) return;
+		if (___roleIconImage == null) return;
+
+		var icon = GetSprite(Utils.RoleName(role), Utils.FactionName(role.GetFactionType()), false);
+		if (icon.IsValid())
+		{
+			___roleIconImage.sprite = icon;
+			___roleIconImage.gameObject.SetActive(true);
+		}
+	}
+}
+
+[HarmonyPatch(typeof(SpecialAbilityPopupRoleListItem))]
+[HarmonyPatch(nameof(SpecialAbilityPopupRoleListItem.SetData), new Type[] { typeof(Sprite), typeof(Role), typeof(LastWillPanel) })]
+public static class Patch_SpecialAbilityPopupRoleListItem_LastWill
+{
+	public static void Postfix(SpecialAbilityPopupRoleListItem __instance, Role role, Image ___roleIconImage)
+	{
+		if (!Constants.EnableIcons()) return;
+		if (___roleIconImage == null) return;
+
+		var icon = GetSprite(Utils.RoleName(role), Utils.FactionName(role.GetFactionType()), false);
+		if (icon.IsValid())
+		{
+			___roleIconImage.sprite = icon;
+			___roleIconImage.gameObject.SetActive(true);
+		}
+	}
+}
+
+[HarmonyPatch(typeof(SpecialAbilityPopupFactionListItem))]
+[HarmonyPatch(nameof(SpecialAbilityPopupRoleListItem.SetData), new Type[] { typeof(FactionType), typeof(SpecialAbilityPopupEnchanter) })]
+public static class Patch_SpecialAbilityPopupFactionListItem_Enchanter
+{
+	public static void Postfix(SpecialAbilityPopupFactionListItem __instance, FactionType faction, Image ___factionIconImage)
+	{
+		if (!Constants.EnableIcons()) return;
+		if (___factionIconImage == null) return;
+
+		var icon = GetSprite(Utils.FactionName(faction), Utils.FactionName(faction), false);
+		if (icon.IsValid())
+		{
+			___factionIconImage.sprite = icon;
+			___factionIconImage.gameObject.SetActive(true);
+		}
+	}
+}
+
+[HarmonyPatch(typeof(SpecialAbilityPopupFactionListItem))]
+[HarmonyPatch(nameof(SpecialAbilityPopupRoleListItem.SetData), new Type[] { typeof(Sprite), typeof(FactionType), typeof(LastWillPanel), typeof(bool) })]
+public static class Patch_SpecialAbilityPopupFactionListItem_LastWill
+{
+	public static void Postfix(SpecialAbilityPopupFactionListItem __instance, FactionType faction, Image ___factionIconImage)
+	{
+		if (!Constants.EnableIcons()) return;
+		if (___factionIconImage == null) return;
+
+		var icon = GetSprite(Utils.FactionName(faction), Utils.FactionName(faction), false);
+		if (icon.IsValid())
+		{
+			___factionIconImage.sprite = icon;
+			___factionIconImage.gameObject.SetActive(true);
+		}
+	}
+}
+[HarmonyPatch(typeof(RoleMenuPopupFactionListItem), nameof(RoleMenuPopupFactionListItem.Set))]
+public static class RoleMenuPopupFactionListItem_Set_IconPatch
+{
+    public static void Postfix(RoleMenuPopupFactionListItem __instance, FactionType overrideFaction)
+    {
+        if (!Constants.EnableIcons())
+            return;
+
+        if (!__instance.Icon)
+            return;
+
+        Sprite icon = null;
+
+        switch (overrideFaction)
+        {
+            case FactionType.TOWN:
+                icon = GetSprite("Town", Utils.FactionName(overrideFaction), false);
+                break;
+
+            case FactionType.COVEN:
+                icon = GetSprite("Coven", Utils.FactionName(overrideFaction), false);
+                break;
+
+            case FactionType.SERIALKILLER:
+                icon = GetSprite("SerialKiller", Utils.FactionName(overrideFaction), false);
+                break;
+
+            case FactionType.ARSONIST:
+                icon = GetSprite("Arsonist", Utils.FactionName(overrideFaction), false);
+                break;
+
+            case FactionType.WEREWOLF:
+                icon = GetSprite("Werewolf", Utils.FactionName(overrideFaction), false);
+                break;
+
+            case FactionType.SHROUD:
+                icon = GetSprite("Shroud", Utils.FactionName(overrideFaction), false);
+                break;
+
+            case FactionType.APOCALYPSE:
+                icon = GetSprite("Apocalypse", Utils.FactionName(overrideFaction), false);
+                break;
+
+            case FactionType.DOOMSAYER:
+                icon = GetSprite("Doomsayer", Utils.FactionName(overrideFaction), false);
+                break;
+
+            case FactionType.EXECUTIONER:
+                icon = GetSprite("Executioner", Utils.FactionName(overrideFaction), false);
+                break;
+
+            case FactionType.JESTER:
+                icon = GetSprite("Jester", Utils.FactionName(overrideFaction), false);
+                break;
+
+            case FactionType.PIRATE:
+                icon = GetSprite("Pirate", Utils.FactionName(overrideFaction), false);
+                break;
+
+            case FactionType.VAMPIRE:
+                icon = GetSprite("Vampire", Utils.FactionName(overrideFaction), false);
+                break;
+
+            case FactionType.CURSED_SOUL:
+                icon = GetSprite("CursedSoul", Utils.FactionName(overrideFaction), false);
+                break;
+
+            case Btos2Faction.Jackal:
+                icon = GetSprite("Jackal", Utils.FactionName(overrideFaction), false);
+                break;
+
+            case Btos2Faction.Frogs:
+            case Btos2Faction.Lions:
+            case Btos2Faction.Hawks:
+                icon = GetSprite("Teams", Utils.FactionName(overrideFaction), false);
+                break;
+
+            case Btos2Faction.Judge:
+                icon = GetSprite("Judge", Utils.FactionName(overrideFaction), false);
+                break;
+
+            case Btos2Faction.Auditor:
+                icon = GetSprite("Auditor", Utils.FactionName(overrideFaction), false);
+                break;
+
+            case Btos2Faction.Starspawn:
+                icon = GetSprite("Starspawn", Utils.FactionName(overrideFaction), false);
+                break;
+
+            case Btos2Faction.Inquisitor:
+                icon = GetSprite("Inquisitor", Utils.FactionName(overrideFaction), false);
+                break;
+
+            case Btos2Faction.Egotist:
+                icon = GetSprite("Egotist", Utils.FactionName(overrideFaction), false);
+                break;
+
+            case Btos2Faction.Pandora:
+                icon = GetSprite("PandorasBox", Utils.FactionName(overrideFaction), false);
+                break;
+
+            case Btos2Faction.Compliance:
+                icon = GetSprite("CompliantKillers", Utils.FactionName(overrideFaction), false);
+                break;
+
+            default:
+                icon = GetSprite("Hidden");
+                break;
+        }
+
+        if (__instance.Icon && icon.IsValid())
+            __instance.Icon.sprite = icon;
+    }
+}
+
+[HarmonyPatch(typeof(RoleMenuPopupController))]
+public static class RoleMenuPatches
+{
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(RoleMenuPopupController.InitializeSetRole1FactionInRoleListPanel))]
+    public static void Postfix_SetRole1Faction(RoleMenuPopupController __instance)
+    {
+        if (__instance.m_index == -1)
+            return;
+
+        var icon = __instance.m_role.GetTMPSprite();
+        icon = icon.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(__instance.m_faction, false)})\"");
+
+        __instance.SetRole1FactionInRoleListLabel.text = __instance.l10n("GUI_ROLE_CARD_MENU_POPUP_SET_ROLE_FACTION").Replace("%role%", icon + __instance.m_role.ToColorizedDisplayString(__instance.m_faction));
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(RoleMenuPopupController.InitializeSetRole2FactionInRoleListPanel))]
+    public static void Postfix_SetRole2Faction(RoleMenuPopupController __instance)
+    {
+        if (__instance.m_index == -1)
+            return;
+
+        var icon = __instance.m_role2.GetTMPSprite();
+        icon = icon.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(__instance.m_faction2, false)})\"");
+
+        __instance.SetRole2FactionInRoleListLabel.text = __instance.l10n("GUI_ROLE_CARD_MENU_POPUP_SET_ROLE_FACTION") .Replace("%role%", icon + __instance.m_role2.ToColorizedDisplayString(__instance.m_faction2));
+    }
+	
+	[HarmonyPostfix]
+	[HarmonyPatch(typeof(RoleMenuPopupController), nameof(RoleMenuPopupController.InitializeShowAddDualBucketToRoleListPanel))]
+	public static void Postfix_AddDualBucket(RoleMenuPopupController __instance)
+	{
+		if (__instance.m_index == -1)
+			return;
+
+		var icon = __instance.m_role.GetTMPSprite();
+		icon = icon.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(__instance.m_faction, false)})\"");
+
+		__instance.AddDualBucketToHostRoleListLabel.text = __instance.l10n("GUI_ROLE_CARD_MENU_POPUP_SET_DUAL_BUCKET_IN_LIST").Replace("%role%", icon + __instance.m_role.ToColorizedDisplayString(__instance.m_faction));
+	}
+}
 // [HarmonyPatch(typeof(RoleDeckListItem), nameof(RoleDeckListItem.SetData))]
 // public static class PatchRoleListPanel2
 // {
@@ -178,7 +424,7 @@ public static class PatchBrowserRoleListPanel
 
         __instance.gameObject.SetActive(true);
 
-        return false; // skip original method
+        return false;
     }
 }
 [HarmonyPatch(typeof(RoleCardPanelBackground))]
@@ -189,17 +435,21 @@ public static class RoleCardFixesAndPatches
     {
         __instance.rolecardBackgroundInstance = UObject.Instantiate(__instance.rolecardBackgroundTemplate);
         Debug.Log($"RoleCardPanelBackground Created {__instance.rolecardBackgroundInstance.name}");
+        
         __instance.deadStamp.SetActive(false);
 
         if (Service.Game.Sim.simulation != null)
         {
             Service.Game.Sim.simulation.myIdentity.OnChanged += __instance.HandleMyIdentityChanged;
             Service.Game.Sim.info.roleCardObservation.OnDataChanged += __instance.HandleRoleCardChanged;
+
             var myIdentity = Pepper.GetMyCurrentIdentity();
             __instance.SetRoleAndFaction(myIdentity.role, myIdentity.faction);
         }
         else
+        {
             __instance.SetRoleAndFaction(Role.TAVERNKEEPER, FactionType.TOWN);
+        }
 
         return false;
     }
@@ -213,10 +463,16 @@ public static class RoleCardFixesAndPatches
             return;
 
         var panel = __instance.GetComponentInParent<RoleCardPanel>();
-        PatchRoleCards.ChangeRoleCard(panel?.roleIcon, panel?.specialAbilityPanel?.useButton?.abilityIcon, panel?.roleInfoButtons, __instance.currentRole, __instance.currentFaction);
+
+        PatchRoleCards.ChangeRoleCard(
+            panel?.roleIcon,
+            panel?.specialAbilityPanel?.useButton?.abilityIcon,
+            panel?.roleInfoButtons,
+            __instance.currentRole,
+            __instance.currentFaction
+        );
     }
 }
-
 [HarmonyPatch(typeof(RoleCardPopupPanel))]
 public static class PatchRoleCards
 {
@@ -414,19 +670,6 @@ public static class PatchAbilityPanelListItems
 
                 switch (role)
                 {
-                    case Role.ILLUSIONIST when __instance.choice2Sprite && !Constants.IsBTOS2():
-                    {
-                        __instance.choice2Sprite.sprite = nommy;
-                        var illu = GetSprite(reg, "Illusionist_Ability", faction, ee);
-
-                        if (!illu.IsValid() && reg)
-                            illu = GetSprite("Illusionist_Ability", ogfaction, ee);
-
-                        if (illu.IsValid() && __instance.choice1Sprite)
-                            __instance.choice1Sprite.sprite = illu;
-
-                        break;
-                    }
                     case Role.WITCH:
                     {
                         var target = GetSprite(reg, "Witch_Ability_2", faction, ee);
@@ -481,6 +724,18 @@ public static class PatchAbilityPanelListItems
                         break;
 
                     }
+                    case Role.BAKER:
+                    {
+						var special = GetSprite(reg, $"{name}_Ability_3", faction, ee);
+
+						if (!special.IsValid() && reg)
+							special = GetSprite($"{name}_Ability_3", ogfaction, ee);
+
+						if (special.IsValid() && __instance.choice2Sprite)
+							__instance.choice2Sprite.sprite = special;
+
+						break;
+                    }
                     default:
                     {
                         var special = GetSprite(reg, $"{name}_Ability_3", faction, ee);
@@ -499,17 +754,131 @@ public static class PatchAbilityPanelListItems
             }
             case AbilityType.POTIONMASTER_HEAL:
             {
-                var ab1 = GetSprite(reg, $"{name}_Ability_1", faction, ee);
+                switch (role)
+                {
+                    case Role.POTIONMASTER:
+                    {
+                        var ab2 = GetSprite(reg, $"{name}_Ability_2", faction, ee);
 
-                if (!ab1.IsValid() && reg)
-                    ab1 = GetSprite($"{name}_Ability_1", ogfaction, ee);
+                        if (!ab2.IsValid() && reg)
+                            ab2 = GetSprite($"{name}_Ability_2", ogfaction, ee);
 
-                if (ab1.IsValid() && __instance.choice1Sprite)
-                    __instance.choice1Sprite.sprite = ab1;
+                        if (ab2.IsValid() && __instance.choice1Sprite)
+                            __instance.choice1Sprite.sprite = ab2;
+
+                        break;
+
+                    }
+                    case Role.BAKER:
+                    {
+						var ab2 = GetSprite(reg, $"{name}_Ability_2", faction, ee);
+
+						if (!ab2.IsValid() && reg)
+							ab2 = GetSprite($"{name}_Ability_2", ogfaction, ee);
+
+						if (ab2.IsValid() && __instance.choice2Sprite)
+							__instance.choice2Sprite.sprite = ab2;
+
+						break;
+                    }
+                    default:
+                    {
+                        var ab2 = GetSprite(reg, $"{name}_Ability_2", faction, ee);
+
+                        if (!ab2.IsValid() && reg)
+                            ab2 = GetSprite($"{name}_Ability_2", ogfaction, ee);
+
+                        if (ab2.IsValid() && __instance.choice1Sprite)
+                            __instance.choice1Sprite.sprite = ab2;
+
+                        break;
+                    }
+                }
 
                 break;
             }
-            case AbilityType.POTIONMASTER_REVEAL or AbilityType.WEREWOLF_NON_FULL_MOON:
+            case AbilityType.POTIONMASTER_REVEAL:
+            {
+                switch (role)
+                {
+                    case Role.POTIONMASTER:
+                    {
+                        var ab = GetSprite(reg, $"{name}_Ability_1", faction, ee);
+
+                        if (!ab.IsValid() && reg)
+                            ab = GetSprite($"{name}_Ability_1", ogfaction, ee);
+
+                        if (ab.IsValid() && __instance.choice1Sprite)
+                            __instance.choice1Sprite.sprite = ab;
+
+                        break;
+
+                    }
+                    case Role.BAKER:
+                    {
+						var ab = GetSprite(reg, $"{name}_Ability_1", faction, ee);
+
+						if (!ab.IsValid() && reg)
+							ab = GetSprite($"{name}_Ability_1", ogfaction, ee);
+
+						if (ab.IsValid() && __instance.choice2Sprite)
+							__instance.choice2Sprite.sprite = ab;
+
+						break;
+                    }
+                    default:
+                    {
+                        var ab = GetSprite(reg, $"{name}_Ability_1", faction, ee);
+
+                        if (!ab.IsValid() && reg)
+                            ab = GetSprite($"{name}_Ability_1", ogfaction, ee);
+
+                        if (ab.IsValid() && __instance.choice1Sprite)
+                            __instance.choice1Sprite.sprite = ab;
+
+                        break;
+                    }
+                }
+
+                break;
+            }
+            case AbilityType.VOODOOMASTER_SILENCE:
+            {
+                var ab = GetSprite(reg, $"{name}_Ability_1", faction, ee);
+
+                if (!ab.IsValid() && reg)
+                    ab = GetSprite($"{name}_Ability_1", ogfaction, ee);
+
+                if (ab.IsValid() && __instance.choice1Sprite)
+                    __instance.choice1Sprite.sprite = ab;
+
+                break;
+            }
+            case AbilityType.VOODOOMASTER_DEAFEN:
+            {
+                var ab = GetSprite(reg, $"{name}_Ability_2", faction, ee);
+
+                if (!ab.IsValid() && reg)
+                    ab = GetSprite($"{name}_Ability_2", ogfaction, ee);
+
+                if (ab.IsValid() && __instance.choice1Sprite)
+                    __instance.choice1Sprite.sprite = ab;
+
+                break;
+            }
+            case AbilityType.VOODOOMASTER_BLIND:
+            {
+                var ab = GetSprite(reg, $"{name}_Ability_3", faction, ee);
+
+                if (!ab.IsValid() && reg)
+                    ab = GetSprite($"{name}_Ability_3", ogfaction, ee);
+
+                if (ab.IsValid() && __instance.choice1Sprite)
+                    __instance.choice1Sprite.sprite = ab;
+
+                break;
+            }
+            case AbilityType.WEREWOLF_NON_FULL_MOON:
             {
                 var ab2 = GetSprite(reg, $"{name}_Ability_2", faction, ee);
 
@@ -901,24 +1270,23 @@ public static class GetInlinedStringsPatches
     {
         if (Constants.EnableIcons())
         {
-            __result = __result.Replace("RoleIcons\"", $"RoleIcons ({(role.GetFactionType() == factionType && Constants.CurrentStyle() == "Regular" ? "Regular" :
-                Utils.FactionName(factionType, false))})\"");
+            __result = __result.Replace("RoleIcons\"", $"RoleIcons ({(role.GetFactionType() == factionType && Constants.CurrentStyle() == "Regular" ? "Regular" : Utils.FactionName(factionType, false))})\"");
         }
     }
 
-    [HarmonyPatch(nameof(GameSimulation.GetTownTraitorRoleIconAndNameInlineString)), HarmonyPostfix]
-    public static void GetTownTraitorRoleIconAndNameInlineStringPostfix(ref string __result)
-    {
-        if (Constants.EnableIcons())
-            __result = __result.Replace("RoleIcons\"", "RoleIcons (Coven)\"");
-    }
+    // [HarmonyPatch(nameof(GameSimulation.GetTownTraitorRoleIconAndNameInlineString)), HarmonyPostfix]
+    // public static void GetTownTraitorRoleIconAndNameInlineStringPostfix(ref string __result)
+    // {
+        // if (Constants.EnableIcons())
+            // __result = __result.Replace("RoleIcons\"", "RoleIcons (Coven)\"");
+    // }
 
-    [HarmonyPatch(nameof(GameSimulation.GetVIPRoleIconAndNameInlineString)), HarmonyPostfix]
-    public static void GetVIPRoleIconAndNameInlineStringPostfix(ref string __result)
-    {
-        if (Constants.EnableIcons())
-            __result = $"{__result.Replace("RoleIcons\"", "RoleIcons (VIP)\"")} <sprite=\"RoleIcons\" name=\"Role201\">";
-    }
+    // [HarmonyPatch(nameof(GameSimulation.GetVIPRoleIconAndNameInlineString)), HarmonyPostfix]
+    // public static void GetVIPRoleIconAndNameInlineStringPostfix(ref string __result)
+    // {
+        // if (Constants.EnableIcons())
+            // __result = $"{__result.Replace("RoleIcons\"", "RoleIcons (VIP)\"")} <sprite=\"RoleIcons\" name=\"Role201\">";
+    // }
 }
 
 [HarmonyPatch]
@@ -1216,7 +1584,7 @@ public static class NecroPassPatches
 						$"{playerName}\n<size=24>({roleText})</size>";
 					break;
 			}
-}
+		}
 
     }
 

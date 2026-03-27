@@ -885,6 +885,17 @@ public static class ClientRoleExtensionsPatches
         __result = newText;
 
     }
+    [HarmonyPatch(nameof(ClientRoleExtensions.ToColorizedDisplayString), typeof(FactionType)), HarmonyPostfix]
+    public static void ToColorizedDisplayStringFactionPostfix(ref string __result, FactionType factionType)
+    {
+        var gradient = factionType.GetChangedGradient(Role.CLERIC);
+
+        var text = factionType.ToDisplayString();
+        var newText = gradient != null ? Utils.ApplyGradient(text, gradient) : $"<color={factionType.GetFactionColor()}>{text}</color>";
+
+        __result = newText;
+
+    }
     private static string GetShortenedBucketString(this Role role, FactionType faction)
     {
         var isNone = faction is FactionType.NONE;
@@ -1604,10 +1615,7 @@ public static class ReplaceRoleTagWithRoleTextPatch
             if (int.TryParse(str[idStart..endIndex], out var factionId))
             {
                 var faction = (FactionType)factionId;
-                var colorized = Utils.ApplyGradient(
-                    faction.ToDisplayString(),
-                    faction.GetChangedGradient(Role.DREAMWEAVER)
-                );
+                var colorized = faction.ToColorizedDisplayString();
                 str = str.Replace(fullTag, colorized);
                 modified = true;
             }

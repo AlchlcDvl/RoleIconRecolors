@@ -916,31 +916,44 @@ public static class FixAbilityButtonOverrides
                 break;
             // Exists for BTOS2 Baker, not that this'll ever appear outside BTOS2 until Cursed Soul happens, but thats its own bug
             case TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_HEAL:
-					if (role.IsCovenAligned())
-						__instance.choice1Text.text = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY1_VERB_{(int)role}");
-					else
-						__instance.choice2Text.text = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY1_VERB_{(int)role}");
-                break;
+					switch (role)
+					{
+						case Role.BAKER:
+							__instance.choice2Text.text = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY1_VERB_{(int)role}");
+							break;
+
+						default:
+							__instance.choice1Text.text = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY1_VERB_{(int)role}");
+							break;
+					}
+					break;
             case TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_REVEAL:
-					if (role.IsCovenAligned())
-						__instance.choice1Text.text = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY2_VERB_{(int)role}");
-					else
-						__instance.choice2Text.text = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY2_VERB_{(int)role}");
-                break;
+					switch (role)
+					{
+						case Role.BAKER:
+							__instance.choice2Text.text = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY2_VERB_{(int)role}");
+							break;
+
+						default:
+							__instance.choice1Text.text = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY2_VERB_{(int)role}");
+							break;
+					}
+					break;
             case TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_ATTACK:
-				switch (role)
-				{
-					case Role.POTIONMASTER:
-						__instance.choice1Text.text =  Utils.GetString($"GUI_ROLE_CARD_NECRONOMICON_ABILITY");
-						break;
-					default:
-					if (role.IsCovenAligned())
-						__instance.choice1Text.text = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY3_VERB_{(int)role}");
-					else
-						__instance.choice2Text.text = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY3_VERB_{(int)role}");
-						break;
-				}
-                break;
+					switch (role)
+					{
+						case Role.POTIONMASTER:
+							__instance.choice1Text.text = Utils.GetString($"GUI_ROLE_CARD_NECRONOMICON_ABILITY");
+							break;
+						case Role.BAKER:
+							__instance.choice2Text.text = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY3_VERB_{(int)role}");
+							break;
+
+						default:
+							__instance.choice1Text.text = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY3_VERB_{(int)role}");
+							break;
+					}
+					break;
         }
     }
 }

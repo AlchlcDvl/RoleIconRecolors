@@ -10,6 +10,8 @@ public static class Gradients
         var middleKey = Utils.FactionName(faction, mod, stoned: true).ToUpper();
         var baseKey = Utils.FactionName(role.GetFactionType(mod), mod, stoned: true).ToUpper();
         var startKey = middleKey;
+		
+		var isNone = role == Role.NONE || role == Role.UNKNOWN;
 
         switch (faction)
         {
