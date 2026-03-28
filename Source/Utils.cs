@@ -1068,7 +1068,7 @@ public static class Utils
 
         return replaceIcons ? factionIcon.ReplaceIcons() : factionIcon;
     }
-
+	
 	public static bool IsValidRole(this Role role)
 	{
 		var faction = role.GetFaction();

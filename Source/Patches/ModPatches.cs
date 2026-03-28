@@ -415,11 +415,13 @@ public static class SpecialAbilityPopupDayConfirmListItemPatch
 
             icon = icon.Replace("RoleIcons\"", $"RoleIcons ({styleName})\"");
         }
+		
+		var icon2 = $"<size=120%><voffset=0>{icon}</voffset></size>";
 
         var formatted = Fancy.PlayerListRoleIcon.Value switch
         {
-            PlayerListRoleIconOption.Left  => $"{icon} {final}",
-            PlayerListRoleIconOption.Right => $"{final} {icon}",
+            PlayerListRoleIconOption.Left  => $"{icon2} {final}",
+            PlayerListRoleIconOption.Right => $"{final} {icon2}",
             _ => final,
         };
 
@@ -484,11 +486,14 @@ public static class SpecialAbilityPopupNecromancerRetributionistListItemPatch
 
             icon = icon.Replace("RoleIcons\"", $"RoleIcons ({styleName})\"");
         }
+		
+		var icon2 = $"<size=120%><voffset=0>{icon}</voffset></size>";
+		
 
         var formatted = Fancy.PlayerListRoleIcon.Value switch
         {
-            PlayerListRoleIconOption.Left  => $"{icon} {final}",
-            PlayerListRoleIconOption.Right => $"{final} {icon}",
+            PlayerListRoleIconOption.Left  => $"{icon2} {final}",
+            PlayerListRoleIconOption.Right => $"{final} {icon2}",
             _ => final,
         };
 
@@ -603,10 +608,12 @@ public static class PatchSpecialAbilityPopupGenericDualTargetListItem
             icon = icon.Replace("RoleIcons\"", $"RoleIcons ({styleName})\"");
         }
 
+		var icon2 = $"<size=120%><voffset=0>{icon}</voffset></size>";
+
         var formatted = Fancy.PlayerListRoleIcon.Value switch
         {
-            PlayerListRoleIconOption.Left  => $"{icon} {final}",
-            PlayerListRoleIconOption.Right => $"{final} {icon}",
+            PlayerListRoleIconOption.Left  => $"{icon2} {final}",
+            PlayerListRoleIconOption.Right => $"{final} {icon2}",
             _ => final,
         };
 

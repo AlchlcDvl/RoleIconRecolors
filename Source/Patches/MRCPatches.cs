@@ -417,11 +417,13 @@ public static class PlayerListPatch
         icon = icon.Replace("RoleIcons\"", $"RoleIcons ({((role.GetFactionType() == faction && Constants.CurrentStyle() == "Regular")
             ? "Regular"
             : Utils.FactionName(faction, false))})\"");
+		
+		var icon2 = $"<size=120%><voffset=0>{icon}</voffset></size>";
 
         __instance.playerRoleText.text = Fancy.PlayerListRoleIcon.Value switch
         {
-            PlayerListRoleIconOption.Left => $"{icon} {text}",
-            PlayerListRoleIconOption.Right => $"{text} {icon} ",
+            PlayerListRoleIconOption.Left => $"{icon2} {text}",
+            PlayerListRoleIconOption.Right => $"{text} {icon2} ",
             _ => $"{text}",
         };
 

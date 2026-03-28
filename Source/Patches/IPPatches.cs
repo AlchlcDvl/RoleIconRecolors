@@ -337,7 +337,7 @@ public static class PatchRoleListPanel
         if (__instance.isBan)
         {
 			var icon1 = role1.GetTMPSprite();
-            icon1 = icon1.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(faction1, false)})\"");
+            icon1 = icon1.Replace("RoleIcons\"", $"RoleIcons (Regular)\"");
 
 			__instance.roleName.text = $"<size=200%><voffset=-7>{icon1}</voffset></size>" + role1.ToColorizedNoLabel(faction1);
 			__instance.roleImage.sprite = GetSprite("Blank");
@@ -396,7 +396,7 @@ public static class PatchBrowserRoleListPanel
         if (__instance.isBan)
         {
 			var icon1 = role1.GetTMPSprite();
-            icon1 = icon1.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(faction1, false)})\"");
+            icon1 = icon1.Replace("RoleIcons\"", $"RoleIcons (Regular)\"");
             __instance.roleName.text = $"<size=200%><voffset=-7>{icon1}</voffset></size>" + role1.ToColorizedNoLabel(faction1);
 			__instance.roleImage.sprite = GetSprite("Blank");
         }
