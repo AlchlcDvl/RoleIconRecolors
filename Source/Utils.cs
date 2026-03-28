@@ -1082,7 +1082,7 @@ public static class Utils
     {
         var sprite = includeSprite
             ? $"<sprite=\"RoleIcons ({GetStyleForFaction(role, faction)})\" name=\"Role{(int)role}\">"
-            : "";
+            : string.Empty;
 
         return sprite + role.ToColorizedDisplayString(faction);
     }

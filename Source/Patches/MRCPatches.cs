@@ -1266,7 +1266,7 @@ public static class KeywordMentionsPatches
 
 			var sprite = (__instance._roleEffects == 1)
 				? $"<sprite=\"BTOSRoleIcons\" name=\"Role{role}\">"
-				: "";
+				: string.Empty;
 
 			var name = __instance._useColors
 				? roleEnum.ToColorizedDisplayString()
@@ -1690,7 +1690,7 @@ public static class GraveyardItem_SetPlayerPicAndName_Patch
             ? "Regular"
             : Utils.FactionName(faction, false))})\"");
 
-        var name = Service.Game.Sim.simulation.GetPlayerInlineLinkString(player, 1.1) ?? "";
+        var name = Service.Game.Sim.simulation.GetPlayerInlineLinkString(player, 1.1) ?? string.Empty;
 
         var text = icon + role.ToColorizedNoLabel(faction);
 

@@ -1647,7 +1647,7 @@ public static class MentionsProviderPatches
         var factionType = (FactionType)result2;
         var text = __instance._useColors ? role.ToColorizedDisplayString(factionType) : role.ToRoleFactionDisplayString(factionType);
         var roleIconsString = Constants.IsBTOS2() ? "BTOSRoleIcons" : "RoleIcons";
-        var text2 = __instance._roleEffects ? $"<sprite=\"{roleIconsString} ({Utils.FactionName(factionType)})\" name=\"Role{(int)role}\">" : "";
+        var text2 = __instance._roleEffects ? $"<sprite=\"{roleIconsString} ({Utils.FactionName(factionType)})\" name=\"Role{(int)role}\">" : string.Empty;
         var text3 = $"{__instance.styleTagOpen}{__instance.styleTagFont}<link=\"r{(int)role},{(int)factionType}\">{text2}<b>{text}</b></link>{__instance.styleTagClose}";
         var item = new MentionInfo
         {

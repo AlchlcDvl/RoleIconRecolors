@@ -403,8 +403,8 @@ public static class SpecialAbilityPopupDayConfirmListItemPatch
         var hiddenText = $"<color={role.GetFaction().GetFactionColor()}>{wrapped}</color>";
         var final = role != Role.NONE
             ? (isHidden ? hiddenText : gradientText)
-            : "";
-        var icon = role != Role.NONE ? role.GetTMPSprite() : "";
+            : string.Empty;
+        var icon = role != Role.NONE ? role.GetTMPSprite() : string.Empty;
 
         if (role != Role.NONE)
         {
@@ -474,8 +474,8 @@ public static class SpecialAbilityPopupNecromancerRetributionistListItemPatch
         var hiddenText = $"<color={role2.GetFaction().GetFactionColor()}>{wrapped}</color>";
         var final = role2 != Role.NONE
             ? (isHidden ? hiddenText : gradientText)
-            : "";
-        var icon = role2 != Role.NONE ? role2.GetTMPSprite() : "";
+            : string.Empty;
+        var icon = role2 != Role.NONE ? role2.GetTMPSprite() : string.Empty;
 
         if (role2 != Role.NONE)
         {
@@ -596,8 +596,8 @@ public static class PatchSpecialAbilityPopupGenericDualTargetListItem
         var hiddenText = $"<color={role2.GetFaction().GetFactionColor()}>{wrapped}</color>";
         var final = role2 != Role.NONE
             ? (isHidden ? hiddenText : gradientText)
-            : "";
-        var icon = role2 != Role.NONE ? role2.GetTMPSprite() : "";
+            : string.Empty;
+        var icon = role2 != Role.NONE ? role2.GetTMPSprite() : string.Empty;
         if (role2 != Role.NONE)
         {
             var styleName =
