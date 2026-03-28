@@ -336,8 +336,11 @@ public static class PatchRoleListPanel
 
         if (__instance.isBan)
         {
-            __instance.roleName.text = "      " + role1.ToColorizedNoLabel(faction1);
-            __instance.roleImage.sprite = GetSprite("Banned");
+			var icon1 = role1.GetTMPSprite();
+            icon1 = icon1.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(faction1, false)})\"");
+
+			__instance.roleName.text = $"<size=200%><voffset=-7>{icon1}</voffset></size>" + role1.ToColorizedNoLabel(faction1);
+			__instance.roleImage.sprite = GetSprite("Blank");
         }
         else if (a_roleDeckSlot.IsDualBucket())
         {
@@ -392,11 +395,10 @@ public static class PatchBrowserRoleListPanel
 
         if (__instance.isBan)
         {
-			// var icon1 = role1.GetTMPSprite();
-            // icon1 = icon1.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(faction1, false)})\"");
-			
-            __instance.roleName.text = "      " + role1.ToColorizedNoLabel(faction1);
-            __instance.roleImage.sprite = GetSprite("Banned");
+			var icon1 = role1.GetTMPSprite();
+            icon1 = icon1.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(faction1, false)})\"");
+            __instance.roleName.text = $"<size=200%><voffset=-7>{icon1}</voffset></size>" + role1.ToColorizedNoLabel(faction1);
+			__instance.roleImage.sprite = GetSprite("Blank");
         }
         else if (a_roleDeckSlot.IsDualBucket())
         {

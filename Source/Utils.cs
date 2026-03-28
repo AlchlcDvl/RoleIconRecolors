@@ -1069,7 +1069,14 @@ public static class Utils
         return replaceIcons ? factionIcon.ReplaceIcons() : factionIcon;
     }
 
-    public static bool IsHorseman(this Role role) => RoleExtensions.horsemenList.Contains(role);
+	public static bool IsValidRole(this Role role)
+	{
+		var faction = role.GetFaction();
+		return faction is not FactionType.NONE
+			and not FactionType.UNKNOWN
+			and not FactionType.FACTION_COUNT;
+	}    
+	public static bool IsHorseman(this Role role) => RoleExtensions.horsemenList.Contains(role);
 
     public static string GetFormattedRoleName(Role role, FactionType faction, bool includeSprite = true)
     {

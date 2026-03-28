@@ -218,7 +218,7 @@ public static class PatchRoleCard
 
         var factionType = __instance.CurrentFaction;
 
-        var gradient = factionType.GetChangedGradient(factionType == (FactionType)33 ? Btos2Role.Jackal : Role.NONE);
+        var gradient = factionType.GetChangedGradient(__instance.CurrentRole);
         var colored = Utils.ApplyGradient(factionName, gradient);
 
         __instance.roleDescText.text = text[..start] + colored + text[end..];
@@ -250,7 +250,7 @@ public static class RoleCardPopupPatches2
 
         var factionType = __instance.CurrentFaction;
 
-        var gradient = factionType.GetChangedGradient(factionType == (FactionType)33 ? Btos2Role.Jackal : Role.NONE);
+        var gradient = factionType.GetChangedGradient(__instance.CurrentRole);
         var colored = Utils.ApplyGradient(factionName, gradient);
 
         __instance.roleDescText.text = text[..start] + colored + text[end..];

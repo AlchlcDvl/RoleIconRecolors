@@ -10,9 +10,6 @@ public static class Gradients
         var middleKey = Utils.FactionName(faction, mod, stoned: true).ToUpper();
         var baseKey = Utils.FactionName(role.GetFactionType(mod), mod, stoned: true).ToUpper();
         var startKey = middleKey;
-		
-		var isNone = role == Role.NONE || role == Role.UNKNOWN;
-
         switch (faction)
         {
             case FactionType.VAMPIRE:
@@ -24,7 +21,7 @@ public static class Gradients
         }
         string end;
 
-        if (faction == Btos2Faction.Jackal && role != Btos2Role.Jackal && role != Role.NONE && role != Role.UNKNOWN)
+        if (faction == Btos2Faction.Jackal && role != Btos2Role.Jackal && role.IsValidRole())
         {
             end = Fancy.RecruitEndingColor.Value switch
             {
@@ -37,7 +34,7 @@ public static class Gradients
                 _ => GetEndColor("JACKAL", role),
             };
         }
-        else if (faction == FactionType.VAMPIRE && role != Role.VAMPIRE && role != Role.NONE && role != Role.UNKNOWN)
+        else if (faction == FactionType.VAMPIRE && role != Role.VAMPIRE && role.IsValidRole())
 		{
 			end = Fancy.ConvertEndingColor.Value switch
 			{
@@ -55,7 +52,7 @@ public static class Gradients
 
         string start;
 
-        if (faction == Btos2Faction.Jackal && role != Btos2Role.Jackal && role != Role.NONE && role != Role.UNKNOWN)
+        if (faction == Btos2Faction.Jackal && role != Btos2Role.Jackal && role.IsValidRole())
         {
             start = Fancy.RecruitStartingColor.Value switch
             {
@@ -68,7 +65,7 @@ public static class Gradients
                 _ => Fancy.Colors["JACKAL"].Start,
             };
         }
-        else if (faction == FactionType.VAMPIRE && role != Role.VAMPIRE && role != Role.NONE && role != Role.UNKNOWN)
+        else if (faction == FactionType.VAMPIRE && role != Role.VAMPIRE && role.IsValidRole())
 		{
 			start = Fancy.ConvertStartingColor.Value switch
 			{
