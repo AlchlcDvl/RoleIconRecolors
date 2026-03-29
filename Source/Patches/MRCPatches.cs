@@ -890,7 +890,7 @@ public static class ClientRoleExtensionsPatches
     [HarmonyPatch(nameof(ClientRoleExtensions.ToColorizedDisplayString), typeof(FactionType)), HarmonyPostfix]
     public static void ToColorizedDisplayStringFactionPostfix(ref string __result, FactionType factionType)
     {
-        var gradient = factionType.GetChangedGradient(Role.CLERIC);
+        var gradient = factionType.GetChangedGradient(Role.NONE);
 
         var text = factionType.ToDisplayString();
         var newText = gradient != null ? Utils.ApplyGradient(text, gradient) : $"<color={factionType.GetFactionColor()}>{text}</color>";
