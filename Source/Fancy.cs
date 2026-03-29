@@ -242,7 +242,7 @@ public class Fancy : BaseMod<Fancy>
 
     public override void BindConfigs()
     {
-        VanillaFactions = [.. GeneralUtils.GetEnumValues<FactionType>()!.Except([FactionType.UNKNOWN])];
+        VanillaFactions = [.. GeneralUtils.GetEnumValues<FactionType>()!.Except([FactionType.UNKNOWN, FactionType.FACTION_COUNT])];
         BTOS2Factions = [.. AccessTools.GetDeclaredFields(typeof(Btos2Faction)).Select(x => (FactionType)x.GetRawConstantValue())];
         VanillaRoles = [.. GeneralUtils.GetEnumValues<Role>()!.Where(role => (byte)role is < 57 or > 249).Except([Role.STONED, Role.UNKNOWN])];
         BTOS2Roles = [.. AccessTools.GetDeclaredFields(typeof(Btos2Role)).Select(x => (Role)x.GetRawConstantValue()).Where(role => (byte)role is < 67 or > 249).Except([Role.STONED,
