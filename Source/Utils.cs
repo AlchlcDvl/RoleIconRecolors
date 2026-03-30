@@ -929,8 +929,16 @@ public static class Utils
     {
         var name = FactionName(faction, stoned: true);
 
-        // Explicit fallback to start color for STONED_HIDDEN
         return name == "Stoned_Hidden" ? Fancy.Colors["STONED_HIDDEN"].Start.ToColor() : Fancy.Colors[name.ToUpper()].End.ToColor();
+    }
+
+    public static string GetPrimaryColor(FactionType faction) => Fancy.Colors[FactionName(faction, stoned: true).ToUpper()].Start;
+
+    public static string GetSecondaryColor(FactionType faction)
+    {
+        var name = FactionName(faction, stoned: true);
+
+        return name == "Stoned_Hidden" ? Fancy.Colors["STONED_HIDDEN"].Start : Fancy.Colors[name.ToUpper()].End;
     }
 
 	public static Color GetFactionMiddleColor(FactionType faction)

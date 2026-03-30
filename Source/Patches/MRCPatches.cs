@@ -76,14 +76,14 @@ public static class PatchRoleCard
         else 
             displayString = RoleAlignment.NONE.ToDisplayString();
 
-        if (faction is FactionType.SERIALKILLER 
-            or FactionType.ARSONIST or FactionType.SHROUD 
-            or FactionType.WEREWOLF or FactionType.JESTER 
-            or FactionType.EXECUTIONER or FactionType.PIRATE
-            or FactionType.DOOMSAYER or Btos2Faction.Judge
-            or Btos2Faction.Auditor or Btos2Faction.Starspawn
-            or Btos2Faction.Inquisitor or (FactionType)37)
-            useNeutralGradient = true;
+        // if (faction is FactionType.SERIALKILLER 
+        //     or FactionType.ARSONIST or FactionType.SHROUD 
+        //     or FactionType.WEREWOLF or FactionType.JESTER 
+        //     or FactionType.EXECUTIONER or FactionType.PIRATE
+        //     or FactionType.DOOMSAYER or Btos2Faction.Judge
+        //     or Btos2Faction.Auditor or Btos2Faction.Starspawn
+        //     or Btos2Faction.Inquisitor or (FactionType)37)
+        //     useNeutralGradient = true;
 
         if (subAlignment.IsInvalid())
         {
@@ -218,8 +218,9 @@ public static class PatchRoleCard
 
         var factionType = __instance.CurrentFaction;
 
-        var gradient = factionType.GetChangedGradient(__instance.CurrentRole);
-        var colored = Utils.ApplyGradient(factionName, gradient);
+        // var gradient = factionType.GetChangedGradient(__instance.CurrentRole);
+        // var gradient = Utils.CreateGradient(Utils.GetPrimaryColor(factionType), Utils.GetSecondaryColor(factionType));
+        var colored = factionType.ToColorizedDisplayString();
 
         __instance.roleDescText.text = text[..start] + colored + text[end..];
     }
@@ -296,14 +297,14 @@ public static class RoleCardPopupPatches2
         else 
             displayString = RoleAlignment.NONE.ToDisplayString();
 
-        if (faction is FactionType.SERIALKILLER 
-            or FactionType.ARSONIST or FactionType.SHROUD 
-            or FactionType.WEREWOLF or FactionType.JESTER 
-            or FactionType.EXECUTIONER or FactionType.PIRATE
-            or FactionType.DOOMSAYER or Btos2Faction.Judge
-            or Btos2Faction.Auditor or Btos2Faction.Starspawn
-            or Btos2Faction.Inquisitor or (FactionType)37)
-            useNeutralGradient = true;
+        // if (faction is FactionType.SERIALKILLER 
+        //     or FactionType.ARSONIST or FactionType.SHROUD 
+        //     or FactionType.WEREWOLF or FactionType.JESTER 
+        //     or FactionType.EXECUTIONER or FactionType.PIRATE
+        //     or FactionType.DOOMSAYER or Btos2Faction.Judge
+        //     or Btos2Faction.Auditor or Btos2Faction.Starspawn
+        //     or Btos2Faction.Inquisitor or (FactionType)37)
+        //     useNeutralGradient = true;
 
         if (subAlignment.IsInvalid())
         {
@@ -890,7 +891,8 @@ public static class ClientRoleExtensionsPatches
     [HarmonyPatch(nameof(ClientRoleExtensions.ToColorizedDisplayString), typeof(FactionType)), HarmonyPostfix]
     public static void ToColorizedDisplayStringFactionPostfix(ref string __result, FactionType factionType)
     {
-        var gradient = factionType.GetChangedGradient(Role.NONE);
+        // var gradient = factionType.GetChangedGradient(Role.NONE);
+        var gradient = Utils.CreateGradient(Utils.GetPrimaryColor(factionType), Utils.GetSecondaryColor(factionType));
 
         var text = factionType.ToDisplayString();
         var newText = gradient != null ? Utils.ApplyGradient(text, gradient) : $"<color={factionType.GetFactionColor()}>{text}</color>";
@@ -1390,7 +1392,7 @@ public static class KeywordMentionsPatches
             var display = item.ToDisplayString();
             var shortName = shortNames.ContainsKey(item) ? shortNames.GetValue(item) : display;
             var encodedText = $"{faction}";
-            var name = __instance._useColors ? Utils.ApplyGradient(item.ToDisplayString(), item.GetChangedGradient(Constants.IsBTOS2() ? Btos2Role.Jackal : Role.DREAMWEAVER)) : display;
+            var name = __instance._useColors ? item.ToColorizedDisplayString() : display;
             name = __instance._roleEffects == 1 ? roleIcon + name : name;
 
             var richText = $"{__instance.styleTagOpen}{__instance.styleTagFont}<b>{name}</b>{__instance.styleTagClose}";
