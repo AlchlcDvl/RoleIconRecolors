@@ -760,8 +760,8 @@
 	<Entry key="FANCY_PIRATE_BUCKET_END_NAME">Pirate Bucket Secondary Color</Entry>
 	<Entry key="FANCY_PIRATE_BUCKET_END_DESC">The secondary color for Pirate buckets.</Entry>
 
-	<Entry key="FANCY_CURSEDSOUL_BUCKET_BUCKET_START_NAME">Wandering Souls Bucket Primary Color</Entry>
-	<Entry key="FANCY_CURSEDSOUL_BUCKET_BUCKET_START_DESC">The primary color for Wandering Souls buckets.</Entry>
+	<Entry key="FANCY_CURSEDSOUL_BUCKET_START_NAME">Wandering Souls Bucket Primary Color</Entry>
+	<Entry key="FANCY_CURSEDSOUL_BUCKET_START_DESC">The primary color for Wandering Souls buckets.</Entry>
 	<Entry key="FANCY_CURSEDSOUL_BUCKET_END_NAME">Wandering Souls Bucket Secondary Color</Entry>
 	<Entry key="FANCY_CURSEDSOUL_BUCKET_END_DESC">The secondary color for Wandering Souls buckets.</Entry>
 
