@@ -117,6 +117,7 @@ public class Fancy : BaseMod<Fancy>
     public static ToggleOption ModifierFactions;
     public static ToggleOption FactionalRoleNames;
     public static ToggleOption FactionalRoleBlurbs;
+    public static ToggleOption FactionalBuckets;
     public static ToggleOption ReplaceNAwithRA;
     public static ToggleOption DisableBTOSTribunal;
 
@@ -135,6 +136,8 @@ public class Fancy : BaseMod<Fancy>
     public static ColorOption BucketEnd;
     public static ColorOption AnyStart;
     public static ColorOption AnyEnd;
+    public static ColorOption ModifierStart;
+    public static ColorOption ModifierEnd;
     public static ColorOption KeywordStart;
     public static ColorOption KeywordEnd;
     public static ColorOption AchievementStart;
@@ -161,6 +164,9 @@ public class Fancy : BaseMod<Fancy>
     public static StringInputOption CourtLabel;
     public static StringInputOption JuryLabel;
     public static ToggleOption JuryIcon;
+    public static ToggleOption RoleCardFactionLabel;
+    public static ToggleOption FactionNameNextToRole;
+    public static ToggleOption ShowForShortNames;
     public static StringInputOption PirateLabel;
 
     public static ColorOption CourtChatColor;
@@ -175,34 +181,34 @@ public class Fancy : BaseMod<Fancy>
     public static FloatOption ChatBackgroundOpacity;
 	
     private static readonly Dictionary<string, ColorOption> ColorOptions = [];
-    public static readonly Dictionary<string, (string Start, string End, string Major, string Middle, string Lethal, string Horsemen)> Colors = new()
+    public static readonly Dictionary<string, (string Start, string End, string Major, string Middle, string Lethal, string Horsemen, string BucketS, string BucketE)> Colors = new()
     {
-        { "TOWN", ("#06E00C", "#06E00C", "#06E00C", null, "#06E00C", "#06E00C") },
-        { "COVEN", ("#B545FF", "#B545FF", "#B545FF", null, "#B545FF", "#B545FF") },
-        { "APOCALYPSE", ("#FF004E", "#FF004E", "#FF004E", null, "#FF004E", "#FF004E") },
-        { "VAMPIRE", ("#ff0000", "#6A1B1B", "#6A1B1B", null, "#6A1B1B", "#6A1B1B") },
-        { "CURSEDSOUL", ("#4FFF9F", "#B54FFF", "#B54FFF", null, "#B54FFF", "#B54FFF") },
-        { "PANDORA", ("#B545FF", "#FF004E", "#FF004E", null, "#FF004E", "#FF004E") },
-        { "COMPLIANCE", ("#2D44B5", "#FC9F32", "#FC9F32", "#AE1B1E", null, "#AE1B1E") },
-        { "SERIALKILLER", ("#1D4DFC", "#1D4DFC", "#1D4DFC", null, null, "#1D4DFC") },
-        { "ARSONIST", ("#DB7601", "#DB7601", "#DB7601", null, null, "#DB7601") },
-        { "WEREWOLF", ("#9D7038", "#9D7038", "#9D7038", null, null, "#9D7038") },
-        { "SHROUD", ("#6699FF", "#6699FF", "#6699FF", null, null, "#6699FF") },
-        { "JACKAL", ("#404040", "#D0D0D0", "#D0D0D0", null, "#D0D0D0", "#D0D0D0") },
-        { "EGOTIST", ("#359f3f", "#3f359f", "#3f359f", null, "#3f359f", "#3f359f") },
-        { "JESTER", ("#F5A6D4", "#F5A6D4", null, null, null, null) },
-        { "EXECUTIONER", ("#949797", "#949797", null, null, null, null) },
-        { "DOOMSAYER", ("#00CC99", "#00CC99", null, null, null, null) },
-        { "PIRATE", ("#ECC23E", "#ECC23E", null, null, null, null) },
-        { "INQUISITOR", ("#821252", "#821252", null, null, null, null) },
-        { "AUDITOR", ("#AEBA87", "#E8FCC5", null, null, null, null) },
-        { "JUDGE", ("#C77364", "#C93D50", null, null, null, null) },
-        { "STARSPAWN", ("#FCE79A", "#999CFF", null, null, null, null) },
-        { "FROGS", ("#1e49cf", "#1e49cf", "#1e49cf", null, "#1e49cf", "#1e49cf") },
-        { "HAWKS", ("#A81538", "#A81538", "#A81538", null, "#A81538", "#A81538") },
-        { "LIONS", ("#FFC34F", "#FFC34F", "#FFC34F", null, "#FFC34F", "#FFC34F") },
-        { "LOVERS", ("#FEA6FA", "#FEA6FA", null, null, null, null) },
-        { "STONED_HIDDEN", ("#9C9A9A", null, null, null, null, null) }
+        { "TOWN", ("#06E00C", "#06E00C", "#06E00C", null, "#06E00C", "#06E00C", "#1F51FF", "#1F51FF") },
+        { "COVEN", ("#B545FF", "#B545FF", "#B545FF", null, "#B545FF", "#B545FF", "#1F51FF", "#1F51FF") },
+        { "APOCALYPSE", ("#FF004E", "#FF004E", "#FF004E", null, "#FF004E", "#FF004E", "#1F51FF", "#1F51FF") },
+        { "VAMPIRE", ("#ff0000", "#6A1B1B", "#6A1B1B", null, "#6A1B1B", "#6A1B1B", "#1F51FF", "#1F51FF") },
+        { "CURSEDSOUL", ("#4FFF9F", "#B54FFF", "#B54FFF", null, "#B54FFF", "#B54FFF", "#1F51FF", "#1F51FF") },
+        { "PANDORA", ("#B545FF", "#FF004E", "#FF004E", null, "#FF004E", "#FF004E", "#1F51FF", "#1F51FF") },
+        { "COMPLIANCE", ("#2D44B5", "#FC9F32", "#FC9F32", "#AE1B1E", null, "#AE1B1E", "#1F51FF", "#1F51FF") },
+        { "SERIALKILLER", ("#1D4DFC", "#1D4DFC", "#1D4DFC", null, null, "#1D4DFC", "#1F51FF", "#1F51FF") },
+        { "ARSONIST", ("#DB7601", "#DB7601", "#DB7601", null, null, "#DB7601", "#1F51FF", "#1F51FF") },
+        { "WEREWOLF", ("#9D7038", "#9D7038", "#9D7038", null, null, "#9D7038", "#1F51FF", "#1F51FF") },
+        { "SHROUD", ("#6699FF", "#6699FF", "#6699FF", null, null, "#6699FF", "#1F51FF", "#1F51FF") },
+        { "JACKAL", ("#404040", "#D0D0D0", "#D0D0D0", null, "#D0D0D0", "#D0D0D0", "#1F51FF", "#1F51FF") },
+        { "EGOTIST", ("#359f3f", "#3f359f", "#3f359f", null, "#3f359f", "#3f359f", "#1F51FF", "#1F51FF") },
+        { "JESTER", ("#F5A6D4", "#F5A6D4", null, null, null, null, "#1F51FF", "#1F51FF") },
+        { "EXECUTIONER", ("#949797", "#949797", null, null, null, null, "#1F51FF", "#1F51FF") },
+        { "DOOMSAYER", ("#00CC99", "#00CC99", null, null, null, null, "#1F51FF", "#1F51FF") },
+        { "PIRATE", ("#ECC23E", "#ECC23E", null, null, null, null, "#1F51FF", "#1F51FF") },
+        { "INQUISITOR", ("#821252", "#821252", null, null, null, null, "#1F51FF", "#1F51FF") },
+        { "AUDITOR", ("#AEBA87", "#E8FCC5", null, null, null, null, "#1F51FF", "#1F51FF") },
+        { "JUDGE", ("#C77364", "#C93D50", null, null, null, null, "#1F51FF", "#1F51FF") },
+        { "STARSPAWN", ("#FCE79A", "#999CFF", null, null, null, null, "#1F51FF", "#1F51FF") },
+        { "FROGS", ("#1e49cf", "#1e49cf", "#1e49cf", null, "#1e49cf", "#1e49cf", "#1F51FF", "#1F51FF") },
+        { "HAWKS", ("#A81538", "#A81538", "#A81538", null, "#A81538", "#A81538", "#1F51FF", "#1F51FF") },
+        { "LIONS", ("#FFC34F", "#FFC34F", "#FFC34F", null, "#FFC34F", "#FFC34F", "#1F51FF", "#1F51FF") },
+        { "LOVERS", ("#FEA6FA", "#FEA6FA", null, null, null, null, "#1F51FF", "#1F51FF") },
+        { "STONED_HIDDEN", ("#9C9A9A", null, null, null, null, null, null, null) }
     };
 
     public static readonly Dictionary<FactionType, EnumDropdownOption<CinematicType>> CinematicMap = [];
@@ -224,8 +230,8 @@ public class Fancy : BaseMod<Fancy>
     public static FloatOption ConvertEndBlendRatio;
     public static EnumDropdownOption<NecroPassingFormatOption> NecroPassingFormat;
     public static FloatOption FactionLabelSize;
-    public static EnumDropdownOption<FactionLabelOption> RoleCardFactionLabel;
-    public static EnumDropdownOption<FactionLabelOption> FactionNameNextToRole;
+    // public static EnumDropdownOption<FactionLabelOption> RoleCardFactionLabel;
+    // public static EnumDropdownOption<FactionLabelOption> FactionNameNextToRole;
     public static EnumDropdownOption<PlayerListRoleIconOption> PlayerListRoleIcon;
     public static EnumDropdownOption<DisplayType> SelectDisplay;
 
@@ -233,6 +239,8 @@ public class Fancy : BaseMod<Fancy>
     private static FactionType[] BTOS2Factions;
     private static Role[] VanillaRoles;
     private static Role[] BTOS2Roles;
+    private static Role[] VanillaModifiers;
+    private static Role[] BTOS2Modifiers;
 
     public static readonly Dictionary<FactionType, Dictionary<ColorType, ColorOption>> FactionToColorMap = [];
 	// public static readonly Dictionary<RolePlus, ColorOption> RoleColorMap = [];
@@ -244,9 +252,10 @@ public class Fancy : BaseMod<Fancy>
     {
         VanillaFactions = [.. GeneralUtils.GetEnumValues<FactionType>()!.Except([FactionType.UNKNOWN, FactionType.FACTION_COUNT])];
         BTOS2Factions = [.. AccessTools.GetDeclaredFields(typeof(Btos2Faction)).Select(x => (FactionType)x.GetRawConstantValue())];
-        VanillaRoles = [.. GeneralUtils.GetEnumValues<Role>()!.Where(role => (byte)role is < 57 or > 249).Except([Role.STONED, Role.UNKNOWN])];
-        BTOS2Roles = [.. AccessTools.GetDeclaredFields(typeof(Btos2Role)).Select(x => (Role)x.GetRawConstantValue()).Where(role => (byte)role is < 67 or > 249).Except([Role.STONED,
-            Role.UNKNOWN])];
+        VanillaRoles = [.. GeneralUtils.GetEnumValues<Role>()!.Where(role => (byte)role is < 57 or > 249).Except([Role.UNKNOWN])];
+        BTOS2Roles = [.. AccessTools.GetDeclaredFields(typeof(Btos2Role)).Select(x => (Role)x.GetRawConstantValue()).Where(role => (byte)role is < 67 or > 249).Except([Role.UNKNOWN])];
+        VanillaModifiers = [.. GeneralUtils.GetEnumValues<Role>() .Where(role => (byte)role > 200 && (byte)role < 240)];
+        BTOS2Modifiers = [.. AccessTools.GetDeclaredFields(typeof(Btos2Role)).Select(x => (Role)x.GetRawConstantValue()).Where(role => (byte)role is > 200 and < 240)];
 
         var colors = GeneralUtils.GetEnumValues<ColorType>()!.Where(x => x != ColorType.All).ToDictionary(x => x, x => x.ToString().ToUpperInvariant());
         var filteredFactions = BTOS2Factions.Where(x => x is not (Btos2Faction.Cannibal or Btos2Faction.None or Btos2Faction.Lovers or Btos2Faction.Compliance or Btos2Faction.Pandora));
@@ -388,9 +397,13 @@ public class Fancy : BaseMod<Fancy>
         AllEasterEggs = new("ALL_EE", false, PackType.IconPacks, Constants.EnableIcons);
         PlayerPanelEasterEggs = new("PLAYER_PANEL_EE", false, PackType.IconPacks, Constants.EnableIcons);
 
+        RoleCardFactionLabel = new("FACTION_LABEL", true, PackType.MiscRoleCustomisation);
+        FactionNameNextToRole = new("FACTION_NEXT_TO_ROLE", false, PackType.MiscRoleCustomisation);
+        ShowForShortNames = new("FACTION_NEXT_TO_SHORT_ROLE", true, PackType.MiscRoleCustomisation, setActive: () => FactionNameNextToRole.Value);
         RoleRevealTintIntensity = new("ROLE_REVEAL_TINT_INTENSITY", 625, PackType.MiscRoleCustomisation, 0, 1000, true);
         FactionalRoleNames = new("FACTIONAL_ROLE_NAMES", false, PackType.MiscRoleCustomisation, Constants.TextEditorExists);
         FactionalRoleBlurbs = new("FACTIONAL_ROLE_BLURBS", false, PackType.MiscRoleCustomisation, Constants.TextEditorExists);
+        FactionalBuckets = new("FACTIONAL_BUCKETS", false, PackType.MiscRoleCustomisation);
         // RoleSpecificEndingColors = new("ROLE_SPECIFIC_COLORS", false, PackType.MiscRoleCustomisation);
         MajorColors = new("MAJOR_COLORS", false, PackType.MiscRoleCustomisation);
         ExcludeCatalyst = new("EXCLUDE_CATALYST", false, PackType.MiscRoleCustomisation, setActive: () => MajorColors.Value);
@@ -408,8 +421,8 @@ public class Fancy : BaseMod<Fancy>
         ConvertEndingColor = new("CONVERT_ENDING", OverrideEndType.Default, PackType.MiscRoleCustomisation, useTranslations: true);
         ConvertEndBlendRatio = new("CONVERT_END_RATIO", 50, PackType.MiscRoleCustomisation, 1, 99, true);
         FactionLabelSize = new("FACTION_LABEL_SIZE", 85, PackType.MiscRoleCustomisation, 10, 100, true);
-        RoleCardFactionLabel = new("FACTION_LABEL", FactionLabelOption.Mismatch, PackType.MiscRoleCustomisation, useTranslations: true);
-        FactionNameNextToRole = new("FACTION_NEXT_TO_ROLE", FactionLabelOption.Never, PackType.MiscRoleCustomisation, useTranslations: true);
+        // RoleCardFactionLabel = new("FACTION_LABEL", FactionLabelOption.Mismatch, PackType.MiscRoleCustomisation, useTranslations: true);
+        // FactionNameNextToRole = new("FACTION_NEXT_TO_ROLE", FactionLabelOption.Never, PackType.MiscRoleCustomisation, useTranslations: true);
         RecruitLabel = new("RECRUIT_LABEL", "Recruited", PackType.MiscRoleCustomisation, setActive: () => Constants.BTOS2Exists());
         CovenTraitorLabel = new("COVEN_TRAITOR_LABEL", "Town Traitor", PackType.MiscRoleCustomisation, setActive: () => SelectTestingFaction.Value == FactionType.COVEN);
         ApocTraitorLabel = new("APOC_TRAITOR_LABEL", "Town Traitor", PackType.MiscRoleCustomisation, setActive: () => Constants.BTOS2Exists() && SelectTestingFaction.Value == FactionType.APOCALYPSE);
@@ -437,6 +450,8 @@ public class Fancy : BaseMod<Fancy>
         // BucketColor = new("BUCKET_COLOR", "#1F51FF", PackType.MiscRoleCustomisation);
         AnyStart = new("ANY_START", "#ffffff", PackType.MiscRoleCustomisation);
         AnyEnd = new("ANY_END", "#ffffff", PackType.MiscRoleCustomisation);
+        ModifierStart = new("MODIFIER_START", "#ffffff", PackType.MiscRoleCustomisation);
+        ModifierEnd = new("MODIFIER_END", "#ffffff", PackType.MiscRoleCustomisation);
         KeywordStart = new("KEYWORD_START", "#007AFF", PackType.MiscRoleCustomisation);
         KeywordEnd = new("KEYWORD_END", "#007AFF", PackType.MiscRoleCustomisation);
         AchievementStart = new("ACHIEVEMENT_START", "#FFBE00", PackType.MiscRoleCustomisation);
@@ -455,7 +470,7 @@ public class Fancy : BaseMod<Fancy>
         DebugPackLoading = new("DEBUG_LOADING", false, PackType.Testing);
         ShowOverlayWhenJailed = new("SHOW_TO_JAILED", true, PackType.Testing);
         ShowOverlayAsJailor = new("SHOW_TO_JAILOR", false, PackType.Testing);
-        ModifierFactions = new("MODIFIER_FACTIONS", true, PackType.Testing);
+        // ModifierFactions = new("MODIFIER_FACTIONS", true, PackType.Testing);
         DisableBTOSTribunal = new("DISABLE_BTOS_TRIBUNAL", true, PackType.Testing, setActive: Constants.BTOS2Exists);
 
         foreach (var faction in BTOS2Factions.Where(x => x is not (FactionType.NONE or (> FactionType.APOCALYPSE and < FactionType.VAMPIRE) or FactionType.CURSED_SOUL or FactionType.UNKNOWN or Btos2Faction.Compliance or
@@ -471,7 +486,7 @@ public class Fancy : BaseMod<Fancy>
                 uponChanged: ReloadCinematics);
         }
 
-        foreach (var (key, (start, end, major, middle, lethal, horseman)) in Colors)
+        foreach (var (key, (start, end, major, middle, lethal, horseman, bucketS, bucketE)) in Colors)
         {
             if (start == null)
                 continue;
@@ -499,6 +514,12 @@ public class Fancy : BaseMod<Fancy>
             if (lethal != null)
                 ColorOptions[$"{key}_LETHAL"] = new($"{key}_LETHAL", lethal, PackType.MiscRoleCustomisation, SetActive, uponChanged: ReloadColors);
 
+            if (bucketS != null)
+                ColorOptions[$"{key}_BUCKET_START"] = new($"{key}_BUCKET_START", bucketS, PackType.MiscRoleCustomisation, SetActive, uponChanged: ReloadColors);
+
+            if (bucketE != null)
+                ColorOptions[$"{key}_BUCKET_END"] = new($"{key}_BUCKET_END", bucketE, PackType.MiscRoleCustomisation, SetActive, uponChanged: ReloadColors);
+
             bool SetActive() => Utils.FactionName(SelectTestingFaction.Value, true, stoned: true).ToUpper() == key;
         }
 
@@ -515,8 +536,10 @@ public class Fancy : BaseMod<Fancy>
             var middle = ColorOptions.TryGetValue($"{key}_MIDDLE", out var mi) ? mi.Value : null;
             var horseman = ColorOptions.TryGetValue($"{key}_HORSEMAN", out var h) ? h.Value : null;
             var lethal = ColorOptions.TryGetValue($"{key}_LETHAL", out var l) ? l.Value : null;
+            var bucketS = ColorOptions.TryGetValue($"{key}_BUCKET_START", out var bS) ? bS.Value : null;
+            var bucketE = ColorOptions.TryGetValue($"{key}_BUCKET_END", out var bE) ? bE.Value : null;
 
-            Colors[key] = (start, end, major, middle, lethal, horseman);
+            Colors[key] = (start, end, major, middle, lethal, horseman, bucketS, bucketE);
         }
     }
 

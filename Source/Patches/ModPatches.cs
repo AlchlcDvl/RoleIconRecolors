@@ -267,9 +267,9 @@ public static class ModifierFactionPatch
 {
     public static bool Prefix(ref string __result, Role role, FactionType factionType)
     {
-        var any = Utils.CreateGradient(Fancy.AnyStart.Value, Fancy.AnyEnd.Value);
+        var modifier = Utils.CreateGradient(Fancy.ModifierStart.Value, Fancy.ModifierEnd.Value);
 
-        if (role.IsModifierCard() && Fancy.ModifierFactions.Value)
+        if (role.IsModifierCard())
         {
             FactionType modifierFaction;
             if (Constants.IsBTOS2())
@@ -284,12 +284,14 @@ public static class ModifierFactionPatch
                     Btos2Role.ApocTownTraitor => Btos2Faction.Apocalypse,
                     Btos2Role.NecroPass => Btos2Faction.Coven,
                     Btos2Role.Egotist => Btos2Faction.Egotist,
-                    Btos2Role.SpeakingSpirits => Btos2Faction.CursedSoul,
+                    Btos2Role.SpeakingSpirits => Btos2Faction.Shroud,
                     Btos2Role.FourHorsemen => Btos2Faction.Apocalypse,
                     Btos2Role.CovenVip => Btos2Faction.Coven,
                     Btos2Role.Lovers => Btos2Faction.Lovers,
                     Btos2Role.FeelinLucky => Btos2Faction.Jester,
                     Btos2Role.AllOutliers => Btos2Faction.CursedSoul,
+                    Btos2Role.SecretKillers => Btos2Faction.SerialKiller,
+                    Btos2Role.Teams => Btos2Faction.Hawks,
                     Btos2Role.TownPower => Btos2Faction.Town, // so it shows as town, cuz game believes its a modifier
                     _ => FactionType.NONE
                 };
@@ -305,16 +307,17 @@ public static class ModifierFactionPatch
                     Role.ALL_OUTLIERS => FactionType.CURSED_SOUL,
                     Role.ELECTION => FactionType.TOWN,
                     Role.FEELIN_LUCKY => FactionType.JESTER,
+                    Role.KILLER_ROLES_HIDDEN => FactionType.SERIALKILLER,
                     _ => FactionType.NONE
                 };
             if (modifierFaction != FactionType.NONE)
             {
-                __result = Utils.ApplyGradient(role.ToDisplayString(), Gradients.GetChangedGradient(modifierFaction, role));
+                __result = Utils.ApplyGradient(role.ToDisplayString(), modifierFaction.GetChangedGradient(role));
                 return false;
             }
             else
             {
-                __result = Utils.ApplyGradient(role.ToDisplayString(), any);
+                __result = Utils.ApplyGradient(role.ToDisplayString(), modifier);
                 return false;
             }
         }
@@ -322,63 +325,6 @@ public static class ModifierFactionPatch
     }
 }
 
-/*
-[HarmonyPatch(typeof(SpecialAbilityPopupGenericListItem), nameof(SpecialAbilityPopupGenericListItem.SetData))]
-public static class SpecialAbilityPopupGenericListItemPatch
-{
-    // ReSharper disable once InconsistentNaming
-    public static bool Prefix(SpecialAbilityPopupGenericListItem __instance, int position, string player_name, Sprite headshot, bool hasChoice1, bool hasChoice2, UIRoleData data)
-    {
-        var role = Role.NONE;
-        var factionType = FactionType.NONE;
-
-        if (Utils.GetRoleAndFaction(position, out var tuple))
-        {
-            role = tuple.Item1;
-            factionType = tuple.Item2;
-        }
-
-        var roleText = "";
-        var gradient = factionType.GetChangedGradient(role);
-
-        if (role != Role.NONE)
-            roleText = Fancy.FactionalRoleNames.Value ? Utils.GetRoleName(role, factionType, true) : $"({role.ToDisplayString()})";
-
-        var text = $"{player_name} {Utils.ApplyGradient(roleText, gradient)}";
-        __instance.playerName.SetText(text);
-        __instance.playerHeadshot.sprite = headshot;
-        __instance.characterPosition = position;
-        __instance.playerNumber.text = $"{__instance.characterPosition + 1}.";
-        var myRole = Pepper.GetMyRole();
-        var uiRoleDataInstance = data.roleDataList.Find(d => d.role == myRole);
-
-        if (uiRoleDataInstance != null)
-        {
-            __instance.choiceText.text = __instance.l10n($"GUI_ROLE_SPECIAL_ABILITY_VERB_{(int)uiRoleDataInstance.role}");
-            __instance.choiceSprite.sprite = uiRoleDataInstance.specialAbilityIcon;
-            __instance.choice2Text.text = __instance.l10n($"GUI_ROLE_ABILITY2_VERB_{(int)uiRoleDataInstance.role}");
-            __instance.choice2Sprite.sprite = uiRoleDataInstance.abilityIcon2;
-        }
-
-        __instance.choiceButton.gameObject.SetActive(hasChoice1);
-        __instance.choice2Button.gameObject.SetActive(hasChoice2);
-
-        if (!hasChoice1)
-        {
-            __instance.selected1 = false;
-            __instance.choiceButton.Deselect();
-        }
-
-        if (!hasChoice2)
-        {
-            __instance.selected2 = false;
-            __instance.choice2Button.Deselect();
-        }
-
-        return false;
-    }
-}
-*/
 
 [HarmonyPatch(typeof(SpecialAbilityPopupDayConfirmListItem), nameof(SpecialAbilityPopupDayConfirmListItem.SetData))]
 public static class SpecialAbilityPopupDayConfirmListItemPatch
@@ -395,15 +341,12 @@ public static class SpecialAbilityPopupDayConfirmListItemPatch
         }
 
         var myFaction = factionType;
-        var isHidden = role is Role.STONED or Role.HIDDEN;
 		var roleName = Fancy.FactionalRoleNames.Value ? Utils.GetRoleName(role, myFaction, true) : $"({role.ToDisplayString()})";
         var wrapped = $"{roleName}";
         var gradient = myFaction.GetChangedGradient(role);
         var gradientText = gradient != null ? Utils.ApplyGradient(wrapped, gradient) : $"<color={myFaction.GetFactionColor()}>{wrapped}</color>";
         var hiddenText = $"<color={role.GetFaction().GetFactionColor()}>{wrapped}</color>";
-        var final = role != Role.NONE
-            ? (isHidden ? hiddenText : gradientText)
-            : string.Empty;
+        var final = role != Role.NONE ? gradientText : string.Empty;
         var icon = role != Role.NONE ? role.GetTMPSprite() : string.Empty;
 
         if (role != Role.NONE)
@@ -438,7 +381,7 @@ public static class SpecialAbilityPopupDayConfirmListItemPatch
 
         if (uiRoleDataInstance != null)
         {
-            __instance.choiceText.text = __instance.l10n(uiRoleDataInstance.role.GetSpecialAbilityVerb());
+            __instance.choiceText.text = uiRoleDataInstance.role.GetSpecialAbilityVerb();
             __instance.choiceSprite.sprite = uiRoleDataInstance.specialAbilityIcon;
         }
 
@@ -466,15 +409,12 @@ public static class SpecialAbilityPopupNecromancerRetributionistListItemPatch
             role2 = tuple.Item1;
             factionType = tuple.Item2;
         }
-        var isHidden = role2 is Role.STONED or Role.HIDDEN;
         var roleName = Fancy.FactionalRoleNames.Value ? Utils.GetRoleName(role2, factionType, true) : $"({role2.ToDisplayString()})";
         var wrapped = $"{roleName}";
         var gradient = factionType.GetChangedGradient(role2);
         var gradientText = gradient != null ? Utils.ApplyGradient(wrapped, gradient) : $"<color={factionType.GetFactionColor()}>{wrapped}</color>";
         var hiddenText = $"<color={role2.GetFaction().GetFactionColor()}>{wrapped}</color>";
-        var final = role2 != Role.NONE
-            ? (isHidden ? hiddenText : gradientText)
-            : string.Empty;
+        var final = role2 != Role.NONE ? gradientText : string.Empty;
         var icon = role2 != Role.NONE ? role2.GetTMPSprite() : string.Empty;
 
         if (role2 != Role.NONE)
@@ -583,7 +523,6 @@ public static class PatchSpecialAbilityPopupGenericDualTargetListItem
             role2 = tuple.Item1;
             factionType = tuple.Item2;
         }
-        var isHidden = role2 is Role.STONED or Role.HIDDEN;
         var roleName = Fancy.FactionalRoleNames.Value
             ? Utils.GetRoleName(role2, factionType, true)
             : $"({role2.ToDisplayString()})";
@@ -594,9 +533,7 @@ public static class PatchSpecialAbilityPopupGenericDualTargetListItem
             : $"<color={factionType.GetFactionColor()}>{wrapped}</color>";
 
         var hiddenText = $"<color={role2.GetFaction().GetFactionColor()}>{wrapped}</color>";
-        var final = role2 != Role.NONE
-            ? (isHidden ? hiddenText : gradientText)
-            : string.Empty;
+        var final = role2 != Role.NONE ? gradientText : string.Empty;
         var icon = role2 != Role.NONE ? role2.GetTMPSprite() : string.Empty;
         if (role2 != Role.NONE)
         {
@@ -1216,14 +1153,14 @@ public static class RoleTargetingPatches
                     else if (overrideType == TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_ATTACK)
                         key += "_ALT2";
                     break;
-                case Role.VOODOOMASTER:
-                    if (overrideType == TosAbilityPanelListItem.OverrideAbilityType.VOODOOMASTER_SILENCE)
-                        key += "_ALT0";
-                    else if (overrideType == TosAbilityPanelListItem.OverrideAbilityType.VOODOOMASTER_DEAFEN)
-                        key += "_ALT1";
-                    else if (overrideType == TosAbilityPanelListItem.OverrideAbilityType.VOODOOMASTER_BLIND)
-                        key += "_ALT2";
-                    break;
+                // case Role.VOODOOMASTER:
+                    // if (overrideType == TosAbilityPanelListItem.OverrideAbilityType.VOODOOMASTER_SILENCE)
+                        // key += "_ALT0";
+                    // else if (overrideType == TosAbilityPanelListItem.OverrideAbilityType.VOODOOMASTER_DEAFEN)
+                        // key += "_ALT1";
+                    // else if (overrideType == TosAbilityPanelListItem.OverrideAbilityType.VOODOOMASTER_BLIND)
+                        // key += "_ALT2";
+                    // break;
                 case Role.SHROUD:
                     if (overrideType == TosAbilityPanelListItem.OverrideAbilityType.SHROUD)
                         key += "_ALT1";
@@ -1236,17 +1173,17 @@ public static class RoleTargetingPatches
                     if (overrideType == Btos2OverrideAbilityType.SerialKillerDisguise && isBTOS2)
                         key += "_ALT1";
                     break;
-                case Role.BAKER:
-                    if (isBTOS2)
-                    {
-                        if (overrideType == Btos2OverrideAbilityType.BakerReveal)
-                            key += "_ALT0";
-                        else if (overrideType == Btos2OverrideAbilityType.BakerRoleblock)
-                            key += "_ALT1";
-                        else if (overrideType == Btos2OverrideAbilityType.BakerDefend)
-                            key += "_ALT2";
-                    }
-                    break;
+                // case Role.BAKER:
+                    // if (isBTOS2)
+                    // {
+                        // if (overrideType == Btos2OverrideAbilityType.BakerReveal)
+                            // key += "_ALT0";
+                        // else if (overrideType == Btos2OverrideAbilityType.BakerRoleblock)
+                            // key += "_ALT1";
+                        // else if (overrideType == Btos2OverrideAbilityType.BakerDefend)
+                            // key += "_ALT2";
+                    // }
+                    // break;
             }
 
     
@@ -1311,28 +1248,28 @@ public static class FactionTargetingPatches
                     if (!Pepper.IsFullMoonNight())
                         key += "_ALT1";
                     break;
-                case Role.BAKER:
-                    if (isBTOS2 && specialData > 0)
-                    {
-                        if (specialData == 1)
-                            key += "_ALT0";
-                        else if (specialData == 2)
-                            key += "_ALT1";
-                        else if (specialData == 3)
-                            key += "_ALT2";
-                    }
-                    break;
-                case Role.VOODOOMASTER:
-                    if (specialData > 0)
-                    {
-                        if (specialData == 1)
-                            key += "_ALT0";
-                        else if (specialData == 2)
-                            key += "_ALT1";
-                        else if (specialData == 3)
-                            key += "_ALT2";
-                    }
-                    break;
+                // case Role.BAKER:
+                    // if (isBTOS2 && specialData > 0)
+                    // {
+                        // if (specialData == 1)
+                            // key += "_ALT0";
+                        // else if (specialData == 2)
+                            // key += "_ALT1";
+                        // else if (specialData == 3)
+                            // key += "_ALT2";
+                    // }
+                    // break;
+                // case Role.VOODOOMASTER:
+                    // if (specialData > 0)
+                    // {
+                        // if (specialData == 1)
+                            // key += "_ALT0";
+                        // else if (specialData == 2)
+                            // key += "_ALT1";
+                        // else if (specialData == 3)
+                            // key += "_ALT2";
+                    // }
+                    // break;
                 
             }
             if (menuChoiceType == MenuChoiceType.NightAbility2)

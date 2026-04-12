@@ -99,7 +99,7 @@ public static class Gradients
 			// );
 		// }
 
-        var (_, endVal, majorVal, _, lethalVal, horsemanVal) = Fancy.Colors[key];
+        var (_, endVal, majorVal, _, lethalVal, horsemanVal, _, _) = Fancy.Colors[key];
 
 		var isPower = role.GetSubAlignment() is SubAlignment.POWER or (SubAlignment)37;
 		var isTownGovernment = Constants.IsBTOS2() ? (role.GetSubAlignment() == (SubAlignment)38 || role is Btos2Role.TownGovernment) : role is Role.MAYOR or Role.MONARCH;

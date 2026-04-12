@@ -46,7 +46,7 @@ public static class PatchRoleCard
 		// var prefix = Constants.IsBTOS2() ? "BTOS" : "GUI";
         var useNeutralGradient = false;
         var neutralGradient = Utils.CreateGradient(Fancy.NeutralStart.Value, Fancy.NeutralEnd.Value);
-        var subAlignGradient = Utils.CreateGradient(Fancy.BucketStart.Value, Fancy.BucketEnd.Value);
+        var subAlignGradient = Fancy.FactionalBuckets.Value ? Utils.GetFactionBucketGradient(faction) : Utils.CreateGradient(Fancy.BucketStart.Value, Fancy.BucketEnd.Value);
         if (role is Role.DEATH or Role.PESTILENCE or Role.WAR or Role.FAMINE)
         {
             __result = string.Empty;
@@ -128,7 +128,7 @@ public static class PatchRoleCard
                     {
 						var label = $"({faction.ToDisplayString()})";
 
-						if (Utils.ShouldShowFactionLabel(Fancy.RoleCardFactionLabel.Value, factionType, faction) && Utils.UsesBaseDisplayName(role, faction))
+						if (Fancy.RoleCardFactionLabel.Value && factionType != faction && Utils.UsesBaseDisplayName(role, faction))
 						{
 							var formatted = gradient != null ? Utils.ApplyGradient(label, gradient) : $"<color={faction.GetFactionColor()}>{label}</color>";
 
@@ -149,7 +149,7 @@ public static class PatchRoleCard
 				{
 					var label = $"({faction.ToDisplayString()})";
 
-					if (Utils.ShouldShowFactionLabel(Fancy.RoleCardFactionLabel.Value, factionType, faction) && Utils.UsesBaseDisplayName(role, faction))
+					if (Fancy.RoleCardFactionLabel.Value && factionType != faction && Utils.UsesBaseDisplayName(role, faction))
 					{
 						var formatted = gradient != null ? Utils.ApplyGradient(label, gradient) : $"<color={faction.GetFactionColor()}>{label}</color>";
 
@@ -168,7 +168,7 @@ public static class PatchRoleCard
 				{
 					var label = $"({faction.ToDisplayString()})";
 
-					if (Utils.ShouldShowFactionLabel(Fancy.RoleCardFactionLabel.Value, factionType, faction) && Utils.UsesBaseDisplayName(role, faction))
+					if (Fancy.RoleCardFactionLabel.Value && factionType != faction && Utils.UsesBaseDisplayName(role, faction))
 					{
 						var formatted = gradient != null ? Utils.ApplyGradient(label, gradient) : $"<color={faction.GetFactionColor()}>{label}</color>";
 
@@ -181,7 +181,7 @@ public static class PatchRoleCard
             {
 				var label = $"({faction.ToDisplayString()})";
 
-				if (Utils.ShouldShowFactionLabel(Fancy.RoleCardFactionLabel.Value, factionType, faction) && Utils.UsesBaseDisplayName(role, faction))
+				if (Fancy.RoleCardFactionLabel.Value && factionType != faction && Utils.UsesBaseDisplayName(role, faction))
 				{
 					var formatted = gradient != null ? Utils.ApplyGradient(label, gradient) : $"<color={faction.GetFactionColor()}>{label}</color>";
 
@@ -267,7 +267,7 @@ public static class RoleCardPopupPatches2
 		// var prefix = Constants.IsBTOS2() ? "BTOS" : "GUI";
         var useNeutralGradient = false;
         var neutralGradient = Utils.CreateGradient(Fancy.NeutralStart.Value, Fancy.NeutralEnd.Value);
-        var subAlignGradient = Utils.CreateGradient(Fancy.BucketStart.Value, Fancy.BucketEnd.Value);
+        var subAlignGradient = Fancy.FactionalBuckets.Value ? Utils.GetFactionBucketGradient(faction) : Utils.CreateGradient(Fancy.BucketStart.Value, Fancy.BucketEnd.Value);
         if (role is Role.DEATH or Role.PESTILENCE or Role.WAR or Role.FAMINE)
         {
             __result = string.Empty;
@@ -408,12 +408,11 @@ public static class PlayerListPatch
             return false;
 
         __instance.playerRole = role;
-        var isStonedOrHidden = role is Role.STONED or Role.HIDDEN;
         var roleName = Fancy.FactionalRoleNames.Value ? role.ToRoleFactionDisplayString(faction) : role.ToDisplayString();
         var gradient = faction.GetChangedGradient(role);
         var gradientText = gradient != null ? Utils.ApplyGradient($"({roleName})", gradient) : $"<color={faction.GetFactionColor()}>({roleName})</color>";
         var hiddenText = $"<color={role.GetFaction().GetFactionColor()}>({roleName})</color>";
-        var text = isStonedOrHidden ? $"{hiddenText}" : $"{gradientText}";
+        var text = $"{gradientText}";
         var icon = role.GetTMPSprite();
         icon = icon.Replace("RoleIcons\"", $"RoleIcons ({((role.GetFactionType() == faction && Constants.CurrentStyle() == "Regular")
             ? "Regular"
@@ -442,7 +441,7 @@ public static class TosCharacterNametagPatch
     {
         var gradient = factionType.GetChangedGradient(role);
 
-        if (gradient == null || role is Role.STONED or Role.HIDDEN)
+        if (gradient == null)
             return;
 
         var roleName = Fancy.FactionalRoleNames.Value ? role.ToRoleFactionDisplayString(factionType) : role.ToDisplayString();
@@ -720,12 +719,12 @@ public static class PatchCustomWinScreens
 [HarmonyPatch(typeof(ClientRoleExtensions))]
 public static class ClientRoleExtensionsPatches
 {
-    [HarmonyPatch(nameof(ClientRoleExtensions.ToColorizedDisplayString), typeof(Role), typeof(FactionType))]
-    public static void Postfix(ref string __result, Role role, FactionType factionType)
-    {
-        var gradient = factionType.GetChangedGradient(role);
+	[HarmonyPatch(nameof(ClientRoleExtensions.ToColorizedDisplayString), typeof(Role), typeof(FactionType))]
+	public static void Postfix(ref string __result, Role role, FactionType factionType)
+	{
+		var gradient = factionType.GetChangedGradient(role);
 
-        if (!role.IsResolved() && !role.IsBucket() && role is not (Role.FAMINE or Role.DEATH or Role.PESTILENCE or Role.WAR))
+		if (!role.IsResolved() && !role.IsBucket() && role is not (Role.FAMINE or Role.DEATH or Role.PESTILENCE or Role.WAR))
 			return;
 
 		// if (gradient != null && Fancy.BannedRoleDesaturation.Value != -1 && Constants.IsRoleBanned(role))
@@ -738,14 +737,14 @@ public static class ClientRoleExtensionsPatches
 			return;
 		}
 		
-        var text = Fancy.FactionalRoleNames.Value ? role.ToRoleFactionDisplayString(factionType) : role.ToDisplayString();
-        var newText = gradient != null ? Utils.ApplyGradient(text, gradient) : $"<color={factionType.GetFactionColor()}>{text}</color>";
-        var factionText = factionType.ToDisplayString();
+		var text = Fancy.FactionalRoleNames.Value ? role.ToRoleFactionDisplayString(factionType) : role.ToDisplayString();
+		var newText = gradient != null ? Utils.ApplyGradient(text, gradient) : $"<color={factionType.GetFactionColor()}>{text}</color>";
+		var factionText = factionType.ToDisplayString();
 
 		var roleFaction = role.GetFaction();
 		var label = (factionType == Btos2Faction.Jackal && !string.IsNullOrWhiteSpace(Fancy.RecruitLabel.Value)) ? $"({Fancy.RecruitLabel.Value})" : $"({factionText})";
 
-		if (Utils.ShouldShowFactionLabel(Fancy.FactionNameNextToRole.Value, roleFaction, factionType) && Utils.UsesBaseDisplayName(role, factionType))
+		if (Fancy.FactionNameNextToRole.Value && roleFaction != factionType && role.UsesBaseDisplayName(factionType))
 		{
 
 			if (gradient != null)
@@ -754,8 +753,9 @@ public static class ClientRoleExtensionsPatches
 				newText += $" <color={factionType.GetFactionColor()}>{label}</color>";
 		}
 
-        __result = newText;
-    }
+		__result = newText;
+	}
+
     private static string GetBucketString(this Role role, FactionType faction)
     {
         var isNone = faction is FactionType.NONE;
@@ -763,7 +763,7 @@ public static class ClientRoleExtensionsPatches
 
         var neut = Utils.CreateGradient(Fancy.NeutralStart.Value, Fancy.NeutralEnd.Value);
         var any = Utils.CreateGradient(Fancy.AnyStart.Value, Fancy.AnyEnd.Value);
-        var bucket = Utils.CreateGradient(Fancy.BucketStart.Value, Fancy.BucketEnd.Value);
+        var bucket = Fancy.FactionalBuckets.Value ? Utils.GetFactionBucketGradient(faction) : Utils.CreateGradient(Fancy.BucketStart.Value, Fancy.BucketEnd.Value);
 
 		// Town
 		var CT = !isNone ? faction.GetChangedGradient(Role.ADMIRER) : neut;
@@ -885,10 +885,23 @@ public static class ClientRoleExtensionsPatches
         var text = Fancy.FactionalRoleNames.Value ? role.ToRoleFactionShortenedDisplayString(factionType) : role.ToShortenedDisplayString();
         var newText = gradient != null ? Utils.ApplyGradient(text, gradient) : $"<color={factionType.GetFactionColor()}>{text}</color>";
 
+        var factionText = factionType.ToShortenedDisplayString();
+        var roleFaction = role.GetFaction();
+        var label = $"({factionText})";
+
+        if (Fancy.FactionNameNextToRole.Value  && Fancy.ShowForShortNames.Value && roleFaction != factionType && role.UsesBaseDisplayName(factionType))
+        {
+            if (gradient != null)
+                newText += $" {Utils.ApplyGradient(label, gradient)}";
+            else
+                newText += $" <color={factionType.GetFactionColor()}>{label}</color>";
+        }
+
+
         __result = newText;
 
     }
-    [HarmonyPatch(nameof(ClientRoleExtensions.ToColorizedDisplayString), typeof(FactionType)), HarmonyPostfix]
+	[HarmonyPatch(nameof(ClientRoleExtensions.ToColorizedDisplayString), typeof(FactionType)), HarmonyPostfix]
     public static void ToColorizedDisplayStringFactionPostfix(ref string __result, FactionType factionType)
     {
         // var gradient = factionType.GetChangedGradient(Role.NONE);
@@ -907,7 +920,7 @@ public static class ClientRoleExtensionsPatches
 
         var neut = Utils.CreateGradient(Fancy.NeutralStart.Value, Fancy.NeutralEnd.Value);
         var any = Utils.CreateGradient(Fancy.AnyStart.Value, Fancy.AnyEnd.Value);
-        var bucket = Utils.CreateGradient(Fancy.BucketStart.Value, Fancy.BucketEnd.Value);
+        var bucket = Fancy.FactionalBuckets.Value ? Utils.GetFactionBucketGradient(faction) : Utils.CreateGradient(Fancy.BucketStart.Value, Fancy.BucketEnd.Value);
 
 		// Town
 		var CT = !isNone ? faction.GetChangedGradient(Role.ADMIRER) : neut;
@@ -1032,17 +1045,12 @@ public static class ClientRoleExtensionsPatches
         __result = Fancy.Colors[Utils.FactionName(factionType, stoned: true).ToUpper()].Start;
         return false;
     }
-[HarmonyPatch(
-    typeof(ClientRoleExtensions),
-    nameof(ClientRoleExtensions.ToColorizedDisplayString),
-    new Type[] { typeof(Role) }
-)]
+[HarmonyPatch(typeof(ClientRoleExtensions), nameof(ClientRoleExtensions.ToColorizedDisplayString), [typeof(Role)])]
 public static class Patch_ToColorizedDisplayString_NoFaction
 {
     public static bool Prefix(ref string __result, Role role)
     {
-        // Redirect to the patched method
-        __result = ClientRoleExtensions.ToColorizedDisplayString(role, role.GetFaction());
+        __result = role.ToColorizedDisplayString(role.GetFaction());
         return false;
     }
 }}
@@ -1660,6 +1668,44 @@ public static class ReplaceRoleTagWithRoleTextPatch
 
 			index = str.IndexOf(prefix, index + 1);
 		}
+
+        // Handle %rX_Y_text% (role/faction-driven keyword gradient)
+        var prefix2 = "%r";
+        index = str.IndexOf(prefix2);
+
+        while (index > -1)
+        {
+            var endIndex = str.IndexOf("%", index + 1);
+            if (endIndex == -1)
+                break;
+
+            var fullTag = str.Substring(index, endIndex - index + 1);
+            var content = str[(index + 2)..endIndex]; // after %r
+
+            var parts = content.Split('_', 3);
+
+            if (parts.Length == 3
+                && int.TryParse(parts[0], out var roleId)
+                && int.TryParse(parts[1], out var factionId))
+            {
+                var role = (Role)roleId;
+                var faction = (FactionType)factionId;
+                var text = parts[2];
+
+                if (!string.IsNullOrWhiteSpace(text))
+                {
+                    var gradient = faction.GetChangedGradient(role);
+
+                    var formatted = text.Trim();
+                    var colorized = $"{Utils.ApplyGradient(formatted, gradient)}";
+
+                    str = str.Replace(fullTag, colorized);
+                    modified = true;
+                }
+            }
+
+            index = str.IndexOf(prefix2, index + 1);
+        }
 
         if (modified)
             __result = str;
