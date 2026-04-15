@@ -464,7 +464,12 @@ public static class SpecialAbilityPopupNecromancerRetributionistListItemPatch
             //     uiRoleDataInstance2.role is Role.DEPUTY or Role.CONJURER
             //         ? uiRoleDataInstance2.specialAbilityIcon
             //         : uiRoleDataInstance2.abilityIcon;
-            if (roleCardData.normalAbilityAvailable)
+			
+            if (role is Role.STONED or Role.HIDDEN)
+            {
+                __instance.choice2Sprite.sprite = uiRoleDataInstance2.roleIcon;
+            }
+            else if (roleCardData.normalAbilityAvailable)
             {
                 __instance.choice2Sprite.sprite = uiRoleDataInstance2.abilityIcon;
             }

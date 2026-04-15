@@ -172,6 +172,7 @@ public static class Utils
         Btos2Role.FeelinLucky => "FeelinLucky",
         Btos2Role.GracePeriod => "GracePeriod",
         Btos2Role.AllOutliers => "AllOutliers",
+        Btos2Role.FlexibleAny => "TrueAny",
         _ => "Blank"
     };
 

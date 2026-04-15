@@ -106,6 +106,7 @@ public static class Btos2Role
     public const Role NeutralOutlier = (Role)118;
     public const Role TownExecutive = (Role)119;
     public const Role TownGovernment = (Role)120;
+    public const Role FlexibleAny = (Role)121;
 
     // Modifiers
     public const Role Vip = Role.VIP;

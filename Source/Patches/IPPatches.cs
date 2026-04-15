@@ -1947,26 +1947,32 @@ public static class PatchNecroRetMenuItem
 
         if (roleCardData != null)
         {
-            if (roleCardData.normalAbilityAvailable)
+			if (role is Role.STONED or Role.HIDDEN)
 			{
-				abilitySuffix = "Ability";
+				abilitySuffix = string.Empty;
+				abilityText = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY1_VERB_0");
+				
+			}
+            else if (roleCardData.normalAbilityAvailable)
+			{
+				abilitySuffix = "_Ability";
 				abilityText = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY1_VERB_{(int)role}");
 			}
             else if (roleCardData.secondAbilityAvailable)
 			{
-				abilitySuffix = "Ability_2";
+				abilitySuffix = "_Ability_2";
 				abilityText = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY2_VERB_{(int)role}");
 			}
             else if (roleCardData.specialAbilityAvailable)
 			{
 				var btos = Constants.IsBTOS2() ? string.Empty : "_";
-				abilitySuffix = "Special";
+				abilitySuffix = "_Special";
 				abilityText = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_SPECIAL{btos}ABILITY_VERB_{(int)role}");
 			}
             else
 			{
-				abilitySuffix = "Ability";
-				abilityText = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY1_VERB_{(int)role}");
+				abilitySuffix = string.Empty;
+				abilityText = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY1_VERB_0");
 			}
         }
         else
@@ -1975,7 +1981,7 @@ public static class PatchNecroRetMenuItem
 			abilityText = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY1_VERB_{(int)role}");
         }
 
-        var abilityName = $"{targetRoleName}_{abilitySuffix}";
+        var abilityName = $"{targetRoleName}{abilitySuffix}";
 
         var abilitySprite =
             GetSprite(abilityName, targetFaction, false) ??
