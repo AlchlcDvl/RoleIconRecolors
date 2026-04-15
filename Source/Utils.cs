@@ -12,7 +12,7 @@ public static class Utils
 	// Note: Update this whenever a role's ability count changes in updates for Vanilla and BetterTOS2
 
     private static readonly string[] VanillaSkippableNames = ["Pirate_Ability_1", "Pirate_Ability_2", "Dreamweaver_Ability_1", "Seer_Ability_1", "Seer_Ability_2", "SerialKiller_Ability"];
-    private static readonly string[] BTOS2SkippableNames = [ "Baker_Ability_1", "Jackal_Ability", "Auditor_Ability_1", "Auditor_Ability_2", "Inquisitor_Ability_1", "Inquisitor_Ability_2", "Banshee_Ability", "Judge_Ability",
+    private static readonly string[] BTOS2SkippableNames = [ "Baker_Ability_1", "Jackal_Ability", "Auditor_Ability_1", "Auditor_Ability_2", "Inquisitor_Ability_1", "Inquisitor_Ability_2", "Banshee_Ability", "Judge_Ability", "Coroner_Ability_2",
         "Warlock_Ability_2", "Starspawn_Ability", "Dreamweaver_Ability_2", "Illusionist_Ability_2", "Pacifist_Ability_2", "Archmage_Ability", "Mayor_Ability", "SerialKiller_Ability_1", "SerialKiller_Ability_2" ];
     private static readonly string[] CommonSkippableNames = [ "Baker_Ability_2", "Admirer_Ability_1", "Admirer_Ability_2", "Amnesiac_Ability", "Arsonist_Ability_2", "Attributes", "Berserker_Ability", "Bodyguard_Ability", "Catalyst_Ability",
         "Cleric_Ability", "Coroner_Ability", "Crusader_Ability", "CursedSoul_Ability", "Death_Ability", "Enchanter_Ability", "Famine_Ability", "HexMaster_Ability",
