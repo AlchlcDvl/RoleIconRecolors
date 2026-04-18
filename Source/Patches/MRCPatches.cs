@@ -730,19 +730,31 @@ public static class ClientRoleExtensionsPatches
 		// if (gradient != null && Fancy.BannedRoleDesaturation.Value != -1 && Constants.IsRoleBanned(role))
 			// gradient = Utils.Desaturate(gradient, Constants.BannedRoleDesaturation());
 		
+		var roleFaction = role.GetFaction();
+		var factionText = factionType.ToDisplayString();
+		var label = (factionType == Btos2Faction.Jackal && !string.IsNullOrWhiteSpace(Fancy.RecruitLabel.Value)) ? $"({Fancy.RecruitLabel.Value})" : $"({factionText})";
+		
 
 		if (role.IsBucket() || role is Btos2Role.TownPower)
 		{    
-			__result = role.GetBucketString(factionType);
+			var bucket = role.GetBucketString(factionType);
+			
+			if (Fancy.FactionNameNextToBucket.Value && roleFaction != factionType)
+			{
+
+				if (gradient != null)
+					bucket += $" {Utils.ApplyGradient(label, gradient)}";
+				else
+					bucket += $" <color={factionType.GetFactionColor()}>{label}</color>";
+			}
+
+			__result = bucket;
 			return;
 		}
 		
 		var text = Fancy.FactionalRoleNames.Value ? role.ToRoleFactionDisplayString(factionType) : role.ToDisplayString();
 		var newText = gradient != null ? Utils.ApplyGradient(text, gradient) : $"<color={factionType.GetFactionColor()}>{text}</color>";
-		var factionText = factionType.ToDisplayString();
 
-		var roleFaction = role.GetFaction();
-		var label = (factionType == Btos2Faction.Jackal && !string.IsNullOrWhiteSpace(Fancy.RecruitLabel.Value)) ? $"({Fancy.RecruitLabel.Value})" : $"({factionText})";
 
 		if (Fancy.FactionNameNextToRole.Value && roleFaction != factionType && role.UsesBaseDisplayName(factionType))
 		{
@@ -796,7 +808,8 @@ public static class ClientRoleExtensionsPatches
         {
             return role switch
             {
-                Btos2Role.Any => G(Key("BTOS_SUBALIGNMENTNAME_1"), any),
+                Btos2Role.Any => isNone ? G(Key("BTOS_SUBALIGNMENTNAME_1"), any) : G(Key("BTOS_SUBALIGNMENTNAME_1"), NK),
+				Btos2Role.FlexibleAny => $"{G(Key("FANCY_BUCKETS_FLEXIBLE"), bucket)} {G(Key("FANCY_BUCKETS_ANY"), NK)}",
 
                 Btos2Role.RandomTown => $"{G(Random(), bucket)} {G(town, CT)}",
                 Btos2Role.CommonTown => $"{G(Common(), bucket)} {G(town, CT)}",
@@ -831,7 +844,7 @@ public static class ClientRoleExtensionsPatches
 
         return role switch
         {
-            Role.ANY => G(Key("GUI_SUBALIGNMENTNAME_1"), any),
+            Role.ANY => isNone ? G(Key("GUI_SUBALIGNMENTNAME_1"), any) : G(Key("GUI_SUBALIGNMENTNAME_1"), NK),
 
             Role.RANDOM_TOWN => $"{G(Random(), bucket)} {G(town, CT)}",
             Role.COMMON_TOWN => $"{G(Common(), bucket)} {G(town, CT)}",
@@ -873,23 +886,35 @@ public static class ClientRoleExtensionsPatches
 		// if (gradient != null && Fancy.BannedRoleDesaturation.Value != -1 && Constants.IsRoleBanned(role))
 			// gradient = Utils.Desaturate(gradient, Constants.BannedRoleDesaturation());
 
-        if (role.IsBucket() || role is Btos2Role.TownPower)
+        var roleFaction = role.GetFaction();
+        var factionText = factionType.ToShortenedDisplayString();
+        var label = $"({factionText})";
+
+		if (role.IsBucket() || role is Btos2Role.TownPower)
 		{    
-			__result = role.GetShortenedBucketString(factionType);
+			var bucket = role.GetShortenedBucketString(factionType);
+			
+			if (Fancy.FactionNameNextToBucket.Value && Fancy.ShowForShortNames.Value  && roleFaction != factionType)
+			{
+
+				if (gradient != null)
+					bucket += $" {Utils.ApplyGradient(label, gradient)}";
+				else
+					bucket += $" <color={factionType.GetFactionColor()}>{label}</color>";
+			}
+
+			__result = bucket;
 			return;
 		}
-		
+
 
 		
 
         var text = Fancy.FactionalRoleNames.Value ? role.ToRoleFactionShortenedDisplayString(factionType) : role.ToShortenedDisplayString();
         var newText = gradient != null ? Utils.ApplyGradient(text, gradient) : $"<color={factionType.GetFactionColor()}>{text}</color>";
 
-        var factionText = factionType.ToShortenedDisplayString();
-        var roleFaction = role.GetFaction();
-        var label = $"({factionText})";
 
-        if (Fancy.FactionNameNextToRole.Value  && Fancy.ShowForShortNames.Value && roleFaction != factionType && role.UsesBaseDisplayName(factionType))
+        if (Fancy.FactionNameNextToRole.Value && Fancy.ShowForShortNames.Value && roleFaction != factionType && role.UsesBaseDisplayName(factionType))
         {
             if (gradient != null)
                 newText += $" {Utils.ApplyGradient(label, gradient)}";
@@ -954,7 +979,9 @@ public static class ClientRoleExtensionsPatches
         {
             return role switch
             {
-                Btos2Role.Any => G(Key("BTOS_ROLE_LIST_BUCKET_ANY_SHORT"), any),
+                Btos2Role.Any => isNone ? G(Key("BTOS_ROLE_LIST_BUCKET_ANY_SHORT"), any) : G(Key("BTOS_ROLE_LIST_BUCKET_ANY_SHORT"), NK),
+				Btos2Role.FlexibleAny => $"{G(Key("FANCY_BUCKETS_FLEXIBLE_SHORT"), bucket)} {G(Key("FANCY_BUCKETS_ANY_SHORT"), NK)}",
+
 
                 Btos2Role.RandomTown => $"{G(Random(), bucket)}{G(town, CT)}",
                 Btos2Role.CommonTown => $"{G(Common(), bucket)}{G(town, CT)}",
@@ -989,7 +1016,7 @@ public static class ClientRoleExtensionsPatches
 
         return role switch
         {
-            Role.ANY => G(Key("GUI_ROLE_LIST_BUCKET_ANY_SHORT"), any),
+            Role.ANY => isNone ? G(Key("BTOS_ROLE_LIST_BUCKET_ANY_SHORT"), any) : G(Key("BTOS_ROLE_LIST_BUCKET_ANY_SHORT"), NK),
 
             Role.RANDOM_TOWN => $"{G(Random(), bucket)}{G(town, CT)}",
             Role.COMMON_TOWN => $"{G(Common(), bucket)}{G(town, CT)}",

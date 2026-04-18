@@ -963,6 +963,11 @@ public static class Utils
         return CreateGradient(GetPrimaryFactionBucketColor(faction), GetSecondaryFactionBucketColor(faction));
     }
     
+    public static Gradient GetFactionGradient(FactionType faction)
+    {
+        return CreateGradient(GetPrimaryColor(faction), GetSecondaryColor(faction));
+    }
+    
     
 	public static Color GetFactionMiddleColor(FactionType faction)
 	{
