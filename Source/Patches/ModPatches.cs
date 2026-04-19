@@ -1007,6 +1007,17 @@ public static class AlwaysShowPrimaryAbility
         public bool Value;
     }
 
+    private static bool IsUsableSprite(Sprite sprite)
+    {
+        if (!sprite)
+            return false;
+
+        if (!sprite.texture)
+            return false;
+
+        return true;
+    }
+
     public static void Prefix(RoleCardPanel __instance)
     {
         var obs = Service.Game?.Sim?.info?.roleCardObservation;
@@ -1016,8 +1027,9 @@ public static class AlwaysShowPrimaryAbility
         var box = Cache.GetOrCreateValue(__instance);
         box.Value = obs.Data.normalAbilityAvailable;
 
-        if (__instance.myData.abilityIcon != null)
-            obs.Data.normalAbilityAvailable = true;
+        var sprite = __instance.myData.abilityIcon;
+
+        obs.Data.normalAbilityAvailable = IsUsableSprite(sprite);
     }
 
     public static void Postfix(RoleCardPanel __instance)
@@ -1041,6 +1053,17 @@ public static class AlwaysShowSecondaryAbility
         public bool Value;
     }
 
+    private static bool IsUsableSprite(Sprite sprite)
+    {
+        if (!sprite)
+            return false;
+
+        if (!sprite.texture)
+            return false;
+
+        return true;
+    }
+
     public static void Prefix(RoleCardPanel __instance)
     {
         var obs = Service.Game?.Sim?.info?.roleCardObservation;
@@ -1050,8 +1073,9 @@ public static class AlwaysShowSecondaryAbility
         var box = Cache.GetOrCreateValue(__instance);
         box.Value = obs.Data.secondAbilityAvailable;
 
-        if (__instance.myData.abilityIcon2 != null)
-            obs.Data.secondAbilityAvailable = true;
+        var sprite = __instance.myData.abilityIcon2;
+
+        obs.Data.secondAbilityAvailable = IsUsableSprite(sprite);
     }
 
     public static void Postfix(RoleCardPanel __instance)
@@ -1064,8 +1088,6 @@ public static class AlwaysShowSecondaryAbility
             obs.Data.secondAbilityAvailable = box.Value;
     }
 }
-
-
 [HarmonyPatch(typeof(HudTargetSelectionShared))]
 public static class RoleTargetingPatches
 {
