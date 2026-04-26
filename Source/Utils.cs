@@ -967,6 +967,8 @@ public static class Utils
     {
         return CreateGradient(GetPrimaryColor(faction), GetSecondaryColor(faction));
     }
+
+    public static string GetFactionGradient(string text, FactionType faction) => ApplyGradient(text, GetPrimaryColor(faction), GetSecondaryColor(faction));
     
     
 	public static Color GetFactionMiddleColor(FactionType faction)
@@ -1004,7 +1006,7 @@ public static class Utils
 	}
 
     public static string GetString(string key) => Service.Home.LocalizationService.GetLocalizedString(key);
-	public static bool StringExists(string key) => Service.Home.LocalizationService.StringExists(key);
+	// public static bool StringExists(string key) => Service.Home.LocalizationService.StringExists(key);
 	public static string TryGetString(string key1, string key2, bool preferFirst = true)
 	{
 		if (StringExists(key1))
@@ -1014,6 +1016,34 @@ public static class Utils
 			return GetString(key2);
 
 		return GetString(preferFirst ? key1 : key2);
+	}
+	public static bool StringExists(params string[] keys)
+	{
+		foreach (var key in keys)
+		{
+			if (Service.Home.LocalizationService.StringExists(key))
+				return true;
+		}
+
+		return false;
+	}
+	
+	/// <summary>
+	/// Tries keys left-to-right until one exists. If none exist, returns the key at <paramref name="fallback"/>.
+	/// </summary>
+	public static string TryGetString(int fallback, params string[] keys)
+	{
+		foreach (var key in keys)
+		{
+			if (StringExists(key))
+				return GetString(key);
+		}
+
+		if (keys.Length == 0)
+			return string.Empty;
+
+		fallback = Math.Clamp(fallback, 0, keys.Length - 1);
+		return GetString(keys[fallback]);
 	}
 
     public static string RemoveVanillaGradientStyleTags(string input)
@@ -1276,4 +1306,260 @@ public static class Utils
         var id = (int)faction;
         return TryGetString($"{GetKeyPrefix()}_FACTION_SHORTNAME_{id}", $"{GetKeyPrefix()}_FACTIONNAME_{id}");
     }
+
+    public static readonly Regex NumberRegex = new(@"(?<!indent=)\b\d{1,2}\b(?!""?>)", RegexOptions.Compiled);
+
+    public static readonly Regex MentionRegex = new(@"<link=""(\d+)"">(?:<sprite=""PlayerNumbers""\sname=""PlayerNumbers_\d+"">|<sprite=""Cast"" name=""Skin\d+"">)?<color=#[A-Za-z0-9]+>[A-Za-z0-9 ]+</color>", RegexOptions.Compiled);
+
+    public static bool TryGetPlayerData(int index, out Tuple<Role, FactionType> data)
+    {
+        return Service.Game.Sim.simulation.knownRolesAndFactions.Data.TryGetValue(index, out data);
+    }
+    public static string ColorNumber(string numText, int index, bool allowSelf)
+    {
+        if (index < 0 || index >= Service.Game.Sim.simulation.validPlayerCount.Get())
+            return numText;
+
+        if (!allowSelf && index == Pepper.GetMyPosition())
+            return numText;
+
+        if (!TryGetPlayerData(index, out var data))
+            return numText;
+
+        if (data.Item2 is FactionType.NONE or FactionType.UNKNOWN)
+            return ApplyGradient(numText, Fancy.MentionStart.Value, Fancy.MentionEnd.Value);
+
+        return ApplyGradient(numText, GetPrimaryColor(data.Item2), GetSecondaryColor(data.Item2)
+        );
+    }
+
+    public static string BaseMentionGradient(string text) => ApplyGradient(text, Fancy.MentionStart.Value, Fancy.MentionEnd.Value);
+    
+    public static string GetBucketString(Role role, FactionType faction)
+    {
+        var isNone = faction is FactionType.NONE;
+        var isBTOS2 = Constants.IsBTOS2();
+
+        var neut = Utils.CreateGradient(Fancy.NeutralStart.Value, Fancy.NeutralEnd.Value);
+        var any = Utils.CreateGradient(Fancy.AnyStart.Value, Fancy.AnyEnd.Value);
+        var bucket = Fancy.FactionalBuckets.Value ? Utils.GetFactionBucketGradient(faction) : Utils.CreateGradient(Fancy.BucketStart.Value, Fancy.BucketEnd.Value);
+
+		// Town
+		var CT = !isNone ? faction.GetChangedGradient(Role.ADMIRER) : neut;
+        var TE = !isNone ? faction.GetChangedGradient(Role.PROSECUTOR) : neut;
+        var TG = !isNone ? faction.GetChangedGradient(Role.MAYOR) : neut;
+        var TK = !isNone ? faction.GetChangedGradient(Role.VIGILANTE) : neut;
+		
+		// Coven
+        var CPOW = !isNone ? faction.GetChangedGradient(Role.WITCH) : neut;
+        var CK = !isNone ? faction.GetChangedGradient(Role.CONJURER) : neut;
+		var CC = !isNone ? faction.GetChangedGradient(Role.ENCHANTER) : neut;
+		
+		// Apocalypse
+        var RA = !isNone ? faction.GetChangedGradient(Role.PLAGUEBEARER) : neut;
+        var horsemen = !isNone ? faction.GetChangedGradient(Role.PESTILENCE) : neut;
+
+        var NK = !isNone ? faction.GetChangedGradient(Role.NONE) : neut;
+
+        var town = Utils.GetString(isBTOS2 ? "BTOS_ALIGNMENTNAME_1" : "GUI_ALIGNMENTNAME_1");
+        var coven = Utils.GetString(isBTOS2 ? "BTOS_ALIGNMENTNAME_2" : "GUI_ALIGNMENTNAME_2");
+        var neutral = Utils.GetString(isBTOS2 ? "BTOS_ALIGNMENTNAME_3" : "GUI_ALIGNMENTNAME_3");
+        var apocalypse = Utils.GetString(isBTOS2 ? "BTOS_ALIGNMENTNAME_17" : "GUI_SUBALIGNMENTNAME_9");
+
+        string G(string text, Gradient g) => Utils.ApplyGradient(text, g);
+        string Key(string key) => Utils.GetString(key);
+        string Random() => Key("FANCY_BUCKETS_RANDOM");
+        string Common() => Key("FANCY_BUCKETS_COMMON");
+
+        if (isBTOS2)
+        {
+            return role switch
+            {
+                Btos2Role.Any => isNone ? G(Key("BTOS_SUBALIGNMENTNAME_1"), any) : G(Key("BTOS_SUBALIGNMENTNAME_1"), NK),
+				Btos2Role.FlexibleAny => isNone ? $"{G(Key("FANCY_BUCKETS_FLEXIBLE"), bucket)} {G(Key("FANCY_BUCKETS_ANY"), any)}" : $"{G(Key("FANCY_BUCKETS_FLEXIBLE"), bucket)} {G(Key("FANCY_BUCKETS_ANY"), NK)}",
+
+                Btos2Role.RandomTown => $"{G(Random(), bucket)} {G(town, CT)}",
+                Btos2Role.CommonTown => $"{G(Common(), bucket)} {G(town, CT)}",
+
+                Btos2Role.TownInvestigative => $"{G(town, CT)} {G(Key("BTOS_SUBALIGNMENTNAME_5"), bucket)}",
+                Btos2Role.TownProtective => $"{G(town, CT)} {G(Key("BTOS_SUBALIGNMENTNAME_4"), bucket)}",
+                Btos2Role.TownSupport => $"{G(town, CT)} {G(Key("BTOS_SUBALIGNMENTNAME_2"), bucket)}",
+                Btos2Role.TownKilling => $"{G(town, TK)} {G(Key("BTOS_SUBALIGNMENTNAME_6"), bucket)}",
+                Btos2Role.TownGovernment => $"{G(town, TG)} {G(Key("BTOS_SUBALIGNMENTNAME_38"), bucket)}",
+                Btos2Role.TownExecutive => $"{G(town, TE)} {G(Key("BTOS_SUBALIGNMENTNAME_37"), bucket)}",
+                Btos2Role.TownPower => $"{G(town, TE)} {G(Key("BTOS_SUBALIGNMENTNAME_3"), bucket)}",
+
+                Btos2Role.RandomCoven => $"{G(Random(), bucket)} {G(coven, CC)}",
+                Btos2Role.CommonCoven => $"{G(Common(), bucket)} {G(coven, CC)}",
+
+                Btos2Role.CovenPower => $"{G(coven, CPOW)} {G(Key("BTOS_SUBALIGNMENTNAME_3"), bucket)}",
+                Btos2Role.CovenKilling => $"{G(coven, CK)} {G(Key("BTOS_SUBALIGNMENTNAME_6"), bucket)}",
+                Btos2Role.CovenUtility => $"{G(coven, CC)} {G(Key("BTOS_SUBALIGNMENTNAME_8"), bucket)}",
+                Btos2Role.CovenDeception => $"{G(coven, CC)} {G(Key("BTOS_SUBALIGNMENTNAME_7"), bucket)}",
+
+                Btos2Role.RandomApocalypse => $"{G(Random(), bucket)} {G(apocalypse, RA)}",
+
+                Btos2Role.NeutralKilling => $"{G(neutral, NK)} {G(Key("BTOS_SUBALIGNMENTNAME_6"), bucket)}",
+                Btos2Role.NeutralEvil => $"{G(neutral, NK)} {G(Key("BTOS_SUBALIGNMENTNAME_10"), bucket)}",
+                Btos2Role.NeutralPariah => $"{G(neutral, NK)} {G(Key("BTOS_SUBALIGNMENTNAME_34"), bucket)}",
+                Btos2Role.NeutralOutlier => $"{G(neutral, NK)} {G(Key("BTOS_SUBALIGNMENTNAME_33"), bucket)}",
+                Btos2Role.RandomNeutral => $"{G(Random(), bucket)} {G(neutral, NK)}",
+				
+				// %name_bucketX% usage, cant appear normally
+				(Role)243 => $"{G(town, CT)} {G(Key("BTOS_SUBALIGNMENTNAME_33"), bucket)}", // Town Outlier
+				(Role)244 => $"{G(coven, CC)} {G(Key("BTOS_SUBALIGNMENTNAME_33"), bucket)}", // Coven Outlier
+				(Role)245 => $"{G(apocalypse, RA)} {G(Key("BTOS_SUBALIGNMENTNAME_33"), bucket)}", // Apocalypse Outlier
+
+                _ => string.Empty,
+            };
+        }
+
+        return role switch
+        {
+            Role.ANY => isNone ? G(Key("GUI_SUBALIGNMENTNAME_1"), any) : G(Key("GUI_SUBALIGNMENTNAME_1"), NK),
+
+            Role.RANDOM_TOWN => $"{G(Random(), bucket)} {G(town, CT)}",
+            Role.COMMON_TOWN => $"{G(Common(), bucket)} {G(town, CT)}",
+
+            Role.TOWN_INVESTIGATIVE => $"{G(town, CT)} {G(Key("GUI_SUBALIGNMENTNAME_5"), bucket)}",
+            Role.TOWN_PROTECTIVE => $"{G(town, CT)} {G(Key("GUI_SUBALIGNMENTNAME_4"), bucket)}",
+            Role.TOWN_SUPPORT => $"{G(town, CT)} {G(Key("GUI_SUBALIGNMENTNAME_2"), bucket)}",
+            Role.TOWN_KILLING => $"{G(town, TK)} {G(Key("GUI_SUBALIGNMENTNAME_6"), bucket)}",
+            Role.TOWN_POWER => $"{G(town, TE)} {G(Key("GUI_SUBALIGNMENTNAME_3"), bucket)}",
+
+            Role.RANDOM_COVEN => $"{G(Random(), bucket)} {G(coven, CC)}",
+            Role.COMMON_COVEN => $"{G(Common(), bucket)} {G(coven, CC)}",
+
+            Role.COVEN_POWER => $"{G(coven, CPOW)} {G(Key("GUI_SUBALIGNMENTNAME_3"), bucket)}",
+            Role.COVEN_KILLING => $"{G(coven, CK)} {G(Key("GUI_SUBALIGNMENTNAME_6"), bucket)}",
+            Role.COVEN_UTILITY => $"{G(coven, CC)} {G(Key("GUI_SUBALIGNMENTNAME_8"), bucket)}",
+            Role.COVEN_DECEPTION => $"{G(coven, CC)} {G(Key("GUI_SUBALIGNMENTNAME_7"), bucket)}",
+
+            Role.NEUTRAL_APOCALYPSE => !Fancy.ReplaceNAwithRA.Value
+                ? $"{G(neutral, RA)} {G(apocalypse, bucket)}"
+                : $"{G(Random(), bucket)} {G(apocalypse, RA)}",
+
+            Role.NEUTRAL_KILLING => $"{G(neutral, NK)} {G(Key("GUI_SUBALIGNMENTNAME_6"), bucket)}",
+            Role.NEUTRAL_EVIL => $"{G(neutral, NK)} {G(Key("GUI_SUBALIGNMENTNAME_10"), bucket)}",
+            Role.RANDOM_NEUTRAL => $"{G(Random(), bucket)} {G(neutral, NK)}",
+
+			// %name_bucketX% usage, cant appear normally
+			(Role)243 => $"{G(town, CT)} {G(Key("GUI_SUBALIGNMENTNAME_11"), bucket)}", // Town Outlier
+			(Role)244 => $"{G(coven, CC)} {G(Key("GUI_SUBALIGNMENTNAME_11"), bucket)}", // Coven Outlier
+			(Role)245 => $"{G(apocalypse, RA)} {G(Key("GUI_SUBALIGNMENTNAME_11"), bucket)}", // Apocalypse Outlier
+			(Role)246 => $"{G(neutral, NK)} {G(Key("GUI_SUBALIGNMENTNAME_11"), bucket)}", // Neutral Outlier
+
+            _ => string.Empty,
+        };
+    }
+
+    public static string GetShortenedBucketString(Role role, FactionType faction)
+    {
+        var isNone = faction is FactionType.NONE;
+        var isBTOS2 = Constants.IsBTOS2();
+
+        var neut = Utils.CreateGradient(Fancy.NeutralStart.Value, Fancy.NeutralEnd.Value);
+        var any = Utils.CreateGradient(Fancy.AnyStart.Value, Fancy.AnyEnd.Value);
+        var bucket = Fancy.FactionalBuckets.Value ? Utils.GetFactionBucketGradient(faction) : Utils.CreateGradient(Fancy.BucketStart.Value, Fancy.BucketEnd.Value);
+
+		// Town
+		var CT = !isNone ? faction.GetChangedGradient(Role.ADMIRER) : neut;
+        var TE = !isNone ? faction.GetChangedGradient(Role.PROSECUTOR) : neut;
+        var TG = !isNone ? faction.GetChangedGradient(Role.MAYOR) : neut;
+        var TK = !isNone ? faction.GetChangedGradient(Role.VIGILANTE) : neut;
+		
+		// Coven
+        var CPOW = !isNone ? faction.GetChangedGradient(Role.WITCH) : neut;
+        var CK = !isNone ? faction.GetChangedGradient(Role.CONJURER) : neut;
+		var CC = !isNone ? faction.GetChangedGradient(Role.ENCHANTER) : neut;
+		
+		// Apocalypse
+        var RA = !isNone ? faction.GetChangedGradient(Role.PLAGUEBEARER) : neut;
+        var horsemen = !isNone ? faction.GetChangedGradient(Role.PESTILENCE) : neut;
+		
+        var NK = !isNone ? faction.GetChangedGradient(Role.NONE) : neut;
+
+
+        var town = Utils.GetString("FANCY_BUCKETS_TOWN_SHORT");
+        var coven = Utils.GetString("FANCY_BUCKETS_COVEN_SHORT");
+        var neutral = Utils.GetString("FANCY_BUCKETS_NEUTRAL_SHORT");
+        var apocalypse = Utils.GetString("FANCY_BUCKETS_APOCALYPSE_SHORT");
+
+        string G(string text, Gradient g) => Utils.ApplyGradient(text, g);
+        string Key(string key) => Utils.GetString(key);
+        string Random() => Key("FANCY_BUCKETS_RANDOM_SHORT");
+        string Common() => Key("FANCY_BUCKETS_COMMON_SHORT");
+
+        if (isBTOS2)
+        {
+            return role switch
+            {
+                Btos2Role.Any => isNone ? G(Key("BTOS_ROLE_LIST_BUCKET_ANY_SHORT"), any) : G(Key("BTOS_ROLE_LIST_BUCKET_ANY_SHORT"), NK),
+				Btos2Role.FlexibleAny => isNone ? $"{G(Key("FANCY_BUCKETS_FLEXIBLE_SHORT"), bucket)} {G(Key("FANCY_BUCKETS_ANY_SHORT"), any)}" : $"{G(Key("FANCY_BUCKETS_FLEXIBLE_SHORT"), bucket)} {G(Key("FANCY_BUCKETS_ANY_SHORT"), NK)}",
+
+
+                Btos2Role.RandomTown => $"{G(Random(), bucket)}{G(town, CT)}",
+                Btos2Role.CommonTown => $"{G(Common(), bucket)}{G(town, CT)}",
+
+                Btos2Role.TownInvestigative => $"{G(town, CT)}{G(Key("FANCY_BUCKETS_INVESTIGATIVE_SHORT"), bucket)}",
+                Btos2Role.TownProtective => $"{G(town, CT)}{G(Key("FANCY_BUCKETS_PROTECTIVE_SHORT"), bucket)}",
+                Btos2Role.TownSupport => $"{G(town, CT)}{G(Key("FANCY_BUCKETS_SUPPORT_SHORT"), bucket)}",
+                Btos2Role.TownKilling => $"{G(town, TK)}{G(Key("FANCY_BUCKETS_KILLING_SHORT"), bucket)}",
+                Btos2Role.TownGovernment => $"{G(town, TG)}{G(Key("FANCY_BUCKETS_GOVERNMENT_SHORT"), bucket)}",
+                Btos2Role.TownExecutive => $"{G(town, TE)}{G(Key("FANCY_BUCKETS_EXECUTIVE_SHORT"), bucket)}",
+                Btos2Role.TownPower => $"{G(town, TE)}{G(Key("FANCY_BUCKETS_POWER_SHORT"), bucket)}",
+
+                Btos2Role.RandomCoven => $"{G(Random(), bucket)}{G(coven, CC)}",
+                Btos2Role.CommonCoven => $"{G(Common(), bucket)}{G(coven, CC)}",
+
+                Btos2Role.CovenPower => $"{G(coven, CPOW)}{G(Key("FANCY_BUCKETS_POWER_SHORT"), bucket)}",
+                Btos2Role.CovenKilling => $"{G(coven, CK)}{G(Key("FANCY_BUCKETS_KILLING_SHORT"), bucket)}",
+                Btos2Role.CovenUtility => $"{G(coven, CC)}{G(Key("FANCY_BUCKETS_UTILITY_SHORT"), bucket)}",
+                Btos2Role.CovenDeception => $"{G(coven, CC)}{G(Key("FANCY_BUCKETS_DECEPTION_SHORT"), bucket)}",
+
+                Btos2Role.RandomApocalypse => $"{G(Random(), bucket)}{G(apocalypse, RA)}",
+
+                Btos2Role.NeutralKilling => $"{G(neutral, NK)}{G(Key("FANCY_BUCKETS_KILLING_SHORT"), bucket)}",
+                Btos2Role.NeutralEvil => $"{G(neutral, NK)}{G(Key("FANCY_BUCKETS_EVIL_SHORT"), bucket)}",
+                Btos2Role.NeutralPariah => $"{G(neutral, NK)}{G(Key("FANCY_BUCKETS_PARIAH_SHORT"), bucket)}",
+                Btos2Role.NeutralOutlier => $"{G(neutral, NK)}{G(Key("FANCY_BUCKETS_OUTLIER_SHORT"), bucket)}",
+                Btos2Role.RandomNeutral => $"{G(Random(), bucket)}{G(neutral, NK)}",
+
+                _ => string.Empty,
+            };
+        }
+
+        return role switch
+        {
+            Role.ANY => isNone ? G(Key("BTOS_ROLE_LIST_BUCKET_ANY_SHORT"), any) : G(Key("BTOS_ROLE_LIST_BUCKET_ANY_SHORT"), NK),
+
+            Role.RANDOM_TOWN => $"{G(Random(), bucket)}{G(town, CT)}",
+            Role.COMMON_TOWN => $"{G(Common(), bucket)}{G(town, CT)}",
+
+            Role.TOWN_INVESTIGATIVE => $"{G(town, CT)}{G(Key("FANCY_BUCKETS_INVESTIGATIVE_SHORT"), bucket)}",
+            Role.TOWN_PROTECTIVE => $"{G(town, CT)}{G(Key("FANCY_BUCKETS_PROTECTIVE_SHORT"), bucket)}",
+            Role.TOWN_SUPPORT => $"{G(town, CT)}{G(Key("FANCY_BUCKETS_SUPPORT_SHORT"), bucket)}",
+            Role.TOWN_KILLING => $"{G(town, TK)}{G(Key("FANCY_BUCKETS_KILLING_SHORT"), bucket)}",
+            Role.TOWN_POWER => $"{G(town, TE)}{G(Key("FANCY_BUCKETS_POWER_SHORT"), bucket)}",
+
+            Role.RANDOM_COVEN => $"{G(Random(), bucket)}{G(coven, CC)}",
+            Role.COMMON_COVEN => $"{G(Common(), bucket)}{G(coven, CC)}",
+
+            Role.COVEN_POWER => $"{G(coven, CPOW)}{G(Key("FANCY_BUCKETS_POWER_SHORT"), bucket)}",
+            Role.COVEN_KILLING => $"{G(coven, CK)}{G(Key("FANCY_BUCKETS_KILLING_SHORT"), bucket)}",
+            Role.COVEN_UTILITY => $"{G(coven, CC)}{G(Key("FANCY_BUCKETS_UTILITY_SHORT"), bucket)}",
+            Role.COVEN_DECEPTION => $"{G(coven, CC)}{G(Key("FANCY_BUCKETS_DECEPTION_SHORT"), bucket)}",
+
+            Role.NEUTRAL_APOCALYPSE => !Fancy.ReplaceNAwithRA.Value
+                ? $"{G(neutral, RA)}{G(apocalypse, bucket)}"
+                : $"{G(Random(), bucket)}{G(apocalypse, RA)}",
+
+            Role.NEUTRAL_KILLING => $"{G(neutral, NK)}{G(Key("FANCY_BUCKETS_KILLING_SHORT"), bucket)}",
+            Role.NEUTRAL_EVIL => $"{G(neutral, NK)}{G(Key("FANCY_BUCKETS_EVIL_SHORT"), bucket)}",
+            Role.RANDOM_NEUTRAL => $"{G(Random(), bucket)}{G(neutral, NK)}",
+
+            _ => string.Empty,
+        };
+    }
+
 }

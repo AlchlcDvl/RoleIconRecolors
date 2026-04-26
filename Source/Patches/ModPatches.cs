@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 using Cinematics.Players;
 using FlexMenu;
 using Game.Characters;
@@ -10,10 +11,12 @@ using Home.Services;
 using Home.Shared;
 using Mentions;
 using Mentions.Providers;
+using Mentions.UI;
 using SalemModLoaderUI;
 using Server.Shared.Cinematics.Data;
 using Server.Shared.Collections;
 using Server.Shared.Extensions;
+using Server.Shared.State.Chat;
 using UnityEngine.EventSystems;
 
 namespace FancyUI.Patches;
@@ -1312,5 +1315,197 @@ public static class FactionTargetingPatches
 
         isValidMessage = false;
         return true;
+    }
+}
+
+// [HarmonyPatch(typeof(HudChatPoolItem), nameof(HudChatPoolItem.Validate))]
+// public static class DetectNonMentions
+// {
+//     [HarmonyPostfix]
+//     public static void Postfix(HudChatPoolItem __instance, ref bool forceRevalidate)
+//     {
+//         if (__instance.doInitialValidation)
+//         {
+//             __instance.doInitialValidation = false;
+//             forceRevalidate = true;
+//         }
+
+//         if (__instance.Data.Exists && !forceRevalidate) return;
+//         if (__instance.chatLogMessage?.chatLogEntry is not ChatLogChatMessageEntry entry) return;
+//         if (entry.type != ChatType.CHAT) return;
+//         if (!entry.speakerWasAlive) return;
+//         if (entry.speakerId == ChatLogChatMessageEntry.JAILOR_SPEAKING_ID) return;
+//         if (entry.speakerId is 69 or 70 or 71) return;
+
+//         if (Service.Game.Sim.simulation.m_currentGamePhase != GamePhase.PLAY)
+//             return;
+
+//         var data = (ChatItemData)__instance.Data;
+//         var text = data.decodedText;
+
+//         var colorOthers = Fancy.ColorNumbersLikeMentions.Value;
+
+//         if (colorOthers)
+//         {
+//             text = Regex.Replace(text, @"(?<!indent=)(?<!\w)\b\d{1,2}\b(?![^<]*>)(?![^\[]*\]\])", match =>
+//             {
+//                 var index = int.Parse(match.Value) - 1;
+//                 return Utils.ColorNumber(match.Value, index, true);
+//             });
+//         }
+
+//         data.decodedText = text;
+//         __instance.textField.SetText(text);
+//     }
+// }
+
+// [HarmonyPatch(typeof(MentionMenuItem), nameof(MentionMenuItem.Initialize))]
+// public static class MentionsPatchMenu
+// {
+//     public static bool Prefix(MentionMenuItem __instance, MentionInfo mentionInfo)
+//     {
+//         if (mentionInfo.mentionInfoType != MentionInfo.MentionInfoType.PLAYER)
+//             return true;
+
+//         if (Service.Game.Sim.simulation.m_currentGamePhase != GamePhase.PLAY)
+//             return true;
+
+//         var raw = mentionInfo.richText;
+//         var index = int.Parse(mentionInfo.encodedText.Substring(3)) - 1;
+
+//         if (!Utils.TryGetPlayerData(index, out var data))
+//             return true;
+
+//         var match = Regex.Match(raw, @"<link=""\d+"">(.*?)</link>");
+//         if (!match.Success)
+//             return true;
+
+//         var inner = match.Groups[1].Value;
+
+//         string newInner;
+
+//         if (data.Item2 is FactionType.NONE or FactionType.UNKNOWN)
+//         {
+//             newInner = Utils.BaseMentionGradient(inner);
+//         }
+//         else
+//         {
+//             newInner = Utils.GetFactionGradient(inner, data.Item2);
+//         }
+
+//         var result = raw.Replace(inner, newInner);
+
+//         __instance.textField.text = result;
+//         mentionInfo.richText = result;
+
+//         return false;
+//     }
+// }
+// [HarmonyPatch(typeof(MentionsProvider), nameof(MentionsProvider.DecodeText))]
+// public static class MentionsPatchChat
+// {
+//     [HarmonyPostfix]
+//     public static void Postfix(ref string __result)
+//     {
+//         if (Service.Game.Sim.simulation.m_currentGamePhase != GamePhase.PLAY)
+//             return;
+
+//         __result = Regex.Replace(__result,
+//             "<link=\"(\\d+)\">(.*?)</link>",
+//             match =>
+//             {
+//                 var index = int.Parse(match.Groups[1].Value);
+//                 var inner = match.Groups[2].Value;
+
+//                 if (!Utils.TryGetPlayerData(index, out var data))
+//                     return match.Value;
+
+//                 if (data.Item2 is FactionType.NONE or FactionType.UNKNOWN)
+//                     return $"<link=\"{index}\">{Utils.BaseMentionGradient(inner)}</link>";
+
+//                 return $"<link=\"{index}\">{Utils.GetFactionGradient(inner, data.Item2)}</link>";
+//             });
+//     }
+// }
+
+[HarmonyPatch(typeof(MentionsProvider), nameof(MentionsProvider.ValidateTextualMentions))]
+public static class DontDeleteModdedMentions
+{
+    [HarmonyPrefix]
+    public static bool Prefix(ref bool __result, MentionsProvider __instance)
+    {
+        var modified = false;
+
+        for (var i = 0; i < __instance._textualMentionInfos.Count; i++)
+        {
+            var info = __instance._textualMentionInfos[i];
+
+            if (!__instance._matchInfo.fullText.Contains(info.richText))
+            {
+                __instance._textualMentionInfos.RemoveAt(i);
+                i--;
+            }
+        }
+
+        var index = 0;
+
+        while (true)
+        {
+            index = __instance._matchInfo.fullText.IndexOf(__instance.styleTagOpen, index);
+            if (index < 0)
+            {
+                __result = modified;
+                return false;
+            }
+
+            var end = __instance._matchInfo.fullText.IndexOf(__instance.styleTagClose, index);
+            if (end < 0)
+                break;
+
+            var segment = __instance._matchInfo.fullText.Substring(index, end - index + __instance.styleTagClose.Length);
+            var hash = segment.ToLower().GetHashCode();
+
+            var valid =
+                __instance.MentionInfos.Any(m => m.hashCode == hash) ||
+                IsValidGradientMention(segment);
+
+            if (valid)
+            {
+                index++;
+            }
+            else
+            {
+                __instance._matchInfo.fullText =
+                    __instance._matchInfo.fullText.Remove(index, segment.Length);
+
+                __instance._matchInfo.stringPosition = index;
+                modified = true;
+            }
+        }
+
+        __instance._matchInfo.fullText =
+            __instance._matchInfo.fullText.Substring(0, index);
+
+        __result = true;
+        return false;
+    }
+
+    private static bool IsValidGradientMention(string text)
+    {
+        if (!Regex.IsMatch(text, "<link=\"(\\d+)\">.*?</link>"))
+            return false;
+
+        var match = Regex.Match(text, "<link=\"(\\d+)\">(.*?)</link>");
+        if (!match.Success)
+            return false;
+
+        var index = int.Parse(match.Groups[1].Value);
+        var inner = match.Groups[2].Value;
+
+        var displayName = Service.Game.Sim.simulation.GetDisplayName(index);
+
+        var plain = Regex.Replace(inner, "<.*?>", "");
+
+        return string.Equals(displayName, plain, StringComparison.OrdinalIgnoreCase);
     }
 }

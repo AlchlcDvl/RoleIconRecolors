@@ -26,6 +26,9 @@
     <Entry key="FANCY_FACTION_NEXT_TO_SHORT_ROLE_NAME">Faction Name Next to Short Names</Entry>
     <Entry key="FANCY_FACTION_NEXT_TO_SHORT_ROLE_DESC">Determines whether or not factions will be displayed next to short variants of role names.</Entry>
 
+    <Entry key="FANCY_FACTIONAL_PLAYER_MENTIONS_NAME">Color Player Mentions With Faction</Entry>
+    <Entry key="FANCY_FACTIONAL_PLAYER_MENTIONS_DESC">Determines whether or not player mentions will be colored with the target faction gradient. Updates accordingly on various phase changes, primarily WDAH.</Entry>
+
     <Entry key="FANCY_FACTION_LABEL_NAME">Faction Label in Role Card</Entry>
     <Entry key="FANCY_FACTION_LABEL_DESC">Determines whether or not the faction label within the role card will be displayed. If Faction Specific Role Names are enabled, the label will NOT show up if the faction specific role name is different from the base name.</Entry>
 

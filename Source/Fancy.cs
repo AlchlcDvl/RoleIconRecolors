@@ -145,6 +145,7 @@ public class Fancy : BaseMod<Fancy>
     public static ColorOption MentionStart;
     public static ColorOption MentionEnd;
     public static ToggleOption ColorMentionsWithFaction;
+    public static ToggleOption ColorNumbersLikeMentions;
 
     public static FloatOption GeneralBrightness;
     public static FloatOption GrayscaleAmount;
@@ -406,7 +407,7 @@ public class Fancy : BaseMod<Fancy>
         FactionalRoleNames = new("FACTIONAL_ROLE_NAMES", false, PackType.MiscRoleCustomisation, Constants.TextEditorExists);
         FactionalRoleBlurbs = new("FACTIONAL_ROLE_BLURBS", false, PackType.MiscRoleCustomisation, Constants.TextEditorExists);
         FactionalBuckets = new("FACTIONAL_BUCKETS", false, PackType.MiscRoleCustomisation);
-        // RoleSpecificEndingColors = new("ROLE_SPECIFIC_COLORS", false, PackType.MiscRoleCustomisation);
+        ColorMentionsWithFaction = new("FACTIONAL_PLAYER_MENTIONS", false, PackType.MiscRoleCustomisation, setActive: () => !Constants.BetterMentionsExists());
         MajorColors = new("MAJOR_COLORS", false, PackType.MiscRoleCustomisation);
         ExcludeCatalyst = new("EXCLUDE_CATALYST", false, PackType.MiscRoleCustomisation, setActive: () => MajorColors.Value);
         ExcludeCultist = new("EXCLUDE_CULTIST", false, PackType.MiscRoleCustomisation, setActive: () => MajorColors.Value);
@@ -460,7 +461,6 @@ public class Fancy : BaseMod<Fancy>
         AchievementEnd = new("ACHIEVEMENT_END", "#FFBE00", PackType.MiscRoleCustomisation);
         MentionStart = new("MENTION_START", "#FFCE3B", PackType.MiscRoleCustomisation, setActive: () => !Constants.BetterMentionsExists());
         MentionEnd = new("MENTION_END", "#FFCE3B", PackType.MiscRoleCustomisation, setActive: () => !Constants.BetterMentionsExists());
-        // ColorMentionsWithFaction = new("FACTIONAL_PLAYER_MENTIONS", true, PackType.MiscRoleCustomisation, setActive: () => !Constants.BetterMentionsExists());
 
         PlayerListRoleIcon = new("PLAYER_LIST_ROLE_ICON", PlayerListRoleIconOption.Disabled, PackType.Testing, useTranslations: true);
         TallRoleDeck = new("TALL_ROLE_DECK", false, PackType.Testing);

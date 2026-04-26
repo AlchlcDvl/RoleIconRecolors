@@ -737,7 +737,7 @@ public static class ClientRoleExtensionsPatches
 
 		if (role.IsBucket() || role is Btos2Role.TownPower)
 		{    
-			var bucket = role.GetBucketString(factionType);
+			var bucket = Utils.GetBucketString(role, factionType);
 			
 			if (Fancy.FactionNameNextToBucket.Value && roleFaction != factionType)
 			{
@@ -768,113 +768,6 @@ public static class ClientRoleExtensionsPatches
 		__result = newText;
 	}
 
-    private static string GetBucketString(this Role role, FactionType faction)
-    {
-        var isNone = faction is FactionType.NONE;
-        var isBTOS2 = Constants.IsBTOS2();
-
-        var neut = Utils.CreateGradient(Fancy.NeutralStart.Value, Fancy.NeutralEnd.Value);
-        var any = Utils.CreateGradient(Fancy.AnyStart.Value, Fancy.AnyEnd.Value);
-        var bucket = Fancy.FactionalBuckets.Value ? Utils.GetFactionBucketGradient(faction) : Utils.CreateGradient(Fancy.BucketStart.Value, Fancy.BucketEnd.Value);
-
-		// Town
-		var CT = !isNone ? faction.GetChangedGradient(Role.ADMIRER) : neut;
-        var TE = !isNone ? faction.GetChangedGradient(Role.PROSECUTOR) : neut;
-        var TG = !isNone ? faction.GetChangedGradient(Role.MAYOR) : neut;
-        var TK = !isNone ? faction.GetChangedGradient(Role.VIGILANTE) : neut;
-		
-		// Coven
-        var CPOW = !isNone ? faction.GetChangedGradient(Role.WITCH) : neut;
-        var CK = !isNone ? faction.GetChangedGradient(Role.CONJURER) : neut;
-		var CC = !isNone ? faction.GetChangedGradient(Role.ENCHANTER) : neut;
-		
-		// Apocalypse
-        var RA = !isNone ? faction.GetChangedGradient(Role.PLAGUEBEARER) : neut;
-        var horsemen = !isNone ? faction.GetChangedGradient(Role.PESTILENCE) : neut;
-
-        var NK = !isNone ? faction.GetChangedGradient(Role.NONE) : neut;
-
-        var town = Utils.GetString(isBTOS2 ? "BTOS_ALIGNMENTNAME_1" : "GUI_ALIGNMENTNAME_1");
-        var coven = Utils.GetString(isBTOS2 ? "BTOS_ALIGNMENTNAME_2" : "GUI_ALIGNMENTNAME_2");
-        var neutral = Utils.GetString(isBTOS2 ? "BTOS_ALIGNMENTNAME_3" : "GUI_ALIGNMENTNAME_3");
-        var apocalypse = Utils.GetString(isBTOS2 ? "BTOS_ALIGNMENTNAME_17" : "GUI_SUBALIGNMENTNAME_9");
-
-        string G(string text, Gradient g) => Utils.ApplyGradient(text, g);
-        string Key(string key) => Utils.GetString(key);
-        string Random() => Key("FANCY_BUCKETS_RANDOM");
-        string Common() => Key("FANCY_BUCKETS_COMMON");
-
-        if (isBTOS2)
-        {
-            return role switch
-            {
-                Btos2Role.Any => isNone ? G(Key("BTOS_SUBALIGNMENTNAME_1"), any) : G(Key("BTOS_SUBALIGNMENTNAME_1"), NK),
-				Btos2Role.FlexibleAny => $"{G(Key("FANCY_BUCKETS_FLEXIBLE"), bucket)} {G(Key("FANCY_BUCKETS_ANY"), NK)}",
-
-                Btos2Role.RandomTown => $"{G(Random(), bucket)} {G(town, CT)}",
-                Btos2Role.CommonTown => $"{G(Common(), bucket)} {G(town, CT)}",
-
-                Btos2Role.TownInvestigative => $"{G(town, CT)} {G(Key("BTOS_SUBALIGNMENTNAME_5"), bucket)}",
-                Btos2Role.TownProtective => $"{G(town, CT)} {G(Key("BTOS_SUBALIGNMENTNAME_4"), bucket)}",
-                Btos2Role.TownSupport => $"{G(town, CT)} {G(Key("BTOS_SUBALIGNMENTNAME_2"), bucket)}",
-                Btos2Role.TownKilling => $"{G(town, TK)} {G(Key("BTOS_SUBALIGNMENTNAME_6"), bucket)}",
-                Btos2Role.TownGovernment => $"{G(town, TG)} {G(Key("BTOS_SUBALIGNMENTNAME_38"), bucket)}",
-                Btos2Role.TownExecutive => $"{G(town, TE)} {G(Key("BTOS_SUBALIGNMENTNAME_37"), bucket)}",
-                Btos2Role.TownPower => $"{G(town, TE)} {G(Key("BTOS_SUBALIGNMENTNAME_3"), bucket)}",
-
-                Btos2Role.RandomCoven => $"{G(Random(), bucket)} {G(coven, CC)}",
-                Btos2Role.CommonCoven => $"{G(Common(), bucket)} {G(coven, CC)}",
-
-                Btos2Role.CovenPower => $"{G(coven, CPOW)} {G(Key("BTOS_SUBALIGNMENTNAME_3"), bucket)}",
-                Btos2Role.CovenKilling => $"{G(coven, CK)} {G(Key("BTOS_SUBALIGNMENTNAME_6"), bucket)}",
-                Btos2Role.CovenUtility => $"{G(coven, CC)} {G(Key("BTOS_SUBALIGNMENTNAME_8"), bucket)}",
-                Btos2Role.CovenDeception => $"{G(coven, CC)} {G(Key("BTOS_SUBALIGNMENTNAME_7"), bucket)}",
-
-                Btos2Role.RandomApocalypse => $"{G(Random(), bucket)} {G(apocalypse, RA)}",
-
-                Btos2Role.NeutralKilling => $"{G(neutral, NK)} {G(Key("BTOS_SUBALIGNMENTNAME_6"), bucket)}",
-                Btos2Role.NeutralEvil => $"{G(neutral, NK)} {G(Key("BTOS_SUBALIGNMENTNAME_10"), bucket)}",
-                Btos2Role.NeutralPariah => $"{G(neutral, NK)} {G(Key("BTOS_SUBALIGNMENTNAME_34"), bucket)}",
-                Btos2Role.NeutralOutlier => $"{G(neutral, NK)} {G(Key("BTOS_SUBALIGNMENTNAME_33"), bucket)}",
-                Btos2Role.RandomNeutral => $"{G(Random(), bucket)} {G(neutral, NK)}",
-
-                _ => string.Empty,
-            };
-        }
-
-        return role switch
-        {
-            Role.ANY => isNone ? G(Key("GUI_SUBALIGNMENTNAME_1"), any) : G(Key("GUI_SUBALIGNMENTNAME_1"), NK),
-
-            Role.RANDOM_TOWN => $"{G(Random(), bucket)} {G(town, CT)}",
-            Role.COMMON_TOWN => $"{G(Common(), bucket)} {G(town, CT)}",
-
-            Role.TOWN_INVESTIGATIVE => $"{G(town, CT)} {G(Key("GUI_SUBALIGNMENTNAME_5"), bucket)}",
-            Role.TOWN_PROTECTIVE => $"{G(town, CT)} {G(Key("GUI_SUBALIGNMENTNAME_4"), bucket)}",
-            Role.TOWN_SUPPORT => $"{G(town, CT)} {G(Key("GUI_SUBALIGNMENTNAME_2"), bucket)}",
-            Role.TOWN_KILLING => $"{G(town, TK)} {G(Key("GUI_SUBALIGNMENTNAME_6"), bucket)}",
-            Role.TOWN_POWER => $"{G(town, TE)} {G(Key("GUI_SUBALIGNMENTNAME_3"), bucket)}",
-
-            Role.RANDOM_COVEN => $"{G(Random(), bucket)} {G(coven, CC)}",
-            Role.COMMON_COVEN => $"{G(Common(), bucket)} {G(coven, CC)}",
-
-            Role.COVEN_POWER => $"{G(coven, CPOW)} {G(Key("GUI_SUBALIGNMENTNAME_3"), bucket)}",
-            Role.COVEN_KILLING => $"{G(coven, CK)} {G(Key("GUI_SUBALIGNMENTNAME_6"), bucket)}",
-            Role.COVEN_UTILITY => $"{G(coven, CC)} {G(Key("GUI_SUBALIGNMENTNAME_8"), bucket)}",
-            Role.COVEN_DECEPTION => $"{G(coven, CC)} {G(Key("GUI_SUBALIGNMENTNAME_7"), bucket)}",
-
-            Role.NEUTRAL_APOCALYPSE => !Fancy.ReplaceNAwithRA.Value
-                ? $"{G(neutral, RA)} {G(apocalypse, bucket)}"
-                : $"{G(Random(), bucket)} {G(apocalypse, RA)}",
-
-            Role.NEUTRAL_KILLING => $"{G(neutral, NK)} {G(Key("GUI_SUBALIGNMENTNAME_6"), bucket)}",
-            Role.NEUTRAL_EVIL => $"{G(neutral, NK)} {G(Key("GUI_SUBALIGNMENTNAME_10"), bucket)}",
-            Role.RANDOM_NEUTRAL => $"{G(Random(), bucket)} {G(neutral, NK)}",
-
-            _ => string.Empty,
-        };
-    }
-
     [HarmonyPatch(nameof(ClientRoleExtensions.ToColorizedShortenedDisplayString), typeof(Role), typeof(FactionType)), HarmonyPostfix]
     public static void ToColorizedShortenedDisplayStringPostfix(ref string __result, Role role, FactionType factionType)
     {
@@ -891,8 +784,8 @@ public static class ClientRoleExtensionsPatches
         var label = $"({factionText})";
 
 		if (role.IsBucket() || role is Btos2Role.TownPower)
-		{    
-			var bucket = role.GetShortenedBucketString(factionType);
+		{  
+			var bucket = Utils.GetShortenedBucketString(role, factionType);
 			
 			if (Fancy.FactionNameNextToBucket.Value && Fancy.ShowForShortNames.Value  && roleFaction != factionType)
 			{
@@ -937,114 +830,6 @@ public static class ClientRoleExtensionsPatches
 
         __result = newText;
 
-    }
-    private static string GetShortenedBucketString(this Role role, FactionType faction)
-    {
-        var isNone = faction is FactionType.NONE;
-        var isBTOS2 = Constants.IsBTOS2();
-
-        var neut = Utils.CreateGradient(Fancy.NeutralStart.Value, Fancy.NeutralEnd.Value);
-        var any = Utils.CreateGradient(Fancy.AnyStart.Value, Fancy.AnyEnd.Value);
-        var bucket = Fancy.FactionalBuckets.Value ? Utils.GetFactionBucketGradient(faction) : Utils.CreateGradient(Fancy.BucketStart.Value, Fancy.BucketEnd.Value);
-
-		// Town
-		var CT = !isNone ? faction.GetChangedGradient(Role.ADMIRER) : neut;
-        var TE = !isNone ? faction.GetChangedGradient(Role.PROSECUTOR) : neut;
-        var TG = !isNone ? faction.GetChangedGradient(Role.MAYOR) : neut;
-        var TK = !isNone ? faction.GetChangedGradient(Role.VIGILANTE) : neut;
-		
-		// Coven
-        var CPOW = !isNone ? faction.GetChangedGradient(Role.WITCH) : neut;
-        var CK = !isNone ? faction.GetChangedGradient(Role.CONJURER) : neut;
-		var CC = !isNone ? faction.GetChangedGradient(Role.ENCHANTER) : neut;
-		
-		// Apocalypse
-        var RA = !isNone ? faction.GetChangedGradient(Role.PLAGUEBEARER) : neut;
-        var horsemen = !isNone ? faction.GetChangedGradient(Role.PESTILENCE) : neut;
-		
-        var NK = !isNone ? faction.GetChangedGradient(Role.NONE) : neut;
-
-
-        var town = Utils.GetString("FANCY_BUCKETS_TOWN_SHORT");
-        var coven = Utils.GetString("FANCY_BUCKETS_COVEN_SHORT");
-        var neutral = Utils.GetString("FANCY_BUCKETS_NEUTRAL_SHORT");
-        var apocalypse = Utils.GetString("FANCY_BUCKETS_APOCALYPSE_SHORT");
-
-        string G(string text, Gradient g) => Utils.ApplyGradient(text, g);
-        string Key(string key) => Utils.GetString(key);
-        string Random() => Key("FANCY_BUCKETS_RANDOM_SHORT");
-        string Common() => Key("FANCY_BUCKETS_COMMON_SHORT");
-
-        if (isBTOS2)
-        {
-            return role switch
-            {
-                Btos2Role.Any => isNone ? G(Key("BTOS_ROLE_LIST_BUCKET_ANY_SHORT"), any) : G(Key("BTOS_ROLE_LIST_BUCKET_ANY_SHORT"), NK),
-				Btos2Role.FlexibleAny => $"{G(Key("FANCY_BUCKETS_FLEXIBLE_SHORT"), bucket)} {G(Key("FANCY_BUCKETS_ANY_SHORT"), NK)}",
-
-
-                Btos2Role.RandomTown => $"{G(Random(), bucket)}{G(town, CT)}",
-                Btos2Role.CommonTown => $"{G(Common(), bucket)}{G(town, CT)}",
-
-                Btos2Role.TownInvestigative => $"{G(town, CT)}{G(Key("FANCY_BUCKETS_INVESTIGATIVE_SHORT"), bucket)}",
-                Btos2Role.TownProtective => $"{G(town, CT)}{G(Key("FANCY_BUCKETS_PROTECTIVE_SHORT"), bucket)}",
-                Btos2Role.TownSupport => $"{G(town, CT)}{G(Key("FANCY_BUCKETS_SUPPORT_SHORT"), bucket)}",
-                Btos2Role.TownKilling => $"{G(town, TK)}{G(Key("FANCY_BUCKETS_KILLING_SHORT"), bucket)}",
-                Btos2Role.TownGovernment => $"{G(town, TG)}{G(Key("FANCY_BUCKETS_GOVERNMENT_SHORT"), bucket)}",
-                Btos2Role.TownExecutive => $"{G(town, TE)}{G(Key("FANCY_BUCKETS_EXECUTIVE_SHORT"), bucket)}",
-                Btos2Role.TownPower => $"{G(town, TE)}{G(Key("FANCY_BUCKETS_POWER_SHORT"), bucket)}",
-
-                Btos2Role.RandomCoven => $"{G(Random(), bucket)}{G(coven, CC)}",
-                Btos2Role.CommonCoven => $"{G(Common(), bucket)}{G(coven, CC)}",
-
-                Btos2Role.CovenPower => $"{G(coven, CPOW)}{G(Key("FANCY_BUCKETS_POWER_SHORT"), bucket)}",
-                Btos2Role.CovenKilling => $"{G(coven, CK)}{G(Key("FANCY_BUCKETS_KILLING_SHORT"), bucket)}",
-                Btos2Role.CovenUtility => $"{G(coven, CC)}{G(Key("FANCY_BUCKETS_UTILITY_SHORT"), bucket)}",
-                Btos2Role.CovenDeception => $"{G(coven, CC)}{G(Key("FANCY_BUCKETS_DECEPTION_SHORT"), bucket)}",
-
-                Btos2Role.RandomApocalypse => $"{G(Random(), bucket)}{G(apocalypse, RA)}",
-
-                Btos2Role.NeutralKilling => $"{G(neutral, NK)}{G(Key("FANCY_BUCKETS_KILLING_SHORT"), bucket)}",
-                Btos2Role.NeutralEvil => $"{G(neutral, NK)}{G(Key("FANCY_BUCKETS_EVIL_SHORT"), bucket)}",
-                Btos2Role.NeutralPariah => $"{G(neutral, NK)}{G(Key("FANCY_BUCKETS_PARIAH_SHORT"), bucket)}",
-                Btos2Role.NeutralOutlier => $"{G(neutral, NK)}{G(Key("FANCY_BUCKETS_OUTLIER_SHORT"), bucket)}",
-                Btos2Role.RandomNeutral => $"{G(Random(), bucket)}{G(neutral, NK)}",
-
-                _ => string.Empty,
-            };
-        }
-
-        return role switch
-        {
-            Role.ANY => isNone ? G(Key("BTOS_ROLE_LIST_BUCKET_ANY_SHORT"), any) : G(Key("BTOS_ROLE_LIST_BUCKET_ANY_SHORT"), NK),
-
-            Role.RANDOM_TOWN => $"{G(Random(), bucket)}{G(town, CT)}",
-            Role.COMMON_TOWN => $"{G(Common(), bucket)}{G(town, CT)}",
-
-            Role.TOWN_INVESTIGATIVE => $"{G(town, CT)}{G(Key("FANCY_BUCKETS_INVESTIGATIVE_SHORT"), bucket)}",
-            Role.TOWN_PROTECTIVE => $"{G(town, CT)}{G(Key("FANCY_BUCKETS_PROTECTIVE_SHORT"), bucket)}",
-            Role.TOWN_SUPPORT => $"{G(town, CT)}{G(Key("FANCY_BUCKETS_SUPPORT_SHORT"), bucket)}",
-            Role.TOWN_KILLING => $"{G(town, TK)}{G(Key("FANCY_BUCKETS_KILLING_SHORT"), bucket)}",
-            Role.TOWN_POWER => $"{G(town, TE)}{G(Key("FANCY_BUCKETS_POWER_SHORT"), bucket)}",
-
-            Role.RANDOM_COVEN => $"{G(Random(), bucket)}{G(coven, CC)}",
-            Role.COMMON_COVEN => $"{G(Common(), bucket)}{G(coven, CC)}",
-
-            Role.COVEN_POWER => $"{G(coven, CPOW)}{G(Key("FANCY_BUCKETS_POWER_SHORT"), bucket)}",
-            Role.COVEN_KILLING => $"{G(coven, CK)}{G(Key("FANCY_BUCKETS_KILLING_SHORT"), bucket)}",
-            Role.COVEN_UTILITY => $"{G(coven, CC)}{G(Key("FANCY_BUCKETS_UTILITY_SHORT"), bucket)}",
-            Role.COVEN_DECEPTION => $"{G(coven, CC)}{G(Key("FANCY_BUCKETS_DECEPTION_SHORT"), bucket)}",
-
-            Role.NEUTRAL_APOCALYPSE => !Fancy.ReplaceNAwithRA.Value
-                ? $"{G(neutral, RA)}{G(apocalypse, bucket)}"
-                : $"{G(Random(), bucket)}{G(apocalypse, RA)}",
-
-            Role.NEUTRAL_KILLING => $"{G(neutral, NK)}{G(Key("FANCY_BUCKETS_KILLING_SHORT"), bucket)}",
-            Role.NEUTRAL_EVIL => $"{G(neutral, NK)}{G(Key("FANCY_BUCKETS_EVIL_SHORT"), bucket)}",
-            Role.RANDOM_NEUTRAL => $"{G(Random(), bucket)}{G(neutral, NK)}",
-
-            _ => string.Empty,
-        };
     }
 	[HarmonyPatch(nameof(ClientRoleExtensions.GetFactionColor)), HarmonyPrefix]
 	[HarmonyPriority(Priority.Last)]
@@ -1476,56 +1261,77 @@ public static class KeywordMentionsPatches
         }
     }
 
-    [HarmonyPatch(nameof(SharedMentionsProvider.PreparePlayerMentions))]
-    public static bool Prefix(SharedMentionsProvider __instance, DiscussionPlayerObservation player, int skinId, int i, MentionInfo.MentionInfoType mentionInfoType,
-        MentionToken.MentionTokenType mentionTokenType)
+[HarmonyPatch(nameof(SharedMentionsProvider.PreparePlayerMentions))]
+public static bool Prefix(
+    SharedMentionsProvider __instance,
+    DiscussionPlayerObservation player,
+    int skinId,
+    int i,
+    MentionInfo.MentionInfoType mentionInfoType,
+    MentionToken.MentionTokenType mentionTokenType)
     {
-        if (Constants.BetterMentionsExists() || !Pepper.IsLobbyOrPickNamesOrGamePhase())
+        if (!Pepper.IsLobbyOrPickNamesOrGamePhase())
             return true;
 
         var text = string.IsNullOrWhiteSpace(player.Data.gameName)
             ? player.Data.accountName
             : player.Data.gameName;
+
+        var encodedText = $"[[@{i + 1}]]";
         var match = $"@{i + 1}";
         var match2 = "@" + text;
-        var encodedText = $"[[@{i + 1}]]";
-        var text2 = (mentionTokenType == MentionToken.MentionTokenType.ACCOUNT) ? "a" : string.Empty;
-        var gradient = Utils.CreateGradient(Fancy.MentionStart.Value, Fancy.MentionEnd.Value);
-        var playerPos = Pepper.GetDiscussionPlayerByPosition(i);
-        var isRecruited = Service.Game.Sim.simulation.observations.playerEffects.Any(x => x.Data.effects.Contains((EffectType)100) && x.Data.playerPosition == i);
 
-        // if (Fancy.ColorMentionsWithFaction.Value)
-        var color = Fancy.MentionStart.Value;
-        if (string.IsNullOrEmpty(color))
-            color = "#FFCE3B";
+        var linkPrefix = mentionTokenType == MentionToken.MentionTokenType.ACCOUNT ? "a" : "";
 
-        // if (Fancy.ColorMentionsWithFaction.Value && Utils.GetRoleAndFaction(i, out var playerInfo) && playerInfo.Item2 != FactionType.NONE && playerInfo.Item2 != FactionType.UNKNOWN)
-            // gradient = playerInfo.Item2.GetChangedGradient(playerInfo.Item1);
+        string styledText;
 
-        var text3 = __instance._useColors
-            ? $"<b>{Utils.ApplyGradient(text, gradient)}</b>"
-            : $"<b>{text}</b>";
-  
+        if (Utils.TryGetPlayerData(i, out var data))
+        {
+            if (data.Item2 is FactionType.NONE or FactionType.UNKNOWN)
+            {
+                styledText = Utils.BaseMentionGradient(text);
+            }
+            else
+            {
+                styledText = Utils.GetFactionGradient(text, data.Item2);
+            }
+        }
+        else
+        {
+            styledText = Utils.BaseMentionGradient(text);
+        }
 
+        // Optional bold (matches your previous behavior)
+        if (__instance._useColors)
+            styledText = $"<b>{styledText}</b>";
+        else
+            styledText = $"<b>{text}</b>";
 
-        var text4 = __instance._playerEffects == 2
-            ? $"<sprite=\"PlayerNumbers\" name=\"PlayerNumbers_{player.Data.position + 1}\">"
-            : (__instance._playerEffects == 1
-                ? $"<sprite=\"Cast\" name=\"Skin{skinId}\">"
-                : string.Empty);
+        // 🔹 Sprite
+        var sprite = __instance._playerEffects switch
+        {
+            2 => $"<sprite=\"PlayerNumbers\" name=\"PlayerNumbers_{player.Data.position + 1}\">",
+            1 => $"<sprite=\"Cast\" name=\"Skin{skinId}\">",
+            _ => ""
+        };
 
-        var text5 = $"{__instance.styleTagOpen}{__instance.styleTagFont}<link=\"{text2}{player.Data.position}\">{text4}{text3}</link>{__instance.styleTagClose}";
+        // 🔹 Final rich text
+        var richText =
+            $"{__instance.styleTagOpen}{__instance.styleTagFont}" +
+            $"<link=\"{linkPrefix}{player.Data.position}\">{sprite}{styledText}</link>" +
+            $"{__instance.styleTagClose}";
 
         var mentionInfo = new MentionInfo
         {
             mentionInfoType = mentionInfoType,
-            richText = text5,
+            richText = richText,
             encodedText = encodedText,
-            hashCode = text5.ToLower().GetHashCode(),
+            hashCode = richText.ToLower().GetHashCode(),
             humanText = "@" + text.ToLower()
         };
 
         __instance.MentionInfos.Add(mentionInfo);
+
         __instance.MentionTokens.Add(new MentionToken
         {
             mentionTokenType = mentionTokenType,
@@ -1533,6 +1339,7 @@ public static class KeywordMentionsPatches
             mentionInfo = mentionInfo,
             priority = i
         });
+
         __instance.MentionTokens.Add(new MentionToken
         {
             mentionTokenType = mentionTokenType,
@@ -1543,7 +1350,6 @@ public static class KeywordMentionsPatches
 
         return false;
     }
-
 	// [HarmonyPatch(typeof(MentionsProvider), nameof(MentionsProvider.ValidateTextualMentions))]
     // internal static class RehashMentionsBeforeValidation
     // {
@@ -1617,7 +1423,7 @@ public static class ReplaceRoleTagWithRoleTextPatch
                     var faction = (FactionType)factionId;
 
                     // Use the overload with faction
-                    var colorized = role.ToColorizedNoLabel(faction);
+                    var colorized = role.ToColorizedDisplayString(faction);
 
                     str = str.Replace(fullTag, colorized);
                     modified = true;
@@ -1629,13 +1435,55 @@ public static class ReplaceRoleTagWithRoleTextPatch
                 if (int.TryParse(content, out var roleId))
                 {
                     var role = (Role)roleId;
-                    var colorized = role.ToColorizedNoLabel(role.GetFaction());
+                    var colorized = role.ToColorizedDisplayString(role.GetFaction());
                     str = str.Replace(fullTag, colorized);
                     modified = true;
                 }
             }
 
             index = str.IndexOf("%name_role", index + 1);
+        }
+
+        // Handle %name_bucketX% and %name_bucketX_Y%
+        index = str.IndexOf("%name_bucket");
+
+        while (index > -1)
+        {
+            var endIndex = str.IndexOf("%", index + 1);
+            if (endIndex == -1)
+                break;
+
+            var fullTag = str.Substring(index, endIndex - index + 1);
+            var content = fullTag[12..^1];
+
+            if (content.Contains("_"))
+            {
+                var parts = content.Split('_');
+                if (parts.Length == 2
+                    && int.TryParse(parts[0], out var roleId)
+                    && int.TryParse(parts[1], out var factionId))
+                {
+                    var role = (Role)roleId;
+                    var faction = (FactionType)factionId;
+
+                    var colorized = Utils.GetBucketString(role, faction);
+
+                    str = str.Replace(fullTag, colorized);
+                    modified = true;
+                }
+            }
+            else
+            {
+                if (int.TryParse(content, out var roleId))
+                {
+                    var role = (Role)roleId;
+                    var colorized = Utils.GetBucketString(role, role.GetFaction());
+                    str = str.Replace(fullTag, colorized);
+                    modified = true;
+                }
+            }
+
+            index = str.IndexOf("%name_bucket", index + 1);
         }
 
         // Handle %name_factionX%
