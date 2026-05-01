@@ -18,6 +18,7 @@ using Server.Shared.Collections;
 using Server.Shared.Extensions;
 using Server.Shared.State.Chat;
 using UnityEngine.EventSystems;
+using UnityEngine.Events;
 
 namespace FancyUI.Patches;
 
@@ -115,9 +116,10 @@ public static class RetrainPopupPatch
             ? "Regular"
             : Utils.FactionName(myFaction, false))})\"");
 
-        var key = "FANCY_RETRAIN_POPUP";
         var roleName = state.isRetraining.ToColorizedNoLabel(myFaction);
         var myRoleName = myRole.ToColorizedNoLabel(myFaction);
+        var hasVowel = Utils.StartsWithVowel(Utils.StripFormatting(roleName));
+        var key = !hasVowel ? "FANCY_RETRAIN_POPUP" : "RETRAIN_POPUP_VOWEL";
 
         __instance.HeaderText.text = Utils.GetString(key).Replace("%role%", icon + roleName).Replace("%role2%", myIcon + myRoleName);
 
@@ -295,6 +297,9 @@ public static class ModifierFactionPatch
                     Btos2Role.AllOutliers => Btos2Faction.CursedSoul,
                     Btos2Role.SecretKillers => Btos2Faction.SerialKiller,
                     Btos2Role.Teams => Btos2Faction.Hawks,
+                    Btos2Role.FastMode => Btos2Faction.Arsonist,
+                    Btos2Role.SlowMode => Btos2Faction.Vampire,
+                    Btos2Role.Anomaly => Btos2Faction.Pirate,
                     Btos2Role.TownPower => Btos2Faction.Town, // so it shows as town, cuz game believes its a modifier
                     _ => FactionType.NONE
                 };
@@ -311,6 +316,9 @@ public static class ModifierFactionPatch
                     Role.ELECTION => FactionType.TOWN,
                     Role.FEELIN_LUCKY => FactionType.JESTER,
                     Role.KILLER_ROLES_HIDDEN => FactionType.SERIALKILLER,
+                    Role.FAST_MODE => FactionType.ARSONIST,
+                    Role.SLOW_MODE => FactionType.VAMPIRE,
+                    Role.ANOMALY => FactionType.PIRATE,
                     _ => FactionType.NONE
                 };
             if (modifierFaction != FactionType.NONE)
@@ -823,92 +831,92 @@ public static class WarAbilityCancelPatch
     }
 }
 
-[HarmonyPatch(typeof(TosAbilityPanelListItem), nameof(TosAbilityPanelListItem.OverrideIconAndText))]
-public static class FixAbilityButtonOverrides
-{
-    [HarmonyPostfix]
-    [HarmonyPriority(Priority.Last)]
-    public static void FixOverrideText(TosAbilityPanelListItem __instance, TosAbilityPanelListItem.OverrideAbilityType overrideType)
-    {
-        var role = Pepper.GetMyCurrentIdentity().role;
+// [HarmonyPatch(typeof(TosAbilityPanelListItem), nameof(TosAbilityPanelListItem.OverrideIconAndText))]
+// public static class FixAbilityButtonOverrides
+// {
+    // [HarmonyPostfix]
+    // [HarmonyPriority(Priority.Last)]
+    // public static void FixOverrideText(TosAbilityPanelListItem __instance, TosAbilityPanelListItem.OverrideAbilityType overrideType)
+    // {
+        // var role = Pepper.GetMyCurrentIdentity().role;
 		
-		if (overrideType is not (TosAbilityPanelListItem.OverrideAbilityType.HORSEMAN or TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_HEAL or TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_REVEAL))
-			return;
+		// if (overrideType is not (TosAbilityPanelListItem.OverrideAbilityType.HORSEMAN or TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_HEAL or TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_REVEAL))
+			// return;
 
 
-        switch (overrideType)
-        {
-            case TosAbilityPanelListItem.OverrideAbilityType.HORSEMAN:
+        // switch (overrideType)
+        // {
+            // case TosAbilityPanelListItem.OverrideAbilityType.HORSEMAN:
 
-                switch (role)
-                {
-                    case Role.SOULCOLLECTOR:
-                    case (Role)62:
-                        role = Role.DEATH;
-                        break;
-                    case Role.PLAGUEBEARER:
-                        role = Role.PESTILENCE;
-                        break;
-                    case Role.BAKER:
-                        role = Role.FAMINE;
-                        break;
-                    case Role.BERSERKER:
-                        role = Role.WAR;
-                        break;
-                }
+                // switch (role)
+                // {
+                    // case Role.SOULCOLLECTOR:
+                    // case (Role)62:
+                        // role = Role.DEATH;
+                        // break;
+                    // case Role.PLAGUEBEARER:
+                        // role = Role.PESTILENCE;
+                        // break;
+                    // case Role.BAKER:
+                        // role = Role.FAMINE;
+                        // break;
+                    // case Role.BERSERKER:
+                        // role = Role.WAR;
+                        // break;
+                // }
 
-                __instance.choice1Text.text = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY1_VERB_{(int)role}");
+                // __instance.choice1Text.text = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY1_VERB_{(int)role}");
 
-                __instance.choice2Text.text = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY2_VERB_{(int)role}");
+                // __instance.choice2Text.text = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY2_VERB_{(int)role}");
 
-                __instance.choice1Text.SetAllDirty();
-                if (__instance.choice2Text)
-                    __instance.choice2Text.SetAllDirty();
+                // __instance.choice1Text.SetAllDirty();
+                // if (__instance.choice2Text)
+                    // __instance.choice2Text.SetAllDirty();
 
-                break;
-            // Exists for BTOS2 Baker, not that this'll ever appear outside BTOS2 until Cursed Soul happens, but thats its own bug
-            case TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_HEAL:
-					switch (role)
-					{
-						case Role.BAKER:
-							__instance.choice2Text.text = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY1_VERB_{(int)role}");
-							break;
+                // break;
+            // // Exists for BTOS2 Baker, not that this'll ever appear outside BTOS2 until Cursed Soul happens, but thats its own bug
+            // case TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_HEAL:
+					// switch (role)
+					// {
+						// case Role.BAKER:
+							// __instance.choice2Text.text = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY1_VERB_{(int)role}");
+							// break;
 
-						default:
-							__instance.choice1Text.text = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY1_VERB_{(int)role}");
-							break;
-					}
-					break;
-            case TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_REVEAL:
-					switch (role)
-					{
-						case Role.BAKER:
-							__instance.choice2Text.text = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY2_VERB_{(int)role}");
-							break;
+						// default:
+							// __instance.choice1Text.text = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY1_VERB_{(int)role}");
+							// break;
+					// }
+					// break;
+            // case TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_REVEAL:
+					// switch (role)
+					// {
+						// case Role.BAKER:
+							// __instance.choice2Text.text = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY2_VERB_{(int)role}");
+							// break;
 
-						default:
-							__instance.choice1Text.text = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY2_VERB_{(int)role}");
-							break;
-					}
-					break;
-            case TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_ATTACK:
-					switch (role)
-					{
-						case Role.POTIONMASTER:
-							__instance.choice1Text.text = Utils.GetString($"GUI_ROLE_CARD_NECRONOMICON_ABILITY");
-							break;
-						case Role.BAKER:
-							__instance.choice2Text.text = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY3_VERB_{(int)role}");
-							break;
+						// default:
+							// __instance.choice1Text.text = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY2_VERB_{(int)role}");
+							// break;
+					// }
+					// break;
+            // case TosAbilityPanelListItem.OverrideAbilityType.POTIONMASTER_ATTACK:
+					// switch (role)
+					// {
+						// case Role.POTIONMASTER:
+							// __instance.choice1Text.text = Utils.GetString($"GUI_ROLE_CARD_NECRONOMICON_ABILITY");
+							// break;
+						// case Role.BAKER:
+							// __instance.choice2Text.text = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY3_VERB_{(int)role}");
+							// break;
 
-						default:
-							__instance.choice1Text.text = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY3_VERB_{(int)role}");
-							break;
-					}
-					break;
-        }
-    }
-}
+						// default:
+							// __instance.choice1Text.text = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY3_VERB_{(int)role}");
+							// break;
+					// }
+					// break;
+        // }
+    // }
+// }
 
 [HarmonyPatch(typeof(HexBombCinematicPlayer), nameof(HexBombCinematicPlayer.Init))]
 public static class HexBombTextPatch
@@ -1046,51 +1054,211 @@ public static class AlwaysShowPrimaryAbility
     }
 }
 
-[HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.DetermineFrameAndSlots_AbilityIcon2))]
-public static class AlwaysShowSecondaryAbility
+// [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.DetermineFrameAndSlots_AbilityIcon2))]
+// public static class AlwaysShowSecondaryAbility
+// {
+    // private static readonly ConditionalWeakTable<RoleCardPanel, BoolBox> Cache = new();
+
+    // private class BoolBox
+    // {
+        // public bool Value;
+    // }
+
+    // private static bool IsUsableSprite(Sprite sprite)
+    // {
+        // if (!sprite)
+            // return false;
+
+        // if (!sprite.texture)
+            // return false;
+
+        // return true;
+    // }
+
+    // public static void Prefix(RoleCardPanel __instance)
+    // {
+        // var obs = Service.Game?.Sim?.info?.roleCardObservation;
+        // if (obs?.Data == null || __instance.myData == null)
+            // return;
+
+        // var box = Cache.GetOrCreateValue(__instance);
+        // box.Value = obs.Data.secondAbilityAvailable;
+
+        // var sprite = __instance.myData.abilityIcon2;
+
+        // obs.Data.secondAbilityAvailable = IsUsableSprite(sprite);
+    // }
+
+    // public static void Postfix(RoleCardPanel __instance)
+    // {
+        // var obs = Service.Game?.Sim?.info?.roleCardObservation;
+        // if (obs?.Data == null)
+            // return;
+
+        // if (Cache.TryGetValue(__instance, out var box))
+            // obs.Data.secondAbilityAvailable = box.Value;
+    // }
+// }
+
+public static class RoleCardPanelAccess
 {
-    private static readonly ConditionalWeakTable<RoleCardPanel, BoolBox> Cache = new();
+	public static UIRoleData.UIRoleDataInstance GetData(RoleCardPanel inst) =>
+		AccessTools.Field(typeof(RoleCardPanel), "myData").GetValue(inst) as UIRoleData.UIRoleDataInstance;
 
-    private class BoolBox
+	public static int GetIndex(RoleCardPanel inst) =>
+		(int)AccessTools.Field(typeof(RoleCardPanel), "infoButtonsShowing").GetValue(inst);
+
+	public static void SetIndex(RoleCardPanel inst, int val) =>
+		AccessTools.Field(typeof(RoleCardPanel), "infoButtonsShowing").SetValue(inst, val);
+
+	public static List<BaseAbilityButton> GetList(RoleCardPanel inst) =>
+		AccessTools.Field(typeof(RoleCardPanel), "roleInfoButtons").GetValue(inst) as List<BaseAbilityButton>;
+}
+
+[HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.DetermineFrameAndSlots_AbilityIcon))]
+public static class Ability1Patch
+{
+	public static bool Prefix(RoleCardPanel __instance)
+	{
+		var data = RoleCardPanelAccess.GetData(__instance);
+		if (data == null || data.abilityIcon == null)
+			return false;
+
+		var obs = Service.Game?.Sim?.info?.roleCardObservation?.Data;
+		if (obs == null)
+			return false;
+
+		int uses = obs.normalAbilityTotal;
+		if (uses == -1) uses = 4;
+
+		var template = __instance.roleInfoButtonTemplates.GetElement(uses);
+		if (template == null)
+			return false;
+
+		var button = UObject.Instantiate(template, template.transform.parent);
+
+		var list = RoleCardPanelAccess.GetList(__instance);
+		list.Add(button);
+
+		__instance.pips = button.GetComponentInChildren<PipController>();
+
+		int index = RoleCardPanelAccess.GetIndex(__instance);
+		if (index >= list.Count)
+			return false;
+
+		var active = list[index];
+
+		active.gameObject.SetActive(true);
+		active.abilityIcon.sprite = data.abilityIcon;
+
+		if (!__instance.isGamePadPanel)
+		{
+			var entry = new EventTrigger.Entry
+			{
+				eventID = EventTriggerType.PointerEnter
+			};
+			entry.callback.AddListener(_ => __instance.OnClickRoleAbility());
+
+			var trigger = active.GetComponent<EventTrigger>();
+			if (trigger != null)
+				trigger.triggers.Add(entry);
+		}
+		else
+		{
+			var tab = __instance.abilityTabs[index];
+			tab.SetTabActive(true);
+
+			var action = new UnityEvent();
+			action.AddListener(() => __instance.OnClickRoleAbility());
+
+			tab.ApplyNewSelectAction(action);
+			tab.ParentIconsToAnchor(active.gameObject, "Ability1");
+		}
+
+		RoleCardPanelAccess.SetIndex(__instance, index + 1);
+
+		return false; 
+	}
+}
+
+[HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.DetermineFrameAndSlots_AbilityIcon2))]
+public static class Ability2Patch
+{
+	public static bool Prefix(RoleCardPanel __instance)
+	{
+		var data = RoleCardPanelAccess.GetData(__instance);
+		if (data == null || data.abilityIcon2 == null)
+			return false;
+
+		var obs = Service.Game?.Sim?.info?.roleCardObservation?.Data;
+		if (obs == null)
+			return false;
+
+		int uses = obs.secondAbilityTotal;
+		if (uses == -1) uses = 4;
+
+		var template = __instance.roleInfoButtonTemplates.GetElement(uses);
+		if (template == null)
+			return false;
+
+		var button = UObject.Instantiate(template, template.transform.parent);
+
+		var list = RoleCardPanelAccess.GetList(__instance);
+		list.Add(button);
+
+		__instance.pips2 = button.GetComponentInChildren<PipController>();
+
+		int index = RoleCardPanelAccess.GetIndex(__instance);
+		if (index >= list.Count)
+			return false;
+
+		var active = list[index];
+
+		active.gameObject.SetActive(true);
+		active.abilityIcon.sprite = data.abilityIcon2;
+
+		if (!__instance.isGamePadPanel)
+		{
+			var entry = new EventTrigger.Entry
+			{
+				eventID = EventTriggerType.PointerEnter
+			};
+			entry.callback.AddListener(_ => __instance.OnClickRoleAbility2());
+
+			var trigger = active.GetComponent<EventTrigger>();
+			if (trigger != null)
+				trigger.triggers.Add(entry);
+		}
+		else
+		{
+			var tab = __instance.abilityTabs[index];
+			tab.SetTabActive(true);
+
+			var action = new UnityEvent();
+			action.AddListener(() => __instance.OnClickRoleAbility2());
+
+			tab.ApplyNewSelectAction(action);
+			tab.ParentIconsToAnchor(active.gameObject, "Ability2");
+		}
+
+		RoleCardPanelAccess.SetIndex(__instance, index + 1);
+
+		return false;
+	}
+}
+
+[HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.HandleOnRoleCardDataChanged))]
+public static class HorsemanForceRefresh
+{
+    public static void Postfix(RoleCardPanel __instance, RoleCardData data)
     {
-        public bool Value;
-    }
-
-    private static bool IsUsableSprite(Sprite sprite)
-    {
-        if (!sprite)
-            return false;
-
-        if (!sprite.texture)
-            return false;
-
-        return true;
-    }
-
-    public static void Prefix(RoleCardPanel __instance)
-    {
-        var obs = Service.Game?.Sim?.info?.roleCardObservation;
-        if (obs?.Data == null || __instance.myData == null)
-            return;
-
-        var box = Cache.GetOrCreateValue(__instance);
-        box.Value = obs.Data.secondAbilityAvailable;
-
-        var sprite = __instance.myData.abilityIcon2;
-
-        obs.Data.secondAbilityAvailable = IsUsableSprite(sprite);
-    }
-
-    public static void Postfix(RoleCardPanel __instance)
-    {
-        var obs = Service.Game?.Sim?.info?.roleCardObservation;
-        if (obs?.Data == null)
-            return;
-
-        if (Cache.TryGetValue(__instance, out var box))
-            obs.Data.secondAbilityAvailable = box.Value;
+        if (data != null && data.isHorseman)
+        {
+            __instance.DetermineFrameAndSlots();
+        }
     }
 }
+
 [HarmonyPatch(typeof(HudTargetSelectionShared))]
 public static class RoleTargetingPatches
 {
@@ -1507,5 +1675,71 @@ public static class DontDeleteModdedMentions
         var plain = Regex.Replace(inner, "<.*?>", "");
 
         return string.Equals(displayName, plain, StringComparison.OrdinalIgnoreCase);
+    }
+}
+
+[HarmonyPatch(typeof(RoleCardPopupPanel), nameof(RoleCardPopupPanel.DetermineFrameAndSlots))]
+public static class NecronomiconRoleCardIconPatch
+{
+    public static void Postfix(RoleCardPopupPanel __instance, Role role, RoleCardData roleCardData)
+    {
+        var faction = __instance.CurrentFaction;
+        if (__instance == null || roleCardData == null)
+            return;
+
+        if (faction is Btos2Faction.Jackal)
+            return;
+
+		if (role.IsCovenAligned() && (faction is FactionType.COVEN or Btos2Faction.Pandora))
+			return;
+
+
+        var toRemove = __instance.GetComponentsInChildren<BaseAbilityButton>(true).Where(b => b?.abilityIcon != null && b.abilityIcon.sprite == __instance.roleData.generalData.abilityIcon2).ToList();
+
+        foreach (var btn in toRemove)
+        {
+            UObject.Destroy(btn.gameObject);
+        }
+
+        if (faction is not FactionType.COVEN or Btos2Faction.Pandora)
+            return;
+		
+        if (role is Role.CURSED_SOUL or Role.DEATH or Role.FAMINE or Role.WAR or Role.PESTILENCE or Role.HIDDEN or Role.STONED)
+            return;
+
+        var template = __instance.roleInfoButtonTemplates[0];
+
+        var item = UObject.Instantiate(template, template.transform.parent);
+        __instance.roleInfoButtons.Add(item);
+
+        int index = __instance.roleInfoButtons.Count - 1;
+
+        var button = __instance.roleInfoButtons[index];
+        button.gameObject.SetActive(true);
+        button.abilityIcon.sprite = __instance.roleData.generalData.abilityIcon2;
+
+        if (!__instance.isGamePadPanel)
+        {
+            var trigger = button.GetComponent<EventTrigger>();
+
+            var entry = new EventTrigger.Entry
+            {
+                eventID = EventTriggerType.PointerEnter
+            };
+
+            entry.callback.AddListener(_ => __instance.OnClickNecronomicon());
+            trigger.triggers.Add(entry);
+        }
+        else
+        {
+            var tab = __instance.abilityTabs[index];
+            tab.SetTabActive(true);
+
+            var unityEvent = new UnityEngine.Events.UnityEvent();
+            unityEvent.AddListener(__instance.OnClickNecronomicon);
+
+            tab.ApplyNewSelectAction(unityEvent);
+            tab.ParentIconsToAnchor(button.gameObject, "Necro");
+        }
     }
 }

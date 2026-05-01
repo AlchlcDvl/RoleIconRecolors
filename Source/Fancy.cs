@@ -210,7 +210,7 @@ public class Fancy : BaseMod<Fancy>
         { "HAWKS", ("#A81538", "#A81538", "#A81538", null, "#A81538", "#A81538", "#1F51FF", "#1F51FF") },
         { "LIONS", ("#FFC34F", "#FFC34F", "#FFC34F", null, "#FFC34F", "#FFC34F", "#1F51FF", "#1F51FF") },
         { "LOVERS", ("#FEA6FA", "#FEA6FA", null, null, null, null, "#1F51FF", "#1F51FF") },
-        { "STONED_HIDDEN", ("#9C9A9A", null, null, null, null, null, null, null) }
+        { "STONED_HIDDEN", ("#9C9A9A", "#9C9A9A", null, null, null, null, null, null) }
     };
 
     public static readonly Dictionary<FactionType, EnumDropdownOption<CinematicType>> CinematicMap = [];
@@ -260,7 +260,7 @@ public class Fancy : BaseMod<Fancy>
         BTOS2Modifiers = [.. AccessTools.GetDeclaredFields(typeof(Btos2Role)).Select(x => (Role)x.GetRawConstantValue()).Where(role => (byte)role is > 200 and < 240)];
 
         var colors = GeneralUtils.GetEnumValues<ColorType>()!.Where(x => x != ColorType.All).ToDictionary(x => x, x => x.ToString().ToUpperInvariant());
-        var filteredFactions = BTOS2Factions.Where(x => x is not (Btos2Faction.Cannibal or Btos2Faction.None or Btos2Faction.Lovers or Btos2Faction.Compliance or Btos2Faction.Pandora));
+        var filteredFactions = BTOS2Factions.Where(x => x is not (Btos2Faction.Cannibal or Btos2Faction.None or Btos2Faction.Compliance or Btos2Faction.Pandora));
 
         var factions = filteredFactions.ToDictionary(x => x, x => Utils.FactionName(x, Constants.BTOS2Exists() ? GameModType.BTOS2 : GameModType.Vanilla, false).ToUpperInvariant());
 
@@ -475,7 +475,7 @@ public class Fancy : BaseMod<Fancy>
         // ModifierFactions = new("MODIFIER_FACTIONS", true, PackType.Testing);
         DisableBTOSTribunal = new("DISABLE_BTOS_TRIBUNAL", true, PackType.Testing, setActive: Constants.BTOS2Exists);
 
-        foreach (var faction in BTOS2Factions.Where(x => x is not (FactionType.NONE or (> FactionType.APOCALYPSE and < FactionType.VAMPIRE) or FactionType.CURSED_SOUL or FactionType.UNKNOWN or Btos2Faction.Compliance or
+        foreach (var faction in BTOS2Factions.Where(x => x is not ((> FactionType.APOCALYPSE and < FactionType.VAMPIRE) or FactionType.CURSED_SOUL or FactionType.UNKNOWN or Btos2Faction.Compliance or
             Btos2Faction.Lovers or > Btos2Faction.Hawks)))
         {
             CinematicMap[faction] = new(

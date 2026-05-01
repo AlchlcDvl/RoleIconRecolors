@@ -639,8 +639,37 @@ public static class PatchRoleCards
 [HarmonyPatch(typeof(TosAbilityPanelListItem), nameof(TosAbilityPanelListItem.OverrideIconAndText))]
 public static class PatchAbilityPanelListItems
 {
+	private static Sprite Resolve(string key, bool reg, string faction, string ogFaction, bool ee)
+	{
+		var sprite = GetSprite(reg, key, faction, ee);
+
+		if (!sprite.IsValid() && reg)
+			sprite = GetSprite(key, ogFaction, ee);
+
+		return sprite;
+	}
+
+	private static void Apply(Sprite sprite, Image target)
+	{
+		if (sprite.IsValid() && target)
+			target.sprite = sprite;
+	}
+
+	private static string AbilityKey(string roleName, int index) => $"{roleName}_Ability_{index}";
+
+	private static void SetText(TMP_Text target, string key)
+	{
+		if (!target) return;
+
+		target.text = Utils.GetString(key);
+		target.SetAllDirty();
+	}
+
+	[HarmonyPostfix]
+	[HarmonyPriority(Priority.Last)]
     public static void Postfix(TosAbilityPanelListItem __instance, AbilityType overrideType)
     {
+
         if (__instance.choice1Sprite)
             __instance.choice1Sprite.transform.parent.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wax);
 
@@ -650,8 +679,8 @@ public static class PatchAbilityPanelListItems
         __instance.playerName.SetGraphicColor(ColorType.Paper);
         __instance.playerNumber.SetGraphicColor(ColorType.Paper);
 
-        if (!Constants.EnableIcons())
-            return;
+        // if (!Constants.EnableIcons())
+            // return;
 
         var role = Pepper.GetMyRole();
         var faction = Utils.FactionName(Pepper.GetMyFaction());
@@ -662,287 +691,124 @@ public static class PatchAbilityPanelListItems
         var ee = Fancy.PlayerPanelEasterEggs.Value;
 
         switch (overrideType)
-        {
-            case AbilityType.NECRO_ATTACK:
-            {
-                var nommy = GetSprite("Necronomicon", faction, ee);
-
-                if (nommy.IsValid() && __instance.choice1Sprite)
-                    __instance.choice1Sprite.sprite = nommy;
-
-                switch (role)
-                {
-                    case Role.WITCH:
-                    {
-                        var target = GetSprite(reg, "Witch_Ability_2", faction, ee);
-
-                        if (!target.IsValid() && reg)
-                            target = GetSprite("Witch_Ability_2", ogfaction, ee);
-
-                        if (target.IsValid() && __instance.choice2Sprite)
-                            __instance.choice2Sprite.sprite = target;
-
-                        break;
-                    }
-                }
-
-                break;
-            }
-            case AbilityType.VOTING:
-            {
-                var ab1 = GetSprite(reg, $"Vote", faction, ee);
-
-                if (ab1.IsValid() && __instance.choice1Sprite)
-                    __instance.choice1Sprite.sprite = ab1;
-
-                break;
-            }
-            case AbilityType.POISONER_POISON or AbilityType.SHROUD or AbilityType.PIRATE or (AbilityType)30 or (AbilityType)32 or (AbilityType)33:
-            {
-                var special = GetSprite(reg, $"{name}_Special", faction, ee);
-
-                if (!special.IsValid() && reg)
-                    special = GetSprite($"{name}_Special", ogfaction, ee);
-
-                if (special.IsValid() && __instance.choice1Sprite)
-                    __instance.choice1Sprite.sprite = special;
-
-                break;
-            }
-            case AbilityType.POTIONMASTER_ATTACK:
-            {
-                switch (role)
-                {
-                    case Role.POTIONMASTER:
-                    {
-                        var special = GetSprite(reg, $"Necronomicon", faction, ee);
-
-                        if (!special.IsValid() && reg)
-                            special = GetSprite($"Necronomicon", ogfaction, ee);
-
-                        if (special.IsValid() && __instance.choice1Sprite)
-                            __instance.choice1Sprite.sprite = special;
-
-                        break;
-
-                    }
-                    case Role.BAKER:
-                    {
-						var special = GetSprite(reg, $"{name}_Ability_3", faction, ee);
-
-						if (!special.IsValid() && reg)
-							special = GetSprite($"{name}_Ability_3", ogfaction, ee);
-
-						if (special.IsValid() && __instance.choice2Sprite)
-							__instance.choice2Sprite.sprite = special;
-
-						break;
-                    }
-                    default:
-                    {
-                        var special = GetSprite(reg, $"{name}_Ability_3", faction, ee);
-
-                        if (!special.IsValid() && reg)
-                            special = GetSprite($"{name}_Ability_3", ogfaction, ee);
-
-                        if (special.IsValid() && __instance.choice1Sprite)
-                            __instance.choice1Sprite.sprite = special;
-
-                        break;
-                    }
-                }
-
-                break;
-            }
-            case AbilityType.POTIONMASTER_HEAL:
-            {
-                switch (role)
-                {
-                    case Role.POTIONMASTER:
-                    {
-                        var ab2 = GetSprite(reg, $"{name}_Ability_2", faction, ee);
-
-                        if (!ab2.IsValid() && reg)
-                            ab2 = GetSprite($"{name}_Ability_2", ogfaction, ee);
-
-                        if (ab2.IsValid() && __instance.choice1Sprite)
-                            __instance.choice1Sprite.sprite = ab2;
-
-                        break;
-
-                    }
-                    case Role.BAKER:
-                    {
-						var ab2 = GetSprite(reg, $"{name}_Ability_2", faction, ee);
-
-						if (!ab2.IsValid() && reg)
-							ab2 = GetSprite($"{name}_Ability_2", ogfaction, ee);
-
-						if (ab2.IsValid() && __instance.choice2Sprite)
-							__instance.choice2Sprite.sprite = ab2;
-
-						break;
-                    }
-                    default:
-                    {
-                        var ab2 = GetSprite(reg, $"{name}_Ability_2", faction, ee);
-
-                        if (!ab2.IsValid() && reg)
-                            ab2 = GetSprite($"{name}_Ability_2", ogfaction, ee);
-
-                        if (ab2.IsValid() && __instance.choice1Sprite)
-                            __instance.choice1Sprite.sprite = ab2;
-
-                        break;
-                    }
-                }
-
-                break;
-            }
-            case AbilityType.POTIONMASTER_REVEAL:
-            {
-                switch (role)
-                {
-                    case Role.POTIONMASTER:
-                    {
-                        var ab = GetSprite(reg, $"{name}_Ability_1", faction, ee);
-
-                        if (!ab.IsValid() && reg)
-                            ab = GetSprite($"{name}_Ability_1", ogfaction, ee);
-
-                        if (ab.IsValid() && __instance.choice1Sprite)
-                            __instance.choice1Sprite.sprite = ab;
-
-                        break;
-
-                    }
-                    case Role.BAKER:
-                    {
-						var ab = GetSprite(reg, $"{name}_Ability_1", faction, ee);
-
-						if (!ab.IsValid() && reg)
-							ab = GetSprite($"{name}_Ability_1", ogfaction, ee);
-
-						if (ab.IsValid() && __instance.choice2Sprite)
-							__instance.choice2Sprite.sprite = ab;
-
-						break;
-                    }
-                    default:
-                    {
-                        var ab = GetSprite(reg, $"{name}_Ability_1", faction, ee);
-
-                        if (!ab.IsValid() && reg)
-                            ab = GetSprite($"{name}_Ability_1", ogfaction, ee);
-
-                        if (ab.IsValid() && __instance.choice1Sprite)
-                            __instance.choice1Sprite.sprite = ab;
-
-                        break;
-                    }
-                }
-
-                break;
-            }
-            case AbilityType.VOODOOMASTER_SILENCE:
-            {
-                var ab = GetSprite(reg, $"{name}_Ability_1", faction, ee);
-
-                if (!ab.IsValid() && reg)
-                    ab = GetSprite($"{name}_Ability_1", ogfaction, ee);
-
-                if (ab.IsValid() && __instance.choice1Sprite)
-                    __instance.choice1Sprite.sprite = ab;
-
-                break;
-            }
-            case AbilityType.VOODOOMASTER_DEAFEN:
-            {
-                var ab = GetSprite(reg, $"{name}_Ability_2", faction, ee);
-
-                if (!ab.IsValid() && reg)
-                    ab = GetSprite($"{name}_Ability_2", ogfaction, ee);
-
-                if (ab.IsValid() && __instance.choice1Sprite)
-                    __instance.choice1Sprite.sprite = ab;
-
-                break;
-            }
-            case AbilityType.VOODOOMASTER_BLIND:
-            {
-                var ab = GetSprite(reg, $"{name}_Ability_3", faction, ee);
-
-                if (!ab.IsValid() && reg)
-                    ab = GetSprite($"{name}_Ability_3", ogfaction, ee);
-
-                if (ab.IsValid() && __instance.choice1Sprite)
-                    __instance.choice1Sprite.sprite = ab;
-
-                break;
-            }
-            case AbilityType.WEREWOLF_NON_FULL_MOON:
-            {
-                var ab2 = GetSprite(reg, $"{name}_Ability_2", faction, ee);
-
-                if (!ab2.IsValid() && reg)
-                    ab2 = GetSprite($"{name}_Ability_2", ogfaction, ee);
-
-                if (ab2.IsValid() && __instance.choice1Sprite)
-                    __instance.choice1Sprite.sprite = ab2;
-
-                break;
-            }
-            default:
+		{
+			case AbilityType.NECRO_ATTACK:
 			{
-				if (role == Role.JAILOR && Pepper.GetCurrentPlayPhase() == PlayPhase.NIGHT)
-				{
-					var target = GetSprite(reg, "Jailor_Ability", faction, ee);
-
-					if (!target.IsValid() && reg)
-						target = GetSprite("Jailor_Ability_1", faction, ee);
-
-					if (!target.IsValid() && reg)
-						target = GetSprite("Jailor_Ability", ogfaction, ee);
-
-					if (!target.IsValid() && reg)
-						target = GetSprite("Jailor_Ability_1", ogfaction, ee);
-
-					if (target.IsValid() && __instance.choice2Sprite)
-						__instance.choice2Sprite.sprite = target;
-				}
-				else
-				{
-					var abilityName = $"{name}_Ability";
-					var ability1 = GetSprite(reg, abilityName, faction, ee);
-
-					if (!ability1.IsValid())
-						ability1 = GetSprite(reg, $"{abilityName}_1", faction, ee);
-
-					if (reg)
-					{
-						if (!ability1.IsValid())
-							ability1 = GetSprite(abilityName, ogfaction, ee);
-
-						if (!ability1.IsValid())
-							ability1 = GetSprite($"{abilityName}_1", ogfaction, ee);
-					}
-
-					if (ability1.IsValid() && __instance.choice1Sprite)
-						__instance.choice1Sprite.sprite = ability1;
-
-					var ability2 = GetSprite(reg, $"{abilityName}_2", faction, ee);
-
-					if (!ability2.IsValid() && reg)
-						ability2 = GetSprite($"{abilityName}_2", ogfaction, ee);
-
-					if (ability2.IsValid() && __instance.choice2Sprite)
-						__instance.choice2Sprite.sprite = ability2;
-				}
-
+				Apply(Resolve("Necronomicon", reg, faction, ogfaction, ee), __instance.choice1Sprite);
 				break;
 			}
 
-        }
+			case AbilityType.VOTING:
+			{
+				Apply(GetSprite("Vote"), __instance.choice1Sprite);
+				break;
+			}
+
+			case AbilityType.POTIONMASTER_ATTACK:
+			{
+				if (role == Role.POTIONMASTER)
+				{
+					Apply(Resolve("Necronomicon", reg, faction, ogfaction, ee), __instance.choice1Sprite);
+				}
+				else if (role == Role.BAKER)
+				{
+					Apply(Resolve("Baker_Special", reg, faction, ogfaction, ee), __instance.choice2Sprite);
+					SetText(__instance.choice2Text, $"BTOS_ROLE_SPECIALABILITY_VERB_{(int)role}"); 
+				}
+				else
+				{
+					var sprite = Resolve(AbilityKey(name, 3), reg, faction, ogfaction, ee);
+					Apply(sprite, __instance.choice1Sprite);
+				}
+				break;
+			}
+
+			case AbilityType.SHROUD:
+			{
+				Apply(Resolve("Shroud_Special", reg, faction, ogfaction, ee), __instance.choice1Sprite);
+				var text = Constants.IsBTOS2() ? $"BTOS_ROLE_SPECIALABILITY_VERB_49" : $"GUI_ROLE_SPECIAL_ABILITY_VERB_49";
+				SetText(__instance.choice1Text, text); 
+				break;
+			}
+
+			case AbilityType.WEREWOLF_NON_FULL_MOON:
+			{
+				Apply(Resolve("Werewolf_Ability_2", reg, faction, ogfaction, ee), __instance.choice1Sprite);
+				var text = $"{Utils.GetKeyPrefix()}_ROLE_ABILITY2_VERB_51";
+				SetText(__instance.choice1Text, text); 
+				break;
+			}
+
+			case AbilityType.POTIONMASTER_HEAL:
+			case AbilityType.POTIONMASTER_REVEAL:
+			{
+				if (role == Role.BAKER)
+				{
+					Apply(Resolve("Baker_Special", reg, faction, ogfaction, ee), __instance.choice2Sprite);
+					SetText(__instance.choice2Text, $"BTOS_ROLE_SPECIALABILITY_VERB_{(int)role}"); 
+					break;
+				}
+
+				int index = overrideType switch
+				{
+					AbilityType.POTIONMASTER_HEAL => 1,
+					AbilityType.POTIONMASTER_REVEAL => 2,
+					_ => 1
+				};
+
+				var sprite = Resolve(AbilityKey(name, index), reg, faction, ogfaction, ee);
+				Apply(sprite, __instance.choice1Sprite);
+				break;
+			}
+
+			case AbilityType.VOODOOMASTER_SILENCE:
+			case AbilityType.VOODOOMASTER_DEAFEN:
+			case AbilityType.VOODOOMASTER_BLIND:
+			{
+				int index = overrideType switch
+				{
+					AbilityType.VOODOOMASTER_SILENCE => 1,
+					AbilityType.VOODOOMASTER_DEAFEN => 2,
+					AbilityType.VOODOOMASTER_BLIND => 3,
+					_ => 1
+				};
+
+				Apply(Resolve(AbilityKey(name, index), reg, faction, ogfaction, ee), __instance.choice1Sprite);
+				break;
+			}
+			
+			case AbilityType.HORSEMAN:
+			{
+				var mapped = role switch
+				{
+					Role.SOULCOLLECTOR or Btos2Role.Warlock => Role.DEATH,
+					Role.PLAGUEBEARER => Role.PESTILENCE,
+					Role.BAKER => Role.FAMINE,
+					Role.BERSERKER => Role.WAR,
+					_ => role
+				};
+
+				Apply(Resolve(AbilityKey(name, 1), reg, faction, ogfaction, ee), __instance.choice1Sprite);
+				Apply(Resolve(AbilityKey(name, 2), reg, faction, ogfaction, ee), __instance.choice2Sprite);
+				SetText(__instance.choice1Text, $"{Utils.GetKeyPrefix()}_ROLE_ABILITY1_VERB_{(int)mapped}");
+				SetText(__instance.choice2Text, $"{Utils.GetKeyPrefix()}_ROLE_ABILITY2_VERB_{(int)mapped}");
+				break;
+			}
+
+			default:
+			{
+				var baseKey = $"{name}_Ability";
+
+				var ability1 = Resolve(baseKey, reg, faction, ogfaction, ee);
+
+				if (!ability1.IsValid())
+					ability1 = Resolve($"{baseKey}_1", reg, faction, ogfaction, ee);
+
+				Apply(ability1, __instance.choice1Sprite);
+				Apply(Resolve($"{baseKey}_2", reg, faction, ogfaction, ee), __instance.choice2Sprite);
+				break;
+			}
+		}
     }
 }
 

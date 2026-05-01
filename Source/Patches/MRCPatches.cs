@@ -330,71 +330,182 @@ public static class RoleCardPopupPatches2
     [HarmonyPatch(nameof(RoleCardPopupPanel.ShowAttackAndDefense)), HarmonyPrefix]
     public static bool Prefix(RoleCardPopupPanel __instance, RoleCardData data)
     {
-        if (Service.Game.Sim.simulation.roleDeckBuilder.Data.modifierCards.Contains(Role.FEELIN_LUCKY) || Constants.IsBTOS2() && Service.Game.Sim.simulation.roleDeckBuilder.Data.modifierCards.Contains(Btos2Role.FeelinLucky))
-            return true;
-        var defense = -1;
-        Role role = __instance.CurrentRole;
-        var faction = (int)__instance.CurrentFaction;
-        if (faction == 33)
-            faction = (int)__instance.CurrentRole.GetFaction();
-        if (faction > 0 && faction < 3 || faction > 42)
-            defense = 0;
-        if (faction > 2 && faction < 34 || faction == 33 && role == Btos2Role.Jackal || role == Role.CULTIST || role == Role.COVENLEADER || Constants.IsBTOS2() && role == Btos2Role.Cultist || faction == 40)
-            defense = 1;
-        if (Utils.IsHorseman(role) || data.defense == 3)
-            defense = 3;
-        if (faction > 37 && faction < 43 && faction != 40)
-            defense = 4;
-        if (faction == 33 && role != Btos2Role.Jackal || faction > 33 && faction < 37)
-            defense = data.defense;
-        var num = 0f;
-        var num2 = 0f;
-        if (data.attack == 1)
+        var role = __instance.CurrentRole;
+
+        var faction = __instance.CurrentFaction;
+        if (faction is Btos2Faction.Jackal or Btos2Faction.Frogs or Btos2Faction.Lions or Btos2Faction.Hawks)
+            faction = (FactionType)(int)role.GetFaction();
+
+        int defense;
+
+        switch (role)
         {
-            num = 0.33f;
+            case Role.CULTIST when !Constants.IsBTOS2():
+            case Btos2Role.Cultist when Constants.IsBTOS2():
+                defense = 1;
+                break;
+
+            case Role.FAMINE:
+            case Role.WAR:
+            case Role.PESTILENCE:
+            case Role.DEATH:
+                defense = 3;
+                break;
+
+            default:
+                defense = faction switch
+                {
+                    // No defense
+                    FactionType.TOWN or
+                    FactionType.COVEN or
+                    Btos2Faction.Pandora or
+                    Btos2Faction.Compliance
+                        => 0,
+
+                    // Basic Defense
+                    FactionType.SERIALKILLER or
+                    FactionType.ARSONIST or
+                    FactionType.WEREWOLF or
+                    FactionType.SHROUD or
+                    FactionType.APOCALYPSE or
+                    FactionType.EXECUTIONER or
+                    FactionType.JESTER or
+                    // FactionType.PIRATE or
+                    FactionType.DOOMSAYER or
+                    FactionType.VAMPIRE or
+                    FactionType.CURSED_SOUL or
+                    Btos2Faction.Inquisitor
+                        => 1,
+
+                    // Ethereal defense
+                    Btos2Faction.Starspawn or
+                    Btos2Faction.Auditor or
+                    Btos2Faction.Judge or
+                    Btos2Faction.Egotist
+                        => 4,
+
+                    // Role based
+                    Btos2Faction.Jackal or
+                    Btos2Faction.Frogs or
+                    Btos2Faction.Lions or
+                    Btos2Faction.Hawks
+                        => data.defense,
+
+					FactionType.PIRATE => Constants.IsBTOS2() ? 0 : 1,
+
+                    // Fallback
+                    _ => data.defense
+                };
+                break;
         }
-        else if (data.attack == 2)
+
+        var attackFill = data.attack switch
         {
-            num = 0.66f;
-        }
-        else if (data.attack == 3)
+            1 => 0.33f,
+            2 => 0.66f,
+            3 => 1f,
+            _ => 0f
+        };
+
+        var defenseFill = defense switch
         {
-            num = 1f;
-        }
-        if (defense == 1)
-        {
-            num2 = 0.33f;
-        }
-        else if (defense == 2 || defense == 4)
-        {
-            num2 = 0.66f;
-        }
-        else if (defense == 3)
-        {
-            num2 = 1f;
-        }
-        __instance.attackIcon.fillAmount = num;
-        __instance.attackGlow.fillAmount = num;
+            1 => 0.33f,
+            2 or 4 => 0.66f,
+            3 => 1f,
+            _ => 0f
+        };
+
+        __instance.attackIcon.fillAmount = attackFill;
+        __instance.attackGlow.fillAmount = attackFill;
+
         if (__instance.tabAtkFillImage)
-        {
-            __instance.tabAtkFillImage.fillAmount = num;
-        }
+            __instance.tabAtkFillImage.fillAmount = attackFill;
+
         if (__instance.tabAtkGlowImage)
-        {
-            __instance.tabAtkGlowImage.fillAmount = num;
-        }
-        __instance.defenseIcon.fillAmount = num2;
-        __instance.defenseGlow.fillAmount = num2;
+            __instance.tabAtkGlowImage.fillAmount = attackFill;
+
+        __instance.defenseIcon.fillAmount = defenseFill;
+        __instance.defenseGlow.fillAmount = defenseFill;
+
         if (__instance.tabDefFillImage)
-        {
-            __instance.tabDefFillImage.fillAmount = num2;
-        }
+            __instance.tabDefFillImage.fillAmount = defenseFill;
+
         if (__instance.tabDefGlowImage)
-        {
-            __instance.tabDefGlowImage.fillAmount = num2;
-        }
+            __instance.tabDefGlowImage.fillAmount = defenseFill;
+
         return false;
     }
+
+    [HarmonyPatch(nameof(RoleCardPopupPanel.OnMouseOverRoleDefense)), HarmonyPrefix]
+	public static bool Prefix2(RoleCardPopupPanel __instance)
+	{
+		var data = __instance.roleCardData;
+		if (data == null)
+			return true;
+
+		var role = __instance.CurrentRole;
+
+		var faction = __instance.CurrentFaction;
+		if (faction is Btos2Faction.Jackal or Btos2Faction.Frogs or Btos2Faction.Lions or Btos2Faction.Hawks)
+			faction = (FactionType)(int)role.GetFaction();
+
+		string defense;
+
+		switch (role)
+		{
+			case Role.CULTIST when !Constants.IsBTOS2():
+			case Btos2Role.Cultist when Constants.IsBTOS2():
+				defense = Utils.GetString("GUI_ROLE_CARD_BASIC_DEFENSE_TOOLTIP");
+				break;
+
+			case Role.FAMINE:
+			case Role.WAR:
+			case Role.PESTILENCE:
+			case Role.DEATH:
+				defense = Utils.GetString("GUI_ROLE_CARD_INVINCIBLE_DEFENSE_TOOLTIP");
+				break;
+
+			default:
+				defense = faction switch
+				{
+					FactionType.TOWN or
+					FactionType.COVEN or
+					Btos2Faction.Pandora or
+					Btos2Faction.Compliance
+						=> Utils.GetString("GUI_ROLE_CARD_NONE_DEFENSE_TOOLTIP"),
+
+					FactionType.SERIALKILLER or
+					FactionType.ARSONIST or
+					FactionType.WEREWOLF or
+					FactionType.SHROUD or
+					FactionType.APOCALYPSE or
+					FactionType.EXECUTIONER or
+					FactionType.JESTER or
+					// FactionType.PIRATE or
+					FactionType.DOOMSAYER or
+					FactionType.VAMPIRE or
+					FactionType.CURSED_SOUL or
+					Btos2Faction.Inquisitor
+						=> Utils.GetString("GUI_ROLE_CARD_BASIC_DEFENSE_TOOLTIP"),
+
+					Btos2Faction.Starspawn or
+					Btos2Faction.Auditor or
+					Btos2Faction.Judge or
+					Btos2Faction.Egotist
+						=> Utils.GetString("GUI_ROLE_CARD_POWERFUL_ETHEREAL_DEFENSE_TOOLTIP"),
+
+					FactionType.PIRATE => Constants.IsBTOS2() ? Utils.GetString("GUI_ROLE_CARD_NONE_DEFENSE_TOOLTIP") : Utils.GetString("GUI_ROLE_CARD_BASIC_DEFENSE_TOOLTIP"),
+
+					_ => Utils.GetString("GUI_ROLE_CARD_NONE_DEFENSE_TOOLTIP")
+				};
+				break;
+		}
+
+		__instance.roleDescText.SetText(defense);
+		__instance.roleDescGO.gameObject.SetActive(true);
+
+		return false;
+	}
 }
 
 [HarmonyPatch(typeof(TosAbilityPanelListItem), nameof(TosAbilityPanelListItem.SetKnownRole))]
@@ -724,7 +835,10 @@ public static class ClientRoleExtensionsPatches
 	{
 		var gradient = factionType.GetChangedGradient(role);
 
-		if (!role.IsResolved() && !role.IsBucket() && role is not (Role.FAMINE or Role.DEATH or Role.PESTILENCE or Role.WAR))
+		// if (!role.IsResolved() && !role.IsBucket() && role is not (Role.FAMINE or Role.DEATH or Role.PESTILENCE or Role.WAR))
+			// return;
+
+        if (role.IsModifierCard())
 			return;
 
 		// if (gradient != null && Fancy.BannedRoleDesaturation.Value != -1 && Constants.IsRoleBanned(role))
@@ -773,7 +887,10 @@ public static class ClientRoleExtensionsPatches
     {
         var gradient = factionType.GetChangedGradient(role);
 
-        if (!role.IsResolved() && !role.IsBucket() && role is not (Role.FAMINE or Role.DEATH or Role.PESTILENCE or Role.WAR))
+        // if (!role.IsResolved() && !role.IsBucket() && role is not (Role.FAMINE or Role.DEATH or Role.PESTILENCE or Role.WAR))
+			// return;
+
+        if (role.IsModifierCard())
 			return;
 
 		// if (gradient != null && Fancy.BannedRoleDesaturation.Value != -1 && Constants.IsRoleBanned(role))
@@ -1800,3 +1917,4 @@ public static class FactionSpecificPotionMasterResults
         }
     }
 }
+

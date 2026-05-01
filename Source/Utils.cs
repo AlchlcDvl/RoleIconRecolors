@@ -11,15 +11,99 @@ public static class Utils
 {
 	// Note: Update this whenever a role's ability count changes in updates for Vanilla and BetterTOS2
 
-    private static readonly string[] VanillaSkippableNames = ["Pirate_Ability_1", "Pirate_Ability_2", "Dreamweaver_Ability_1", "Seer_Ability_1", "Seer_Ability_2", "SerialKiller_Ability"];
-    private static readonly string[] BTOS2SkippableNames = [ "Baker_Ability_1", "Jackal_Ability", "Auditor_Ability_1", "Auditor_Ability_2", "Inquisitor_Ability_1", "Inquisitor_Ability_2", "Banshee_Ability", "Judge_Ability", "Coroner_Ability_2",
-        "Warlock_Ability_2", "Starspawn_Ability", "Dreamweaver_Ability_2", "Illusionist_Ability_2", "Pacifist_Ability_2", "Archmage_Ability", "Mayor_Ability", "SerialKiller_Ability_1", "SerialKiller_Ability_2" ];
-    private static readonly string[] CommonSkippableNames = [ "Baker_Ability_2", "Admirer_Ability_1", "Admirer_Ability_2", "Amnesiac_Ability", "Arsonist_Ability_2", "Attributes", "Berserker_Ability", "Bodyguard_Ability", "Catalyst_Ability",
-        "Cleric_Ability", "Coroner_Ability", "Crusader_Ability", "CursedSoul_Ability", "Death_Ability", "Enchanter_Ability", "Famine_Ability", "HexMaster_Ability",
-        "Illusionist_Ability", "Investigator_Ability", "Jailor_Ability", "Jester_Ability", "Jinx_Ability", "Lookout_Ability", "Medusa_Ability", "Monarch_Ability_2", 
-		"Sheriff_Ability", "Shroud_Ability", "SoulCollector_Ability", "Trickster_Ability_1", "Trickster_Ability_2", "Spy_Ability", "Wildling_Ability",
-        "TavernKeeper_Ability", "Tracker_Ability", "Trapper_Ability", "Vampire_Ability_1", "Vampire_Ability_2", "Vigilante_Ability", "VoodooMaster_Ability_1", "VoodooMaster_Ability_2", "War_Ability_2", "Witch_Ability_1", "Witch_Ability_2",
-        "Werewolf_Ability_1", "Necromancer_Ability_2", "Socialite_Ability_2" ];
+    private static readonly string[] VanillaSkippableNames =
+	[
+		// Town
+		"Seer_Ability_1", "Seer_Ability_2",
+
+		// Coven
+		"Dreamweaver_Ability_1",
+
+		// Neutral
+		"Pirate_Ability_1", "Pirate_Ability_2"
+	];
+    private static readonly string[] BTOS2SkippableNames =
+	[
+		// Town
+		"Mayor_Ability_1", 
+		"Coroner_Ability_2", 
+		"Pacifist_Ability_2",
+
+		// Coven
+		"Archmage_Ability_1", 
+		"Banshee_Ability_1", 
+		"Dreamweaver_Ability_2", 
+		"Illusionist_Ability_2",
+		
+		// Apocalypse
+		"Baker_Ability_1", "Warlock_Ability_2",
+
+		
+		// Neutral
+		"Auditor_Ability_1", "Auditor_Ability_2", 
+		"Inquisitor_Ability_1", "Inquisitor_Ability_2", 
+		"Jackal_Ability_1", 
+		"Judge_Ability_1", 
+		"SerialKiller_Ability_2", 
+		"Starspawn_Ability_1"
+	];
+    private static readonly string[] CommonSkippableNames =
+	[
+		// Town
+		"Admirer_Ability_1", "Admirer_Ability_2",
+		"Amnesiac_Ability_1",
+		"Bodyguard_Ability_1",
+		"Catalyst_Ability_1",
+		"Cleric_Ability_1",
+		"Coroner_Ability_1",
+		"Crusader_Ability_1",
+		"Investigator_Ability_1",
+		"Jailor_Ability_2",
+		"Lookout_Ability_1",
+		"Monarch_Ability_2",
+		"Sheriff_Ability_1",
+		"Socialite_Ability_2",
+		"Spy_Ability_1",
+		"TavernKeeper_Ability_1",
+		"Tracker_Ability_1",
+		"Trapper_Ability_1",
+		"Trickster_Ability_1", "Trickster_Ability_2",
+		"Vigilante_Ability",
+
+		// Coven
+		"Enchanter_Ability_1",
+		"HexMaster_Ability_1",
+		"Illusionist_Ability_1",
+		"Jinx_Ability_1",
+		"Medusa_Ability_1",
+		"Necromancer_Ability_2",
+		"Poisoner_Ability_1", "Poisoner_Ability_2",
+		"PotionMaster_Ability_1", "PotionMaster_Ability_2",
+		"VoodooMaster_Ability_1", "VoodooMaster_Ability_2",
+		"Wildling_Ability_1",
+		"Witch_Ability_1", "Witch_Ability_2",
+		
+		// Apocalypse
+		"Baker_Ability_2",
+		"Berserker_Ability_1",
+		"Death_Ability_1",
+		"Famine_Ability_1",
+		"SoulCollector_Ability_1",
+		"War_Ability_1", "War_Ability_2",
+
+		// Neutral
+		"Arsonist_Ability_2",
+		"CursedSoul_Ability_1",
+		"Jester_Ability_1",
+		"Plaguebearer_Ability_1",
+		"SerialKiller_Ability_1",
+		"Shroud_Ability_1",
+		"Vampire_Ability_1", "Vampire_Ability_2",
+		"Werewolf_Ability_1", "Werewolf_Ability_2",
+
+		// Misc
+		"Attributes"
+	];
 
     private static readonly Dictionary<GameModType, (Dictionary<string, string>, Dictionary<string, int>)> RoleStuff = [];
 
@@ -46,6 +130,7 @@ public static class Utils
 
     private static string BTOSRoleName(Role role) => role switch
     {
+		(Role)0 => "Hidden",
         Btos2Role.Admirer => "Admirer",
         Btos2Role.Amnesiac => "Amnesiac",
         Btos2Role.Bodyguard => "Bodyguard",
@@ -178,6 +263,7 @@ public static class Utils
 
     private static string VanillaRoleName(Role role) => role switch
     {
+		(Role)0 => "Hidden",
         Role.ADMIRER => "Admirer",
         Role.AMNESIAC => "Amnesiac",
         Role.BODYGUARD => "Bodyguard",
@@ -641,6 +727,10 @@ public static class Utils
 
         (_, Role.NEUTRAL_APOCALYPSE, GameModType.Vanilla) => FactionType.APOCALYPSE,
         (_, Btos2Role.RandomApocalypse, GameModType.BTOS2) => FactionType.APOCALYPSE,
+		
+        (_, Btos2Role.TownPower, GameModType.BTOS2) => FactionType.TOWN,
+
+		
 
         // Default case
         _ => FactionType.NONE
@@ -1091,7 +1181,7 @@ public static class Utils
         return "AEIOU".IndexOf(firstChar) >= 0;
     }
 
-    private static string StripFormatting(string input)
+    public static string StripFormatting(string input)
     {
         var sb = new StringBuilder();
         var insideTag = false;
