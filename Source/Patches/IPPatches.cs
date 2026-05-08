@@ -73,6 +73,44 @@ public static class Patch_SpecialAbilityPopupRoleListItem_Ritualist
 	}
 }
 
+[HarmonyPatch(typeof(SpecialAbilityPopupRitualist), nameof(SpecialAbilityPopupRitualist.OnRoleDropdownPicked))]
+public static class Patch_Ritualist_SelectedRoleIcon
+{
+    public static void Postfix(Role role, Image ___selectedRoleImagePC)
+    {
+        if (!Constants.EnableIcons()) return;
+        if (___selectedRoleImagePC == null) return;
+        if (role == Role.NONE) return;
+
+        var icon = GetSprite(Utils.RoleName(role), Utils.FactionName(role.GetFactionType()), false);
+
+        if (icon.IsValid())
+        {
+            ___selectedRoleImagePC.sprite = icon;
+            ___selectedRoleImagePC.gameObject.SetActive(true);
+        }
+    }
+}
+
+[HarmonyPatch(typeof(SpecialAbilityPopupEnchanter), nameof(SpecialAbilityPopupEnchanter.OnClickRoleGuess))]
+public static class Patch_Enchanter_SelectedRoleIcon
+{
+    public static void Postfix(Role newRole, Image ___roleAlterIconImage)
+    {
+        if (!Constants.EnableIcons()) return;
+        if (___roleAlterIconImage == null) return;
+        if (newRole == Role.NONE) return;
+
+        var icon = GetSprite(Utils.RoleName(newRole), Utils.FactionName(newRole.GetFactionType()), false);
+
+        if (icon.IsValid())
+        {
+            ___roleAlterIconImage.sprite = icon;
+            ___roleAlterIconImage.gameObject.SetActive(true);
+        }
+    }
+}
+
 [HarmonyPatch(typeof(SpecialAbilityPopupRoleListItem))]
 [HarmonyPatch(nameof(SpecialAbilityPopupRoleListItem.SetData), new Type[] { typeof(Sprite), typeof(Role), typeof(LastWillPanel) })]
 public static class Patch_SpecialAbilityPopupRoleListItem_LastWill
@@ -664,6 +702,31 @@ public static class PatchAbilityPanelListItems
 		target.text = Utils.GetString(key);
 		target.SetAllDirty();
 	}
+		
+	private static Sprite TryResolve(bool reg, string faction, string ogFaction, bool ee, params string[] keys)
+	{
+		foreach (var key in keys)
+		{
+			var sprite = GetSprite(reg, key, faction, ee);
+
+			if (!sprite.IsValid() && reg)
+				sprite = GetSprite(key, ogFaction, ee);
+
+			if (sprite.IsValid())
+				return sprite;
+		}
+
+		return null;
+	}
+	
+	private static void TrySetText(TMP_Text target, int fallback, params string[] keys)
+	{
+		if (!target)
+			return;
+
+		target.text = Utils.TryGetString(fallback, keys);
+		target.SetAllDirty();
+	}
 
 	[HarmonyPostfix]
 	[HarmonyPriority(Priority.Last)]
@@ -694,7 +757,14 @@ public static class PatchAbilityPanelListItems
 		{
 			case AbilityType.NECRO_ATTACK:
 			{
-				Apply(Resolve("Necronomicon", reg, faction, ogfaction, ee), __instance.choice1Sprite);
+				Apply(TryResolve(reg, faction, ogfaction, ee, $"Necronomicon_{name}", "Necronomicon"), __instance.choice1Sprite);
+				TrySetText(__instance.choice1Text, 1, $"GUI_ROLE_CARD_NECRONOMICON_ABILITY_{(int)role}", "GUI_ROLE_CARD_NECRONOMICON_ABILITY"); 
+				
+				if (role is Role.BAKER && Constants.IsBTOS2())
+				{
+					Apply(Resolve("Baker_Special", reg, faction, ogfaction, ee), __instance.choice2Sprite);
+					SetText(__instance.choice2Text, $"BTOS_ROLE_SPECIALABILITY_VERB_{(int)role}"); 
+				}
 				break;
 			}
 
@@ -708,7 +778,7 @@ public static class PatchAbilityPanelListItems
 			{
 				if (role == Role.POTIONMASTER)
 				{
-					Apply(Resolve("Necronomicon", reg, faction, ogfaction, ee), __instance.choice1Sprite);
+					Apply(TryResolve(reg, faction, ogfaction, ee, $"Necronomicon_PotionMaster", "Necronomicon"), __instance.choice1Sprite);
 				}
 				else if (role == Role.BAKER)
 				{
@@ -1050,7 +1120,7 @@ public static class PlayerPopupControllerPatch
     [HarmonyPatch(nameof(PlayerPopupController.InitializeRolePanel)), HarmonyPostfix]
     public static void InitializeRolePanelPostfix(PlayerPopupController __instance)
     {
-        if (!Constants.EnableIcons() || !Pepper.IsGamePhasePlay())
+        if (!Pepper.IsGamePhasePlay())
             return;
 
         Tuple<Role, FactionType> tuple;
@@ -1119,17 +1189,35 @@ public static class PlayerEffectsServicePatch
             return;
         }
 
-		var effect = Utils.EffectName(effectType);
+        var effect = Utils.EffectName(effectType);
+
+        var faction = Utils.FactionName(Pepper.GetMyFaction());
+        var baseFaction = Utils.FactionName(Utils.EffectFaction(effectType), false);
+
         var ee = Fancy.PlayerPanelEasterEggs.Value;
-        var sprite = GetSprite($"{effect}_Effect", ee);
+
+        var sprite = GetSprite($"{effect}_Effect", faction, ee);
+		
+		if (!sprite.IsValid())
+			sprite = GetSprite($"{effect}_Effect", baseFaction, ee);
+
+        if (!sprite.IsValid())
+            sprite = GetSprite($"{effect}_Effect", ee);
+
+        if (!sprite.IsValid())
+            sprite = GetSprite(effect, faction, ee);
+
+        if (!sprite.IsValid())
+            sprite = GetSprite(effect, baseFaction, ee);
 
         if (!sprite.IsValid())
             sprite = GetSprite(effect, ee);
 
-        __result.sprite = sprite.IsValid() ? sprite : EffectSprites[effectType];
+        __result.sprite = sprite.IsValid()
+            ? sprite
+            : EffectSprites[effectType];
     }
 }
-
 [HarmonyPatch(typeof(GameSimulation))]
 public static class GetInlinedStringsPatches
 {

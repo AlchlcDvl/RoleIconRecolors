@@ -838,7 +838,7 @@ public static class ClientRoleExtensionsPatches
 		// if (!role.IsResolved() && !role.IsBucket() && role is not (Role.FAMINE or Role.DEATH or Role.PESTILENCE or Role.WAR))
 			// return;
 
-        if (role.IsModifierCard())
+        if (role.IsModifierCard() && role is not Btos2Role.TownPower)
 			return;
 
 		// if (gradient != null && Fancy.BannedRoleDesaturation.Value != -1 && Constants.IsRoleBanned(role))
@@ -890,7 +890,7 @@ public static class ClientRoleExtensionsPatches
         // if (!role.IsResolved() && !role.IsBucket() && role is not (Role.FAMINE or Role.DEATH or Role.PESTILENCE or Role.WAR))
 			// return;
 
-        if (role.IsModifierCard())
+        if (role.IsModifierCard() && role is not Btos2Role.TownPower)
 			return;
 
 		// if (gradient != null && Fancy.BannedRoleDesaturation.Value != -1 && Constants.IsRoleBanned(role))

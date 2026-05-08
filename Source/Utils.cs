@@ -130,7 +130,6 @@ public static class Utils
 
     private static string BTOSRoleName(Role role) => role switch
     {
-		(Role)0 => "Hidden",
         Btos2Role.Admirer => "Admirer",
         Btos2Role.Amnesiac => "Amnesiac",
         Btos2Role.Bodyguard => "Bodyguard",
@@ -263,7 +262,6 @@ public static class Utils
 
     private static string VanillaRoleName(Role role) => role switch
     {
-		(Role)0 => "Hidden",
         Role.ADMIRER => "Admirer",
         Role.AMNESIAC => "Amnesiac",
         Role.BODYGUARD => "Bodyguard",
@@ -543,54 +541,62 @@ public static class Utils
     
     public static bool IsValid(this Sprite sprite) => sprite && sprite != Blank;
 
-    public static string EffectName(EffectType effect) => effect switch
-    {
-        // Vanilla
-        EffectType.EXECUTIONER_TARGET => "ExeTarget",
-        EffectType.HEXED => "Hexed",
-        EffectType.KNIGHTED => "Knighted",
-        EffectType.REVEALED_MAYOR => "RevealedMayor",
-        EffectType.DISCONNECTED => "Disconnected",
-        EffectType.CONNECTING => "Connecting",
-        EffectType.LOVER => "Lover",
-        EffectType.DOUSED => "Doused",
-        EffectType.PLAGUED => "Plagued",
-        EffectType.NECRONOMICON => "Necronomicon",
-        EffectType.TRAPPED => "Trapped",
-        EffectType.BREAD => "Bread",
-        EffectType.HANGOVER => "Hangover",
-        EffectType.VOODOOED => "Silenced",
-        EffectType.DREAMWOVE => "Dreamwoven",
-        EffectType.INSANE => "Insomniac",
-        EffectType.VIP => "VIP",
-        EffectType.BUG => "Bugged",
-        EffectType.SCENT_TRACK => "Tracked",
-        EffectType.PESTILENCE => "Sickness",
-        EffectType.REVEALED_MARSHAL => "RevealedMarshal",
-        EffectType.SOCIALITE_GUEST => "Guest",
-        EffectType.REAPED => "Reaped",
-        EffectType.REVEALED_BY_PMWITCH => "Illuminated",
-        EffectType.BESTOWED or (EffectType)111 => "Bestowed",
-        EffectType.SOVEREIGN => "Sovereign",
-        EffectType.STONED => "Stoned",
-        EffectType.TOWN_TRAITOR => "TownTraitor",
-        EffectType.DEAFENED or (EffectType)101 => "Deafened",
+	private static (string Name, FactionType Faction) EffectData(EffectType effect) => effect switch
+	{
+		// Vanilla
+		EffectType.EXECUTIONER_TARGET => ("ExeTarget", FactionType.EXECUTIONER),
+		EffectType.HEXED => ("Hexed", FactionType.COVEN),
+		EffectType.KNIGHTED => ("Knighted", FactionType.TOWN),
+		EffectType.REVEALED_MAYOR => ("RevealedMayor", FactionType.TOWN),
+		EffectType.DISCONNECTED => ("Disconnected", FactionType.NONE),
+		EffectType.CONNECTING => ("Connecting", FactionType.NONE),
+		EffectType.LOVER => ("Lover", FactionType.TOWN),
+		EffectType.DOUSED => ("Doused", FactionType.ARSONIST),
+		EffectType.PLAGUED => ("Plagued", FactionType.APOCALYPSE),
+		EffectType.NECRONOMICON => ("Necronomicon", FactionType.COVEN),
+		EffectType.TRAPPED => ("Trapped", FactionType.TOWN),
+		EffectType.BREAD => ("Bread", FactionType.APOCALYPSE),
+		EffectType.HANGOVER => ("Hangover", FactionType.TOWN),
+		EffectType.VOODOOED => ("Silenced", FactionType.COVEN),
+		EffectType.DREAMWOVE => ("Dreamwoven", FactionType.COVEN),
+		EffectType.INSANE => ("Insomniac", FactionType.COVEN),
+		EffectType.VIP => ("VIP", FactionType.TOWN),
+		EffectType.BUG => ("Bugged", FactionType.TOWN),
+		EffectType.SCENT_TRACK => ("Tracked", FactionType.WEREWOLF),
+		EffectType.PESTILENCE => ("StackOfPestilence", FactionType.APOCALYPSE),
+		EffectType.REVEALED_MARSHAL => ("RevealedMarshal", FactionType.TOWN),
+		EffectType.SOCIALITE_GUEST => ("Guest", FactionType.TOWN),
+		EffectType.REAPED => ("Reaped", FactionType.APOCALYPSE),
+		EffectType.REVEALED_BY_PMWITCH => ("Illuminated", FactionType.COVEN),
+		EffectType.BESTOWED or (EffectType)111 => ("Bestowed", FactionType.TOWN),
+		EffectType.SOVEREIGN => ("Sovereign", FactionType.TOWN),
+		EffectType.STONED => ("Stoned", FactionType.COVEN),
+		EffectType.TOWN_TRAITOR => ("TownTraitor", FactionType.COVEN),
+		EffectType.DEAFENED or (EffectType)101 => ("Deafened", FactionType.COVEN),
 
-        // BTOS2
-        (EffectType)100 => "Recruit",
-        (EffectType)102 => "CovenTownTraitor",
-        (EffectType)103 => "ApocTownTraitor",
-        (EffectType)104 => "Audited",
-        (EffectType)105 => "Enchanted",
-        (EffectType)106 => "Accompanied",
-        (EffectType)107 => "Campaigned",
-        (EffectType)108 => "Egotist",
-        (EffectType)109 => "Suspect",
-        (EffectType)110 => "WarlockCursed",
-        (EffectType)112 => "Sensed",
-        _ => "Blank"
-    };
+		// BTOS2
+		(EffectType)100 => ("Recruit", Btos2Faction.Jackal),
+		(EffectType)102 => ("CovenTownTraitor", Btos2Faction.Coven),
+		(EffectType)103 => ("ApocTownTraitor", Btos2Faction.Apocalypse),
+		(EffectType)104 => ("Audited", Btos2Faction.Auditor),
+		(EffectType)105 => ("Enchanted", Btos2Faction.Coven),
+		(EffectType)106 => ("Accompanied", Btos2Faction.Town),
+		(EffectType)107 => ("Campaigned", Btos2Faction.Town),
+		(EffectType)108 => ("Egotist", Btos2Faction.Egotist),
+		(EffectType)109 => ("Suspect", Btos2Faction.Town),
+		(EffectType)110 => ("Cursed", Btos2Faction.Apocalypse),
+		(EffectType)112 => ("Sensed", Btos2Faction.Coven),
 
+		_ => ("Blank", FactionType.NONE)
+	};
+
+	public static string EffectName(EffectType effect)
+		=> EffectData(effect).Name;
+
+	public static FactionType EffectFaction(EffectType effect)
+		=> EffectData(effect).Faction;
+	
+	
     public static GameModType GetGameType()
     {
         if (Constants.IsBTOS2() || FindCasualQueue() || SettingsAndTestingUI.Instance?.IsBTOS2 == true)

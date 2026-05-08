@@ -300,6 +300,8 @@ public static class ModifierFactionPatch
                     Btos2Role.FastMode => Btos2Faction.Arsonist,
                     Btos2Role.SlowMode => Btos2Faction.Vampire,
                     Btos2Role.Anomaly => Btos2Faction.Pirate,
+                    Btos2Role.SecretWhispers => Btos2Faction.Jackal,
+					Btos2Role.Individuality => Btos2Faction.Doomsayer,
                     Btos2Role.TownPower => Btos2Faction.Town, // so it shows as town, cuz game believes its a modifier
                     _ => FactionType.NONE
                 };

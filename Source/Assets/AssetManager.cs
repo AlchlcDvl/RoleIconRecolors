@@ -32,8 +32,7 @@ public static class FancyAssetManager
     public static string IPPath => Path.Combine(Fancy.Instance.ModPath, "IconPacks");
     public static string SSPath => Path.Combine(Fancy.Instance.ModPath, "SilhouetteSets");
 
-    private static readonly string[] Avoid = [ "Recruit", "Doused", "ExeTarget", "Hexed", "Knighted", "Bread", "Revealed", "Disconnected", "Connecting", "Plagued", "Revealed", "Trapped",
-        "Hangover", "Silenced", "Dreamwoven", "Insane", "Bugged", "Tracked", "Sickness", "Reaped", "Deafened", "Audited", "Enchanted", "Accompanied", "Banned", "WarlockCursed" ];
+    private static readonly string[] Avoid = [ "Banned" ];
 
     public static Sprite GetSprite(bool skipFactionless, string name, string faction, bool allowEe = false, string packName = null) => GetSprite(name, allowEe, faction, packName,
         skipFactionless);
@@ -133,10 +132,21 @@ public static class FancyAssetManager
     public static string FancySanitisePath(this string path, bool removeIcon = false)
     {
         path = path.SanitisePath();
+		
+		// TOS1 to TOS2
         path = path.Replace("Marshall", "Marshal");
+		
+		// Backwards compatibility
         path = path.Replace("CovenLeader", "Archmage");
         path = path.Replace("NeutralApocalypse", "Apocalypse");
         path = path.Replace("RandomApocalypse", "Apocalypse");
+        path = path.Replace("Sickness", "StackOfPestilence");
+        path = path.Replace("WarlockCursed", "Cursed");
+		
+		// Common mistakes
+        path = path.Replace("RandomTown", "Town");
+        path = path.Replace("RandomCoven", "Coven");
+        path = path.Replace("RandomNeutral", "Neutral");
 
         if (removeIcon)
         {
