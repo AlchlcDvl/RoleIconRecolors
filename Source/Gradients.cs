@@ -7,6 +7,7 @@ public static class Gradients
     public static Gradient GetChangedGradient(this FactionType faction, Role role)
     {
         var mod = Utils.GetGameType();
+
         var middleKey = Utils.FactionName(faction, mod, stoned: true).ToUpper();
         var baseKey = Utils.FactionName(role.GetFactionType(mod), mod, stoned: true).ToUpper();
         var startKey = middleKey;
@@ -47,6 +48,8 @@ public static class Gradients
 				_ => GetEndColor("VAMPIRE", role),
 			};
 		}
+		else if (faction == Btos2Faction.Cannibal)
+		{ end = Fancy.CannibalEnd.Value; }
         else
         end = GetEndColor(middleKey, role);
 
@@ -78,7 +81,8 @@ public static class Gradients
 				_ => Fancy.Colors["VAMPIRE"].Start,
 			};
 		}
-
+		else if (faction == Btos2Faction.Cannibal)
+		{ start = Fancy.CannibalStart.Value; }
         else
         start = Fancy.Colors[startKey].Start;
 

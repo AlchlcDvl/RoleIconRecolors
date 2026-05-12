@@ -14,92 +14,94 @@ public static class Utils
     private static readonly string[] VanillaSkippableNames =
 	[
 		// Town
-		"Seer_Ability_1", "Seer_Ability_2",
+		"Seer_Ability", "Seer_Ability_2",
 
 		// Coven
-		"Dreamweaver_Ability_1",
+		"Dreamweaver_Ability",
 
 		// Neutral
-		"Pirate_Ability_1", "Pirate_Ability_2"
+		"Pirate_Ability", "Pirate_Ability_2"
 	];
     private static readonly string[] BTOS2SkippableNames =
 	[
 		// Town
-		"Mayor_Ability_1", 
+		"Mayor_Ability", 
 		"Coroner_Ability_2", 
 		"Pacifist_Ability_2",
 
 		// Coven
-		"Archmage_Ability_1", 
-		"Banshee_Ability_1", 
+		"Archmage_Ability", 
+		"Banshee_Ability", 
 		"Dreamweaver_Ability_2", 
 		"Illusionist_Ability_2",
 		
 		// Apocalypse
-		"Baker_Ability_1", "Warlock_Ability_2",
+		"Baker_Ability", "Warlock_Ability_2",
 
 		
 		// Neutral
-		"Auditor_Ability_1", "Auditor_Ability_2", 
-		"Inquisitor_Ability_1", "Inquisitor_Ability_2", 
-		"Jackal_Ability_1", 
-		"Judge_Ability_1", 
+		"Auditor_Ability", "Auditor_Ability_2", 
+		"Inquisitor_Ability", "Inquisitor_Ability_2", 
+		"Jackal_Ability", 
+		"Judge_Ability", 
 		"SerialKiller_Ability_2", 
-		"Starspawn_Ability_1"
+		"Starspawn_Ability"
 	];
     private static readonly string[] CommonSkippableNames =
 	[
 		// Town
-		"Admirer_Ability_1", "Admirer_Ability_2",
-		"Amnesiac_Ability_1",
-		"Bodyguard_Ability_1",
-		"Catalyst_Ability_1",
-		"Cleric_Ability_1",
-		"Coroner_Ability_1",
-		"Crusader_Ability_1",
-		"Investigator_Ability_1",
+		"Admirer_Ability", "Admirer_Ability_2",
+		"Amnesiac_Ability",
+		"Bodyguard_Ability",
+		"Catalyst_Ability",
+		"Cleric_Ability",
+		"Coroner_Ability",
+		"Crusader_Ability",
+		"Investigator_Ability",
 		"Jailor_Ability_2",
-		"Lookout_Ability_1",
+		"Lookout_Ability",
 		"Monarch_Ability_2",
-		"Sheriff_Ability_1",
+		"Sheriff_Ability",
 		"Socialite_Ability_2",
-		"Spy_Ability_1",
-		"TavernKeeper_Ability_1",
-		"Tracker_Ability_1",
-		"Trapper_Ability_1",
-		"Trickster_Ability_1", "Trickster_Ability_2",
+		"Spy_Ability",
+		"TavernKeeper_Ability",
+		"Tracker_Ability",
+		"Trapper_Ability",
+		"Trickster_Ability", "Trickster_Ability_2",
 		"Vigilante_Ability",
+		"Psychic_Ability",
 
 		// Coven
-		"Enchanter_Ability_1",
-		"HexMaster_Ability_1",
-		"Illusionist_Ability_1",
-		"Jinx_Ability_1",
-		"Medusa_Ability_1",
+		"Enchanter_Ability",
+		"HexMaster_Ability",
+		"Illusionist_Ability",
+		"Jinx_Ability",
+		"Medusa_Ability",
 		"Necromancer_Ability_2",
-		"Poisoner_Ability_1", "Poisoner_Ability_2",
-		"PotionMaster_Ability_1", "PotionMaster_Ability_2",
-		"VoodooMaster_Ability_1", "VoodooMaster_Ability_2",
-		"Wildling_Ability_1",
-		"Witch_Ability_1", "Witch_Ability_2",
+		"Poisoner_Ability", "Poisoner_Ability_2",
+		"PotionMaster_Ability", "PotionMaster_Ability_2",
+		"VoodooMaster_Ability", "VoodooMaster_Ability_2",
+		"Wildling_Ability",
+		"Witch_Ability", "Witch_Ability_2",
 		
 		// Apocalypse
 		"Baker_Ability_2",
-		"Berserker_Ability_1",
-		"Death_Ability_1",
-		"Famine_Ability_1",
-		"SoulCollector_Ability_1",
-		"War_Ability_1", "War_Ability_2",
+		"Berserker_Ability",
+		"Death_Ability",
+		"Famine_Ability",
+		"Pestilence_Ability",
+		"SoulCollector_Ability",
+		"War_Ability", "War_Ability_2",
 
 		// Neutral
 		"Arsonist_Ability_2",
-		"CursedSoul_Ability_1",
-		"Jester_Ability_1",
-		"Plaguebearer_Ability_1",
-		"SerialKiller_Ability_1",
-		"Shroud_Ability_1",
-		"Vampire_Ability_1", "Vampire_Ability_2",
-		"Werewolf_Ability_1", "Werewolf_Ability_2",
+		"CursedSoul_Ability",
+		"Jester_Ability",
+		"Plaguebearer_Ability",
+		"SerialKiller_Ability",
+		"Shroud_Ability",
+		"Vampire_Ability", "Vampire_Ability_2",
+		"Werewolf_Ability", "Werewolf_Ability_2",
 
 		// Misc
 		"Attributes"
@@ -372,6 +374,8 @@ public static class Utils
     {
         if (allowOverrides && Constants.FactionOverridden())
             return Constants.FactionOverride();
+		
+		// return BTOSFactionName(faction, stoned);
 
         try
         {
@@ -414,7 +418,7 @@ public static class Utils
         Btos2Faction.Pandora => "Pandora",
         Btos2Faction.Compliance => "Compliance",
         Btos2Faction.Lovers => "Lovers",
-        _ => stoned ? "Stoned_Hidden" : "Factionless"
+        _ => stoned ? "Stoned_Hidden" : "Unknown"
     };
 
     private static string VanillaFactionName(FactionType faction, bool stoned) => faction switch
@@ -432,7 +436,7 @@ public static class Utils
         FactionType.DOOMSAYER => "Doomsayer",
         FactionType.VAMPIRE => "Vampire",
         FactionType.CURSED_SOUL => "CursedSoul",
-        _ => stoned ? "Stoned_Hidden" : "Factionless"
+        _ => stoned ? "Stoned_Hidden" : "Unknown"
     };
 
     public static bool IsValid(this List<BaseAbilityButton> list, int index)
@@ -900,7 +904,7 @@ public static class Utils
 			return true;
 
 		var factionName = FactionName(faction, GameModType.BTOS2)?.ToUpper() ?? "NONE";
-		if (factionName == "FACTIONLESS")
+		if (factionName == "UNKNOWN")
 			factionName = "NONE";
 
 		var isBTOS2 = Constants.IsBTOS2();
@@ -926,7 +930,7 @@ public static class Utils
 			faction = FactionType.NONE;
 
 		var factionName = FactionName(faction, GameModType.BTOS2)?.ToUpper() ?? "NONE";
-		if (factionName == "FACTIONLESS")
+		if (factionName == "UNKNOWN")
 			factionName = "NONE";
 
 		var isBTOS2 = Constants.IsBTOS2() || SettingsAndTestingUI.Instance?.IsBTOS2 == true;
@@ -954,7 +958,7 @@ public static class Utils
 			faction = FactionType.NONE;
 
 		var factionName = FactionName(faction, GameModType.BTOS2)?.ToUpper() ?? "NONE";
-		if (factionName == "FACTIONLESS")
+		if (factionName == "UNKNOWN")
 			factionName = "NONE";
 
 		var isBTOS2 = Constants.IsBTOS2() || SettingsAndTestingUI.Instance?.IsBTOS2 == true;
@@ -983,7 +987,7 @@ public static class Utils
 			faction = FactionType.NONE;
 
 		var factionName = FactionName(faction, GameModType.BTOS2)?.ToUpper() ?? "NONE";
-		if (factionName == "FACTIONLESS")
+		if (factionName == "UNKNOWN")
 			factionName = "NONE";
 
 		var isBTOS2 = Constants.IsBTOS2() || SettingsAndTestingUI.Instance?.IsBTOS2 == true;
@@ -1657,5 +1661,13 @@ public static class Utils
             _ => string.Empty,
         };
     }
+	
+	public static string GetTextSprite(this Role role, FactionType faction)
+	{
+		var style = role.GetFactionType() == faction && Constants.CurrentStyle() == "Regular" ? "Regular" : Utils.FactionName(faction, false);
+		var icon = role.GetTMPSprite().Replace("RoleIcons\"", $"RoleIcons ({style})\"");
+
+		return icon;
+	}
 
 }

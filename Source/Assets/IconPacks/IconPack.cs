@@ -103,12 +103,22 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                         {
                             foreach (var type1 in FileTypes)
                             {
-                                foreach (var file in Directory.GetFiles(baseFolder, $"*.{type1}"))
+                                foreach (var file in Directory.GetFiles(baseFolder, $"*.{type1}", SearchOption.AllDirectories))
                                 {
                                     var sprite = AssetManager.LoadSpriteFromDisk(file);
 
                                     if (sprite.IsValid())
-                                        baseIcons[file.FancySanitisePath(true)] = sprite;
+									{
+										var key = file.FancySanitisePath(true);
+
+										if (baseIcons.TryGetValue(key, out var existing))
+										{
+											Fancy.Instance.Warning($"Duplicate asset detected: '{key}'\n" + $"Kept: {file}\n" + $"Replaced: {existing.name}");
+										}
+
+										baseIcons[key] = sprite;
+									}
+                                        // baseIcons[file.FancySanitisePath(true)] = sprite;
                                 }
                             }
                         }
@@ -129,7 +139,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                         {
                             foreach (var type1 in FileTypes)
                             {
-                                foreach (var file in Directory.GetFiles(eeFolder, $"*.{type1}"))
+                                foreach (var file in Directory.GetFiles(eeFolder, $"*.{type1}", SearchOption.AllDirectories))
                                 {
                                     var sprite = AssetManager.LoadSpriteFromDisk(file);
                                     var name = file.FancySanitisePath(true);
@@ -165,7 +175,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                     {
                         foreach (var type1 in FileTypes)
                         {
-                            foreach (var file in Directory.GetFiles(folder, $"*.{type1}"))
+                            foreach (var file in Directory.GetFiles(folder, $"*.{type1}", SearchOption.AllDirectories))
                             {
                                 var sprite = AssetManager.LoadSpriteFromDisk(file);
 
@@ -186,7 +196,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
 
                     foreach (var type1 in FileTypes)
                     {
-                        foreach (var file in Directory.GetFiles(modPath, $"*.{type1}"))
+                        foreach (var file in Directory.GetFiles(modPath, $"*.{type1}", SearchOption.AllDirectories))
                         {
                             var sprite = AssetManager.LoadSpriteFromDisk(file);
 
@@ -375,7 +385,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                     sprite = icons2.TryGetValue(name2, out sprite1) ? sprite1 : Blank;
             }
 
-            if (!sprite.IsValid() && style != "Factionless" && Assets[GameModType.Common].BaseIcons.TryGetValue("Factionless", out icons2))
+            if (!sprite.IsValid() && style != "Unknown" && Assets[GameModType.Common].BaseIcons.TryGetValue("Unknown", out icons2))
             {
                 sprite = icons2.TryGetValue($"{name2}_{mod}", out sprite1) ? sprite1 : Blank;
 

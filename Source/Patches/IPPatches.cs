@@ -561,11 +561,6 @@ public static class PatchRoleCards
         var reg = ogfaction != factionName;
         var sprite = GetSprite(reg, roleName, factionName);
 
-		/* var obs = Service.Game?.Sim?.info?.roleCardObservation;
-		var data = obs?.Data;
-		bool ability1Available = data?.normalAbilityAvailable ?? true;
-		bool ability2Available = data?.secondAbilityAvailable ?? true; */
-
         if (!sprite.IsValid() && reg)
             sprite = GetSprite(roleName, ogfaction);
 
@@ -593,7 +588,7 @@ public static class PatchRoleCards
         if (!ability1.IsValid() && reg)
             ability1 = GetSprite($"{abilityName}_1", ogfaction);
 
-        if (/*(ability1Available || isGuide) && */ability1.IsValid() && roleInfoButtons.IsValid(index))
+        if (ability1.IsValid() && (Utils.Skippable(abilityName) || Utils.Skippable($"{abilityName}_1")) && roleInfoButtons.IsValid(index))
         {
             roleInfoButtons[index].abilityIcon.sprite = ability1;
             index++;
@@ -607,7 +602,7 @@ public static class PatchRoleCards
         if (!ability2.IsValid() && reg)
             ability2 = GetSprite(abilityName2, ogfaction);
 
-        if (/*(ability2Available || isGuide) && */ability2.IsValid() && roleInfoButtons.IsValid(index)/* && !(role == Utils.GetWar() && !isGuide)*/)
+        if (ability2.IsValid() && Utils.Skippable(abilityName2) && roleInfoButtons.IsValid(index)/* && !(role == Utils.GetWar() && !isGuide)*/)
         {
             roleInfoButtons[index].abilityIcon.sprite = ability2;
             index++;
@@ -672,6 +667,7 @@ public static class PatchRoleCards
         if (nommy.IsValid() && (Constants.IsNecroActive() || isGuide) && roleInfoButtons.IsValid(index))
             roleInfoButtons[index].abilityIcon.sprite = nommy;
     }
+	
 }
 
 [HarmonyPatch(typeof(TosAbilityPanelListItem), nameof(TosAbilityPanelListItem.OverrideIconAndText))]
@@ -826,7 +822,7 @@ public static class PatchAbilityPanelListItems
 					_ => 1
 				};
 
-				var sprite = Resolve(AbilityKey(name, index), reg, faction, ogfaction, ee);
+				var sprite = Resolve(AbilityKey("PotionMaster", index), reg, faction, ogfaction, ee);
 				Apply(sprite, __instance.choice1Sprite);
 				break;
 			}
@@ -835,6 +831,14 @@ public static class PatchAbilityPanelListItems
 			case AbilityType.VOODOOMASTER_DEAFEN:
 			case AbilityType.VOODOOMASTER_BLIND:
 			{
+				if (Constants.IsNecroActive())
+				{
+					Apply(TryResolve(reg, faction, ogfaction, ee, $"Necronomicon_VoodooMaster", "Necronomicon"), __instance.choice1Sprite);
+					TrySetText(__instance.choice1Text, 1, $"GUI_ROLE_CARD_NECRONOMICON_ABILITY_{(int)role}", "GUI_ROLE_CARD_NECRONOMICON_ABILITY"); 
+					break;
+				}
+
+
 				int index = overrideType switch
 				{
 					AbilityType.VOODOOMASTER_SILENCE => 1,
@@ -843,7 +847,7 @@ public static class PatchAbilityPanelListItems
 					_ => 1
 				};
 
-				Apply(Resolve(AbilityKey(name, index), reg, faction, ogfaction, ee), __instance.choice1Sprite);
+				Apply(Resolve(AbilityKey("VoodooMaster", index), reg, faction, ogfaction, ee), __instance.choice1Sprite);
 				break;
 			}
 			
@@ -1426,10 +1430,10 @@ public static class ReplaceTMPSpritesPatch
                         Fancy.Instance.Warning($"{packName} {mod} Mention Style Regular was null or missing");
                 }
 
-                if (!asset && deconstructed != "Factionless")
+                if (!asset && deconstructed != "Unknown")
                 {
-                    if (!assets.MentionStyles.TryGetValue("Factionless", out asset) || !asset)
-                        Fancy.Instance.Warning($"{packName} {mod} Mention Style Factionless was null or missing");
+                    if (!assets.MentionStyles.TryGetValue("Unknown", out asset) || !asset)
+                        Fancy.Instance.Warning($"{packName} {mod} Mention Style Unknown was null or missing");
                 }
             }
 
@@ -1883,16 +1887,20 @@ public static class PatchNecroRetMenuItem
         var myFaction   = Utils.FactionName(Pepper.GetMyFaction());
         var myOgFaction = Utils.FactionName(myRole.GetFactionType(), false);
 
-        var specialName = $"{myRoleName}_Special";
-        var special =
-            GetSprite(specialName, myFaction, false) ??
-            GetSprite(specialName, myOgFaction, false);
-
-        if (special.IsValid() && __instance.choiceSprite)
-            __instance.choiceSprite.sprite = special;
 
         var targetRoleName = Utils.RoleName(role);
         var targetFaction  = Utils.FactionName(role.GetFactionType(), false);
+        var reg = myOgFaction != myFaction;
+
+        var specialName = $"{myRoleName}_Special";
+
+        var special = GetSprite(reg, specialName, myFaction);
+
+        if (!special.IsValid() && reg)
+            special = GetSprite(specialName, myOgFaction);
+
+        if (special.IsValid() && __instance.choiceSprite)
+            __instance.choiceSprite.sprite = special;
 
         RoleCardData roleCardData = SharedRoleData.GetRoleCardData(role);
 
@@ -1931,18 +1939,26 @@ public static class PatchNecroRetMenuItem
         }
         else
         {
-            abilitySuffix = "Ability";
+            abilitySuffix = "_Ability";
 			abilityText = Utils.GetString($"{Utils.GetKeyPrefix()}_ROLE_ABILITY1_VERB_{(int)role}");
         }
 
         var abilityName = $"{targetRoleName}{abilitySuffix}";
+			
+        var ability1 = GetSprite(reg, abilityName, myFaction);
 
-        var abilitySprite =
-            GetSprite(abilityName, targetFaction, false) ??
-            GetSprite($"{abilityName}_1", targetFaction, false);
+        if (!ability1.IsValid())
+            ability1 = GetSprite(reg, $"{abilityName}_1", myFaction);
 
-        if (abilitySprite.IsValid() && __instance.choice2Sprite)
-            __instance.choice2Sprite.sprite = abilitySprite;
+        if (!ability1.IsValid() && reg)
+            ability1 = GetSprite(abilityName, myOgFaction);
+
+        if (!ability1.IsValid() && reg)
+            ability1 = GetSprite($"{abilityName}_1", myOgFaction);
+
+
+        if (ability1.IsValid() && __instance.choice2Sprite)
+            __instance.choice2Sprite.sprite = ability1;
 		
 		if (__instance.choice2Text)
 			__instance.choice2Text.text = abilityText;

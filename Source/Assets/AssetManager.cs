@@ -33,6 +33,14 @@ public static class FancyAssetManager
     public static string SSPath => Path.Combine(Fancy.Instance.ModPath, "SilhouetteSets");
 
     private static readonly string[] Avoid = [ "Banned" ];
+	
+	public static string ResolveFactionOverride(string faction, out string faction2)
+	{
+		// VIP and Necronomicon remnant, kept cuz may be used for something else
+		faction2 = faction;
+
+		return faction;
+	}
 
     public static Sprite GetSprite(bool skipFactionless, string name, string faction, bool allowEe = false, string packName = null) => GetSprite(name, allowEe, faction, packName,
         skipFactionless);
@@ -57,12 +65,7 @@ public static class FancyAssetManager
         if (NewModLoading.Utils.IsNullEmptyOrWhiteSpace(faction) || faction == "Blank" || Avoid.Any(name.Contains))
             faction = "Regular";
 
-        var og = faction;
-
-        if (Constants.IsNecroActive())
-            faction = "Necronomicon";
-        else if (Constants.IsLocalVip())
-            faction = "VIP";
+        faction = ResolveFactionOverride(faction, out var og);
 
         var mod = Utils.GetGameType();
 
@@ -87,14 +90,6 @@ public static class FancyAssetManager
 
                 if (faction != "Regular" && !sprite.IsValid())
                     sprite = pack.GetSprite(name, allowEe, "Regular");
-            }
-
-            if (!sprite.IsValid() && faction != "Factionless" && !skipFactionless)
-            {
-                sprite = pack.GetSprite($"{name}_{mod}", allowEe, "Factionless");
-
-                if (!sprite.IsValid())
-                    sprite = pack.GetSprite(name, allowEe, "Factionless");
             }
             sprite.texture.anisoLevel = 4;
             sprite.texture.mipMapBias = -2;
@@ -142,11 +137,13 @@ public static class FancyAssetManager
         path = path.Replace("RandomApocalypse", "Apocalypse");
         path = path.Replace("Sickness", "StackOfPestilence");
         path = path.Replace("WarlockCursed", "Cursed");
+        path = path.Replace("Insane", "Insomniac");
 		
 		// Common mistakes
         path = path.Replace("RandomTown", "Town");
         path = path.Replace("RandomCoven", "Coven");
         path = path.Replace("RandomNeutral", "Neutral");
+        path = path.Replace("Infected", "Plagued");
 
         if (removeIcon)
         {

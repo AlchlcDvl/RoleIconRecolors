@@ -172,8 +172,8 @@ public class Fancy : BaseMod<Fancy>
     public static StringInputOption PirateLabel;
 
     public static ColorOption CourtChatColor;
-    public static ColorOption JailorChatColor;
-    public static ColorOption PirateChatColor;
+    public static ColorOption CannibalStart;
+    public static ColorOption CannibalEnd;
     public static ColorOption JuryColor;
     public static ColorOption UnknownColor;
     public static ColorOption DeadColor;
@@ -268,7 +268,7 @@ public class Fancy : BaseMod<Fancy>
 
         SelectDisplay = new("SELECT_DISPLAY", DisplayType.RoleCard, PackType.None, useTranslations: true);
         SelectTestingFaction = new("SELECTED_TESTING_FACTION", FactionType.NONE, PackType.None, useTranslations: true, values:
-            () => SettingsAndTestingUI.Instance?.IsBTOS2 == true ? [.. filteredFactions.AddItem(FactionType.NONE)] : VanillaFactions);
+            () => SettingsAndTestingUI.Instance?.IsBTOS2 == true ? [.. filteredFactions.AddItem(FactionType.NONE)] : [.. VanillaFactions.AddItem(Btos2Faction.Pandora)]);
         SelectTestingRole = new("SELECTED_TESTING_ROLE", Role.ADMIRER, PackType.None, useTranslations: true, values:
             () => SettingsAndTestingUI.Instance?.IsBTOS2 == true ? BTOS2Roles : VanillaRoles);
 
@@ -444,6 +444,8 @@ public class Fancy : BaseMod<Fancy>
         WildlingWhisperColor = new("WILDLING_WHISPER", "#DD0000", PackType.MiscRoleCustomisation);
         SerialKillerWhisperColor = new("SERIALKILLER_WHISPER", "#800040", PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists);
         ReplaceNAwithRA = new("RANDOM_APOC_IN_VANILLA", false, PackType.MiscRoleCustomisation);
+        CannibalStart = new("CANNIBAL_START", "#E6956A", PackType.MiscRoleCustomisation, setActive: () => false);
+        CannibalEnd = new("CANNIBAL_END", "#E6956A", PackType.MiscRoleCustomisation, setActive: () => false);
 
         NeutralStart = new("NEUTRAL_START", "#A9A9A9", PackType.MiscRoleCustomisation);
         NeutralEnd = new("NEUTRAL_END", "#A9A9A9", PackType.MiscRoleCustomisation);
@@ -475,8 +477,8 @@ public class Fancy : BaseMod<Fancy>
         // ModifierFactions = new("MODIFIER_FACTIONS", true, PackType.Testing);
         DisableBTOSTribunal = new("DISABLE_BTOS_TRIBUNAL", true, PackType.Testing, setActive: Constants.BTOS2Exists);
 
-        foreach (var faction in BTOS2Factions.Where(x => x is not ((> FactionType.APOCALYPSE and < FactionType.VAMPIRE) or FactionType.CURSED_SOUL or FactionType.UNKNOWN or Btos2Faction.Compliance or
-            Btos2Faction.Lovers or > Btos2Faction.Hawks)))
+        foreach (var faction in BTOS2Factions.Where(x => x is not FactionType.NONE or FactionType.UNKNOWN or FactionType.FACTION_COUNT or FactionType.JESTER or FactionType.EXECUTIONER or FactionType.DOOMSAYER or FactionType.PIRATE
+			or Btos2Faction.Judge or Btos2Faction.Starspawn or Btos2Faction.Auditor or Btos2Faction.Inquisitor or Btos2Faction.Lovers or Btos2Faction.Judge or Btos2Faction.Compliance or Btos2Faction.Lovers))
         {
             CinematicMap[faction] = new(
                 $"{Utils.FactionName(faction, GameModType.BTOS2, false).ToUpper()}_CINEMATIC",
@@ -547,8 +549,8 @@ public class Fancy : BaseMod<Fancy>
 
     private static void ReloadCinematics()
     {
-        foreach (var faction in BTOS2Factions.Where(x => x is not (FactionType.NONE or (> FactionType.APOCALYPSE and < FactionType.VAMPIRE) or FactionType.UNKNOWN or (>
-            Btos2Faction.Hawks and < Btos2Faction.Egotist))))
+			foreach (var faction in BTOS2Factions.Where(x => x is not FactionType.NONE or FactionType.UNKNOWN or FactionType.FACTION_COUNT or FactionType.JESTER or FactionType.EXECUTIONER or FactionType.DOOMSAYER or FactionType.PIRATE
+		or Btos2Faction.Judge or Btos2Faction.Starspawn or Btos2Faction.Auditor or Btos2Faction.Inquisitor or Btos2Faction.Lovers or Btos2Faction.Judge or Btos2Faction.Compliance or Btos2Faction.Lovers))
         {
             if (CinematicMap.ContainsKey(faction)) continue;
 

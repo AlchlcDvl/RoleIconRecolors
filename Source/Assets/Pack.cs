@@ -12,8 +12,8 @@ public abstract class Pack(string name, PackType type)
     //     "Trapper", "Trickster", "Veteran", "Vigilante", "Conjurer", "CovenLeader", "Dreamweaver", "Enchanter", "HexMaster", "Illusionist", "Jinx", "Medusa", "Necromancer", "Poisoner", "Judge",
     //     "PotionMaster", "Ritualist", "VoodooMaster", "Wildling", "Witch", "Arsonist", "Baker", "Berserker", "Doomsayer", "Executioner", "Jester", "Pirate", "Plaguebearer", "SerialKiller",
     //     "Shroud", "SoulCollector", "Werewolf", "Vampire", "CursedSoul", "Banshee", "Jackal", "Marshal", "Auditor", "Inquisitor", "Starspawn", "Oracle", "Warlock", "Famine", "Pestilence" ];
-    private static readonly string[] CommonFolders = [ "Regular", "Town", "Coven", "SerialKiller", "Arsonist", "Werewolf", "Shroud", "Apocalypse", "VIP", "Jester", "Pirate", "Doomsayer",
-        "Vampire", "CursedSoul", "Executioner", "Necronomicon", "Factionless" ];
+    private static readonly string[] CommonFolders = [ "Regular", "Town", "Coven", "SerialKiller", "Arsonist", "Werewolf", "Shroud", "Apocalypse", "Jester", "Pirate", "Doomsayer",
+        "Vampire", "CursedSoul", "Executioner" ];
     private static readonly string[] VanillaFolders = [];
     private static readonly string[] Btos2Folders = [ "Judge", "Auditor", "Starspawn", "Inquisitor", "Jackal", "Lions", "Frogs", "Hawks", "Pandora", "Egotist", "Compliance", "Lovers" ];
     protected static readonly string[] MainFolders = [ "Common", "Vanilla", "BTOS2", "PlayerNumbers", "Emojis" ];

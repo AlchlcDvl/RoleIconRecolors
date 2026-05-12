@@ -1,10 +1,12 @@
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
+using System.Collections.Generic;
 using Cinematics.Players;
 using FlexMenu;
 using Game.Characters;
 using Game.Chat;
 using Game.DevMenu;
+using Game.Interface;
 using Home.HomeScene;
 using Home.LoginScene;
 using Home.Services;
@@ -19,6 +21,7 @@ using Server.Shared.Extensions;
 using Server.Shared.State.Chat;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
+using Services;
 
 namespace FancyUI.Patches;
 
@@ -267,76 +270,226 @@ public static class AchievementMentionsPatch
     }
 }
 
-[HarmonyPatch(typeof(ClientRoleExtensions), nameof(ClientRoleExtensions.ToColorizedDisplayString), [typeof(Role), typeof(FactionType)])]
+[HarmonyPatch(typeof(ClientRoleExtensions))]
 public static class ModifierFactionPatch
 {
-    public static bool Prefix(ref string __result, Role role, FactionType factionType)
+    private static bool TryHandleModifier(ref string result, Role role, bool shortened)
     {
-        var modifier = Utils.CreateGradient(Fancy.ModifierStart.Value, Fancy.ModifierEnd.Value);
+        if (!role.IsModifierCard())
+            return false;
 
-        if (role.IsModifierCard())
-        {
-            FactionType modifierFaction;
-            if (Constants.IsBTOS2())
-                modifierFaction = role switch
-                {
-                    Btos2Role.Vip => Btos2Faction.Town,
-                    Btos2Role.CovenTownTraitor => Btos2Faction.Coven,
-                    Btos2Role.GhostTown => Btos2Faction.Shroud,
-                    Btos2Role.PerfectTown => Btos2Faction.Town,
-                    Btos2Role.AnonVoting => Btos2Faction.Judge,
-                    Btos2Role.OneTrial => Btos2Faction.Executioner,
-                    Btos2Role.ApocTownTraitor => Btos2Faction.Apocalypse,
-                    Btos2Role.NecroPass => Btos2Faction.Coven,
-                    Btos2Role.Egotist => Btos2Faction.Egotist,
-                    Btos2Role.SpeakingSpirits => Btos2Faction.Shroud,
-                    Btos2Role.FourHorsemen => Btos2Faction.Apocalypse,
-                    Btos2Role.CovenVip => Btos2Faction.Coven,
-                    Btos2Role.Lovers => Btos2Faction.Lovers,
-                    Btos2Role.FeelinLucky => Btos2Faction.Jester,
-                    Btos2Role.AllOutliers => Btos2Faction.CursedSoul,
-                    Btos2Role.SecretKillers => Btos2Faction.SerialKiller,
-                    Btos2Role.Teams => Btos2Faction.Hawks,
-                    Btos2Role.FastMode => Btos2Faction.Arsonist,
-                    Btos2Role.SlowMode => Btos2Faction.Vampire,
-                    Btos2Role.Anomaly => Btos2Faction.Pirate,
-                    Btos2Role.SecretWhispers => Btos2Faction.Jackal,
-					Btos2Role.Individuality => Btos2Faction.Doomsayer,
-                    Btos2Role.TownPower => Btos2Faction.Town, // so it shows as town, cuz game believes its a modifier
-                    _ => FactionType.NONE
-                };
-            else
-                modifierFaction = role switch
-                {
-                    Role.VIP => FactionType.TOWN,
-                    Role.TOWN_TRAITOR => FactionType.COVEN,
-                    Role.GHOST_TOWN => FactionType.SHROUD,
-                    Role.NO_TOWN_HANGED => FactionType.TOWN,
-                    Role.ONE_TRIAL_PER_DAY => FactionType.EXECUTIONER,
-                    Role.FOUR_HORSEMEN => FactionType.APOCALYPSE,
-                    Role.ALL_OUTLIERS => FactionType.CURSED_SOUL,
-                    Role.ELECTION => FactionType.TOWN,
-                    Role.FEELIN_LUCKY => FactionType.JESTER,
-                    Role.KILLER_ROLES_HIDDEN => FactionType.SERIALKILLER,
-                    Role.FAST_MODE => FactionType.ARSONIST,
-                    Role.SLOW_MODE => FactionType.VAMPIRE,
-                    Role.ANOMALY => FactionType.PIRATE,
-                    _ => FactionType.NONE
-                };
-            if (modifierFaction != FactionType.NONE)
-            {
-                __result = Utils.ApplyGradient(role.ToDisplayString(), modifierFaction.GetChangedGradient(role));
-                return false;
-            }
-            else
-            {
-                __result = Utils.ApplyGradient(role.ToDisplayString(), modifier);
-                return false;
-            }
-        }
+        var modifierFaction = GetModifierFaction(role);
+        var display = shortened ? role.ToShortenedDisplayString() : role.ToDisplayString();
+        result = Utils.ApplyGradient(display, modifierFaction != FactionType.NONE ? modifierFaction.GetChangedGradient(role) : Utils.CreateGradient(Fancy.ModifierStart.Value, Fancy.ModifierEnd.Value));
+
         return true;
     }
+
+    private static FactionType GetModifierFaction(Role role)
+    {
+        if (Constants.IsBTOS2())
+        {
+            return role switch
+            {
+                Btos2Role.Vip               => Btos2Faction.Town,
+                Btos2Role.CovenTownTraitor  => Btos2Faction.Coven,
+                Btos2Role.GhostTown         => Btos2Faction.Shroud,
+                Btos2Role.PerfectTown       => Btos2Faction.Town,
+                Btos2Role.AnonVoting        => Btos2Faction.Judge,
+                Btos2Role.OneTrial          => Btos2Faction.Executioner,
+                Btos2Role.ApocTownTraitor   => Btos2Faction.Apocalypse,
+                Btos2Role.NecroPass         => Btos2Faction.Coven,
+                Btos2Role.Egotist           => Btos2Faction.Egotist,
+                Btos2Role.SpeakingSpirits   => Btos2Faction.Shroud,
+                Btos2Role.FourHorsemen      => Btos2Faction.Apocalypse,
+                Btos2Role.CovenVip          => Btos2Faction.Coven,
+                Btos2Role.Lovers            => Btos2Faction.Lovers,
+                Btos2Role.FeelinLucky       => Btos2Faction.Jester,
+                Btos2Role.AllOutliers       => Btos2Faction.CursedSoul,
+                Btos2Role.SecretKillers     => Btos2Faction.SerialKiller,
+                Btos2Role.Teams             => Btos2Faction.Hawks,
+                Btos2Role.FastMode          => Btos2Faction.Arsonist,
+                Btos2Role.SlowMode          => Btos2Faction.Vampire,
+                Btos2Role.Anomaly           => Btos2Faction.Pirate,
+                Btos2Role.SecretWhispers    => Btos2Faction.Jackal,
+                Btos2Role.Individuality     => Btos2Faction.Doomsayer,
+                Btos2Role.Immovable     	=> Btos2Faction.Auditor,
+                Btos2Role.TownPower         => Btos2Faction.Town,
+                _                           => FactionType.NONE
+            };
+        }
+
+        return role switch
+        {
+            Role.VIP                  => FactionType.TOWN,
+            Role.TOWN_TRAITOR         => FactionType.COVEN,
+            Role.GHOST_TOWN           => FactionType.SHROUD,
+            Role.NO_TOWN_HANGED       => FactionType.TOWN,
+            Role.ONE_TRIAL_PER_DAY    => FactionType.EXECUTIONER,
+            Role.FOUR_HORSEMEN        => FactionType.APOCALYPSE,
+            Role.ALL_OUTLIERS         => FactionType.CURSED_SOUL,
+            Role.ELECTION             => FactionType.TOWN,
+            Role.FEELIN_LUCKY         => FactionType.JESTER,
+            Role.KILLER_ROLES_HIDDEN  => FactionType.SERIALKILLER,
+            Role.FAST_MODE            => FactionType.ARSONIST,
+            Role.SLOW_MODE            => FactionType.VAMPIRE,
+            Role.ANOMALY              => FactionType.PIRATE,
+            _                         => FactionType.NONE
+        };
+    }
+	
+    [HarmonyPatch(nameof(ClientRoleExtensions.ToColorizedDisplayString), [typeof(Role), typeof(FactionType)])]
+    [HarmonyPrefix]
+    public static bool DisplayPrefix(ref string __result, Role role) => !TryHandleModifier(ref __result, role, false);
+
+    [HarmonyPatch(nameof(ClientRoleExtensions.ToColorizedShortenedDisplayString),
+        [typeof(Role), typeof(FactionType)])]
+    [HarmonyPrefix]
+    public static bool ShortDisplayPrefix(ref string __result, Role role) => !TryHandleModifier(ref __result, role, true);
 }
+
+// [HarmonyPatch(typeof(ClientRoleExtensions), nameof(ClientRoleExtensions.ToColorizedDisplayString), [typeof(Role), typeof(FactionType)])]
+// public static class ModifierFactionPatch
+// {
+    // public static bool Prefix(ref string __result, Role role, FactionType factionType)
+    // {
+        // var modifier = Utils.CreateGradient(Fancy.ModifierStart.Value, Fancy.ModifierEnd.Value);
+
+        // if (role.IsModifierCard())
+        // {
+            // FactionType modifierFaction;
+            // if (Constants.IsBTOS2())
+                // modifierFaction = role switch
+                // {
+                    // Btos2Role.Vip => Btos2Faction.Town,
+                    // Btos2Role.CovenTownTraitor => Btos2Faction.Coven,
+                    // Btos2Role.GhostTown => Btos2Faction.Shroud,
+                    // Btos2Role.PerfectTown => Btos2Faction.Town,
+                    // Btos2Role.AnonVoting => Btos2Faction.Judge,
+                    // Btos2Role.OneTrial => Btos2Faction.Executioner,
+                    // Btos2Role.ApocTownTraitor => Btos2Faction.Apocalypse,
+                    // Btos2Role.NecroPass => Btos2Faction.Coven,
+                    // Btos2Role.Egotist => Btos2Faction.Egotist,
+                    // Btos2Role.SpeakingSpirits => Btos2Faction.Shroud,
+                    // Btos2Role.FourHorsemen => Btos2Faction.Apocalypse,
+                    // Btos2Role.CovenVip => Btos2Faction.Coven,
+                    // Btos2Role.Lovers => Btos2Faction.Lovers,
+                    // Btos2Role.FeelinLucky => Btos2Faction.Jester,
+                    // Btos2Role.AllOutliers => Btos2Faction.CursedSoul,
+                    // Btos2Role.SecretKillers => Btos2Faction.SerialKiller,
+                    // Btos2Role.Teams => Btos2Faction.Hawks,
+                    // Btos2Role.FastMode => Btos2Faction.Arsonist,
+                    // Btos2Role.SlowMode => Btos2Faction.Vampire,
+                    // Btos2Role.Anomaly => Btos2Faction.Pirate,
+                    // Btos2Role.SecretWhispers => Btos2Faction.Jackal,
+					// Btos2Role.Individuality => Btos2Faction.Doomsayer,
+                    // Btos2Role.TownPower => Btos2Faction.Town, // so it shows as town, cuz game believes its a modifier
+                    // _ => FactionType.NONE
+                // };
+            // else
+                // modifierFaction = role switch
+                // {
+                    // Role.VIP => FactionType.TOWN,
+                    // Role.TOWN_TRAITOR => FactionType.COVEN,
+                    // Role.GHOST_TOWN => FactionType.SHROUD,
+                    // Role.NO_TOWN_HANGED => FactionType.TOWN,
+                    // Role.ONE_TRIAL_PER_DAY => FactionType.EXECUTIONER,
+                    // Role.FOUR_HORSEMEN => FactionType.APOCALYPSE,
+                    // Role.ALL_OUTLIERS => FactionType.CURSED_SOUL,
+                    // Role.ELECTION => FactionType.TOWN,
+                    // Role.FEELIN_LUCKY => FactionType.JESTER,
+                    // Role.KILLER_ROLES_HIDDEN => FactionType.SERIALKILLER,
+                    // Role.FAST_MODE => FactionType.ARSONIST,
+                    // Role.SLOW_MODE => FactionType.VAMPIRE,
+                    // Role.ANOMALY => FactionType.PIRATE,
+                    // _ => FactionType.NONE
+                // };
+            // if (modifierFaction != FactionType.NONE)
+            // {
+                // __result = Utils.ApplyGradient(role.ToDisplayString(), modifierFaction.GetChangedGradient(role));
+                // return false;
+            // }
+            // else
+            // {
+                // __result = Utils.ApplyGradient(role.ToDisplayString(), modifier);
+                // return false;
+            // }
+        // }
+        // return true;
+    // }
+// }
+
+// [HarmonyPatch(typeof(ClientRoleExtensions), nameof(ClientRoleExtensions.ToColorizedShortenedDisplayString), [typeof(Role), typeof(FactionType)])]
+// public static class ModifierFactionPatch2
+// {
+    // public static bool Prefix(ref string __result, Role role, FactionType factionType)
+    // {
+        // var modifier = Utils.CreateGradient(Fancy.ModifierStart.Value, Fancy.ModifierEnd.Value);
+
+        // if (role.IsModifierCard())
+        // {
+            // FactionType modifierFaction;
+            // if (Constants.IsBTOS2())
+                // modifierFaction = role switch
+                // {
+                    // Btos2Role.Vip => Btos2Faction.Town,
+                    // Btos2Role.CovenTownTraitor => Btos2Faction.Coven,
+                    // Btos2Role.GhostTown => Btos2Faction.Shroud,
+                    // Btos2Role.PerfectTown => Btos2Faction.Town,
+                    // Btos2Role.AnonVoting => Btos2Faction.Judge,
+                    // Btos2Role.OneTrial => Btos2Faction.Executioner,
+                    // Btos2Role.ApocTownTraitor => Btos2Faction.Apocalypse,
+                    // Btos2Role.NecroPass => Btos2Faction.Coven,
+                    // Btos2Role.Egotist => Btos2Faction.Egotist,
+                    // Btos2Role.SpeakingSpirits => Btos2Faction.Shroud,
+                    // Btos2Role.FourHorsemen => Btos2Faction.Apocalypse,
+                    // Btos2Role.CovenVip => Btos2Faction.Coven,
+                    // Btos2Role.Lovers => Btos2Faction.Lovers,
+                    // Btos2Role.FeelinLucky => Btos2Faction.Jester,
+                    // Btos2Role.AllOutliers => Btos2Faction.CursedSoul,
+                    // Btos2Role.SecretKillers => Btos2Faction.SerialKiller,
+                    // Btos2Role.Teams => Btos2Faction.Hawks,
+                    // Btos2Role.FastMode => Btos2Faction.Arsonist,
+                    // Btos2Role.SlowMode => Btos2Faction.Vampire,
+                    // Btos2Role.Anomaly => Btos2Faction.Pirate,
+                    // Btos2Role.SecretWhispers => Btos2Faction.Jackal,
+					// Btos2Role.Individuality => Btos2Faction.Doomsayer,
+                    // Btos2Role.TownPower => Btos2Faction.Town, // so it shows as town, cuz game believes its a modifier
+                    // _ => FactionType.NONE
+                // };
+            // else
+                // modifierFaction = role switch
+                // {
+                    // Role.VIP => FactionType.TOWN,
+                    // Role.TOWN_TRAITOR => FactionType.COVEN,
+                    // Role.GHOST_TOWN => FactionType.SHROUD,
+                    // Role.NO_TOWN_HANGED => FactionType.TOWN,
+                    // Role.ONE_TRIAL_PER_DAY => FactionType.EXECUTIONER,
+                    // Role.FOUR_HORSEMEN => FactionType.APOCALYPSE,
+                    // Role.ALL_OUTLIERS => FactionType.CURSED_SOUL,
+                    // Role.ELECTION => FactionType.TOWN,
+                    // Role.FEELIN_LUCKY => FactionType.JESTER,
+                    // Role.KILLER_ROLES_HIDDEN => FactionType.SERIALKILLER,
+                    // Role.FAST_MODE => FactionType.ARSONIST,
+                    // Role.SLOW_MODE => FactionType.VAMPIRE,
+                    // Role.ANOMALY => FactionType.PIRATE,
+                    // _ => FactionType.NONE
+                // };
+            // if (modifierFaction != FactionType.NONE)
+            // {
+                // __result = Utils.ApplyGradient(role.ToShortenedDisplayString(), modifierFaction.GetChangedGradient(role));
+                // return false;
+            // }
+            // else
+            // {
+                // __result = Utils.ApplyGradient(role.ToShortenedDisplayString(), modifier);
+                // return false;
+            // }
+        // }
+        // return true;
+    // }
+// }
+
 
 
 [HarmonyPatch(typeof(SpecialAbilityPopupDayConfirmListItem), nameof(SpecialAbilityPopupDayConfirmListItem.SetData))]
@@ -1745,3 +1898,333 @@ public static class NecronomiconRoleCardIconPatch
         }
     }
 }
+
+// [HarmonyPatch(typeof(RoleCardPanel))]
+// public static class RoleCardPanelPatches
+// {
+    // [HarmonyPatch(nameof(RoleCardPanel.GetGoal))]
+    // [HarmonyFinalizer]
+    // public static Exception Goal(RoleCardPanel __instance, ref string __result)
+    // {
+        // var faction = (int)__instance.CurrentFaction;
+        // var role = (int)__instance.CurrentRole;
+
+        // var prefix = Utils.GetKeyPrefix(true);
+        // var isBTOS2 = Constants.IsBTOS2();
+
+        // var fancyRoleKey = $"{prefix}_ROLE_GOAL_{role}";
+        // var fancyFactionKey = $"{prefix}_FACTION_GOAL_{faction}";
+        // var baseRoleKey = isBTOS2 ? $"BTOS_ROLE_GOAL_{role}" : $"GUI_ROLE_GOAL_{role}";
+        // var baseFactionKey = isBTOS2 ? $"BTOS_FACTION_GOAL_{faction}" : $"GUI_FACTION_GOAL_{faction}";
+
+        // __result = Utils.TryGetString(4, fancyRoleKey, fancyFactionKey, baseRoleKey, baseFactionKey);
+
+        // return null;
+    // }
+
+    // [HarmonyPatch(nameof(RoleCardPanel.GetAbilities))]
+    // [HarmonyFinalizer]
+    // public static Exception Summary(RoleCardPanel __instance, ref string __result)
+    // {
+        // var faction = (int)__instance.CurrentFaction;
+        // var role = (int)__instance.CurrentRole;
+
+        // var prefix = Utils.GetKeyPrefix(true);
+        // var isBTOS2 = Constants.IsBTOS2();
+
+        // var fancyRoleKey = $"{prefix}_ROLE_ABILITY_SUMMARY_{role}_{faction}";
+        // var fancyFactionKey = $"{prefix}_ROLE_ABILITY_SUMMARY_{role}";
+        // var baseRoleKey = isBTOS2 ? $"BTOS_ROLE_ABILITY_SUMMARY_{role}_{faction}" : $"GUI_ROLE_ABILITY_SUMMARY_{role}_{faction}";
+        // var baseFactionKey = isBTOS2 ? $"BTOS_ROLE_ABILITY_SUMMARY_{role}" : $"GUI_ROLE_ABILITY_SUMMARY_{role}";
+
+        // __result = Utils.TryGetString(4, fancyRoleKey, fancyFactionKey, baseRoleKey, baseFactionKey);
+
+        // return null;
+    // }
+
+    // [HarmonyPatch(nameof(RoleCardPanel.GetAttributes))]
+    // [HarmonyFinalizer]
+    // public static Exception Attributes(RoleCardPanel __instance, ref string __result)
+    // {
+        // var faction = (int)__instance.CurrentFaction;
+        // var role = (int)__instance.CurrentRole;
+
+        // var prefix = Utils.GetKeyPrefix(true);
+        // var isBTOS2 = Constants.IsBTOS2();
+
+        // var fancyRoleKey = $"{prefix}_ROLE_ATTRIBUTES_{role}_{faction}";
+        // var fancyFactionKey = $"{prefix}_ROLE_ATTRIBUTES_{role}";
+        // var baseRoleKey = isBTOS2 ? $"BTOS_ROLE_ATTRIBUTES_{role}_{faction}" : $"GUI_ROLE_ATTRIBUTES_{role}_{faction}";
+        // var baseFactionKey = isBTOS2 ? $"BTOS_ROLE_ATTRIBUTES_{role}" : $"GUI_ROLE_ATTRIBUTES_{role}";
+
+        // __result = Utils.TryGetString(4, fancyRoleKey, fancyFactionKey, baseRoleKey, baseFactionKey);
+
+        // return null;
+    // }
+
+    // [HarmonyPatch(nameof(RoleCardPanel.GetVictoryConditions))]
+    // [HarmonyFinalizer]
+    // public static Exception VictoryConditions(RoleCardPanel __instance, ref string __result)
+    // {
+        // var faction = (int)__instance.CurrentFaction;
+
+        // var prefix = Utils.GetKeyPrefix(true);
+        // var isBTOS2 = Constants.IsBTOS2();
+
+        // var fancyFactionKey = $"{prefix}_FACTION_VICTORY_CONDITION_{faction}";
+        // var baseFactionKey = isBTOS2 ? $"BTOS_FACTION_VICTORY_CONDITION_{faction}" : $"GUI_FACTION_VICTORY_CONDITION_{faction}";
+
+        // __result = Utils.TryGetString(2, fancyFactionKey, baseFactionKey);
+
+        // return null;
+    // }
+
+    // [HarmonyPatch(nameof(RoleCardPanel.GetAbility1Desc))]
+    // [HarmonyFinalizer]
+    // public static Exception Ability1(RoleCardPanel __instance, ref string __result)
+    // {
+        // var faction = (int)__instance.CurrentFaction;
+        // var role = (int)__instance.CurrentRole;
+
+        // var prefix = Utils.GetKeyPrefix(true);
+        // var isBTOS2 = Constants.IsBTOS2();
+
+        // var fancyRoleKey = $"{prefix}_ROLE_ABILITY1_DESC_{role}_{faction}";
+        // var fancyFactionKey = $"{prefix}_ROLE_ABILITY1_DESC_{role}";
+        // var baseRoleKey = isBTOS2 ? $"BTOS_ROLE_ABILITY1_TEXT_{role}_{faction}" : $"GUI_ROLE_ABILITY1_DESC_{role}_{faction}";
+        // var baseFactionKey = isBTOS2 ? $"BTOS_ROLE_ABILITY1_TEXT_{role}" : $"GUI_ROLE_ABILITY1_DESC_{role}";
+
+        // __result = Utils.TryGetString(4, fancyRoleKey, fancyFactionKey, baseRoleKey, baseFactionKey);
+
+        // return null;
+    // }
+
+    // [HarmonyPatch(nameof(RoleCardPanel.GetAbility2Desc))]
+    // [HarmonyFinalizer]
+    // public static Exception Ability2(RoleCardPanel __instance, ref string __result)
+    // {
+        // var faction = (int)__instance.CurrentFaction;
+        // var role = (int)__instance.CurrentRole;
+
+        // var prefix = Utils.GetKeyPrefix(true);
+        // var isBTOS2 = Constants.IsBTOS2();
+
+        // var fancyRoleKey = $"{prefix}_ROLE_ABILITY2_DESC_{role}_{faction}";
+        // var fancyFactionKey = $"{prefix}_ROLE_ABILITY2_DESC_{role}";
+        // var baseRoleKey = isBTOS2 ? $"BTOS_ROLE_ABILITY2_TEXT_{role}_{faction}" : $"GUI_ROLE_ABILITY2_DESC_{role}_{faction}";
+        // var baseFactionKey = isBTOS2 ? $"BTOS_ROLE_ABILITY2_TEXT_{role}" : $"GUI_ROLE_ABILITY2_DESC_{role}";
+
+        // __result = Utils.TryGetString(4, fancyRoleKey, fancyFactionKey, baseRoleKey, baseFactionKey);
+
+        // return null;
+    // }
+
+    // [HarmonyPatch(nameof(RoleCardPanel.GetSpecialAbilityDesc))]
+    // [HarmonyFinalizer]
+    // public static Exception SpecialAbility(RoleCardPanel __instance, ref string __result)
+    // {
+        // var faction = (int)__instance.CurrentFaction;
+        // var role = (int)__instance.CurrentRole;
+
+        // var prefix = Utils.GetKeyPrefix(true);
+        // var isBTOS2 = Constants.IsBTOS2();
+
+        // var fancyRoleKey = $"{prefix}_ROLE_SPECIAL_ABILITY_DESC_{role}_{faction}";
+        // var fancyFactionKey = $"{prefix}_ROLE_SPECIAL_ABILITY_DESC_{role}";
+        // var baseRoleKey = isBTOS2 ? $"BTOS_ROLE_SPECIALABILITY_TEXT_{role}_{faction}" : $"GUI_ROLE_SPECIAL_ABILITY_DESC_{role}_{faction}";
+        // var baseFactionKey = isBTOS2 ? $"BTOS_ROLE_SPECIALABILITY_TEXT_{role}" : $"GUI_ROLE_SPECIAL_ABILITY_DESC_{role}";
+
+        // __result = Utils.TryGetString(4, fancyRoleKey, fancyFactionKey, baseRoleKey, baseFactionKey);
+
+        // return null;
+    // }
+	
+	// [HarmonyPatch(nameof(RoleCardPanel.OnClickNecronomicon))]
+	// [HarmonyFinalizer]
+	// public static Exception Necronomicon(RoleCardPanel __instance)
+	// {
+		// var role = (int)__instance.CurrentRole;
+		// var faction = (int)__instance.CurrentFaction;
+
+		// var prefix = Utils.GetKeyPrefix(true);
+		// var isBTOS2 = Constants.IsBTOS2();
+
+		// var fancyRoleKey = $"{prefix}_ROLE_CARD_NECRONOMICON_ABILITY_TOOLTIP_{role}_{faction}";
+		// var fancyFactionKey = $"{prefix}_ROLE_CARD_NECRONOMICON_ABILITY_TOOLTIP_{role}";
+		// var baseRoleKey = isBTOS2 ? $"BTOS_ROLE_CARD_NECRONOMICON_ABILITY_TOOLTIP_{role}_{faction}" : $"GUI_ROLE_CARD_NECRONOMICON_ABILITY_TOOLTIP_{role}_{faction}";
+		// var baseFactionKey = isBTOS2 ? $"BTOS_ROLE_CARD_NECRONOMICON_ABILITY_TOOLTIP_{role}" : $"GUI_ROLE_CARD_NECRONOMICON_ABILITY_TOOLTIP_{role}";
+		// var vanilla = "GUI_ROLE_CARD_NECRONOMICON_ABILITY_TOOLTIP";
+
+		// var text = Utils.TryGetString(5, fancyRoleKey, fancyFactionKey, baseRoleKey, baseFactionKey, vanilla);
+
+		// __instance.roleDescText.SetText(text);
+		// __instance.roleDescGO.gameObject.SetActive(true);
+
+		// return null;
+	// }
+// }
+
+// [HarmonyPatch(typeof(RoleCardPopupPanel))]
+// public static class RoleCardPopupPanelPatches
+// {
+    // [HarmonyPatch(nameof(RoleCardPopupPanel.GetGoal))]
+    // [HarmonyFinalizer]
+    // public static Exception Goal(RoleCardPopupPanel __instance, ref string __result)
+    // {
+        // var faction = (int)__instance.CurrentFaction;
+        // var role = (int)__instance.CurrentRole;
+
+        // var prefix = Utils.GetKeyPrefix(true);
+        // var isBTOS2 = Constants.IsBTOS2();
+
+        // var fancyRoleKey = $"{prefix}_ROLE_GOAL_{role}";
+        // var fancyFactionKey = $"{prefix}_FACTION_GOAL_{faction}";
+        // var baseRoleKey = isBTOS2 ? $"BTOS_ROLE_GOAL_{role}" : $"GUI_ROLE_GOAL_{role}";
+        // var baseFactionKey = isBTOS2 ? $"BTOS_FACTION_GOAL_{faction}" : $"GUI_FACTION_GOAL_{faction}";
+
+        // __result = Utils.TryGetString(4, fancyRoleKey, fancyFactionKey, baseRoleKey, baseFactionKey);
+
+        // return null;
+    // }
+
+    // [HarmonyPatch(nameof(RoleCardPopupPanel.GetAbilities))]
+    // [HarmonyFinalizer]
+    // public static Exception Summary(RoleCardPopupPanel __instance, ref string __result)
+    // {
+        // var faction = (int)__instance.CurrentFaction;
+        // var role = (int)__instance.CurrentRole;
+
+        // var prefix = Utils.GetKeyPrefix(true);
+        // var isBTOS2 = Constants.IsBTOS2();
+
+        // var fancyRoleKey = $"{prefix}_ROLE_ABILITY_SUMMARY_{role}_{faction}";
+        // var fancyFactionKey = $"{prefix}_ROLE_ABILITY_SUMMARY_{role}";
+        // var baseRoleKey = isBTOS2 ? $"BTOS_ROLE_ABILITY_SUMMARY_{role}_{faction}" : $"GUI_ROLE_ABILITY_SUMMARY_{role}_{faction}";
+        // var baseFactionKey = isBTOS2 ? $"BTOS_ROLE_ABILITY_SUMMARY_{role}" : $"GUI_ROLE_ABILITY_SUMMARY_{role}";
+
+        // __result = Utils.TryGetString(4, fancyRoleKey, fancyFactionKey, baseRoleKey, baseFactionKey);
+
+        // return null;
+    // }
+
+    // [HarmonyPatch(nameof(RoleCardPopupPanel.GetAttributes))]
+    // [HarmonyFinalizer]
+    // public static Exception Attributes(RoleCardPopupPanel __instance, ref string __result)
+    // {
+        // var faction = (int)__instance.CurrentFaction;
+        // var role = (int)__instance.CurrentRole;
+
+        // var prefix = Utils.GetKeyPrefix(true);
+        // var isBTOS2 = Constants.IsBTOS2();
+
+        // var fancyRoleKey = $"{prefix}_ROLE_ATTRIBUTES_{role}_{faction}";
+        // var fancyFactionKey = $"{prefix}_ROLE_ATTRIBUTES_{role}";
+        // var baseRoleKey = isBTOS2 ? $"BTOS_ROLE_ATTRIBUTES_{role}_{faction}" : $"GUI_ROLE_ATTRIBUTES_{role}_{faction}";
+        // var baseFactionKey = isBTOS2 ? $"BTOS_ROLE_ATTRIBUTES_{role}" : $"GUI_ROLE_ATTRIBUTES_{role}";
+
+        // __result = Utils.TryGetString(4, fancyRoleKey, fancyFactionKey, baseRoleKey, baseFactionKey);
+
+        // return null;
+    // }
+
+    // [HarmonyPatch(nameof(RoleCardPopupPanel.GetVictoryConditions))]
+    // [HarmonyFinalizer]
+    // public static Exception VictoryConditions(RoleCardPopupPanel __instance, ref string __result)
+    // {
+        // var faction = (int)__instance.CurrentFaction;
+
+        // var prefix = Utils.GetKeyPrefix(true);
+        // var isBTOS2 = Constants.IsBTOS2();
+
+        // var fancyFactionKey = $"{prefix}_FACTION_VICTORY_CONDITION_{faction}";
+        // var baseFactionKey = isBTOS2 ? $"BTOS_FACTION_VICTORY_CONDITION_{faction}" : $"GUI_FACTION_VICTORY_CONDITION_{faction}";
+
+        // __result = Utils.TryGetString(2, fancyFactionKey, baseFactionKey);
+
+        // return null;
+    // }
+
+    // [HarmonyPatch(nameof(RoleCardPopupPanel.GetAbility1Desc))]
+    // [HarmonyFinalizer]
+    // public static Exception Ability1(RoleCardPopupPanel __instance, ref string __result)
+    // {
+        // var faction = (int)__instance.CurrentFaction;
+        // var role = (int)__instance.CurrentRole;
+
+        // var prefix = Utils.GetKeyPrefix(true);
+        // var isBTOS2 = Constants.IsBTOS2();
+
+        // var fancyRoleKey = $"{prefix}_ROLE_ABILITY1_DESC_{role}_{faction}";
+        // var fancyFactionKey = $"{prefix}_ROLE_ABILITY1_DESC_{role}";
+        // var baseRoleKey = isBTOS2 ? $"BTOS_ROLE_ABILITY1_TEXT_{role}_{faction}" : $"GUI_ROLE_ABILITY1_DESC_{role}_{faction}";
+        // var baseFactionKey = isBTOS2 ? $"BTOS_ROLE_ABILITY1_TEXT_{role}" : $"GUI_ROLE_ABILITY1_DESC_{role}";
+
+        // __result = Utils.TryGetString(4, fancyRoleKey, fancyFactionKey, baseRoleKey, baseFactionKey);
+
+        // return null;
+    // }
+
+    // [HarmonyPatch(nameof(RoleCardPopupPanel.GetAbility2Desc))]
+    // [HarmonyFinalizer]
+    // public static Exception Ability2(RoleCardPopupPanel __instance, ref string __result)
+    // {
+        // var faction = (int)__instance.CurrentFaction;
+        // var role = (int)__instance.CurrentRole;
+
+        // var prefix = Utils.GetKeyPrefix(true);
+        // var isBTOS2 = Constants.IsBTOS2();
+
+        // var fancyRoleKey = $"{prefix}_ROLE_ABILITY2_DESC_{role}_{faction}";
+        // var fancyFactionKey = $"{prefix}_ROLE_ABILITY2_DESC_{role}";
+        // var baseRoleKey = isBTOS2 ? $"BTOS_ROLE_ABILITY2_TEXT_{role}_{faction}" : $"GUI_ROLE_ABILITY2_DESC_{role}_{faction}";
+        // var baseFactionKey = isBTOS2 ? $"BTOS_ROLE_ABILITY2_TEXT_{role}" : $"GUI_ROLE_ABILITY2_DESC_{role}";
+
+        // __result = Utils.TryGetString(4, fancyRoleKey, fancyFactionKey, baseRoleKey, baseFactionKey);
+
+        // return null;
+    // }
+
+    // [HarmonyPatch(nameof(RoleCardPopupPanel.GetSpecialAbilityDesc))]
+    // [HarmonyFinalizer]
+    // public static Exception SpecialAbility(RoleCardPopupPanel __instance, ref string __result)
+    // {
+        // var faction = (int)__instance.CurrentFaction;
+        // var role = (int)__instance.CurrentRole;
+
+        // var prefix = Utils.GetKeyPrefix(true);
+        // var isBTOS2 = Constants.IsBTOS2();
+
+        // var fancyRoleKey = $"{prefix}_ROLE_SPECIAL_ABILITY_DESC_{role}_{faction}";
+        // var fancyFactionKey = $"{prefix}_ROLE_SPECIAL_ABILITY_DESC_{role}";
+        // var baseRoleKey = isBTOS2 ? $"BTOS_ROLE_SPECIALABILITY_TEXT_{role}_{faction}" : $"GUI_ROLE_SPECIAL_ABILITY_DESC_{role}_{faction}";
+        // var baseFactionKey = isBTOS2 ? $"BTOS_ROLE_SPECIALABILITY_TEXT_{role}" : $"GUI_ROLE_SPECIAL_ABILITY_DESC_{role}";
+
+        // __result = Utils.TryGetString(4, fancyRoleKey, fancyFactionKey, baseRoleKey, baseFactionKey);
+
+        // return null;
+    // }
+	
+	// [HarmonyPatch(nameof(RoleCardPopupPanel.OnClickNecronomicon))]
+	// [HarmonyFinalizer]
+	// public static Exception Necronomicon(RoleCardPopupPanel __instance)
+	// {
+		// var role = (int)__instance.CurrentRole;
+		// var faction = (int)__instance.CurrentFaction;
+
+		// var prefix = Utils.GetKeyPrefix(true);
+		// var isBTOS2 = Constants.IsBTOS2();
+
+		// var fancyRoleKey = $"{prefix}_ROLE_CARD_NECRONOMICON_ABILITY_TOOLTIP_{role}_{faction}";
+		// var fancyFactionKey = $"{prefix}_ROLE_CARD_NECRONOMICON_ABILITY_TOOLTIP_{role}";
+		// var baseRoleKey = isBTOS2 ? $"BTOS_ROLE_CARD_NECRONOMICON_ABILITY_TOOLTIP_{role}_{faction}" : $"GUI_ROLE_CARD_NECRONOMICON_ABILITY_TOOLTIP_{role}_{faction}";
+		// var baseFactionKey = isBTOS2 ? $"BTOS_ROLE_CARD_NECRONOMICON_ABILITY_TOOLTIP_{role}" : $"GUI_ROLE_CARD_NECRONOMICON_ABILITY_TOOLTIP_{role}";
+		// var vanilla = "GUI_ROLE_CARD_NECRONOMICON_ABILITY_TOOLTIP";
+
+		// var text = Utils.TryGetString(5, fancyRoleKey, fancyFactionKey, baseRoleKey, baseFactionKey, vanilla);
+
+		// __instance.roleDescText.SetText(text);
+		// __instance.roleDescGO.gameObject.SetActive(true);
+
+		// return null;
+	// }
+// }
