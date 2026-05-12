@@ -260,7 +260,7 @@ public class Fancy : BaseMod<Fancy>
         BTOS2Modifiers = [.. AccessTools.GetDeclaredFields(typeof(Btos2Role)).Select(x => (Role)x.GetRawConstantValue()).Where(role => (byte)role is > 200 and < 240)];
 
         var colors = GeneralUtils.GetEnumValues<ColorType>()!.Where(x => x != ColorType.All).ToDictionary(x => x, x => x.ToString().ToUpperInvariant());
-        var filteredFactions = BTOS2Factions.Where(x => x is not (Btos2Faction.Cannibal or Btos2Faction.None or Btos2Faction.Compliance or Btos2Faction.Pandora));
+        var filteredFactions = BTOS2Factions.Where(x => x is not (Btos2Faction.Cannibal or Btos2Faction.None or Btos2Faction.Compliance));
 
         var factions = filteredFactions.ToDictionary(x => x, x => Utils.FactionName(x, Constants.BTOS2Exists() ? GameModType.BTOS2 : GameModType.Vanilla, false).ToUpperInvariant());
 
@@ -268,7 +268,7 @@ public class Fancy : BaseMod<Fancy>
 
         SelectDisplay = new("SELECT_DISPLAY", DisplayType.RoleCard, PackType.None, useTranslations: true);
         SelectTestingFaction = new("SELECTED_TESTING_FACTION", FactionType.NONE, PackType.None, useTranslations: true, values:
-            () => SettingsAndTestingUI.Instance?.IsBTOS2 == true ? [.. filteredFactions.AddItem(FactionType.NONE)] : [.. VanillaFactions.AddItem(Btos2Faction.Pandora)]);
+            () => SettingsAndTestingUI.Instance?.IsBTOS2 == true ? [.. filteredFactions.AddItem(FactionType.NONE)] : [.. VanillaFactions]);
         SelectTestingRole = new("SELECTED_TESTING_ROLE", Role.ADMIRER, PackType.None, useTranslations: true, values:
             () => SettingsAndTestingUI.Instance?.IsBTOS2 == true ? BTOS2Roles : VanillaRoles);
 
