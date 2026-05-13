@@ -385,14 +385,6 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                     sprite = icons2.TryGetValue(name2, out sprite1) ? sprite1 : Blank;
             }
 
-            if (!sprite.IsValid() && style != "Unknown" && Assets[GameModType.Common].BaseIcons.TryGetValue("Unknown", out icons2))
-            {
-                sprite = icons2.TryGetValue($"{name2}_{mod}", out sprite1) ? sprite1 : Blank;
-
-                if (!sprite.IsValid())
-                    sprite = icons2.TryGetValue(name2, out sprite1) ? sprite1 : Blank;
-            }
-
             if (!sprite.IsValid())
                 sprite = Fancy.Instance.Assets.GetSprite($"{name2}_{mod}") ?? Blank;
 
