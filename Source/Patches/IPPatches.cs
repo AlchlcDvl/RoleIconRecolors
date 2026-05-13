@@ -289,8 +289,7 @@ public static class RoleMenuPatches
         if (__instance.m_index == -1)
             return;
 
-        var icon = __instance.m_role.GetTMPSprite();
-        icon = icon.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(__instance.m_faction, false)})\"");
+        var icon = __instance.m_role.GetRoleSprite(__instance.m_faction);
 
         __instance.SetRole1FactionInRoleListLabel.text = __instance.l10n("GUI_ROLE_CARD_MENU_POPUP_SET_ROLE_FACTION").Replace("%role%", icon + __instance.m_role.ToColorizedDisplayString(__instance.m_faction));
     }
@@ -302,8 +301,7 @@ public static class RoleMenuPatches
         if (__instance.m_index == -1)
             return;
 
-        var icon = __instance.m_role2.GetTMPSprite();
-        icon = icon.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(__instance.m_faction2, false)})\"");
+        var icon = __instance.m_role2.GetRoleSprite(__instance.m_faction2);
 
         __instance.SetRole2FactionInRoleListLabel.text = __instance.l10n("GUI_ROLE_CARD_MENU_POPUP_SET_ROLE_FACTION") .Replace("%role%", icon + __instance.m_role2.ToColorizedDisplayString(__instance.m_faction2));
     }
@@ -315,8 +313,7 @@ public static class RoleMenuPatches
 		if (__instance.m_index == -1)
 			return;
 
-		var icon = __instance.m_role.GetTMPSprite();
-		icon = icon.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(__instance.m_faction, false)})\"");
+        var icon = __instance.m_role.GetRoleSprite(__instance.m_faction);
 
 		__instance.AddDualBucketToHostRoleListLabel.text = __instance.l10n("GUI_ROLE_CARD_MENU_POPUP_SET_DUAL_BUCKET_IN_LIST").Replace("%role%", icon + __instance.m_role.ToColorizedDisplayString(__instance.m_faction));
 	}
@@ -374,16 +371,15 @@ public static class PatchRoleListPanel
 
         if (__instance.isBan)
         {
-			var icon1 = role1.GetTMPSprite();
-            icon1 = icon1.Replace("RoleIcons\"", $"RoleIcons (Regular)\"");
+			var icon1 = role1.GetRoleSprite(faction1);
 
 			__instance.roleName.text = $"<size=200%><voffset=-7>{icon1}</voffset></size>" + role1.ToColorizedNoLabel(faction1);
 			__instance.roleImage.sprite = GetSprite("Blank");
         }
         else if (a_roleDeckSlot.IsDualBucket())
         {
-            var icon1 = GetStyledIcon(role1, faction1);
-            var icon2 = GetStyledIcon(role2, faction2);
+            var icon1 = role1.GetRoleSprite(faction1);
+            var icon2 = role2.GetRoleSprite(faction2);
 
             __instance.roleName.text = string.Concat(
                 "<size=200%><voffset=-7>", icon1, "</voffset></size>", role1.ToColorizedShortenedDisplayString(faction1),
@@ -392,7 +388,7 @@ public static class PatchRoleListPanel
         }
         else
         {
-            var icon1 = GetStyledIcon(role1, faction1);
+            var icon1 = role1.GetRoleSprite(faction1);
             __instance.roleName.text = "<size=200%><voffset=-7>" + icon1 + "</voffset></size>" + role1.ToColorizedDisplayString(faction1);
         }
 
@@ -401,13 +397,6 @@ public static class PatchRoleListPanel
         __instance.ValidateButtons();
 
         return false;
-    }
-
-    private static string GetStyledIcon(Role role, FactionType faction)
-    {
-        var icon = role.GetTMPSprite();
-        return icon.Replace("RoleIcons\"", $"RoleIcons ({((role.GetFactionType() == faction && Constants.CurrentStyle() == "Regular")
-            ? "Regular" : Utils.FactionName(faction, false))})\"");
     }
 }
 [HarmonyPatch(typeof(GameBrowserRoleDeckListItem), nameof(GameBrowserRoleDeckListItem.SetData))]
@@ -433,18 +422,14 @@ public static class PatchBrowserRoleListPanel
 
         if (__instance.isBan)
         {
-			var icon1 = role1.GetTMPSprite();
-            icon1 = icon1.Replace("RoleIcons\"", $"RoleIcons (Regular)\"");
+			var icon1 = role1.GetRoleSprite(faction1);
             __instance.roleName.text = $"<size=200%><voffset=-7>{icon1}</voffset></size>" + role1.ToColorizedNoLabel(faction1);
 			__instance.roleImage.sprite = GetSprite("Blank");
         }
         else if (a_roleDeckSlot.IsDualBucket())
         {
-            var icon1 = role1.GetTMPSprite();
-            var icon2 = role2.GetTMPSprite();
-
-            icon1 = icon1.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(faction1, false)})\"");
-            icon2 = icon2.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(faction2, false)})\"");
+            var icon1 = role1.GetRoleSprite(faction1);
+            var icon2 = role2.GetRoleSprite(faction2);
 
             __instance.roleName.text = string.Concat(
                 "<size=200%><voffset=-7>", icon1, "</voffset></size>",
@@ -455,11 +440,9 @@ public static class PatchBrowserRoleListPanel
         }
         else
         {
-            var icon1 = role1.GetTMPSprite();
-            icon1 = icon1.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(faction1, false)})\"");
+            var icon1 =role1.GetRoleSprite(faction1);
 
-            __instance.roleName.text = "<size=200%><voffset=-7>" + icon1 + "</voffset></size>" +
-                                       role1.ToColorizedDisplayString(faction1);
+            __instance.roleName.text = "<size=200%><voffset=-7>" + icon1 + "</voffset></size>" + role1.ToColorizedDisplayString(faction1);
         }
 
         __instance.gameObject.SetActive(true);
@@ -1590,8 +1573,9 @@ public static class MentionsProviderPatches
         var role = (Role)result;
         var factionType = (FactionType)result2;
         var text = __instance._useColors ? role.ToColorizedDisplayString(factionType) : role.ToRoleFactionDisplayString(factionType);
-        var roleIconsString = Constants.IsBTOS2() ? "BTOSRoleIcons" : "RoleIcons";
-        var text2 = __instance._roleEffects ? $"<sprite=\"{roleIconsString} ({Utils.FactionName(factionType)})\" name=\"Role{(int)role}\">" : string.Empty;
+        // var roleIconsString = Constants.IsBTOS2() ? "BTOSRoleIcons" : "RoleIcons";
+        // var text2 = __instance._roleEffects ? $"<sprite=\"{roleIconsString} ({Utils.FactionName(factionType)})\" name=\"Role{(int)role}\">" : string.Empty;
+        var text2 = __instance._roleEffects ? role.GetRoleSprite(factionType) : string.Empty;
         var text3 = $"{__instance.styleTagOpen}{__instance.styleTagFont}<link=\"r{(int)role},{(int)factionType}\">{text2}<b>{text}</b></link>{__instance.styleTagClose}";
         var item = new MentionInfo
         {
@@ -1607,7 +1591,7 @@ public static class MentionsProviderPatches
         if (!__instance.MentionInfos.Contains(item))
             __instance.MentionInfos.Add(item);
 
-        encodedText = encodedText.ReplaceIcons();
+        // encodedText = encodedText.ReplaceIcons();
 
         __result = encodedText.Replace(mention, text3);
         return false;
@@ -1704,8 +1688,9 @@ public static class MakeProperFactionChecksInHeaderAnnouncement
         var faction = killRecord.playerFaction;
 
         var roleText = role.ToColorizedDisplayString(faction);
-        var roleIconsString = Constants.IsBTOS2() ? "BTOSRoleIcons" : "RoleIcons";
-        var icon = $"<sprite=\"{roleIconsString} ({(Constants.CurrentStyle() == "Regular" && role.GetFactionType() == faction ? "Regular" : Utils.FactionName(faction, false))})\" name=\"Role{(int)role}\">";
+        // var roleIconsString = Constants.IsBTOS2() ? "BTOSRoleIcons" : "RoleIcons";
+        // var icon = $"<sprite=\"{roleIconsString} ({(Constants.CurrentStyle() == "Regular" && role.GetFactionType() == faction ? "Regular" : Utils.FactionName(faction, false))})\" name=\"Role{(int)role}\">";
+        var icon = role.GetRoleSprite(faction);
         var display = icon + roleText;
 
         var l10nKey = Fancy.YouAreARole ? Utils.GetHangingMessage2(role, faction) : "GUI_GAME_WHO_DIED_AND_HOW_1_2";
@@ -1715,7 +1700,7 @@ public static class MakeProperFactionChecksInHeaderAnnouncement
         var name = Service.Game.Sim.simulation.GetDisplayName(trialData.defendantPosition).ToWhiteNameString();
         formattedLine = formattedLine.Replace("%name%", name);
         formattedLine = Utils.ApplyGender(formattedLine, gender);
-        formattedLine = formattedLine.ReplaceIcons();
+        // formattedLine = formattedLine.ReplaceIcons();
 
         __instance.AddLine(formattedLine);
     }
@@ -1736,8 +1721,9 @@ public static class MakeProperFactionChecksInWdah1
         if (!Service.Game.Sim.simulation.killRecords.Data.TryFinding(k => k.playerId == __instance.currentPlayerNumber, out var killRecord) || killRecord!.killedByReasons.Count < 1)
             return false;
 
-        var roleIconsString = Constants.IsBTOS2() ? "BTOSRoleIcons" : "RoleIcons";
-        var roleText = $"<sprite=\"{roleIconsString}\" name=\"Role{(int)killRecord.playerRole}\">{killRecord.playerRole.ToColorizedDisplayString(killRecord.playerFaction)}";
+        // var roleIconsString = Constants.IsBTOS2() ? "BTOSRoleIcons" : "RoleIcons";
+        // var roleText = $"<sprite=\"{roleIconsString}\" name=\"Role{(int)killRecord.playerRole}\">{killRecord.playerRole.ToColorizedDisplayString(killRecord.playerFaction)}";
+        var roleText = killRecord.playerRole.GetRoleSprite(killRecord.playerFaction);
 
         if (Constants.EnableIcons())
             roleText = roleText.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(killRecord.playerFaction)})\"");
@@ -1755,13 +1741,12 @@ public static class MakeProperFactionChecksInWdah1
             }
 
             newLine = (killRecord.playerRole != Role.HIDDEN) ? Utils.GetString("GUI_GAME_WHO_DIED_VICTIM_ROLE_KNOWN") : Utils.GetString("GUI_GAME_WHO_DIED_VICTIM_ROLE_HIDDEN");
-            newLine = newLine.Replace("%role%", killRecord.playerRole.GetTMPSprite() + killRecord.playerRole.ToColorizedDisplayString(killRecord.playerFaction));
+            newLine = newLine.Replace("%role%", killRecord.playerRole.GetRoleSprite(killRecord.playerFaction) + killRecord.playerRole.ToColorizedDisplayString(killRecord.playerFaction));
         }
         var gender = Utils.GetPlayerGender(killRecord.playerId);
 
         var text = Fancy.YouAreARole ? Utils.GetString(Utils.GetWdahMessage(killRecord.playerRole, killRecord.playerFaction))
-            .Replace("%role%", roleText)
-            .ReplaceIcons() : newLine.ReplaceIcons();
+            .Replace("%role%", roleText) : newLine;
 
         text = Utils.ApplyGender(text, gender);
 
@@ -2163,17 +2148,14 @@ public static class RoleListHeaderIcon
 
         if (role2 == Role.NONE)
         {
-            var icon1 = role.GetTMPSprite();
-            icon1 = icon1.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(faction, false)})\"");
+            var icon1 = role.GetRoleSprite(faction);
 
             __instance.RoleNameLabel.text = icon1 + role.ToColorizedDisplayString(faction);
         }
         else
         {
-            var icon1 = role.GetTMPSprite();
-            var icon2 = role2.GetTMPSprite();
-            icon1 = icon1.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(faction, false)})\"");
-            icon2 = icon2.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(faction2, false)})\"");
+            var icon1 = role.GetRoleSprite(faction);
+            var icon2 = role2.GetRoleSprite(faction2);
 
             __instance.RoleNameLabel.text = string.Concat(
                 icon1,
@@ -2222,18 +2204,15 @@ public static class RoleListItemIcon
 
         if (__instance.role2 == Role.NONE)
         {
-			var role1Sprite = __instance.role.GetTMPSprite();
+			var role1Sprite = __instance.role.GetRoleSprite(__instance.faction);
 			var role1Text = __instance.role.ToColorizedDisplayString(__instance.faction);
-			role1Sprite = role1Sprite.Replace("RoleIcons", $"RoleIcons ({Utils.FactionName(__instance.faction, false)})");
             roleText = role1Sprite + role1Text;
         }
         else
         {
-			var role1Sprite = __instance.role.GetTMPSprite();
+			var role1Sprite = __instance.role.GetRoleSprite(__instance.faction);
 			var role1Text = __instance.role.ToColorizedShortenedDisplayString(__instance.faction);
-            var role2Sprite = __instance.role2.GetTMPSprite();
-			role1Sprite = role1Sprite.Replace("RoleIcons", $"RoleIcons ({Utils.FactionName(__instance.faction, false)})");
-			role2Sprite = role2Sprite.Replace("RoleIcons", $"RoleIcons ({Utils.FactionName(__instance.faction2, false)})");
+            var role2Sprite = __instance.role2.GetRoleSprite(__instance.faction2);
 			
             var role2Text = __instance.role2.ToColorizedShortenedDisplayString(__instance.faction2);
 
@@ -2258,8 +2237,7 @@ public static class RoleListPopupUpdate
     private static string BuildRoleText(RoleData roleData)
     {
         var factionType = GetEffectiveFaction(roleData);
-		var icon = roleData.role.GetTMPSprite();
-		icon = icon.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(factionType, false)})\"");
+		var icon = roleData.role.GetRoleSprite(factionType);
 
         var roleText = icon + roleData.role.ToColorizedDisplayString(factionType);
         return roleText;

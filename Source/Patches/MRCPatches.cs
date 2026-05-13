@@ -524,10 +524,7 @@ public static class PlayerListPatch
         var gradientText = gradient != null ? Utils.ApplyGradient($"({roleName})", gradient) : $"<color={faction.GetFactionColor()}>({roleName})</color>";
         var hiddenText = $"<color={role.GetFaction().GetFactionColor()}>({roleName})</color>";
         var text = $"{gradientText}";
-        var icon = role.GetTMPSprite();
-        icon = icon.Replace("RoleIcons\"", $"RoleIcons ({((role.GetFactionType() == faction && Constants.CurrentStyle() == "Regular")
-            ? "Regular"
-            : Utils.FactionName(faction, false))})\"");
+        var icon = role.GetRoleSprite(faction);
 		
 		var icon2 = $"<size=120%><voffset=0>{icon}</voffset></size>";
 
@@ -558,10 +555,11 @@ public static class TosCharacterNametagPatch
         var roleName = Fancy.FactionalRoleNames.Value ? role.ToRoleFactionDisplayString(factionType) : role.ToDisplayString();
         var gradientName = Utils.ApplyGradient(theName, gradient);
         var gradientRole = Utils.ApplyGradient($"({roleName})", gradient);
-        __result = $"<size=36><sprite=\"{(Constants.IsBTOS2() ? "BTOS" : "")}RoleIcons\" name=\"Role{(int)role}\"></size>\n<size=24>{gradientName}</size>\n<size=18>{gradientRole}</size>";
+        // __result = $"<size=36><sprite=\"{(Constants.IsBTOS2() ? "BTOS" : "")}RoleIcons\" name=\"Role{(int)role}\"></size>\n<size=24>{gradientName}</size>\n<size=18>{gradientRole}</size>";
+        __result = role.GetRoleSprite(factionType);
 
-        if (Constants.EnableIcons())
-            __result = __result.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(factionType, false)})\"");
+        // if (Constants.EnableIcons())
+        //     __result = __result.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(factionType, false)})\"");
     }
 }
 
@@ -665,16 +663,16 @@ public static class FancyChatExperimentalBTOS2
         var myfaction = Utils.FactionName(Pepper.GetMyFaction());
         var pirate = Utils.GetString("BTOS_ROLENAME_46");
         var court = Btos2Faction.Judge.GetChangedGradient(Btos2Role.Judge);
-		var juryIcon = Fancy.JuryIcon.Value ? $"<sprite=\"BTOSRoleIcons (Judge)\" name=\"Role16\">" : string.Empty;
+		var juryIcon = Fancy.JuryIcon.Value ? Btos2Role.Seer.GetRoleSprite(Btos2Faction.Judge) : string.Empty;
 
         __result = position switch
         {
-            70 => $"<link=\"r57\"><sprite=\"BTOSRoleIcons\" name=\"Role57\"><indent=1.1em><b>{Utils.ApplyGradient(Fancy.CourtLabel.Value, court)}:</b> </link>{encodedText.Replace("????: </color>", "").Replace("white", $"#{ColorUtility.ToHtmlStringRGB(Fancy.CourtChatColor.Value.ToColor())}")}",
+            70 => $"<link=\"r57\">{Btos2Role.Judge.GetRoleSprite(Btos2Faction.Judge)}<indent=1.1em><b>{Utils.ApplyGradient(Fancy.CourtLabel.Value, court)}:</b> </link>{encodedText.Replace("????: </color>", "").Replace("white", $"#{ColorUtility.ToHtmlStringRGB(Fancy.CourtChatColor.Value.ToColor())}")}",
             // 69 => encodedText.Replace("????:", $"<color=#{ColorUtility.ToHtmlStringRGB(Fancy.JuryColor.Value.ToColor())}>{Fancy.JuryLabel.Value}:</color>"),
             // I decided to remove the Seer icon from Jury messages for the scenario of which an Icon Pack's Seer icon does not fit Jury. An example is replacing Seer with TOS1 Medium.
             69 => encodedText.Replace("????:", $"{juryIcon}<color=#{ColorUtility.ToHtmlStringRGB(Fancy.JuryColor.Value.ToColor())}>{Fancy.JuryLabel.Value}:</color>"),
 
-            71 => encodedText.Replace("????:", $"<sprite=\"BTOSRoleIcons\" name=\"Role46\"> <color=#ECC23E>{pirate}:</color>").Replace("white", "#ECC23E"),
+            71 => encodedText.Replace("????:", $"{Role.PIRATE.GetRoleSprite(FactionType.PIRATE)}<color=#ECC23E>{pirate}:</color>").Replace("white", "#ECC23E"),
             _ => __result
         };
     }
@@ -1203,9 +1201,8 @@ public static class KeywordMentionsPatches
 			var display = roleEnum.ToDisplayString();
 			var shortName = roleEnum.ToShortenedDisplayString();
 
-			var sprite = (__instance._roleEffects == 1)
-				? $"<sprite=\"BTOSRoleIcons\" name=\"Role{role}\">"
-				: string.Empty;
+            // come back here if btos2 breaks
+			var sprite = (__instance._roleEffects == 1) ? roleEnum.GetRoleSprite(roleEnum.GetFaction()).ReplaceIcons() : string.Empty;
 
 			var name = __instance._useColors
 				? roleEnum.ToColorizedDisplayString()
@@ -1321,7 +1318,7 @@ public static class KeywordMentionsPatches
         foreach (var kvp in dict)
         {
             var item = kvp.Key;
-            var roleIcon = kvp.Value.GetTMPSprite();
+            var roleIcon = kvp.Value.GetRoleSprite(item);
             roleIcon = roleIcon.Replace("RoleIcons\"", $"RoleIcons ({((kvp.Value.GetFactionType() == item && Constants.CurrentStyle() == "Regular")
             ? "Regular"
             : Utils.FactionName(item, false))})\"");
@@ -1725,7 +1722,7 @@ public static class GraveyardItem_SetPlayerPicAndName_Patch
         var faction = killRecord.playerFaction;
         var role = killRecord.playerRole;
         var player = (int)killRecord.playerId;
-        var icon = role.GetTMPSprite();
+        var icon = role.GetRoleSprite(faction);
         icon = icon.Replace("RoleIcons\"", $"RoleIcons ({((role.GetFactionType() == faction && Constants.CurrentStyle() == "Regular")
             ? "Regular"
             : Utils.FactionName(faction, false))})\"");

@@ -1223,17 +1223,6 @@ public static class Utils
         else
             return input.Replace("\"BTOSRoleIcons", "\"RoleIcons");
     }
-
-    public static string AddFactionToIcon(this string input, string faction) => input.Replace("RoleIcons\"", $"RoleIcons ({faction})\"");
-
-    public static string GetFactionSprite(this Role role, FactionType factionType, bool replaceIcons = false)
-    {
-        var icon = role.GetTMPSprite();
-        var factionName = FactionName(factionType);
-        var factionIcon = icon.AddFactionToIcon(factionName);
-
-        return replaceIcons ? factionIcon.ReplaceIcons() : factionIcon;
-    }
 	
 	public static bool IsValidRole(this Role role)
 	{
@@ -1653,9 +1642,9 @@ public static class Utils
         };
     }
 	
-	public static string GetTextSprite(this Role role, FactionType faction)
+	public static string GetRoleSprite(this Role role, FactionType faction)
 	{
-		var style = role.GetFactionType() == faction && Constants.CurrentStyle() == "Regular" ? "Regular" : Utils.FactionName(faction, false);
+		var style = role.GetFactionType() == faction && Constants.CurrentStyle() == "Regular" ? "Regular" : FactionName(faction, false);
 		var icon = role.GetTMPSprite().Replace("RoleIcons\"", $"RoleIcons ({style})\"");
 
 		return icon;

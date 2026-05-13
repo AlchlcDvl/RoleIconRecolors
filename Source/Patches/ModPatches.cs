@@ -109,22 +109,16 @@ public static class RetrainPopupPatch
             return false;
         }
 
-        var icon = state.isRetraining.GetTMPSprite();
-        icon = icon.Replace("RoleIcons\"", $"RoleIcons ({((state.isRetraining.GetFactionType() == myFaction && Constants.CurrentStyle() == "Regular")
-            ? "Regular"
-            : Utils.FactionName(myFaction, false))})\"");
-
-        var myIcon = myRole.GetTMPSprite();
-        myIcon = myIcon.Replace("RoleIcons\"", $"RoleIcons ({((myRole.GetFactionType() == myFaction && Constants.CurrentStyle() == "Regular")
-            ? "Regular"
-            : Utils.FactionName(myFaction, false))})\"");
+        var icon = state.isRetraining.GetRoleSprite(myFaction);
+        var myIcon = myRole.GetRoleSprite(myFaction);
+        var arch = Role.COVENLEADER.GetRoleSprite(FactionType.COVEN);
 
         var roleName = state.isRetraining.ToColorizedNoLabel(myFaction);
         var myRoleName = myRole.ToColorizedNoLabel(myFaction);
         var hasVowel = Utils.StartsWithVowel(Utils.StripFormatting(roleName));
         var key = !hasVowel ? "FANCY_RETRAIN_POPUP" : "RETRAIN_POPUP_VOWEL";
 
-        __instance.HeaderText.text = Utils.GetString(key).Replace("%role%", icon + roleName).Replace("%role2%", myIcon + myRoleName);
+        __instance.HeaderText.text = Utils.GetString(key).Replace("%role%", icon + roleName).Replace("%role2%", myIcon + myRoleName).Replace("%arch%", arch + Role.COVENLEADER.ToColorizedDisplayString(FactionType.COVEN));
 
         return false;
     }
@@ -150,11 +144,11 @@ public static class RoleRevealCinematicPlayerPatch
 
         // Role name + icon
         var roleName = role.ToColorizedNoLabel(factionType);
-        var roleIcon = role.GetTMPSprite() + roleName;
+        var roleIcon = role.GetRoleSprite(factionType) + roleName;
 
-        roleIcon = roleIcon.Replace("RoleIcons\"", $"RoleIcons ({((role.GetFactionType() == factionType && Constants.CurrentStyle() == "Regular")
-            ? "Regular"
-            : Utils.FactionName(factionType, false))})\"");
+        // roleIcon = roleIcon.Replace("RoleIcons\"", $"RoleIcons ({((role.GetFactionType() == factionType && Constants.CurrentStyle() == "Regular")
+        //     ? "Regular"
+        //     : Utils.FactionName(factionType, false))})\"");
 
         string roleRevealKey;
 
@@ -513,17 +507,7 @@ public static class SpecialAbilityPopupDayConfirmListItemPatch
         var gradientText = gradient != null ? Utils.ApplyGradient(wrapped, gradient) : $"<color={myFaction.GetFactionColor()}>{wrapped}</color>";
         var hiddenText = $"<color={role.GetFaction().GetFactionColor()}>{wrapped}</color>";
         var final = role != Role.NONE ? gradientText : string.Empty;
-        var icon = role != Role.NONE ? role.GetTMPSprite() : string.Empty;
-
-        if (role != Role.NONE)
-        {
-            var styleName =
-                role.GetFactionType() == myFaction && Constants.CurrentStyle() == "Regular"
-                    ? "Regular"
-                    : Utils.FactionName(myFaction, false);
-
-            icon = icon.Replace("RoleIcons\"", $"RoleIcons ({styleName})\"");
-        }
+        var icon = role != Role.NONE ? role.GetRoleSprite(myFaction) : string.Empty;
 		
 		var icon2 = $"<size=120%><voffset=0>{icon}</voffset></size>";
 
@@ -581,7 +565,7 @@ public static class SpecialAbilityPopupNecromancerRetributionistListItemPatch
         var gradientText = gradient != null ? Utils.ApplyGradient(wrapped, gradient) : $"<color={factionType.GetFactionColor()}>{wrapped}</color>";
         var hiddenText = $"<color={role2.GetFaction().GetFactionColor()}>{wrapped}</color>";
         var final = role2 != Role.NONE ? gradientText : string.Empty;
-        var icon = role2 != Role.NONE ? role2.GetTMPSprite() : string.Empty;
+        var icon = role2 != Role.NONE ? role2.GetRoleSprite(factionType) : string.Empty;
 
         if (role2 != Role.NONE)
         {
@@ -705,7 +689,7 @@ public static class PatchSpecialAbilityPopupGenericDualTargetListItem
 
         var hiddenText = $"<color={role2.GetFaction().GetFactionColor()}>{wrapped}</color>";
         var final = role2 != Role.NONE ? gradientText : string.Empty;
-        var icon = role2 != Role.NONE ? role2.GetTMPSprite() : string.Empty;
+        var icon = role2 != Role.NONE ? role2.GetRoleSprite(factionType) : string.Empty;
         if (role2 != Role.NONE)
         {
             var styleName =
@@ -1856,7 +1840,7 @@ public static class NecronomiconRoleCardIconPatch
             UObject.Destroy(btn.gameObject);
         }
 
-        if (faction is not FactionType.COVEN or Btos2Faction.Pandora)
+        if (faction is not FactionType.COVEN and not Btos2Faction.Pandora)
             return;
 		
         if (role is Role.CURSED_SOUL or Role.DEATH or Role.FAMINE or Role.WAR or Role.PESTILENCE or Role.HIDDEN or Role.STONED)
