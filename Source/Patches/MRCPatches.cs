@@ -1770,8 +1770,10 @@ public static class WdahChatPatch
             {
                 var roleName = Utils.BuildRoleText(killRecord);
                 var key = Fancy.YouAreARole.Value ? Utils.GetHangingMessage(killRecord.playerRole, killRecord.playerFaction) : "GUI_XROLE_LAST_NIGHT";
+                var gender = Utils.GetPlayerGender(killRecord.playerId);
 
                 __result = uiController.l10n(key).Replace("%name%", playerName).Replace("%role%", roleName);
+                __result = Utils.ApplyGender(__result, gender);
             }
             else
             {
@@ -1798,8 +1800,10 @@ public static class WdahChatPatch2
                 var playerName = Utils.BuildPlayerTag(killRecord);
                 var roleName = Utils.BuildRoleText(killRecord);
                 var key = Fancy.YouAreARole.Value ? Utils.GetHangingMessage(killRecord.playerRole, killRecord.playerFaction) : "GUI_XROLE_LAST_NIGHT";
+                var gender = Utils.GetPlayerGender(killRecord.playerId);
 
                 __result = uiController.l10n(key).Replace("%name%", playerName).Replace("%role%", roleName);
+                __result = Utils.ApplyGender(__result, gender);
 
                 return false;
             }

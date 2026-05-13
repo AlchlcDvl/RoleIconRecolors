@@ -1103,6 +1103,7 @@
     </Entry>
 
 
+	<!-- You can use %they% and %were% for gender based variation. -->
     <Entry key="FANCY_THEY_WERE_A_ROLE">They were a %role%.</Entry>
 	<Entry key="FANCY_THEY_WERE_AN_ROLE">They were an %role%.</Entry>
     <Entry key="FANCY_THEY_WERE_THE_ROLE">They were the %role%.</Entry>
@@ -1810,5 +1811,22 @@ Would you like to abandon %role2% and become %role%?</Entry> -->
 
 	<Entry key="GUI_ROLE_ABILITY1_VERB_0">Use Ability</Entry>
 	<Entry key="BTOS_ROLE_ABILITY1_VERB_0">Use Ability</Entry>	
+
+	<Entry key="FANCY_MALE_0">was</Entry>	
+	<Entry key="FANCY_FEMALE_0">was</Entry>	
+	<Entry key="FANCY_NONBINARY_0">were</Entry>	
+
+	<Entry key="FANCY_MALE_1">He</Entry>	
+	<Entry key="FANCY_FEMALE_1">She</Entry>	
+	<Entry key="FANCY_NONBINARY_1">They</Entry>	
+
+	<Entry key="FANCY_MALE_2">Him</Entry>	
+	<Entry key="FANCY_FEMALE_2">Her</Entry>	
+	<Entry key="FANCY_NONBINARY_2">Them</Entry>	
+
+	<Entry key="FANCY_MALE_3">His</Entry>	
+	<Entry key="FANCY_FEMALE_3">Her</Entry>	
+	<Entry key="FANCY_NONBINARY_3">Their</Entry>	
+
 
 </StringTable>

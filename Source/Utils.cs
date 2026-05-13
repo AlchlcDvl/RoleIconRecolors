@@ -1244,15 +1244,6 @@ public static class Utils
 	}    
 	public static bool IsHorseman(this Role role) => RoleExtensions.horsemenList.Contains(role);
 
-    public static string GetFormattedRoleName(Role role, FactionType faction, bool includeSprite = true)
-    {
-        var sprite = includeSprite
-            ? $"<sprite=\"RoleIcons ({GetStyleForFaction(role, faction)})\" name=\"Role{(int)role}\">"
-            : string.Empty;
-
-        return sprite + role.ToColorizedDisplayString(faction);
-    }
-
     private static string GetStyleForFaction(Role role, FactionType faction)
     {
         return (Constants.CurrentStyle() == "Regular" && role.GetFactionType() == faction)
@@ -1670,4 +1661,56 @@ public static class Utils
 		return icon;
 	}
 
+    public static string GetGenderTerm(Gender gender, GenderUse use, bool lowercase = false)
+    {
+        return use switch
+        {
+            GenderUse.HeSheThey => gender switch
+            {
+                Gender.Male => GetString("FANCY_MALE_1"),
+                Gender.Female => GetString("FANCY_FEMALE_1"),
+                _ => GetString("FANCY_NONBINARY_1")
+            },
+
+            GenderUse.HimHerThem => gender switch
+            {
+                Gender.Male => GetString("FANCY_MALE_2"),
+                Gender.Female => GetString("FANCY_FEMALE_2"),
+                _ => GetString("FANCY_NONBINARY_2")
+            },
+
+            GenderUse.HisHerTheir => gender switch
+            {
+                Gender.Male => GetString("FANCY_MALE_3"),
+                Gender.Female => GetString("FANCY_FEMALE_3"),
+                _ => GetString("FANCY_NONBINARY_3")
+            },
+
+            GenderUse.WasWere => gender switch
+            {
+                Gender.Male => GetString("FANCY_MALE_0"),
+                Gender.Female => GetString("FANCY_FEMALE_0"),
+                _ => GetString("FANCY_NONBINARY_0")
+            },
+
+            _ => string.Empty
+        };
+    }
+
+    public static string ApplyGender(string text, Gender gender)
+    {
+        return text
+            .Replace("%were%", GetGenderTerm(gender, GenderUse.WasWere))
+            .Replace("%they%", GetGenderTerm(gender, GenderUse.HeSheThey))
+            .Replace("%them%", GetGenderTerm(gender, GenderUse.HimHerThem))
+            .Replace("%their%", GetGenderTerm(gender, GenderUse.HisHerTheir));
+    }
+
+    public static Gender GetPlayerGender(int playerId)
+    {
+        var skinId = Service.Game.Cast.GetPlayerSkin(playerId);
+        var character = Service.Game.Cast.GetCharacterWithSkinId(skinId);
+
+        return character?.gender ?? Gender.None;
+    }
 }

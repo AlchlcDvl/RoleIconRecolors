@@ -1233,20 +1233,6 @@ public static class GetInlinedStringsPatches
             __result = __result.Replace("RoleIcons\"", $"RoleIcons ({(role.GetFactionType() == factionType && Constants.CurrentStyle() == "Regular" ? "Regular" : Utils.FactionName(factionType, false))})\"");
         }
     }
-
-    // [HarmonyPatch(nameof(GameSimulation.GetTownTraitorRoleIconAndNameInlineString)), HarmonyPostfix]
-    // public static void GetTownTraitorRoleIconAndNameInlineStringPostfix(ref string __result)
-    // {
-        // if (Constants.EnableIcons())
-            // __result = __result.Replace("RoleIcons\"", "RoleIcons (Coven)\"");
-    // }
-
-    // [HarmonyPatch(nameof(GameSimulation.GetVIPRoleIconAndNameInlineString)), HarmonyPostfix]
-    // public static void GetVIPRoleIconAndNameInlineStringPostfix(ref string __result)
-    // {
-        // if (Constants.EnableIcons())
-            // __result = $"{__result.Replace("RoleIcons\"", "RoleIcons (VIP)\"")} <sprite=\"RoleIcons\" name=\"Role201\">";
-    // }
 }
 
 [HarmonyPatch]
@@ -1723,10 +1709,12 @@ public static class MakeProperFactionChecksInHeaderAnnouncement
         var display = icon + roleText;
 
         var l10nKey = Fancy.YouAreARole ? Utils.GetHangingMessage2(role, faction) : "GUI_GAME_WHO_DIED_AND_HOW_1_2";
+        var gender = Utils.GetPlayerGender(trialData.defendantPosition);
         var formattedLine = __instance.l10n(l10nKey).Replace("%role%", display);
 
         var name = Service.Game.Sim.simulation.GetDisplayName(trialData.defendantPosition).ToWhiteNameString();
         formattedLine = formattedLine.Replace("%name%", name);
+        formattedLine = Utils.ApplyGender(formattedLine, gender);
         formattedLine = formattedLine.ReplaceIcons();
 
         __instance.AddLine(formattedLine);
@@ -1769,10 +1757,13 @@ public static class MakeProperFactionChecksInWdah1
             newLine = (killRecord.playerRole != Role.HIDDEN) ? Utils.GetString("GUI_GAME_WHO_DIED_VICTIM_ROLE_KNOWN") : Utils.GetString("GUI_GAME_WHO_DIED_VICTIM_ROLE_HIDDEN");
             newLine = newLine.Replace("%role%", killRecord.playerRole.GetTMPSprite() + killRecord.playerRole.ToColorizedDisplayString(killRecord.playerFaction));
         }
+        var gender = Utils.GetPlayerGender(killRecord.playerId);
 
         var text = Fancy.YouAreARole ? Utils.GetString(Utils.GetWdahMessage(killRecord.playerRole, killRecord.playerFaction))
             .Replace("%role%", roleText)
             .ReplaceIcons() : newLine.ReplaceIcons();
+
+        text = Utils.ApplyGender(text, gender);
 
         __instance.AddLine(text, 1f);
         return false;
@@ -1821,12 +1812,14 @@ public static class MakeProperFactionChecksInWdah2
 				var killedByReason = killRecord.killedByReasons[i];
 				var also = i == 0 ? "" : "_ALSO";
 				var reasonId = (int)killedByReason;
+                var gender = Utils.GetPlayerGender(killRecord.playerId);
 
 				var fancy = $"FANCY_GUI_GAME{also}_KILLED_BY_REASON_{reasonId}";
 				var normal = $"GUI_GAME{also}_KILLED_BY_REASON_{reasonId}";
 
 				// var text2 = __instance.l10n($"GUI_GAME{also}_KILLED_BY_REASON_{(int)killedByReason}");
 				var text2 = Utils.TryGetString(fancy, normal, false);
+                text2 = Utils.ApplyGender(text2, gender);
 
 				text2 = text2.Replace("RoleIcons\"", "RoleIcons (Regular)\"");
 
