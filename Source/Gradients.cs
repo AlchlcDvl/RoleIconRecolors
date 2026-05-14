@@ -6,16 +6,24 @@ public static class Gradients
 {
     public static Gradient GetChangedGradient(this FactionType faction, Role role)
     {
-        var mod = Utils.GetGameType();
+         var mod = Utils.GetGameType();
+
+        // Apply Pandora override
+        faction = Fancy.ResolveFaction(faction);
+
+        var roleFaction = Fancy.ResolveFaction(role.GetFactionType(mod));
 
         var middleKey = Utils.FactionName(faction, mod, stoned: true).ToUpper();
-        var baseKey = Utils.FactionName(role.GetFactionType(mod), mod, stoned: true).ToUpper();
+        var baseKey = Utils.FactionName(roleFaction, mod, stoned: true).ToUpper();
+
         var startKey = middleKey;
+
         switch (faction)
         {
             case FactionType.VAMPIRE:
                 startKey = "VAMPIRE";
                 break;
+
             case Btos2Faction.Jackal:
                 startKey = "JACKAL";
                 break;

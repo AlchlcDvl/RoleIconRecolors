@@ -375,20 +375,20 @@ public static class Utils
         if (allowOverrides && Constants.FactionOverridden())
             return Constants.FactionOverride();
 		
-		// return BTOSFactionName(faction, stoned);
+		return BTOSFactionName(faction, stoned);
 
-        try
-        {
-            return (mod ?? GetGameType()) switch
-            {
-                GameModType.BTOS2 => BTOSFactionName(faction, stoned),
-                _ => VanillaFactionName(faction, stoned)
-            };
-        }
-        catch
-        {
-            return VanillaFactionName(faction, stoned);
-        }
+        // try
+        // {
+            // return (mod ?? GetGameType()) switch
+            // {
+                // GameModType.BTOS2 => BTOSFactionName(faction, stoned),
+                // _ => VanillaFactionName(faction, stoned)
+            // };
+        // }
+        // catch
+        // {
+            // return VanillaFactionName(faction, stoned);
+        // }
     }
 
     private static string BTOSFactionName(FactionType faction, bool stoned) => faction switch
@@ -1024,35 +1024,69 @@ public static class Utils
         return roleName;
     }
 
-    public static Color GetFactionStartingColor(FactionType faction) => Fancy.Colors[FactionName(faction, stoned: true).ToUpper()].Start.ToColor();
+	public static Color GetFactionStartingColor(FactionType faction)
+	{
+		if (faction is Btos2Faction.Cannibal)
+			return Fancy.CannibalStart.Value.ToColor();
+		
+		var resolved = Fancy.ResolveFaction(faction);
+
+		if (Fancy.FactionToColorMap.TryGetValue(resolved, out var dict) &&
+			dict.TryGetValue(ColorType.All, out var opt))
+			return opt.Value.ToColor();
+
+		var key = FactionName(resolved, stoned: true).ToUpper();
+		return Fancy.Colors[key].Start.ToColor();
+	}
+
     public static Color GetFactionEndingColor(FactionType faction)
 	{
-		var key = FactionName(faction, stoned: true).ToUpper();
+		if (faction is Btos2Faction.Cannibal)
+			return Fancy.CannibalEnd.Value.ToColor();
+		
+		var resolved = Fancy.ResolveFaction(faction);
+
+		if (Fancy.FactionToColorMap.TryGetValue(resolved, out var dict) &&
+			dict.TryGetValue(ColorType.All, out var opt))
+			return (opt.Value ?? Fancy.Colors[FactionName(resolved, true).ToUpper()].Start).ToColor();
+
+		var key = FactionName(resolved, stoned: true).ToUpper();
 		var entry = Fancy.Colors[key];
 
-		var color = entry.End ?? entry.Start;
-
-		return color.ToColor();
+		return (entry.End ?? entry.Start).ToColor();
 	}
-    public static string GetPrimaryColor(FactionType faction) => Fancy.Colors[FactionName(faction, stoned: true).ToUpper()].Start;
-    public static string GetSecondaryColor(FactionType faction)
+    public static string GetPrimaryColor(FactionType faction)
 	{
-		var key = FactionName(faction, stoned: true).ToUpper();
+		if (faction is Btos2Faction.Cannibal)
+			return Fancy.CannibalStart.Value;	
+
+		var resolved = Fancy.ResolveFaction(faction);
+		return Fancy.Colors[FactionName(resolved, stoned: true).ToUpper()].Start;
+	}
+	public static string GetSecondaryColor(FactionType faction)
+	{
+		if (faction is Btos2Faction.Cannibal)
+			return Fancy.CannibalEnd.Value;
+		
+		var resolved = Fancy.ResolveFaction(faction);
+		var key = FactionName(resolved, stoned: true).ToUpper();
 		var entry = Fancy.Colors[key];
 
 		return entry.End ?? entry.Start;
 	}
-    public static string GetPrimaryFactionBucketColor(FactionType faction)
+	public static string GetPrimaryFactionBucketColor(FactionType faction)
 	{
-		var key = FactionName(faction, stoned: true).ToUpper();
+		var resolved = Fancy.ResolveFaction(faction);
+		var key = FactionName(resolved, stoned: true).ToUpper();
 		var entry = Fancy.Colors[key];
 
 		return entry.BucketS ?? Fancy.BucketStart.Value;
 	}
 
-    public static string GetSecondaryFactionBucketColor(FactionType faction)
+	public static string GetSecondaryFactionBucketColor(FactionType faction)
 	{
-		var key = FactionName(faction, stoned: true).ToUpper();
+		var resolved = Fancy.ResolveFaction(faction);
+		var key = FactionName(resolved, stoned: true).ToUpper();
 		var entry = Fancy.Colors[key];
 
 		return entry.BucketE ?? Fancy.BucketEnd.Value;

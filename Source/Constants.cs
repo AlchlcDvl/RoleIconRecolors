@@ -33,7 +33,9 @@ public static class Constants
         try
         {
             if (!Fancy.ColorShadeToggleMap[color].Value)
-                return Fancy.CustomUIColorsMap.TryGetValue(color, out var custom) ? custom.Value.ToColor() : Color.clear;
+                return Fancy.CustomUIColorsMap.TryGetValue(color, out var custom)
+                    ? custom.Value.ToColor()
+                    : Color.clear;
 
             if (!faction.HasValue)
             {
@@ -45,25 +47,40 @@ public static class Constants
                     faction = Pepper.GetMyFaction();
             }
 
+            // Apply Pandora override here
+            if (faction.HasValue)
+                faction = Fancy.ResolveFaction(faction.Value);
+
             var shouldUseCustom = faction is null or FactionType.NONE;
             var colorString = "";
 
             if (!shouldUseCustom)
             {
-                if (Fancy.FactionToColorMap.TryGetValue(faction.Value, out var dict) && dict.TryGetValue(color, out var opt))
+                if (Fancy.FactionToColorMap.TryGetValue(faction.Value, out var dict)
+                    && dict.TryGetValue(color, out var opt))
+                {
                     colorString = opt.Value;
+                }
                 else
+                {
                     shouldUseCustom = true;
+                }
             }
 
             if (shouldUseCustom)
-                colorString = Fancy.CustomUIColorsMap.TryGetValue(color, out var opt) ? opt.Value : "#000000";
+            {
+                colorString = Fancy.CustomUIColorsMap.TryGetValue(color, out var opt)
+                    ? opt.Value
+                    : "#000000";
+            }
 
             return colorString.ToColor();
         }
         catch
         {
-            return (Fancy.CustomUIColorsMap.TryGetValue(color, out var opt) ? opt.Value : "#000000").ToColor();
+            return (Fancy.CustomUIColorsMap.TryGetValue(color, out var opt)
+                ? opt.Value
+                : "#000000").ToColor();
         }
     }
 
