@@ -1736,4 +1736,14 @@ public static class Utils
 
         return character?.gender ?? Gender.None;
     }
+	
+	public static string ApplyGenderGradient(this string text, Gender gender)
+	{
+		return gender switch
+		{
+			Gender.Male => ApplyGradient(text, CreateGradient(Fancy.MaleStart.Value, Fancy.MaleEnd.Value)),
+			Gender.Female => ApplyGradient(text, CreateGradient(Fancy.FemaleStart.Value, Fancy.FemaleEnd.Value)),
+			_ => ApplyGradient(text, CreateGradient(Fancy.NonbinaryStart.Value, Fancy.NonbinaryEnd.Value))
+		};
+	}
 }

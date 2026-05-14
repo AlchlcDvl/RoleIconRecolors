@@ -1723,10 +1723,8 @@ public static class MakeProperFactionChecksInWdah1
 
         // var roleIconsString = Constants.IsBTOS2() ? "BTOSRoleIcons" : "RoleIcons";
         // var roleText = $"<sprite=\"{roleIconsString}\" name=\"Role{(int)killRecord.playerRole}\">{killRecord.playerRole.ToColorizedDisplayString(killRecord.playerFaction)}";
-        var roleText = killRecord.playerRole.GetRoleSprite(killRecord.playerFaction);
+        var roleText = killRecord.playerRole.GetRoleSprite(killRecord.playerFaction) + killRecord.playerRole.ToColorizedDisplayString(killRecord.playerFaction);
 
-        if (Constants.EnableIcons())
-            roleText = roleText.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(killRecord.playerFaction)})\"");
 
         string newLine;
         if (killRecord.playerRole is Role.NONE or Role.UNKNOWN)

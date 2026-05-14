@@ -7,6 +7,8 @@ using Game.Characters;
 using Game.Chat;
 using Game.DevMenu;
 using Game.Interface;
+using Game.Interface.Customization;
+using Game.Services;
 using Home.HomeScene;
 using Home.LoginScene;
 using Home.Services;
@@ -1883,332 +1885,66 @@ public static class NecronomiconRoleCardIconPatch
     }
 }
 
-// [HarmonyPatch(typeof(RoleCardPanel))]
-// public static class RoleCardPanelPatches
-// {
-    // [HarmonyPatch(nameof(RoleCardPanel.GetGoal))]
-    // [HarmonyFinalizer]
-    // public static Exception Goal(RoleCardPanel __instance, ref string __result)
-    // {
-        // var faction = (int)__instance.CurrentFaction;
-        // var role = (int)__instance.CurrentRole;
-
-        // var prefix = Utils.GetKeyPrefix(true);
-        // var isBTOS2 = Constants.IsBTOS2();
-
-        // var fancyRoleKey = $"{prefix}_ROLE_GOAL_{role}";
-        // var fancyFactionKey = $"{prefix}_FACTION_GOAL_{faction}";
-        // var baseRoleKey = isBTOS2 ? $"BTOS_ROLE_GOAL_{role}" : $"GUI_ROLE_GOAL_{role}";
-        // var baseFactionKey = isBTOS2 ? $"BTOS_FACTION_GOAL_{faction}" : $"GUI_FACTION_GOAL_{faction}";
-
-        // __result = Utils.TryGetString(4, fancyRoleKey, fancyFactionKey, baseRoleKey, baseFactionKey);
-
-        // return null;
-    // }
-
-    // [HarmonyPatch(nameof(RoleCardPanel.GetAbilities))]
-    // [HarmonyFinalizer]
-    // public static Exception Summary(RoleCardPanel __instance, ref string __result)
-    // {
-        // var faction = (int)__instance.CurrentFaction;
-        // var role = (int)__instance.CurrentRole;
-
-        // var prefix = Utils.GetKeyPrefix(true);
-        // var isBTOS2 = Constants.IsBTOS2();
-
-        // var fancyRoleKey = $"{prefix}_ROLE_ABILITY_SUMMARY_{role}_{faction}";
-        // var fancyFactionKey = $"{prefix}_ROLE_ABILITY_SUMMARY_{role}";
-        // var baseRoleKey = isBTOS2 ? $"BTOS_ROLE_ABILITY_SUMMARY_{role}_{faction}" : $"GUI_ROLE_ABILITY_SUMMARY_{role}_{faction}";
-        // var baseFactionKey = isBTOS2 ? $"BTOS_ROLE_ABILITY_SUMMARY_{role}" : $"GUI_ROLE_ABILITY_SUMMARY_{role}";
-
-        // __result = Utils.TryGetString(4, fancyRoleKey, fancyFactionKey, baseRoleKey, baseFactionKey);
-
-        // return null;
-    // }
-
-    // [HarmonyPatch(nameof(RoleCardPanel.GetAttributes))]
-    // [HarmonyFinalizer]
-    // public static Exception Attributes(RoleCardPanel __instance, ref string __result)
-    // {
-        // var faction = (int)__instance.CurrentFaction;
-        // var role = (int)__instance.CurrentRole;
-
-        // var prefix = Utils.GetKeyPrefix(true);
-        // var isBTOS2 = Constants.IsBTOS2();
-
-        // var fancyRoleKey = $"{prefix}_ROLE_ATTRIBUTES_{role}_{faction}";
-        // var fancyFactionKey = $"{prefix}_ROLE_ATTRIBUTES_{role}";
-        // var baseRoleKey = isBTOS2 ? $"BTOS_ROLE_ATTRIBUTES_{role}_{faction}" : $"GUI_ROLE_ATTRIBUTES_{role}_{faction}";
-        // var baseFactionKey = isBTOS2 ? $"BTOS_ROLE_ATTRIBUTES_{role}" : $"GUI_ROLE_ATTRIBUTES_{role}";
-
-        // __result = Utils.TryGetString(4, fancyRoleKey, fancyFactionKey, baseRoleKey, baseFactionKey);
-
-        // return null;
-    // }
-
-    // [HarmonyPatch(nameof(RoleCardPanel.GetVictoryConditions))]
-    // [HarmonyFinalizer]
-    // public static Exception VictoryConditions(RoleCardPanel __instance, ref string __result)
-    // {
-        // var faction = (int)__instance.CurrentFaction;
-
-        // var prefix = Utils.GetKeyPrefix(true);
-        // var isBTOS2 = Constants.IsBTOS2();
-
-        // var fancyFactionKey = $"{prefix}_FACTION_VICTORY_CONDITION_{faction}";
-        // var baseFactionKey = isBTOS2 ? $"BTOS_FACTION_VICTORY_CONDITION_{faction}" : $"GUI_FACTION_VICTORY_CONDITION_{faction}";
-
-        // __result = Utils.TryGetString(2, fancyFactionKey, baseFactionKey);
-
-        // return null;
-    // }
-
-    // [HarmonyPatch(nameof(RoleCardPanel.GetAbility1Desc))]
-    // [HarmonyFinalizer]
-    // public static Exception Ability1(RoleCardPanel __instance, ref string __result)
-    // {
-        // var faction = (int)__instance.CurrentFaction;
-        // var role = (int)__instance.CurrentRole;
-
-        // var prefix = Utils.GetKeyPrefix(true);
-        // var isBTOS2 = Constants.IsBTOS2();
-
-        // var fancyRoleKey = $"{prefix}_ROLE_ABILITY1_DESC_{role}_{faction}";
-        // var fancyFactionKey = $"{prefix}_ROLE_ABILITY1_DESC_{role}";
-        // var baseRoleKey = isBTOS2 ? $"BTOS_ROLE_ABILITY1_TEXT_{role}_{faction}" : $"GUI_ROLE_ABILITY1_DESC_{role}_{faction}";
-        // var baseFactionKey = isBTOS2 ? $"BTOS_ROLE_ABILITY1_TEXT_{role}" : $"GUI_ROLE_ABILITY1_DESC_{role}";
-
-        // __result = Utils.TryGetString(4, fancyRoleKey, fancyFactionKey, baseRoleKey, baseFactionKey);
-
-        // return null;
-    // }
-
-    // [HarmonyPatch(nameof(RoleCardPanel.GetAbility2Desc))]
-    // [HarmonyFinalizer]
-    // public static Exception Ability2(RoleCardPanel __instance, ref string __result)
-    // {
-        // var faction = (int)__instance.CurrentFaction;
-        // var role = (int)__instance.CurrentRole;
-
-        // var prefix = Utils.GetKeyPrefix(true);
-        // var isBTOS2 = Constants.IsBTOS2();
-
-        // var fancyRoleKey = $"{prefix}_ROLE_ABILITY2_DESC_{role}_{faction}";
-        // var fancyFactionKey = $"{prefix}_ROLE_ABILITY2_DESC_{role}";
-        // var baseRoleKey = isBTOS2 ? $"BTOS_ROLE_ABILITY2_TEXT_{role}_{faction}" : $"GUI_ROLE_ABILITY2_DESC_{role}_{faction}";
-        // var baseFactionKey = isBTOS2 ? $"BTOS_ROLE_ABILITY2_TEXT_{role}" : $"GUI_ROLE_ABILITY2_DESC_{role}";
-
-        // __result = Utils.TryGetString(4, fancyRoleKey, fancyFactionKey, baseRoleKey, baseFactionKey);
-
-        // return null;
-    // }
-
-    // [HarmonyPatch(nameof(RoleCardPanel.GetSpecialAbilityDesc))]
-    // [HarmonyFinalizer]
-    // public static Exception SpecialAbility(RoleCardPanel __instance, ref string __result)
-    // {
-        // var faction = (int)__instance.CurrentFaction;
-        // var role = (int)__instance.CurrentRole;
-
-        // var prefix = Utils.GetKeyPrefix(true);
-        // var isBTOS2 = Constants.IsBTOS2();
-
-        // var fancyRoleKey = $"{prefix}_ROLE_SPECIAL_ABILITY_DESC_{role}_{faction}";
-        // var fancyFactionKey = $"{prefix}_ROLE_SPECIAL_ABILITY_DESC_{role}";
-        // var baseRoleKey = isBTOS2 ? $"BTOS_ROLE_SPECIALABILITY_TEXT_{role}_{faction}" : $"GUI_ROLE_SPECIAL_ABILITY_DESC_{role}_{faction}";
-        // var baseFactionKey = isBTOS2 ? $"BTOS_ROLE_SPECIALABILITY_TEXT_{role}" : $"GUI_ROLE_SPECIAL_ABILITY_DESC_{role}";
-
-        // __result = Utils.TryGetString(4, fancyRoleKey, fancyFactionKey, baseRoleKey, baseFactionKey);
-
-        // return null;
-    // }
-	
-	// [HarmonyPatch(nameof(RoleCardPanel.OnClickNecronomicon))]
-	// [HarmonyFinalizer]
-	// public static Exception Necronomicon(RoleCardPanel __instance)
-	// {
-		// var role = (int)__instance.CurrentRole;
-		// var faction = (int)__instance.CurrentFaction;
-
-		// var prefix = Utils.GetKeyPrefix(true);
-		// var isBTOS2 = Constants.IsBTOS2();
-
-		// var fancyRoleKey = $"{prefix}_ROLE_CARD_NECRONOMICON_ABILITY_TOOLTIP_{role}_{faction}";
-		// var fancyFactionKey = $"{prefix}_ROLE_CARD_NECRONOMICON_ABILITY_TOOLTIP_{role}";
-		// var baseRoleKey = isBTOS2 ? $"BTOS_ROLE_CARD_NECRONOMICON_ABILITY_TOOLTIP_{role}_{faction}" : $"GUI_ROLE_CARD_NECRONOMICON_ABILITY_TOOLTIP_{role}_{faction}";
-		// var baseFactionKey = isBTOS2 ? $"BTOS_ROLE_CARD_NECRONOMICON_ABILITY_TOOLTIP_{role}" : $"GUI_ROLE_CARD_NECRONOMICON_ABILITY_TOOLTIP_{role}";
-		// var vanilla = "GUI_ROLE_CARD_NECRONOMICON_ABILITY_TOOLTIP";
-
-		// var text = Utils.TryGetString(5, fancyRoleKey, fancyFactionKey, baseRoleKey, baseFactionKey, vanilla);
-
-		// __instance.roleDescText.SetText(text);
-		// __instance.roleDescGO.gameObject.SetActive(true);
-
-		// return null;
-	// }
-// }
-
-// [HarmonyPatch(typeof(RoleCardPopupPanel))]
-// public static class RoleCardPopupPanelPatches
-// {
-    // [HarmonyPatch(nameof(RoleCardPopupPanel.GetGoal))]
-    // [HarmonyFinalizer]
-    // public static Exception Goal(RoleCardPopupPanel __instance, ref string __result)
-    // {
-        // var faction = (int)__instance.CurrentFaction;
-        // var role = (int)__instance.CurrentRole;
-
-        // var prefix = Utils.GetKeyPrefix(true);
-        // var isBTOS2 = Constants.IsBTOS2();
-
-        // var fancyRoleKey = $"{prefix}_ROLE_GOAL_{role}";
-        // var fancyFactionKey = $"{prefix}_FACTION_GOAL_{faction}";
-        // var baseRoleKey = isBTOS2 ? $"BTOS_ROLE_GOAL_{role}" : $"GUI_ROLE_GOAL_{role}";
-        // var baseFactionKey = isBTOS2 ? $"BTOS_FACTION_GOAL_{faction}" : $"GUI_FACTION_GOAL_{faction}";
-
-        // __result = Utils.TryGetString(4, fancyRoleKey, fancyFactionKey, baseRoleKey, baseFactionKey);
-
-        // return null;
-    // }
-
-    // [HarmonyPatch(nameof(RoleCardPopupPanel.GetAbilities))]
-    // [HarmonyFinalizer]
-    // public static Exception Summary(RoleCardPopupPanel __instance, ref string __result)
-    // {
-        // var faction = (int)__instance.CurrentFaction;
-        // var role = (int)__instance.CurrentRole;
-
-        // var prefix = Utils.GetKeyPrefix(true);
-        // var isBTOS2 = Constants.IsBTOS2();
-
-        // var fancyRoleKey = $"{prefix}_ROLE_ABILITY_SUMMARY_{role}_{faction}";
-        // var fancyFactionKey = $"{prefix}_ROLE_ABILITY_SUMMARY_{role}";
-        // var baseRoleKey = isBTOS2 ? $"BTOS_ROLE_ABILITY_SUMMARY_{role}_{faction}" : $"GUI_ROLE_ABILITY_SUMMARY_{role}_{faction}";
-        // var baseFactionKey = isBTOS2 ? $"BTOS_ROLE_ABILITY_SUMMARY_{role}" : $"GUI_ROLE_ABILITY_SUMMARY_{role}";
-
-        // __result = Utils.TryGetString(4, fancyRoleKey, fancyFactionKey, baseRoleKey, baseFactionKey);
-
-        // return null;
-    // }
-
-    // [HarmonyPatch(nameof(RoleCardPopupPanel.GetAttributes))]
-    // [HarmonyFinalizer]
-    // public static Exception Attributes(RoleCardPopupPanel __instance, ref string __result)
-    // {
-        // var faction = (int)__instance.CurrentFaction;
-        // var role = (int)__instance.CurrentRole;
-
-        // var prefix = Utils.GetKeyPrefix(true);
-        // var isBTOS2 = Constants.IsBTOS2();
-
-        // var fancyRoleKey = $"{prefix}_ROLE_ATTRIBUTES_{role}_{faction}";
-        // var fancyFactionKey = $"{prefix}_ROLE_ATTRIBUTES_{role}";
-        // var baseRoleKey = isBTOS2 ? $"BTOS_ROLE_ATTRIBUTES_{role}_{faction}" : $"GUI_ROLE_ATTRIBUTES_{role}_{faction}";
-        // var baseFactionKey = isBTOS2 ? $"BTOS_ROLE_ATTRIBUTES_{role}" : $"GUI_ROLE_ATTRIBUTES_{role}";
-
-        // __result = Utils.TryGetString(4, fancyRoleKey, fancyFactionKey, baseRoleKey, baseFactionKey);
-
-        // return null;
-    // }
-
-    // [HarmonyPatch(nameof(RoleCardPopupPanel.GetVictoryConditions))]
-    // [HarmonyFinalizer]
-    // public static Exception VictoryConditions(RoleCardPopupPanel __instance, ref string __result)
-    // {
-        // var faction = (int)__instance.CurrentFaction;
-
-        // var prefix = Utils.GetKeyPrefix(true);
-        // var isBTOS2 = Constants.IsBTOS2();
-
-        // var fancyFactionKey = $"{prefix}_FACTION_VICTORY_CONDITION_{faction}";
-        // var baseFactionKey = isBTOS2 ? $"BTOS_FACTION_VICTORY_CONDITION_{faction}" : $"GUI_FACTION_VICTORY_CONDITION_{faction}";
-
-        // __result = Utils.TryGetString(2, fancyFactionKey, baseFactionKey);
-
-        // return null;
-    // }
-
-    // [HarmonyPatch(nameof(RoleCardPopupPanel.GetAbility1Desc))]
-    // [HarmonyFinalizer]
-    // public static Exception Ability1(RoleCardPopupPanel __instance, ref string __result)
-    // {
-        // var faction = (int)__instance.CurrentFaction;
-        // var role = (int)__instance.CurrentRole;
-
-        // var prefix = Utils.GetKeyPrefix(true);
-        // var isBTOS2 = Constants.IsBTOS2();
-
-        // var fancyRoleKey = $"{prefix}_ROLE_ABILITY1_DESC_{role}_{faction}";
-        // var fancyFactionKey = $"{prefix}_ROLE_ABILITY1_DESC_{role}";
-        // var baseRoleKey = isBTOS2 ? $"BTOS_ROLE_ABILITY1_TEXT_{role}_{faction}" : $"GUI_ROLE_ABILITY1_DESC_{role}_{faction}";
-        // var baseFactionKey = isBTOS2 ? $"BTOS_ROLE_ABILITY1_TEXT_{role}" : $"GUI_ROLE_ABILITY1_DESC_{role}";
-
-        // __result = Utils.TryGetString(4, fancyRoleKey, fancyFactionKey, baseRoleKey, baseFactionKey);
-
-        // return null;
-    // }
-
-    // [HarmonyPatch(nameof(RoleCardPopupPanel.GetAbility2Desc))]
-    // [HarmonyFinalizer]
-    // public static Exception Ability2(RoleCardPopupPanel __instance, ref string __result)
-    // {
-        // var faction = (int)__instance.CurrentFaction;
-        // var role = (int)__instance.CurrentRole;
-
-        // var prefix = Utils.GetKeyPrefix(true);
-        // var isBTOS2 = Constants.IsBTOS2();
-
-        // var fancyRoleKey = $"{prefix}_ROLE_ABILITY2_DESC_{role}_{faction}";
-        // var fancyFactionKey = $"{prefix}_ROLE_ABILITY2_DESC_{role}";
-        // var baseRoleKey = isBTOS2 ? $"BTOS_ROLE_ABILITY2_TEXT_{role}_{faction}" : $"GUI_ROLE_ABILITY2_DESC_{role}_{faction}";
-        // var baseFactionKey = isBTOS2 ? $"BTOS_ROLE_ABILITY2_TEXT_{role}" : $"GUI_ROLE_ABILITY2_DESC_{role}";
-
-        // __result = Utils.TryGetString(4, fancyRoleKey, fancyFactionKey, baseRoleKey, baseFactionKey);
-
-        // return null;
-    // }
-
-    // [HarmonyPatch(nameof(RoleCardPopupPanel.GetSpecialAbilityDesc))]
-    // [HarmonyFinalizer]
-    // public static Exception SpecialAbility(RoleCardPopupPanel __instance, ref string __result)
-    // {
-        // var faction = (int)__instance.CurrentFaction;
-        // var role = (int)__instance.CurrentRole;
-
-        // var prefix = Utils.GetKeyPrefix(true);
-        // var isBTOS2 = Constants.IsBTOS2();
-
-        // var fancyRoleKey = $"{prefix}_ROLE_SPECIAL_ABILITY_DESC_{role}_{faction}";
-        // var fancyFactionKey = $"{prefix}_ROLE_SPECIAL_ABILITY_DESC_{role}";
-        // var baseRoleKey = isBTOS2 ? $"BTOS_ROLE_SPECIALABILITY_TEXT_{role}_{faction}" : $"GUI_ROLE_SPECIAL_ABILITY_DESC_{role}_{faction}";
-        // var baseFactionKey = isBTOS2 ? $"BTOS_ROLE_SPECIALABILITY_TEXT_{role}" : $"GUI_ROLE_SPECIAL_ABILITY_DESC_{role}";
-
-        // __result = Utils.TryGetString(4, fancyRoleKey, fancyFactionKey, baseRoleKey, baseFactionKey);
-
-        // return null;
-    // }
-	
-	// [HarmonyPatch(nameof(RoleCardPopupPanel.OnClickNecronomicon))]
-	// [HarmonyFinalizer]
-	// public static Exception Necronomicon(RoleCardPopupPanel __instance)
-	// {
-		// var role = (int)__instance.CurrentRole;
-		// var faction = (int)__instance.CurrentFaction;
-
-		// var prefix = Utils.GetKeyPrefix(true);
-		// var isBTOS2 = Constants.IsBTOS2();
-
-		// var fancyRoleKey = $"{prefix}_ROLE_CARD_NECRONOMICON_ABILITY_TOOLTIP_{role}_{faction}";
-		// var fancyFactionKey = $"{prefix}_ROLE_CARD_NECRONOMICON_ABILITY_TOOLTIP_{role}";
-		// var baseRoleKey = isBTOS2 ? $"BTOS_ROLE_CARD_NECRONOMICON_ABILITY_TOOLTIP_{role}_{faction}" : $"GUI_ROLE_CARD_NECRONOMICON_ABILITY_TOOLTIP_{role}_{faction}";
-		// var baseFactionKey = isBTOS2 ? $"BTOS_ROLE_CARD_NECRONOMICON_ABILITY_TOOLTIP_{role}" : $"GUI_ROLE_CARD_NECRONOMICON_ABILITY_TOOLTIP_{role}";
-		// var vanilla = "GUI_ROLE_CARD_NECRONOMICON_ABILITY_TOOLTIP";
-
-		// var text = Utils.TryGetString(5, fancyRoleKey, fancyFactionKey, baseRoleKey, baseFactionKey, vanilla);
-
-		// __instance.roleDescText.SetText(text);
-		// __instance.roleDescGO.gameObject.SetActive(true);
-
-		// return null;
-	// }
-// }
+[HarmonyPatch]
+public static class ApplyGenderGradientToCustomizationName
+{
+	[HarmonyPatch(typeof(CustomizationCharacterItem), nameof(CustomizationCharacterItem.SetData))]
+	[HarmonyPostfix]
+	public static void SetDataPostfix(CustomizationCharacterItem __instance)
+	{
+		var character = Service.Game.Cast.GetCharacterWithSkinId(__instance.skinId);
+
+		if (character == null || __instance.nameText == null)
+			return;
+
+		__instance.nameText.text = __instance.nameText.text.ApplyGenderGradient(character.gender);
+	}
+
+	[HarmonyPatch(typeof(CustomizationCharacterItem), nameof(CustomizationCharacterItem.OverrideData))]
+	[HarmonyPostfix]
+	public static void OverrideDataPostfix(CustomizationCharacterItem __instance, int a_skinId)
+	{
+		var character = Service.Game.Cast.GetCharacterWithSkinId(a_skinId);
+
+		if (character == null || __instance.nameText == null)
+			return;
+
+		__instance.nameText.text = __instance.nameText.text.ApplyGenderGradient(character.gender);
+	}
+}
+
+[HarmonyPatch(typeof(CastService), nameof(CastService.GetSkinName))]
+public static class ApplyGenderGradientToSkinNames
+{
+	public static void Postfix(CastService __instance, int skinId, ref string __result)
+	{
+		if (string.IsNullOrWhiteSpace(__result))
+			return;
+
+		var character = __instance.GetCharacterWithSkinId(skinId);
+
+		if (character == null)
+			return;
+
+		__result = __result.ApplyGenderGradient(character.gender);
+	}
+}
+
+[HarmonyPatch(typeof(SkinSelectionItem), nameof(SkinSelectionItem.Init))]
+public static class ApplyGenderGradientToSkinSelectionItem
+{
+	[HarmonyPostfix]
+	public static void Postfix(SkinSelectionItem __instance, int skinId)
+	{
+		if (__instance.skinText == null)
+			return;
+
+		var character = Service.Game.Cast.GetCharacterWithSkinId(skinId);
+
+		if (character == null)
+			return;
+
+		__instance.skinText.text =
+			__instance.skinText.text.ApplyGenderGradient(character.gender);
+	}
+}

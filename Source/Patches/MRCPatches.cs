@@ -555,8 +555,7 @@ public static class TosCharacterNametagPatch
         var roleName = Fancy.FactionalRoleNames.Value ? role.ToRoleFactionDisplayString(factionType) : role.ToDisplayString();
         var gradientName = Utils.ApplyGradient(theName, gradient);
         var gradientRole = Utils.ApplyGradient($"({roleName})", gradient);
-        // __result = $"<size=36><sprite=\"{(Constants.IsBTOS2() ? "BTOS" : "")}RoleIcons\" name=\"Role{(int)role}\"></size>\n<size=24>{gradientName}</size>\n<size=18>{gradientRole}</size>";
-        __result = role.GetRoleSprite(factionType);
+        __result = $"<size=36>{role.GetRoleSprite(factionType)}</size>\n<size=24>{gradientName}</size>\n<size=18>{gradientRole}</size>";
 
         // if (Constants.EnableIcons())
         //     __result = __result.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(factionType, false)})\"");
@@ -1399,21 +1398,22 @@ public static bool Prefix(
 
         string styledText;
 
-        if (Utils.TryGetPlayerData(i, out var data))
-        {
-            if (data.Item2 is FactionType.NONE or FactionType.UNKNOWN)
-            {
-                styledText = Utils.BaseMentionGradient(text);
-            }
-            else
-            {
-                styledText = Utils.GetFactionGradient(text, data.Item2);
-            }
-        }
-        else
-        {
-            styledText = Utils.BaseMentionGradient(text);
-        }
+        if (Utils.TryGetPlayerData(i, out var data) && data.Item2 is not (FactionType.NONE or FactionType.UNKNOWN))
+		{
+			styledText = Utils.GetFactionGradient(text, data.Item2);
+		}
+		else if (Fancy.ApplyGendersToPlayerMentions.Value)
+		{
+			var character = Service.Game.Cast.GetCharacterWithSkinId(skinId);
+
+			styledText = character != null
+				? text.ApplyGenderGradient(character.gender)
+				: Utils.BaseMentionGradient(text);
+		}
+		else
+		{
+			styledText = Utils.BaseMentionGradient(text);
+		}
 
         // Optional bold (matches your previous behavior)
         if (__instance._useColors)
