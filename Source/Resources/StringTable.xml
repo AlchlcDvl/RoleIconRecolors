@@ -1132,7 +1132,8 @@
 %role%!</Entry>
 	<Entry key="FANCY_PLAYER_WAS_AN_ROLE_ALT">%name% was an 
 %role%!</Entry>
-    <Entry key="FANCY_PLAYER_WAS_THE_ROLE_ALT">%name% was the %role%.</Entry>
+    <Entry key="FANCY_PLAYER_WAS_THE_ROLE_ALT">%name% was the 
+%role%!</Entry>
 	<Entry key="FANCY_PLAYER_WAS_ROLE_ALT">%name% was 
 %role%!</Entry>
 	<Entry key="FANCY_PLAYER_WAS_STONED_ALT">%name% was 
