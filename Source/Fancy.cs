@@ -225,7 +225,6 @@ public class Fancy : BaseMod<Fancy>
 
     private static EnumDropdownOption<ColorType> SelectColorFilter;
     public static EnumDropdownOption<FactionType> SelectTestingFaction;
-    public static EnumDropdownOption<FactionType> FactionIsPandora;
 
     // TODO: Implement these
     public static EnumDropdownOption<Role> SelectTestingRole;
@@ -277,7 +276,7 @@ public class Fancy : BaseMod<Fancy>
 
         SelectDisplay = new("SELECT_DISPLAY", DisplayType.RoleCard, PackType.None, useTranslations: true);
         SelectTestingFaction = new("SELECTED_TESTING_FACTION", FactionType.NONE, PackType.None, useTranslations: true, values:
-            () => SettingsAndTestingUI.Instance?.IsBTOS2 == true ? [.. filteredFactions.AddItem(FactionType.NONE)] : [.. VanillaFactions.AddItem(Btos2Faction.Pandora)]);
+            () => SettingsAndTestingUI.Instance?.IsBTOS2 == true ? [.. filteredFactions.AddItem(FactionType.NONE)] : [.. VanillaFactions]);
         SelectTestingRole = new("SELECTED_TESTING_ROLE", Role.ADMIRER, PackType.None, useTranslations: true, values:
             () => SettingsAndTestingUI.Instance?.IsBTOS2 == true ? BTOS2Roles : VanillaRoles);
 
@@ -456,7 +455,7 @@ public class Fancy : BaseMod<Fancy>
         ReplaceNAwithRA = new("RANDOM_APOC_IN_VANILLA", false, PackType.MiscRoleCustomisation);
         CannibalStart = new("CANNIBAL_START", "#E6956A", PackType.MiscRoleCustomisation, setActive: () => false);
         CannibalEnd = new("CANNIBAL_END", "#E6956A", PackType.MiscRoleCustomisation, setActive: () => false);
-        FactionIsPandora = new("FACTION_IS_PANDORA", FactionType.NONE, PackType.MiscRoleCustomisation, useTranslations: true, setActive: () => SelectTestingFaction.Value == Btos2Faction.Pandora, values: () => SettingsAndTestingUI.Instance?.IsBTOS2 == true ? [.. filteredFactions.Where(x => x != Btos2Faction.Pandora).AddItem(FactionType.NONE)] : VanillaFactions);
+
         NeutralStart = new("NEUTRAL_START", "#A9A9A9", PackType.MiscRoleCustomisation);
         NeutralEnd = new("NEUTRAL_END", "#A9A9A9", PackType.MiscRoleCustomisation);
         BucketStart = new("BUCKET_START", "#1F51FF", PackType.MiscRoleCustomisation);
@@ -493,8 +492,8 @@ public class Fancy : BaseMod<Fancy>
         NonbinaryStart = new("NONBINARY_START", "#88ff88", PackType.Testing);
         NonbinaryEnd = new("NONBINARY_END", "#ffff88", PackType.Testing);
 
-        foreach (var faction in BTOS2Factions.Where(x => x is not FactionType.NONE and not FactionType.UNKNOWN and not FactionType.FACTION_COUNT and not FactionType.JESTER and not FactionType.EXECUTIONER and not FactionType.DOOMSAYER and not FactionType.PIRATE
-			and not Btos2Faction.Judge and not Btos2Faction.Starspawn and not Btos2Faction.Auditor and not Btos2Faction.Inquisitor and not Btos2Faction.Lovers and not Btos2Faction.Judge and not Btos2Faction.Compliance and not Btos2Faction.Lovers))
+        foreach (var faction in BTOS2Factions.Where(x => x is not FactionType.NONE or FactionType.UNKNOWN or FactionType.FACTION_COUNT or FactionType.JESTER or FactionType.EXECUTIONER or FactionType.DOOMSAYER or FactionType.PIRATE
+			or Btos2Faction.Judge or Btos2Faction.Starspawn or Btos2Faction.Auditor or Btos2Faction.Inquisitor or Btos2Faction.Lovers or Btos2Faction.Judge or Btos2Faction.Compliance or Btos2Faction.Lovers))
         {
             CinematicMap[faction] = new(
                 $"{Utils.FactionName(faction, GameModType.BTOS2, false).ToUpper()}_CINEMATIC",
@@ -563,24 +562,10 @@ public class Fancy : BaseMod<Fancy>
         }
     }
 
-// IMPORTANT:
-// Apply ResolveFaction() whenever faction-based UI/color lookups happen.
-
-public static FactionType ResolveFaction(FactionType faction)
-{
-	if (faction is FactionType.NONE or FactionType.UNKNOWN)
-		return faction;
-
-
-    if (FactionIsPandora.Value == faction)
-        return Btos2Faction.Pandora;
-
-    return faction;
-}
     private static void ReloadCinematics()
     {
-			foreach (var faction in BTOS2Factions.Where(x => x is not FactionType.NONE and not FactionType.UNKNOWN and not FactionType.FACTION_COUNT and not FactionType.JESTER and not FactionType.EXECUTIONER and not FactionType.DOOMSAYER and not FactionType.PIRATE
-		and not Btos2Faction.Judge and not Btos2Faction.Starspawn and not Btos2Faction.Auditor and not Btos2Faction.Inquisitor and not Btos2Faction.Lovers and not Btos2Faction.Judge and not Btos2Faction.Compliance and not Btos2Faction.Lovers))
+			foreach (var faction in BTOS2Factions.Where(x => x is not FactionType.NONE or FactionType.UNKNOWN or FactionType.FACTION_COUNT or FactionType.JESTER or FactionType.EXECUTIONER or FactionType.DOOMSAYER or FactionType.PIRATE
+		or Btos2Faction.Judge or Btos2Faction.Starspawn or Btos2Faction.Auditor or Btos2Faction.Inquisitor or Btos2Faction.Lovers or Btos2Faction.Judge or Btos2Faction.Compliance or Btos2Faction.Lovers))
         {
             if (CinematicMap.ContainsKey(faction)) continue;
 
