@@ -507,7 +507,7 @@ public static class SpecialAbilityPopupDayConfirmListItemPatch
         var wrapped = $"{roleName}";
         var gradient = myFaction.GetChangedGradient(role);
         var gradientText = gradient != null ? Utils.ApplyGradient(wrapped, gradient) : $"<color={myFaction.GetFactionColor()}>{wrapped}</color>";
-        var hiddenText = $"<color={role.GetFaction().GetFactionColor()}>{wrapped}</color>";
+        var hiddenText = $"<color={role.GetFactionType().GetFactionColor()}>{wrapped}</color>";
         var final = role != Role.NONE ? gradientText : string.Empty;
         var icon = role != Role.NONE ? role.GetRoleSprite(myFaction) : string.Empty;
 		
@@ -565,7 +565,7 @@ public static class SpecialAbilityPopupNecromancerRetributionistListItemPatch
         var wrapped = $"{roleName}";
         var gradient = factionType.GetChangedGradient(role2);
         var gradientText = gradient != null ? Utils.ApplyGradient(wrapped, gradient) : $"<color={factionType.GetFactionColor()}>{wrapped}</color>";
-        var hiddenText = $"<color={role2.GetFaction().GetFactionColor()}>{wrapped}</color>";
+        var hiddenText = $"<color={role2.GetFactionType().GetFactionColor()}>{wrapped}</color>";
         var final = role2 != Role.NONE ? gradientText : string.Empty;
         var icon = role2 != Role.NONE ? role2.GetRoleSprite(factionType) : string.Empty;
 
@@ -689,7 +689,7 @@ public static class PatchSpecialAbilityPopupGenericDualTargetListItem
             ? Utils.ApplyGradient(wrapped, gradient)
             : $"<color={factionType.GetFactionColor()}>{wrapped}</color>";
 
-        var hiddenText = $"<color={role2.GetFaction().GetFactionColor()}>{wrapped}</color>";
+        var hiddenText = $"<color={role2.GetFactionType().GetFactionColor()}>{wrapped}</color>";
         var final = role2 != Role.NONE ? gradientText : string.Empty;
         var icon = role2 != Role.NONE ? role2.GetRoleSprite(factionType) : string.Empty;
         if (role2 != Role.NONE)

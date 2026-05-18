@@ -334,7 +334,7 @@ public static class RoleCardPopupPatches2
 
         var faction = __instance.CurrentFaction;
         if (faction is Btos2Faction.Jackal or Btos2Faction.Frogs or Btos2Faction.Lions or Btos2Faction.Hawks)
-            faction = (FactionType)(int)role.GetFaction();
+            faction = (FactionType)(int)role.GetFactionType();
 
         int defense;
 
@@ -447,7 +447,7 @@ public static class RoleCardPopupPatches2
 
 		var faction = __instance.CurrentFaction;
 		if (faction is Btos2Faction.Jackal or Btos2Faction.Frogs or Btos2Faction.Lions or Btos2Faction.Hawks)
-			faction = (FactionType)(int)role.GetFaction();
+			faction = (FactionType)(int)role.GetFactionType();
 
 		string defense;
 
@@ -522,7 +522,7 @@ public static class PlayerListPatch
         var roleName = Fancy.FactionalRoleNames.Value ? role.ToRoleFactionDisplayString(faction) : role.ToDisplayString();
         var gradient = faction.GetChangedGradient(role);
         var gradientText = gradient != null ? Utils.ApplyGradient($"({roleName})", gradient) : $"<color={faction.GetFactionColor()}>({roleName})</color>";
-        var hiddenText = $"<color={role.GetFaction().GetFactionColor()}>({roleName})</color>";
+        var hiddenText = $"<color={role.GetFactionType().GetFactionColor()}>({roleName})</color>";
         var text = $"{gradientText}";
         var icon = role.GetRoleSprite(faction);
 		
@@ -841,7 +841,7 @@ public static class ClientRoleExtensionsPatches
 		// if (gradient != null && Fancy.BannedRoleDesaturation.Value != -1 && Constants.IsRoleBanned(role))
 			// gradient = Utils.Desaturate(gradient, Constants.BannedRoleDesaturation());
 		
-		var roleFaction = role.GetFaction();
+		var roleFaction = role.GetFactionType();
 		var factionText = factionType.ToDisplayString();
 		var label = (factionType == Btos2Faction.Jackal && !string.IsNullOrWhiteSpace(Fancy.RecruitLabel.Value)) ? $"({Fancy.RecruitLabel.Value})" : $"({factionText})";
 		
@@ -893,7 +893,7 @@ public static class ClientRoleExtensionsPatches
 		// if (gradient != null && Fancy.BannedRoleDesaturation.Value != -1 && Constants.IsRoleBanned(role))
 			// gradient = Utils.Desaturate(gradient, Constants.BannedRoleDesaturation());
 
-        var roleFaction = role.GetFaction();
+        var roleFaction = role.GetFactionType();
         var factionText = factionType.ToShortenedDisplayString();
         var label = $"({factionText})";
 
@@ -976,7 +976,7 @@ public static class Patch_ToColorizedDisplayString_NoFaction
 {
     public static bool Prefix(ref string __result, Role role)
     {
-        __result = role.ToColorizedDisplayString(role.GetFaction());
+        __result = role.ToColorizedDisplayString(role.GetFactionType());
         return false;
     }
 }}
@@ -1201,7 +1201,7 @@ public static class KeywordMentionsPatches
 			var shortName = roleEnum.ToShortenedDisplayString();
 
             // come back here if btos2 breaks
-			var sprite = (__instance._roleEffects == 1) ? roleEnum.GetRoleSprite(roleEnum.GetFaction()).ReplaceIcons() : string.Empty;
+			var sprite = (__instance._roleEffects == 1) ? roleEnum.GetRoleSprite(roleEnum.GetFactionType()).ReplaceIcons() : string.Empty;
 
 			var name = __instance._useColors
 				? roleEnum.ToColorizedDisplayString()
@@ -1549,7 +1549,7 @@ public static class ReplaceRoleTagWithRoleTextPatch
                 if (int.TryParse(content, out var roleId))
                 {
                     var role = (Role)roleId;
-                    var colorized = role.ToColorizedDisplayString(role.GetFaction());
+                    var colorized = role.ToColorizedDisplayString(role.GetFactionType());
                     str = str.Replace(fullTag, colorized);
                     modified = true;
                 }
@@ -1591,7 +1591,7 @@ public static class ReplaceRoleTagWithRoleTextPatch
                 if (int.TryParse(content, out var roleId))
                 {
                     var role = (Role)roleId;
-                    var colorized = Utils.GetBucketString(role, role.GetFaction());
+                    var colorized = Utils.GetBucketString(role, role.GetFactionType());
                     str = str.Replace(fullTag, colorized);
                     modified = true;
                 }

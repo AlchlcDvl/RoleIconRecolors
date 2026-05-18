@@ -1656,23 +1656,23 @@ public static class Utils
         {
             GenderUse.HeSheThey => gender switch
             {
-                Gender.Male => GetString("FANCY_MALE_1"),
-                Gender.Female => GetString("FANCY_FEMALE_1"),
-                _ => GetString("FANCY_NONBINARY_1")
+                Gender.Male => lowercase ? GetString("FANCY_MALE_1_LOWER") : GetString("FANCY_MALE_1"),
+                Gender.Female => lowercase ? GetString("FANCY_FEMALE_1_LOWER") : GetString("FANCY_FEMALE_1"),
+                _ => lowercase ? GetString("FANCY_NONBINARY_1_LOWER") : GetString("FANCY_NONBINARY_1")
             },
 
             GenderUse.HimHerThem => gender switch
             {
-                Gender.Male => GetString("FANCY_MALE_2"),
-                Gender.Female => GetString("FANCY_FEMALE_2"),
-                _ => GetString("FANCY_NONBINARY_2")
+                Gender.Male => lowercase ? GetString("FANCY_MALE_2_LOWER") : GetString("FANCY_MALE_2"),
+                Gender.Female => lowercase ? GetString("FANCY_FEMALE_2_LOWER") : GetString("FANCY_FEMALE_2"),
+                _ => lowercase ? GetString("FANCY_NONBINARY_2_LOWER") : GetString("FANCY_NONBINARY_2")
             },
 
             GenderUse.HisHerTheir => gender switch
             {
-                Gender.Male => GetString("FANCY_MALE_3"),
-                Gender.Female => GetString("FANCY_FEMALE_3"),
-                _ => GetString("FANCY_NONBINARY_3")
+                Gender.Male => lowercase ? GetString("FANCY_MALE_3_LOWER") : GetString("FANCY_MALE_3"),
+                Gender.Female => lowercase ? GetString("FANCY_FEMALE_3_LOWER") : GetString("FANCY_FEMALE_3"),
+                _ => lowercase ? GetString("FANCY_NONBINARY_3_LOWER") : GetString("FANCY_NONBINARY_3")
             },
 
             GenderUse.WasWere => gender switch
@@ -1690,9 +1690,12 @@ public static class Utils
     {
         return text
             .Replace("%were%", GetGenderTerm(gender, GenderUse.WasWere))
-            .Replace("%they%", GetGenderTerm(gender, GenderUse.HeSheThey))
-            .Replace("%them%", GetGenderTerm(gender, GenderUse.HimHerThem))
-            .Replace("%their%", GetGenderTerm(gender, GenderUse.HisHerTheir));
+            .Replace("%they%", GetGenderTerm(gender, GenderUse.HeSheThey), true)
+            .Replace("%them%", GetGenderTerm(gender, GenderUse.HimHerThem), true)
+            .Replace("%their%", GetGenderTerm(gender, GenderUse.HisHerTheir), true)
+            .Replace("%They%", GetGenderTerm(gender, GenderUse.HeSheThey), false)
+            .Replace("%Them%", GetGenderTerm(gender, GenderUse.HimHerThem), false)
+            .Replace("%Their%", GetGenderTerm(gender, GenderUse.HisHerTheir), false);
     }
 
     public static Gender GetPlayerGender(int playerId)

@@ -1823,14 +1823,23 @@ Would you like to abandon %role2% and become %role%?</Entry> -->
 	<Entry key="FANCY_MALE_1">He</Entry>	
 	<Entry key="FANCY_FEMALE_1">She</Entry>	
 	<Entry key="FANCY_NONBINARY_1">They</Entry>	
+	<Entry key="FANCY_MALE_1_LOWER">he</Entry>	
+	<Entry key="FANCY_FEMALE_1_LOWER">she</Entry>	
+	<Entry key="FANCY_NONBINARY_1_LOWER">they</Entry>	
 
 	<Entry key="FANCY_MALE_2">Him</Entry>	
 	<Entry key="FANCY_FEMALE_2">Her</Entry>	
 	<Entry key="FANCY_NONBINARY_2">Them</Entry>	
+	<Entry key="FANCY_MALE_2_LOWER">him</Entry>	
+	<Entry key="FANCY_FEMALE_2_LOWER">her</Entry>	
+	<Entry key="FANCY_NONBINARY_2_LOWER">them</Entry>	
 
 	<Entry key="FANCY_MALE_3">His</Entry>	
 	<Entry key="FANCY_FEMALE_3">Her</Entry>	
 	<Entry key="FANCY_NONBINARY_3">Their</Entry>	
+	<Entry key="FANCY_MALE_3_LOWER">His</Entry>	
+	<Entry key="FANCY_FEMALE_3_LOWER">Her</Entry>	
+	<Entry key="FANCY_NONBINARY_3_LOWER">Their</Entry>	
 
     <Entry key="FANCY_MALE_START_NAME">Male Primary Color</Entry>
     <Entry key="FANCY_MALE_START_DESC">The primary color for Male characters.</Entry>
