@@ -723,11 +723,10 @@ public static class PatchSpecialAbilityPopupGenericDualTargetListItem
 
         if (uiRoleDataInstance != null)
         {
-            __instance.choiceText.text =
-                __instance.l10n($"GUI_ROLE_SPECIAL_ABILITY_VERB_{(int)myRole}");
+            var abilityText = Constants.IsBTOS2() ? __instance.l10n($"BTOS_ROLE_SPECIALABILITY_VERB_{(int)myRole}") : __instance.l10n($"GUI_ROLE_SPECIAL_ABILITY_VERB_{(int)myRole}");
+            __instance.choiceText.text = abilityText;
             __instance.choiceSprite.sprite = uiRoleDataInstance.specialAbilityIcon;
-            __instance.choice2Text.text =
-                __instance.l10n($"GUI_ROLE_SPECIAL_ABILITY_VERB_{(int)myRole}");
+            __instance.choice2Text.text = abilityText;
             __instance.choice2Sprite.sprite = uiRoleDataInstance.specialAbilityIcon;
         }
 

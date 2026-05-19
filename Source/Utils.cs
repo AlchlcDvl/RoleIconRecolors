@@ -1690,12 +1690,12 @@ public static class Utils
     {
         return text
             .Replace("%were%", GetGenderTerm(gender, GenderUse.WasWere))
-            .Replace("%they%", GetGenderTerm(gender, GenderUse.HeSheThey), true)
-            .Replace("%them%", GetGenderTerm(gender, GenderUse.HimHerThem), true)
-            .Replace("%their%", GetGenderTerm(gender, GenderUse.HisHerTheir), true)
-            .Replace("%They%", GetGenderTerm(gender, GenderUse.HeSheThey), false)
-            .Replace("%Them%", GetGenderTerm(gender, GenderUse.HimHerThem), false)
-            .Replace("%Their%", GetGenderTerm(gender, GenderUse.HisHerTheir), false);
+            .Replace("%they%", GetGenderTerm(gender, GenderUse.HeSheThey, true))
+            .Replace("%them%", GetGenderTerm(gender, GenderUse.HimHerThem, true))
+            .Replace("%their%", GetGenderTerm(gender, GenderUse.HisHerTheir, true))
+            .Replace("%They%", GetGenderTerm(gender, GenderUse.HeSheThey, false))
+            .Replace("%Them%", GetGenderTerm(gender, GenderUse.HimHerThem, false))
+            .Replace("%Their%", GetGenderTerm(gender, GenderUse.HisHerTheir, false));
     }
 
     public static Gender GetPlayerGender(int playerId)
