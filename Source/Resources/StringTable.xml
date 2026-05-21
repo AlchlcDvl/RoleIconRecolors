@@ -1837,9 +1837,9 @@ Would you like to abandon %role2% and become %role%?</Entry> -->
 	<Entry key="FANCY_MALE_3">His</Entry>	
 	<Entry key="FANCY_FEMALE_3">Her</Entry>	
 	<Entry key="FANCY_NONBINARY_3">Their</Entry>	
-	<Entry key="FANCY_MALE_3_LOWER">His</Entry>	
-	<Entry key="FANCY_FEMALE_3_LOWER">Her</Entry>	
-	<Entry key="FANCY_NONBINARY_3_LOWER">Their</Entry>	
+	<Entry key="FANCY_MALE_3_LOWER">his</Entry>	
+	<Entry key="FANCY_FEMALE_3_LOWER">her</Entry>	
+	<Entry key="FANCY_NONBINARY_3_LOWER">their</Entry>	
 
     <Entry key="FANCY_MALE_START_NAME">Male Primary Color</Entry>
     <Entry key="FANCY_MALE_START_DESC">The primary color for Male characters.</Entry>
