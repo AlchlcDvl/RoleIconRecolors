@@ -32,6 +32,9 @@
     <Entry key="FANCY_GENDERED_PLAYER_MENTIONS_NAME">Color Player Mentions With Gender</Entry>
     <Entry key="FANCY_GENDERED_PLAYER_MENTIONS_DESC">Determines whether or not player mentions will be colored with the target's gender gradient. Factional mentions take priority over genders.</Entry>
 
+    <Entry key="FANCY_GENDER_COLORS_NAME">Color Skin Names with Gender</Entry>
+    <Entry key="FANCY_GENDER_COLORS_DESC">Determines whether or not skin names will be colored by their gender.</Entry>
+
     <Entry key="FANCY_FACTION_LABEL_NAME">Faction Label in Role Card</Entry>
     <Entry key="FANCY_FACTION_LABEL_DESC">Determines whether or not the faction label within the role card will be displayed. If Faction Specific Role Names are enabled, the label will NOT show up if the faction specific role name is different from the base name.</Entry>
 
@@ -1194,7 +1197,7 @@
     <Entry key="FANCY_PLAYER_LIST_ROLE_ICON_DESC">Whether or not to render the role icon in the player list, either to the left or to the right.</Entry>
 
     <Entry key="FANCY_JURY_ICON_NAME">Jury Icon</Entry>
-    <Entry key="FANCY_Jury_ICON_DESC">Whether or not to render the Judge aligned Seer icon used for Jury during Court.</Entry>
+    <Entry key="FANCY_JURY_ICON_DESC">Whether or not to render the Judge aligned Seer icon used for Jury during Court.</Entry>
 
     <Entry key="FANCY_NECRO_PASS_FORMAT_NAME">Necro Passing Vote UI Format</Entry>
     <Entry key="FANCY_NECRO_PASS_FORMAT_DESC">Determines the format of the Necro Passing UI. Vanilla is just the vanilla appearance, Classic is the old appearance from when Necro Passing was a BTOS2 exclusive, and Inverted Classic is Classic with the player names and role name swapped.</Entry>

@@ -162,7 +162,7 @@ public static class RoleRevealCinematicPlayerPatch
             roleRevealKey = "FANCY_ROLE_REVEAL_ROLE_CONSONANT";
 
         var roleText = Fancy.YouAreARole.Value
-            ? __instance.l10n(roleRevealKey).Replace("%role%", roleIcon)
+            ? Utils.TryGetString($"{roleRevealKey}_{(int)factionType}", roleRevealKey).Replace("%role%", roleIcon)
             : __instance.l10n("CINE_ROLE_REVEAL_ROLE").Replace("%role%", roleIcon);
 
         __instance.roleTextPlayer.ShowText(roleText);
@@ -1891,6 +1891,9 @@ public static class ApplyGenderGradientToCustomizationName
 	[HarmonyPostfix]
 	public static void SetDataPostfix(CustomizationCharacterItem __instance)
 	{
+		if (!Fancy.GenderColors.Value)
+			return;
+		
 		var character = Service.Game.Cast.GetCharacterWithSkinId(__instance.skinId);
 
 		if (character == null || __instance.nameText == null)
@@ -1903,6 +1906,9 @@ public static class ApplyGenderGradientToCustomizationName
 	[HarmonyPostfix]
 	public static void OverrideDataPostfix(CustomizationCharacterItem __instance, int a_skinId)
 	{
+		if (!Fancy.GenderColors.Value)
+			return;
+		
 		var character = Service.Game.Cast.GetCharacterWithSkinId(a_skinId);
 
 		if (character == null || __instance.nameText == null)
@@ -1920,6 +1926,9 @@ public static class ApplyGenderGradientToSkinNames
 		if (string.IsNullOrWhiteSpace(__result))
 			return;
 
+		if (!Fancy.GenderColors.Value)
+			return;
+		
 		var character = __instance.GetCharacterWithSkinId(skinId);
 
 		if (character == null)
@@ -1938,6 +1947,9 @@ public static class ApplyGenderGradientToSkinSelectionItem
 		if (__instance.skinText == null)
 			return;
 
+		if (!Fancy.GenderColors.Value)
+			return;
+		
 		var character = Service.Game.Cast.GetCharacterWithSkinId(skinId);
 
 		if (character == null)

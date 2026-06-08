@@ -738,11 +738,13 @@ public static class PatchAbilityPanelListItems
 			{
 				Apply(TryResolve(reg, faction, ogfaction, ee, $"Necronomicon_{name}", "Necronomicon"), __instance.choice1Sprite);
 				TrySetText(__instance.choice1Text, 1, $"GUI_ROLE_CARD_NECRONOMICON_ABILITY_{(int)role}", "GUI_ROLE_CARD_NECRONOMICON_ABILITY"); 
+				Apply(Resolve($"{name}_Ability_2", reg, faction, ogfaction, ee), __instance.choice2Sprite);
 				
 				if (role is Role.BAKER && Constants.IsBTOS2())
 				{
 					Apply(Resolve("Baker_Special", reg, faction, ogfaction, ee), __instance.choice2Sprite);
 					SetText(__instance.choice2Text, $"BTOS_ROLE_SPECIALABILITY_VERB_{(int)role}"); 
+					break;
 				}
 				break;
 			}
@@ -757,7 +759,15 @@ public static class PatchAbilityPanelListItems
 			{
 				if (role == Role.POTIONMASTER)
 				{
+					if (Constants.IsNecroActive())
+					{
+						Apply(TryResolve(reg, faction, ogfaction, ee, $"Necronomicon_PotionMaster", "Necronomicon"), __instance.choice1Sprite);
+						TrySetText(__instance.choice1Text, 1, $"GUI_ROLE_CARD_NECRONOMICON_ABILITY_{(int)role}", "GUI_ROLE_CARD_NECRONOMICON_ABILITY"); 
+						break;
+					}
+				
 					Apply(TryResolve(reg, faction, ogfaction, ee, $"Necronomicon_PotionMaster", "Necronomicon"), __instance.choice1Sprite);
+					TrySetText(__instance.choice1Text, 1, $"{Utils.GetKeyPrefix()}_ROLE_ABILITY3_VERB_{(int)Role.POTIONMASTER}", "GUI_ROLE_CARD_NECRONOMICON_ABILITY"); 
 				}
 				else if (role == Role.BAKER)
 				{
@@ -775,7 +785,7 @@ public static class PatchAbilityPanelListItems
 			case AbilityType.SHROUD:
 			{
 				Apply(Resolve("Shroud_Special", reg, faction, ogfaction, ee), __instance.choice1Sprite);
-				var text = Constants.IsBTOS2() ? $"BTOS_ROLE_SPECIALABILITY_VERB_49" : $"GUI_ROLE_SPECIAL_ABILITY_VERB_49";
+				var text = Constants.IsBTOS2() ? $"BTOS_ROLE_SPECIALABILITY_VERB_{(int)Role.SHROUD}" : $"GUI_ROLE_SPECIAL_ABILITY_VERB_{(int)Role.SHROUD}";
 				SetText(__instance.choice1Text, text); 
 				break;
 			}
@@ -783,7 +793,7 @@ public static class PatchAbilityPanelListItems
 			case AbilityType.WEREWOLF_NON_FULL_MOON:
 			{
 				Apply(Resolve("Werewolf_Ability_2", reg, faction, ogfaction, ee), __instance.choice1Sprite);
-				var text = $"{Utils.GetKeyPrefix()}_ROLE_ABILITY2_VERB_51";
+				var text = $"{Utils.GetKeyPrefix()}_ROLE_ABILITY2_VERB_{(int)Role.WEREWOLF}";
 				SetText(__instance.choice1Text, text); 
 				break;
 			}

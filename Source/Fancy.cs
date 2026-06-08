@@ -148,6 +148,7 @@ public class Fancy : BaseMod<Fancy>
 	public static ToggleOption ApplyGendersToPlayerMentions;
     public static ToggleOption ColorNumbersLikeMentions;
 	
+    public static ToggleOption GenderColors;
     public static ColorOption MaleStart;
     public static ColorOption MaleEnd;
     public static ColorOption FemaleStart;
@@ -414,7 +415,7 @@ public class Fancy : BaseMod<Fancy>
         RoleRevealTintIntensity = new("ROLE_REVEAL_TINT_INTENSITY", 625, PackType.MiscRoleCustomisation, 0, 1000, true);
         FactionalRoleNames = new("FACTIONAL_ROLE_NAMES", false, PackType.MiscRoleCustomisation, Constants.TextEditorExists);
         FactionalRoleBlurbs = new("FACTIONAL_ROLE_BLURBS", false, PackType.MiscRoleCustomisation, Constants.TextEditorExists);
-        FactionalBuckets = new("FACTIONAL_BUCKETS", false, PackType.MiscRoleCustomisation); // ApplyGendersToPlayerMentions
+        FactionalBuckets = new("FACTIONAL_BUCKETS", false, PackType.MiscRoleCustomisation);
         ColorMentionsWithFaction = new("FACTIONAL_PLAYER_MENTIONS", false, PackType.MiscRoleCustomisation, setActive: () => !Constants.BetterMentionsExists());
         ApplyGendersToPlayerMentions = new("GENDERED_PLAYER_MENTIONS", false, PackType.MiscRoleCustomisation);
         MajorColors = new("MAJOR_COLORS", false, PackType.MiscRoleCustomisation);
@@ -485,6 +486,7 @@ public class Fancy : BaseMod<Fancy>
         ShowOverlayAsJailor = new("SHOW_TO_JAILOR", false, PackType.Testing);
         // ModifierFactions = new("MODIFIER_FACTIONS", true, PackType.Testing);
         DisableBTOSTribunal = new("DISABLE_BTOS_TRIBUNAL", true, PackType.Testing, setActive: Constants.BTOS2Exists);
+        GenderColors = new("GENDER_COLORS", true, PackType.Testing);
         MaleStart = new("MALE_START", "#bbffff", PackType.Testing);
         MaleEnd = new("MALE_END", "#bbbbff", PackType.Testing);
         FemaleStart = new("FEMALE_START", "#ffbbbb", PackType.Testing);

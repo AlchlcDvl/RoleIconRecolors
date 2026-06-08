@@ -132,6 +132,7 @@ public static class Utils
 
     private static string BTOSRoleName(Role role) => role switch
     {
+        Btos2Role.None => "None",
         Btos2Role.Admirer => "Admirer",
         Btos2Role.Amnesiac => "Amnesiac",
         Btos2Role.Bodyguard => "Bodyguard",
@@ -264,6 +265,7 @@ public static class Utils
 
     private static string VanillaRoleName(Role role) => role switch
     {
+        Role.NONE => "None",
         Role.ADMIRER => "Admirer",
         Role.AMNESIAC => "Amnesiac",
         Role.BODYGUARD => "Bodyguard",
