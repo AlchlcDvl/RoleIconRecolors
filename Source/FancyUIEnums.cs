@@ -109,3 +109,19 @@ public enum GenderUse
     HisHerTheir,
     WasWere
 }
+
+public enum AttackLevel
+{
+    None,
+    Basic,
+    Powerful,
+    Unstoppable
+}
+
+public enum DefenseLevel
+{
+    None,
+    Basic,
+    Powerful,
+    Invincible
+}

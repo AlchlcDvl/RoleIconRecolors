@@ -178,6 +178,7 @@ public class Fancy : BaseMod<Fancy>
     public static ToggleOption FactionNameNextToRole;
     public static ToggleOption FactionNameNextToBucket;
     public static ToggleOption ShowForShortNames;
+    public static ToggleOption ShortenFlexedWithLabel;
     public static StringInputOption PirateLabel;
 
     public static ColorOption CourtChatColor;
@@ -411,7 +412,8 @@ public class Fancy : BaseMod<Fancy>
         RoleCardFactionLabel = new("FACTION_LABEL", true, PackType.MiscRoleCustomisation);
         FactionNameNextToRole = new("FACTION_NEXT_TO_ROLE", false, PackType.MiscRoleCustomisation);
         FactionNameNextToBucket = new("FACTION_NEXT_TO_BUCKET", false, PackType.MiscRoleCustomisation);
-        ShowForShortNames = new("FACTION_NEXT_TO_SHORT_ROLE", true, PackType.MiscRoleCustomisation, setActive: () => (FactionNameNextToRole.Value || FactionNameNextToBucket.Value));
+        ShowForShortNames = new("FACTION_NEXT_TO_SHORT_ROLE", true, PackType.MiscRoleCustomisation, setActive: () => FactionNameNextToRole.Value || FactionNameNextToBucket.Value);
+        ShortenFlexedWithLabel = new("SHORTEN_FLEXED_WITH_LABEL", true, PackType.MiscRoleCustomisation, setActive: () => FactionNameNextToRole.Value || FactionNameNextToBucket.Value);
         RoleRevealTintIntensity = new("ROLE_REVEAL_TINT_INTENSITY", 625, PackType.MiscRoleCustomisation, 0, 1000, true);
         FactionalRoleNames = new("FACTIONAL_ROLE_NAMES", false, PackType.MiscRoleCustomisation, Constants.TextEditorExists);
         FactionalRoleBlurbs = new("FACTIONAL_ROLE_BLURBS", false, PackType.MiscRoleCustomisation, Constants.TextEditorExists);

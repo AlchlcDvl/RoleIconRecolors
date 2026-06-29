@@ -462,6 +462,49 @@ public static class Utils
         _ => "None"
     };
 
+    // public static AttackLevel GetAttackLevel(int value) => value switch
+    // {
+    //     1 => AttackLevel.Basic,
+    //     2 => AttackLevel.Powerful,
+    //     3 => AttackLevel.Unstoppable,
+    //     _ => AttackLevel.None
+    // };
+
+    // public static DefenseLevel GetDefenseLevel(int value) => value switch
+    // {
+    //     1 => DefenseLevel.Basic,
+    //     2 => DefenseLevel.Powerful,
+    //     3 => DefenseLevel.Invincible,
+    //     _ => DefenseLevel.None
+    // };
+
+    // public static string GetAttackString(AttackLevel level)
+    // {
+    //     return level switch
+    //     {
+    //         AttackLevel.Basic => "Basic",
+    //         AttackLevel.Powerful => "Powerful",
+    //         AttackLevel.Unstoppable => "Unstoppable",
+    //         _ => "None",
+    //     };
+    // }
+    // public static string GetDefenseString(DefenseLevel level)
+    // {
+    //     return level switch
+    //     {
+    //         DefenseLevel.Basic => "Basic",
+    //         DefenseLevel.Powerful => "Powerful",
+    //         DefenseLevel.Invincible => "Invincible",
+    //         _ => "None",
+    //     };
+    // }
+    public static float GetLevelFill(int level) => level switch
+    {
+        1 => 0.33f,
+        2 => 0.66f,
+        3 => 1f,
+        _ => 0f
+    };
     public static bool Skippable(string name)
     {
         if (CommonSkippableNames.Contains(name))
@@ -1717,4 +1760,74 @@ public static class Utils
 			_ => ApplyGradient(text, CreateGradient(Fancy.NonbinaryStart.Value, Fancy.NonbinaryEnd.Value))
 		};
 	}
+
+    public static string GetDeckEntryString(this Role role, FactionType factionType)
+    {
+        var gradient = factionType.GetChangedGradient(role);
+
+        if (role.IsModifierCard() && factionType == FactionType.NONE && role is not Btos2Role.TownPower)
+            return role.ToColorizedDisplayString();
+
+        var roleFaction = role.GetFactionType();
+        var factionText = factionType.ToDisplayString();
+        var label = (factionType == Btos2Faction.Jackal && !string.IsNullOrWhiteSpace(Fancy.RecruitLabel.Value))
+            ? $"({Fancy.RecruitLabel.Value})"
+            : $"({factionText})";
+
+        if (role.IsBucket() || role is Btos2Role.TownPower)
+        {
+            var bucket = GetBucketString(role, factionType);
+            var bucket2 = GetShortenedBucketString(role, factionType);
+
+            if (Fancy.FactionNameNextToBucket.Value && roleFaction != factionType)
+            {
+                if (Fancy.ShortenFlexedWithLabel.Value)
+                {
+                    if (gradient != null)
+                        bucket = $"{bucket2} {ApplyGradient(label, gradient)}";
+                    else
+                        bucket = $"<color={factionType.GetFactionColor()}>{role.ToShortenedDisplayString()}</color> <color={factionType.GetFactionColor()}>{label}</color>";
+                }
+                else
+                {
+                    if (gradient != null)
+                        bucket += $" {ApplyGradient(label, gradient)}";
+                    else
+                        bucket += $" <color={factionType.GetFactionColor()}>{label}</color>";
+                }
+            }
+
+            return bucket;
+        }
+
+        var text = Fancy.FactionalRoleNames.Value ? role.ToRoleFactionDisplayString(factionType) : role.ToDisplayString();
+        var text2 = Fancy.FactionalRoleNames.Value ? role.ToRoleFactionShortenedDisplayString(factionType) : role.ToShortenedDisplayString();
+
+        var newText = gradient != null ? ApplyGradient(text, gradient) : $"<color={factionType.GetFactionColor()}>{text}</color>";
+
+        if (Fancy.FactionNameNextToRole.Value && roleFaction != factionType && role.UsesBaseDisplayName(factionType))
+        {
+            if (gradient != null)
+                newText += $" {ApplyGradient(label, gradient)}";
+            else
+                newText += $" <color={factionType.GetFactionColor()}>{label}</color>";
+
+            if (Fancy.ShortenFlexedWithLabel.Value)
+            {
+                if (gradient != null)
+                    newText = $"{ApplyGradient(text2, gradient)} {ApplyGradient(label, gradient)}";
+                else
+                    newText = $"<color={factionType.GetFactionColor()}>{role.ToShortenedDisplayString()}</color> <color={factionType.GetFactionColor()}>{label}</color>";
+            }
+            else
+            {
+                if (gradient != null)
+                    newText += $" {ApplyGradient(label, gradient)}";
+                else
+                    newText += $" <color={factionType.GetFactionColor()}>{label}</color>";
+            }
+        }
+
+        return newText;
+    }
 }

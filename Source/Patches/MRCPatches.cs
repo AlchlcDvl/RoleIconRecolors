@@ -367,7 +367,6 @@ public static class RoleCardPopupPatches2
                     FactionType.ARSONIST or
                     FactionType.WEREWOLF or
                     FactionType.SHROUD or
-                    FactionType.APOCALYPSE or
                     FactionType.EXECUTIONER or
                     FactionType.JESTER or
                     // FactionType.PIRATE or
@@ -382,7 +381,7 @@ public static class RoleCardPopupPatches2
                     Btos2Faction.Auditor or
                     Btos2Faction.Judge or
                     Btos2Faction.Egotist
-                        => 4,
+                        => 2,
 
                     // Role based
                     Btos2Faction.Jackal or
@@ -393,27 +392,16 @@ public static class RoleCardPopupPatches2
 
 					FactionType.PIRATE => Constants.IsBTOS2() ? 0 : 1,
 
+					FactionType.APOCALYPSE => Constants.IsFourHorsemen() ? 0 : 1,
+
                     // Fallback
                     _ => data.defense
                 };
                 break;
         }
 
-        var attackFill = data.attack switch
-        {
-            1 => 0.33f,
-            2 => 0.66f,
-            3 => 1f,
-            _ => 0f
-        };
-
-        var defenseFill = defense switch
-        {
-            1 => 0.33f,
-            2 or 4 => 0.66f,
-            3 => 1f,
-            _ => 0f
-        };
+        var attackFill = Utils.GetLevelFill(data.attack);
+        var defenseFill = Utils.GetLevelFill(defense);
 
         __instance.attackIcon.fillAmount = attackFill;
         __instance.attackGlow.fillAmount = attackFill;
@@ -478,7 +466,6 @@ public static class RoleCardPopupPatches2
 					FactionType.ARSONIST or
 					FactionType.WEREWOLF or
 					FactionType.SHROUD or
-					FactionType.APOCALYPSE or
 					FactionType.EXECUTIONER or
 					FactionType.JESTER or
 					// FactionType.PIRATE or
@@ -495,6 +482,8 @@ public static class RoleCardPopupPatches2
 						=> Utils.GetString("GUI_ROLE_CARD_POWERFUL_ETHEREAL_DEFENSE_TOOLTIP"),
 
 					FactionType.PIRATE => Constants.IsBTOS2() ? Utils.GetString("GUI_ROLE_CARD_NONE_DEFENSE_TOOLTIP") : Utils.GetString("GUI_ROLE_CARD_BASIC_DEFENSE_TOOLTIP"),
+
+					FactionType.APOCALYPSE => Constants.IsFourHorsemen() ? Utils.GetString("GUI_ROLE_CARD_NONE_DEFENSE_TOOLTIP") : Utils.GetString("GUI_ROLE_CARD_BASIC_DEFENSE_TOOLTIP"),
 
 					_ => Utils.GetString("GUI_ROLE_CARD_NONE_DEFENSE_TOOLTIP")
 				};

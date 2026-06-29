@@ -373,7 +373,7 @@ public static class PatchRoleListPanel
         {
 			var icon1 = role1.GetRoleSprite(faction1);
 
-			__instance.roleName.text = $"<size=200%><voffset=-7>{icon1}</voffset></size>" + role1.ToColorizedNoLabel(faction1);
+			__instance.roleName.text = $"<size=200%><voffset=-7>{icon1}</voffset></size>" + role1.GetDeckEntryString(faction1);
 			__instance.roleImage.sprite = GetSprite("Blank");
         }
         else if (a_roleDeckSlot.IsDualBucket())
@@ -389,7 +389,7 @@ public static class PatchRoleListPanel
         else
         {
             var icon1 = role1.GetRoleSprite(faction1);
-            __instance.roleName.text = "<size=200%><voffset=-7>" + icon1 + "</voffset></size>" + role1.ToColorizedDisplayString(faction1);
+            __instance.roleName.text = "<size=200%><voffset=-7>" + icon1 + "</voffset></size>" + role1.GetDeckEntryString(faction1);
         }
 
         __instance.roleImage.SetAllDirty();
@@ -423,7 +423,7 @@ public static class PatchBrowserRoleListPanel
         if (__instance.isBan)
         {
 			var icon1 = role1.GetRoleSprite(faction1);
-            __instance.roleName.text = $"<size=200%><voffset=-7>{icon1}</voffset></size>" + role1.ToColorizedNoLabel(faction1);
+            __instance.roleName.text = $"<size=200%><voffset=-7>{icon1}</voffset></size>" + role1.GetDeckEntryString(faction1);
 			__instance.roleImage.sprite = GetSprite("Blank");
         }
         else if (a_roleDeckSlot.IsDualBucket())
@@ -442,7 +442,7 @@ public static class PatchBrowserRoleListPanel
         {
             var icon1 =role1.GetRoleSprite(faction1);
 
-            __instance.roleName.text = "<size=200%><voffset=-7>" + icon1 + "</voffset></size>" + role1.ToColorizedDisplayString(faction1);
+            __instance.roleName.text = "<size=200%><voffset=-7>" + icon1 + "</voffset></size>" + role1.GetDeckEntryString(faction1);
         }
 
         __instance.gameObject.SetActive(true);
@@ -2158,7 +2158,7 @@ public static class RoleListHeaderIcon
         {
             var icon1 = role.GetRoleSprite(faction);
 
-            __instance.RoleNameLabel.text = icon1 + role.ToColorizedDisplayString(faction);
+            __instance.RoleNameLabel.text = icon1 + role.GetDeckEntryString(faction);
         }
         else
         {
@@ -2213,7 +2213,7 @@ public static class RoleListItemIcon
         if (__instance.role2 == Role.NONE)
         {
 			var role1Sprite = __instance.role.GetRoleSprite(__instance.faction);
-			var role1Text = __instance.role.ToColorizedDisplayString(__instance.faction);
+			var role1Text = __instance.role.GetDeckEntryString(__instance.faction);
             roleText = role1Sprite + role1Text;
         }
         else
@@ -2247,7 +2247,7 @@ public static class RoleListPopupUpdate
         var factionType = GetEffectiveFaction(roleData);
 		var icon = roleData.role.GetRoleSprite(factionType);
 
-        var roleText = icon + roleData.role.ToColorizedDisplayString(factionType);
+        var roleText = icon + roleData.role.GetDeckEntryString(factionType);
         return roleText;
     }
 

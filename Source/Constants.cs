@@ -155,6 +155,11 @@ public static class Constants
 
     public static bool IsIndividuality() => IsBTOS2() && Service.Game?.Sim?.simulation?.roleDeckBuilder?.Data?.modifierCards?.Contains(Btos2Role.Individuality) == true;
 
+    public static bool IsFourHorsemen()
+        => (IsBTOS2() && Service.Game?.Sim?.simulation?.roleDeckBuilder?.Data?.modifierCards?.Contains(Btos2Role.FourHorsemen) == true)
+        || (!IsBTOS2() && Service.Game?.Sim?.simulation?.roleDeckBuilder?.Data?.modifierCards?.Contains(Role.FOUR_HORSEMEN) == true);
+
+
     public static bool IsRoleInDeck(Role role) => Service.Game?.Sim?.simulation?.roleDeckBuilder?.Data?.roles?.Contains(role) == true;
 
     public static bool IsRoleBanned(Role role) => Service.Game?.Sim?.simulation?.roleDeckBuilder?.Data?.bannedRoles?.Contains(role) == true;
