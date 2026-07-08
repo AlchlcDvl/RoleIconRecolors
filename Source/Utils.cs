@@ -620,10 +620,11 @@ public static class Utils
 		EffectType.SOVEREIGN => ("Sovereign", FactionType.TOWN),
 		EffectType.STONED => ("Stoned", FactionType.COVEN),
 		EffectType.TOWN_TRAITOR => ("TownTraitor", FactionType.COVEN),
-		EffectType.DEAFENED or (EffectType)101 => ("Deafened", FactionType.COVEN),
+		EffectType.DEAFENED  => ("Deafened", FactionType.COVEN),
 
 		// BTOS2
 		(EffectType)100 => ("Recruit", Btos2Faction.Jackal),
+		(EffectType)101 => ("Deaf", Btos2Faction.Coven), // Banshee deafen
 		(EffectType)102 => ("TownTraitor", Btos2Faction.Coven),
 		(EffectType)103 => ("TownTraitor", Btos2Faction.Apocalypse),
 		(EffectType)104 => ("Audited", Btos2Faction.Auditor),
