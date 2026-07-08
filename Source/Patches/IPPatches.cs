@@ -559,7 +559,18 @@ public static class PatchRoleCards
         var defenseLevel = Utils.GetDefenseLevel(defenseAmount);
         var defenseName = $"Defense{Utils.GetDefenseString(defenseLevel)}";
 
-        var defense = GetSprite(reg, defenseName, faction);
+        var defense = GetSprite("Blank");
+		
+		if (eth)
+		{
+			defense = GetSprite(reg, "DefenseEthereal", faction);
+
+			if (!defense.IsValid() && reg)
+				defense = GetSprite("DefenseEthereal", ogFaction);
+		}
+		
+		if (!defense.IsValid())
+			defense = GetSprite(reg, defenseName, faction);
 
         if (!defense.IsValid() && reg)
             defense = GetSprite(defenseName, ogFaction);
@@ -1154,7 +1165,18 @@ public static class PatchAttackDefense
         var defenseLevel = Utils.GetDefenseLevel(defenseAmount);
         var defenseName = $"Defense{Utils.GetDefenseString(defenseLevel)}";
 
-        var defense = GetSprite(reg, defenseName, faction);
+		var defense = GetSprite("Blank");
+		
+		if (eth)
+		{
+			defense = GetSprite(reg, "DefenseEthereal", faction);
+
+			if (!defense.IsValid() && reg)
+				defense = GetSprite("DefenseEthereal", ogFaction);
+		}
+		
+		if (!defense.IsValid())
+			defense = GetSprite(reg, defenseName, faction);
 
         if (!defense.IsValid() && reg)
             defense = GetSprite(defenseName, ogFaction);
@@ -1169,6 +1191,7 @@ public static class PatchAttackDefense
 
         if (icon2)
             icon2.sprite = defense.IsValid() ? defense : (eth ? Ethereal : FancyAssetManager.Defense);
+
 
     }
 }
