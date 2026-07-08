@@ -260,9 +260,8 @@ public static class Utils
         Btos2Role.GracePeriod => "GracePeriod",
         Btos2Role.AllOutliers => "AllOutliers",
         Btos2Role.FlexibleAny => "TrueAny",
-        _ => "Blank"
+        _ => $"Role{(int)role}"
     };
-
     private static string VanillaRoleName(Role role) => role switch
     {
         Role.NONE => "None",
@@ -367,7 +366,7 @@ public static class Utils
         Role.ALL_OUTLIERS => "AllOutliers",
         Role.ANOMALY => "Anomaly",
         Role.HIDDEN => "Hidden",
-        _ => "Blank"
+        _ => $"Role{(int)role}"
     };
 
     public static string FactionName(FactionType faction, bool allowOverrides, GameModType? mod = null, bool stoned = false) => FactionName(faction, mod, allowOverrides, stoned);
@@ -625,8 +624,8 @@ public static class Utils
 
 		// BTOS2
 		(EffectType)100 => ("Recruit", Btos2Faction.Jackal),
-		(EffectType)102 => ("CovenTownTraitor", Btos2Faction.Coven),
-		(EffectType)103 => ("ApocTownTraitor", Btos2Faction.Apocalypse),
+		(EffectType)102 => ("TownTraitor", Btos2Faction.Coven),
+		(EffectType)103 => ("TownTraitor", Btos2Faction.Apocalypse),
 		(EffectType)104 => ("Audited", Btos2Faction.Auditor),
 		(EffectType)105 => ("Enchanted", Btos2Faction.Coven),
 		(EffectType)106 => ("Accompanied", Btos2Faction.Town),
