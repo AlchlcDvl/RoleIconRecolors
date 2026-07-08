@@ -453,51 +453,51 @@ public static class Utils
         }
     }
 
-    public static string GetLevel(int value, bool attack) => value switch
+    // public static string GetLevel(int value, bool attack) => value switch
+    // {
+    //     1 => "Basic",
+    //     2 => "Powerful",
+    //     3 => attack ? "Unstoppable" : "Invincible",
+    //     4 => "Ethereal",
+    //     _ => "None"
+    // };
+
+    public static AttackLevel GetAttackLevel(int value) => value switch
     {
-        1 => "Basic",
-        2 => "Powerful",
-        3 => attack ? "Unstoppable" : "Invincible",
-        4 => "Ethereal",
-        _ => "None"
+        1 => AttackLevel.Basic,
+        2 => AttackLevel.Powerful,
+        3 => AttackLevel.Unstoppable,
+        _ => AttackLevel.None
     };
 
-    // public static AttackLevel GetAttackLevel(int value) => value switch
-    // {
-    //     1 => AttackLevel.Basic,
-    //     2 => AttackLevel.Powerful,
-    //     3 => AttackLevel.Unstoppable,
-    //     _ => AttackLevel.None
-    // };
+    public static DefenseLevel GetDefenseLevel(int value) => value switch
+    {
+        1 => DefenseLevel.Basic,
+        2 => DefenseLevel.Powerful,
+        3 => DefenseLevel.Invincible,
+        _ => DefenseLevel.None
+    };
 
-    // public static DefenseLevel GetDefenseLevel(int value) => value switch
-    // {
-    //     1 => DefenseLevel.Basic,
-    //     2 => DefenseLevel.Powerful,
-    //     3 => DefenseLevel.Invincible,
-    //     _ => DefenseLevel.None
-    // };
-
-    // public static string GetAttackString(AttackLevel level)
-    // {
-    //     return level switch
-    //     {
-    //         AttackLevel.Basic => "Basic",
-    //         AttackLevel.Powerful => "Powerful",
-    //         AttackLevel.Unstoppable => "Unstoppable",
-    //         _ => "None",
-    //     };
-    // }
-    // public static string GetDefenseString(DefenseLevel level)
-    // {
-    //     return level switch
-    //     {
-    //         DefenseLevel.Basic => "Basic",
-    //         DefenseLevel.Powerful => "Powerful",
-    //         DefenseLevel.Invincible => "Invincible",
-    //         _ => "None",
-    //     };
-    // }
+    public static string GetAttackString(AttackLevel level)
+    {
+        return level switch
+        {
+            AttackLevel.Basic => "Basic",
+            AttackLevel.Powerful => "Powerful",
+            AttackLevel.Unstoppable => "Unstoppable",
+            _ => "None",
+        };
+    }
+    public static string GetDefenseString(DefenseLevel level)
+    {
+        return level switch
+        {
+            DefenseLevel.Basic => "Basic",
+            DefenseLevel.Powerful => "Powerful",
+            DefenseLevel.Invincible => "Invincible",
+            _ => "None",
+        };
+    }
     public static float GetLevelFill(int level) => level switch
     {
         1 => 0.33f,
@@ -668,17 +668,7 @@ public static class Utils
 
     private static bool FindCasualQueueBypass() => Constants.BTOS2Exists() && BetterTOS2.BTOSInfo.CasualModeController;
 
-    public static bool IsEthereal(this UIRoleData.UIRoleDataInstance ui)
-    {
-        try
-        {
-            return Constants.IsBTOS2() && ui.role is Btos2Role.Judge or Btos2Role.Auditor or Btos2Role.Starspawn;
-        }
-        catch
-        {
-            return false;
-        }
-    }
+    public static bool IsEthereal(this FactionType faction) => faction is Btos2Faction.Judge or Btos2Faction.Auditor or Btos2Faction.Starspawn or Btos2Faction.Egotist;
 
     public static Role GetTransformedVersion(Role role, GameModType? mod = null)
     {

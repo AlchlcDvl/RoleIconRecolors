@@ -506,25 +506,75 @@ public static class PatchRoleCards
             ChangeRoleCard(__instance.roleIcon, __instance.specialAbilityPanel?.useButton?.abilityIcon, __instance.roleInfoButtons, role, faction, true);
     }
 
+    // [HarmonyPatch(nameof(RoleCardPopupPanel.ShowAttackAndDefense))]
+    // [HarmonyPriority(0)]
+    // public static void Postfix(RoleCardPopupPanel __instance, RoleCardData data)
+    // {
+    //     var attack = GetSprite($"Attack{Utils.GetLevel(data.attack, true)}");
+    //     var icon1 = __instance.transform.Find("AttackIcon").Find("Icon").GetComponent<Image>();
+
+    //     if (icon1)
+    //         icon1.sprite = attack.IsValid() ? attack : FancyAssetManager.Attack;
+
+    //     var eth = __instance.CurrentFaction > Btos2Faction.Hawks && __instance.CurrentFaction < Btos2Faction.Pandora && __instance.CurrentFaction != Btos2Faction.Inquisitor;
+    //     var defenseAmount = __instance.defenseGlow.fillAmount * 3.0303030303f;
+    //     var defense = GetSprite($"Defense{Utils.GetLevel(eth ? 4 : (int)defenseAmount, false)}");
+    //     var icon2 = __instance.transform.Find("DefenseIcon").Find("Icon").GetComponent<Image>();
+
+    //     if (icon2)
+    //         icon2.sprite = defense.IsValid() ? defense : (eth ? Ethereal : FancyAssetManager.Defense);
+    // }
+
     [HarmonyPatch(nameof(RoleCardPopupPanel.ShowAttackAndDefense))]
     [HarmonyPriority(0)]
     public static void Postfix(RoleCardPopupPanel __instance, RoleCardData data)
     {
-        var attack = GetSprite($"Attack{Utils.GetLevel(data.attack, true)}");
+        var role = Pepper.GetMyRole();
+        var faction = Utils.FactionName(Pepper.GetMyFaction());
+        var ogFaction = Utils.FactionName(role.GetFactionType(), false);
+        var reg = ogFaction != faction;
+
+        var attackLevel = Utils.GetAttackLevel(data.attack);
+        var attackName = $"Attack{Utils.GetAttackString(attackLevel)}";
+
+        var attack = GetSprite(reg, attackName, faction);
+
+        if (!attack.IsValid() && reg)
+            attack = GetSprite(attackName, ogFaction);
+
+        if (!attack.IsValid())
+            attack = GetSprite(reg, "Attack", faction);
+
+        if (!attack.IsValid() && reg)
+            attack = GetSprite("Attack", ogFaction);
+
         var icon1 = __instance.transform.Find("AttackIcon").Find("Icon").GetComponent<Image>();
 
         if (icon1)
             icon1.sprite = attack.IsValid() ? attack : FancyAssetManager.Attack;
 
-        var eth = __instance.CurrentFaction > Btos2Faction.Hawks && __instance.CurrentFaction < Btos2Faction.Pandora && __instance.CurrentFaction != Btos2Faction.Inquisitor;
-        var defenseAmount = __instance.defenseGlow.fillAmount * 3.0303030303f;
-        var defense = GetSprite($"Defense{Utils.GetLevel(eth ? 4 : (int)defenseAmount, false)}");
+        var eth = __instance.CurrentFaction.IsEthereal();
+
+        var defenseAmount = (int)(__instance.defenseGlow.fillAmount * 3.0303030303f);
+        var defenseLevel = Utils.GetDefenseLevel(defenseAmount);
+        var defenseName = $"Defense{Utils.GetDefenseString(defenseLevel)}";
+
+        var defense = GetSprite(reg, defenseName, faction);
+
+        if (!defense.IsValid() && reg)
+            defense = GetSprite(defenseName, ogFaction);
+
+        if (!defense.IsValid())
+            defense = GetSprite(reg, "Defense", faction);
+
+        if (!defense.IsValid() && reg)
+            defense = GetSprite("Defense", ogFaction);
+
         var icon2 = __instance.transform.Find("DefenseIcon").Find("Icon").GetComponent<Image>();
 
         if (icon2)
             icon2.sprite = defense.IsValid() ? defense : (eth ? Ethereal : FancyAssetManager.Defense);
     }
-
     public static void ChangeRoleCard(Image roleIcon, Image specialAbilityPanel, List<BaseAbilityButton> roleInfoButtons, Role role, FactionType faction, bool isGuide = false)
     {
         roleInfoButtons ??= [];
@@ -1074,23 +1124,55 @@ public static class PatchAttackDefense
 {
     public static void Postfix(RoleCardPanel __instance, RoleCardData data)
     {
-        if (!Constants.EnableIcons())
-            return;
+        var role = Pepper.GetMyRole();
+        var faction = Utils.FactionName(Pepper.GetMyFaction());
+        var ogFaction = Utils.FactionName(role.GetFactionType(), false);
+        var reg = ogFaction != faction;
 
-        var attack = GetSprite($"Attack{Utils.GetLevel(data.attack, true)}");
+        var attackLevel = Utils.GetAttackLevel(data.attack);
+        var attackName = $"Attack{Utils.GetAttackString(attackLevel)}";
+
+        var attack = GetSprite(reg, attackName, faction);
+
+        if (!attack.IsValid() && reg)
+            attack = GetSprite(attackName, ogFaction);
+
+        if (!attack.IsValid())
+            attack = GetSprite(reg, "Attack", faction);
+
+        if (!attack.IsValid() && reg)
+            attack = GetSprite("Attack", ogFaction);
+
         var icon1 = __instance.transform.Find("AttackIcon").Find("Icon").GetComponent<Image>();
 
         if (icon1)
             icon1.sprite = attack.IsValid() ? attack : FancyAssetManager.Attack;
 
-        var eth = __instance.myData.IsEthereal() || __instance.CurrentFaction == Btos2Faction.Egotist;
-        var defense = GetSprite($"Defense{Utils.GetLevel(eth ? 4 : data.defense, false)}");
+        var eth = __instance.CurrentFaction.IsEthereal();
+
+        var defenseAmount = (int)(__instance.defenseGlow.fillAmount * 3.0303030303f);
+        var defenseLevel = Utils.GetDefenseLevel(defenseAmount);
+        var defenseName = $"Defense{Utils.GetDefenseString(defenseLevel)}";
+
+        var defense = GetSprite(reg, defenseName, faction);
+
+        if (!defense.IsValid() && reg)
+            defense = GetSprite(defenseName, ogFaction);
+
+        if (!defense.IsValid())
+            defense = GetSprite(reg, "Defense", faction);
+
+        if (!defense.IsValid() && reg)
+            defense = GetSprite("Defense", ogFaction);
+
         var icon2 = __instance.transform.Find("DefenseIcon").Find("Icon").GetComponent<Image>();
 
         if (icon2)
             icon2.sprite = defense.IsValid() ? defense : (eth ? Ethereal : FancyAssetManager.Defense);
+
     }
 }
+
 
 [HarmonyPatch(typeof(PlayerPopupController))]
 public static class PlayerPopupControllerPatch

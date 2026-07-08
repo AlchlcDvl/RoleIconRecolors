@@ -342,7 +342,7 @@ public static class RoleCardPopupPatches2
         {
             case Role.CULTIST when !Constants.IsBTOS2():
             case Btos2Role.Cultist when Constants.IsBTOS2():
-                defense = 1;
+                defense = faction.IsEthereal() ? 2 : 1;
                 break;
 
             case Role.FAMINE:
@@ -443,14 +443,14 @@ public static class RoleCardPopupPatches2
 		{
 			case Role.CULTIST when !Constants.IsBTOS2():
 			case Btos2Role.Cultist when Constants.IsBTOS2():
-				defense = Utils.GetString("GUI_ROLE_CARD_BASIC_DEFENSE_TOOLTIP");
+				defense = faction.IsEthereal() ? Utils.GetString("GUI_ROLE_CARD_POWERFUL_ETHEREAL_DEFENSE_TOOLTIP") : Utils.GetString("GUI_ROLE_CARD_BASIC_DEFENSE_TOOLTIP");
 				break;
 
 			case Role.FAMINE:
 			case Role.WAR:
 			case Role.PESTILENCE:
 			case Role.DEATH:
-				defense = Utils.GetString("GUI_ROLE_CARD_INVINCIBLE_DEFENSE_TOOLTIP");
+				defense = faction.IsEthereal() ? Utils.GetString("GUI_ROLE_CARD_INVINCIBLE_ETHEREAL_DEFENSE_TOOLTIP") : Utils.GetString("GUI_ROLE_CARD_INVINCIBLE_DEFENSE_TOOLTIP");
 				break;
 
 			default:

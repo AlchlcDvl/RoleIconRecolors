@@ -29,6 +29,9 @@
     <Entry key="FANCY_FACTIONAL_PLAYER_MENTIONS_NAME">Color Player Mentions With Faction</Entry>
     <Entry key="FANCY_FACTIONAL_PLAYER_MENTIONS_DESC">Determines whether or not player mentions will be colored with the target faction gradient. Updates accordingly on various phase changes, primarily WDAH.</Entry>
 
+    <Entry key="FANCY_SHORTEN_FLEXED_WITH_LABEL_NAME">Use Short Names For Flexed Roles in Role Deck Related Features</Entry>
+    <Entry key="FANCY_SHORTEN_FLEXED_WITH_LABEL_DESC">Determines whether or not roles and buckets, when flexed to a different faction, will use their short names instead of their regular names. This only applies to the role list and the bucket preview. This only occurs if the faction label would show.</Entry>
+
     <Entry key="FANCY_GENDERED_PLAYER_MENTIONS_NAME">Color Player Mentions With Gender</Entry>
     <Entry key="FANCY_GENDERED_PLAYER_MENTIONS_DESC">Determines whether or not player mentions will be colored with the target's gender gradient. Factional mentions take priority over genders.</Entry>
 
