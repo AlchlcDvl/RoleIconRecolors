@@ -278,7 +278,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
                 }
 
                 Emojis = BuildGlyphs(sprites, $"Emojis ({Name})", dict, 384f, 384f, 0f, 300f, 390f);
-                Utils.DumpSprite(PlayerNumbers.spriteSheet as Texture2D, "Emojis", Path.Combine(PackPath, "Emojis"));
+                Utils.DumpSprite(Emojis.spriteSheet as Texture2D, "Emojis", Path.Combine(PackPath, "Emojis"));
             }
             catch (Exception e)
             {
