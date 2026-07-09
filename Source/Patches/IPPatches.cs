@@ -537,16 +537,16 @@ public static class PatchRoleCards
         var attackLevel = Utils.GetAttackLevel(data.attack);
         var attackName = $"Attack{Utils.GetAttackString(attackLevel)}";
 
-        var attack = GetSprite(reg, "Attack", faction);
+		var attack = GetSprite(reg, attackName, faction);
 
-        if (!attack.IsValid() && reg)
-            attack = GetSprite("Attack", ogFaction);
+		if (!attack.IsValid())
+			attack = GetSprite(reg, "Attack", faction);
 
-        if (!attack.IsValid())
-            attack = GetSprite(reg, attackName, faction);
+		if (!attack.IsValid() && reg)
+			attack = GetSprite(attackName, ogFaction);
 
-        if (!attack.IsValid() && reg)
-            attack = GetSprite(attackName, ogFaction);
+		if (!attack.IsValid() && reg)
+			attack = GetSprite("Attack", ogFaction);
 
         var icon1 = __instance.transform.Find("AttackIcon").Find("Icon").GetComponent<Image>();
 
@@ -559,16 +559,16 @@ public static class PatchRoleCards
         var defenseLevel = Utils.GetDefenseLevel(defenseAmount);
         var defenseName = $"Defense{Utils.GetDefenseString(defenseLevel)}";
 
-        var defense = GetSprite(reg, "Defense", faction);
+        var defense = GetSprite(reg, defenseName, faction);
 
-        if (!defense.IsValid() && reg)
-            defense = GetSprite("Defense", ogFaction);
+		if (!defense.IsValid())
+			defense = GetSprite(reg, "Defense", faction);
 
-        if (!defense.IsValid())
-            defense = GetSprite(reg, defenseName, faction);
+		if (!defense.IsValid() && reg)
+			defense = GetSprite(defenseName, ogFaction);
 
-        if (!defense.IsValid() && reg)
-            defense = GetSprite(defenseName, ogFaction);
+		if (!defense.IsValid() && reg)
+			defense = GetSprite("Defense", ogFaction);
 
         var icon2 = __instance.transform.Find("DefenseIcon").Find("Icon").GetComponent<Image>();
 
@@ -1132,16 +1132,16 @@ public static class PatchAttackDefense
         var attackLevel = Utils.GetAttackLevel(data.attack);
         var attackName = $"Attack{Utils.GetAttackString(attackLevel)}";
 
-        var attack = GetSprite(reg, "Attack", faction);
+		var attack = GetSprite(reg, attackName, faction);
 
-        if (!attack.IsValid() && reg)
-            attack = GetSprite("Attack", ogFaction);
+		if (!attack.IsValid())
+			attack = GetSprite(reg, "Attack", faction);
 
-        if (!attack.IsValid())
-            attack = GetSprite(reg, attackName, faction);
+		if (!attack.IsValid() && reg)
+			attack = GetSprite(attackName, ogFaction);
 
-        if (!attack.IsValid() && reg)
-            attack = GetSprite(attackName, ogFaction);
+		if (!attack.IsValid() && reg)
+			attack = GetSprite("Attack", ogFaction);
 
         var icon1 = __instance.transform.Find("AttackIcon").Find("Icon").GetComponent<Image>();
 
@@ -1154,16 +1154,16 @@ public static class PatchAttackDefense
         var defenseLevel = Utils.GetDefenseLevel(defenseAmount);
         var defenseName = $"Defense{Utils.GetDefenseString(defenseLevel)}";
 
-        var defense = GetSprite(reg, "Defense", faction);
+        var defense = GetSprite(reg, defenseName, faction);
 
-        if (!defense.IsValid() && reg)
-            defense = GetSprite("Defense", ogFaction);
+		if (!defense.IsValid())
+			defense = GetSprite(reg, "Defense", faction);
 
-        if (!defense.IsValid())
-            defense = GetSprite(reg, defenseName, faction);
+		if (!defense.IsValid() && reg)
+			defense = GetSprite(defenseName, ogFaction);
 
-        if (!defense.IsValid() && reg)
-            defense = GetSprite(defenseName, ogFaction);
+		if (!defense.IsValid() && reg)
+			defense = GetSprite("Defense", ogFaction);
 
         var icon2 = __instance.transform.Find("DefenseIcon").Find("Icon").GetComponent<Image>();
 
