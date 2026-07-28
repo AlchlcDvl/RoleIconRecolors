@@ -533,7 +533,7 @@ public static class SpecialAbilityPopupDayConfirmListItemPatch
 
         if (uiRoleDataInstance != null)
         {
-            __instance.choiceText.text = uiRoleDataInstance.role.GetSpecialAbilityVerb();
+            __instance.choiceText.text = uiRoleDataInstance.role.GetRoleCardSpecialAbilityVerb(Pepper.GetMyFaction(), false);
             __instance.choiceSprite.sprite = uiRoleDataInstance.specialAbilityIcon;
         }
 
@@ -1818,71 +1818,71 @@ public static class DontDeleteModdedMentions
     }
 }
 
-[HarmonyPatch(typeof(RoleCardPopupPanel), nameof(RoleCardPopupPanel.DetermineFrameAndSlots))]
-public static class NecronomiconRoleCardIconPatch
-{
-    public static void Postfix(RoleCardPopupPanel __instance, Role role, RoleCardData roleCardData)
-    {
-        var faction = __instance.CurrentFaction;
-        if (__instance == null || roleCardData == null)
-            return;
+// [HarmonyPatch(typeof(RoleCardPopupPanel), nameof(RoleCardPopupPanel.DetermineFrameAndSlots))]
+// public static class NecronomiconRoleCardIconPatch
+// {
+    // public static void Postfix(RoleCardPopupPanel __instance, Role role, RoleCardData roleCardData)
+    // {
+        // var faction = __instance.CurrentFaction;
+        // if (__instance == null || roleCardData == null)
+            // return;
 
-        if (faction is Btos2Faction.Jackal)
-            return;
+        // if (faction is Btos2Faction.Jackal)
+            // return;
 
-		if (role.IsCovenAligned() && (faction is FactionType.COVEN or Btos2Faction.Pandora))
-			return;
+		// if (role.IsCovenAligned() && (faction is FactionType.COVEN or Btos2Faction.Pandora))
+			// return;
 
 
-        var toRemove = __instance.GetComponentsInChildren<BaseAbilityButton>(true).Where(b => b?.abilityIcon != null && b.abilityIcon.sprite == __instance.roleData.generalData.abilityIcon2).ToList();
+        // var toRemove = __instance.GetComponentsInChildren<BaseAbilityButton>(true).Where(b => b?.abilityIcon != null && b.abilityIcon.sprite == __instance.roleData.generalData.abilityIcon2).ToList();
 
-        foreach (var btn in toRemove)
-        {
-            UObject.Destroy(btn.gameObject);
-        }
+        // foreach (var btn in toRemove)
+        // {
+            // UObject.Destroy(btn.gameObject);
+        // }
 
-        if (faction is not FactionType.COVEN and not Btos2Faction.Pandora)
-            return;
+        // if (faction is not FactionType.COVEN and not Btos2Faction.Pandora)
+            // return;
 		
-        if (role is Role.CURSED_SOUL or Role.DEATH or Role.FAMINE or Role.WAR or Role.PESTILENCE or Role.HIDDEN or Role.STONED)
-            return;
+        // if (role is Role.CURSED_SOUL or Role.DEATH or Role.FAMINE or Role.WAR or Role.PESTILENCE or Role.HIDDEN or Role.STONED)
+            // return;
 
-        var template = __instance.roleInfoButtonTemplates[0];
+        // var template = __instance.roleInfoButtonTemplates[0];
 
-        var item = UObject.Instantiate(template, template.transform.parent);
-        __instance.roleInfoButtons.Add(item);
+        // var item = UObject.Instantiate(template, template.transform.parent);
+        // __instance.roleInfoButtons.Add(item);
 
-        int index = __instance.roleInfoButtons.Count - 1;
+        // int index = __instance.roleInfoButtons.Count - 1;
 
-        var button = __instance.roleInfoButtons[index];
-        button.gameObject.SetActive(true);
-        button.abilityIcon.sprite = __instance.roleData.generalData.abilityIcon2;
+        // var button = __instance.roleInfoButtons[index];
+        // button.gameObject.SetActive(true);
+        // button.abilityIcon.sprite = __instance.roleData.generalData.abilityIcon2;
 
-        if (!__instance.isGamePadPanel)
-        {
-            var trigger = button.GetComponent<EventTrigger>();
+        // if (!__instance.isGamePadPanel)
+        // {
+            // var trigger = button.GetComponent<EventTrigger>();
 
-            var entry = new EventTrigger.Entry
-            {
-                eventID = EventTriggerType.PointerEnter
-            };
+            // var entry = new EventTrigger.Entry
+            // {
+                // eventID = EventTriggerType.PointerEnter
+            // };
 
-            entry.callback.AddListener(_ => __instance.OnClickNecronomicon());
-            trigger.triggers.Add(entry);
-        }
-        else
-        {
-            var tab = __instance.abilityTabs[index];
-            tab.SetTabActive(true);
+            // entry.callback.AddListener(_ => __instance.OnClickNecronomicon());
+            // trigger.triggers.Add(entry);
+        // }
+        // else
+        // {
+            // var tab = __instance.abilityTabs[index];
+            // tab.SetTabActive(true);
 
-            var unityEvent = new UnityEngine.Events.UnityEvent();
-            unityEvent.AddListener(__instance.OnClickNecronomicon);
+            // var unityEvent = new UnityEngine.Events.UnityEvent();
+            // unityEvent.AddListener(__instance.OnClickNecronomicon);
 
-            tab.ApplyNewSelectAction(unityEvent);
-            tab.ParentIconsToAnchor(button.gameObject, "Necro");
-        }
-    }
-}
+            // tab.ApplyNewSelectAction(unityEvent);
+            // tab.ParentIconsToAnchor(button.gameObject, "Necro");
+        // }
+    // }
+// }
 
 [HarmonyPatch]
 public static class ApplyGenderGradientToCustomizationName

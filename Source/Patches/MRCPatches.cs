@@ -18,6 +18,7 @@ using Server.Shared.Extensions;
 using Server.Shared.Messages;
 using Server.Shared.State.Chat;
 using Shared.Chat;
+using System.Text;
 
 namespace FancyUI.Patches;
 
@@ -36,68 +37,160 @@ public static class PatchRoleCard
         __instance.roleNameText.text = Pepper.GetMyRole().ToChangedDisplayString(Pepper.GetMyFaction(), Service.Game.Sim.simulation.observations.roleCardObservation.Data.modifier);
     }
 
-    [HarmonyPatch(nameof(RoleCardPanel.GetSubAlignment)), HarmonyPrefix]
-    public static bool Prefix(RoleCardPanel __instance, ref string __result)
-    {
-        var role = __instance.CurrentRole;
-        var faction = __instance.CurrentFaction;
-        var alignment = role.GetAlignment();
-        var subAlignment = role.GetSubAlignment();
-		// var prefix = Constants.IsBTOS2() ? "BTOS" : "GUI";
-        var useNeutralGradient = false;
-        var neutralGradient = Utils.CreateGradient(Fancy.NeutralStart.Value, Fancy.NeutralEnd.Value);
-        var subAlignGradient = Fancy.FactionalBuckets.Value ? Utils.GetFactionBucketGradient(faction) : Utils.CreateGradient(Fancy.BucketStart.Value, Fancy.BucketEnd.Value);
-        if (role is Role.DEATH or Role.PESTILENCE or Role.WAR or Role.FAMINE)
-        {
-            __result = string.Empty;
-            return false;
-        }
-        var acolyte = role switch
-        {
-            Role.BERSERKER => Role.WAR.ToColorizedNoLabel(faction),
-            Role.BAKER => Role.FAMINE.ToColorizedNoLabel(faction),
-            Role.PLAGUEBEARER => Role.PESTILENCE.ToColorizedNoLabel(faction),
-            Role.SOULCOLLECTOR or Btos2Role.Warlock => Role.DEATH.ToColorizedNoLabel(faction),
-            _ => string.Empty
-        };
-        if (!string.IsNullOrEmpty(acolyte))
-        {
-            __result = $"{acolyte} {Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_ACOLYTE"), subAlignGradient)}";
-            return false;
-        }
-        string displayString;
+    // [HarmonyPatch(nameof(RoleCardPanel.GetSubAlignment)), HarmonyPrefix]
+    // public static bool Prefix(RoleCardPanel __instance, ref string __result)
+    // {
+        // var role = __instance.CurrentRole;
+        // var faction = __instance.CurrentFaction;
+        // var alignment = role.GetAlignment();
+        // var subAlignment = role.GetSubAlignment();
+		// // var prefix = Constants.IsBTOS2() ? "BTOS" : "GUI";
+        // var useNeutralGradient = false;
+        // var neutralGradient = Utils.CreateGradient(Fancy.NeutralStart.Value, Fancy.NeutralEnd.Value);
+        // var subAlignGradient = Fancy.FactionalBuckets.Value ? Utils.GetFactionBucketGradient(faction) : Utils.CreateGradient(Fancy.BucketStart.Value, Fancy.BucketEnd.Value);
+        // if (role is Role.DEATH or Role.PESTILENCE or Role.WAR or Role.FAMINE)
+        // {
+            // __result = string.Empty;
+            // return false;
+        // }
+        // var acolyte = role switch
+        // {
+            // Role.BERSERKER => Role.WAR.ToColorizedNoLabel(faction),
+            // Role.BAKER => Role.FAMINE.ToColorizedNoLabel(faction),
+            // Role.PLAGUEBEARER => Role.PESTILENCE.ToColorizedNoLabel(faction),
+            // Role.SOULCOLLECTOR or Btos2Role.Warlock => Role.DEATH.ToColorizedNoLabel(faction),
+            // _ => string.Empty
+        // };
+        // if (!string.IsNullOrEmpty(acolyte))
+        // {
+            // __result = $"{acolyte} {Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_ACOLYTE"), subAlignGradient)}";
+            // return false;
+        // }
+        // string displayString;
 
-        if (role.IsTownAligned())
-            displayString = RoleAlignment.TOWN.ToDisplayString();
-        else if (role.IsCovenAligned())
-            displayString = RoleAlignment.COVEN.ToDisplayString();
-        else if (role.IsNeutralAligned())
-            displayString = RoleAlignment.NEUTRAL.ToDisplayString();
-        else 
-            displayString = RoleAlignment.NONE.ToDisplayString();
+        // if (role.IsTownAligned())
+            // displayString = RoleAlignment.TOWN.ToDisplayString();
+        // else if (role.IsCovenAligned())
+            // displayString = RoleAlignment.COVEN.ToDisplayString();
+        // else if (role.IsNeutralAligned())
+            // displayString = RoleAlignment.NEUTRAL.ToDisplayString();
+        // else 
+            // displayString = RoleAlignment.NONE.ToDisplayString();
 
-        // if (faction is FactionType.SERIALKILLER 
-        //     or FactionType.ARSONIST or FactionType.SHROUD 
-        //     or FactionType.WEREWOLF or FactionType.JESTER 
-        //     or FactionType.EXECUTIONER or FactionType.PIRATE
-        //     or FactionType.DOOMSAYER or Btos2Faction.Judge
-        //     or Btos2Faction.Auditor or Btos2Faction.Starspawn
-        //     or Btos2Faction.Inquisitor or (FactionType)37)
-        //     useNeutralGradient = true;
+        // if (subAlignment.IsInvalid())
+        // {
+            // if (alignment.IsInvalid())
+            // {
+                // __result = string.Empty;
+                // return false;
+            // }
+            // __result = alignment.ToColorizedDisplayString();
+            // return false;
+        // }
+        // __result = Utils.ApplyGradient(displayString, useNeutralGradient ? neutralGradient : faction.GetChangedGradient(role)) + " " + Utils.ApplyGradient(subAlignment.ToDisplayString(), subAlignGradient);
+        // return false;
+    // }
 
-        if (subAlignment.IsInvalid())
-        {
-            if (alignment.IsInvalid())
-            {
-                __result = string.Empty;
-                return false;
-            }
-            __result = alignment.ToColorizedDisplayString();
-            return false;
-        }
-        __result = Utils.ApplyGradient(displayString, useNeutralGradient ? neutralGradient : faction.GetChangedGradient(role)) + " " + Utils.ApplyGradient(subAlignment.ToDisplayString(), subAlignGradient);
-        return false;
-    }
+	[HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.OnClickRoleDesc))]
+	public static class RoleCardPanelPatch
+	{
+		private static string GetFancySubAlignment(RoleCardPanel panel)
+		{
+			var role = panel.CurrentRole;
+			var faction = panel.CurrentFaction;
+			var alignment = role.GetAlignment();
+			var subAlignment = role.GetSubAlignment();
+
+			var useNeutralGradient = false;
+
+			var neutralGradient = Utils.CreateGradient(
+				Fancy.NeutralStart.Value,
+				Fancy.NeutralEnd.Value);
+
+			var subAlignGradient = Fancy.FactionalBuckets.Value
+				? Utils.GetFactionBucketGradient(faction)
+				: Utils.CreateGradient(Fancy.BucketStart.Value, Fancy.BucketEnd.Value);
+
+			if (role is Role.DEATH or Role.PESTILENCE or Role.WAR or Role.FAMINE)
+				return string.Empty;
+
+			var acolyte = role switch
+			{
+				Role.BERSERKER => Role.WAR.ToColorizedNoLabel(faction),
+				Role.BAKER => Role.FAMINE.ToColorizedNoLabel(faction),
+				Role.PLAGUEBEARER => Role.PESTILENCE.ToColorizedNoLabel(faction),
+				Role.SOULCOLLECTOR or Btos2Role.Warlock => Role.DEATH.ToColorizedNoLabel(faction),
+				_ => string.Empty
+			};
+
+			if (!string.IsNullOrEmpty(acolyte))
+			{
+				return $"{acolyte} {Utils.ApplyGradient(Utils.GetString("FANCY_BUCKETS_ACOLYTE"), subAlignGradient)}";
+			}
+
+			if (subAlignment.IsInvalid())
+			{
+				if (alignment.IsInvalid())
+					return string.Empty;
+
+				return alignment.ToColorizedDisplayString();
+			}
+
+			string displayString;
+
+			if (role.IsTownAligned())
+				displayString = RoleAlignment.TOWN.ToDisplayString();
+			else if (role.IsCovenAligned())
+				displayString = RoleAlignment.COVEN.ToDisplayString();
+			else if (role.IsNeutralAligned())
+				displayString = RoleAlignment.NEUTRAL.ToDisplayString();
+			else
+				displayString = RoleAlignment.NONE.ToDisplayString();
+
+			return Utils.ApplyGradient(displayString, useNeutralGradient ? neutralGradient : faction.GetChangedGradient(role))
+				   + " " + Utils.ApplyGradient(subAlignment.ToDisplayString(), subAlignGradient);
+		}
+
+		[HarmonyPrefix]
+		public static bool Prefix(RoleCardPanel __instance)
+		{
+			string text = __instance.CurrentFaction.ToColorizedDisplayString();
+			string text2 = GetFancySubAlignment(__instance);
+			string roleCardGoal = __instance.CurrentRole.GetRoleCardGoal(__instance.CurrentFaction, Pepper.IsVoiceChat());
+			string roleCardAbilities = __instance.CurrentRole.GetRoleCardAbilities(__instance.CurrentFaction, Pepper.IsVoiceChat());
+
+			StringBuilder stringBuilder = new();
+
+			if (text != string.Empty)
+			{
+				stringBuilder.AppendLine(__instance.l10n("GUI_ROLECARDHEADER_FACTION"));
+				stringBuilder.AppendLine(text + "\n");
+			}
+
+			if (text2 != string.Empty)
+			{
+				stringBuilder.AppendLine(__instance.l10n("GUI_ROLECARDHEADER_SUBALIGNMENT"));
+				stringBuilder.AppendLine(text2 + "\n");
+			}
+
+			if (roleCardGoal != string.Empty)
+			{
+				stringBuilder.AppendLine(__instance.l10n("GUI_ROLECARDHEADER_GOAL"));
+				stringBuilder.AppendLine(roleCardGoal + "\n");
+			}
+
+			if (roleCardAbilities != string.Empty)
+			{
+				stringBuilder.AppendLine(__instance.l10n("GUI_ROLECARDHEADER_ABILITIES"));
+				stringBuilder.AppendLine(roleCardAbilities);
+			}
+
+			__instance.roleDescText.SetText(stringBuilder.ToString().Trim());
+			__instance.roleDescGO.SetActive(true);
+
+			return false;
+		}
+	}
 
     private static string ToChangedDisplayString(this Role role, FactionType faction, ROLE_MODIFIER modifier)
     {
@@ -345,6 +438,10 @@ public static class RoleCardPopupPatches2
                 defense = faction.IsEthereal() ? 2 : 1;
                 break;
 
+            case Btos2Role.Bodyguard when Constants.IsBTOS2():
+                defense = 2;
+                break;
+
             case Role.FAMINE:
             case Role.WAR:
             case Role.PESTILENCE:
@@ -444,6 +541,10 @@ public static class RoleCardPopupPatches2
 			case Role.CULTIST when !Constants.IsBTOS2():
 			case Btos2Role.Cultist when Constants.IsBTOS2():
 				defense = faction.IsEthereal() ? Utils.GetString("GUI_ROLE_CARD_POWERFUL_ETHEREAL_DEFENSE_TOOLTIP") : Utils.GetString("GUI_ROLE_CARD_BASIC_DEFENSE_TOOLTIP");
+				break;
+
+			case Btos2Role.Bodyguard when Constants.IsBTOS2():
+				defense = Utils.GetString("GUI_ROLE_CARD_POWERFUL_ETHEREAL_DEFENSE_TOOLTIP");
 				break;
 
 			case Role.FAMINE:
@@ -550,6 +651,38 @@ public static class TosCharacterNametagPatch
         //     __result = __result.Replace("RoleIcons\"", $"RoleIcons ({Utils.FactionName(factionType, false)})\"");
     }
 }
+
+// [HarmonyPatch(typeof(TosCharacterNametag))]
+// public static class TosCharacterNametagPatch
+// {
+    // [HarmonyPatch(nameof(TosCharacterNametag.ColouredName))]
+    // [HarmonyPostfix]
+    // public static void ColouredNamePostfix(TosCharacterNametag __instance, string theName, FactionType factionType, Role role, ref string __result)
+    // {
+        // var gradient = factionType.GetChangedGradient(role);
+
+        // if (gradient == null)
+            // return;
+
+        // var roleName = Fancy.FactionalRoleNames.Value
+            // ? role.ToRoleFactionDisplayString(factionType)
+            // : role.ToDisplayString();
+
+        // var gradientName = Utils.ApplyGradient(theName, gradient);
+        // var gradientRole = Utils.ApplyGradient($"({roleName})", gradient);
+
+        // var tosCharacter = AccessTools
+            // .Field(typeof(TosCharacterNametag), "tosCharacter")
+            // .GetValue(__instance) as TosCharacter;
+
+        // string sprite = "";
+
+        // if (tosCharacter != null)
+            // sprite = $"<sprite=\"PlayerNumbers\" name=\"PlayerNumbers_{tosCharacter.position + 1}\">";
+
+        // __result = $"<size=36>{role.GetRoleSprite(factionType)}</size>\n" + $"<size=24>{sprite}{gradientName}</size>\n" + $"<size=18>{gradientRole}</size>";
+    // }
+// }
 
 [HarmonyPatch(typeof(HomeSceneController), nameof(HomeSceneController.HandleClickPlay))]
 public static class FixStyles
@@ -675,9 +808,11 @@ public static class PatchDefaultWinScreens
     {
         __instance.elapsedDuration = 0f;
         Debug.Log($"FactionWinsCinematicPlayer current phase at start = {Pepper.GetGamePhase()}");
+
         __instance.cinematicData = cinematicData as FactionWinsCinematicData;
         __instance.totalDuration = CinematicFactionWinsTimes.GetWinTimeByFaction(__instance.cinematicData!.winningFaction);
         __instance.callbackTimers.Clear();
+
         var spawnedCharacters = Service.Game.Cast.GetSpawnedCharacters();
 
         if (spawnedCharacters == null)
@@ -688,6 +823,7 @@ public static class PatchDefaultWinScreens
 
         var positions = new HashSet<int>();
         __instance.cinematicData.entries.ForEach(e => positions.Add(e.position));
+
         spawnedCharacters.ForEach(c =>
         {
             if (positions.Contains(c.position))
@@ -695,18 +831,27 @@ public static class PatchDefaultWinScreens
             else
                 c.characterSprite.SetColor(Color.clear);
         });
+
         var winningFaction = __instance.cinematicData.winningFaction;
 
         if (winningFaction == FactionType.TOWN)
         {
-            Service.Home.AudioService.PlayMusic("Audio/Music/TownVictory.wav", false, AudioController.AudioChannel.Cinematic);
+            Service.Home.AudioService.PlayMusic("Audio/Music/TownVictory.wav", false, AudioController.AudioChannel.Cinematic, true,
+                0f);
+
             __instance.evilProp.SetActive(false);
             __instance.goodProp.SetActive(true);
             __instance.m_Animator.SetInteger(State, 1);
         }
         else
         {
-            Service.Home.AudioService.PlayMusic("Audio/Music/CovenVictory.wav", false, AudioController.AudioChannel.Cinematic);
+            Service.Home.AudioService.PlayMusic(
+                "Audio/Music/CovenVictory.wav",
+                false,
+                AudioController.AudioChannel.Cinematic,
+                true,
+                0f);
+
             __instance.evilProp.SetActive(true);
             __instance.goodProp.SetActive(false);
             __instance.m_Animator.SetInteger(State, 2);
@@ -717,9 +862,18 @@ public static class PatchDefaultWinScreens
 
         if (gradient != null)
         {
-            __instance.leftImage.color = Fancy.VerticalGradients.Value ? Utils.GetFactionMiddleColor(winningFaction) : Utils.GetFactionStartingColor(winningFaction);
-            __instance.rightImage.color = Fancy.VerticalGradients.Value ? Utils.GetFactionMiddleColor(winningFaction) : Utils.GetFactionEndingColor(winningFaction);
-			__instance.glow.color = Fancy.VerticalGradients.Value ? Utils.GetFactionMiddleColor(winningFaction) : Utils.GetFactionStartingColor(winningFaction);
+            __instance.leftImage.color = Fancy.VerticalGradients.Value
+                ? Utils.GetFactionMiddleColor(winningFaction)
+                : Utils.GetFactionStartingColor(winningFaction);
+
+            __instance.rightImage.color = Fancy.VerticalGradients.Value
+                ? Utils.GetFactionMiddleColor(winningFaction)
+                : Utils.GetFactionEndingColor(winningFaction);
+
+            __instance.glow.color = Fancy.VerticalGradients.Value
+                ? Utils.GetFactionMiddleColor(winningFaction)
+                : Utils.GetFactionStartingColor(winningFaction);
+
             __instance.textAnimatorPlayer.ShowText(Utils.ApplyGradient(text, gradient));
         }
         else
@@ -729,9 +883,9 @@ public static class PatchDefaultWinScreens
                 __instance.leftImage.color = color;
                 __instance.rightImage.color = color;
                 __instance.glow.color = color;
+                __instance.text.color = color;
             }
 
-            __instance.text.color = color;
             __instance.textAnimatorPlayer.ShowText(text);
         }
 
@@ -746,54 +900,55 @@ public static class PatchCustomWinScreens
     public static bool Prefix(FactionWinsStandardCinematicPlayer __instance, ICinematicData cinematicData)
     {
         Debug.Log($"FactionWinsStandardCinematicPlayer current phase at end = {Pepper.GetGamePhase()}");
+
+        bool isResultsPhase = Pepper.IsResultsPhase();
+
         __instance.elapsedDuration = 0f;
         __instance.cinematicData = cinematicData as FactionWinsCinematicData;
         __instance.totalDuration = CinematicFactionWinsTimes.GetWinTimeByFaction(__instance.cinematicData!.winningFaction);
 
+        if (isResultsPhase)
+            __instance.totalDuration += 0.2f;
+
         var winningFaction = __instance.cinematicData.winningFaction;
+
         PlayVictoryMusic(winningFaction);
-        var text2 = Utils.GetString($"GUI_WINNERS_ARE_{(int)winningFaction}").RemoveColorTags();
+
+        var text = Utils.GetString($"GUI_WINNERS_ARE_{(int)winningFaction}").RemoveColorTags();
         var gradient = winningFaction.GetChangedGradient(Role.NONE);
 
         if (gradient != null)
-            text2 = Utils.ApplyGradient(text2, gradient);
+            text = Utils.ApplyGradient(text, gradient);
 
         if (__instance.textAnimatorPlayer.gameObject.activeSelf)
-            __instance.textAnimatorPlayer.ShowText(text2);
+            __instance.textAnimatorPlayer.ShowText(text);
 
         foreach (var child in __instance.transform.GetComponentsInChildren<Transform>(true))
-		{
-			switch (child.name)
-			{
-				case "Filigree_L":
-				case "Filigree_R":
-				case "Glow":
-					if (child.TryGetComponent<Image>(out var image))
-					{
-						if (Fancy.VerticalGradients.Value)
-						{
-							image.color = Utils.GetFactionMiddleColor(winningFaction);
-						}
-						else
-						{
-							image.color = child.name == "Filigree_R"
-								? Utils.GetFactionEndingColor(winningFaction)
-								: Utils.GetFactionStartingColor(winningFaction);
-						}
-					}
-					break;
+        {
+            switch (child.name)
+            {
+                case "Filigree_L":
+                case "Filigree_R":
+                case "Glow":
+                    if (child.TryGetComponent<Image>(out var image))
+                    {
+                        if (Fancy.VerticalGradients.Value)
+                            image.color = Utils.GetFactionMiddleColor(winningFaction);
+                        else
+                            image.color = child.name == "Filigree_R" ? Utils.GetFactionEndingColor(winningFaction) : Utils.GetFactionStartingColor(winningFaction);
+                    }
+                    break;
 
-				case "BigText (1)":
-					if (child.TryGetComponent<TextMeshProUGUI>(out var tmp))
-					{
-						tmp.text = Utils.GetString("FANCY_CINEMATIC_APOCALYPSE_IS_NIGH");
-					}
-					break;
-			}
-		}
-
+                case "BigText (1)":
+                    if (child.TryGetComponent<TextMeshProUGUI>(out var tmp))
+                        tmp.text = Utils.GetString("FANCY_CINEMATIC_APOCALYPSE_IS_NIGH");
+                    break;
+            }
+        }
 
         __instance.SetUpWinners();
+        __instance.SetupSoloWinners();
+
         return false;
     }
 
@@ -802,15 +957,69 @@ public static class PatchCustomWinScreens
         var musicPath = GetVictoryMusicPath(winningFaction);
 
         if (!NewModLoading.Utils.IsNullEmptyOrWhiteSpace(musicPath))
-            Service.Home.AudioService.PlayMusic(musicPath, false, AudioController.AudioChannel.Cinematic);
+        {
+            Service.Home.AudioService.PlayMusic(
+                musicPath,
+                false,
+                AudioController.AudioChannel.Cinematic,
+                true,
+                0f);
+        }
     }
 
     private static string GetVictoryMusicPath(FactionType faction) => (Fancy.CinematicMap.TryGetValue(faction, out var setting) ? setting.Value : Fancy.GetCinematic(faction)) switch
+	{
+		CinematicType.TownWins => "Audio/Music/TownVictory.wav",
+		CinematicType.CovenWins or CinematicType.FactionWins => "Audio/Music/CovenVictory.wav",
+		_ => null
+	};
+}
+
+[HarmonyPatch(typeof(FactionWinsStandardCinematicPlayer), nameof(FactionWinsStandardCinematicPlayer.SetupSoloWinners))]
+public static class PatchSetupSoloWinners
+{
+    public static bool Prefix(FactionWinsStandardCinematicPlayer __instance)
     {
-        CinematicType.TownWins => "Audio/Music/TownVictory.wav",
-        CinematicType.CovenWins or CinematicType.FactionWins => "Audio/Music/CovenVictory.wav",
-        _ => null
-    };
+        var sb = new StringBuilder();
+
+        foreach (var entry in __instance.cinematicData.entries)
+        {
+            if (entry.faction == __instance.cinematicData.winningFaction)
+                continue;
+
+            var player = Pepper.GetDiscussionPlayerByPosition(entry.position);
+            if (player == null)
+                continue;
+
+            string roleName = entry.role.ToColorizedDisplayString(entry.faction).RemoveColorTags();
+
+            var gradient = entry.faction.GetChangedGradient(entry.role);
+            if (gradient != null)
+                roleName = Utils.ApplyGradient(roleName, gradient);
+
+            string line = Utils.GetString("GUI_SOLO_WINNER").Replace("%name%", $"<style=\"UIGold\"><sprite=\"PlayerNumbers\" name=\"PlayerNumbers_{entry.position + 1}\">{player.gameName}</style>")
+			.Replace("%role%", entry.role.GetRoleSprite(entry.faction) + roleName);
+
+            sb.AppendLine(line);
+        }
+
+        float textDuration = __instance.CalculateTypeWriterDuration(sb.ToString());
+        float speedMultiplier = 1f;
+        float popupDuration = __instance.totalDuration
+                            - __instance.soloWinnerPopupDelay
+                            - __instance.soloWinnerPopupFinish;
+
+        if (textDuration > popupDuration)
+            speedMultiplier = textDuration / popupDuration;
+
+        sb.Insert(0, $"<waitfor={__instance.soloWinnerPopupDelay}> <speed={speedMultiplier:F2}> ");
+
+        __instance.soloWinnerText.SetText(sb.ToString());
+
+        Debug.Log($"textDuration == {textDuration} | multiplier = {speedMultiplier} | popupDuration = {popupDuration}\n{sb}");
+
+        return false;
+    }
 }
 
 [HarmonyPatch(typeof(ClientRoleExtensions))]
@@ -1074,12 +1283,13 @@ public static class KeywordMentionsPatches
         var prefixes = rebuildMentionTypesFlag.HasFlag(RebuildMentionTypesFlag.PREFIXES);
         var emojis = rebuildMentionTypesFlag.HasFlag(RebuildMentionTypesFlag.EMOJIS);
         var achievements = rebuildMentionTypesFlag.HasFlag(RebuildMentionTypesFlag.ACHIEVEMENTS);
+        var feedback = rebuildMentionTypesFlag.HasFlag(RebuildMentionTypesFlag.GAME_FEEDBACK);
 
         __instance._useColors = Service.Home.UserService.Settings.MentionsUseColorsEnabled;
         __instance._playerEffects = Service.Home.UserService.Settings.MentionsPlayerEffects;
         __instance._roleEffects = Service.Home.UserService.Settings.MentionsRoleEffects;
 
-        __instance.ClearMentions(roles, keywords, players, prefixes, emojis, achievements);
+        __instance.ClearMentions(roles, keywords, players, prefixes, emojis, achievements, feedback);
 
         if (roles)
         {
@@ -1106,6 +1316,10 @@ public static class KeywordMentionsPatches
 
             if (achievements)
                 __instance.BuildAchievementMentions();
+
+			if (feedback)
+				__instance.BuildGameFeedbackMentions();
+
         }
 
         return false;

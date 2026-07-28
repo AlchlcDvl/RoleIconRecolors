@@ -662,13 +662,13 @@ public static class PatchRoleCards
 
         if (reg && !attribute.IsValid())
         {
-            attribute = GetSprite($"Attributes_{roleName}", ogfaction);
+            attribute = GetSprite(reg, $"Attributes_{roleName}", ogfaction);
 
             if (!attribute.IsValid() && role.IsTransformedApoc())
-                attribute = GetSprite("Attributes_Horsemen", ogfaction);
+                attribute = GetSprite(reg, "Attributes_Horsemen", ogfaction);
 
             if (!attribute.IsValid() && role.IsApocAcolyte())
-                attribute = GetSprite("Attributes_Apocalypse", ogfaction);
+                attribute = GetSprite(reg, "Attributes_Apocalypse", ogfaction);
 
             if (!attribute.IsValid() && role.IsCovenAligned())
                 attribute = GetSprite(reg, "Attributes_Coven", ogfaction);
@@ -677,28 +677,48 @@ public static class PatchRoleCards
                 attribute = GetSprite(reg, "Attributes_Town", ogfaction);
 
             if (!attribute.IsValid())
-                attribute = GetSprite("Attributes", ogfaction);
+                attribute = GetSprite(reg, "Attributes", ogfaction);
         }
+		
+		if (Constants.IsNecroActive() && !isGuide)
+		{
+			var nommy = GetSprite(reg, $"Necronomicon_{roleName}", factionName);
 
-        if (attribute.IsValid() && roleInfoButtons.IsValid(index))
-            roleInfoButtons[index].abilityIcon.sprite = attribute;
+			if (!nommy.IsValid())
+				nommy = GetSprite(reg, "Necronomicon", factionName);
 
+			if (reg && !nommy.IsValid())
+			{
+				nommy = GetSprite($"Necronomicon_{roleName}", ogfaction);
+
+				if (!nommy.IsValid())
+					nommy = GetSprite("Necronomicon", ogfaction);
+			}
+
+			if (nommy.IsValid())
+				attribute = nommy;
+		}
+
+		if (attribute.IsValid() && roleInfoButtons.IsValid(index))
+			roleInfoButtons[index].abilityIcon.sprite = attribute;
+		
         index++;
-        var nommy = GetSprite(reg, $"Necronomicon_{roleName}", factionName);
+		
+        var trophy = GetSprite(reg, $"Achievements_{roleName}", factionName);
 
-        if (!nommy.IsValid())
-            nommy = GetSprite(reg, "Necronomicon", factionName);
+        if (!trophy.IsValid())
+            trophy = GetSprite(reg, "Achievements", factionName);
 
-        if (reg && !nommy.IsValid())
+        if (reg && !trophy.IsValid())
         {
-            nommy = GetSprite($"Necronomicon_{roleName}", ogfaction);
+            trophy = GetSprite($"Achievements_{roleName}", ogfaction);
 
-            if (!nommy.IsValid())
-                nommy = GetSprite("Necronomicon", ogfaction);
+            if (!trophy.IsValid())
+                trophy = GetSprite("Achievements", ogfaction);
         }
 
-        if (nommy.IsValid() && (Constants.IsNecroActive() || isGuide) && roleInfoButtons.IsValid(index))
-            roleInfoButtons[index].abilityIcon.sprite = nommy;
+        if (trophy.IsValid() && roleInfoButtons.IsValid(index))
+            roleInfoButtons[index].abilityIcon.sprite = trophy;
     }
 	
 }

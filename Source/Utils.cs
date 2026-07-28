@@ -14,7 +14,7 @@ public static class Utils
     private static readonly string[] VanillaSkippableNames =
 	[
 		// Town
-		"Seer_Ability", "Seer_Ability_2",
+		"Seer_Ability", "Seer_Ability_2", "Amnesiac_Ability",
 
 		// Coven
 		"Dreamweaver_Ability",
@@ -51,7 +51,7 @@ public static class Utils
 	[
 		// Town
 		"Admirer_Ability", "Admirer_Ability_2",
-		"Amnesiac_Ability",
+		// "Amnesiac_Ability",
 		"Bodyguard_Ability",
 		"Catalyst_Ability",
 		"Cleric_Ability",
@@ -365,6 +365,7 @@ public static class Utils
         Role.NO_NIGHT_ONE_KILLS => "GracePeriod",
         Role.ALL_OUTLIERS => "AllOutliers",
         Role.ANOMALY => "Anomaly",
+        Role.NO_SCROLLS => "NoScrolls",
         Role.HIDDEN => "Hidden",
         _ => $"Role{(int)role}"
     };
@@ -621,6 +622,7 @@ public static class Utils
 		EffectType.STONED => ("Stoned", FactionType.COVEN),
 		EffectType.TOWN_TRAITOR => ("TownTraitor", FactionType.COVEN),
 		EffectType.DEAFENED  => ("Deafened", FactionType.COVEN),
+		EffectType.ENCHANTED  => ("Enchanted", FactionType.COVEN),
 
 		// BTOS2
 		(EffectType)100 => ("Recruit", Btos2Faction.Jackal),
@@ -1151,6 +1153,13 @@ public static class Utils
 			return GetString(key2);
 
 		return GetString(preferFirst ? key1 : key2);
+	}
+	public static string TryGetStringRaw(string key, string raw)
+	{
+		if (StringExists(key))
+			return GetString(key);
+
+		return raw;
 	}
 	public static bool StringExists(params string[] keys)
 	{
