@@ -175,104 +175,7 @@ public static class RoleMenuPopupFactionListItem_Set_IconPatch
         if (!__instance.Icon)
             return;
 
-        Sprite icon = null;
-
-        switch (overrideFaction)
-        {
-            case FactionType.TOWN:
-                icon = GetSprite("Town", Utils.FactionName(overrideFaction), false);
-                break;
-
-            case FactionType.COVEN:
-                icon = GetSprite("Coven", Utils.FactionName(overrideFaction), false);
-                break;
-
-            case FactionType.SERIALKILLER:
-                icon = GetSprite("SerialKiller", Utils.FactionName(overrideFaction), false);
-                break;
-
-            case FactionType.ARSONIST:
-                icon = GetSprite("Arsonist", Utils.FactionName(overrideFaction), false);
-                break;
-
-            case FactionType.WEREWOLF:
-                icon = GetSprite("Werewolf", Utils.FactionName(overrideFaction), false);
-                break;
-
-            case FactionType.SHROUD:
-                icon = GetSprite("Shroud", Utils.FactionName(overrideFaction), false);
-                break;
-
-            case FactionType.APOCALYPSE:
-                icon = GetSprite("Apocalypse", Utils.FactionName(overrideFaction), false);
-                break;
-
-            case FactionType.DOOMSAYER:
-                icon = GetSprite("Doomsayer", Utils.FactionName(overrideFaction), false);
-                break;
-
-            case FactionType.EXECUTIONER:
-                icon = GetSprite("Executioner", Utils.FactionName(overrideFaction), false);
-                break;
-
-            case FactionType.JESTER:
-                icon = GetSprite("Jester", Utils.FactionName(overrideFaction), false);
-                break;
-
-            case FactionType.PIRATE:
-                icon = GetSprite("Pirate", Utils.FactionName(overrideFaction), false);
-                break;
-
-            case FactionType.VAMPIRE:
-                icon = GetSprite("Vampire", Utils.FactionName(overrideFaction), false);
-                break;
-
-            case FactionType.CURSED_SOUL:
-                icon = GetSprite("CursedSoul", Utils.FactionName(overrideFaction), false);
-                break;
-
-            case Btos2Faction.Jackal:
-                icon = GetSprite("Jackal", Utils.FactionName(overrideFaction), false);
-                break;
-
-            case Btos2Faction.Frogs:
-            case Btos2Faction.Lions:
-            case Btos2Faction.Hawks:
-                icon = GetSprite("Teams", Utils.FactionName(overrideFaction), false);
-                break;
-
-            case Btos2Faction.Judge:
-                icon = GetSprite("Judge", Utils.FactionName(overrideFaction), false);
-                break;
-
-            case Btos2Faction.Auditor:
-                icon = GetSprite("Auditor", Utils.FactionName(overrideFaction), false);
-                break;
-
-            case Btos2Faction.Starspawn:
-                icon = GetSprite("Starspawn", Utils.FactionName(overrideFaction), false);
-                break;
-
-            case Btos2Faction.Inquisitor:
-                icon = GetSprite("Inquisitor", Utils.FactionName(overrideFaction), false);
-                break;
-
-            case Btos2Faction.Egotist:
-                icon = GetSprite("Egotist", Utils.FactionName(overrideFaction), false);
-                break;
-
-            case Btos2Faction.Pandora:
-                icon = GetSprite("PandorasBox", Utils.FactionName(overrideFaction), false);
-                break;
-
-            case Btos2Faction.Compliance:
-                icon = GetSprite("CompliantKillers", Utils.FactionName(overrideFaction), false);
-                break;
-
-            default:
-                icon = GetSprite("Hidden");
-                break;
-        }
+        var icon = overrideFaction.GetFactionIcon();
 
         if (__instance.Icon && icon.IsValid())
             __instance.Icon.sprite = icon;
@@ -529,46 +432,44 @@ public static class PatchRoleCards
     [HarmonyPriority(0)]
     public static void Postfix(RoleCardPopupPanel __instance, RoleCardData data)
     {
-        var role = Pepper.GetMyRole();
-        var faction = Utils.FactionName(Pepper.GetMyFaction());
+        var role = __instance.CurrentRole;
+        var roleName = Utils.RoleName(role);
+        var faction = Utils.FactionName(__instance.CurrentFaction);
         var ogFaction = Utils.FactionName(role.GetFactionType(), false);
         var reg = ogFaction != faction;
 
         var attackLevel = Utils.GetAttackLevel(data.attack);
         var attackName = $"Attack{Utils.GetAttackString(attackLevel)}";
 
-		var attack = GetSprite(reg, attackName, faction);
-
-		if (!attack.IsValid())
-			attack = GetSprite(reg, "Attack", faction);
-
-		if (!attack.IsValid() && reg)
-			attack = GetSprite(attackName, ogFaction);
-
-		if (!attack.IsValid() && reg)
-			attack = GetSprite("Attack", ogFaction);
+		var attack = GetSprite(reg, $"Attack_{roleName}", faction); // Attack_Admirer (Faction)
+		if (!attack.IsValid()) attack = GetSprite(reg, "Attack", faction); // Attack (Faction)
+		if (!attack.IsValid()) attack = GetSprite(reg, $"{attackName}_{roleName}", faction); // AttackBasic_Admirer (Faction)
+		if (!attack.IsValid()) attack = GetSprite(reg, attackName, faction); // AttackBasic (Faction)
+		if (!attack.IsValid() && reg) attack = GetSprite($"Attack_{roleName}", ogFaction); // Attack_Admirer
+		if (!attack.IsValid() && reg) attack = GetSprite("Attack", ogFaction); // Attack
+		if (!attack.IsValid() && reg) attack = GetSprite($"{attackName}_{roleName}", ogFaction); // AttackBasic_Admirer
+		if (!attack.IsValid() && reg) attack = GetSprite(attackName, ogFaction); // AttackBasic
 
         var icon1 = __instance.transform.Find("AttackIcon").Find("Icon").GetComponent<Image>();
 
         if (icon1)
             icon1.sprite = attack.IsValid() ? attack : FancyAssetManager.Attack;
 
-        var eth = __instance.CurrentFaction.IsEthereal();
+        var eth = __instance.CurrentFaction.IsEthereal() || role.IsEthereal();
 
         var defenseAmount = (int)(__instance.defenseGlow.fillAmount * 3.0303030303f);
         var defenseLevel = Utils.GetDefenseLevel(defenseAmount);
         var defenseName = $"Defense{Utils.GetDefenseString(defenseLevel)}";
 
-        var defense = GetSprite(reg, defenseName, faction);
+		var defense = GetSprite(reg, $"Defense_{roleName}", faction); // Defense_Admirer (Faction)
+		if (!defense.IsValid()) defense = GetSprite(reg, "Defense", faction); // Defense (Faction)
+		if (!defense.IsValid()) defense = GetSprite(reg, $"{defenseName}_{roleName}", faction); // DefenseBasic_Admirer (Faction)
+		if (!defense.IsValid()) defense = GetSprite(reg, defenseName, faction); // DefenseBasic (Faction)
+		if (!defense.IsValid() && reg) defense = GetSprite($"Defense_{roleName}", ogFaction); // Defense_Admirer
+		if (!defense.IsValid() && reg) defense = GetSprite("Defense", ogFaction); // Defense
+		if (!defense.IsValid() && reg) defense = GetSprite($"{defenseName}_{roleName}", ogFaction); // DefenseBasic_Admirer
+		if (!defense.IsValid() && reg) defense = GetSprite(defenseName, ogFaction); // DefenseBasic
 
-		if (!defense.IsValid())
-			defense = GetSprite(reg, "Defense", faction);
-
-		if (!defense.IsValid() && reg)
-			defense = GetSprite(defenseName, ogFaction);
-
-		if (!defense.IsValid() && reg)
-			defense = GetSprite("Defense", ogFaction);
 
         var icon2 = __instance.transform.Find("DefenseIcon").Find("Icon").GetComponent<Image>();
 
@@ -1144,46 +1045,44 @@ public static class PatchAttackDefense
 {
     public static void Postfix(RoleCardPanel __instance, RoleCardData data)
     {
-        var role = Pepper.GetMyRole();
-        var faction = Utils.FactionName(Pepper.GetMyFaction());
+        var role = __instance.CurrentRole;
+        var roleName = Utils.RoleName(role);
+        var faction = Utils.FactionName(__instance.CurrentFaction);
         var ogFaction = Utils.FactionName(role.GetFactionType(), false);
         var reg = ogFaction != faction;
 
         var attackLevel = Utils.GetAttackLevel(data.attack);
         var attackName = $"Attack{Utils.GetAttackString(attackLevel)}";
 
-		var attack = GetSprite(reg, attackName, faction);
-
-		if (!attack.IsValid())
-			attack = GetSprite(reg, "Attack", faction);
-
-		if (!attack.IsValid() && reg)
-			attack = GetSprite(attackName, ogFaction);
-
-		if (!attack.IsValid() && reg)
-			attack = GetSprite("Attack", ogFaction);
+		var attack = GetSprite(reg, $"Attack_{roleName}", faction); // Attack_Admirer (Faction)
+		if (!attack.IsValid()) attack = GetSprite(reg, "Attack", faction); // Attack (Faction)
+		if (!attack.IsValid()) attack = GetSprite(reg, $"{attackName}_{roleName}", faction); // AttackBasic_Admirer (Faction)
+		if (!attack.IsValid()) attack = GetSprite(reg, attackName, faction); // AttackBasic (Faction)
+		if (!attack.IsValid() && reg) attack = GetSprite($"Attack_{roleName}", ogFaction); // Attack_Admirer
+		if (!attack.IsValid() && reg) attack = GetSprite("Attack", ogFaction); // Attack
+		if (!attack.IsValid() && reg) attack = GetSprite($"{attackName}_{roleName}", ogFaction); // AttackBasic_Admirer
+		if (!attack.IsValid() && reg) attack = GetSprite(attackName, ogFaction); // AttackBasic
 
         var icon1 = __instance.transform.Find("AttackIcon").Find("Icon").GetComponent<Image>();
 
         if (icon1)
             icon1.sprite = attack.IsValid() ? attack : FancyAssetManager.Attack;
 
-        var eth = __instance.CurrentFaction.IsEthereal();
+        var eth = __instance.CurrentFaction.IsEthereal() || role.IsEthereal();
 
         var defenseAmount = (int)(__instance.defenseGlow.fillAmount * 3.0303030303f);
         var defenseLevel = Utils.GetDefenseLevel(defenseAmount);
         var defenseName = $"Defense{Utils.GetDefenseString(defenseLevel)}";
 
-        var defense = GetSprite(reg, defenseName, faction);
+		var defense = GetSprite(reg, $"Defense_{roleName}", faction); // Defense_Admirer (Faction)
+		if (!defense.IsValid()) defense = GetSprite(reg, "Defense", faction); // Defense (Faction)
+		if (!defense.IsValid()) defense = GetSprite(reg, $"{defenseName}_{roleName}", faction); // DefenseBasic_Admirer (Faction)
+		if (!defense.IsValid()) defense = GetSprite(reg, defenseName, faction); // DefenseBasic (Faction)
+		if (!defense.IsValid() && reg) defense = GetSprite($"Defense_{roleName}", ogFaction); // Defense_Admirer
+		if (!defense.IsValid() && reg) defense = GetSprite("Defense", ogFaction); // Defense
+		if (!defense.IsValid() && reg) defense = GetSprite($"{defenseName}_{roleName}", ogFaction); // DefenseBasic_Admirer
+		if (!defense.IsValid() && reg) defense = GetSprite(defenseName, ogFaction); // DefenseBasic
 
-		if (!defense.IsValid())
-			defense = GetSprite(reg, "Defense", faction);
-
-		if (!defense.IsValid() && reg)
-			defense = GetSprite(defenseName, ogFaction);
-
-		if (!defense.IsValid() && reg)
-			defense = GetSprite("Defense", ogFaction);
 
         var icon2 = __instance.transform.Find("DefenseIcon").Find("Icon").GetComponent<Image>();
 
@@ -1724,7 +1623,7 @@ public static class MentionsProviderPatches
     // ReSharper disable once InconsistentNaming
     public static void Prefix(ref HashSet<char> ___ExpansionTokens)
     {
-        ___ExpansionTokens.Add('~');
+        // ___ExpansionTokens.Add('~'); // curtis L right here
         ___ExpansionTokens.Add('$');
     }
 

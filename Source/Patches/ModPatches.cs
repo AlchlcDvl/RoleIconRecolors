@@ -168,9 +168,7 @@ public static class RoleRevealCinematicPlayerPatch
         __instance.roleTextPlayer.ShowText(roleText);
 
         // Blurb
-        var roleBlurb = Fancy.FactionalRoleBlurbs
-            ? role.ToFactionalRoleBlurb(factionType)
-            : role.GetRoleBlurb();
+        var roleBlurb = Fancy.FactionalRoleBlurbs ? role.ToFactionalRoleBlurb(factionType) : role.GetRoleBlurb();
 
         __instance.roleBlurbTextPlayer.ShowText(roleBlurb);
 
@@ -1148,51 +1146,51 @@ public static class AttackedCinematicTextPatch
 }
 
 
-[HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.DetermineFrameAndSlots_AbilityIcon))]
-public static class AlwaysShowPrimaryAbility
-{
-    private static readonly ConditionalWeakTable<RoleCardPanel, BoolBox> Cache = new();
+// [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.DetermineFrameAndSlots_AbilityIcon))]
+// public static class AlwaysShowPrimaryAbility
+// {
+    // private static readonly ConditionalWeakTable<RoleCardPanel, BoolBox> Cache = new();
 
-    private class BoolBox
-    {
-        public bool Value;
-    }
+    // private class BoolBox
+    // {
+        // public bool Value;
+    // }
 
-    private static bool IsUsableSprite(Sprite sprite)
-    {
-        if (!sprite)
-            return false;
+    // private static bool IsUsableSprite(Sprite sprite)
+    // {
+        // if (!sprite)
+            // return false;
 
-        if (!sprite.texture)
-            return false;
+        // if (!sprite.texture)
+            // return false;
 
-        return true;
-    }
+        // return true;
+    // }
 
-    public static void Prefix(RoleCardPanel __instance)
-    {
-        var obs = Service.Game?.Sim?.info?.roleCardObservation;
-        if (obs?.Data == null || __instance.myData == null)
-            return;
+    // public static void Prefix(RoleCardPanel __instance)
+    // {
+        // var obs = Service.Game?.Sim?.info?.roleCardObservation;
+        // if (obs?.Data == null || __instance.myData == null)
+            // return;
 
-        var box = Cache.GetOrCreateValue(__instance);
-        box.Value = obs.Data.normalAbilityAvailable;
+        // var box = Cache.GetOrCreateValue(__instance);
+        // box.Value = obs.Data.normalAbilityAvailable;
 
-        var sprite = __instance.myData.abilityIcon;
+        // var sprite = __instance.myData.abilityIcon;
 
-        obs.Data.normalAbilityAvailable = IsUsableSprite(sprite);
-    }
+        // obs.Data.normalAbilityAvailable = IsUsableSprite(sprite);
+    // }
 
-    public static void Postfix(RoleCardPanel __instance)
-    {
-        var obs = Service.Game?.Sim?.info?.roleCardObservation;
-        if (obs?.Data == null)
-            return;
+    // public static void Postfix(RoleCardPanel __instance)
+    // {
+        // var obs = Service.Game?.Sim?.info?.roleCardObservation;
+        // if (obs?.Data == null)
+            // return;
 
-        if (Cache.TryGetValue(__instance, out var box))
-            obs.Data.normalAbilityAvailable = box.Value;
-    }
-}
+        // if (Cache.TryGetValue(__instance, out var box))
+            // obs.Data.normalAbilityAvailable = box.Value;
+    // }
+// }
 
 // [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.DetermineFrameAndSlots_AbilityIcon2))]
 // public static class AlwaysShowSecondaryAbility

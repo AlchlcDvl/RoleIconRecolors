@@ -2,6 +2,9 @@
     <Entry key="FANCY_">Something</Entry>
     <Entry key="FANCY_SOMETHING">Something</Entry>
 
+    <Entry key="FANCY_SHOW_HIDDEN_SETTINGS_NAME">Show Hidden Settings</Entry>
+    <Entry key="FANCY_SHOW_HIDDEN_SETTINGS_DESC">If enabled, various hidden settings are made visible. These revealed settings are not recommended for the average user to touch, manage at your own risk.</Entry>
+
     <Entry key="FANCY_TALL_ROLE_DECK_NAME">Tall Role Deck</Entry>
     <Entry key="FANCY_TALL_ROLE_DECK_DESC">Makes the Custom role deck as tall as it can be without going off-screen.</Entry>
 
@@ -37,6 +40,10 @@
 
     <Entry key="FANCY_GENDER_COLORS_NAME">Color Skin Names with Gender</Entry>
     <Entry key="FANCY_GENDER_COLORS_DESC">Determines whether or not skin names will be colored by their gender.</Entry>
+
+    <Entry key="FANCY_SHOW_ALL_WINNERS_NAME">Show All Winners</Entry>
+    <Entry key="FANCY_SHOW_ALL_WINNERS_DESC">If enabled, the 'solo winners' section of win cinematics will show faction winners in addition to solo winners.</Entry>
+	<Entry key="FANCY_TEAM_WINNER"><![CDATA[<bounce>%name% won as %role%!</bounce>]]></Entry>
 
     <Entry key="FANCY_FACTION_LABEL_NAME">Faction Label in Role Card</Entry>
     <Entry key="FANCY_FACTION_LABEL_DESC">Determines whether or not the faction label within the role card will be displayed. If Faction Specific Role Names are enabled, the label will NOT show up if the faction specific role name is different from the base name.</Entry>
@@ -80,8 +87,8 @@
     <Entry key="FANCY_HORSEMAN_COLORS_NAME">Override Secondary Color for Horsemen</Entry>
     <Entry key="FANCY_HORSEMAN_COLORS_DESC">Determines whether or not secondary colors on factions will be overwritten with a separate color value when role is a Horseman of the Apocalypse.</Entry>
 
-    <Entry key="FANCY_VERTICAL_GRADIENTS_NAME">Vertical Gradients</Entry>
-    <Entry key="FANCY_VERTICAL_GRADIENTS_DESC">Determines whether or not gradients should be vertical (like Vanilla's gradients) or horziontal (like BToS2's gradients).</Entry>
+    <Entry key="FANCY_HORIZONTAL_GRADIENTS_NAME">Horizontal Gradients</Entry>
+    <Entry key="FANCY_HORIZONTAL_GRADIENTS_DESC">Determines whether or not gradients should be use the old horizontal gradient system. Not all features are supported by horizontal gradients, and bugs are more likely to occur with horizontal gradients. As such, we do not recommend the usage of horizontal gradients unless you really wanna use them.</Entry>
 
     <Entry key="FANCY_RECRUIT_ENDING_NAME">Override Recruit Secondary Color</Entry>
     <Entry key="FANCY_RECRUIT_ENDING_DESC">Determines what secondary color Jackal recruits will pull. Jackal means it pulls from the Jackal Secondary Color, Original Primary means it pulls from their original faction's primary color, and Original Secondary pulls from their original faction's secondary color (Power if a Power role with the setting on). Original Blend takes the Primary and Secondary colors of the role's original faction and blends them together and makes that the secondary color.</Entry>
@@ -1794,9 +1801,6 @@ Would you like to abandon %role2% and become %role%?</Entry> -->
 	<Entry key="FANCY_GUI_GAME_KILLED_BY_REASON_1">They were killed by the <![CDATA[<style="CovenColor"><sprite="RoleIcons" name="Role106">]]>%name_faction2%<![CDATA[</style>]]>.</Entry>
 	<Entry key="FANCY_GUI_GAME_ALSO_KILLED_BY_REASON_1">They were also killed by the <![CDATA[<style="CovenColor"><sprite="RoleIcons" name="Role106">]]>%name_faction2%<![CDATA[</style>]]>.</Entry>
 	
-	<Entry key="FANCY_GUI_GAME_KILLED_BY_REASON_73">They were killed by <![CDATA[<sprite="BTOSRoleIcons" name="Role222">]]>%name_faction43%.</Entry>
-	<Entry key="FANCY_GUI_GAME_ALSO_KILLED_BY_REASON_73">They were also killed by <![CDATA[<sprite="BTOSRoleIcons" name="Role222">]]>%name_faction43%.</Entry>
-
     <Entry key="FANCY_GUI_GAME_KILLED_BY_REASON_14">They were bitten by a <![CDATA[<sprite="RoleIcons" name="Role52">]]>%name_role52%.</Entry>
     <Entry key="FANCY_GUI_GAME_ALSO_KILLED_BY_REASON_14">They were also bitten by a <![CDATA[<sprite="RoleIcons" name="Role52">]]>%name_role52%.</Entry>
 

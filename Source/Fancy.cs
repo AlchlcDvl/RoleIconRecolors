@@ -124,7 +124,7 @@ public class Fancy : BaseMod<Fancy>
     public static ToggleOption MajorColors;
     public static ToggleOption LethalColors;
     public static ToggleOption HorsemenColors;
-    public static ToggleOption VerticalGradients;
+    public static ToggleOption HorizontalGradients;
     public static ToggleOption ExcludeTownGovernmentRoles;
     public static ToggleOption ExcludeCatalyst;
     public static ToggleOption ExcludeCultist;
@@ -180,6 +180,8 @@ public class Fancy : BaseMod<Fancy>
     public static ToggleOption ShowForShortNames;
     public static ToggleOption ShortenFlexedWithLabel;
     public static StringInputOption PirateLabel;
+    public static ToggleOption ShowAllWinners;
+    public static ToggleOption ShowHiddenSettings;
 
     public static ColorOption CourtChatColor;
     public static ColorOption CannibalStart;
@@ -426,7 +428,7 @@ public class Fancy : BaseMod<Fancy>
         ExcludeTownGovernmentRoles = new("EXCLUDE_TG", false, PackType.MiscRoleCustomisation, setActive: () => MajorColors.Value);
         HorsemenColors = new("HORSEMAN_COLORS", false, PackType.MiscRoleCustomisation);
         LethalColors = new("LETHAL_COLORS", false, PackType.MiscRoleCustomisation);
-        VerticalGradients = new("VERTICAL_GRADIENTS", true, PackType.MiscRoleCustomisation);
+        HorizontalGradients = new("HORIZONTAL_GRADIENTS", false, PackType.MiscRoleCustomisation, setActive: () => ShowHiddenSettings.Value);
         RecruitStartingColor = new("RECRUIT_STARTING", OverrideStartType.Default, PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists, useTranslations: true);
         RecruitStartBlendRatio = new("RECRUIT_START_RATIO", 50, PackType.MiscRoleCustomisation, 1, 99, true);
         RecruitEndingColor = new("RECRUIT_ENDING", OverrideEndType.Default, PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists, useTranslations: true);
@@ -456,8 +458,8 @@ public class Fancy : BaseMod<Fancy>
         WildlingWhisperColor = new("WILDLING_WHISPER", "#DD0000", PackType.MiscRoleCustomisation);
         SerialKillerWhisperColor = new("SERIALKILLER_WHISPER", "#800040", PackType.MiscRoleCustomisation, setActive: Constants.BTOS2Exists);
         ReplaceNAwithRA = new("RANDOM_APOC_IN_VANILLA", false, PackType.MiscRoleCustomisation);
-        CannibalStart = new("CANNIBAL_START", "#E6956A", PackType.MiscRoleCustomisation, setActive: () => false);
-        CannibalEnd = new("CANNIBAL_END", "#E6956A", PackType.MiscRoleCustomisation, setActive: () => false);
+        CannibalStart = new("CANNIBAL_START", "#E6956A", PackType.MiscRoleCustomisation, setActive: () => ShowHiddenSettings.Value);
+        CannibalEnd = new("CANNIBAL_END", "#E6956A", PackType.MiscRoleCustomisation, setActive: () => ShowHiddenSettings.Value);
 
         NeutralStart = new("NEUTRAL_START", "#A9A9A9", PackType.MiscRoleCustomisation);
         NeutralEnd = new("NEUTRAL_END", "#A9A9A9", PackType.MiscRoleCustomisation);
@@ -477,13 +479,14 @@ public class Fancy : BaseMod<Fancy>
         MentionEnd = new("MENTION_END", "#FFCE3B", PackType.MiscRoleCustomisation, setActive: () => !Constants.BetterMentionsExists());
 
         PlayerListRoleIcon = new("PLAYER_LIST_ROLE_ICON", PlayerListRoleIconOption.Disabled, PackType.Testing, useTranslations: true);
+        ShowAllWinners = new("SHOW_ALL_WINNERS", false, PackType.Testing);
         TallRoleDeck = new("TALL_ROLE_DECK", false, PackType.Testing);
         YouAreARole = new("YOU_ARE_A_ROLE", true, PackType.Testing);
         NecroPassingFormat = new("NECRO_PASS_FORMAT", NecroPassingFormatOption.Vanilla, PackType.Testing, useTranslations: true);
         PlayerNumber = new("PLAYER_NUMBER", 0, PackType.Testing, 0, 15, true, Constants.CustomNumbers);
         ChatBackgroundOpacity = new("CHAT_BACKGROUND", 80, PackType.Testing, 0, 100, true);
-        DumpSpriteSheets = new("DUMP_SHEETS", false, PackType.Testing);
-        DebugPackLoading = new("DEBUG_LOADING", false, PackType.Testing);
+        DumpSpriteSheets = new("DUMP_SHEETS", false, PackType.Testing, setActive: () => ShowHiddenSettings.Value);
+        DebugPackLoading = new("DEBUG_LOADING", false, PackType.Testing, setActive: () => ShowHiddenSettings.Value);
         ShowOverlayWhenJailed = new("SHOW_TO_JAILED", true, PackType.Testing);
         ShowOverlayAsJailor = new("SHOW_TO_JAILOR", false, PackType.Testing);
         // ModifierFactions = new("MODIFIER_FACTIONS", true, PackType.Testing);
@@ -495,6 +498,7 @@ public class Fancy : BaseMod<Fancy>
         FemaleEnd = new("FEMALE_END", "#ffbbff", PackType.Testing);
         NonbinaryStart = new("NONBINARY_START", "#88ff88", PackType.Testing);
         NonbinaryEnd = new("NONBINARY_END", "#ffff88", PackType.Testing);
+        ShowHiddenSettings = new("SHOW_HIDDEN_SETTINGS", false, PackType.Testing);
 
         foreach (var faction in BTOS2Factions.Where(x => x is not FactionType.NONE or FactionType.UNKNOWN or FactionType.FACTION_COUNT or FactionType.JESTER or FactionType.EXECUTIONER or FactionType.DOOMSAYER or FactionType.PIRATE
 			or Btos2Faction.Judge or Btos2Faction.Starspawn or Btos2Faction.Auditor or Btos2Faction.Inquisitor or Btos2Faction.Lovers or Btos2Faction.Judge or Btos2Faction.Compliance or Btos2Faction.Lovers))

@@ -144,6 +144,8 @@ public static class FancyAssetManager
         path = path.Replace("RandomCoven", "Coven");
         path = path.Replace("RandomNeutral", "Neutral");
         path = path.Replace("Infected", "Plagued");
+        path = path.Replace("FourHorsemen", "4Horsemen");
+        path = path.Replace("EgotistTownie", "Egotist");
 
         if (removeIcon)
         {

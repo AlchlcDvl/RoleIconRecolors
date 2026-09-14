@@ -672,6 +672,8 @@ public static class Utils
 
     public static bool IsEthereal(this FactionType faction) => faction is Btos2Faction.Judge or Btos2Faction.Auditor or Btos2Faction.Starspawn or Btos2Faction.Egotist;
 
+    public static bool IsEthereal(this Role role) => Constants.IsBTOS2() && role is Btos2Role.Bodyguard or Btos2Role.Judge or Btos2Role.Auditor or Btos2Role.Starspawn;
+
     public static Role GetTransformedVersion(Role role, GameModType? mod = null)
     {
         try
@@ -917,7 +919,7 @@ public static class Utils
 
     public static string ApplyGradient(string text, Gradient gradient)
     {
-        if (!Fancy.VerticalGradients.Value)
+        if (Fancy.HorizontalGradients.Value)
         {
             var text2 = "";
 
@@ -1023,19 +1025,29 @@ public static class Utils
 		if (role is Role.STONED or Role.HIDDEN or Role.UNKNOWN)
 			faction = FactionType.NONE;
 
-		var factionName = FactionName(faction, GameModType.BTOS2)?.ToUpper() ?? "NONE";
-		if (factionName == "UNKNOWN")
-			factionName = "NONE";
+		var factName = FactionName(faction, GameModType.BTOS2)?.ToUpper() ?? "NONE";
+		if (factName == "UNKNOWN")
+			factName = "NONE";
 
 		var isBTOS2 = Constants.IsBTOS2() || SettingsAndTestingUI.Instance?.IsBTOS2 == true;
+		var factionName = faction.ToColorizedDisplayString();
+		var factionNameWithIcon = faction.ToColorizedDisplayString();
+		var roleName = role.ToColorizedDisplayString();
+		var roleNameWithIcon = role.ToColorizedDisplayString(faction);
+		var flexedName = role.ToColorizedDisplayString(faction);
+		var flexedNameWithIcon = role.ToColorizedDisplayString(faction);
 
 		var newKey = $"{(isBTOS2 ? "BTOS_" : "GUI_")}ROLE_BLURB_{(int)role}_{(int)faction}";
-		var oldKey = $"FANCY_{factionName}_{(isBTOS2 ? "BTOS_" : "")}ROLE_BLURB_{(int)role}";
+		var fallbackKey = $"{(isBTOS2 ? "BTOS_" : "GUI_")}ROLE_BLURB_{(int)role}_0";
+		var oldKey = $"FANCY_{factName}_{(isBTOS2 ? "BTOS_" : "")}ROLE_BLURB_{(int)role}";
 
 		var loc = Service.Home.LocalizationService;
 
 		if (loc.StringExists(newKey))
 			return loc.GetLocalizedString(newKey);
+		
+		if (loc.StringExists(fallbackKey))
+			return loc.GetLocalizedString(fallbackKey);
 
 		if (loc.StringExists(oldKey))
 			return loc.GetLocalizedString(oldKey);
@@ -1190,18 +1202,41 @@ public static class Utils
 		return GetString(keys[fallback]);
 	}
 
-    public static string RemoveVanillaGradientStyleTags(string input)
-    {
-        if (string.IsNullOrEmpty(input))
-            return input;
+	public static string RemoveVanillaGradientStyleTags(string input)
+	{
+		if (string.IsNullOrEmpty(input))
+			return input;
+		
+		if (Fancy.HorizontalGradients.Value)
+			return input;
 
-        return Regex.Replace(
-            input,
-            @"<style\s*=\s*""?(VampireColor|CursedSoulColor)""?\s*>(.*?)</style>",
-            "$2",
-            RegexOptions.Singleline);
-    }
+		return Regex.Replace(
+			input,
+			@"<style\s*=\s*""?(VampireColor|CursedSoulColor|TownColor|CovenColor|ApocalypseColor|NeutralColor|ArsonistColor|SerialKillerColor|ShroudColor|WerewolfColor|DoomsayerColor|ExecutionerColor|JesterColor|PirateColor)""?\s*>(.*?)</style>",
+			match =>
+			{
+				var gradient = GetGradientForVanillaStyleTag(match.Groups[1].Value);
+				var text = match.Groups[2].Value;
 
+				return gradient != null ? ApplyGradient(text, gradient) : text;
+			},
+			RegexOptions.Singleline);
+	}
+
+	private static Gradient GetGradientForVanillaStyleTag(string styleName)
+	{
+		if (styleName.Equals("NeutralColor", StringComparison.OrdinalIgnoreCase))
+			return CreateGradient(Fancy.NeutralStart.Value, Fancy.NeutralEnd.Value);
+
+		var key = styleName.ToUpperInvariant().Replace("COLOR", string.Empty);
+
+		if (!Fancy.Colors.TryGetValue(key, out var colorData))
+			return null;
+
+		return colorData.Middle != null
+			? CreateGradient(colorData.Start, colorData.Middle, colorData.End)
+			: CreateGradient(colorData.Start, colorData.End);
+	}
     public static bool ConditionalCompliancePandora(FactionType originalFaction, FactionType currentFaction)
     {
         if (currentFaction == (FactionType)43)
@@ -1236,6 +1271,31 @@ public static class Utils
     }
 
     public static string StripFormatting(string input)
+    {
+        var sb = new StringBuilder();
+        var insideTag = false;
+
+        foreach (var c in input)
+        {
+            if (c == '<')
+            {
+                insideTag = true;
+                continue;
+            }
+            if (c == '>' && insideTag)
+            {
+                insideTag = false;
+                continue;
+            }
+
+            if (!insideTag)
+                sb.Append(c);
+        }
+
+        return sb.ToString();
+    }
+
+    public static string StripFormatting(this string input)
     {
         var sb = new StringBuilder();
         var insideTag = false;
@@ -1485,10 +1545,10 @@ public static class Utils
 
         var NK = !isNone ? faction.GetChangedGradient(Role.NONE) : neut;
 
-        var town = Utils.GetString(isBTOS2 ? "BTOS_ALIGNMENTNAME_1" : "GUI_ALIGNMENTNAME_1");
-        var coven = Utils.GetString(isBTOS2 ? "BTOS_ALIGNMENTNAME_2" : "GUI_ALIGNMENTNAME_2");
+        var town = FactionType.TOWN.ToColorizedDisplayString().StripFormatting();
+        var coven = FactionType.COVEN.ToColorizedDisplayString().StripFormatting();
         var neutral = Utils.GetString(isBTOS2 ? "BTOS_ALIGNMENTNAME_3" : "GUI_ALIGNMENTNAME_3");
-        var apocalypse = Utils.GetString(isBTOS2 ? "BTOS_ALIGNMENTNAME_17" : "GUI_SUBALIGNMENTNAME_9");
+        var apocalypse = FactionType.APOCALYPSE.ToColorizedDisplayString().StripFormatting();
 
         string G(string text, Gradient g) => Utils.ApplyGradient(text, g);
         string Key(string key) => Utils.GetString(key);
@@ -1692,6 +1752,84 @@ public static class Utils
 		var icon = role.GetTMPSprite().Replace("RoleIcons\"", $"RoleIcons ({style})\"");
 
 		return icon;
+	}
+
+	public static string GetFactionSprite(this FactionType faction)
+	{
+		var isBTOS2 = Constants.IsBTOS2();
+		var factionName = FactionName(faction);
+
+		string icon = faction switch
+		{
+			FactionType.TOWN => (isBTOS2 ? Btos2Role.RandomTown : Role.RANDOM_TOWN).GetTMPSprite(),
+			FactionType.COVEN => (isBTOS2 ? Btos2Role.RandomCoven : Role.RANDOM_COVEN).GetTMPSprite(),
+			FactionType.APOCALYPSE => (isBTOS2 ? Btos2Role.RandomApocalypse : Role.NEUTRAL_APOCALYPSE).GetTMPSprite(),
+			FactionType.SERIALKILLER => Role.SERIALKILLER.GetTMPSprite(),
+			FactionType.ARSONIST => Role.ARSONIST.GetTMPSprite(),
+			FactionType.WEREWOLF => Role.WEREWOLF.GetTMPSprite(),
+			FactionType.SHROUD => Role.SHROUD.GetTMPSprite(),
+			FactionType.JESTER => Role.JESTER.GetTMPSprite(),
+			FactionType.EXECUTIONER => Role.EXECUTIONER.GetTMPSprite(),
+			FactionType.PIRATE => Role.PIRATE.GetTMPSprite(),
+			FactionType.DOOMSAYER => Role.DOOMSAYER.GetTMPSprite(),
+			FactionType.VAMPIRE => Role.VAMPIRE.GetTMPSprite(),
+			FactionType.CURSED_SOUL => Role.CURSED_SOUL.GetTMPSprite(),
+
+			Btos2Faction.Jackal => Btos2Role.Jackal.GetTMPSprite(),
+			Btos2Faction.Starspawn => Btos2Role.Starspawn.GetTMPSprite(),
+			Btos2Faction.Judge => Btos2Role.Judge.GetTMPSprite(),
+			Btos2Faction.Auditor => Btos2Role.Auditor.GetTMPSprite(),
+			Btos2Faction.Frogs or 
+			Btos2Faction.Hawks or 
+			Btos2Faction.Lions => Btos2Role.Teams.GetTMPSprite(),
+			Btos2Faction.Egotist => Btos2Role.Egotist.GetTMPSprite(),
+			Btos2Faction.Inquisitor => Btos2Role.Inquisitor.GetTMPSprite(),
+			Btos2Faction.Lovers => Btos2Role.Lovers.GetTMPSprite(),
+			Btos2Faction.Pandora => Btos2Role.CommonCoven.GetTMPSprite(),
+			Btos2Faction.Compliance => Btos2Role.NeutralKilling.GetTMPSprite(),
+
+			_ => (isBTOS2 ? Btos2Role.Hidden : Role.HIDDEN).GetTMPSprite()
+		};
+
+		return icon.Replace("RoleIcons\"", $"RoleIcons ({factionName})\"");
+	}
+	
+	public static Sprite GetFactionIcon(this FactionType faction)
+	{
+		var factionName = Utils.FactionName(faction);
+
+		var spriteName = faction switch
+		{
+			FactionType.TOWN => "Town",
+			FactionType.COVEN => "Coven",
+			FactionType.SERIALKILLER => "SerialKiller",
+			FactionType.ARSONIST => "Arsonist",
+			FactionType.WEREWOLF => "Werewolf",
+			FactionType.SHROUD => "Shroud",
+			FactionType.APOCALYPSE => "Apocalypse",
+			FactionType.DOOMSAYER => "Doomsayer",
+			FactionType.EXECUTIONER => "Executioner",
+			FactionType.JESTER => "Jester",
+			FactionType.PIRATE => "Pirate",
+			FactionType.VAMPIRE => "Vampire",
+			FactionType.CURSED_SOUL => "CursedSoul",
+
+			Btos2Faction.Jackal => "Jackal",
+			Btos2Faction.Frogs or
+			Btos2Faction.Lions or
+			Btos2Faction.Hawks => "Teams",
+			Btos2Faction.Judge => "Judge",
+			Btos2Faction.Auditor => "Auditor",
+			Btos2Faction.Starspawn => "Starspawn",
+			Btos2Faction.Inquisitor => "Inquisitor",
+			Btos2Faction.Egotist => "Egotist",
+			Btos2Faction.Pandora => "PandorasBox",
+			Btos2Faction.Compliance => "CompliantKillers",
+
+			_ => "Hidden"
+		};
+
+		return spriteName == "Hidden" ? GetSprite(spriteName) : GetSprite(spriteName, factionName, false);
 	}
 
     public static string GetGenderTerm(Gender gender, GenderUse use, bool lowercase = false)

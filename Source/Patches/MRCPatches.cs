@@ -139,13 +139,13 @@ public static class PatchRoleCard
 			string displayString;
 
 			if (role.IsTownAligned())
-				displayString = RoleAlignment.TOWN.ToDisplayString();
+				displayString = FactionType.TOWN.ToColorizedDisplayString().StripFormatting();
 			else if (role.IsCovenAligned())
-				displayString = RoleAlignment.COVEN.ToDisplayString();
+				displayString = FactionType.COVEN.ToColorizedDisplayString().StripFormatting();
 			else if (role.IsNeutralAligned())
 				displayString = RoleAlignment.NEUTRAL.ToDisplayString();
-			else
-				displayString = RoleAlignment.NONE.ToDisplayString();
+			else 
+				displayString = FactionType.NONE.ToColorizedDisplayString().StripFormatting();
 
 			return Utils.ApplyGradient(displayString, useNeutralGradient ? neutralGradient : faction.GetChangedGradient(role))
 				   + " " + Utils.ApplyGradient(subAlignment.ToDisplayString(), subAlignGradient);
@@ -382,13 +382,13 @@ public static class RoleCardPopupPatches2
         string displayString;
 
         if (role.IsTownAligned())
-            displayString = RoleAlignment.TOWN.ToDisplayString();
+            displayString = FactionType.TOWN.ToColorizedDisplayString().StripFormatting();
         else if (role.IsCovenAligned())
-            displayString = RoleAlignment.COVEN.ToDisplayString();
+            displayString = FactionType.COVEN.ToColorizedDisplayString().StripFormatting();
         else if (role.IsNeutralAligned())
             displayString = RoleAlignment.NEUTRAL.ToDisplayString();
         else 
-            displayString = RoleAlignment.NONE.ToDisplayString();
+            displayString = FactionType.NONE.ToColorizedDisplayString().StripFormatting();
 
         // if (faction is FactionType.SERIALKILLER 
         //     or FactionType.ARSONIST or FactionType.SHROUD 
@@ -643,7 +643,21 @@ public static class TosCharacterNametagPatch
             return;
 
         var roleName = Fancy.FactionalRoleNames.Value ? role.ToRoleFactionDisplayString(factionType) : role.ToDisplayString();
-        var gradientName = Utils.ApplyGradient(theName, gradient);
+        var spriteEnd = theName.IndexOf('>');
+
+		string gradientName;
+
+		if (spriteEnd >= 0 && theName.StartsWith("<sprite=\"PlayerNumbers\""))
+		{
+			var playerNumber = theName[..(spriteEnd + 1)];
+			var playerName = theName[(spriteEnd + 1)..];
+
+			gradientName = playerNumber + Utils.ApplyGradient(playerName, gradient);
+		}
+		else
+		{
+			gradientName = Utils.ApplyGradient(theName, gradient);
+		}
         var gradientRole = Utils.ApplyGradient($"({roleName})", gradient);
         __result = $"<size=36>{role.GetRoleSprite(factionType)}</size>\n<size=24>{gradientName}</size>\n<size=18>{gradientRole}</size>";
 
@@ -862,15 +876,15 @@ public static class PatchDefaultWinScreens
 
         if (gradient != null)
         {
-            __instance.leftImage.color = Fancy.VerticalGradients.Value
+            __instance.leftImage.color = !Fancy.HorizontalGradients.Value
                 ? Utils.GetFactionMiddleColor(winningFaction)
                 : Utils.GetFactionStartingColor(winningFaction);
 
-            __instance.rightImage.color = Fancy.VerticalGradients.Value
+            __instance.rightImage.color = !Fancy.HorizontalGradients.Value
                 ? Utils.GetFactionMiddleColor(winningFaction)
                 : Utils.GetFactionEndingColor(winningFaction);
 
-            __instance.glow.color = Fancy.VerticalGradients.Value
+            __instance.glow.color = !Fancy.HorizontalGradients.Value
                 ? Utils.GetFactionMiddleColor(winningFaction)
                 : Utils.GetFactionStartingColor(winningFaction);
 
@@ -932,7 +946,7 @@ public static class PatchCustomWinScreens
                 case "Glow":
                     if (child.TryGetComponent<Image>(out var image))
                     {
-                        if (Fancy.VerticalGradients.Value)
+                        if (!Fancy.HorizontalGradients.Value)
                             image.color = Utils.GetFactionMiddleColor(winningFaction);
                         else
                             image.color = child.name == "Filigree_R" ? Utils.GetFactionEndingColor(winningFaction) : Utils.GetFactionStartingColor(winningFaction);
@@ -984,23 +998,37 @@ public static class PatchSetupSoloWinners
 
         foreach (var entry in __instance.cinematicData.entries)
         {
-            if (entry.faction == __instance.cinematicData.winningFaction)
-                continue;
+            // if (entry.faction == __instance.cinematicData.winningFaction)
+                // continue;
 
             var player = Pepper.GetDiscussionPlayerByPosition(entry.position);
             if (player == null)
                 continue;
 
-            string roleName = entry.role.ToColorizedDisplayString(entry.faction).RemoveColorTags();
+            var roleName = entry.role.ToColorizedDisplayString(entry.faction).RemoveColorTags();
+			var isSolo = entry.faction != __instance.cinematicData.winningFaction;
 
             var gradient = entry.faction.GetChangedGradient(entry.role);
             if (gradient != null)
                 roleName = Utils.ApplyGradient(roleName, gradient);
 
-            string line = Utils.GetString("GUI_SOLO_WINNER").Replace("%name%", $"<style=\"UIGold\"><sprite=\"PlayerNumbers\" name=\"PlayerNumbers_{entry.position + 1}\">{player.gameName}</style>")
-			.Replace("%role%", entry.role.GetRoleSprite(entry.faction) + roleName);
-
-            sb.AppendLine(line);
+            var line = Utils.GetString("GUI_SOLO_WINNER").Replace("%name%", $"<sprite=\"PlayerNumbers\" name=\"PlayerNumbers_{entry.position + 1}\">" + Utils.BaseMentionGradient($"{player.gameName}")).Replace("%role%", entry.role.GetRoleSprite(entry.faction) + roleName);
+            var line2 = Utils.TryGetString(1, $"FANCY_TEAM_WINNER", "GUI_SOLO_WINNER").Replace("%name%", $"<sprite=\"PlayerNumbers\" name=\"PlayerNumbers_{entry.position + 1}\">" + Utils.BaseMentionGradient($"{player.gameName}")).Replace("%role%", entry.role.GetRoleSprite(entry.faction) + roleName);
+			
+			if (Fancy.ShowAllWinners.Value)
+			{
+				if (isSolo)
+					sb.AppendLine(line);
+				else
+					sb.AppendLine(line2);
+			}
+			else
+			{
+				if (isSolo)
+					sb.AppendLine(line);
+				else { }
+			}
+				
         }
 
         float textDuration = __instance.CalculateTypeWriterDuration(sb.ToString());
@@ -1143,15 +1171,12 @@ public static class ClientRoleExtensionsPatches
         __result = newText;
 
     }
-	[HarmonyPatch(nameof(ClientRoleExtensions.GetFactionColor)), HarmonyPrefix]
-	[HarmonyPriority(Priority.Last)]
-    public static bool Prefix(ref string __result, FactionType factionType)
+	[HarmonyPatch(nameof(ClientRoleExtensions.GetFactionColor)), HarmonyPostfix]
+	[HarmonyPriority(Priority.First)]
+    public static void Postfix(ref string __result, FactionType factionType)
     {
-        if (!Fancy.Colors.TryGetValue(Utils.FactionName(factionType, stoned: true).ToUpper(), out var color))
-            return true;
-
-        __result = color.Start;
-        return false;
+        if (Fancy.Colors.TryGetValue(Utils.FactionName(factionType, stoned: true).ToUpper(), out var color))
+            __result = color.Start;
     }
 
     [HarmonyPatch(nameof(ClientRoleExtensions.ApplyFactionColor))]
@@ -1162,12 +1187,12 @@ public static class ClientRoleExtensionsPatches
         __result = "<color=" + factionColor + ">" + text + "</color>";
     }
 
-    [HarmonyPatch(nameof(ClientRoleExtensions.GetSecondFactionColor)), HarmonyPrefix]
-	[HarmonyPriority(Priority.Last)]
-    public static bool GetSecondFactionColorPrefix(ref string __result, FactionType factionType)
+    [HarmonyPatch(nameof(ClientRoleExtensions.GetSecondFactionColor)), HarmonyPostfix]
+	[HarmonyPriority(Priority.First)]
+    public static void GetSecondFactionColorPostfix(ref string __result, FactionType factionType)
     {
-        __result = Fancy.Colors[Utils.FactionName(factionType, stoned: true).ToUpper()].Start;
-        return false;
+        if (Fancy.Colors.TryGetValue(Utils.FactionName(factionType, stoned: true).ToUpper(), out var color))
+            __result = color.End;
     }
 [HarmonyPatch(typeof(ClientRoleExtensions), nameof(ClientRoleExtensions.ToColorizedDisplayString), [typeof(Role)])]
 public static class Patch_ToColorizedDisplayString_NoFaction
@@ -2121,4 +2146,3 @@ public static class FactionSpecificPotionMasterResults
         }
     }
 }
-
