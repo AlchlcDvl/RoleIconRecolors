@@ -20,6 +20,24 @@
     <Entry key="FANCY_FACTIONAL_BUCKETS_NAME">Faction-Specific Bucket Colors</Entry>
     <Entry key="FANCY_FACTIONAL_BUCKETS_DESC">Determines whether or not the blue part of buckets can have a unique gradient per faction.</Entry>
 
+    <Entry key="FANCY_PANDORA_COVEN_APOC_NAME">Pandora Coven: Apocalypse</Entry>
+    <Entry key="FANCY_PANDORA_COVEN_APOC_DESC">Makes the Coven use Pandora icons and colors if the role deck starts them with an Apocalypse role.</Entry>
+
+    <Entry key="FANCY_PANDORA_COVEN_NK_NAME">Pandora Coven: Neutral Killing</Entry>
+    <Entry key="FANCY_PANDORA_COVEN_NK_DESC">Makes the Coven use Pandora icons and colors if the role deck starts them with a Neutral Killing role.</Entry>
+
+    <Entry key="FANCY_PANDORA_COVEN_TOWN_NAME">Pandora Coven: Town</Entry>
+    <Entry key="FANCY_PANDORA_COVEN_TOWN_DESC">Makes the Coven use Pandora icons and colors if the role deck starts them with a Town role.</Entry>
+
+    <Entry key="FANCY_I_AM_LAZY_GIVE_ME_PANDORA_NAME">Pandora Coven: Always</Entry>
+    <Entry key="FANCY_I_AM_LAZY_GIVE_ME_PANDORA_DESC">Makes the Coven use Pandora icons and colors at all times. What are ya, lazy?</Entry>
+
+    <Entry key="FANCY_PANDORA_COVEN_NAMES_NAME">Pandora Coven: Role Names</Entry>
+    <Entry key="FANCY_PANDORA_COVEN_NAMES_DESC">When the Coven appears as Pandora, factional role names try their Pandora variants first, then the Coven ones. Requires Faction-Specific Role Names.</Entry>
+
+    <Entry key="FANCY_PANDORA_COVEN_BLURBS_NAME">Pandora Coven: Role Blurbs</Entry>
+    <Entry key="FANCY_PANDORA_COVEN_BLURBS_DESC">When the Coven appears as Pandora, factional role blurbs try their Pandora variants first, then the Coven ones. Requires Faction-Specific Role Blurbs.</Entry>
+
     <Entry key="FANCY_FACTION_NEXT_TO_ROLE_NAME">Faction Name Next to Role</Entry>
     <Entry key="FANCY_FACTION_NEXT_TO_ROLE_DESC">Determines whether or not factions will be displayed next to roles as if colors were off in Town of Salem 2's chat settings.</Entry>
 

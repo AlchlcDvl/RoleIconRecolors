@@ -336,6 +336,23 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
             }
         }
 
+        // Pandora Coven: the Pandora folder lives under BTOS2, so vanilla-typed games would have no Pandora mention sheet.
+        // Build one indexed by vanilla role ids from the same icons; missing icons fall back to Coven/Regular like every other sheet.
+        if (Assets.TryGetValue(GameModType.BTOS2, out var btosAssets) && btosAssets.BaseIcons.TryGetValue("Pandora", out var pandoraIcons) && pandoraIcons.Count > 0)
+        {
+            try
+            {
+                var asset = BuildSpriteSheet(GameModType.Vanilla, "Vanilla", "Pandora", pandoraIcons, Utils.Filtered(GameModType.Vanilla));
+                Assets[GameModType.Vanilla].MentionStyles["Pandora"] = asset;
+                Utils.DumpSprite(asset?.spriteSheet as Texture2D, "PandoraVanillaRoleIcons", Path.Combine(PackPath, "Vanilla"));
+            }
+            catch (Exception e)
+            {
+                Fancy.Instance.Error($"Unable to create vanilla Pandora role icons for {Name} because:\n{e}");
+                Assets[GameModType.Vanilla].MentionStyles["Pandora"] = null;
+            }
+        }
+
         var cursor = GetSprite("Cursor", false, null);
 
         if (cursor.IsValid())
@@ -355,7 +372,7 @@ public class IconPack(string name) : Pack(name, PackType.IconPacks)
             var roleEnum = (Role)roleInt;
             var name2 = Utils.RoleName(roleEnum, type);
             var factionEnum = roleEnum.GetFactionType(type);
-            var name3 = Utils.FactionName(factionEnum, type);
+            var name3 = Utils.FactionName(factionEnum, type, pandora: false);
             var sprite = icons.TryGetValue($"{name2}_{mod}", out var sprite1) ? sprite1 : Blank;
 
             if (!sprite.IsValid())

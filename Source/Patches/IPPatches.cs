@@ -1223,7 +1223,7 @@ public static class GetInlinedStringsPatches
     {
         if (Constants.EnableIcons())
         {
-            __result = __result.Replace("RoleIcons\"", $"RoleIcons ({(role.GetFactionType() == factionType && Constants.CurrentStyle() == "Regular" ? "Regular" : Utils.FactionName(factionType, false))})\"");
+            __result = __result.Replace("RoleIcons\"", $"RoleIcons ({Utils.MentionStyleName(role, factionType)})\"");
         }
     }
 }
@@ -1252,14 +1252,14 @@ public static class FixDecodingAndEncoding
         var faction = "Regular";
 
         if (Utils.GetRoleAndFaction(entry.speakerId, out var tuple))
-            faction = Utils.FactionName(tuple.Item2, false);
+            faction = Utils.FactionName(tuple.Item2, false, pandora: true);
 
         var myFact = Pepper.GetMyFaction();
 
-        if (myFact == tuple.Item2 && Constants.CurrentStyle() == "Regular")
+        if (myFact == tuple.Item2 && Constants.CurrentStyle() == "Regular" && !(myFact == FactionType.COVEN && Utils.CovenAppearsAsPandora()))
             faction = "Regular";
         else if (entry.speakerId == Pepper.GetMyPosition())
-            faction = Utils.FactionName(myFact, false);
+            faction = Utils.FactionName(myFact, false, pandora: true);
 
         __result = __result.Replace("RoleIcons\"", $"RoleIcons ({faction})\"");
     }
@@ -1401,7 +1401,13 @@ public static class ReplaceTMPSpritesPatch
             else
             {
                 if (!assets.MentionStyles.TryGetValue(deconstructed, out asset) || !asset)
-                    Fancy.Instance.Warning($"{packName} {mod} Mention Style {deconstructed} was null or missing");
+                {
+                    // Pandora Coven: non-BTOS2 games have no Pandora sheet, so use the Coven one before falling back to Regular
+                    var usedCoven = deconstructed == "Pandora" && Utils.PandoraFallbackEnabled() && assets.MentionStyles.TryGetValue("Coven", out asset) && asset;
+
+                    if (!usedCoven)
+                        Fancy.Instance.Warning($"{packName} {mod} Mention Style {deconstructed} was null or missing");
+                }
 
                 if (!asset && deconstructed != "Regular")
                 {

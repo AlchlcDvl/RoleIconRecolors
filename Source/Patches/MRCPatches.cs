@@ -139,13 +139,13 @@ public static class PatchRoleCard
 			string displayString;
 
 			if (role.IsTownAligned())
-				displayString = FactionType.TOWN.ToColorizedDisplayString().StripFormatting();
+				displayString = RoleAlignment.TOWN.ToDisplayString();
 			else if (role.IsCovenAligned())
-				displayString = FactionType.COVEN.ToColorizedDisplayString().StripFormatting();
+				displayString = RoleAlignment.COVEN.ToDisplayString();
 			else if (role.IsNeutralAligned())
 				displayString = RoleAlignment.NEUTRAL.ToDisplayString();
 			else 
-				displayString = FactionType.NONE.ToColorizedDisplayString().StripFormatting();
+				displayString = RoleAlignment.NONE.ToDisplayString();
 
 			return Utils.ApplyGradient(displayString, useNeutralGradient ? neutralGradient : faction.GetChangedGradient(role))
 				   + " " + Utils.ApplyGradient(subAlignment.ToDisplayString(), subAlignGradient);
@@ -382,13 +382,13 @@ public static class RoleCardPopupPatches2
         string displayString;
 
         if (role.IsTownAligned())
-            displayString = FactionType.TOWN.ToColorizedDisplayString().StripFormatting();
+            displayString = RoleAlignment.TOWN.ToDisplayString();
         else if (role.IsCovenAligned())
-            displayString = FactionType.COVEN.ToColorizedDisplayString().StripFormatting();
+            displayString = RoleAlignment.COVEN.ToDisplayString();
         else if (role.IsNeutralAligned())
             displayString = RoleAlignment.NEUTRAL.ToDisplayString();
         else 
-            displayString = FactionType.NONE.ToColorizedDisplayString().StripFormatting();
+            displayString = RoleAlignment.NONE.ToDisplayString();
 
         // if (faction is FactionType.SERIALKILLER 
         //     or FactionType.ARSONIST or FactionType.SHROUD 
@@ -1546,9 +1546,7 @@ public static class KeywordMentionsPatches
         {
             var item = kvp.Key;
             var roleIcon = kvp.Value.GetRoleSprite(item);
-            roleIcon = roleIcon.Replace("RoleIcons\"", $"RoleIcons ({((kvp.Value.GetFactionType() == item && Constants.CurrentStyle() == "Regular")
-            ? "Regular"
-            : Utils.FactionName(item, false))})\"");
+            roleIcon = roleIcon.Replace("RoleIcons\"", $"RoleIcons ({(Utils.MentionStyleName(kvp.Value, item))})\"");
             var faction = (int)item;
             var display = item.ToDisplayString();
             var shortName = shortNames.ContainsKey(item) ? shortNames.GetValue(item) : display;
@@ -1951,9 +1949,7 @@ public static class GraveyardItem_SetPlayerPicAndName_Patch
         var role = killRecord.playerRole;
         var player = (int)killRecord.playerId;
         var icon = role.GetRoleSprite(faction);
-        icon = icon.Replace("RoleIcons\"", $"RoleIcons ({((role.GetFactionType() == faction && Constants.CurrentStyle() == "Regular")
-            ? "Regular"
-            : Utils.FactionName(faction, false))})\"");
+        icon = icon.Replace("RoleIcons\"", $"RoleIcons ({(Utils.MentionStyleName(role, faction))})\"");
 
         var name = Service.Game.Sim.simulation.GetPlayerInlineLinkString(player, 1.1) ?? string.Empty;
 

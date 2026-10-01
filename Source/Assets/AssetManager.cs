@@ -36,8 +36,9 @@ public static class FancyAssetManager
 	
 	public static string ResolveFactionOverride(string faction, out string faction2)
 	{
-		// VIP and Necronomicon remnant, kept cuz may be used for something else
-		faction2 = faction;
+		// Pandora Coven: icons missing from the Pandora folder fall back to the Coven folder (then Regular) instead of going straight to Regular.
+		// Only ever the *displayed* faction is "Pandora" here; native-faction fallbacks pass "Coven", so they never get remapped.
+		faction2 = faction == "Pandora" && Utils.PandoraFallbackEnabled() ? "Coven" : faction;
 
 		return faction;
 	}

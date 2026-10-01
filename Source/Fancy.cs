@@ -118,6 +118,12 @@ public class Fancy : BaseMod<Fancy>
     public static ToggleOption FactionalRoleNames;
     public static ToggleOption FactionalRoleBlurbs;
     public static ToggleOption FactionalBuckets;
+    public static ToggleOption PandoraCovenApoc;
+    public static ToggleOption PandoraCovenNK;
+    public static ToggleOption PandoraCovenTown;
+    public static ToggleOption PandoraCovenNames;
+    public static ToggleOption PandoraCovenBlurbs;
+    public static ToggleOption ImLazyGiveMePandora;
     public static ToggleOption ReplaceNAwithRA;
     public static ToggleOption DisableBTOSTribunal;
 
@@ -420,6 +426,12 @@ public class Fancy : BaseMod<Fancy>
         FactionalRoleNames = new("FACTIONAL_ROLE_NAMES", false, PackType.MiscRoleCustomisation, Constants.TextEditorExists);
         FactionalRoleBlurbs = new("FACTIONAL_ROLE_BLURBS", false, PackType.MiscRoleCustomisation, Constants.TextEditorExists);
         FactionalBuckets = new("FACTIONAL_BUCKETS", false, PackType.MiscRoleCustomisation);
+        ImLazyGiveMePandora = new("I_AM_LAZY_GIVE_ME_PANDORA", false, PackType.MiscRoleCustomisation, setActive: () => ShowHiddenSettings.Value); // makes Coven always appear as Pandora
+        PandoraCovenApoc = new("PANDORA_COVEN_APOC", false, PackType.MiscRoleCustomisation);
+        PandoraCovenNK = new("PANDORA_COVEN_NK", false, PackType.MiscRoleCustomisation);
+        PandoraCovenTown = new("PANDORA_COVEN_TOWN", false, PackType.MiscRoleCustomisation);
+        PandoraCovenNames = new("PANDORA_COVEN_NAMES", false, PackType.MiscRoleCustomisation, setActive: () => FactionalRoleNames.Value);
+        PandoraCovenBlurbs = new("PANDORA_COVEN_BLURBS", false, PackType.MiscRoleCustomisation, setActive: () => FactionalRoleBlurbs.Value);
         ColorMentionsWithFaction = new("FACTIONAL_PLAYER_MENTIONS", false, PackType.MiscRoleCustomisation, setActive: () => !Constants.BetterMentionsExists());
         ApplyGendersToPlayerMentions = new("GENDERED_PLAYER_MENTIONS", false, PackType.MiscRoleCustomisation);
         MajorColors = new("MAJOR_COLORS", false, PackType.MiscRoleCustomisation);

@@ -45,6 +45,9 @@ public static class Constants
                     faction = Pepper.GetMyFaction();
             }
 
+            if (faction == FactionType.COVEN && Utils.CovenAppearsAsPandora())
+                faction = Btos2Faction.Pandora;
+
             var shouldUseCustom = faction is null or FactionType.NONE;
             var colorString = "";
 

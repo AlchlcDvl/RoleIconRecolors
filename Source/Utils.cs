@@ -370,12 +370,16 @@ public static class Utils
         _ => $"Role{(int)role}"
     };
 
-    public static string FactionName(FactionType faction, bool allowOverrides, GameModType? mod = null, bool stoned = false) => FactionName(faction, mod, allowOverrides, stoned);
+    // pandora: whether Coven may be displayed as Pandora (see CovenAppearsAsPandora). Defaults to allowOverrides, so callers asking for the native faction (allowOverrides: false) never get remapped.
+    public static string FactionName(FactionType faction, bool allowOverrides, GameModType? mod = null, bool stoned = false, bool? pandora = null) => FactionName(faction, mod, allowOverrides, stoned, pandora);
 
-    public static string FactionName(FactionType faction, GameModType? mod = null, bool allowOverrides = true, bool stoned = false)
+    public static string FactionName(FactionType faction, GameModType? mod = null, bool allowOverrides = true, bool stoned = false, bool? pandora = null)
     {
         if (allowOverrides && Constants.FactionOverridden())
             return Constants.FactionOverride();
+
+        if (faction == FactionType.COVEN && (pandora ?? allowOverrides) && CovenAppearsAsPandora())
+            return "Pandora";
 		
 		// return BTOSFactionName(faction, stoned);
 
@@ -392,6 +396,96 @@ public static class Utils
             return VanillaFactionName(faction, stoned);
         }
     }
+
+    private static bool deckCacheValid;
+    private static int deckSignature;
+    private static bool deckHasApoc;
+    private static bool deckHasNK;
+    private static bool deckHasTown;
+
+    /// <summary>True if any of the "Pandora Coven" conditions is enabled.</summary>
+    public static bool PandoraFallbackEnabled() => Fancy.PandoraCovenApoc.Value || Fancy.PandoraCovenNK.Value || Fancy.PandoraCovenTown.Value || Fancy.ImLazyGiveMePandora.Value;
+
+    /// <summary>
+    /// True if the Coven should currently be displayed as Pandora: the role deck flexes a role into the Coven faction whose native faction is
+    /// Apocalypse, Neutral Killing or Town, and the matching option is enabled. Never true in the testing UI or outside of a lobby/game.
+    /// </summary>
+    public static bool CovenAppearsAsPandora()
+    {
+        try
+        {
+            if (!PandoraFallbackEnabled() || SettingsAndTestingUI.Instance)
+                return false;
+			
+					
+            var slots = Service.Game?.Sim?.simulation?.roleDeckBuilder?.Data?.roleDeckSlots;
+
+            if (slots == null)
+            {
+                deckCacheValid = false;
+                return false;
+            }
+
+            var mod = GetGameType();
+            var signature = (int)mod;
+
+            unchecked
+            {
+                foreach (var slot in slots)
+                    signature = (signature * 31) + ((int)slot.Role1 | ((int)slot.Role2 << 8) | ((int)slot.Faction1 << 16) | ((int)slot.Faction2 << 24));
+            }
+
+            if (!deckCacheValid || signature != deckSignature)
+            {
+                bool apoc = false, nk = false, town = false;
+
+                foreach (var slot in slots)
+                {
+                    ScanDeckEntry(slot.Role1, slot.Faction1, mod, ref apoc, ref nk, ref town);
+
+                    if (slot.Role2 != Role.NONE)
+                        ScanDeckEntry(slot.Role2, slot.Faction2, mod, ref apoc, ref nk, ref town);
+                }
+
+                deckSignature = signature;
+                deckHasApoc = apoc;
+                deckHasNK = nk;
+                deckHasTown = town;
+                deckCacheValid = true;
+            }
+
+            return (Fancy.PandoraCovenApoc.Value && deckHasApoc) || (Fancy.PandoraCovenNK.Value && deckHasNK) || (Fancy.PandoraCovenTown.Value && deckHasTown) || Fancy.ImLazyGiveMePandora.Value;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    private static void ScanDeckEntry(Role role, FactionType slotFaction, GameModType mod, ref bool apoc, ref bool nk, ref bool town)
+    {
+        if (role == Role.NONE || slotFaction != FactionType.COVEN)
+            return;
+
+        switch (role.GetFactionType(mod))
+        {
+            case FactionType.APOCALYPSE:
+                apoc = true;
+                break;
+            case FactionType.TOWN:
+                town = true;
+                break;
+            case FactionType.SERIALKILLER or FactionType.ARSONIST or FactionType.WEREWOLF or FactionType.SHROUD:
+                nk = true;
+                break;
+        }
+
+        // The Neutral Killing bucket has no faction of its own
+        if (role == (mod == GameModType.BTOS2 ? Btos2Role.NeutralKilling : Role.NEUTRAL_KILLING))
+            nk = true;
+    }
+
+    private static bool PandoraVariantActive(FactionType faction, bool option) => option && faction == FactionType.COVEN && CovenAppearsAsPandora();
 
     private static string BTOSFactionName(FactionType faction, bool stoned) => faction switch
     {
@@ -937,16 +1031,41 @@ public static class Utils
         return Color.Lerp(color, strength < 0 ? Color.white : Color.black, Mathf.Abs(strength));
     }
 
+	private static bool TryGetFactionalString(string newKey, string oldKey, out string result)
+	{
+		var loc = Service.Home.LocalizationService;
+		result = null;
+
+		if (loc.StringExists(newKey))
+			result = loc.GetLocalizedString(newKey);
+		else if (loc.StringExists(oldKey))
+			result = loc.GetLocalizedString(oldKey);
+
+		return result != null;
+	}
+
+	private static string PandoraKeyPrefix(bool isBTOS2) => isBTOS2 ? "BTOS_" : "GUI_";
+
+	private static string PandoraOldKey(bool isBTOS2, string suffix, Role role) => $"FANCY_PANDORA_{(isBTOS2 ? "BTOS_" : "")}{suffix}_{(int)role}";
+
 	public static bool UsesBaseDisplayName(this Role role, FactionType faction)
 	{
-		if (!Fancy.FactionalRoleNames.Value || role.GetFaction() == faction)
+		if (!Fancy.FactionalRoleNames.Value)
 			return true;
 
-		var factionName = FactionName(faction, GameModType.BTOS2)?.ToUpper() ?? "NONE";
+		var isBTOS2 = Constants.IsBTOS2();
+
+		if (PandoraVariantActive(faction, Fancy.PandoraCovenNames.Value) &&
+			TryGetFactionalString($"{PandoraKeyPrefix(isBTOS2)}ROLENAME_{(int)role}_{(int)Btos2Faction.Pandora}", PandoraOldKey(isBTOS2, "ROLENAME", role), out _))
+			return false;
+
+		if (role.GetFaction() == faction)
+			return true;
+
+		var factionName = FactionName(faction, GameModType.BTOS2, pandora: false)?.ToUpper() ?? "NONE";
 		if (factionName == "UNKNOWN")
 			factionName = "NONE";
 
-		var isBTOS2 = Constants.IsBTOS2();
 		var newKey = $"{(isBTOS2 ? "BTOS_" : "GUI_")}ROLENAME_{(int)role}_{(int)faction}";
 		var oldKey = $"FANCY_{factionName}_{(isBTOS2 ? "BTOS_" : "")}ROLENAME_{(int)role}";
 
@@ -968,11 +1087,15 @@ public static class Utils
 		if (role is Role.STONED or Role.HIDDEN or Role.UNKNOWN)
 			faction = FactionType.NONE;
 
-		var factionName = FactionName(faction, GameModType.BTOS2)?.ToUpper() ?? "NONE";
+		var factionName = FactionName(faction, GameModType.BTOS2, pandora: false)?.ToUpper() ?? "NONE";
 		if (factionName == "UNKNOWN")
 			factionName = "NONE";
 
 		var isBTOS2 = Constants.IsBTOS2() || SettingsAndTestingUI.Instance?.IsBTOS2 == true;
+
+		if (PandoraVariantActive(faction, Fancy.PandoraCovenNames.Value) &&
+			TryGetFactionalString($"{PandoraKeyPrefix(isBTOS2)}ROLENAME_{(int)role}_{(int)Btos2Faction.Pandora}", PandoraOldKey(isBTOS2, "ROLENAME", role), out var pandoraName))
+			return pandoraName;
 
 		var newKey = $"{(isBTOS2 ? "BTOS_" : "GUI_")}ROLENAME_{(int)role}_{(int)faction}";
 		var oldKey = $"FANCY_{factionName}_{(isBTOS2 ? "BTOS_" : "")}ROLENAME_{(int)role}";
@@ -996,11 +1119,15 @@ public static class Utils
 		if (role is Role.STONED or Role.HIDDEN or Role.UNKNOWN)
 			faction = FactionType.NONE;
 
-		var factionName = FactionName(faction, GameModType.BTOS2)?.ToUpper() ?? "NONE";
+		var factionName = FactionName(faction, GameModType.BTOS2, pandora: false)?.ToUpper() ?? "NONE";
 		if (factionName == "UNKNOWN")
 			factionName = "NONE";
 
 		var isBTOS2 = Constants.IsBTOS2() || SettingsAndTestingUI.Instance?.IsBTOS2 == true;
+
+		if (PandoraVariantActive(faction, Fancy.PandoraCovenNames.Value) &&
+			TryGetFactionalString($"{PandoraKeyPrefix(isBTOS2)}ROLE_SHORTNAME_{(int)role}_{(int)Btos2Faction.Pandora}", PandoraOldKey(isBTOS2, "SHORTNAME", role), out var pandoraName))
+			return pandoraName;
 
 		var newKey = $"{(isBTOS2 ? "BTOS_" : "GUI_")}ROLE_SHORTNAME_{(int)role}_{(int)faction}";
 		var oldKey = $"FANCY_{factionName}_{(isBTOS2 ? "BTOS_" : "")}SHORTNAME_{(int)role}";
@@ -1017,6 +1144,18 @@ public static class Utils
 	}
 
 
+	private static string RolePlaceholder(Role role, FactionType faction, bool flexed, bool icon)
+	{
+		var name = flexed ? role.ToColorizedDisplayString(faction) : role.ToColorizedDisplayString();
+		return icon ? role.GetRoleSprite() + name : name;
+	}
+
+	private static string FactionPlaceholder(FactionType faction, bool icon)
+	{
+		var name = faction.ToColorizedDisplayString();
+		return icon ? faction.GetFactionSprite() + name : name;
+	}
+
 	public static string ToFactionalRoleBlurb(this Role role, FactionType faction)
 	{
 		if (!Fancy.FactionalRoleBlurbs.Value)
@@ -1025,17 +1164,19 @@ public static class Utils
 		if (role is Role.STONED or Role.HIDDEN or Role.UNKNOWN)
 			faction = FactionType.NONE;
 
-		var factName = FactionName(faction, GameModType.BTOS2)?.ToUpper() ?? "NONE";
+		var factName = FactionName(faction, GameModType.BTOS2, pandora: false)?.ToUpper() ?? "NONE";
 		if (factName == "UNKNOWN")
 			factName = "NONE";
 
 		var isBTOS2 = Constants.IsBTOS2() || SettingsAndTestingUI.Instance?.IsBTOS2 == true;
+		
 		var factionName = faction.ToColorizedDisplayString();
-		var factionNameWithIcon = faction.ToColorizedDisplayString();
+		var factionNameWithIcon = faction.GetFactionSprite() + faction.ToColorizedDisplayString();
 		var roleName = role.ToColorizedDisplayString();
-		var roleNameWithIcon = role.ToColorizedDisplayString(faction);
+		var roleNameWithIcon = role.GetRoleSprite() + role.ToColorizedDisplayString();
 		var flexedName = role.ToColorizedDisplayString(faction);
-		var flexedNameWithIcon = role.ToColorizedDisplayString(faction);
+		var flexedNameWithIcon = role.GetRoleSprite() + role.ToColorizedDisplayString(faction);
+
 
 		var newKey = $"{(isBTOS2 ? "BTOS_" : "GUI_")}ROLE_BLURB_{(int)role}_{(int)faction}";
 		var fallbackKey = $"{(isBTOS2 ? "BTOS_" : "GUI_")}ROLE_BLURB_{(int)role}_0";
@@ -1043,16 +1184,51 @@ public static class Utils
 
 		var loc = Service.Home.LocalizationService;
 
-		if (loc.StringExists(newKey))
-			return loc.GetLocalizedString(newKey);
-		
-		if (loc.StringExists(fallbackKey))
-			return loc.GetLocalizedString(fallbackKey);
+		string blurb;
 
-		if (loc.StringExists(oldKey))
-			return loc.GetLocalizedString(oldKey);
+		if (PandoraVariantActive(faction, Fancy.PandoraCovenBlurbs.Value) &&
+			TryGetFactionalString($"{PandoraKeyPrefix(isBTOS2)}ROLE_BLURB_{(int)role}_{(int)Btos2Faction.Pandora}", PandoraOldKey(isBTOS2, "ROLE_BLURB", role), out var pandoraBlurb))
+			blurb = pandoraBlurb;
+		else if (loc.StringExists(newKey))
+			blurb = loc.GetLocalizedString(newKey);
+		else if (loc.StringExists(fallbackKey))
+			blurb = loc.GetLocalizedString(fallbackKey);
+		else if (loc.StringExists(oldKey))
+			blurb = loc.GetLocalizedString(oldKey);
+		else
+			return role.GetRoleBlurb();
 
-		return role.GetRoleBlurb();
+		blurb = blurb
+		.Replace("%faction%", factionName)
+		.Replace("%faction_icon%", factionNameWithIcon)
+		.Replace("%role%", roleName)
+		.Replace("%role_icon%", roleNameWithIcon)
+		.Replace("%flexed%", flexedName)
+		.Replace("%flexed_icon%", flexedNameWithIcon);
+
+		blurb = Regex.Replace(blurb, @"%(role|flexed|faction)(_icon)?(\d+)%", match =>
+		{
+			var type = match.Groups[1].Value;
+			var icon = match.Groups[2].Success;
+			var id = int.Parse(match.Groups[3].Value);
+
+			switch (type)
+			{
+				case "role":
+					return RolePlaceholder((Role)id, faction, false, icon);
+
+				case "flexed":
+					return RolePlaceholder((Role)id, faction, true, icon);
+
+				case "faction":
+					return FactionPlaceholder((FactionType)id, icon);
+
+				default:
+					return match.Value;
+			}
+		});
+
+		return blurb;
 	}
 
     public static Color GetPlayerRoleColor(int pos)
@@ -1295,31 +1471,6 @@ public static class Utils
         return sb.ToString();
     }
 
-    public static string StripFormatting(this string input)
-    {
-        var sb = new StringBuilder();
-        var insideTag = false;
-
-        foreach (var c in input)
-        {
-            if (c == '<')
-            {
-                insideTag = true;
-                continue;
-            }
-            if (c == '>' && insideTag)
-            {
-                insideTag = false;
-                continue;
-            }
-
-            if (!insideTag)
-                sb.Append(c);
-        }
-
-        return sb.ToString();
-    }
-
     public static string ReplaceIcons(this string input)
     {
         if (Constants.IsBTOS2())
@@ -1339,9 +1490,7 @@ public static class Utils
 
     private static string GetStyleForFaction(Role role, FactionType faction)
     {
-        return (Constants.CurrentStyle() == "Regular" && role.GetFactionType() == faction)
-            ? "Regular"
-            : FactionName(faction, false);
+        return MentionStyleName(role, faction);
     }
 
     public static string GetHangingMessage(Role role, FactionType faction)
@@ -1545,10 +1694,10 @@ public static class Utils
 
         var NK = !isNone ? faction.GetChangedGradient(Role.NONE) : neut;
 
-        var town = FactionType.TOWN.ToColorizedDisplayString().StripFormatting();
-        var coven = FactionType.COVEN.ToColorizedDisplayString().StripFormatting();
+        var town = Utils.GetString(isBTOS2 ? "BTOS_ALIGNMENTNAME_1" : "GUI_ALIGNMENTNAME_1");
+        var coven = Utils.GetString(isBTOS2 ? "BTOS_ALIGNMENTNAME_2" : "GUI_ALIGNMENTNAME_2");
         var neutral = Utils.GetString(isBTOS2 ? "BTOS_ALIGNMENTNAME_3" : "GUI_ALIGNMENTNAME_3");
-        var apocalypse = FactionType.APOCALYPSE.ToColorizedDisplayString().StripFormatting();
+        var apocalypse = Utils.GetString(isBTOS2 ? "BTOS_ALIGNMENTNAME_17" : "GUI_SUBALIGNMENTNAME_9");
 
         string G(string text, Gradient g) => Utils.ApplyGradient(text, g);
         string Key(string key) => Utils.GetString(key);
@@ -1746,9 +1895,29 @@ public static class Utils
         };
     }
 	
+	/// <summary>
+	/// Sprite sheet style for a role shown under a faction in text. Native roles use "Regular" when that mention style is selected,
+	/// except while the Coven is displayed as Pandora, so their icons match the Pandora gradient.
+	/// </summary>
+	public static string MentionStyleName(Role role, FactionType faction)
+	{
+		var pandora = faction == FactionType.COVEN && CovenAppearsAsPandora();
+
+		return !pandora && role.GetFactionType() == faction && Constants.CurrentStyle() == "Regular" ? "Regular" : FactionName(faction, false, pandora: true);
+	}
+
 	public static string GetRoleSprite(this Role role, FactionType faction)
 	{
-		var style = role.GetFactionType() == faction && Constants.CurrentStyle() == "Regular" ? "Regular" : FactionName(faction, false);
+		var style = MentionStyleName(role, faction);
+		var icon = role.GetTMPSprite().Replace("RoleIcons\"", $"RoleIcons ({style})\"");
+
+		return icon;
+	}
+
+	public static string GetRoleSprite(this Role role)
+	{
+		var faction = role.GetFaction();
+		var style = MentionStyleName(role, faction);
 		var icon = role.GetTMPSprite().Replace("RoleIcons\"", $"RoleIcons ({style})\"");
 
 		return icon;

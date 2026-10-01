@@ -570,9 +570,7 @@ public static class SpecialAbilityPopupNecromancerRetributionistListItemPatch
         if (role2 != Role.NONE)
         {
             var styleName =
-                role2.GetFactionType() == factionType && Constants.CurrentStyle() == "Regular"
-                    ? "Regular"
-                    : Utils.FactionName(factionType, false);
+                Utils.MentionStyleName(role2, factionType);
 
             icon = icon.Replace("RoleIcons\"", $"RoleIcons ({styleName})\"");
         }
@@ -693,9 +691,7 @@ public static class PatchSpecialAbilityPopupGenericDualTargetListItem
         if (role2 != Role.NONE)
         {
             var styleName =
-                role2.GetFactionType() == factionType && Constants.CurrentStyle() == "Regular"
-                    ? "Regular"
-                    : Utils.FactionName(factionType, false);
+                Utils.MentionStyleName(role2, factionType);
 
             icon = icon.Replace("RoleIcons\"", $"RoleIcons ({styleName})\"");
         }
