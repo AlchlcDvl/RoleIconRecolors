@@ -1173,16 +1173,16 @@ public static class Utils
 
 		var isBTOS2 = Constants.IsBTOS2() || SettingsAndTestingUI.Instance?.IsBTOS2 == true;
 		
-		var factionName = faction.ToColorizedDisplayString();
-		var factionNameWithIcon = faction.GetFactionSprite() + faction.ToColorizedDisplayString();
-		var roleName = role.ToColorizedDisplayString();
-		var roleNameWithIcon = role.GetRoleSprite() + role.ToColorizedDisplayString();
-		var flexedName = role.ToColorizedDisplayString(faction);
-		var flexedNameWithIcon = role.GetRoleSprite(faction) + role.ToColorizedDisplayString(faction);
+		// var factionName = faction.ToColorizedDisplayString();
+		// var factionNameWithIcon = faction.GetFactionSprite() + faction.ToColorizedDisplayString();
+		// var roleName = role.ToColorizedDisplayString();
+		// var roleNameWithIcon = role.GetRoleSprite() + role.ToColorizedDisplayString();
+		// var flexedName = role.ToColorizedDisplayString(faction);
+		// var flexedNameWithIcon = role.GetRoleSprite(faction) + role.ToColorizedDisplayString(faction);
 
 
 		var newKey = $"{(isBTOS2 ? "BTOS_" : "GUI_")}ROLE_BLURB_{(int)role}_{(int)faction}";
-		var fallbackKey = $"{(isBTOS2 ? "BTOS_" : "GUI_")}ROLE_BLURB_{(int)role}_0";
+		// var fallbackKey = $"{(isBTOS2 ? "BTOS_" : "GUI_")}ROLE_BLURB_{(int)role}_0";
 		var oldKey = $"FANCY_{factName}_{(isBTOS2 ? "BTOS_" : "")}ROLE_BLURB_{(int)role}";
 
 		var loc = Service.Home.LocalizationService;
@@ -1194,42 +1194,42 @@ public static class Utils
 			blurb = pandoraBlurb;
 		else if (loc.StringExists(newKey))
 			blurb = loc.GetLocalizedString(newKey);
-		else if (loc.StringExists(fallbackKey))
-			blurb = loc.GetLocalizedString(fallbackKey);
+		// else if (loc.StringExists(fallbackKey))
+			// blurb = loc.GetLocalizedString(fallbackKey);
 		else if (loc.StringExists(oldKey))
 			blurb = loc.GetLocalizedString(oldKey);
 		else
 			return role.GetRoleBlurb();
 
-		blurb = blurb
-		.Replace("%faction%", factionName)
-		.Replace("%faction_icon%", factionNameWithIcon)
-		.Replace("%role%", roleName)
-		.Replace("%role_icon%", roleNameWithIcon)
-		.Replace("%flexed%", flexedName)
-		.Replace("%flexed_icon%", flexedNameWithIcon);
+		// blurb = blurb
+		// .Replace("%faction%", factionName)
+		// .Replace("%faction_icon%", factionNameWithIcon)
+		// .Replace("%role%", roleName)
+		// .Replace("%role_icon%", roleNameWithIcon)
+		// .Replace("%flexed%", flexedName)
+		// .Replace("%flexed_icon%", flexedNameWithIcon);
 
-		blurb = Regex.Replace(blurb, @"%(role|flexed|faction)(_icon)?(\d+)%", match =>
-		{
-			var type = match.Groups[1].Value;
-			var icon = match.Groups[2].Success;
-			var id = int.Parse(match.Groups[3].Value);
+		// blurb = Regex.Replace(blurb, @"%(role|flexed|faction)(_icon)?(\d+)%", match =>
+		// {
+			// var type = match.Groups[1].Value;
+			// var icon = match.Groups[2].Success;
+			// var id = int.Parse(match.Groups[3].Value);
 
-			switch (type)
-			{
-				case "role":
-					return RolePlaceholder((Role)id, faction, false, icon);
+			// switch (type)
+			// {
+				// case "role":
+					// return RolePlaceholder((Role)id, faction, false, icon);
 
-				case "flexed":
-					return RolePlaceholder((Role)id, faction, true, icon);
+				// case "flexed":
+					// return RolePlaceholder((Role)id, faction, true, icon);
 
-				case "faction":
-					return FactionPlaceholder((FactionType)id, icon);
+				// case "faction":
+					// return FactionPlaceholder((FactionType)id, icon);
 
-				default:
-					return match.Value;
-			}
-		});
+				// default:
+					// return match.Value;
+			// }
+		// });
 
 		return blurb;
 	}
