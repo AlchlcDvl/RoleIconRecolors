@@ -75,6 +75,87 @@
     <Entry key="FANCY_ROLE_REVEAL_TINT_INTENSITY_NAME">Role Reveal Tint Intensity</Entry>
     <Entry key="FANCY_ROLE_REVEAL_TINT_INTENSITY_DESC">Determines how intense the role reveal's tint is. The lower the number, the more intense it is. Default is 625, the vanilla value.</Entry>
 
+    <Entry key="FANCY_COLORED_SILHOUETTES_NAME">Colored Silhouettes</Entry>
+    <Entry key="FANCY_COLORED_SILHOUETTES_DESC">Tints silhouettes in the role card, role reveal and victory cinematics with the player's current faction color. Hangman and the four Horsemen of the Apocalypse are excluded for obvious reasons.</Entry>
+
+    <Entry key="FANCY_SILHOUETTE_BRIGHTNESS_NAME">Silhouette Tint Brightness (%)</Entry>
+    <Entry key="FANCY_SILHOUETTE_BRIGHTNESS_DESC">Brightness of the faction tint on silhouettes. 100 is the exact faction color, higher is brighter, lower is darker. Only change this if necessary, as the default (150) is already set up to work as is.</Entry>
+
+    <Entry key="FANCY_SILHOUETTE_COLOR_TOWN_NAME">Silhouette Color (Town)</Entry>
+    <Entry key="FANCY_SILHOUETTE_COLOR_TOWN_DESC">Determines which of the Town faction colors silhouettes will try to use.</Entry>
+
+    <Entry key="FANCY_SILHOUETTE_COLOR_COVEN_NAME">Silhouette Color (Coven)</Entry>
+    <Entry key="FANCY_SILHOUETTE_COLOR_COVEN_DESC">Determines which of the Coven faction colors silhouettes will try to use.</Entry>
+
+    <Entry key="FANCY_SILHOUETTE_COLOR_APOCALYPSE_NAME">Silhouette Color (Apocalypse)</Entry>
+    <Entry key="FANCY_SILHOUETTE_COLOR_APOCALYPSE_DESC">Determines which of the Apocalypse faction colors silhouettes will try to use.</Entry>
+
+    <Entry key="FANCY_SILHOUETTE_COLOR_VAMPIRE_NAME">Silhouette Color (Vampire)</Entry>
+    <Entry key="FANCY_SILHOUETTE_COLOR_VAMPIRE_DESC">Determines which of the Vampire faction colors silhouettes will try to use.</Entry>
+
+    <Entry key="FANCY_SILHOUETTE_COLOR_CURSEDSOUL_NAME">Silhouette Color (Wandering Souls)</Entry>
+    <Entry key="FANCY_SILHOUETTE_COLOR_CURSEDSOUL_DESC">Determines which of the Wandering Souls faction colors silhouettes will try to use.</Entry>
+
+    <Entry key="FANCY_SILHOUETTE_COLOR_PANDORA_NAME">Silhouette Color (Pandora)</Entry>
+    <Entry key="FANCY_SILHOUETTE_COLOR_PANDORA_DESC">Determines which of the Pandora faction colors silhouettes will try to use.</Entry>
+
+    <Entry key="FANCY_SILHOUETTE_COLOR_COMPLIANCE_NAME">Silhouette Color (Compliance)</Entry>
+    <Entry key="FANCY_SILHOUETTE_COLOR_COMPLIANCE_DESC">Determines which of the Compliance faction colors silhouettes will try to use.</Entry>
+
+    <Entry key="FANCY_SILHOUETTE_COLOR_SERIALKILLER_NAME">Silhouette Color (Serial Killer)</Entry>
+    <Entry key="FANCY_SILHOUETTE_COLOR_SERIALKILLER_DESC">Determines which of the Serial Killer faction colors silhouettes will try to use.</Entry>
+
+    <Entry key="FANCY_SILHOUETTE_COLOR_ARSONIST_NAME">Silhouette Color (Arsonist)</Entry>
+    <Entry key="FANCY_SILHOUETTE_COLOR_ARSONIST_DESC">Determines which of the Arsonist faction colors silhouettes will try to use.</Entry>
+
+    <Entry key="FANCY_SILHOUETTE_COLOR_WEREWOLF_NAME">Silhouette Color (Werewolf)</Entry>
+    <Entry key="FANCY_SILHOUETTE_COLOR_WEREWOLF_DESC">Determines which of the Werewolf faction colors silhouettes will try to use.</Entry>
+
+    <Entry key="FANCY_SILHOUETTE_COLOR_SHROUD_NAME">Silhouette Color (Shroud)</Entry>
+    <Entry key="FANCY_SILHOUETTE_COLOR_SHROUD_DESC">Determines which of the Shroud faction colors silhouettes will try to use.</Entry>
+
+    <Entry key="FANCY_SILHOUETTE_COLOR_JACKAL_NAME">Silhouette Color (Jackal)</Entry>
+    <Entry key="FANCY_SILHOUETTE_COLOR_JACKAL_DESC">Determines which of the Jackal faction colors silhouettes will try to use.</Entry>
+
+    <Entry key="FANCY_SILHOUETTE_COLOR_EGOTIST_NAME">Silhouette Color (Egotist)</Entry>
+    <Entry key="FANCY_SILHOUETTE_COLOR_EGOTIST_DESC">Determines which of the Egotist faction colors silhouettes will try to use.</Entry>
+
+    <Entry key="FANCY_SILHOUETTE_COLOR_JESTER_NAME">Silhouette Color (Jester)</Entry>
+    <Entry key="FANCY_SILHOUETTE_COLOR_JESTER_DESC">Determines which of the Jester faction colors silhouettes will try to use.</Entry>
+
+    <Entry key="FANCY_SILHOUETTE_COLOR_EXECUTIONER_NAME">Silhouette Color (Executioner)</Entry>
+    <Entry key="FANCY_SILHOUETTE_COLOR_EXECUTIONER_DESC">Determines which of the Executioner faction colors silhouettes will try to use.</Entry>
+
+    <Entry key="FANCY_SILHOUETTE_COLOR_DOOMSAYER_NAME">Silhouette Color (Doomsayer)</Entry>
+    <Entry key="FANCY_SILHOUETTE_COLOR_DOOMSAYER_DESC">Determines which of the Doomsayer faction colors silhouettes will try to use.</Entry>
+
+    <Entry key="FANCY_SILHOUETTE_COLOR_PIRATE_NAME">Silhouette Color (Pirate)</Entry>
+    <Entry key="FANCY_SILHOUETTE_COLOR_PIRATE_DESC">Determines which of the Pirate faction colors silhouettes will try to use.</Entry>
+
+    <Entry key="FANCY_SILHOUETTE_COLOR_INQUISITOR_NAME">Silhouette Color (Inquisitor)</Entry>
+    <Entry key="FANCY_SILHOUETTE_COLOR_INQUISITOR_DESC">Determines which of the Inquisitor faction colors silhouettes will try to use.</Entry>
+
+    <Entry key="FANCY_SILHOUETTE_COLOR_AUDITOR_NAME">Silhouette Color (Auditor)</Entry>
+    <Entry key="FANCY_SILHOUETTE_COLOR_AUDITOR_DESC">Determines which of the Auditor faction colors silhouettes will try to use.</Entry>
+
+    <Entry key="FANCY_SILHOUETTE_COLOR_JUDGE_NAME">Silhouette Color (Judge)</Entry>
+    <Entry key="FANCY_SILHOUETTE_COLOR_JUDGE_DESC">Determines which of the Judge faction colors silhouettes will try to use.</Entry>
+
+    <Entry key="FANCY_SILHOUETTE_COLOR_STARSPAWN_NAME">Silhouette Color (Starspawn)</Entry>
+    <Entry key="FANCY_SILHOUETTE_COLOR_STARSPAWN_DESC">Determines which of the Starspawn faction colors silhouettes will try to use.</Entry>
+
+    <Entry key="FANCY_SILHOUETTE_COLOR_FROGS_NAME">Silhouette Color (Frogs)</Entry>
+    <Entry key="FANCY_SILHOUETTE_COLOR_FROGS_DESC">Determines which of the Frogs faction colors silhouettes will try to use.</Entry>
+
+    <Entry key="FANCY_SILHOUETTE_COLOR_HAWKS_NAME">Silhouette Color (Hawks)</Entry>
+    <Entry key="FANCY_SILHOUETTE_COLOR_HAWKS_DESC">Determines which of the Hawks faction colors silhouettes will try to use.</Entry>
+
+    <Entry key="FANCY_SILHOUETTE_COLOR_LIONS_NAME">Silhouette Color (Lions)</Entry>
+    <Entry key="FANCY_SILHOUETTE_COLOR_LIONS_DESC">Determines which of the Lions faction colors silhouettes will try to use.</Entry>
+
+    <Entry key="FANCY_SILHOUETTE_COLOR_LOVERS_NAME">Silhouette Color (Lovers)</Entry>
+    <Entry key="FANCY_SILHOUETTE_COLOR_LOVERS_DESC">Determines which of the Lovers faction colors silhouettes will try to use.</Entry>
+
     <Entry key="FANCY_DEAD_CHAT_DESATURATION_NAME">Dead Chat Saturation (%)</Entry>
     <Entry key="FANCY_DEAD_CHAT_DESATURATION_DESC">Determines how saturated the names of dead players are when you know their roles. Setting to -1 effectively disables this feature.</Entry>
 
@@ -1402,6 +1483,10 @@ Would you like to abandon %role2% and become %role%?</Entry> -->
     <Entry key="FANCY_WOOD">Wood</Entry>
     <Entry key="FANCY_WAX">Wax</Entry>
     <Entry key="FANCY_ALL">All</Entry>
+
+    <Entry key="FANCY_PRIMARY">Primary</Entry>
+    <Entry key="FANCY_SECONDARY">Secondary</Entry>
+    <Entry key="FANCY_MIXED">Mixed</Entry>
 
     <Entry key="FANCY_FACTIONSTART">Original Primary</Entry>
     <Entry key="FANCY_FACTIONEND">Original Secondary</Entry>

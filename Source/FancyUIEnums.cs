@@ -58,6 +58,13 @@ public enum DisplayType : byte
 //     Effect
 // }
 
+public enum SilhouetteColorType : byte
+{
+    Primary,
+    Secondary,
+    Mixed
+}
+
 public enum OverrideStartType : byte
 {
     Default,

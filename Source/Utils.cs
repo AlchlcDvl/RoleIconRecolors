@@ -15,6 +15,7 @@ public static class Utils
 	[
 		// Town
 		"Seer_Ability", "Seer_Ability_2", "Amnesiac_Ability",
+		"Crusader_Ability",
 
 		// Coven
 		"Dreamweaver_Ability",
@@ -28,9 +29,11 @@ public static class Utils
 		"Mayor_Ability", 
 		"Coroner_Ability_2", 
 		"Pacifist_Ability_2",
+		"Crusader_Ability_2",
 
 		// Coven
 		"Archmage_Ability", 
+		"Socialite_Ability", 
 		"Banshee_Ability", 
 		"Dreamweaver_Ability_2", 
 		"Illusionist_Ability_2",
@@ -56,7 +59,6 @@ public static class Utils
 		"Catalyst_Ability",
 		"Cleric_Ability",
 		"Coroner_Ability",
-		"Crusader_Ability",
 		"Investigator_Ability",
 		"Jailor_Ability_2",
 		"Lookout_Ability",
@@ -766,7 +768,7 @@ public static class Utils
 
     public static bool IsEthereal(this FactionType faction) => faction is Btos2Faction.Judge or Btos2Faction.Auditor or Btos2Faction.Starspawn or Btos2Faction.Egotist;
 
-    public static bool IsEthereal(this Role role) => Constants.IsBTOS2() && role is Btos2Role.Bodyguard or Btos2Role.Judge or Btos2Role.Auditor or Btos2Role.Starspawn;
+    public static bool IsEthereal(this Role role) => Constants.IsBTOS2() && role is Btos2Role.Judge or Btos2Role.Auditor or Btos2Role.Starspawn;
 
     public static Role GetTransformedVersion(Role role, GameModType? mod = null)
     {
@@ -1147,7 +1149,8 @@ public static class Utils
 	private static string RolePlaceholder(Role role, FactionType faction, bool flexed, bool icon)
 	{
 		var name = flexed ? role.ToColorizedDisplayString(faction) : role.ToColorizedDisplayString();
-		return icon ? role.GetRoleSprite() + name : name;
+		var roleIcon = flexed ? role.GetRoleSprite(faction) : role.GetRoleSprite();
+		return icon ? roleIcon + name : name;
 	}
 
 	private static string FactionPlaceholder(FactionType faction, bool icon)
@@ -1175,7 +1178,7 @@ public static class Utils
 		var roleName = role.ToColorizedDisplayString();
 		var roleNameWithIcon = role.GetRoleSprite() + role.ToColorizedDisplayString();
 		var flexedName = role.ToColorizedDisplayString(faction);
-		var flexedNameWithIcon = role.GetRoleSprite() + role.ToColorizedDisplayString(faction);
+		var flexedNameWithIcon = role.GetRoleSprite(faction) + role.ToColorizedDisplayString(faction);
 
 
 		var newKey = $"{(isBTOS2 ? "BTOS_" : "GUI_")}ROLE_BLURB_{(int)role}_{(int)faction}";

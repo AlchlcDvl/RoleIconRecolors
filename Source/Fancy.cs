@@ -134,6 +134,8 @@ public class Fancy : BaseMod<Fancy>
     public static ToggleOption ExcludeTownGovernmentRoles;
     public static ToggleOption ExcludeCatalyst;
     public static ToggleOption ExcludeCultist;
+    public static ToggleOption ColoredSilhouettes;
+    public static FloatOption SilhouetteBrightness;
 	// public static ToggleOption RoleSpecificEndingColors;
 
     public static ColorOption NeutralStart;
@@ -201,6 +203,7 @@ public class Fancy : BaseMod<Fancy>
     public static FloatOption ChatBackgroundOpacity;
 	
     private static readonly Dictionary<string, ColorOption> ColorOptions = [];
+    public static readonly Dictionary<string, EnumDropdownOption<SilhouetteColorType>> SilhouetteColorOptions = [];
     public static readonly Dictionary<string, (string Start, string End, string Major, string Middle, string Lethal, string Horsemen, string BucketS, string BucketE)> Colors = new()
     {
         { "TOWN", ("#06E00C", "#06E00C", "#06E00C", null, "#06E00C", "#06E00C", "#1F51FF", "#1F51FF") },
@@ -423,6 +426,17 @@ public class Fancy : BaseMod<Fancy>
         ShowForShortNames = new("FACTION_NEXT_TO_SHORT_ROLE", true, PackType.MiscRoleCustomisation, setActive: () => FactionNameNextToRole.Value || FactionNameNextToBucket.Value);
         ShortenFlexedWithLabel = new("SHORTEN_FLEXED_WITH_LABEL", true, PackType.MiscRoleCustomisation, setActive: () => FactionNameNextToRole.Value || FactionNameNextToBucket.Value);
         RoleRevealTintIntensity = new("ROLE_REVEAL_TINT_INTENSITY", 625, PackType.MiscRoleCustomisation, 0, 1000, true);
+        ColoredSilhouettes = new("COLORED_SILHOUETTES", false, PackType.MiscRoleCustomisation);
+        SilhouetteBrightness = new("SILHOUETTE_BRIGHTNESS", 150, PackType.MiscRoleCustomisation, 0, 300, true, () => ColoredSilhouettes.Value && ShowHiddenSettings.Value);
+
+        foreach (var key in Colors.Keys.Where(x => x != "STONED_HIDDEN"))
+        {
+            var factionKey = key;
+
+            SilhouetteColorOptions[factionKey] = new($"SILHOUETTE_COLOR_{factionKey}", SilhouetteColorType.Primary, PackType.MiscRoleCustomisation,
+                setActive: () => ColoredSilhouettes.Value && Utils.FactionName(SelectTestingFaction.Value, true, stoned: true).ToUpper() == factionKey, useTranslations: true);
+        }
+
         FactionalRoleNames = new("FACTIONAL_ROLE_NAMES", false, PackType.MiscRoleCustomisation, Constants.TextEditorExists);
         FactionalRoleBlurbs = new("FACTIONAL_ROLE_BLURBS", false, PackType.MiscRoleCustomisation, Constants.TextEditorExists);
         FactionalBuckets = new("FACTIONAL_BUCKETS", false, PackType.MiscRoleCustomisation);

@@ -438,9 +438,9 @@ public static class RoleCardPopupPatches2
                 defense = faction.IsEthereal() ? 2 : 1;
                 break;
 
-            case Btos2Role.Bodyguard when Constants.IsBTOS2():
-                defense = 2;
-                break;
+            // case Btos2Role.Bodyguard when Constants.IsBTOS2():
+                // defense = 2;
+                // break;
 
             case Role.FAMINE:
             case Role.WAR:
@@ -543,9 +543,9 @@ public static class RoleCardPopupPatches2
 				defense = faction.IsEthereal() ? Utils.GetString("GUI_ROLE_CARD_POWERFUL_ETHEREAL_DEFENSE_TOOLTIP") : Utils.GetString("GUI_ROLE_CARD_BASIC_DEFENSE_TOOLTIP");
 				break;
 
-			case Btos2Role.Bodyguard when Constants.IsBTOS2():
-				defense = Utils.GetString("GUI_ROLE_CARD_POWERFUL_ETHEREAL_DEFENSE_TOOLTIP");
-				break;
+			// case Btos2Role.Bodyguard when Constants.IsBTOS2():
+				// defense = Utils.GetString("GUI_ROLE_CARD_POWERFUL_ETHEREAL_DEFENSE_TOOLTIP");
+				// break;
 
 			case Role.FAMINE:
 			case Role.WAR:
@@ -2139,6 +2139,58 @@ public static class FactionSpecificPotionMasterResults
                     }
                 }
             }
+        }
+    }
+}
+
+[HarmonyPatch(typeof(RoleCardPanelBackground))]
+public static class ColoredSilhouetteRoleCardPatches
+{
+    [HarmonyPatch("SetRole"), HarmonyPostfix]
+    public static void SetRolePostfix(RoleCardPanelBackground __instance) => Tint(__instance);
+
+    [HarmonyPatch("SetFaction"), HarmonyPostfix]
+    public static void SetFactionPostfix(RoleCardPanelBackground __instance) => Tint(__instance);
+
+    private static void Tint(RoleCardPanelBackground panel)
+    {
+        if (panel.rolecardBackgroundInstance)
+            SilhouetteFactionTint.Apply(panel.rolecardBackgroundInstance.silhouette, panel.currentFaction);
+    }
+}
+
+[HarmonyPatch(typeof(RoleRevealCinematicPlayer), nameof(RoleRevealCinematicPlayer.SetPlayerInfo))]
+public static class ColoredSilhouetteRoleRevealPatch
+{
+    [HarmonyPriority(Priority.Last)]
+    public static void Postfix(RoleRevealCinematicPlayer __instance, Role role, FactionType factionType)
+    {
+        if (role == Role.NONE || !__instance.silhouetteWrapper || !__instance.silhouetteWrapper.animator)
+            return;
+
+        SilhouetteFactionTint.Apply(__instance.silhouetteWrapper.animator.GetComponent<Silhouette>(), factionType);
+    }
+}
+
+[HarmonyPatch(typeof(FactionWinsStandardCinematicPlayer), nameof(FactionWinsStandardCinematicPlayer.SetUpWinners))]
+public static class ColoredSilhouetteWinnersPatch
+{
+    // Tints per entry (solo winners can have a different faction); runs last to cover the lobby test swap.
+    [HarmonyPriority(Priority.Last)]
+    public static void Postfix(FactionWinsStandardCinematicPlayer __instance)
+    {
+        if (__instance.silhouetteWrappers == null || __instance.cinematicData?.entries == null)
+            return;
+
+        for (var i = 0; i < __instance.silhouetteWrappers.Count; i++)
+        {
+            var entry = __instance.cinematicData.entries.GetElement(i);
+            var wrapper = __instance.silhouetteWrappers.GetElement(i);
+
+            if (entry == null || !wrapper || !wrapper.animator)
+                continue;
+
+            SilhouetteFactionTint.Apply(wrapper.animator.GetComponent<Silhouette>(), entry.faction);
         }
     }
 }
