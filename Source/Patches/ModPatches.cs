@@ -118,7 +118,7 @@ public static class RetrainPopupPatch
         var roleName = state.isRetraining.ToColorizedNoLabel(myFaction);
         var myRoleName = myRole.ToColorizedNoLabel(myFaction);
         var hasVowel = Utils.StartsWithVowel(Utils.StripFormatting(roleName));
-        var key = !hasVowel ? "FANCY_RETRAIN_POPUP" : "RETRAIN_POPUP_VOWEL";
+        var key = !hasVowel ? "FANCY_RETRAIN_POPUP" : "FANCY_RETRAIN_POPUP_VOWEL";
 
         __instance.HeaderText.text = Utils.GetString(key).Replace("%role%", icon + roleName).Replace("%role2%", myIcon + myRoleName).Replace("%arch%", arch + Role.COVENLEADER.ToColorizedDisplayString(FactionType.COVEN));
 
@@ -802,50 +802,50 @@ public static class DropdownPatch
     }
 }
 
-[HarmonyPatch(typeof(FactionWinsStandardCinematicPlayer), nameof(FactionWinsStandardCinematicPlayer.SetUpWinners))]
-public static class FactionWinsStandardCinematicPlayer_SetUpWinners_Patch
-{
-    private static readonly int[] AllowedSilhouettes =
-    [
-        1,2,3,4,5,6,7,8,9,10,
-        11,12,13,14,15,16,17,18,19,20,
-        21,22,23,24,25,26,27,28,29,30,
-        31,32,33,34,35,36,37,38,39,40,
-        41,42,43,44,45,46,47,48,49,50,
-        51,52,53,54,55,56,57,58,59,60,
-        240, 250, 251, 252, 253
-    ];
-    private static readonly int[] AllowedSilhouettesBTOS =
-    [
-        ..AllowedSilhouettes,
-        61,62,63,64,65,66
-    ];
+// [HarmonyPatch(typeof(FactionWinsStandardCinematicPlayer), nameof(FactionWinsStandardCinematicPlayer.SetUpWinners))]
+// public static class FactionWinsStandardCinematicPlayer_SetUpWinners_Patch
+// {
+    // private static readonly int[] AllowedSilhouettes =
+    // [
+        // 1,2,3,4,5,6,7,8,9,10,
+        // 11,12,13,14,15,16,17,18,19,20,
+        // 21,22,23,24,25,26,27,28,29,30,
+        // 31,32,33,34,35,36,37,38,39,40,
+        // 41,42,43,44,45,46,47,48,49,50,
+        // 51,52,53,54,55,56,57,58,59,60,
+        // 240, 250, 251, 252, 253
+    // ];
+    // private static readonly int[] AllowedSilhouettesBTOS =
+    // [
+        // ..AllowedSilhouettes,
+        // 61,62,63,64,65,66
+    // ];
 
-    public static void Postfix(FactionWinsStandardCinematicPlayer __instance)
-    {
-        var gamePhase = Service.Game.Sim.info.gameInfo.Data.gamePhase;
+    // public static void Postfix(FactionWinsStandardCinematicPlayer __instance)
+    // {
+        // var gamePhase = Service.Game.Sim.info.gameInfo.Data.gamePhase;
 
-        if (gamePhase != GamePhase.LOBBY || __instance.silhouetteWrappers == null || __instance.characterWrappers == null || __instance.cinematicData.entries == null)
-            return;
+        // if (gamePhase != GamePhase.LOBBY || __instance.silhouetteWrappers == null || __instance.characterWrappers == null || __instance.cinematicData.entries == null)
+            // return;
 
-        foreach (var wrapper in __instance.silhouetteWrappers.Where(x => x))
-        {
-            var silhouetteId = 0;
+        // foreach (var wrapper in __instance.silhouetteWrappers.Where(x => x))
+        // {
+            // var silhouetteId = 0;
 
-            if (Fancy.SelectTestingRole.Value == Role.NONE)
-                silhouetteId = Constants.IsBTOS2() ? AllowedSilhouettesBTOS.Random() : AllowedSilhouettes.Random();
-            else
-                silhouetteId = (int)Fancy.SelectTestingRole.Value;
+            // if (Fancy.SelectTestingRole.Value == Role.NONE)
+                // silhouetteId = Constants.IsBTOS2() ? AllowedSilhouettesBTOS.Random() : AllowedSilhouettes.Random();
+            // else
+                // silhouetteId = (int)Fancy.SelectTestingRole.Value;
 
-            wrapper.SwapWithSilhouette(silhouetteId, true);
-        }
+            // wrapper.SwapWithSilhouette(silhouetteId, true);
+        // }
 
-        // var characterCount = __instance.characterWrappers.Count;
+        // // var characterCount = __instance.characterWrappers.Count;
 
-        foreach (var wrapper in __instance.characterWrappers.Where(x => x))
-            wrapper.SwapWithCharacter(URandom.RandomRangeInt(0, 86), true, 0);
-    }
-}
+        // foreach (var wrapper in __instance.characterWrappers.Where(x => x))
+            // wrapper.SwapWithCharacter(URandom.RandomRangeInt(0, 86), true, 0);
+    // }
+// }
 
 [HarmonyPatch(typeof(HomeAudioService), nameof(HomeAudioService.PlayMusic))]
 public static class CommonCurtisL

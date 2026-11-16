@@ -637,6 +637,9 @@ public static class TosCharacterNametagPatch
 {
     public static void Postfix(string theName, FactionType factionType, Role role, ref string __result)
     {
+        if (theName == null)
+            return;
+
         var gradient = factionType.GetChangedGradient(role);
 
         if (gradient == null)

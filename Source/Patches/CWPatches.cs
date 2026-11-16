@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Game.Achievements;
 using Home.Common.Dialog;
 using Home.Interface;
@@ -238,8 +239,18 @@ public static class HudTimeChangePanelPatch
 [HarmonyPatch(typeof(LobbyGameModeChoicePanel), nameof(LobbyGameModeChoicePanel.Start))]
 public static class LobbyGameModeChoicePanelPatch
 {
-    public static void Postfix(LobbyGameModeChoicePanel __instance) =>
-        __instance.transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetChild(15).GetComponent<Image>().SetImageColor(ColorType.Wood);
+    public static void Postfix(LobbyGameModeChoicePanel __instance)
+    {
+        var current = __instance.transform;
+        int[] path = { 0, 0, 0, 0, 15 };
+        foreach (var index in path)
+        {
+            if (current == null || current.childCount <= index)
+                return;
+            current = current.GetChild(index);
+        }
+        current.GetComponent<Image>().SetImageColor(ColorType.Wood);
+    }
 }
 
 [HarmonyPatch(typeof(TosAbilityPanel), nameof(TosAbilityPanel.Start))]
@@ -485,13 +496,24 @@ public static class PatchGameModeChoices
             return;
 
         __instance.transform.AddComponent<DummyBehaviour>();
-        __instance.transform.GetChild(__instance.transform.childCount - 1).GetComponent<Image>().SetImageColor(ColorType.Wood);
+        var root = __instance.transform;
+        if (root.childCount > 0)
+            root.GetChild(root.childCount - 1).GetComponent<Image>().SetImageColor(ColorType.Wood);
 
-        for (var i = 0; i < __instance.transform.childCount - 1; i++)
-            __instance.transform.GetChild(i).GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
+        for (var i = 0; i < root.childCount - 1; i++)
+        {
+            var child = root.GetChild(i);
+            if (child.childCount > 1)
+                child.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
+        }
 
-        var lobbyDescription = __instance.transform.parent.GetChild(2);
-        lobbyDescription.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wood);
+        var parent = root.parent;
+        if (parent != null && parent.childCount > 2)
+        {
+            var lobbyDescription = parent.GetChild(2);
+            if (lobbyDescription.childCount > 1)
+                lobbyDescription.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wood);
+        }
         // Cannot change the color of the Join button to Wax because of the Animator resetting its Material
     }
 }
@@ -502,16 +524,32 @@ public static class PatchHomeMenu
     [HarmonyPriority(Priority.Last)]
     public static void Postfix(SafeAreaController __instance)
     {
+        // Not every SafeAreaController has a LeftButtons child (e.g. the ones
+        // enabled during cinematics), so bail out instead of throwing.
         var leftButtons = __instance.transform.Find("LeftButtons");
+        if (leftButtons == null || leftButtons.childCount == 0)
+            return;
+
         leftButtons.GetChild(leftButtons.childCount - 1).GetComponent<Image>().SetImageColor(ColorType.Wood);
 
         for (var i = 1; i < leftButtons.childCount - 1; i++)
-            leftButtons.GetChild(i).GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
+        {
+            var button = leftButtons.GetChild(i);
+            if (button.childCount > 1)
+                button.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Metal);
+        }
 
         foreach (var trans in __instance.transform.GetComponentsInChildren<Transform>(true))
         {
-            if (trans.name == "GameModeChoiceElementsUI(Clone)" && !trans.GetChild(0).GetChild(0).GetComponent<DummyBehaviour>())
-                PatchGameModeChoices.Postfix(trans.GetChild(0).GetChild(0).GetComponent<GameModeChoicePanelController>());
+            if (trans.name != "GameModeChoiceElementsUI(Clone)" || trans.childCount == 0)
+                continue;
+            var outer = trans.GetChild(0);
+            if (outer.childCount == 0)
+                continue;
+            var inner = outer.GetChild(0);
+            var panel = inner.GetComponent<GameModeChoicePanelController>();
+            if (panel != null && !inner.GetComponent<DummyBehaviour>())
+                PatchGameModeChoices.Postfix(panel);
         }
     }
 }
@@ -596,13 +634,23 @@ public static class PatchPlayerPopup
     public static void Postfix(PlayerPopupElementsPanel __instance)
     {
         var template = __instance.PlayerPopupTemplate;
-        template.transform.GetChild(2).GetComponent<Image>().SetImageColor(ColorType.Wood);
-        template.transform.GetChild(3).GetComponent<Image>().SetImageColor(ColorType.Metal);
-        var buttons = template.transform.GetChild(1).GetChild(0);
+        var templateTransform = template.transform;
+        if (templateTransform.childCount > 2)
+            templateTransform.GetChild(2).GetComponent<Image>().SetImageColor(ColorType.Wood);
+        if (templateTransform.childCount > 3)
+            templateTransform.GetChild(3).GetComponent<Image>().SetImageColor(ColorType.Metal);
+        if (templateTransform.childCount <= 1)
+            return;
+        var buttonsParent = templateTransform.GetChild(1);
+        if (buttonsParent.childCount == 0)
+            return;
+        var buttons = buttonsParent.GetChild(0);
 
-        for (var i = 0; i < 15; i++)
+        for (var i = 0; i < 15 && i < buttons.childCount; i++)
         {
             var tempHolder = buttons.GetChild(i);
+            if (tempHolder.childCount <= 1)
+                continue;
 
             switch (i)
             {
@@ -618,17 +666,24 @@ public static class PatchPlayerPopup
                 }
                 default:
                 {
-                    var tempButton = tempHolder.GetChild(1).GetChild(0);
+                    var holderChild = tempHolder.GetChild(1);
+                    if (holderChild.childCount == 0)
+                        break;
+                    var tempButton = holderChild.GetChild(0);
                     tempButton.GetComponent<Image>().SetImageColor(ColorType.Metal);
 
-                    if (i != 6)
+                    if (i != 6 && tempButton.childCount > 1)
                         tempButton.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wax);
 
-                    if (i == 12)
+                    if (i == 12 && tempHolder.childCount > 2)
                     {
-                        tempButton = tempHolder.GetChild(2).GetChild(0);
+                        var extraChild = tempHolder.GetChild(2);
+                        if (extraChild.childCount == 0)
+                            break;
+                        tempButton = extraChild.GetChild(0);
                         tempButton.GetComponent<Image>().SetImageColor(ColorType.Metal);
-                        tempButton.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wax);
+                        if (tempButton.childCount > 1)
+                            tempButton.GetChild(1).GetComponent<Image>().SetImageColor(ColorType.Wax);
                     }
 
                     break;
@@ -1054,6 +1109,13 @@ public static class NavigationControllerPatch
 [HarmonyPatch(typeof(SpecialAbilityPopupNecromancerRetributionistListItem), nameof(SpecialAbilityPopupNecromancerRetributionistListItem.SetData))]
 public static class ReanimateMenuListPatch
 {
+    private static readonly ConditionalWeakTable<Image, ColorBox> LastUndimmedColors = new();
+
+    private class ColorBox
+    {
+        public Color Value;
+    }
+
     public static void Postfix(
         SpecialAbilityPopupNecromancerRetributionistListItem __instance,
         bool hasChoice1,
@@ -1078,6 +1140,10 @@ public static class ReanimateMenuListPatch
                     continue;
 
                 img.SetImageColor(ColorType.Wax);
+                var last = LastUndimmedColors.GetValue(img, static image => new ColorBox { Value = image.color });
+                if (img.color == last.Value * 0.75f)
+                    continue;
+                last.Value = img.color;
                 img.color *= 0.75f;
             }
         }

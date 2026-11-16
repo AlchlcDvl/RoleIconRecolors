@@ -883,7 +883,7 @@ public static class Utils
 
     public static void SetImageColor(this Image img, ColorType type, bool notGuide = true)
     {
-        if (Constants.AllMaterials.Count == 0)
+        if (img == null || Constants.AllMaterials.Count == 0)
             return;
 
         var hasMask = img.TryGetComponent<Mask>(out var mask);
